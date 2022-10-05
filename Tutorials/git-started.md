@@ -46,4 +46,4 @@ These have to be done only once and will be forgotten soon after. ;)
     - create *within* your new folder a new file (best a Markdown file ending in .md) and say "Hi I am here" within the file
     - add the file to git control and push the file to GitHub
     - check online if you can see your file and all is good!
-    - **ATTENTION:** if you are working on the repository *at the same time as one of your peers* you might get a notification that you  
+    - **ATTENTION:** if you are working on the repository *at the same time as one of your peers* your *push* might fail with a notification that you are missing changes that are on GitHub already. In that event, you first need to *pull* the changes and *afterwards push* should work fine.
