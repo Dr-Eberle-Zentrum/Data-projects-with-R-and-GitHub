@@ -5,11 +5,11 @@ This page lists compact summaries of topics studies within the course
  **"R2 - Advanced data processing in R"**
  
 at the Dr. Eberle Centre for digital competencies at the University Tübingen.
+
  
 ## Topics
  
 - (R)markdown
-- git + github
 - factors
 - dates and times
 - ggplot revisited
@@ -29,3 +29,6 @@ at the Dr. Eberle Centre for digital competencies at the University Tübingen.
 
 If would be great if everybody **both** is mainly involved in *writing/editing* one topic and *reviewing* another!
 
+## Tutorials
+
+- [Git-ing started](Tutorials/git-started.md)
