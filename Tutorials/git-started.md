@@ -25,12 +25,12 @@ These have to be done only once and will be forgotten soon after. ;)
     -   `install.packages("usethis")` to get the package
     -   `library(usethis)`
     -   use `use_git_config(..)` to register your GitHub credentials: [Section 7](https://happygitwithr.com/hello-git.html)
-    -   use `git_default_branch_configure()` to reset `main` branch name: [Section 7 + 7.1.2](https://happygitwithr.com/hello-git.html)
+    -   use `git_default_branch_configure()` to reset `main` branch name: [Section 7.1.2](https://happygitwithr.com/hello-git.html#configure-the-default-name-for-an-initial-branch)
 
 8.  Generate a PAT to enable RStudio-GitHub communication via `usethis` package: [Section 9](https://happygitwithr.com/https-pat.html)
 
     -   `library(usethis)`
-    -   use `git_default_branch_configure(description="R2 course")`
+    -   use `create_github_token(description="R2 course")`
         -   set an **Expiration** *date after the end of the course* (or "No expiration")
         -   *keep the generated PAT website open for Copy-and-Paste !!!*
     -   use `credentials::set_github_pat()` (already installed) to store the PAT: [Section 9.4.1.1](https://happygitwithr.com/https-pat.html#credentials-package)
@@ -41,7 +41,7 @@ These have to be done only once and will be forgotten soon after. ;)
 10. Once you can access the repository online, you will need to get a local copy via RStudio: [Section 16.2.2](https://happygitwithr.com/existing-github-first.html#rstudio-ide-1)
     - the HTTPS URL is `https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R.git`
 
-11. Change and `push` your changes!
+11. Do the following and `push` your changes!
     - create a subfolder within the **Project** folders named as your **FIRSTNAME**
     - create *within* your new folder a new file (best a Markdown file ending in .md) and say "Hi I am here" within the file
     - add the file to git control and push the file to GitHub
