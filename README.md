@@ -96,12 +96,20 @@ To this end:
 -   copy the following files to the folder:
     -   your `project-description.Rmd` file from above
     -   all files linked to, loaded or referenced within the project description (data sets, images, ...)
--   knit the file to `PDF` output (*you need LaTeX installed or as a workaround knit to HTML and "print" the page from your browser to PDF. Let me know if you need help here..*)
--   check if all is nicely rendered within the created PDF file
+-   knit the file to `HTML` output
+-   check if all is nicely rendered within the created HTML file
 -   `Pull` the recent project version from the GitHub repository
 -   `Commit` all new files to git versioning
-    -   Markdown, images, PDF output, ...
--   `Push` your changes to github
--   Check online if your PDF is listed on GitHub and renders within the browser
+    -   Markdown, images, .html output file, ...
+-   `Push` your changes to GitHub
+-   Check online if your HTML file is listed on GitHub
+-   Change this `README.md` file and add your project to the following list
+    - to this end, you have to put a relative link to the html page, see example link
+-   `Commit` and `Push` your changes to GitHub
+-   wait a minute (to get things published automatically)
+-   check the [project website](https://dr-eberle-zentrum.github.io/Advanced-data-processing-with-R/) if your project draft is listed, linked and correctly rendered
 
-An example project can be found [here](Projects/martin-raden/project-description.html)
+#### Available projects
+
+- [example project by Martin](Projects/martin-raden/project-description.html)
+
