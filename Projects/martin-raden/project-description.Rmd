@@ -1,7 +1,9 @@
 ---
 title: "Image reproduction"
-author: Martin Raden
-output: html_document
+author: "Martin Raden"
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 # Reproduce this chart!
@@ -10,7 +12,7 @@ It is often that you find a chart that you really like but have no idea how to d
 An example might be the following one.
 
 
-![](https://ourworldindata.org/uploads/2022/05/Wildlife-comeback-in-Europe-1.png){ width=50% }
+![](Wildlife-comeback-in-Europe-1.png){ width=50% }
 
 Which is shown and detailed on [https://ourworldindata.org](https://ourworldindata.org/europe-mammal-comeback).
 
