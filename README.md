@@ -108,3 +108,5 @@ To this end:
     -   Markdown, images, PDF output, ...
 -   `Push` your changes to github
 -   Check online if your PDF is listed on GitHub and renders within the browser
+
+An example project can be found [here](Projects/martin-raden/project-description.html)

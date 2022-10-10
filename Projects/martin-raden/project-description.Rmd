@@ -1,8 +1,7 @@
 ---
 title: "Image reproduction"
 author: "Martin Raden"
-output:
-  pdf_document: default
+output: html_document
 ---
 
 # Reproduce this chart!
