@@ -3,7 +3,6 @@ title: "Image reproduction"
 author: "Martin Raden"
 output:
   pdf_document: default
-  html_document: default
 ---
 
 # Reproduce this chart!
