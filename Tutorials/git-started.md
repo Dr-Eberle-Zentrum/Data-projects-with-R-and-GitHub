@@ -41,8 +41,8 @@ These have to be done only once and will be forgotten soon after. ;)
 10. Once you can access the repository online, you will need to get a local copy via RStudio: [Section 16.2.2](https://happygitwithr.com/existing-github-first.html#rstudio-ide-1)
     - the HTTPS URL is `https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R.git`
 
-11. Do the following and `push` your changes!
-    - create a subfolder within the **Project** folders named as your **FIRSTNAME**
+11. Change and `push` your changes!
+    - create a subfolder within the **Project** folder named as your **FIRSTNAME**
     - create *within* your new folder a new file (best a Markdown file ending in .md) and say "Hi I am here" within the file
     - add the file to git control and push the file to GitHub
     - check online if you can see your file and all is good!
