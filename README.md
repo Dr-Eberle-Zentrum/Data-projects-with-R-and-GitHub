@@ -88,7 +88,7 @@ Write an R Markdown file `project-description.Rmd` to
 
 -   introduce shortly the general topic of your task (to put it in context)
 -   introduce the data set, it's origin and important information of what-is-what, etc.
--   define the visualization goal(s) and possible intermediate goals
+-   define the visualization goal(s) and possible intermediates
 
 It is fine to be vague at some points but you should formulate a clear goal and roadmap.
 
@@ -97,13 +97,14 @@ It is fine to be vague at some points but you should formulate a clear goal and 
 In order to submit your project proposal, you have to upload it to GitHub as part of this project!
 To this end:
 
-- (if not done already) create a subfolder with **your user account name** in the `Project` folder
-- copy the following files to the folder:
-  - your `project-description.Rmd` file from above
-  - all files linked to, loaded or referenced within the project description (data sets, images, ...)
-- knit the file to `.html` output
-- check if all is nicely rendered within the HTML output
-- `Pull` the recent version from the GitHub repository
-- `Commit` all added files to git versioning
-- `Push` your changes to github
-- Check online if your html page is listed in github
+-   (if not done already) create a subfolder with **your user account name** in the `Project` folder
+-   copy the following files to the folder:
+    -   your `project-description.Rmd` file from above
+    -   all files linked to, loaded or referenced within the project description (data sets, images, ...)
+-   knit the file to `PDF` output (*you need LaTeX installed or as a workaround knit to HTML and "print" the page from your browser to PDF. Let me know if you need help here..*)
+-   check if all is nicely rendered within the created PDF file
+-   `Pull` the recent project version from the GitHub repository
+-   `Commit` all new files to git versioning
+    -   Markdown, images, PDF output, ...
+-   `Push` your changes to github
+-   Check online if your PDF is listed on GitHub and renders within the browser
