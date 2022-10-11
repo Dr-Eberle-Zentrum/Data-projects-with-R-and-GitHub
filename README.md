@@ -11,6 +11,13 @@ at the Dr. Eberle Centre for digital competencies at the University Tübingen.
 
 -   [Git-ing started](Tutorials/git-started.md)
 
+## Overview
+
+- Project descriptions
+  - [Phase 1 - Drafting a project description](#phase-1---drafting-a-project-description)
+  - [Phase 2 - Reviewing a project description](#phase-2---reviewing-a-project-description)
+  - [Phase 3 - Finalizing your project description](#phase-3---finalizing-your-project-description)
+
 ------------------------------------------------------------------------
 
 ## Project descriptions
@@ -26,7 +33,7 @@ But first, some details concerning project definition.
 
 ------------------------------------------------------------------------
 
-### Phase 1 - drafting a project description
+### Phase 1 - Drafting a project description
 
 Before you can define a project you need some data!
 In order to select something, you might want to "reach high"!
@@ -107,7 +114,7 @@ At the end of Phase 1 you will have a better understanding of
 
 ------------------------------------------------------------------------
 
-### Phase 2 - reviewing a project description
+### Phase 2 - Reviewing a project description
 
 To ensure the drafted projects are understandable and doable, we will do a peer reviewing.
 To this end, you will get assigned to two projects to give feedback for them.
@@ -148,7 +155,7 @@ At the end of Phase 2 you will
 
 ------------------------------------------------------------------------
 
-### Phase 3 - finalizing your project description
+### Phase 3 - Finalizing your project description
 
 Now it is time to rework your project draft in the light of the received reviews and the project drafts you have reviewed yourself.
 You might want/need to change a few bits and pieces.
@@ -161,6 +168,7 @@ In the end, you might do the following:
 - `Pull` again the current project state from GitHub
 - `Commit` your changes
 - `Push` your committed changes to GitHub
+- Check your changes are on GitHub Pages (after a minute or two)
 - Close the Issues *you received for your project* (with a nice comment) :-)
 
 
@@ -172,4 +180,6 @@ At the end of Phase 3 you will
 - be familiar with basic git commands in RStudio
 - have experienced the Issue feature of GitHub from both sides (raise and close)
 
+
+------------------------------------------------------------------------
 
