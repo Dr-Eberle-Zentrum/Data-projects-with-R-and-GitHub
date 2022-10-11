@@ -7,31 +7,11 @@ This project accompanies the course
 
 at the Dr. Eberle Centre for digital competencies at the University Tübingen.
 
-## Topics
-
--   (R)Markdown
--   factors
--   dates and times
--   ggplot revisited
--   markdown output
--   iteration
-
-## How to contribute?
-
--   **one issue per topic**:
-    -   if not listed yet, create an issue for the topic you want to contribute
-    -   OR put your account name in "Assignees" (upper right corner) in an existing project you want to contribute
-        -   AND write message what you are going to do within the issue
--   **contributions** are
-    -   creating the respective MD file for the topic
-    -   writing/editing content
-    -   revising/reviewing content
-
-If would be great if everybody **both** is mainly involved in *writing/editing* one topic and *reviewing* another!
-
 ## Tutorials
 
 -   [Git-ing started](Tutorials/git-started.md)
+
+------------------------------------------------------------------------
 
 ## Project descriptions
 
@@ -44,6 +24,8 @@ Data cleanup, transformation and extension should be one (big) part of your proj
 The formulated projects are the set of exercises you and your fellow students will pick from during the rest of the course, which is discussed below.
 But first, some details concerning project definition.
 
+------------------------------------------------------------------------
+
 ### Phase 1 - drafting a project description
 
 Before you can define a project you need some data!
@@ -55,7 +37,7 @@ Either you find something useful, or you might change your idea while looking fo
 
 #### Data sets
 
-Best are data set you are working on anyway or that are connected to your field of interest, this such data makes most sense to you and you are most creative about possible analyses.
+Best are data set you are working on anyway or that are connected to your field of interest, such data makes most sense to you and you are most creative about possible analyses.
 Or something you have discussed in some other course or project.
 It would be **best**, if the data is already in some **table form but not tidy**, i.e. there is still need for some (extensive) data cleaning, formatting, ...
 
@@ -103,13 +85,91 @@ To this end:
     -   Markdown, images, .html output file, ...
 -   `Push` your changes to GitHub
 -   Check online if your HTML file is listed on GitHub
--   Change this `README.md` file and add your project to the following list
-    - to this end, you have to put a relative link to the html page, see example link
+-   Change this `README.md` file and add your project to the following list of `Available projects` below
+    -   to this end, you have to put a relative link to the html page, see example link
 -   `Commit` and `Push` your changes to GitHub
 -   wait a minute (to get things published automatically)
 -   check the [project website](https://dr-eberle-zentrum.github.io/Advanced-data-processing-with-R/) if your project draft is listed, linked and correctly rendered
 
 #### Available projects
 
-- [example project by Martin](Projects/martin-raden/project-description.html)
+-   [example project by Martin](Projects/martin-raden/project-description.html)
+
+
+#### Goals
+
+At the end of Phase 1 you will have a better understanding of
+
+- How to write stuff in R Markdown
+- How to produce presentable output from it
+- How to get things into version control in GitHub
+- See the integration of Markdown and HTML pages in GitHub Pages
+
+------------------------------------------------------------------------
+
+### Phase 2 - reviewing a project description
+
+To ensure the drafted projects are understandable and doable, we will do a peer reviewing.
+To this end, you will get assigned to two projects to give feedback for them.
+Review comments should be done via GitHub issues, where you can also discuss you ideas and suggestions with the respective project owner.
+
+#### Raising issues
+
+For each project draft, we will assign two reviewers at random.
+
+**Each reviewer** is supposed to
+
+- read the respective project draft on GitHub Pages
+- open an Issue on GitHub within the project
+- provide constructive feedback w.r.t.
+  - understandability
+  - missing information
+  - possible extensions or other ideas in the scope of the project and data
+- "ping" the project owner by referencing his/her user name with an "@", like `Hi @martin-raden, what do you think about my comments!`
+  
+**Each project owner** is supposed to
+
+- carefully check the reviews for his/her project
+- respond to the reviews (verbosely! not just *"Yes, sounds good!"*)
+  - you can also argument why you don't want to do this or that etc..
+  - it is YOUR rebuttal of the review!
+  
+**DON'T CHANGE THE PROJECT DRAFT SO FAR!!!** (Since this will interfere with the second review!)
+
+
+#### Goals
+
+At the end of Phase 2 you will
+
+- Get used to the Issue-based communication on GitHub
+- Practice your "constructive criticism" skills
+- Get and discuss feedback on your own project draft
+
+
+------------------------------------------------------------------------
+
+### Phase 3 - finalizing your project description
+
+Now it is time to rework your project draft in the light of the received reviews and the project drafts you have reviewed yourself.
+You might want/need to change a few bits and pieces.
+In the end, you might do the following:
+
+- `Pull` the current state of the project (just to be up-to-date)
+- revise your R Markdown project description
+- double check the Issues with the review comments to see if you incorporated everything
+- knit your description to HTML output
+- `Pull` again the current project state from GitHub
+- `Commit` your changes
+- `Push` your committed changes to GitHub
+- Close the Issues *you received for your project* (with a nice comment) :-)
+
+
+#### Goals
+
+At the end of Phase 3 you will
+
+- have exercised a feedback loop of project work
+- be familiar with basic git commands in RStudio
+- have experienced the Issue feature of GitHub from both sides (raise and close)
+
 
