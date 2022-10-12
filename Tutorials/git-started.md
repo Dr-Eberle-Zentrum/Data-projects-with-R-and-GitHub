@@ -2,7 +2,8 @@
 
 In order to get RStudio working with git and GitHub, we need to do a couple of steps.
 
-These have to be done only once and will be forgotten soon after. ;)
+These have to be done only once and will be forgotten soon after.
+;)
 
 1.  Understand what git is: [Section 1. - 1.7](https://happygitwithr.com/big-picture.html)
 
@@ -34,16 +35,32 @@ These have to be done only once and will be forgotten soon after. ;)
         -   set an **Expiration** *date after the end of the course* (or "No expiration")
         -   *keep the generated PAT website open for Copy-and-Paste !!!*
     -   use `credentials::set_github_pat()` (already installed) to store the PAT: [Section 9.4.1.1](https://happygitwithr.com/https-pat.html#credentials-package)
-    
+
 9.  Check if you can [access the project on GitHub](https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R) (i.e. we registered you as a collaborator already)
-    - **if not** you will have to *wait until we have added you...* you will get an email notification from GitHub when done and ready
+
+    -   **if not** you will have to *wait until we have added you...* you will get an email notification from GitHub when done and ready
 
 10. Once you can access the repository online, you will need to get a local copy via RStudio: [Section 16.2.2](https://happygitwithr.com/existing-github-first.html#rstudio-ide-1)
-    - the HTTPS URL is `https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R.git`
 
-11. Change and `push` your changes!
-    - create a subfolder within the **Project** folder named as your **GitHub account user name**
-    - create *within* your new folder a new file (best a Markdown file ending in .md) and say "Hi I am here" within the file
-    - add the file to git control and push the file to GitHub
-    - check online if you can see your file and all is good!
-    - **ATTENTION:** if you are working on the repository *at the same time as one of your peers* your *push* might fail with a notification that you are missing changes that are on GitHub already. In that event, you first need to *pull* the changes and *afterwards push* should work fine.
+    -   the HTTPS URL is `https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R.git`
+
+11. Get ready to work with it
+
+    -   study the brief [Section 6.4 The no branch workflow](https://edav.info/github.html#the-no-branch-workflow) on your *own* git repositories
+
+12. Let's try: Change something and `Push` your changes!
+
+    -   create a subfolder within the **Project** folder named as your **GitHub account user name**
+    -   create *within* your new folder a new file (best a Markdown file ending in .md) and say "Hi I am here" within the file
+    -   add the file to git control and push the file to GitHub
+    -   check online if you can see your file and all is good!
+    -   **ATTENTION:** if you are working on the repository *at the same time as one of your peers* your *push* might fail with a notification that you are missing changes that are on GitHub already. In that event, you first need to *pull* the changes and *afterwards push* should work fine.
+
+
+**Congratulations!** 
+You have just made your first steps in a version-controlled project workflow using git!
+
+The last three steps (check out a local copy from Github + working on it) are the standard workflow when you start your own project, using GitHub as your version-control cloud service.
+When working collaboratively with others or when contributing to foreign projects, the workflow needs some extensions in terms of "branches" and "pull requests".
+We will look into both later in the course and master them as well!
+
