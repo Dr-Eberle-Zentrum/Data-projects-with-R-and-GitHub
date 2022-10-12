@@ -16,6 +16,9 @@ at the Dr. Eberle Centre for digital competencies at the University Tübingen.
     -   [Phase 1 - Drafting a project description](#phase-1---drafting-a-project-description)
     -   [Phase 2 - Reviewing a project description](#phase-2---reviewing-a-project-description)
     -   [Phase 3 - Finalizing your project description](#phase-3---finalizing-your-project-description)
+-   [Tackling a suggested project](#tackling-a-suggested-project)
+    -   [Phase 1 - Posting your initial solution](#phase-1---posting-your-initial-solution)
+    -   [Phase 2 - Reviewing and finalizing](#phase-2---reviewing-and-finalizing)
 
 ------------------------------------------------------------------------
 
@@ -183,7 +186,7 @@ At the end of Phase 3 you will
 
 ------------------------------------------------------------------------
 
-## Tackling a suggested project
+## Tackling a suggested project {#tackling-a-suggested-project}
 
 Given a project description, you will try to solve the task.
 In order to practice real work flow life cycles, you will create your solution first in your own git branch and suggest it via a pull request on GitHub.
@@ -201,7 +204,9 @@ We do *not create a fork*, i.e. our own copy of the repository on GitHub, which 
 The latter (forking) is needed, if you don't have writing permissions to a repository.
 But the overall workflow is more or less the same.
 
-### Phase 1 - Posting your initial solution
+------------------------------------------------------------------------
+
+### Phase 1 - Posting your initial solution {#phase-1---posting-your-initial-solution}
 
 <img src="https://img.icons8.com/external-justicon-lineal-color-justicon/344/external-coding-responsive-web-design-justicon-lineal-color-justicon-3.png" width="100px"/>
 
@@ -265,8 +270,46 @@ At the end of Phase 1 you will
 -   have worked on a data wrangling and visualization project (in your own independent git branch)
 -   have created a pull request on GitHub to incorporate your suggested project solution
 
-### Phase 2 - Reviewing and finalizing
+### Phase 2 - Reviewing and finalizing {#phase-2---reviewing-and-finalizing}
 
 <img src="https://img.icons8.com/external-parzival-1997-outline-color-parzival-1997/344/external-training-human-resource-management-parzival-1997-outline-color-parzival-1997.png" width="100px"/>
 
--   
+Now it is time for the *project owner* to **check** your solution and for *both of you* to **discuss** possible changes, extensions, ... This should, as before, be done on GitHub, but now **directly within the pull request**!
+All comments, answers, changes etc. will be listed there.
+Even **if you are meeting in person**, please **note down** the main points and goals *within the pull request* (together).
+
+The **project owner** should
+
+-   check the solution using the link provided in the pull request
+-   compare the solution with your own project description
+-   provide **constructive feedback** within the pull request
+    -   positive writing
+    -   suggest changes, extensions, ...
+    -   you can even (in discussion and agreement) change the goal of this solution! Your are not fixed to the initial project plan from this point on!
+    -   provide hints/ideas how to tackle the project (if known to you or needed)
+    -   ...
+
+The **solution author** should
+
+-   be open minded to suggestions and criticism
+-   at the end **formulate a plan of changes**, i.e.
+    -   what will you change
+    -   try to implement
+    -   ...
+-   your can use [GitHub Markdown checkboxes](https://www.w3schools.io/file/markdown-checkbox-github/) to later keep track what you have done and what is still open
+
+You can already **work on the changes while you are discussing**!
+Any change you commit to your branch is automatically visible in the pull request (and this HTML visualizing link you provided).
+
+Thus, you can directly discuss if you meet the ideas of the project owner or suggest alternative ideas.
+
+*You will get a loooot of GitHub emails this week!* :grin:
+
+
+#### Goal
+
+At the end of Phase 2 you will
+
+-   have experienced the pull request workflow from both sides
+-   have integrated an interactive reviewing cycle in your project solution
+-   be ready for the next project! :grin:
