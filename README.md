@@ -1,6 +1,6 @@
 # Advanced-data-processing-with-R
 
-This project accompanies the course
+This project accompanies the course R2
 
 **"R2 - Advanced data processing in R"**
 
@@ -297,6 +297,7 @@ The **solution author** should
     -   try to implement
     -   ...
 -   your can use [GitHub Markdown checkboxes](https://www.w3schools.io/file/markdown-checkbox-github/) to later keep track what you have done and what is still open
+-   best put your plan *in the first post of the pull request* by editing it. That way it is found and updated most easily!
 
 You can already **work on the changes while you are discussing**!
 Any change you commit to your branch is automatically visible in the pull request (and this HTML visualizing link you provided).
