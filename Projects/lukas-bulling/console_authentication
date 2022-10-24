@@ -1,0 +1,75 @@
+
+R version 4.2.1 (2022-06-23) -- "Funny-Looking Kid"
+Copyright (C) 2022 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> install.packages("git-creds")
+Installing package into ‘/home/lukas/R/x86_64-pc-linux-gnu-library/4.2’
+(as ‘lib’ is unspecified)
+Warning in install.packages :
+  package ‘git-creds’ is not available for this version of R
+
+A version of this package for your version of R might be available elsewhere,
+see the ideas at
+https://cran.r-project.org/doc/manuals/r-patched/R-admin.html#Installing-packages
+> install.packages("gitcreds")
+Installing package into ‘/home/lukas/R/x86_64-pc-linux-gnu-library/4.2’
+(as ‘lib’ is unspecified)
+trying URL 'https://cran.rstudio.com/src/contrib/gitcreds_0.1.2.tar.gz'
+Content type 'application/x-gzip' length 62569 bytes (61 KB)
+==================================================
+downloaded 61 KB
+
+* installing *source* package ‘gitcreds’ ...
+** package ‘gitcreds’ successfully unpacked and MD5 sums checked
+** using staged installation
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded from temporary location
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (gitcreds)
+
+The downloaded source packages are in
+	‘/tmp/RtmpKrBVh3/downloaded_packages’
+> gitcreds_get()
+Error in gitcreds_get() : could not find function "gitcreds_get"
+> gitcreds_get() 
+Error in gitcreds_get() : could not find function "gitcreds_get"
+> library(gitcreds)
+> gitcreds_get() 
+Error in throw(new_error("gitcreds_no_credentials", url = url)) : 
+  Could not find any credentials
+> gitcreds::gitcreds_set()
+
+
+? Enter password or token: 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
+-> Adding new credentials...
+-> Removing credentials from cache...
+-> Done.
+> gitcreds_get() 
+<gitcreds>
+  protocol: https
+  host    : github.com
+  username: PersonalAccessToken
+  password: <-- hidden -->
+> 
