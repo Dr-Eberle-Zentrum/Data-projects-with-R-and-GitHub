@@ -4,7 +4,7 @@ author: "Martin Raden"
 output: html_document
 ---
 
-# Reproduce this nice chart!
+# Reproduce this super nice chart!
 
 It is often that you find a chart that you really like but have no idea how to do.
 An example might be the following one.
