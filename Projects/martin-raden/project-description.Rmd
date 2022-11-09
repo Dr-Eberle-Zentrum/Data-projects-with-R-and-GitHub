@@ -14,7 +14,7 @@ An example might be the following one.
 
 Which is shown and detailed on [https://ourworldindata.org](https://ourworldindata.org/europe-mammal-comeback).
 
-The idea of this project is to recreate this plot as close as possible using `ggplot` and the data available in the provided [CSV file](https://ourworldindata.org/uploads/2022/05/Wildlife-comeback-in-Europe-1.png)
+The idea of this project is to recreate this plot as close as possible using `ggplot` and the data available in the provided [CSV file](https://ourworldindata.org/uploads/2022/09/Mammal-comeback-in-Europe-data-OWID-download.csv)
 
 Visualization priorities (from high to low are)
 
@@ -28,4 +28,3 @@ Visualization priorities (from high to low are)
 - relative font sizes
 - animal symbols (no idea where to get them ...)
 
-In the end, this is a "semi-boring" project, since it solely focuses on visualization details...
