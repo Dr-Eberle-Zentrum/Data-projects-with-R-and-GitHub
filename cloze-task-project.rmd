@@ -1,0 +1,48 @@
+
+Dana Jabari
+R2 course
+
+Name of the data set: cloze_task_results.csv
+
+Some statistical knowledge is needed in order to do this project.
+
+----
+
+Hi!
+
+Thank you for looking at my project. 
+During a psychology course of mine, we have conducted an experiment. 
+I don't think we are supposed to
+
+
+The file is named "cloze_task_results.csv". You will find that dataset in my 
+folder on github. 
+
+Our participants were supposed to continue sentences, which were presented to 
+them on their laptop screen. 
+
+For example (it was in german):
+
+"Das ist kein Auto, sondern ..."
+
+The number of alternatives to the sentences, given by the participants were collected.
+
+Explanation of the variables:
+"Das is kein Auto, sondern" - variable "text"
+"Fahrrad" - variable "response" (Fahrrad is an example)
+number of times a certain response was typed in - "count" 
+
+My project for you would be:
+
+- tidy the data
+- make a power analysis and tell me the reqired number of participants for a power of 80%.
+- analyse the data with two 2x2 factor anovas (I think?) (details are to follow) (I can help with the statistical part if you need it)
+- ... tba
+
+I know that there are still some infos missing but these will be added with time.
+Thank you for your interest! I'm happy if you want to work on this project!
+
+Best,
+Dana
+
+
