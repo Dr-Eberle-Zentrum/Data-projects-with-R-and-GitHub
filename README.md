@@ -105,6 +105,7 @@ To this end:
 #### Available projects
 
 -   [example project by Martin](Projects/martin-raden/project-description.html)
+- [first draft of Dana's project](https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/f6e3c5615bb119e9306314573b4c302127f3af94/Projects/dana-jabari/cloze-task-project.html)
 
 #### Goals
 
