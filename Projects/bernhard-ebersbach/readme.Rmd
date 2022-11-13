@@ -1,0 +1,35 @@
+# Biodiversity and N~min~ visualization
+
+### The Description
+
+#### The Jena Experiment
+The Jena Experiment was established in 2002 with the aim to link biodiversity and the population processes in ecological communities to ecosystem fluxes. Sixty plant species were used to assemble experimental plant communities of different diversities. Different plots with different diversity levels were created.     
+
+[Visit the homepage for more information](http://the-jena-experiment.de/)
+
+![The Jena Experiment](https://www.ufz.de/export/data/2/91642_Jena_experiment_feld.jpg)
+
+#### N~min~
+Nitrogen is one of the most common nutrient in plant substance and part of a large number of vital compounds like amino acids, DNA, vitamines and chlorophyll. Plants can mainly recieve N in form of mineralic N, in short N~min~. In agriculture N~min~ is an important factor to determine the need of fertilization.
+
+#### Legumes
+Legumes belong to the plant family of Fabaceae. In german they are called Hülsenfrüchte. Most legumes can enter into a symbiosis with the N-fixing Rhizobiaceae bacteria (Knöllchenbakterien) on their roots, giving legumes an important role in crop rotation.
+
+***
+
+### The data
+The [CSV](nmin_jena_2022.csv) contains many information taken from different plots (rows of the CSV) at the Jena Experiment field in September 2022. Not all columns are of importance to our visualization. Here are some descriptions for the abbreviation:
+
+* sowndiv: Number of different plant species (plant diversity level)
+* funcgr: Number of different functional groups
+* numgras: Number of grass species
+* numsherb: Number of small herbs 
+* numtherb: Number of tall herbs
+* numleg: Number of legumes
+
+Only the first (sowndiv) and the last one (numleg) will be of interest to us.
+
+### The Task
+Make a bar plot that shows the following:
+* 
+
