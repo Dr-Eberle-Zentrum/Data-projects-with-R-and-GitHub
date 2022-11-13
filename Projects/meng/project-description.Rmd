@@ -1,0 +1,53 @@
+---
+title: "project-description"
+output: html_notebook
+---
+
+## Data set
+
+> data from <https://data.rijksmuseum.nl/object-metadata/download/>\
+> This Comma Separated Values file (*202020-rma-csv-collection.zip*) provides a simple inventory of objects in the Rijksmuseum collection. It includes the object number and persistent identifier, as well as a single title, type, creator, date and image URL for each object.
+
+## Visualization goals
+
+original data has column names:
+
+```{r raw}
+library(tidyverse)
+data <- read_csv("rma-csv-collection.csv")
+colnames(data)
+```
+
+column 3, 4, 5, 6 will be kept
+
+```{r renamed, cache = TRUE, echo = FALSE}
+data <- data %>%
+  transmute(
+    title = .data[["objectTitle[1]"]],
+    type = .data[["objectType[1]"]],
+    creator = .data[["objectCreator[1]"]],
+    year = .data[["objectCreationDate[1]"]],
+  ) 
+head(data)
+```
+
+to explore the change of the top 7 *type* according to *year*.
+
+```{r type, echo = FALSE}
+types <- data %>% group_by(type) %>%
+   summarise(count = n()) %>%
+   mutate(type = fct_reorder(factor(type), count))
+types  # A tibble:2,577 × 2
+range(types$count)  # 1 313905
+```
+
+reorder the types according to *count*, choose the top 7 (or if the top 7 are too close, choose the 1st, 21st, 41st, .. in the list)
+
+```{r variables}
+str(data$year)  # chr [1:667894]
+```
+
+*year* contains strings and NA, to clean the data - filter out rows with *year* that is not a number - try keep the x axis continuous, if it doesn't work, then `fct_lump()` it into ranges
+
+the visualization will be something like ![nothing here](sample.png)
+and hopefully fancier and with annotations staying in the right places
