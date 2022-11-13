@@ -20,16 +20,26 @@ Legumes belong to the plant family of Fabaceae. In german they are called Hülse
 ### The data
 The [CSV](nmin_jena_2022.csv) contains many information taken from different plots (rows of the CSV) at the Jena Experiment field in September 2022. Not all columns are of importance to our visualization. Here are some descriptions for the abbreviation:
 
-* sowndiv: Number of different plant species (plant diversity level)
-* funcgr: Number of different functional groups
-* numgras: Number of grass species
-* numsherb: Number of small herbs 
-* numtherb: Number of tall herbs
-* numleg: Number of legumes
+* *sowndiv*: number of different plant species (plant diversity level)
+* *funcgr*: number of different functional groups
+* *numgras*: number of grass species
+* *numsherb*: number of small herbs 
+* *numtherb*: number of tall herbs
+* *numleg*: number of legumes
 
-Only the first (sowndiv) and the last one (numleg) will be of interest to us.
+Only the first (*sowndiv*) and the last one (*numleg*) as well as the N~min~-colon will be of interest to us.
 
 ### The Task
 Make a bar plot that shows the following:
-* 
+
+* Y-axis: the mean of N~min~ mith the given unit
+* X-axis: the grouped *numleg*-values
+  + the *numleg*-groups shall contain sub groups
+  + the subgroups shall represent the grouped *sowndiv*-values
+  + the subgroups must be easily distinguishable (of different colors or symbology)
+  + each bar shall needs to have an error bar representing the standard error
+  + the symbology/colors of *sowndiv* shall be described in a legend box
+  
+The following example can be used as a basic reference:
+![](https://clauswilke.com/dataviz/visualizing_amounts_files/figure-html/income-by-age-race-dodged-1.png)
 
