@@ -1,4 +1,4 @@
-# Biodiversity and N~min~ visualization
+# Biodiversity and N<sub>min</sub> visualization
 
 ### The Description
 
@@ -9,8 +9,8 @@ The Jena Experiment was established in 2002 with the aim to link biodiversity an
 
 ![The Jena Experiment](https://www.ufz.de/export/data/2/91642_Jena_experiment_feld.jpg)
 
-#### N~min~
-Nitrogen is one of the most common nutrient in plant substance and part of a large number of vital compounds like amino acids, DNA, vitamines and chlorophyll. Plants can mainly recieve N in form of mineralic N, in short N~min~. In agriculture N~min~ is an important factor to determine the need of fertilization.
+#### N<sub>min</sub>
+Nitrogen is one of the most common nutrient in plant substance and part of a large number of vital compounds like amino acids, DNA, vitamines and chlorophyll. Plants can mainly recieve N in form of mineralic N, in short N<sub>min</sub>. In agriculture N<sub>min</sub> is an important factor to determine the need of fertilization.
 
 #### Legumes
 Legumes belong to the plant family of Fabaceae. In german they are called Hülsenfrüchte. Most legumes can enter into a symbiosis with the N-fixing Rhizobiaceae bacteria (Knöllchenbakterien) on their roots, giving legumes an important role in crop rotation.
@@ -27,12 +27,12 @@ The [CSV](nmin_jena_2022.csv) contains many information taken from different plo
 * *numtherb*: number of tall herbs
 * *numleg*: number of legumes
 
-Only the first (*sowndiv*) and the last one (*numleg*) as well as the N~min~-colon will be of interest to us.
+Only the first (*sowndiv*) and the last one (*numleg*) as well as the N<sub>min</sub>-colon will be of interest to us.
 
 ### The Task
 Make a bar plot that shows the following:
 
-* Y-axis: the mean of N~min~ mith the given unit
+* Y-axis: the mean of N<sub>min</sub> mith the given unit
 * X-axis: the grouped *numleg*-values
   + the *numleg*-groups shall contain sub groups
   + the subgroups shall represent the grouped *sowndiv*-values
