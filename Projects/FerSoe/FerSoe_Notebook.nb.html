@@ -1758,31 +1758,64 @@ display: none;
 
 
 <!-- rnb-text-begin -->
-<p>This is an <a href="http://rmarkdown.rstudio.com">R Markdown</a>
-Notebook. When you execute code within the notebook, the results appear
-beneath the code.</p>
-<p>Try executing this chunk by clicking the <em>Run</em> button within
-the chunk or by placing your cursor inside it and pressing
-<em>Ctrl+Shift+Enter</em>.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGxvdChjYXJzKVxuYGBgIn0= -->
-<pre class="r"><code>plot(cars)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShnZ3Bsb3QyKVxubGlicmFyeSh0aWR5dmVyc2UpXG5cbmRhdGE8LW10Y2Fyc1xuXG4jZGF0YSRjeWwgPC0gYXMuZmFjdG9yKGRhdGEkY3lsKVxuXG5kYXRhICU+JSBcbiAgbXV0YXRlKGN5bCA9IGZhY3RvcihjeWwpKSAlPiUgXG4gIGdncGxvdChhZXMod3QsbXBnLCBjb2xvciA9Y3lsKSkrXG4gIGdlb21fcG9pbnQoYWVzIChzaGFwZSA9IGN5bCksIHNpemUgPTMpK1xuICBnZW9tX3Ntb290aChtZXRob2QgPSBcImxtXCIpXG5cblxuXG5kYXRhICU+JSBcbiAgbXV0YXRlKGN5bCA9IGZhY3RvcihjeWwpKSAlPiUgXG4gIGdncGxvdChhZXMod3QsbXBnLCBjb2xvciA9Y3lsKSkrXG4gIGdlb21fcG9pbnQoYWVzIChzaGFwZSA9IGN5bCksIHNpemUgPTMpK1xuICBnZW9tX3Ntb290aChtZXRob2QgPSBcImxtXCIsIHNlPUYsIGZ1bGxyYW5nZT1UKVxuXG5cbmBgYCJ9 -->
+<pre class="r"><code>library(ggplot2)
+library(tidyverse)
+
+data&lt;-mtcars
+
+#data$cyl &lt;- as.factor(data$cyl)
+
+data %&gt;% 
+  mutate(cyl = factor(cyl)) %&gt;% 
+  ggplot(aes(wt,mpg, color =cyl))+
+  geom_point(aes (shape = cyl), size =3)+
+  geom_smooth(method = &quot;lm&quot;)
+
+
+
+data %&gt;% 
+  mutate(cyl = factor(cyl)) %&gt;% 
+  ggplot(aes(wt,mpg, color =cyl))+
+  geom_point(aes (shape = cyl), size =3)+
+  geom_smooth(method = &quot;lm&quot;, se=F, fullrange=T)
+</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Add a new chunk by clicking the <em>Insert Chunk</em> button on the
-toolbar or by pressing <em>Ctrl+Alt+I</em>.</p>
-<p>When you save the notebook, an HTML file containing the code and
-output will be saved alongside it (click the <em>Preview</em> button or
-press <em>Ctrl+Shift+K</em> to preview the HTML file).</p>
-<p>The preview shows you a rendered HTML copy of the contents of the
-editor. Consequently, unlike <em>Knit</em>, <em>Preview</em> does not
-run any R code chunks. Instead, the output of the chunk when it was last
-run in the editor is displayed.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Col1</th>
+<th>Col2</th>
+<th>Col3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Hallo</strong></p>
+<p>lm = linear model loess = loess model local polynomial regression</p>
 <!-- rnb-text-end -->
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIkZlcmRpbmFuZHMgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpUaGlzIGlzIGFuIFtSIE1hcmtkb3duXShodHRwOi8vcm1hcmtkb3duLnJzdHVkaW8uY29tKSBOb3RlYm9vay4gV2hlbiB5b3UgZXhlY3V0ZSBjb2RlIHdpdGhpbiB0aGUgbm90ZWJvb2ssIHRoZSByZXN1bHRzIGFwcGVhciBiZW5lYXRoIHRoZSBjb2RlLiANCg0KVHJ5IGV4ZWN1dGluZyB0aGlzIGNodW5rIGJ5IGNsaWNraW5nIHRoZSAqUnVuKiBidXR0b24gd2l0aGluIHRoZSBjaHVuayBvciBieSBwbGFjaW5nIHlvdXIgY3Vyc29yIGluc2lkZSBpdCBhbmQgcHJlc3NpbmcgKkN0cmwrU2hpZnQrRW50ZXIqLiANCg0KYGBge3J9DQpwbG90KGNhcnMpDQpgYGANCg0KQWRkIGEgbmV3IGNodW5rIGJ5IGNsaWNraW5nIHRoZSAqSW5zZXJ0IENodW5rKiBidXR0b24gb24gdGhlIHRvb2xiYXIgb3IgYnkgcHJlc3NpbmcgKkN0cmwrQWx0K0kqLg0KDQpXaGVuIHlvdSBzYXZlIHRoZSBub3RlYm9vaywgYW4gSFRNTCBmaWxlIGNvbnRhaW5pbmcgdGhlIGNvZGUgYW5kIG91dHB1dCB3aWxsIGJlIHNhdmVkIGFsb25nc2lkZSBpdCAoY2xpY2sgdGhlICpQcmV2aWV3KiBidXR0b24gb3IgcHJlc3MgKkN0cmwrU2hpZnQrSyogdG8gcHJldmlldyB0aGUgSFRNTCBmaWxlKS4NCg0KVGhlIHByZXZpZXcgc2hvd3MgeW91IGEgcmVuZGVyZWQgSFRNTCBjb3B5IG9mIHRoZSBjb250ZW50cyBvZiB0aGUgZWRpdG9yLiBDb25zZXF1ZW50bHksIHVubGlrZSAqS25pdCosICpQcmV2aWV3KiBkb2VzIG5vdCBydW4gYW55IFIgY29kZSBjaHVua3MuIEluc3RlYWQsIHRoZSBvdXRwdXQgb2YgdGhlIGNodW5rIHdoZW4gaXQgd2FzIGxhc3QgcnVuIGluIHRoZSBlZGl0b3IgaXMgZGlzcGxheWVkLg0K</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkZlcmRpbmFuZHMgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpgYGB7cn0NCmxpYnJhcnkoZ2dwbG90MikNCmxpYnJhcnkodGlkeXZlcnNlKQ0KDQpkYXRhPC1tdGNhcnMNCg0KI2RhdGEkY3lsIDwtIGFzLmZhY3RvcihkYXRhJGN5bCkNCg0KZGF0YSAlPiUgDQogIG11dGF0ZShjeWwgPSBmYWN0b3IoY3lsKSkgJT4lIA0KICBnZ3Bsb3QoYWVzKHd0LG1wZywgY29sb3IgPWN5bCkpKw0KICBnZW9tX3BvaW50KGFlcyAoc2hhcGUgPSBjeWwpLCBzaXplID0zKSsNCiAgZ2VvbV9zbW9vdGgobWV0aG9kID0gImxtIikNCg0KDQoNCmRhdGEgJT4lIA0KICBtdXRhdGUoY3lsID0gZmFjdG9yKGN5bCkpICU+JSANCiAgZ2dwbG90KGFlcyh3dCxtcGcsIGNvbG9yID1jeWwpKSsNCiAgZ2VvbV9wb2ludChhZXMgKHNoYXBlID0gY3lsKSwgc2l6ZSA9MykrDQogIGdlb21fc21vb3RoKG1ldGhvZCA9ICJsbSIsIHNlPUYsIGZ1bGxyYW5nZT1UKQ0KDQoNCmBgYA0KDQp8IENvbDEgfCBDb2wyIHwgQ29sMyB8DQp8LS0tLS0tfC0tLS0tLXwtLS0tLS18DQp8ICAgICAgfCAgICAgIHwgICAgICB8DQp8ICAgICAgfCAgICAgIHwgICAgICB8DQp8ICAgICAgfCAgICAgIHwgICAgICB8DQoNCioqSGFsbG8qKg0KDQpsbSA9IGxpbmVhciBtb2RlbCBsb2VzcyA9IGxvZXNzIG1vZGVsIGxvY2FsIHBvbHlub21pYWwgcmVncmVzc2lvbg0KDQpgYGB7ciBldmFsPUZBTFNFLCBpbmNsdWRlPUZBTFNFfQ0KDQpkYXRhPC1yZWFkLmNzdigiaHR0cHM6Ly9vdXJ3b3JsZGluZGF0YS5vcmcvdXBsb2Fkcy8yMDIyLzA5L01hbW1hbC1jb21lYmFjay1pbi1FdXJvcGUtZGF0YS1PV0lELWRvd25sb2FkLmNzdiIsIHNlcCA9ICIsIikNCg0KDQojaW5zdGFsbC5wYWNrYWdlcygiaHJicnRoZW1lcyIpDQoNCiMgTGlicmFyeQ0KbGlicmFyeShnZ3Bsb3QyKQ0KbGlicmFyeShkcGx5cikNCmxpYnJhcnkodGlkeXZlcnNlKQ0KI2xpYnJhcnkoaHJicnRoZW1lcykNCg0KZGF0YSAlPiUNCiAgbXV0YXRlKG5hbWUgPSBmY3RfcmVvcmRlcihDb21tb24ubmFtZS5vZi5zcGVjaWVzLCBBdmVyYWdlLnJlbGF0aXZlLmNoYW5nZS5pbi5hYnVuZGFuY2UpKSAlPiUNCiAgZ2dwbG90KCBhZXMoeD1uYW1lLCB5PUF2ZXJhZ2UucmVsYXRpdmUuY2hhbmdlLmluLmFidW5kYW5jZSkpICsNCiAgZ2VvbV9iYXIoc3RhdD0iaWRlbnRpdHkiLCBmaWxsPSIjZjY4MDYwIiwgYWxwaGE9LjYsIHdpZHRoPS40KSArDQogIGNvb3JkX2ZsaXAoKSArDQogIHhsYWIoIiIpICsNCiAgdGhlbWVfYncoKQ0KDQojIFJldmVyc2Ugc2lkZQ0KZGF0YSAlPiUNCiAgbXV0YXRlKG5hbWUgPSBmY3RfcmVvcmRlcihDb21tb24ubmFtZS5vZi5zcGVjaWVzLCBkZXNjKEF2ZXJhZ2UucmVsYXRpdmUuY2hhbmdlLmluLmFidW5kYW5jZSkpKSAlPiUNCiAgZ2dwbG90KCBhZXMoeD1uYW1lLCB5PUF2ZXJhZ2UucmVsYXRpdmUuY2hhbmdlLmluLmFidW5kYW5jZSkpICsNCiAgZ2VvbV9iYXIoc3RhdD0iaWRlbnRpdHkiLCBmaWxsPSIjZjY4MDYwIiwgYWxwaGE9LjYsIHdpZHRoPS40KSArDQogIGdlb21fbGluZShhcnJvdyA9IGFycm93KGxlbmd0aD11bml0KDAuMzAsImNtIiksIGVuZHM9ImZpcnN0IiwgdHlwZSA9ICJjbG9zZWQiKSkrDQogIGNvb3JkX2ZsaXAoKSArDQogIHhsYWIoIiIpICsNCiAgI3NvcnQoZGVjcmVhc2luZyA9IFRSVUUpICsNCiAgdGhlbWVfYncoKQ0KDQoNCmBgYA0K</div>
 
 
 
