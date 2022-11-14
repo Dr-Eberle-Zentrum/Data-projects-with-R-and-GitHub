@@ -3,72 +3,16 @@ title: "Ferdinands Notebook"
 output: html_notebook
 ---
 
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
 ```{r}
-library(ggplot2)
-library(tidyverse)
-
-data<-mtcars
-
-#data$cyl <- as.factor(data$cyl)
-
-data %>% 
-  mutate(cyl = factor(cyl)) %>% 
-  ggplot(aes(wt,mpg, color =cyl))+
-  geom_point(aes (shape = cyl), size =3)+
-  geom_smooth(method = "lm")
-
-
-
-data %>% 
-  mutate(cyl = factor(cyl)) %>% 
-  ggplot(aes(wt,mpg, color =cyl))+
-  geom_point(aes (shape = cyl), size =3)+
-  geom_smooth(method = "lm", se=F, fullrange=T)
-
-
+plot(cars)
 ```
 
-| Col1 | Col2 | Col3 |
-|------|------|------|
-|      |      |      |
-|      |      |      |
-|      |      |      |
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
 
-**Hallo**
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
 
-lm = linear model loess = loess model local polynomial regression
-
-```{r eval=FALSE, include=FALSE}
-
-data<-read.csv("https://ourworldindata.org/uploads/2022/09/Mammal-comeback-in-Europe-data-OWID-download.csv", sep = ",")
-
-
-#install.packages("hrbrthemes")
-
-# Library
-library(ggplot2)
-library(dplyr)
-library(tidyverse)
-#library(hrbrthemes)
-
-data %>%
-  mutate(name = fct_reorder(Common.name.of.species, Average.relative.change.in.abundance)) %>%
-  ggplot( aes(x=name, y=Average.relative.change.in.abundance)) +
-  geom_bar(stat="identity", fill="#f68060", alpha=.6, width=.4) +
-  coord_flip() +
-  xlab("") +
-  theme_bw()
-
-# Reverse side
-data %>%
-  mutate(name = fct_reorder(Common.name.of.species, desc(Average.relative.change.in.abundance))) %>%
-  ggplot( aes(x=name, y=Average.relative.change.in.abundance)) +
-  geom_bar(stat="identity", fill="#f68060", alpha=.6, width=.4) +
-  geom_line(arrow = arrow(length=unit(0.30,"cm"), ends="first", type = "closed"))+
-  coord_flip() +
-  xlab("") +
-  #sort(decreasing = TRUE) +
-  theme_bw()
-
-
-```
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
