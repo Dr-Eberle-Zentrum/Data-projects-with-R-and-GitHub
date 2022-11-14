@@ -109,7 +109,7 @@ To this end:
 -   [Project by Bernhard](Projects/bernhard-ebersbach/readme.html)
 -   [Project by Fanyi](Projects/meng/project-description.nb.html)
 - [Project by Ferdinand](Projects/FerSoe/FerSoe_Notebook.nb.html)
-
+- [Project by Jan](Projects/jan-boethling/project-description_Jan.html)
 #### Goals
 
 At the end of Phase 1 you will have a better understanding of
