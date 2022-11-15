@@ -1,9 +1,11 @@
 ---
 title: "R Project 1"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 
-
+# The Chord Diagram
 
 
 Please have a look at the following chord diagram:
@@ -13,5 +15,13 @@ Please have a look at the following chord diagram:
 
 Please try to create something similar. You can find the (example) data for this project in the "Data" folder.
 
-The data contains a list of projects P1 to P12 in a table that shows if these projects are linked to each other (1) or if they are not linked (0). If they are linked to each other, there should be also a line in the graphic.
+
+The data contains a list of projects (P1 to P12). Every P (1-12) number is an own project which has connections to other projects, for example because they use the same sample or the same method of analyzing data.
+The table shows only if these projects are linked to each other (1) or if they are not linked (0). 
+If they are linked to each other, there should be also a line between these projects in the graphic. The appearance of the line does not matter (and the table does not contain any additional information).
+
+## First suggested steps
+First suggested step would be the data rearrangement and searching for a package that creates chord diagrams.
+
+
 
