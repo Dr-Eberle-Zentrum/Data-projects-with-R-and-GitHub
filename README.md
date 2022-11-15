@@ -108,7 +108,7 @@ To this end:
 - [first draft of Dana's project](Projects/dana-jabari/cloze-task-project.html)
 -   [Project by Bernhard](Projects/bernhard-ebersbach/readme.html)
 -   [Project by Fanyi](Projects/meng/project-description.nb.html)
-- [Project by Ferdinand](Projects/FerSoe/FerSoe_Notebook.nb.html)
+- [Project by Ferdinand](Projects/FerSoe/Project1/Projectdescription.html)
 - [Project by Jan](Projects/jan-boethling/project-description_Jan.html)
 - [Project by Zoé](Projects/zoebuerger/mood_stress_ZB.html)
 - [Project by Eric](Projects/offi24/Beispiel_R_Markdown.html)
