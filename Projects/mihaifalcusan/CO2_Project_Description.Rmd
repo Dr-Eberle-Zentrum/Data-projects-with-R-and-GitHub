@@ -1,0 +1,27 @@
+# CO2 Data Project
+
+ As part of this project, your task will be to familiarise yourself with the plant
+dataset CO2 by doing a few helpful visualizations and even some basic statistical analyses.
+
+The CO2 data frame is part of **R base** and contains data from an experiment on the cold tolerance
+of the grass species *Echinochloa crus-galli*.
+
+Although this sounds *extremely* boring at first, its strength lies in the fact that it has a low level of complexity, it contains clean data and still allows for:
+- Cool and helpful visualisations
+- Introduction to hypothesis testing and analysis of variance (ANOVA)
+
+Your tasks would therefore be the following:
+- Get a general understanding of the data
+- Plot some bar plots (together with standard errors) to better comprehend how the different experimental conditions have an impact on CO2 uptake (design style up to you)
+- After this, formulate some hypotheses (e.g. "plant 1 has a higher CO2 uptake than all other plants")
+- Learn to perform hypothesis tests to prove your hypotheses in a scientificaly accurate way
+- Build a new visualization containing more than one plot, with the help of which you can easily communicate your statistical findings to a nonprofessional
+- (BONUS) If you find this fun and want to deepen your understanding of statistical testing, also test your hypotheses using analyses of variance (ANOVA)
+
+I offer to help with any questions regarding the statistical part.
+
+| Project advantages      | Project disadvantages |
+|--------------|-----------------------|
+| good intro to hypothesis testing|   too simple for people with a statistical background   |
+|Learn about the basic differences between expolratory analyses and real experiments| Low number of different Plants (6)
+| Loved by plant enthusiasts      | data insights not extremely relevant in everyday life   |
