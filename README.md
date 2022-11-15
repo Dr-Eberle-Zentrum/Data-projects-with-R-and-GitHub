@@ -112,6 +112,7 @@ To this end:
 - [Project by Jan](Projects/jan-boethling/project-description_Jan.html)
 - [Project by Zoé](Projects/zoebuerger/mood_stress_ZB.html)
 - [Project by Eric](Projects/offi24/Beispiel_R_Markdown.html)
+- [Project by Mihai](Projects/mihaifalcusan/CO2_Project_Description.html)
 
 
 #### Goals
