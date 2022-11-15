@@ -1,0 +1,43 @@
+---
+title: "First Project (Course R2)"
+author: "Eric Offermann"
+date: '2022-11-11'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readxl)
+```
+
+# First Project: Drafting a description of the project
+
+The goal of this project is to work with Covid-data in the EU. The data has informations on the daily number of new reported COVID-19 cases and deaths for every EU/EEA country.
+The dataset starts at the beginning of the pandemic until the 01.11.2022. After this date, the covid cases are not tracked anymore in all country. 
+
+The data can be downloaded from the following link:
+<https://www.ecdc.europa.eu/en/publications-data/data-daily-new-cases-covid-19-eueea-country>
+Please download the data as xlsx-file. 
+
+
+## More detailed infos about the dataset
+
+The dataset includes data for all EU/EEA country. The cases and the deaths are listed per day. In the column popData2020 you can find the population of the respectiv country in the year 2020. Take attention to proper handle the NA-values. Mostly at the end of the data recording their could be countries who stopped the data transmission already earlier.
+
+Small view in the dataset:
+```{r, echo = F}
+cases = "D:/Eric/Documents/Uni_Tuebingen_Kurse/5. Semester/Kurs R2/Project1/Covid_Cases_EU.xlsx"
+ca = read_excel(cases)
+head(ca)
+```
+
+## Work to do
+
+We want to find out, which EU-country has the most covid-cases and deaths proportional to the number of inhabitants, starting from the beginning of the pandemic. Therefore you need to create a bar chart *geom_bar()*. On the X-axis of the chart, the different EU-countries should be listed (exclude the countries which are not part of the EU!!). The Y-axis should visualize the covid-cases. The chart-bars should also include the number of deaths, which should be visualized in a different color than number of cases. Take care to show the cases and deaths in relation to the population of the countries.
+
+<center>
+
+![](D:/Eric/Documents/Uni_Tuebingen_Kurse/5. Semester/Kurs R2/Project1/covid.png)
+<center>
+
+
