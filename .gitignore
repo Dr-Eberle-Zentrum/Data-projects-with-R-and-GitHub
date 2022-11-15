@@ -26,7 +26,6 @@ vignettes/*.pdf
 *.knit.md
 # R Environment Variables
 .Renviron
-Advanced-data-processing-with-R.Rproj
+*.Rproj
 .DS_Store
-R_Advanced.Rproj
 Notes
