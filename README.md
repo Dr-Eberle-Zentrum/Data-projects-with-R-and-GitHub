@@ -140,8 +140,8 @@ For each project draft, we will assign two reviewers at random.
 The *reviewer assignments* are as follows:
 
 - (**reviewer**) : (project owner)
-- **Dana**: Bernhard + Fanyi
-- **Bernhard**: Fanyi + Ferdinand
+- **Dana**: Bernhard + Fanyi (en)
+- **Bernhard**: Fanyi (en) + Ferdinand
 - **Fanyi**: Ferdinand + Jan
 - **Ferdinand**: Jan + Eric
 - **Jan**: Eric + Zoé
