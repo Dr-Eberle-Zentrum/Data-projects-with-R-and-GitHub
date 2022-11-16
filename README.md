@@ -104,10 +104,10 @@ To this end:
 
 #### Available projects
 
--   [example project by Martin](Projects/martin-raden/project-description.html)
-- [first draft of Dana's project](Projects/dana-jabari/cloze-task-project.html)
--   [Project by Bernhard](Projects/bernhard-ebersbach/readme.html)
--   [Project by Fanyi](Projects/meng/project-description.nb.html)
+- [Example project by Martin](Projects/martin-raden/project-description.html)
+- [Project by Dana](Projects/dana-jabari/cloze-task-project.html)
+- [Project by Bernhard](Projects/bernhard-ebersbach/readme.html)
+- [Project by Fanyi](Projects/meng/project-description.nb.html)
 - [Project by Ferdinand](Projects/FerSoe/Project1/Projectdescription.html)
 - [Project by Jan](Projects/jan-boethling/project-description_Jan.html)
 - [Project by Zoé](Projects/zoebuerger/mood_stress_ZB.html)
@@ -137,6 +137,18 @@ Review comments should be done via GitHub issues, where you can also discuss you
 #### Raising issues
 
 For each project draft, we will assign two reviewers at random.
+The *reviewer assignments* are as follows:
+
+- (reviewer) : (project owner)
+- Dana: Bernhard + Fanyi
+- Bernhard: Fanyi + Ferdinand
+- Fanyi: Ferdinand + Jan
+- Ferdinand: Jan + Eric
+- Jan: Eric + Zoé
+- Eric: Zoé + Mihai
+- Zoé: Mihai + Dana
+- Mihai: Dana + Bernhard
+
 
 **Each reviewer** is supposed to
 
