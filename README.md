@@ -139,15 +139,15 @@ Review comments should be done via GitHub issues, where you can also discuss you
 For each project draft, we will assign two reviewers at random.
 The *reviewer assignments* are as follows:
 
-- (reviewer) : (project owner)
-- Dana: Bernhard + Fanyi
-- Bernhard: Fanyi + Ferdinand
-- Fanyi: Ferdinand + Jan
-- Ferdinand: Jan + Eric
-- Jan: Eric + Zoé
-- Eric: Zoé + Mihai
-- Zoé: Mihai + Dana
-- Mihai: Dana + Bernhard
+- (**reviewer**) : (project owner)
+- **Dana**: Bernhard + Fanyi
+- **Bernhard**: Fanyi + Ferdinand
+- **Fanyi**: Ferdinand + Jan
+- **Ferdinand**: Jan + Eric
+- **Jan**: Eric + Zoé
+- **Eric**: Zoé + Mihai
+- **Zoé**: Mihai + Dana
+- **Mihai**: Dana + Bernhard
 
 
 **Each reviewer** is supposed to
