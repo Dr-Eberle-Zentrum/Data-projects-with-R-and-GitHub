@@ -143,8 +143,9 @@ The *reviewer assignments* are as follows:
 - **Dana**: Bernhard + Fanyi (en)
 - **Bernhard**: Fanyi (en) + Ferdinand
 - **Fanyi**: Ferdinand + Jan
-- **Ferdinand**: Jan + Eric
-- **Jan**: Eric + Zoé
+- **Ferdinand**: Jan + Thomas
+- **Jan**: Thomas + Eric
+- **Thomas**: Eric + Zoé
 - **Eric**: Zoé + Mihai
 - **Zoé**: Mihai + Dana
 - **Mihai**: Dana + Bernhard
