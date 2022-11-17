@@ -15,19 +15,19 @@ library(readxl)
 We want to know whether there is a difference in stress reactivity in women using different types of hormonal contraceptives compared with women with a natural cycle. 
 
 ### How: 
-Three different groups of participants went through an experiment - they were submitted to a stress test (**MAST**) and a non-stressful control test (**PLACEBO**). Their mood was measured using questionnaires before and after both tasks. We now want to visualise the changes in mood in the three groups due to the stress test (**MAST**) and the non-stressful control (**PLACEBO**). 
+Three different groups of participants went through an experiment - they were submitted to a stress test (called **MAST**) and a non-stressful control test (called **PLACEBO**). Their mood was measured using questionnaires before and after both tasks. We now want to visualise the changes in mood in the three groups due to the stress test (**MAST**) and the non-stressful control (**PLACEBO**). 
 
 ### Questionnaires: 
-Participants were asked on *visual analogue scales* (**VAS**) how good they felt (*Gefuehl*), how agreable the situation was to them (*Situation*) and how stressed they were feeling (*Stress*).
-The *Positive and Negative Affect Scale* (**PANAS**) measured how much "positive" and "negative" mood they were experiencing.
-The *Emotional Scale Rating* (**ESR**) assessed 6 base emotions and how strongly participants were feeling them. 
-The *State and Trait Anxiety Inventory* (**STAI**) assessed the current state of participants anxiety. 
+* Participants were asked on *visual analogue scales* (**VAS**) how good they felt (*Gefuehl*), how agreable the situation was to them (*Situation*) and how stressed they were feeling (*Stress*).
+* The *Positive and Negative Affect Scale* (**PANAS**) measured how much "positive" and "negative" mood they were experiencing.
+* The *Emotional Scale Rating* (**ESR**) assessed 6 base emotions and how strongly participants were feeling them. 
+* The *State and Trait Anxiety Inventory* (**STAI**) assessed the current state of participants anxiety. 
 
 ### Participants: 
-The three groups of participants are the following : Women with a natural cycle (participant ID starting with NC), women using the hormonal coil (participant ID starting with estIUD) and women using oral contraceptives (participant ID starting with estOC). 
+The three groups of participants are the following : Women with a natural cycle (participant ID starting with NC), women using the hormonal coil (participant ID starting with IUD) and women using oral contraceptives (participant ID starting with OC). 
 
 ### Our goal: 
-The goal is to obtain boxplots with violins (see picture: plot_idea.png ) for feelings of stress, positive mood, negative mood and anger for the four conditions (pre_placebo, post_placebo, pre_MAST, post_MAST) and the three groups (see excel plot below for a barplot representation of this).
+The goal is to obtain boxplots with violins (see picture below) for feelings of **stress**, **positive mood**, **negative mood** and **anger** for the four conditions (pre_placebo, post_placebo, pre_MAST, post_MAST) and the three groups (see excel plot below for a barplot representation of this).
 
 ![Example graph of boxplot with violins](violin_boxplot.png)
 ![Example barplot in Excel with the four conditions and three groups](NegativeMood.png)
@@ -49,18 +49,21 @@ head(mood)
 
 As you can see, the table is not in the right format - each participant (i.e. observation) is in a column, and the variables are in the columns. This needs to be changed, with variables as columns and participants as rows. 
 Further, for easier analysis, it would be good to create a variable group defining which group each participant belongs to - this is extractible from the participant IDs :
-estIUD for the group of women using a hormonal coil
-estOC for the group using oral contraceptives
 NC for the group having a natural menstrual cycle
+IUD for the group of women using a hormonal coil
+OC for the group using oral contraceptives
+
 
 However, there is multiple informations in the first rows: there is 
-- timepoint: indicates which questionnaire timepoint this was (pre or post, placebo or MAST)
-- questionnaire: what is the name of the questionnaire (see above under questionnaires) 
-- item: which question of this questionnaire is this the response for
+
+* timepoint: indicates which questionnaire timepoint this was (pre or post, placebo or MAST)
+* questionnaire: what is the name of the questionnaire (see above under questionnaires) 
+* item: which question of this questionnaire is this the response for
 
 Find a way to incorporate all of this information in the variable names. 
 
 Next steps:
+
 1. Recode the variables "Stress" - for now the scale is set from -200 to +200 --> change it so that the scale only goes from 0 to 100 (percentages).
 2. Calculate the PANAS questionnaire 
     * Negative mood should be the mean of the following ten PANAS items:
@@ -73,9 +76,9 @@ Next steps:
     * sum up all the STAI items that you recoded with the remaining negative items:
         angespannt, bekuemmert, aufgeregt, schiefgehen, beunruhigt, nervoes, zappelig, verkrampft, besorgt, ueberreizt
         
-You now have one value for Stress, one value for negative mood, one for positive mood and one for anxiety. We want to plot the means of each group for the four conditions. 
+You now have one value for stress, one value for negative mood, one for positive mood and one for anxiety, additionally there is one value for anger. We want to plot the means of each group for the four conditions. 
 This means creating 5 different plots: one for stress, 1 for negative mood, one for positive mood, one for anxiety and one for the ESR variable anger (Aerger).
 
-Think about what other plots or visualisation tools you could use to look at the data you tidied. 
+Think about what other plots or visualisation tools you could use to look at the data you tidied, one example might be a barplot with individual data points! 
     
     
