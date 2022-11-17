@@ -1,6 +1,8 @@
 ---
 title: "project-description"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 
 ## Data set
@@ -15,20 +17,30 @@ original data has column names:
 ```{r raw}
 library(tidyverse)
 data <- read_csv("rma-csv-collection.csv")
-colnames(data)
+data
+# A tibble:593,948 × 6
 ```
 
-column 3, 4, 5, 6 will be kept
+column 3, 4, 5, 6 should be kept meanwhile on inspecting *objectCreationDate[1]* there are many NA values and strings. Due to the original file being too large (over 100MB), the data is filtered via command line code
+
+    $ awk '$6 ~ /-?[0-9]{1,4}/  { print $3, $4, $5, $6}' rma-csv-collection.csv > rma-downsize.csv
+
+current size `1.1M Nov 17 17:15 rma-downsize.csv`
+
+```{r}
+data <- read_csv("rma-downsize.csv")
+data
+```
 
 ```{r renamed, cache = TRUE, echo = FALSE}
 data <- data %>%
   transmute(
-    title = .data[["objectTitle[1]"]],
-    type = .data[["objectType[1]"]],
-    creator = .data[["objectCreator[1]"]],
-    year = .data[["objectCreationDate[1]"]],
+    title = data[[1]],
+    type = data[[2]],
+    creator = data[[3]],
+    year = data[[4]],
   ) 
-head(data)
+data
 ```
 
 to explore the change of the top 7 *type* according to *year*.
@@ -49,5 +61,4 @@ str(data$year)  # chr [1:667894]
 
 *year* contains strings and NA, to clean the data - filter out rows with *year* that is not a number - try keep the x axis continuous, if it doesn't work, then `fct_lump()` it into ranges
 
-the visualization will be something like ![nothing here](sample.png)
-and hopefully fancier and with annotations staying in the right places
+the visualization will be something like ![nothing here](sample.png) and hopefully fancier and with annotations staying in the right places
