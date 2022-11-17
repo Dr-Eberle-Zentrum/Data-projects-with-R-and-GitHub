@@ -113,7 +113,7 @@ To this end:
 - [Project by Zoé](Projects/zoebuerger/mood_stress_ZB.html)
 - [Project by Eric](Projects/offi24/Beispiel_R_Markdown.html)
 - [Project by Mihai](Projects/mihaifalcusan/CO2_Project_Description.html)
-
+- [Project by Thomas](Projects/thomaskleiser/project_description_thomaskleiser.html)
 
 #### Goals
 
