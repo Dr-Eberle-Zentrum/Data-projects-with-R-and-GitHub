@@ -106,7 +106,7 @@ To this end:
 
 - [Example project by Martin](Projects/martin-raden/project-description.html)
 - [Project by Dana](Projects/dana-jabari/cloze-task-project.html)
-- [Project by Bernhard](Projects/bernhard-ebersbach/readme.html)
+- [Project by Bernhard](Projects/bernhard-ebersbach/project-description.html)
 - [Project by Fanyi](Projects/meng/project-description.nb.html)
 - [Project by Ferdinand](Projects/FerSoe/Project1/Projectdescription.html)
 - [Project by Jan](Projects/jan-boethling/project-description_Jan.html)
