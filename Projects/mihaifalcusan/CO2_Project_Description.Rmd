@@ -1,12 +1,27 @@
-# CO2 Data Project
+# CO2 Data Project 
 
- As part of this project, your task will be to familiarise yourself with the plant
+As part of this project, your task will be to familiarise yourself with the plant
 dataset CO2 by doing a few helpful visualizations and even some basic statistical analyses.
 
-The CO2 data frame is part of **R base** and contains data from an experiment on the cold tolerance
-of the grass species *Echinochloa crus-galli*.
+<center>
+  <img src="C:/Users/mihai/Documents/Faculta/Advanced R/Advanced-data-processing-with-R/Projects/mihaifalcusan/Plant.png" alt="Plant Logo" centering="True" width="80"/>
+</center>
 
-Although this sounds *extremely* boring at first, its strength lies in the fact that it has a low level of complexity, it contains clean data and still allows for:
+
+The CO2 data frame is part of **R base** and contains data from an experiment on the cold tolerance
+of the grass species *Echinochloa crus-galli*. The CO2 uptake of six plants from Quebec and six plants from Mississippi was measured at several levels of CO2 ambient concentration. Half the plants of each type were chilled overnight before the experiment was conducted. 
+
+Here\'s a preview:
+
+`str(CO2)`
+`:	84 obs. of  5 variables:`
+ `$ Plant    : Ord.factor w/ 12 levels "Qn1"<"Qn2"<"Qn3"<..: 1 1 1 1 1 1 1 2 2 2 ...` (each plant = 1 factor lvl)
+ `$ Type     : Factor w/ 2 levels "Quebec","Mississippi": 1 1 1 1 1 1 1 1 1 1 ...`
+ `$ Treatment: Factor w/ 2 levels "nonchilled","chilled": 1 1 1 1 1 1 1 1 1 1 ...`
+ `$ conc     : num  95 175 250 350 500 675 1000 95 175 250 ...`
+ `$ uptake   : num  16 30.4 34.8 37.2 35.3 39.2 39.7 13.6 27.3 37.1 ...`
+
+Although the data might look boring at first, its strength lies in the fact that it has a low level of complexity, it\'s clean and allows for:
 
 - Cool and helpful visualisations
 
@@ -15,8 +30,18 @@ Although this sounds *extremely* boring at first, its strength lies in the fact 
 
 Your tasks would therefore be the following:
 
-- Get a general understanding of the data
-- Plot some bar plots (together with standard errors) to better comprehend how the different experimental conditions have an impact on CO2 uptake (design style up to you)
+- Get a general understanding of the data by plotting the following (style is up to you):
+
+	- Bar plots illustrating CO2 uptake means (over the _conc_ condition) for **type** and **treatment** groups, together with their respective standard errors
+	- Line plots for each plant\'s CO2 uptake over the _conc_ condition (x-Axis) for all plants from Quebec. These line plots should be plottet in a 2 x 4 grid, where on the first row you have line plots of all chilled plants (3) + the mean chilled CO2 uptake by conc, and on the second row the same for the nonchilled plants (see plot example below). 
+	<center>
+  <img src="C:/Users/mihai/Documents/Faculta/Advanced R/Advanced-data-processing-with-R/Projects/mihaifalcusan/Plant_plot_skizze.png" alt="Plot example" centering="True" width="800"/>
+</center>
+
+<center>	This should help give an intuition about effects in the data. You are free to plot other conditions as well. </center>
+
+
+
 - After this, formulate some hypotheses (e.g. "plant 1 has a higher CO2 uptake than all other plants")
 - Learn to perform hypothesis tests to prove your hypotheses in a scientificaly accurate way
 - Build a new visualization containing more than one plot, with the help of which you can easily communicate your statistical findings to a nonprofessional
