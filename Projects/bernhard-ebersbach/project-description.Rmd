@@ -32,17 +32,26 @@ The [CSV](nmin_jena_2022.csv) contains many information taken from different plo
 -   *numleg*: number of legumes
 
 Only the first (*sowndiv*) and the last one (*numleg*) as well as the N~min~-colon will be of interest to us.
+Here are the first 10 lines of the file:
+```{r echo = FALSE, message=FALSE, results='asis'}
+library(knitr)
+library(tidyverse)
+kable(read_csv2("nmin_jena_2022.csv")[1:10,])
+# A tibble:593,948 × 6
+```
+
 
 ### The Task
 
 Make a bar plot that shows the following:
 
 -   Y-axis: the mean of N~min~ mith the given unit
--   X-axis: the grouped *numleg*-values
-    -   the *numleg*-groups shall contain sub groups
+-   X-axis: the grouped *numleg*-values as shown in the exampel below
+    -   the *numleg*-groups shall contain sub groups as shown in the exampel below
     -   the subgroups shall represent the grouped *sowndiv*-values
     -   the subgroups must be easily distinguishable (of different colors or symbology)
-    -   each bar shall needs to have an error bar representing the standard error
+    -   each bar needs to have an error bar representing the standard error
     -   the symbology/colors of *sowndiv* shall be described in a legend box
 
-The following example can be used as a basic reference: ![](https://clauswilke.com/dataviz/visualizing_amounts_files/figure-html/income-by-age-race-dodged-1.png)
+The result should look something like this: 
+![](example.png)

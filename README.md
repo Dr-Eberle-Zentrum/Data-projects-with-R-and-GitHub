@@ -104,16 +104,16 @@ To this end:
 
 #### Available projects
 
--   [example project by Martin](Projects/martin-raden/project-description.html)
-- [first draft of Dana's project](Projects/dana-jabari/cloze-task-project.html)
--   [Project by Bernhard](Projects/bernhard-ebersbach/readme.html)
--   [Project by Fanyi](Projects/meng/project-description.nb.html)
+- [Example project by Martin](Projects/martin-raden/project-description.html)
+- [Project by Dana](Projects/dana-jabari/cloze-task-project.html)
+- [Project by Bernhard](Projects/bernhard-ebersbach/project-description.html)
+- [Project by Fanyi](Projects/meng/project-description.nb.html)
 - [Project by Ferdinand](Projects/FerSoe/Project1/Projectdescription.html)
 - [Project by Jan](Projects/jan-boethling/project-description_Jan.html)
 - [Project by Zoé](Projects/zoebuerger/mood_stress_ZB.html)
 - [Project by Eric](Projects/offi24/Beispiel_R_Markdown.html)
 - [Project by Mihai](Projects/mihaifalcusan/CO2_Project_Description.html)
-
+- [Project by Thomas](Projects/thomaskleiser/project_description_thomaskleiser.html)
 
 #### Goals
 
@@ -137,11 +137,24 @@ Review comments should be done via GitHub issues, where you can also discuss you
 #### Raising issues
 
 For each project draft, we will assign two reviewers at random.
+The *reviewer assignments* are as follows:
+
+- (**reviewer**) : (project owner)
+- **Dana**: Bernhard + Fanyi (en)
+- **Bernhard**: Fanyi (en) + Ferdinand
+- **Fanyi**: Ferdinand + Jan
+- **Ferdinand**: Jan + Thomas
+- **Jan**: Thomas + Eric
+- **Thomas**: Eric + Zoé
+- **Eric**: Zoé + Mihai
+- **Zoé**: Mihai + Dana
+- **Mihai**: Dana + Bernhard
+
 
 **Each reviewer** is supposed to
 
--   read the respective project draft on GitHub Pages
--   open an Issue on GitHub within the project
+-   [read the respective project draft on GitHub Pages](https://dr-eberle-zentrum.github.io/Advanced-data-processing-with-R/#available-projects)
+-   [open an Issue](https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/issues) on GitHub within the project
 -   provide constructive feedback w.r.t.
     -   understandability
     -   missing information
