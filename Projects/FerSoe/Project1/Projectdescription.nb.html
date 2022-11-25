@@ -1766,19 +1766,57 @@ display: none;
 <p class="caption">“Fig.1 Chord Diagram”</p>
 </div>
 <p>Please try to create something similar. You can find the (example)
-data for this project in the “Data” folder.</p>
+data for this project in the “Data” folder. The chord diagram here is
+just an example as the data given here will not result in the same
+diagram.</p>
+<p><a href="https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/main/Projects/FerSoe/Project1/Data/Chord_test.csv" class="uri">https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/main/Projects/FerSoe/Project1/Data/Chord_test.csv</a></p>
 <p>The data contains a list of projects (P1 to P12). Every P (1-12)
 number is an own project which has connections to other projects, for
 example because they use the same sample or the same method of analyzing
-data.In a table it shows only if these projects are linked to each other
+data. The table shows only if these projects are linked to each other
 (1) or if they are not linked (0). If they are linked to each other,
-there should be also a line in the graphic. The appearance of the line
-does not matter (and the table does not contain any additional
-information).</p>
+there should be also a line between these projects in the graphic. The
+appearance of the line does not matter (and the table does not contain
+any additional information).</p>
+<p>The color scheme does not matter and can be chosen to your own
+liking.</p>
+<p>Please have a short look at the data:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6NiwibmNvbCI6MTMsInN1bW1hcnkiOltdfSwicmRmIjoiSDRzSUFBQUFBQUFBQnRWVFMwL0RNQXgyMGdkYXBRTFNma2NydXZFWWQ4UjVRa1BxTlhTRlZaUmthanZCY2I5ODRMWngrbUE3Y1NLUzFjLytQcnR4bkR3OXhITXY5Z0RBQXBzenNCeUU0RHl2SG9NRllBUWRCalpNNnU4WGlxWUlmTFJMTkZjVGZCa1pORE5vYnRDMVFUY0czZW82THJTTDlZeFd3Kzg3bjQzTThDYzBBLzZJNWhjLzBoemxlNXFUL1A1ZjhJUGhPbEo4cENXMGcvVnA0dkdmSmt6b3pxQ0ZRZmNhV2N2b3FvTlJCMmVqRFU0SzlSblNKdXZPdU83U0hYZVM1S0trVGlqb3JVVWx3dGNDODlFN2pGTE8xTGJLbE1Ra1BtMHJEcEpaVVZlQTduTDJ5WXVkckhlMURwTE5UcjRIVVU5S2Q0anBtbjRYcTMvUHYySDRqdHhVdm1VeTFaNmRKaHRGUGVYaUpjMjFjNDRuMFJ4RXVDMHlXVkdIR0MzRFNsV0NkRjZpY29vMFBjUGhCNVY0TkxmdUF3QUEifQ== -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["X"],"name":[1],"type":["chr"],"align":["left"]},{"label":["P1"],"name":[2],"type":["int"],"align":["right"]},{"label":["P2"],"name":[3],"type":["int"],"align":["right"]},{"label":["P3"],"name":[4],"type":["int"],"align":["right"]},{"label":["P4"],"name":[5],"type":["int"],"align":["right"]},{"label":["P5"],"name":[6],"type":["int"],"align":["right"]},{"label":["P6"],"name":[7],"type":["int"],"align":["right"]},{"label":["P7"],"name":[8],"type":["int"],"align":["right"]},{"label":["P8"],"name":[9],"type":["int"],"align":["right"]},{"label":["P9"],"name":[10],"type":["int"],"align":["right"]},{"label":["P10"],"name":[11],"type":["int"],"align":["right"]},{"label":["P11"],"name":[12],"type":["int"],"align":["right"]},{"label":["P12"],"name":[13],"type":["int"],"align":["right"]}],"data":[{"1":"P1","2":"0","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"NA","12":"NA","13":"NA","_rn_":"1"},{"1":"P2","2":"1","3":"0","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"NA","12":"NA","13":"NA","_rn_":"2"},{"1":"P3","2":"1","3":"1","4":"0","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"NA","12":"NA","13":"NA","_rn_":"3"},{"1":"P4","2":"1","3":"1","4":"1","5":"0","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"NA","12":"NA","13":"NA","_rn_":"4"},{"1":"P5","2":"0","3":"1","4":"1","5":"1","6":"0","7":"NA","8":"NA","9":"NA","10":"NA","11":"NA","12":"NA","13":"NA","_rn_":"5"},{"1":"P6","2":"0","3":"1","4":"1","5":"1","6":"1","7":"0","8":"NA","9":"NA","10":"NA","11":"NA","12":"NA","13":"NA","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10],"total":[13]},"rows":{"min":[10],"max":[10],"total":[6]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>As you can see, the data is stored in a kind of correlation
+table.That means that only half of the “triangle” is filled with values.
+In such a correlation table, one triangle is obsolete because it
+contains the same information as the other half. The NA values are
+therefore contained in the other half of the triangle. For example if
+your go to the <strong>column</strong> of P2 and look at the value for
+the connection with P1, this is empty (NA). When you go to the
+<strong>row</strong> of P2 and look than at the value for the connection
+with P1, you can see that this is 1. You might need to reformat the data
+into the wide or long format, depending on the package that you will be
+using to solve this task.</p>
+<div id="first-suggested-steps" class="section level2">
+<h2>First suggested steps</h2>
+<p>First suggested steps would be</p>
+<ul>
+<li>downloading/integrating the data</li>
+<li>searching for a package that creates chord diagrams</li>
+<li>rearrangement of the data structure, according to the chord diagram
+package</li>
+</ul>
 <!-- rnb-text-end -->
 </div>
+</div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgUHJvamVjdCAxIg0Kb3V0cHV0OiBodG1sX25vdGVib29rDQotLS0NCg0KIyBUaGUgQ2hvcmQgRGlhZ3JhbQ0KDQoNClBsZWFzZSBoYXZlIGEgbG9vayBhdCB0aGUgZm9sbG93aW5nIGNob3JkIGRpYWdyYW06DQoNCiFbIkZpZy4xIENob3JkIERpYWdyYW0iXShjaG9yZC5qcGcpDQoNCg0KUGxlYXNlIHRyeSB0byBjcmVhdGUgc29tZXRoaW5nIHNpbWlsYXIuIFlvdSBjYW4gZmluZCB0aGUgKGV4YW1wbGUpIGRhdGEgZm9yIHRoaXMgcHJvamVjdCBpbiB0aGUgIkRhdGEiIGZvbGRlci4NCg0KVGhlIGRhdGEgY29udGFpbnMgYSBsaXN0IG9mIHByb2plY3RzIChQMSB0byBQMTIpLiBFdmVyeSBQICgxLTEyKSBudW1iZXIgaXMgYW4gb3duIHByb2plY3Qgd2hpY2ggaGFzIGNvbm5lY3Rpb25zIHRvIG90aGVyIHByb2plY3RzLCBmb3IgZXhhbXBsZSBiZWNhdXNlIHRoZXkgdXNlIHRoZSBzYW1lIHNhbXBsZSBvciB0aGUgc2FtZSBtZXRob2Qgb2YgYW5hbHl6aW5nIGRhdGEuSW4gYSB0YWJsZSBpdCBzaG93cyBvbmx5IGlmIHRoZXNlIHByb2plY3RzIGFyZSBsaW5rZWQgdG8gZWFjaCBvdGhlciAoMSkgb3IgaWYgdGhleSBhcmUgbm90IGxpbmtlZCAoMCkuIElmIHRoZXkgYXJlIGxpbmtlZCB0byBlYWNoIG90aGVyLCB0aGVyZSBzaG91bGQgYmUgYWxzbyBhIGxpbmUgaW4gdGhlIGdyYXBoaWMuIFRoZSBhcHBlYXJhbmNlIG9mIHRoZSBsaW5lIGRvZXMgbm90IG1hdHRlciAoYW5kIHRoZSB0YWJsZSBkb2VzIG5vdCBjb250YWluIGFueSBhZGRpdGlvbmFsIGluZm9ybWF0aW9uKS4NCg0KDQoNCg==</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgUHJvamVjdCAxIg0Kb3V0cHV0OiBodG1sX25vdGVib29rDQotLS0NCg0KIyBUaGUgQ2hvcmQgRGlhZ3JhbQ0KDQpQbGVhc2UgaGF2ZSBhIGxvb2sgYXQgdGhlIGZvbGxvd2luZyBjaG9yZCBkaWFncmFtOg0KDQohWyJGaWcuMSBDaG9yZCBEaWFncmFtIl0oY2hvcmQuanBnKQ0KDQpQbGVhc2UgdHJ5IHRvIGNyZWF0ZSBzb21ldGhpbmcgc2ltaWxhci4gWW91IGNhbiBmaW5kIHRoZSAoZXhhbXBsZSkgZGF0YSBmb3IgdGhpcyBwcm9qZWN0IGluIHRoZSAiRGF0YSIgZm9sZGVyLiBUaGUgY2hvcmQgZGlhZ3JhbSBoZXJlIGlzIGp1c3QgYW4gZXhhbXBsZSBhcyB0aGUgZGF0YSBnaXZlbiBoZXJlIHdpbGwgbm90IHJlc3VsdCBpbiB0aGUgc2FtZSBkaWFncmFtLg0KDQo8aHR0cHM6Ly9naXRodWIuY29tL0RyLUViZXJsZS1aZW50cnVtL0FkdmFuY2VkLWRhdGEtcHJvY2Vzc2luZy13aXRoLVIvYmxvYi9tYWluL1Byb2plY3RzL0ZlclNvZS9Qcm9qZWN0MS9EYXRhL0Nob3JkX3Rlc3QuY3N2Pg0KDQpUaGUgZGF0YSBjb250YWlucyBhIGxpc3Qgb2YgcHJvamVjdHMgKFAxIHRvIFAxMikuIEV2ZXJ5IFAgKDEtMTIpIG51bWJlciBpcyBhbiBvd24gcHJvamVjdCB3aGljaCBoYXMgY29ubmVjdGlvbnMgdG8gb3RoZXIgcHJvamVjdHMsIGZvciBleGFtcGxlIGJlY2F1c2UgdGhleSB1c2UgdGhlIHNhbWUgc2FtcGxlIG9yIHRoZSBzYW1lIG1ldGhvZCBvZiBhbmFseXppbmcgZGF0YS4gVGhlIHRhYmxlIHNob3dzIG9ubHkgaWYgdGhlc2UgcHJvamVjdHMgYXJlIGxpbmtlZCB0byBlYWNoIG90aGVyICgxKSBvciBpZiB0aGV5IGFyZSBub3QgbGlua2VkICgwKS4gSWYgdGhleSBhcmUgbGlua2VkIHRvIGVhY2ggb3RoZXIsIHRoZXJlIHNob3VsZCBiZSBhbHNvIGEgbGluZSBiZXR3ZWVuIHRoZXNlIHByb2plY3RzIGluIHRoZSBncmFwaGljLiBUaGUgYXBwZWFyYW5jZSBvZiB0aGUgbGluZSBkb2VzIG5vdCBtYXR0ZXIgKGFuZCB0aGUgdGFibGUgZG9lcyBub3QgY29udGFpbiBhbnkgYWRkaXRpb25hbCBpbmZvcm1hdGlvbikuDQoNClRoZSBjb2xvciBzY2hlbWUgZG9lcyBub3QgbWF0dGVyIGFuZCBjYW4gYmUgY2hvc2VuIHRvIHlvdXIgb3duIGxpa2luZy4NCg0KUGxlYXNlIGhhdmUgYSBzaG9ydCBsb29rIGF0IHRoZSBkYXRhOg0KDQpgYGB7ciBlY2hvPUZBTFNFfQ0KDQp1cmwgPSAiaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0RyLUViZXJsZS1aZW50cnVtL0FkdmFuY2VkLWRhdGEtcHJvY2Vzc2luZy13aXRoLVIvbWFpbi9Qcm9qZWN0cy9GZXJTb2UvUHJvamVjdDEvRGF0YS9DaG9yZF90ZXN0LmNzdiINCg0KZGF0YV9wcjwtIHJlYWQuY3N2KHVybCwgc2VwID0gIjsiKQ0KDQoNCg0KaGVhZChkYXRhX3ByKQ0KYGBgDQoNCkFzIHlvdSBjYW4gc2VlLCB0aGUgZGF0YSBpcyBzdG9yZWQgaW4gYSBraW5kIG9mIGNvcnJlbGF0aW9uIHRhYmxlLlRoYXQgbWVhbnMgdGhhdCBvbmx5IGhhbGYgb2YgdGhlICJ0cmlhbmdsZSIgaXMgZmlsbGVkIHdpdGggdmFsdWVzLiBJbiBzdWNoIGEgY29ycmVsYXRpb24gdGFibGUsIG9uZSB0cmlhbmdsZSBpcyBvYnNvbGV0ZSBiZWNhdXNlIGl0IGNvbnRhaW5zIHRoZSBzYW1lIGluZm9ybWF0aW9uIGFzIHRoZSBvdGhlciBoYWxmLiBUaGUgTkEgdmFsdWVzIGFyZSB0aGVyZWZvcmUgY29udGFpbmVkIGluIHRoZSBvdGhlciBoYWxmIG9mIHRoZSB0cmlhbmdsZS4gRm9yIGV4YW1wbGUgaWYgeW91ciBnbyB0byB0aGUgKipjb2x1bW4qKiBvZiBQMiBhbmQgbG9vayBhdCB0aGUgdmFsdWUgZm9yIHRoZSBjb25uZWN0aW9uIHdpdGggUDEsIHRoaXMgaXMgZW1wdHkgKE5BKS4gV2hlbiB5b3UgZ28gdG8gdGhlICoqcm93Kiogb2YgUDIgYW5kIGxvb2sgdGhhbiBhdCB0aGUgdmFsdWUgZm9yIHRoZSBjb25uZWN0aW9uIHdpdGggUDEsIHlvdSBjYW4gc2VlIHRoYXQgdGhpcyBpcyAxLiANCllvdSBtaWdodCBuZWVkIHRvIHJlZm9ybWF0IHRoZSBkYXRhIGludG8gdGhlIHdpZGUgb3IgbG9uZyBmb3JtYXQsIGRlcGVuZGluZyBvbiB0aGUgcGFja2FnZSB0aGF0IHlvdSB3aWxsIGJlIHVzaW5nIHRvIHNvbHZlIHRoaXMgdGFzay4NCg0KIyMgRmlyc3Qgc3VnZ2VzdGVkIHN0ZXBzDQoNCkZpcnN0IHN1Z2dlc3RlZCBzdGVwcyB3b3VsZCBiZQ0KDQotICAgZG93bmxvYWRpbmcvaW50ZWdyYXRpbmcgdGhlIGRhdGENCi0gICBzZWFyY2hpbmcgZm9yIGEgcGFja2FnZSB0aGF0IGNyZWF0ZXMgY2hvcmQgZGlhZ3JhbXMNCi0gICByZWFycmFuZ2VtZW50IG9mIHRoZSBkYXRhIHN0cnVjdHVyZSwgYWNjb3JkaW5nIHRvIHRoZSBjaG9yZCBkaWFncmFtIHBhY2thZ2UNCg==</div>
 
 
 

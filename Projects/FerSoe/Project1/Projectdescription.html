@@ -1638,7 +1638,9 @@ display: none;
 <p class="caption">“Fig.1 Chord Diagram”</p>
 </div>
 <p>Please try to create something similar. You can find the (example)
-data for this project in the “Data” folder.</p>
+data for this project in the “Data” folder. The chord diagram here is
+just an example as the data given here will not result in the same
+diagram.</p>
 <p><a href="https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/main/Projects/FerSoe/Project1/Data/Chord_test.csv" class="uri">https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/main/Projects/FerSoe/Project1/Data/Chord_test.csv</a></p>
 <p>The data contains a list of projects (P1 to P12). Every P (1-12)
 number is an own project which has connections to other projects, for
@@ -1648,10 +1650,34 @@ data. The table shows only if these projects are linked to each other
 there should be also a line between these projects in the graphic. The
 appearance of the line does not matter (and the table does not contain
 any additional information).</p>
+<p>The color scheme does not matter and can be chosen to your own
+liking.</p>
+<p>Please have a short look at the data:</p>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["X"],"name":[1],"type":["chr"],"align":["left"]},{"label":["P1"],"name":[2],"type":["int"],"align":["right"]},{"label":["P2"],"name":[3],"type":["int"],"align":["right"]},{"label":["P3"],"name":[4],"type":["int"],"align":["right"]},{"label":["P4"],"name":[5],"type":["int"],"align":["right"]},{"label":["P5"],"name":[6],"type":["int"],"align":["right"]},{"label":["P6"],"name":[7],"type":["int"],"align":["right"]},{"label":["P7"],"name":[8],"type":["int"],"align":["right"]},{"label":["P8"],"name":[9],"type":["int"],"align":["right"]},{"label":["P9"],"name":[10],"type":["int"],"align":["right"]},{"label":["P10"],"name":[11],"type":["int"],"align":["right"]},{"label":["P11"],"name":[12],"type":["int"],"align":["right"]},{"label":["P12"],"name":[13],"type":["int"],"align":["right"]}],"data":[{"1":"P1","2":"0","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"NA","12":"NA","13":"NA"},{"1":"P2","2":"1","3":"0","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"NA","12":"NA","13":"NA"},{"1":"P3","2":"1","3":"1","4":"0","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"NA","12":"NA","13":"NA"},{"1":"P4","2":"1","3":"1","4":"1","5":"0","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"NA","12":"NA","13":"NA"},{"1":"P5","2":"0","3":"1","4":"1","5":"1","6":"0","7":"NA","8":"NA","9":"NA","10":"NA","11":"NA","12":"NA","13":"NA"},{"1":"P6","2":"0","3":"1","4":"1","5":"1","6":"1","7":"0","8":"NA","9":"NA","10":"NA","11":"NA","12":"NA","13":"NA"},{"1":"P7","2":"0","3":"1","4":"1","5":"1","6":"1","7":"1","8":"0","9":"NA","10":"NA","11":"NA","12":"NA","13":"NA"},{"1":"P8","2":"0","3":"1","4":"1","5":"1","6":"1","7":"1","8":"1","9":"1","10":"NA","11":"NA","12":"NA","13":"NA"},{"1":"P9","2":"1","3":"0","4":"1","5":"0","6":"0","7":"1","8":"1","9":"1","10":"1","11":"NA","12":"NA","13":"NA"},{"1":"P10","2":"0","3":"0","4":"0","5":"0","6":"0","7":"1","8":"1","9":"1","10":"1","11":"0","12":"NA","13":"NA"},{"1":"P11","2":"1","3":"1","4":"1","5":"1","6":"1","7":"1","8":"1","9":"1","10":"1","11":"1","12":"0","13":"NA"},{"1":"P12","2":"1","3":"1","4":"1","5":"1","6":"1","7":"1","8":"1","9":"1","10":"1","11":"1","12":"0","13":"0"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>As you can see, the data is stored in a kind of correlation
+table.That means that only half of the “triangle” is filled with values.
+In such a correlation table, one triangle is obsolete because it
+contains the same information as the other half. The NA values are
+therefore contained in the other half of the triangle. For example if
+your go to the <strong>column</strong> of P2 and look at the value for
+the connection with P1, this is empty (NA). When you go to the
+<strong>row</strong> of P2 and look than at the value for the connection
+with P1, you can see that this is 1. You might need to reformat the data
+into the wide or long format, depending on the package that you will be
+using to solve this task.</p>
 <div id="first-suggested-steps" class="section level2">
 <h2>First suggested steps</h2>
-<p>First suggested step would be downloading the data, a rearrangement
-and searching for a package that creates chord diagrams.</p>
+<p>First suggested steps would be</p>
+<ul>
+<li>downloading/integrating the data</li>
+<li>searching for a package that creates chord diagrams</li>
+<li>rearrangement of the data structure, according to the chord diagram
+package</li>
+</ul>
 </div>
 </div>
 
