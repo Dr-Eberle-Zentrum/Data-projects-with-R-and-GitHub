@@ -42,3 +42,16 @@ First suggested steps would be
 -   downloading/integrating the data
 -   searching for a package that creates chord diagrams
 -   rearrangement of the data structure, according to the chord diagram package
+
+
+## Optional Task
+Colors: 
+Try the following colors
+
+* P01 to P04 into a blue(ish) color and
+
+* P05 to P008 into a red(ish) color
+
+* P09 to P12 into a golden(ish) color
+
+The color should shift into the other color if the projects are connected with a project from another color category.
