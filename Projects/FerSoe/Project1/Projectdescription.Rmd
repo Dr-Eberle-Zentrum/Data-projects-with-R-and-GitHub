@@ -17,7 +17,7 @@ Please try to create something similar. You can find the (example) data for this
 
 The data contains a list of projects (P1 to P12). Every P (1-12) number is an own project which has connections to other projects, for example because they use the same sample or the same method of analyzing data. The table shows only if these projects are linked to each other (1) or if they are not linked (0). If they are linked to each other, there should be also a line between these projects in the graphic. 
 
-The color scheme does not matter and can be chosen to your own liking. Furthermore, the chord diagram here is just an example, as the data given here will not result in the same diagram. Also the looks of the chord diagrams produced by R, might differ quite a bit from the example above.
+The color scheme does not matter and can be chosen to your own liking. Furthermore, the chord diagram above is just an example, as the data given here will not result in the same diagram. Also the looks of the chord diagrams produced by R, might differ quite a bit from the example above.
 
 Please have a short look at the data:
 
