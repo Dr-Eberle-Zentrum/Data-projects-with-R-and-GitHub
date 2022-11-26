@@ -1,8 +1,8 @@
 ---
 title: "project-description"
 output:
-  html_document:
-    df_print: paged
+  html_notebook: default
+  github_document: default
 ---
 
 ## Data set
@@ -10,55 +10,60 @@ output:
 > data from <https://data.rijksmuseum.nl/object-metadata/download/>\
 > This Comma Separated Values file (*202020-rma-csv-collection.zip*) provides a simple inventory of objects in the Rijksmuseum collection. It includes the object number and persistent identifier, as well as a single title, type, creator, date and image URL for each object.
 
-## Visualization goals
+original data has columns:
 
-original data has column names:
-
-```{r raw}
+```{r raw, message=FALSE, echo=FALSE}
 library(tidyverse)
 data <- read_csv("rma-csv-collection.csv")
-data
-# A tibble:593,948 × 6
+# A tibble:667,894 × 7
+colnames(data)
 ```
 
-column 3, 4, 5, 6 should be kept meanwhile on inspecting *objectCreationDate[1]* there are many NA values and strings. Due to the original file being too large (over 100MB), the data is filtered via command line code
+column 3, 4, 5, 6 should be kept meanwhile on inspecting *objectCreationDate[1]* (which are mainly years) there are NA values and values of additional information such as *1790-01-01* instead of just the year. Also due to the origial file being too large, every 60th entry is saved into a new file [rma-downsize.csv](./rma-downsize.csv) and uploaded to github.
 
-    $ awk '$6 ~ /-?[0-9]{1,4}/  { print $3, $4, $5, $6}' rma-csv-collection.csv > rma-downsize.csv
-
-current size `1.1M Nov 17 17:15 rma-downsize.csv`
-
-```{r}
-data <- read_csv("rma-downsize.csv")
-data
-```
-
-```{r renamed, cache = TRUE, echo = FALSE}
+```{r downsize, echo=FALSE}
 data <- data %>%
   transmute(
-    title = data[[1]],
-    type = data[[2]],
-    creator = data[[3]],
-    year = data[[4]],
-  ) 
-data
+    title = data[[3]],
+    type = data[[4]],
+    creator = data[[5]],
+    year = data[[6]],
+    #index = row_number()
+  ) %>% 
+  # filter out irregular years such as 0000-00
+  filter(nchar(year) < 6, row_number() %% 60 == 0)  
+
+write_csv(data, "rma-downsize.csv")
 ```
 
-to explore the change of the top 7 *type* according to *year*.
+<!-- originally: the data is filtered via command line code  but this turns out to be incorrect  $ awk '$6 ~ /-?[0-9]{1,4}/  { print $3, $4, $5, $6}' rma-csv-collection.csv > rma-downsize.csv. current size:  -->
+
+```{bash, include=FALSE}
+ls -lh
+```
+
+```{r}
+head(data)  # A tibble:9,986 × 4
+```
+
+## Visualization goals
+
+The goal is to explore the change of the top 7 *type* according to *year*.
+
+- transform the data into a summarise of *type* and its *count*;
 
 ```{r type, echo = FALSE}
 types <- data %>% group_by(type) %>%
    summarise(count = n()) %>%
    mutate(type = fct_reorder(factor(type), count))
-types  # A tibble:2,577 × 2
-range(types$count)  # 1 313905
+# A tibble:445 × 2
+# range(types$count)  # 1 4921
 ```
 
-reorder the types according to *count*, choose the top 7 (or if the top 7 are too close, choose the 1st, 21st, 41st, .. in the list)
+- reorder the types according to *count*, choose the top 7 *type* with the most *count*, and track their change in  *count* over *year*.
 
-```{r variables}
-str(data$year)  # chr [1:667894]
-```
+the visualization will be something like ![nothing here](sample.png) with 
 
-*year* contains strings and NA, to clean the data - filter out rows with *year* that is not a number - try keep the x axis continuous, if it doesn't work, then `fct_lump()` it into ranges
-
-the visualization will be something like ![nothing here](sample.png) and hopefully fancier and with annotations staying in the right places
+- x-axis: *year*. try keep the x axis continuous, if it doesn't work, then `fct_lump()` it into ranges
+- y-axis: *count*. the cumulative sum of the *count* of a certain *type* 
+- legend: *type*. 
