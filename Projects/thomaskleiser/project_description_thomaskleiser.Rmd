@@ -1,0 +1,68 @@
+---
+title: "project_description_thomaskleiser"
+author: "Thomas Kleiser"
+date: '2022-11-14'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(readr)
+```
+
+
+### 1. Project description:
+
+
+1.1 Primary goals:
+
+Primary goal of this project is to use the inter-state-war subdatatset of the CoW dataset to do a descriptive analysis, regarding the frequence and duration of inter-state-wars since 1817. 
+
+Questions that should be answered are:
+- How long is the  average duration of interstate-war since 1817?
+- Which states fought the most interstate-wars during this period?
+- Which world region saw the most interstate-wars? Were there significant changes between the 19th and 20th century in this regard?
+
+
+
+1.2 secondary (optional) goals:
+
+An optional secondary goal will be to merge the CoW dataset with secondary and tertiary datasets, to look which Variables might explain a Variation in the frequency and duration of inter-state wars.
+
+Questions that should be answered are: 
+- Dos higher military expenditure increases or decreases the likelihood of interstate-wars (In other words, is the popular slogan of the peace movement "Frieden schaffen ohne Waffen" an achievable or unachievable demand?)
+- Does the regime type influence the likelihood of one state initiating a war?
+- Are autocracies more likely to initiate wars then democracies?
+- Are autocracies more likely to win wars then democracies?
+
+
+### 2. Data:
+
+
+2.1 Correlates of War (CoW):
+
+This project will be centered around the the Correlates of War dataset (CoW) provided by the University of Michigan. The Dataset includes data about wars between 1817 and 2007. The CoW dataset includes variables about the start and end date of wars, who participated in them and who initiated them (for more details regarding the variables and their meaning look at page three and four of the uploaded codebook for the cow dataset).
+
+The CoW dataset consists of several sub-datasets, that specialize on three different types of wars: interstate-wars, non-state-wars and extra-state-wars, but we will only use the sub-dataset about interstate-wars.
+
+The CoW datatset and its subdatasets can be found and downloaded under this link: https://correlatesofwar.org/data-sets/cow-war/
+
+
+
+2.2 National Capabilities:
+
+The National Military Capabilities (NMC) dataset is also provided by the University of Michigan and can easily merged with the CoW dataset via the columm "ccode" which provides a unique code for every country in the CoW and NMC dataset. The NMC datset provides data about the demography, economy and military expenditure and capabilities of states between 1817 and 2016 (for more details regarding the variables and their meaning look at page eight and nine of the uploaded codebook for the nmc dataset).
+
+The National Capabilities datatset can be found and downloaded uder this link:
+https://correlatesofwar.org/data-sets/national-material-capabilities/
+
+
+
+2.3 Varities of Democracy (VoD):
+
+The Varieties of Democracy dataset (VoD) is provided by the University of Götheburg. It provides data about the regime types of states. It includes several Indices that measure how democratic or autocratic states are. Most prominent are the electoral democracy index and the liberal democracy index. Their values can vary from 0 to 100. The higher the value of these indices, the more democratic is the respective state.
+
+The VoD dataset can be found and downloaded under this link (From the given options, the V-dem Core dataset is more then sufficient for our purpose):
+https://www.v-dem.net/data/the-v-dem-dataset/
+
