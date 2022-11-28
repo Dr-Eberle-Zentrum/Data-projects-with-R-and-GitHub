@@ -26,10 +26,10 @@ Three different groups of participants went through an experiment - they were su
 ### Participants: 
 The three groups of participants are the following : Women with a natural cycle (participant ID starting with NC), women using the hormonal coil (participant ID starting with IUD) and women using oral contraceptives (participant ID starting with OC). 
 
-### Our goal: 
-The goal is to obtain boxplots with violins (see picture below) for feelings of **stress**, **positive mood**, **negative mood** and **anger** for the four conditions (pre_placebo, post_placebo, pre_MAST, post_MAST) and the three groups (see excel plot below for a barplot representation of this).
+### Our goal:
+The goal is to obtain 5 different boxplots with singular data points (see picture below, the title & axis content have nothing to do with this task, this is merely for visualisation of the type of graph) for feelings of **stress**, **positive mood**, **negative mood**, **anxiety** and **anger** for the four conditions (pre_placebo, post_placebo, pre_MAST, post_MAST) and the three groups (see excel plot below for a barplot representation of this).
 
-![Example graph of boxplot with violins](violin_boxplot.png)
+![Example graph of boxplot with data-points](boxplot_points.png)
 ![Example barplot in Excel with the four conditions and three groups](NegativeMood.png)
 
 # Data
@@ -75,10 +75,16 @@ Next steps:
         ruhig, geborgen, geloest, ausgeruht, wohl, selbstsicher, entspannt, zufrieden, froh, vergnuegt
     * sum up all the STAI items that you recoded with the remaining negative items:
         angespannt, bekuemmert, aufgeregt, schiefgehen, beunruhigt, nervoes, zappelig, verkrampft, besorgt, ueberreizt
+    * This recoding needs to be done so the actual sum we calculate reflects anxiety, the higher the score the more anxious a person. As the questionnaire is asked, a 5 means this trait is present, and we want to have low numbers for positive traits (less anxious) and high numbers for negative traits (more anxious)
         
 You now have one value for stress, one value for negative mood, one for positive mood and one for anxiety, additionally there is one value for anger. We want to plot the means of each group for the four conditions. 
 This means creating 5 different plots: one for stress, 1 for negative mood, one for positive mood, one for anxiety and one for the ESR variable anger (Aerger).
 
-Think about what other plots or visualisation tools you could use to look at the data you tidied, one example might be a barplot with individual data points! 
+Now that you have the 5 different plots, you can visualise them in one panel (you can use facetting, or try the package ggpubr that allows for nice plot grids with titles and labels of the plots).
+
+Bonus:
+Think about what other plots or visualisation tools you could use to look at the data you tidied, one example might be a barplot with violins or beanplots! 
+
+If you know how, calculate an ANOVA with three factors (task[placebo/stress] x time[pre/post] x group[IUD/OC/NC]) for each of the mood rating. 
     
     
