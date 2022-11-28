@@ -50,7 +50,7 @@ head(data)  # A tibble:9,986 × 4
 
 The goal is to explore the change of the top 7 *type* according to *year*.
 
-- transform the data into a summarise of *type* and its *count*;
+-   transform the data into a summarise of *type* and its *count*;
 
 ```{r type, echo = FALSE}
 types <- data %>% group_by(type) %>%
@@ -60,10 +60,12 @@ types <- data %>% group_by(type) %>%
 # range(types$count)  # 1 4921
 ```
 
-- reorder the types according to *count*, choose the top 7 *type* with the most *count*, and track their change in  *count* over *year*.
+-   reorder the types according to *count*, choose the top 7 *type* with the most *count*, and track their change in *count* over *year*.
 
-the visualization will be something like ![nothing here](sample.png) with 
+the visualization will be something like ![nothing here](sample.png)
 
-- x-axis: *year*. try keep the x axis continuous, if it doesn't work, then `fct_lump()` it into ranges
-- y-axis: *count*. the cumulative sum of the *count* of a certain *type* 
-- legend: *type*. 
+with
+
+-   x-axis: *year*. try keep the x axis continuous, if it doesn't work, then `fct_lump()` it into ranges
+-   y-axis: *count*. the cumulative sum of the *count* of a certain *type*
+-   legend: *type*.
