@@ -1,6 +1,6 @@
 # Advanced-data-processing-with-R
 
-This project accompanies the course
+This project accompanies the course ööiojushdf ökjsdhfökjasdh
 
 **"R2 - Advanced data processing in R"**
 
