@@ -166,24 +166,34 @@ pre code {
 
 <p>Dana Jabari R2 course</p>
 <p>Name of the data set: cloze_task_results.csv</p>
-<p>Some statistical knowledge is needed in order to do this project.</p>
 <hr />
 <p>Hi!</p>
-<p>Thank you for looking at my project. During a psychology course of mine, we have conducted an experiment. I don’t think we are supposed to</p>
+<p>Thank you for looking at my project. During a psychology course of mine, we have conducted an an pre-experiment, in which we collected “best” alternatives for different key words. I am wondering if there is a neat way to present the best alternatives for each key word.</p>
 <p>The file is named “cloze_task_results.csv”. You will find that dataset in my folder on github.</p>
 <p>Our participants were supposed to continue sentences, which were presented to them on their laptop screen.</p>
 <p>For example (it was in german):</p>
 <p>“Das ist kein Auto, sondern …”</p>
 <p>The number of alternatives to the sentences, given by the participants were collected.</p>
-<p>Explanation of the variables: “Das is kein Auto, sondern” - variable “text” “Fahrrad” - variable “response” (Fahrrad is an example) number of times a certain response was typed in - “count”</p>
+<p>Explanation of the variables:</p>
+<p>text: “Das is kein Auto, sondern” response: “Fahrrad” (Fahrrad is an example) count: number of times a certain response was typed in</p>
+<pre class="r"><code>data &lt;- read.csv(&quot;cloze_task_results.csv&quot;)
+head(data)</code></pre>
+<pre><code>##                              text response count
+## 1 Dort ist kein Aldi, sondern %%.     lidl    28
+## 2 Dort ist kein Aldi, sondern %%.     rewe     6
+## 3 Dort ist kein Aldi, sondern %%.    lidel     3
+## 4 Dort ist kein Aldi, sondern %%.    edeka     2
+## 5 Dort ist kein Aldi, sondern %%.    norma     2
+## 6 Dort ist kein Aldi, sondern %%.     cafe     1</code></pre>
 <p>My project for you would be:</p>
 <ul>
 <li>tidy the data</li>
-<li>make a power analysis and tell me the reqired number of participants for a power of 80%.</li>
-<li>analyse the data with two 2x2 factor anovas (I think?) (details are to follow) (I can help with the statistical part if you need it)</li>
-<li>… tba</li>
+<li>find out, which word turned out to be the best alternative for the different “key words”. Example: for the key word “Aldi” the best alternative is “lidl”</li>
+<li>Make a suitable plot for the different key words on the x-axis, and on the y-axis should be the “best alternatives” for each key word, marked with the count of each best alternative.</li>
+<li>for clarification: the “best alternative” is the alternative word, which is named the most for each key word</li>
 </ul>
-<p>I know that there are still some infos missing but these will be added with time. Thank you for your interest! I’m happy if you want to work on this project!</p>
+<p>I do not have a concrete vision for a plot, just create one which you think makes sense in this context. I trust you with this decision!</p>
+<p>Thank you for your interest! If you have any questions, do not hesititate to ask me.</p>
 <p>Best, Dana</p>
 
 
