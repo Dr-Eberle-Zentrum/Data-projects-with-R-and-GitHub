@@ -6,24 +6,32 @@ date: "2022-11-14"
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
 ```
 
 ### HIV data
 
 The Global Health Observatory collects and publishes data related to the ongoing HIV epidemic. I dealt with some of the data sets in the course "Entwurf und Umsetzung von Datenbanken". Apart from that they aren´t connected to my studies in any way.
 
-The data set I want to use can be found here: <https://www.who.int/data/gho/data/indicators/indicator-details/GHO/estimated-number-of-people--living-with-hiv>
+The dataset I want to use can be found here: <https://www.who.int/data/gho/data/indicators/indicator-details/GHO/estimated-number-of-people--living-with-hiv>
 
-Click on the tab that says "Data".
-Regarding the data import, there are two tables available — one which tracks the estimated number of people living with HIV per Country every fifth year and the second one includes data for every year. You can change between them with the abstract table symbol above the "FILTERS" button.
+The relevant data is provided in my GitHub directory.
 
-We use the second table that includes the data for every year. 
+Get a glimpse of the data shown below.
 
-Look at the data, there are many columns that we don´t need. Select and rename the following columns:
+```{r, load data, echo = FALSE}
+dir = "/Users/janboethling/Advanced-data-processing-with-R/projects/jan-boethling"
+setwd(dir)
+data = "Data_Project_Jan.csv"
+HIV <- read_delim(data, delim = ",")
+head(HIV, 10)
+```
+
+Regarding the data above, there are many columns that we don´t need. Select and rename the following columns:
 
 - Column Location as Country
 - Column Period as Year
-- Column FactValueNumeric as Cases
+- Column FactValueNumeric as Cases"
 
 ### With the tidy data...
 1.
@@ -39,7 +47,7 @@ Any revelations comparing results 1 and 2?
 3.
 Create a barplot:
 - Select and use the years 2000, 2005, 2010, 2015, 2020 on the x-Axis (use these years as subgroups)
-- Each subgroup should contain the 5 countries identified in 2.
+- Each subgroup should contain the 5 countries identified in 2. (One bar per country and subgroup!)
 - Make sure that each country has available data for each year, if not select another country!
 - Use the number of cases of the five countries identified in 2 as the y-Axis
 - Label everything and make it look beautiful. 
