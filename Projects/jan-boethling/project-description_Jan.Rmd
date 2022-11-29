@@ -19,7 +19,7 @@ The relevant data is provided in my GitHub directory.
 
 Get a glimpse of the data shown below.
 
-```{r, load data, echo = FALSE}
+```{r, load data, echo = FALSE, message=FALSE}
 dir = "/Users/janboethling/Advanced-data-processing-with-R/projects/jan-boethling"
 setwd(dir)
 data = "Data_Project_Jan.csv"
@@ -31,7 +31,7 @@ Regarding the data above, there are many columns that we don´t need. Select and
 
 - Column Location as Country
 - Column Period as Year
-- Column FactValueNumeric as Cases"
+- Column FactValueNumeric as Cases
 
 ### With the tidy data...
 1.
