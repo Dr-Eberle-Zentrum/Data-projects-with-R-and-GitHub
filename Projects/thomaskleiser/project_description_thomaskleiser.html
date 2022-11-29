@@ -360,34 +360,67 @@ display: none;
 
 
 <div id="project-description" class="section level3">
-<h3>1. Project description:</h3>
-<p>1.1 Primary goals:</p>
-<p>Primary goal of this project is to use the inter-state-war
-subdatatset of the CoW dataset to do a descriptive analysis, regarding
-the frequence and duration of inter-state-wars since 1817.</p>
+<h3><strong>1. Project description:</strong></h3>
+<p><strong>1.1 Primary goals:</strong></p>
+<p>Primary goal of this project is to use the inter-state-war subdataset
+of the CoW dataset to do a descriptive analysis, regarding the frequence
+and duration of inter-state-wars since 1817.</p>
 <p>Questions that should be answered are: - How long is the average
 duration of interstate-war since 1817? - Which states fought the most
 interstate-wars during this period? - Which world region saw the most
 interstate-wars? Were there significant changes between the 19th and
 20th century in this regard?</p>
-<p>1.2 secondary (optional) goals:</p>
+<p><strong>1.2 secondary (optional) goals:</strong></p>
 <p>An optional secondary goal will be to merge the CoW dataset with
-secondary and tertiary datasets, to look which Variables might explain a
-Variation in the frequency and duration of inter-state wars.</p>
-<p>Questions that should be answered are: - Dos higher military
+secondary and tertiary datasets, to look which variables might explain a
+variation in the frequency and duration of inter-state wars.</p>
+<p>Questions that should be answered are: - Does higher military
 expenditure increases or decreases the likelihood of interstate-wars (In
 other words, is the popular slogan of the peace movement “Frieden
 schaffen ohne Waffen” an achievable or unachievable demand?) - Does the
 regime type influence the likelihood of one state initiating a war? -
 Are autocracies more likely to initiate wars then democracies? - Are
 autocracies more likely to win wars then democracies?</p>
+<p><strong>How to do it:</strong></p>
+<p>You can address this question by creating grouped barplots (for
+example you can compare the number of interstate-wars fought in Europe
+with those on Africa, Asia or the two Americas, or the numbers using
+this method) or using geom_smooth(method = “lm”) for those variables
+that are metric (for example you can visualise if and if yes to which
+extend the numbers of interstate-wars that were initiated by states
+increases or decreases the more democratic or autocratic they are). In
+the end I want to leave it upt to you how exactly you want to address
+the questions. The goal should be to create one visualization for each
+of the four primary questions.</p>
 </div>
 <div id="data" class="section level3">
-<h3>2. Data:</h3>
-<p>2.1 Correlates of War (CoW):</p>
+<h3><strong>2. Data:</strong></h3>
+<p><strong>2.1 Correlates of War (CoW):</strong></p>
+<pre><code>## Rows: 337 Columns: 25
+## -- Column specification --------------------------------------------------------
+## Delimiter: &quot;,&quot;
+## chr  (3): WarName, StateName, TransFrom
+## dbl (22): WarNum, WarType, ccode, Side, StartMonth1, StartDay1, StartYear1, ...
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre><code>## # A tibble: 6 x 25
+##   WarNum WarName  WarType ccode StateName  Side StartMonth1 StartDay1 StartYear1
+##    &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;
+## 1      1 Franco-~       1   230 Spain         2           4         7       1823
+## 2      1 Franco-~       1   220 France        1           4         7       1823
+## 3      4 First R~       1   640 Ottoman ~     2           4        26       1828
+## 4      4 First R~       1   365 Russia        1           4        26       1828
+## 5      7 Mexican~       1    70 Mexico        2           4        25       1846
+## 6      7 Mexican~       1     2 United S~     1           4        25       1846
+## # ... with 16 more variables: EndMonth1 &lt;dbl&gt;, EndDay1 &lt;dbl&gt;, EndYear1 &lt;dbl&gt;,
+## #   StartMonth2 &lt;dbl&gt;, StartDay2 &lt;dbl&gt;, StartYear2 &lt;dbl&gt;, EndMonth2 &lt;dbl&gt;,
+## #   EndDay2 &lt;dbl&gt;, EndYear2 &lt;dbl&gt;, TransFrom &lt;chr&gt;, WhereFought &lt;dbl&gt;,
+## #   Initiator &lt;dbl&gt;, Outcome &lt;dbl&gt;, TransTo &lt;dbl&gt;, BatDeath &lt;dbl&gt;,
+## #   Version &lt;dbl&gt;</code></pre>
 <p>This project will be centered around the the Correlates of War
 dataset (CoW) provided by the University of Michigan. The Dataset
-includes data about wars between 1817 and 2007. The dataset includes
+includes data about wars between 1817 and 2007. The CoW dataset includes
 variables about the start and end date of wars, who participated in them
 and who initiated them (for more details regarding the variables and
 their meaning look at page three and four of the uploaded codebook for
@@ -398,7 +431,24 @@ extra-state-wars, but we will only use the sub-dataset about
 interstate-wars.</p>
 <p>The CoW datatset and its subdatasets can be found and downloaded
 under this link: <a href="https://correlatesofwar.org/data-sets/cow-war/" class="uri">https://correlatesofwar.org/data-sets/cow-war/</a></p>
-<p>2.2 National Capabilities:</p>
+<p><strong>2.2 National Military Capabilities (NMC):</strong></p>
+<pre><code>## Rows: 15951 Columns: 11
+## -- Column specification --------------------------------------------------------
+## Delimiter: &quot;,&quot;
+## chr  (1): stateabb
+## dbl (10): ccode, year, milex, milper, irst, pec, tpop, upop, cinc, version
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre><code>## # A tibble: 6 x 11
+##   stateabb ccode  year milex milper  irst   pec  tpop  upop   cinc version
+##   &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+## 1 USA          2  1816  3823     17    80   254  8659   101 0.0397    2021
+## 2 USA          2  1817  2466     15    80   277  8899   106 0.0358    2021
+## 3 USA          2  1818  1910     14    90   302  9139   112 0.0361    2021
+## 4 USA          2  1819  2301     13    90   293  9379   118 0.0371    2021
+## 5 USA          2  1820  1556     15   110   303  9618   124 0.0371    2021
+## 6 USA          2  1821  1612     11   100   321  9939   130 0.0342    2021</code></pre>
 <p>The National Military Capabilities (NMC) dataset is also provided by
 the University of Michigan and can easily merged with the CoW dataset
 via the columm “ccode” which provides a unique code for every country in
@@ -407,19 +457,56 @@ demography, economy and military expenditure and capabilities of states
 between 1817 and 2016 (for more details regarding the variables and
 their meaning look at page eight and nine of the uploaded codebook for
 the nmc dataset).</p>
-<p>The National Capabilities datatset can be found and downloaded uder
+<p>The National Capabilities datatset can be found and downloaded under
 this link: <a href="https://correlatesofwar.org/data-sets/national-material-capabilities/" class="uri">https://correlatesofwar.org/data-sets/national-material-capabilities/</a></p>
-<p>2.3 Varities of Democracy (VoD):</p>
+<p><strong>2.3 Varities of Democracy (VoD):</strong></p>
+<pre><code>## Rows: 27380 Columns: 1818
+## -- Column specification --------------------------------------------------------
+## Delimiter: &quot;,&quot;
+## chr     (3): country_name, country_text_id, histname
+## dbl  (1814): country_id, year, project, historical, codingstart, codingend, ...
+## date    (1): historical_date
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre><code>## # A tibble: 6 x 6
+##   country_name country_id  year v2x_polyarchy v2x_libdem v2x_regime
+##   &lt;chr&gt;             &lt;dbl&gt; &lt;dbl&gt;         &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+## 1 Mexico                3  1789         0.026       0.04         NA
+## 2 Mexico                3  1790         0.026       0.04         NA
+## 3 Mexico                3  1791         0.026       0.04         NA
+## 4 Mexico                3  1792         0.026       0.04         NA
+## 5 Mexico                3  1793         0.026       0.04         NA
+## 6 Mexico                3  1794         0.026       0.04         NA</code></pre>
 <p>The Varieties of Democracy dataset (VoD) is provided by the
-University of Götheburg. It provides data about the regime types of
-states. It includes several Indices that measure how democratic or
-autocratic states are. Most prominent are the electoral democracy index
-and the liberal democracy index. Their values can vary from 0 to 100.
-The higher the value of these indices, the more democratic is the
-respective state.</p>
-<p>The VoD dataset can be found and downloaded under this link (From the
-given options, the V-dem Core dataset is more then sufficient for our
-purpose): <a href="https://www.v-dem.net/data/the-v-dem-dataset/" class="uri">https://www.v-dem.net/data/the-v-dem-dataset/</a></p>
+University of Götheburg, it therefore has no column like the “ccode”
+from the CoW and NMC datasets (Althoug it has a similiar column named
+“country_id”, I do not recommend that you use this column to merge the
+VoD dataset with the other two datasets, because it is not clear if the
+IDs in this column refer to the same states as the “ccode” column of the
+CoW and NMC datasets). I therefore recommend that you try to mege it
+with the other datasets using the column “country_name” that is similar
+to the “StateName” column of the CoW and NMC datasets.</p>
+<p>The VoD dataset provides data about the regime types of states. It
+includes several Indices that measure how democratic or autocratic
+states are. Most prominent are the electoral democracy index
+(v2x_polyarchy) and the liberal democracy index (v2x_libdem). Their
+values can vary from 0 to 100. The higher the value of these indices,
+the more democratic is the respective state.</p>
+<p>The VoD dataset also has a variable that summaries to which of four
+regime types the respective state belongs (v2x_regime). This variable
+has the value “0” for closed autocracies, “1” for electoral autocracies,
+“2” for electoral democracies and “4” for liberal democracies (for more
+details regarding the variables and their meaning look at page 43, 44
+and 287 of the uploaded codebook for the VoD dataset - side note: the
+VoD dataset is HUGE, so do not worry about the thousands of other
+variables that you will encounter in the VoD CoRe dataset and codebook,
+you will not need them!).</p>
+<p>The VoD dataset can be found and downloaded under this link (side
+note: From the given options, the VoD Core dataset is more then
+sufficient for our purpose, I further recommend, that you use select()
+to select the variables country_name, country_id, year, v2x_polyarchy,
+v2x_libdem, v2x_regime): <a href="https://www.v-dem.net/data/the-v-dem-dataset/" class="uri">https://www.v-dem.net/data/the-v-dem-dataset/</a></p>
 </div>
 
 
