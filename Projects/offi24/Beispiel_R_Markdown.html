@@ -11,9 +11,8 @@
 
 <meta name="author" content="Eric Offermann" />
 
-<meta name="date" content="2022-11-11" />
 
-<title>First Project (Course R2)</title>
+<title>Projekt Nr.1 (Kurs R2)</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -356,9 +355,9 @@ pre code {
 
 
 
-<h1 class="title toc-ignore">First Project (Course R2)</h1>
+<h1 class="title toc-ignore">Projekt Nr.1 (Kurs R2)</h1>
 <h4 class="author">Eric Offermann</h4>
-<h4 class="date">2022-11-11</h4>
+<h4 class="date">2022-28-11</h4>
 
 </div>
 
@@ -366,44 +365,62 @@ pre code {
 <div id="first-project-drafting-a-description-of-the-project" class="section level1">
 <h1>First Project: Drafting a description of the project</h1>
 <p>The goal of this project is to work with Covid-data in the EU. The
-data has informations on the daily number of new reported COVID-19 cases
-and deaths for every EU/EEA country. The dataset starts at the beginning
-of the pandemic until the 01.11.2022. After this date, the covid cases
-are not tracked anymore in all country.</p>
+data has informations on the new daily number of reported COVID-19 cases
+(Neuansteckungen, a person is only counting once per Covid-illness as
+“case”) and deaths for every EU/EEA country. The data set starts at the
+beginning of the pandemic until the 01.11.2022. After this date, the
+covid cases are not tracked anymore in all country.</p>
 <p>The data can be downloaded from the following link: <a href="https://www.ecdc.europa.eu/en/publications-data/data-daily-new-cases-covid-19-eueea-country" class="uri">https://www.ecdc.europa.eu/en/publications-data/data-daily-new-cases-covid-19-eueea-country</a>
 Please download the data as xlsx-file.</p>
-<div id="more-detailed-infos-about-the-dataset" class="section level2">
-<h2>More detailed infos about the dataset</h2>
+<div id="more-detailed-informations-about-the-dataset" class="section level2">
+<h2>More detailed informations about the dataset</h2>
 <p>The dataset includes data for all EU/EEA country. The cases and the
 deaths are listed per day. In the column popData2020 you can find the
-population of the respectiv country in the year 2020. Take attention to
+population of the respective country in the year 2020. Take attention to
 proper handle the NA-values. Mostly at the end of the data recording
 their could be countries who stopped the data transmission already
 earlier.</p>
-<p>Small view in the dataset:</p>
-<pre><code>## # A tibble: 6 x 11
-##   dateRep    year month day   cases deaths count~1 geoId popDa~2 count~3 conti~4
+<p>Small view in the data set:</p>
+<pre><code>## # A tibble: 6 × 11
+##   dateRep    year month day   cases deaths count…¹ geoId popDa…² count…³ conti…⁴
 ##   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;  
-## 1 23/10/20~  2022 10    23     3557      0 Austria AT    8901064 AUT     Europe 
-## 2 22/10/20~  2022 10    22     5494      4 Austria AT    8901064 AUT     Europe 
-## 3 21/10/20~  2022 10    21     7776      4 Austria AT    8901064 AUT     Europe 
-## 4 20/10/20~  2022 10    20     8221      6 Austria AT    8901064 AUT     Europe 
-## 5 19/10/20~  2022 10    19    10007      8 Austria AT    8901064 AUT     Europe 
-## 6 18/10/20~  2022 10    18    13204      7 Austria AT    8901064 AUT     Europe 
-## # ... with abbreviated variable names 1: countriesAndTerritories,
-## #   2: popData2020, 3: countryterritoryCode, 4: continentExp</code></pre>
+## 1 23/10/20…  2022 10    23     3557      0 Austria AT    8901064 AUT     Europe 
+## 2 22/10/20…  2022 10    22     5494      4 Austria AT    8901064 AUT     Europe 
+## 3 21/10/20…  2022 10    21     7776      4 Austria AT    8901064 AUT     Europe 
+## 4 20/10/20…  2022 10    20     8221      6 Austria AT    8901064 AUT     Europe 
+## 5 19/10/20…  2022 10    19    10007      8 Austria AT    8901064 AUT     Europe 
+## 6 18/10/20…  2022 10    18    13204      7 Austria AT    8901064 AUT     Europe 
+## # … with abbreviated variable names ¹​countriesAndTerritories, ²​popData2020,
+## #   ³​countryterritoryCode, ⁴​continentExp</code></pre>
 </div>
 <div id="work-to-do" class="section level2">
 <h2>Work to do</h2>
-<p>We want to find out, which EU-country has the most covid-cases and
-deaths proportional to the number of inhabitants, starting from the
-beginning of the pandemic. Therefore you need to create a bar chart
-<em>geom_bar()</em>. On the X-axis of the chart, the different
+<p>We want to find out, which EU-country has the most cumulative
+covid-cases and deaths proportional to the number of inhabitants over
+the entire period of the Covid-pandemic. Therefore you need to create a
+bar chart <em>geom_bar()</em>. On the X-axis of the chart, the different
 EU-countries should be listed (exclude the countries which are not part
 of the EU!!). The Y-axis should visualize the covid-cases. The
-chart-bars should also include the number of deaths, which should be
-visualized in a different color than number of cases. Take care to show
-the cases and deaths in relation to the population of the countries.</p>
+chart-bars should also include the number of deaths. Due to the high
+discrepancy between the “cases” and the “deaths”, you should find an
+adequat method to also visualize the deaths. Herefore on possibility
+would be to group the number of deaths in different categories and to
+color the boxplot in relation to the respective category (color
+gradient). Or you can work. It`s also fine to search for a different
+option, like numbers in the bars, etc…. Take care to show the cases and
+deaths in relation to the population of the countries, mention this also
+in the legend. The relation should be in a way, that you divide the
+total number of daily cases per country with the population number of
+that country.</p>
+<p>##Optional Task</p>
+<p>For those who want to go a little farer. You can try to find out if
+there is a relation between the Gross domestic product (GDP) per capita
+and the total daily covid-cases in this country over the entire period.
+One possibility to do this could be by testing the correlation between
+the two variables and later on creating a Scatterplot that shows the
+distribution and gives us a correlation coefficient. More information
+about how this works can be found on the following website: <a href="http://www.sthda.com/english/wiki/correlation-test-between-two-variables-in-r" class="uri">http://www.sthda.com/english/wiki/correlation-test-between-two-variables-in-r</a></p>
+<p>The dataset can be downloaded as XLS-file from this website: <a href="https://de.statista.com/statistik/daten/studie/188766/umfrage/bruttoinlandsprodukt-bip-pro-kopf-in-den-eu-laendern/" class="uri">https://de.statista.com/statistik/daten/studie/188766/umfrage/bruttoinlandsprodukt-bip-pro-kopf-in-den-eu-laendern/</a></p>
 <center>
 <img src="data:image/png;base64,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" />
 <center>
