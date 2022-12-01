@@ -1,12 +1,10 @@
 ---
 title: "Bernhard's Solution for FerSoe's Project"
-output:
-  html_document:
-    df_print: paged
-  pdf_document: default
+output: html_notebook
 ---
 
 First we should install our libraries
+
 ```{r}
 install.packages(c("tidyverse", 
                  "viridis", 
@@ -19,7 +17,8 @@ devtools::install_github("mattflor/chorddiag", build_vignettes = TRUE)
 ```
 
 Loading the libs
-```{r echo=TRUE}
+
+```{r include=FALSE}
 # libraries
 library(tidyverse)
 library(viridis)
@@ -29,9 +28,10 @@ library(circlize)
 library(chorddiag)
 ```
 
-Preparing the dataset (where is my code???? :(  )
-```{r echo=TRUE}
-data <- read.csv2(str_c(getwd(), "//Data//Chord_test.csv"))
+Preparing the dataset
+
+```{r}
+data <- read.csv2(str_c(getwd(), "//Projects//FerSoe//Project1//Data//Chord_test.csv"))
 
 # Inhalt von spalte X wird zur Reihennamen und dann geloescht
 row.names(data) <- data$X
@@ -54,6 +54,7 @@ gathered <- gather(data, key = "key", value = "value", na.rm = TRUE, factor_key 
 ```
 
 Here the chord diagram will be plotted
+
 ```{r echo=TRUE}
 chordDiagram(
   x = gathered,
