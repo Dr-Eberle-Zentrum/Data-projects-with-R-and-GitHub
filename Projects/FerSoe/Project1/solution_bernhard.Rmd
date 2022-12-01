@@ -1,0 +1,70 @@
+---
+title: "Bernhard's Solution for FerSoe's Project"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+---
+
+First we should install our libraries
+```{r}
+install.packages(c("tidyverse", 
+                 "viridis", 
+                 "patchwork", 
+                 "hrbrthemes", 
+                 "circlize",
+                 "devtools"))
+# chorddiag muss von GitHub installiert werden, wozu devtools verwendet wird:
+devtools::install_github("mattflor/chorddiag", build_vignettes = TRUE)
+```
+
+Loading the libs
+```{r echo=TRUE}
+# libraries
+library(tidyverse)
+library(viridis)
+library(patchwork)
+library(hrbrthemes)
+library(circlize)
+library(chorddiag)
+```
+
+Preparing the dataset (where is my code???? :(  )
+```{r echo=TRUE}
+data <- read.csv2(str_c(getwd(), "//Data//Chord_test.csv"))
+
+# Inhalt von spalte X wird zur Reihennamen und dann geloescht
+row.names(data) <- data$X
+data <- data[2:length(data[1,])]
+
+# fuer jede 1 wird die korrespondierende Klasse eingesetzt, sodass col~row ein Paar bilden
+for (i in 1:length(data[1,])){
+  for (j in 1:length(data[,1])){
+    if (data[i, j] == 1 && !is.na(data[i,j])){
+      data[i, j] <- rownames(data)[i]
+    }
+  }
+}
+
+# NAs werden beim gathern verworfen, also:
+data[data == 0] <- NA
+
+# jetzt noch schoene key-value-Paare bilden
+gathered <- gather(data, key = "key", value = "value", na.rm = TRUE, factor_key = TRUE)
+```
+
+Here the chord diagram will be plotted
+```{r echo=TRUE}
+chordDiagram(
+  x = gathered,
+  #grid.col = mycolor,
+  transparency = 0.25,
+  directional = 1,
+  direction.type = c("arrows", "diffHeight"), 
+  diffHeight  = -0.04,
+  annotationTrack = "grid", 
+  annotationTrackHeight = c(0.05, 0.1),
+  link.arr.type = "big.arrow", 
+  link.sort = TRUE, 
+  link.largest.ontop = TRUE)
+```

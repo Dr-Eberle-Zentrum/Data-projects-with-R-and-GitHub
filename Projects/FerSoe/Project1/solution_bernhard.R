@@ -4,7 +4,7 @@ library(viridis)
 library(patchwork)
 library(hrbrthemes)
 library(circlize)
-library(chorddiag)
+#library(chorddiag)
 
 # Arrange the layout
 setwd("~//r2-advanced-r//Advanced-data-processing-with-R//Projects//FerSoe//Project1")
