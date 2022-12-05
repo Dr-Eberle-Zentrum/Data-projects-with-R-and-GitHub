@@ -1,0 +1,69 @@
+```{r result = 'hide' data importation, manipulation and calculation}
+# Solution attempt for Eric's Project by Thomas
+
+library(readxl)
+library(tidyverse)
+
+# importing the data using read_xcel()
+corona_eu <- read_excel("C:/Users/thoma/Documents/R/Advanced-data-processing-with-R-data/data.xlsx") %>%
+  rename("country" = "countriesAndTerritories",
+         "population_2020" = "popData2020") %>%
+  na.omit()
+
+# filtering for EU-countries with filter()
+
+corona_eu <- corona_eu %>% 
+  filter(country != "Norway" & country != "Iceland" & country != "Liechtenstein") %>%
+# calculating the number of cases and deaths per country with group_by() and mutate()
+  group_by(country) %>%
+  mutate(cases_total = sum(cases),
+         deaths_total = sum(deaths),
+         cases_total_per_capita = cases_total / population_2020,
+         deaths_total_per_capita = deaths_total / population_2020)
+
+# summarising the calculated values in a new dataset (this is porbably inefficient, but everything else was not working):
+corona_eu_summary <- data.frame(country = unique(corona_eu$country),
+                                cases_total = unique(corona_eu$cases_total),
+                                deaths_total = unique(corona_eu$deaths_total),
+                                population_2020 = unique(corona_eu$population_2020),
+                                cases_total_per_capita = unique(corona_eu$cases_total_per_capita) * 100,
+                                deaths_total_per_capita = unique(corona_eu$deaths_total_per_capita) * 1000)
+
+# calculating the mean number of cases and deaths per capita:
+mean_cases_total_per_capita <- mean(corona_eu_summary$cases_total_per_capita)
+
+mean_deaths_total_per_capita <- mean(corona_eu_summary$deaths_total_per_capita)
+
+```
+
+
+
+```{r visualization of cases}
+# visualiszing the number of cases with ggplot() and geom_bar()
+ggplot(corona_eu_summary, aes(x = reorder(country, desc(cases_total_per_capita)), y = cases_total_per_capita)) +
+  geom_bar(stat = "identity", fill = "lightblue") +
+  geom_hline(yintercept = mean_cases_total_per_capita, linetype = "dotted") +
+  geom_text(x = "Malta", y = 45, label = "EU average") +
+  labs(title = "Number of reported Sars-CoV-2 Cases per 100 Inhabitants in EU-Countries (2020-2022)",
+       x = element_blank(),
+       y = element_blank(),
+       caption = "Source: European Center for Disease Prevention and Control") +
+  theme_classic() +
+  theme(axis.text = element_text(angle = 90))
+
+```
+
+```{r visualization of deaths}
+# visualizing the number of deaths with ggplot() and geom_bar()
+ggplot(corona_eu_summary, aes(x = reorder(country, desc(deaths_total_per_capita)), y = deaths_total_per_capita)) +
+  geom_bar(stat = "identity", fill = "lightgreen") +
+  geom_hline(yintercept = mean_deaths_total_per_capita, linetype = "dotted") +
+  geom_text(x = "Malta", y = 3.25, label = "EU average") +
+  labs(title = "Number of reported Deaths due to Sars-CoV-2 per 1000 Inhabitants in EU-Countries (2020-2022)",
+       x = element_blank(),
+       y = element_blank(),
+       caption = "Sources: European Center for Disease Prevention and Control") +
+  theme_classic() +
+  theme(axis.text = element_text(angle = 90))
+```
+
