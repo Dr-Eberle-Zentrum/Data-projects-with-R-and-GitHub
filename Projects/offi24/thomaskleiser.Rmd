@@ -1,11 +1,14 @@
-```{r result = 'hide' data importation, manipulation and calculation}
+
+
+```{r  data_importation_manipulation_and_calculation, result = "hide"}
 # Solution attempt for Eric's Project by Thomas
 
 library(readxl)
 library(tidyverse)
 
 # importing the data using read_xcel()
-corona_eu <- read_excel("C:/Users/thoma/Documents/R/Advanced-data-processing-with-R-data/data.xlsx") %>%
+#corona_eu <- read_xlsx("https://opendata.ecdc.europa.eu/covid19/nationalcasedeath_eueea_daily_ei/xlsx/data.xlsx") %>%
+corona_eu <- read_xlsx("data.xlsx") %>%
   rename("country" = "countriesAndTerritories",
          "population_2020" = "popData2020") %>%
   na.omit()
