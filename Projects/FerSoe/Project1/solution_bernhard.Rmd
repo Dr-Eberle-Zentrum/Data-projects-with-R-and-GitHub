@@ -31,7 +31,7 @@ library(chorddiag)
 Preparing the dataset
 
 ```{r}
-data <- read.csv2(str_c(getwd(), "//Projects//FerSoe//Project1//Data//Chord_test.csv"))
+data <- read.csv2(str_c(getwd(), "//Data//Chord_test.csv"))
 
 # Inhalt von spalte X wird zur Reihennamen und dann geloescht
 row.names(data) <- data$X
