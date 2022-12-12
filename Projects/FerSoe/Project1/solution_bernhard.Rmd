@@ -10,10 +10,10 @@ install.packages(c("tidyverse",
                  "viridis", 
                  "patchwork", 
                  "hrbrthemes", 
-                 "circlize",
-                 "devtools"))
+                 "circlize"))
+                 #"devtools"))
 # chorddiag muss von GitHub installiert werden, wozu devtools verwendet wird:
-devtools::install_github("mattflor/chorddiag", build_vignettes = TRUE)
+#devtools::install_github("mattflor/chorddiag", build_vignettes = TRUE)
 ```
 
 Loading the libs
@@ -25,19 +25,20 @@ library(viridis)
 library(patchwork)
 library(hrbrthemes)
 library(circlize)
-library(chorddiag)
+#library(chorddiag)
 ```
 
 Preparing the dataset
 
 ```{r}
-data <- read.csv2(str_c(getwd(), "//Data//Chord_test.csv"))
+data <- read.csv2(str_c(getwd(), "//Projects//FerSoe//Project1//Data//Chord_test.csv"))
 
 # Inhalt von spalte X wird zur Reihennamen und dann geloescht
 row.names(data) <- data$X
 data <- data[2:length(data[1,])]
 
 # fuer jede 1 wird die korrespondierende Klasse eingesetzt, sodass col~row ein Paar bilden
+# Mein un-R-iger Ansatz:
 for (i in 1:length(data[1,])){
   for (j in 1:length(data[,1])){
     if (data[i, j] == 1 && !is.na(data[i,j])){
@@ -45,6 +46,14 @@ for (i in 1:length(data[1,])){
     }
   }
 }
+
+# Martins effizienter Ansatz:
+# data |> 
+#   rename( "from" = X ) |> 
+#   pivot_longer(starts_with("P"), names_to = "to", values_to =  "connection") |> 
+#   drop_na(connection) |> 
+#   filter(connection > 0) |> 
+#   select( -connection )
 
 # NAs werden beim gathern verworfen, also:
 data[data == 0] <- NA
@@ -56,16 +65,24 @@ gathered <- gather(data, key = "key", value = "value", na.rm = TRUE, factor_key 
 Here the chord diagram will be plotted
 
 ```{r echo=TRUE}
+gathered.col <- c(P1 = "blue",P2 = "blue",P3 = "blue",P4 = "blue",
+                  P5 = "red",P6 = "red",P7 = "red",P8 = "red",
+                  P9 = "yellow",P10 = "yellow",P11 = "yellow",P12 = "yellow")
+circos.par(gap.after = 7)
 chordDiagram(
   x = gathered,
+  grid.col = gathered.col,
   #grid.col = mycolor,
   transparency = 0.25,
-  directional = 1,
-  direction.type = c("arrows", "diffHeight"), 
+  #directional = 1,
+  #direction.type = c("arrows", "diffHeight"), 
   diffHeight  = -0.04,
-  annotationTrack = "grid", 
-  annotationTrackHeight = c(0.05, 0.1),
-  link.arr.type = "big.arrow", 
-  link.sort = TRUE, 
-  link.largest.ontop = TRUE)
+  annotationTrack = c("grid","name"), 
+  #annotationTrackHeight = c(0.05, 0.1),
+  #link.arr.type = "big.arrow",
+  #small.gap = 50,
+  link.sort = FALSE,
+  link.largest.ontop = FALSE,
+  link.border = rgb(1,1,1, alpha = 0.50),
+  link.lwd = 1.5)
 ```
