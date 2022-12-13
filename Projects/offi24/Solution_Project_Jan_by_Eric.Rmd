@@ -45,7 +45,7 @@ df %>%
   
   ggplot(aes(Year, Cases))+
   geom_line(color = "red", linewidth = 2)+
-  labs(x = "Jahr",
+  labs(x = "",
        y = "HIV-Fallzahlen")+
   ggtitle("Anstieg der HIV-Fallzahlen über die Jahre")+
   scale_y_continuous(labels = comma)
@@ -64,16 +64,19 @@ top5 <- df %>%
 
 df %>%
   filter(Country %in% top5$Country) %>%
-  mutate(Country = recode(Country,"United Republic of Tanzania" = "Tanzania"))%>%
+  mutate(Country = recode(Country,"United Republic of Tanzania" = "Tansania",
+                                    "India" = "Indien",
+                                    "South Africa" = "Südafrika",
+                          "Kenya" = "Kenia"))%>%
   
-  ggplot(aes(x = reorder(Country, -Cases), y = Cases, group = Year))+ #Ziel: Hier keine Colorscale sondern normale Farbzuweisung pro Jahr
-  geom_line(aes(color= as.factor(Year)),linewidth = 0.5)+
-  labs(x = "Land",
+  ggplot(aes(x = reorder(Year, Cases), y = Cases, group = Country))+ #Ziel: Hier keine Colorscale sondern normale Farbzuweisung pro Jahr
+  geom_line(aes(color= as.factor(Country)),linewidth = 0.8)+
+  labs(x = "",
        y = "HIV-Fallzahlen",
-       fill = "Jahre")+ #Legenden-Titel soll noch angepasst werden können
+       fill = "")+ #Legenden-Titel soll noch angepasst werden können
   ggtitle("HIV-Zahlen verschiedener Jahre für die am stärksten betroffenen Länder")+
   scale_y_continuous(labels = comma)+
-  scale_color_discrete("Jahre")+
+  scale_color_discrete("")+
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5))
 
 ```
@@ -98,7 +101,7 @@ df %>%
   
   ggplot(aes(x = reorder(Country, -Cases), y = Cases, fill = as.factor(Year)))+
   geom_bar(position = "dodge", stat = "identity")+
-  labs(x = "Land",
+  labs(x = "",
        y = "HIV-Fallzahlen",
        fill = "Jahre")+ 
   ggtitle("Veränderung der HIV-Zahlen der am stärksten betroffenen Länder")+
