@@ -1,0 +1,30 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+library(stringr)
+library(tidyverse)
+data <- read.csv("https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/main/Projects/dana-jabari/cloze_task_results.csv")
+
+# extraction of the keyword
+data$keyword <- sub("," , "", str_extract_all(data$text, "\\w+,"))
+
+data$keyword <- factor(data$keyword)
+
+# filter out the 'best alternatives'
+data |> 
+  group_by(keyword) |>
+  filter(count == max(count)) -> data
+
+# make response uppercase
+data$response <- str_to_title(data$response)
+
+# remove empty responses
+data <- data[data$response != "",]
+print(data)
+```
+
+
