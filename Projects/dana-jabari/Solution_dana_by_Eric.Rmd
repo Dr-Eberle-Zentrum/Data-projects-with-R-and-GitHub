@@ -1,0 +1,47 @@
+---
+title: "Projekt von Dana"
+author: "Eric Offermann"
+date: '2022-12-19'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Lösung von Danas Projekt
+
+
+```{r, echo = FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(ggplot2)
+setwd("D:/Eric/Documents/Uni_Tuebingen_Kurse/5. Semester/Kurs R2/Aufgabe_1/Advanced-data-processing-with-R/Projects/dana-jabari/")
+
+
+data = read.csv("cloze_task_results.csv")
+View(data)
+
+names(data)[1] <- "Frage"
+names(data)[2] <- "Antwort"
+names(data)[3] <- "Faelle"
+
+
+```
+
+## Aufgabe
+
+```{r hallo, echo=FALSE,message=FALSE, warning=FALSE}
+data %>%
+  distinct(Frage, .keep_all = T) %>%
+  slice_max(Faelle, n = 20) %>%
+  ggplot(aes(fill = as.factor(Antwort), x = Faelle, y = reorder(Frage, -Faelle))) +
+  geom_bar(position = "stack", stat = "identity")+
+  geom_text(aes(label=Antwort), vjust= 0.1)+
+  labs(x = "Fälle",
+       y = "Frage mit dazugehöriger Antwort",
+       fill = "Fälle")+ 
+  ggtitle("Die häufigsten Antworten auf folgende Fragen")+
+  #scale_y_continuous(labels = comma)+
+  theme(legend.position="none")
+
+```
