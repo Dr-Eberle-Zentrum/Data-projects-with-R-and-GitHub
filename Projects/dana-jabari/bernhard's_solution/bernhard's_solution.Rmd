@@ -1,6 +1,8 @@
 ---
 title: "R Notebook"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 
 
@@ -24,7 +26,67 @@ data$response <- str_to_title(data$response)
 
 # remove empty responses
 data <- data[data$response != "",]
+
+# remove duplicated entries due to same response count
+data <- data[!duplicated(data$keyword),]
 print(data)
 ```
 
+```{r, echo=FALSE, fig.height = 6}
 
+
+
+data |>
+  filter(count > 20) |>
+  mutate(keyword = fct_reorder(keyword, count, .desc = TRUE)) |>
+  ggplot(aes(x = reorder(keyword, + count), y = count)) +
+  geom_bar(stat = "identity", width = 0.8, fill = "wheat3", color = "black") +
+  coord_flip() +
+  geom_text(aes(label = str_c(response, " ", count)), hjust = 1, nudge_y = -0.5) +
+  ylim(0, 50) +
+  labs(title = "Keywords and their responses with more than 20 counts") +
+  ylab("Keyword") +
+  xlab("Count") +
+  theme_classic()
+
+data |>
+  filter(count > 14) |>
+  filter(count <= 20) |>
+  mutate(keyword = fct_reorder(keyword, count, .desc = TRUE)) |>
+  ggplot(aes(x = reorder(keyword, + count), y = count)) +
+  geom_bar(stat = "identity", width = 0.8, fill = "wheat3", color = "black") +
+  coord_flip() +
+  geom_text(aes(label = str_c(response, " ", count)), hjust = 1, nudge_y = -0.5) +
+  ylim(0, 50) +
+  labs(title = "Keywords and their responses with more than 14 and less than 21 counts") +
+  ylab("Keyword") +
+  xlab("Count") +
+  theme_classic()
+
+data |>
+  filter(count > 10) |>
+  filter(count <= 14) |>
+  mutate(keyword = fct_reorder(keyword, count, .desc = TRUE)) |>
+  ggplot(aes(x = reorder(keyword, + count), y = count)) +
+  geom_bar(stat = "identity", width = 0.8, fill = "wheat3", color = "black") +
+  coord_flip() +
+  geom_text(aes(label = str_c(response, " ", count)), hjust = 1, nudge_y = -0.5) +
+  ylim(0, 50) +
+  labs(title = "Keywords and their responses with more than 10 an less than 15 counts") +
+  ylab("Keyword") +
+  xlab("Count") +
+  theme_classic()
+
+data |>
+  filter(count <= 10) |>
+  mutate(keyword = fct_reorder(keyword, count, .desc = TRUE)) |>
+  ggplot(aes(x = reorder(keyword, + count), y = count)) +
+  geom_bar(stat = "identity", width = 0.8, fill = "wheat3", color = "black") +
+  coord_flip() +
+  geom_text(aes(label = str_c(response, " ", count)), hjust = 1, nudge_y = -0.5) +
+  ylim(0, 50) +
+  labs(title = "Keywords and their responses with less than 11 counts") +
+  ylab("Keyword") +
+  xlab("Count") +
+  theme_classic()
+```
