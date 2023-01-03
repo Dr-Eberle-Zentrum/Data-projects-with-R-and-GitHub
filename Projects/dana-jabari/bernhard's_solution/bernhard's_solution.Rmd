@@ -1,8 +1,6 @@
 ---
 title: "R Notebook"
-output:
-  html_document:
-    df_print: paged
+output: html_notebook
 ---
 
 
@@ -45,8 +43,8 @@ data |>
   geom_text(aes(label = str_c(response, " ", count)), hjust = 1, nudge_y = -0.5) +
   ylim(0, 50) +
   labs(title = "Keywords and their responses with more than 20 counts") +
-  ylab("Keyword") +
-  xlab("Count") +
+  xlab("Keyword") +
+  ylab("Count") +
   theme_classic()
 
 data |>
@@ -59,8 +57,8 @@ data |>
   geom_text(aes(label = str_c(response, " ", count)), hjust = 1, nudge_y = -0.5) +
   ylim(0, 50) +
   labs(title = "Keywords and their responses with more than 14 and less than 21 counts") +
-  ylab("Keyword") +
-  xlab("Count") +
+  xlab("Keyword") +
+  ylab("Count") +
   theme_classic()
 
 data |>
@@ -73,8 +71,8 @@ data |>
   geom_text(aes(label = str_c(response, " ", count)), hjust = 1, nudge_y = -0.5) +
   ylim(0, 50) +
   labs(title = "Keywords and their responses with more than 10 an less than 15 counts") +
-  ylab("Keyword") +
-  xlab("Count") +
+  xlab("Keyword") +
+  ylab("Count") +
   theme_classic()
 
 data |>
@@ -86,7 +84,7 @@ data |>
   geom_text(aes(label = str_c(response, " ", count)), hjust = 1, nudge_y = -0.5) +
   ylim(0, 50) +
   labs(title = "Keywords and their responses with less than 11 counts") +
-  ylab("Keyword") +
-  xlab("Count") +
+  xlab("Keyword") +
+  ylab("Count") +
   theme_classic()
 ```
