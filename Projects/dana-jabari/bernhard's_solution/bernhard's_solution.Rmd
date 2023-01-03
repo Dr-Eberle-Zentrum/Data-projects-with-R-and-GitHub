@@ -3,7 +3,6 @@ title: "R Notebook"
 output: html_notebook
 ---
 
-
 ```{r}
 library(stringr)
 library(tidyverse)
@@ -27,12 +26,11 @@ data <- data[data$response != "",]
 
 # remove duplicated entries due to same response count
 data <- data[!duplicated(data$keyword),]
+
 print(data)
 ```
 
 ```{r, echo=FALSE, fig.height = 6}
-
-
 
 data |>
   filter(count > 20) |>
