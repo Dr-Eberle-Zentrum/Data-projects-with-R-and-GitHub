@@ -14,72 +14,40 @@ data |>
   filter(response != "") |> # remove empty responses
   distinct(keyword, .keep_all = T) |> # remove duplicated entries due to same response count
   group_by(keyword) |>
-  filter(count == max(count)) -> data # filter out the 'best alternatives'
+  filter(count == max(count)) |> # filter out the 'best alternatives'
+  mutate(category = factor(case_when(
+    count > 20  ~ ">20",
+    count > 14 & count <= 20 ~ ">14 and <= 20",
+    count > 10 & count <= 14 ~ ">10 and <= 14",
+    count <= 10 ~ "<= 10"
+  ))) -> data 
 
-data$category = ""
-data[data$count > 20,]$category = ">20"
-data[data$count > 14 & data$count <= 20,]$category = ">14" 
-data[data$count > 10 & data$count <= 14,]$category = ">10"
-data[data$count <= 10,]$category = ">0" 
-data$category <- factor(data$category)
+# data$category = ""
+# data[data$count > 20,]$category = ">20"
+# data[data$count > 14 & data$count <= 20,]$category = ">14" 
+# data[data$count > 10 & data$count <= 14,]$category = ">10"
+# data[data$count <= 10,]$category = ">0" 
+# data$category <- factor(data$category)
 
 print(data)
 ```
 
 ```{r, echo=FALSE, fig.height = 6}
 
-data |>
-  filter(count > 20) |>
-  mutate(keyword = fct_reorder(keyword, count, .desc = TRUE)) |>
-  ggplot(aes(x = reorder(keyword, + count), y = count)) +
-  facet_wrap(~ category, nrow = 1) +
-  geom_bar(stat = "identity", width = 0.8, fill = "wheat3", color = "black") +
-  coord_flip() +
-  geom_text(aes(y = 0, label = str_c(response, " ", count)), hjust = 0, nudge_y = 0.2) +
-  ylim(0, 50) +
-  labs(title = "Keywords and their responses with more than 20 counts") +
-  xlab("Keyword") +
-  ylab("Count") +
-  theme_classic() 
+for (i in levels(data$category)) {
+  Plot <- (data |>
+    filter(category == i) |>
+    mutate(keyword = fct_reorder(keyword, count, .desc = TRUE)) |>
+    ggplot(aes(x = reorder(keyword, + count), y = count)) +
+    geom_bar(stat = "identity", width = 0.8, fill = "wheat3", color = "black") +
+    coord_flip() +
+    geom_text(aes(y = 0, label = str_c(response, " ", count)), hjust = 0, nudge_y = 0.2) +
+    ylim(0, 50) +
+    labs(title = str_c("Keywords and their responses with count ", i)) +
+    xlab("Keyword") +
+    ylab("Count") +
+    theme_classic())
+  print(Plot)
+}
 
-data |>
-  filter(count > 14) |>
-  filter(count <= 20) |>
-  mutate(keyword = fct_reorder(keyword, count, .desc = TRUE)) |>
-  ggplot(aes(x = reorder(keyword, + count), y = count)) +
-  geom_bar(stat = "identity", width = 0.8, fill = "wheat3", color = "black") +
-  coord_flip() +
-  geom_text(aes(y = 0, label = str_c(response, " ", count)), hjust = 0, nudge_y = 0.2) +
-  ylim(0, 50) +
-  labs(title = "Keywords and their responses with more than 14 and less than 21 counts") +
-  xlab("Keyword") +
-  ylab("Count") +
-  theme_classic()
-
-data |>
-  filter(count > 10) |>
-  filter(count <= 14) |>
-  mutate(keyword = fct_reorder(keyword, count, .desc = TRUE)) |>
-  ggplot(aes(x = reorder(keyword, + count), y = count)) +
-  geom_bar(stat = "identity", width = 0.8, fill = "wheat3", color = "black") +
-  coord_flip() +
-  geom_text(aes(y = 0, label = str_c(response, " ", count)), hjust = 0, nudge_y = 0.2) +
-  ylim(0, 50) +
-  labs(title = "Keywords and their responses with more than 10 an less than 15 counts") +
-  xlab("Keyword") +
-  ylab("Count") +
-  theme_classic()
-
-data |>
-  filter(count <= 10) |>
-  mutate(keyword = fct_reorder(keyword, count, .desc = TRUE)) |>
-  ggplot(aes(x = reorder(keyword, + count), y = count)) +
-  geom_bar(stat = "identity", width = 0.8, fill = "wheat3", color = "black") +
-  coord_flip() +
-  geom_text(aes(y = 0, label = str_c(response, " ", count)), hjust = 0, nudge_y = 0.2) +
-  ylim(0, 50) +
-  labs(title = "Keywords and their responses with less than 11 counts") +
-  xlab("Keyword") +
-  ylab("Count") +
-  theme_classic()
 ```
