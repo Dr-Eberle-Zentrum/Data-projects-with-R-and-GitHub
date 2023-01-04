@@ -3,29 +3,24 @@ title: "R Notebook"
 output: html_notebook
 ---
 
-```{r}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(stringr)
 library(tidyverse)
 data <- read.csv("https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/main/Projects/dana-jabari/cloze_task_results.csv")
 
-# extraction of the keyword
-data$keyword <- sub("," , "", str_extract_all(data$text, "\\w+,"))
-
-data$keyword <- factor(data$keyword)
-
-# filter out the 'best alternatives'
-data |> 
+data |>
+  mutate(keyword = factor(str_extract(data$text, "\\w+(?=\\,)"))) |> # extraction of the keyword
+  mutate(response = str_to_title(response)) |> # make response uppercase
+  filter(response != "") |> # remove empty responses
+  distinct(keyword, .keep_all = T) |> # remove duplicated entries due to same response count
   group_by(keyword) |>
-  filter(count == max(count)) -> data
+  filter(count == max(count)) -> data # filter out the 'best alternatives'
 
-# make response uppercase
-data$response <- str_to_title(data$response)
-
-# remove empty responses
-data <- data[data$response != "",]
-
-# remove duplicated entries due to same response count
-data <- data[!duplicated(data$keyword),]
+data$category = ""
+data[data$count > 20,]$category = ">20"
+data[data$count > 14 & data$count <= 20,]$category = ">14" 
+data[data$count > 10 & data$count <= 14,]$category = ">10"
+data[data$count <= 10,]$category = ">0" 
 
 print(data)
 ```
@@ -38,7 +33,7 @@ data |>
   ggplot(aes(x = reorder(keyword, + count), y = count)) +
   geom_bar(stat = "identity", width = 0.8, fill = "wheat3", color = "black") +
   coord_flip() +
-  geom_text(aes(label = str_c(response, " ", count)), hjust = 1, nudge_y = -0.5) +
+  geom_text(aes(y = 0, label = str_c(response, " ", count)), hjust = 0, nudge_y = 0.2) +
   ylim(0, 50) +
   labs(title = "Keywords and their responses with more than 20 counts") +
   xlab("Keyword") +
@@ -52,7 +47,7 @@ data |>
   ggplot(aes(x = reorder(keyword, + count), y = count)) +
   geom_bar(stat = "identity", width = 0.8, fill = "wheat3", color = "black") +
   coord_flip() +
-  geom_text(aes(label = str_c(response, " ", count)), hjust = 1, nudge_y = -0.5) +
+  geom_text(aes(y = 0, label = str_c(response, " ", count)), hjust = 0, nudge_y = 0.2) +
   ylim(0, 50) +
   labs(title = "Keywords and their responses with more than 14 and less than 21 counts") +
   xlab("Keyword") +
@@ -66,7 +61,7 @@ data |>
   ggplot(aes(x = reorder(keyword, + count), y = count)) +
   geom_bar(stat = "identity", width = 0.8, fill = "wheat3", color = "black") +
   coord_flip() +
-  geom_text(aes(label = str_c(response, " ", count)), hjust = 1, nudge_y = -0.5) +
+  geom_text(aes(y = 0, label = str_c(response, " ", count)), hjust = 0, nudge_y = 0.2) +
   ylim(0, 50) +
   labs(title = "Keywords and their responses with more than 10 an less than 15 counts") +
   xlab("Keyword") +
@@ -79,7 +74,7 @@ data |>
   ggplot(aes(x = reorder(keyword, + count), y = count)) +
   geom_bar(stat = "identity", width = 0.8, fill = "wheat3", color = "black") +
   coord_flip() +
-  geom_text(aes(label = str_c(response, " ", count)), hjust = 1, nudge_y = -0.5) +
+  geom_text(aes(y = 0, label = str_c(response, " ", count)), hjust = 0, nudge_y = 0.2) +
   ylim(0, 50) +
   labs(title = "Keywords and their responses with less than 11 counts") +
   xlab("Keyword") +
