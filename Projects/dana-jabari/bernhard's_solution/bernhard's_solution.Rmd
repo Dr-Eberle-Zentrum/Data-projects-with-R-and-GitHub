@@ -21,6 +21,7 @@ data[data$count > 20,]$category = ">20"
 data[data$count > 14 & data$count <= 20,]$category = ">14" 
 data[data$count > 10 & data$count <= 14,]$category = ">10"
 data[data$count <= 10,]$category = ">0" 
+data$category <- factor(data$category)
 
 print(data)
 ```
@@ -31,6 +32,7 @@ data |>
   filter(count > 20) |>
   mutate(keyword = fct_reorder(keyword, count, .desc = TRUE)) |>
   ggplot(aes(x = reorder(keyword, + count), y = count)) +
+  facet_wrap(~ category, nrow = 1) +
   geom_bar(stat = "identity", width = 0.8, fill = "wheat3", color = "black") +
   coord_flip() +
   geom_text(aes(y = 0, label = str_c(response, " ", count)), hjust = 0, nudge_y = 0.2) +
@@ -38,7 +40,7 @@ data |>
   labs(title = "Keywords and their responses with more than 20 counts") +
   xlab("Keyword") +
   ylab("Count") +
-  theme_classic()
+  theme_classic() 
 
 data |>
   filter(count > 14) |>
