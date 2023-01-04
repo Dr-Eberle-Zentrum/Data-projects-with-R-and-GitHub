@@ -6,21 +6,22 @@ output: html_notebook
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(stringr)
 library(tidyverse)
-data <- read.csv("https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/main/Projects/dana-jabari/cloze_task_results.csv")
+data_raw <- read.csv("https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/main/Projects/dana-jabari/cloze_task_results.csv")
 
-data |>
-  mutate(keyword = factor(str_extract(data$text, "\\w+(?=\\,)"))) |> # extraction of the keyword
+data_raw |>
+  mutate(keyword = factor(str_extract(text, "\\w+(?=\\,)"))) |> # extraction of the keyword
   mutate(response = str_to_title(response)) |> # make response uppercase
   filter(response != "") |> # remove empty responses
   distinct(keyword, .keep_all = T) |> # remove duplicated entries due to same response count
   group_by(keyword) |>
   filter(count == max(count)) |> # filter out the 'best alternatives'
   mutate(category = factor(case_when(
-    count > 20  ~ ">20",
-    count > 14 & count <= 20 ~ ">14 and <= 20",
-    count > 10 & count <= 14 ~ ">10 and <= 14",
-    count <= 10 ~ "<= 10"
-  ))) -> data 
+    count > 20  ~ 1,
+    count > 14 & count <= 20 ~ 2,
+    count > 10 & count <= 14 ~ 3,
+    count <= 10 ~ 4
+  ), levels = 1:4, labels = c(">20", ">14 and <= 20", ">10 and <= 14", "<= 10"))
+  ) -> data 
 
 # data$category = ""
 # data[data$count > 20,]$category = ">20"
@@ -35,7 +36,8 @@ print(data)
 ```{r, echo=FALSE, fig.height = 6}
 
 for (i in levels(data$category)) {
-  Plot <- (data |>
+  print(
+    data |>
     filter(category == i) |>
     mutate(keyword = fct_reorder(keyword, count, .desc = TRUE)) |>
     ggplot(aes(x = reorder(keyword, + count), y = count)) +
@@ -46,8 +48,8 @@ for (i in levels(data$category)) {
     labs(title = str_c("Keywords and their responses with count ", i)) +
     xlab("Keyword") +
     ylab("Count") +
-    theme_classic())
-  print(Plot)
+    theme_classic()
+  )
 }
 
 ```
