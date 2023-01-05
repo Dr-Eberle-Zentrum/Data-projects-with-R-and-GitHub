@@ -61,5 +61,6 @@ Unfortunately, since I did not manage to tidy the data I could not execute and t
 down the steps that would follow and what I thought of.
 If someone is able to give me tips or hints regarding the tidying of the data, i would love to try and visualize the data again and finish it! You can read on the details on my struggles regarding the tidying of the data in the issue i opened a while ago.
 
-Thank you this far! I wish i could have presented more than that but I think I need the tidied data
+Thank you this far! 
+I wish i could have presented more than that but I think I need the tidied data
 for that in order to find out whether the code i thought of to continue the tasks work out or not.
