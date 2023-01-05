@@ -1,0 +1,65 @@
+---
+title: "Solution to Zoés Task by Dana"
+output: html_notebook
+---
+
+Hello! 
+I am attempting to work on Zoes Task. I've had some struggles to properly
+read the data in, but now I'm a huge step forward.
+
+
+```{r, echo = FALSE}
+library(ggplot2)
+library(tidyverse)
+library(RPMG)
+```
+
+
+```{r}
+
+dat0 <- read_csv2("https://dr-eberle-zentrum.github.io/Advanced-data-processing-with-R/Projects/zoebuerger/Data_mood_stress.csv") 
+  
+dat0 |> 
+rownames_to_column() |> group_by(timepoint, questionnaire)
+
+
+# mean of negative PANAS items
+# mean_negPANAS <- mean(dat0$questionnaire == "PANAS" & item = c("bekuemmert", "beunruhigt", "schuldig", "erschreckt", "feindselig", "reizbar", "beschaemt", "nervoes", "aengstlich", "furchtsam"))
+
+
+# mean of positive PANAS items
+# mean_posPANAS <-  mean(dat0$questionnaire == "PANAS" & item = c("entschlossen", "begeistert", "aufmerksam", "stark", "interessiert", "aktiv", "wachsam", "angeregt", "stolz", "schwungvoll")),
+
+# recoding positive STAI items
+# mutate(recode((factor(questionnaire == "STAI"),
+#                 "1" = "5",
+#                 "2" = "4"
+#                 "3" = "3"
+#                 "4" = "2"
+#                 "5" = "1")))
+
+# sum posSTAI
+# sum_postSTAI <- sum(dat0$questionnaire == "STAI" & dat0$item == c("ruhig", "geborgen", "geloest", "ausgeruht", "wohl", "selbstsicher", "entspannt", "zufrieden", "froh", "vergnuegt"))
+
+# sum of negative STAI items
+# sum_negSTAI <- sum(dat0$questionnaire == "STAI" & dat0$item == c("angespannt", "bekuemmert", "aufgeregt", "schiefgehen", "beunruhigt", "nervoes", "zappelig", "erkrampft", "besorgt", "ueberreizt"))
+
+
+# 
+# Attempt for ggplot
+# ggplot(dat0, aes(x=timepoint, y= mean_posPANAS, fill=birthcontrol)) + 
+#    geom_boxplot()
+# ggplot(dat0, aes(x=timepoint, y= mean_neg_PANAS, fill=birthcontrol)) + 
+#    geom_boxplot()
+# ...... :(
+
+
+```
+
+I notice that my boxplots might not work this way.
+Unfortunately, since I did not manage to tidy the data I could not execute and try the code but I wrote
+down the steps that would follow and what I thought of.
+If someone is able to give me tips or hints regarding the tidying of the data, i would love to try and visualize the data again and finish it! You can read on the details on my struggles regarding the tidying of the data in the issue i opened a while ago.
+
+Thank you this far! I wish i could have presented more than that but I think I need the tidied data
+for that in order to find out whether the code i thought of to continue the tasks work out or not.
