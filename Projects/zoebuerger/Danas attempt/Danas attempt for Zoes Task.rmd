@@ -56,7 +56,7 @@ rownames_to_column() |> group_by(timepoint, questionnaire)
 
 ```
 
-I notice that my boxplots might not work this way.
+I notice that my boxplots might not work this way...
 Unfortunately, since I did not manage to tidy the data I could not execute and try the code but I wrote
 down the steps that would follow and what I thought of.
 If someone is able to give me tips or hints regarding the tidying of the data, i would love to try and visualize the data again and finish it! You can read on the details on my struggles regarding the tidying of the data in the issue i opened a while ago.

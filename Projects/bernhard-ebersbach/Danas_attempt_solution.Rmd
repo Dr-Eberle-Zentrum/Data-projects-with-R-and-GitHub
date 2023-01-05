@@ -45,7 +45,7 @@ select(sowndiv, numleg, `Nmin [mg/kg]`) |>
                         "6-8" = "8",
                         "12" = "12")) |>
   group_by(sowndiv, numleg) |>
-  summarize(mean_Nmin = mean(`Nmin [mg/kg]`))
+  summarize(mean_Nmin = mean(`Nmin [mg/kg]`, .groups = "drop"))
 
 ```
 
@@ -55,7 +55,7 @@ Lets see how this goes.
 
 ```{r}
 
-ggplot(edited_dat, aes(x = numleg, y = mean_Nmin, fill = sowndiv)) + 
+ggplot(edited_dat,aes(x = numleg, y = mean_Nmin, fill = sowndiv)) + 
    geom_bar(stat = "identity", position = position_dodge()) +
    scale_fill_brewer(palette="Blues") + theme_minimal() +
   labs(y = "Nmin [mg/kg]", x = "Number of Legume Species (numleg)",
