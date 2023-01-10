@@ -38,7 +38,7 @@ data %>%
   #str_extract(Frage, "\S+(?=,)") %>%
   ggplot(aes(fill = as.factor(Antwort), x = Faelle, y = reorder(Schlagwort, -Faelle))) +
   geom_bar(position = "stack", stat = "identity")+
-  geom_text(aes(label=str_to_title(Antwort)), vjust= 0.1, nudge_x = -2, nudge_y = -0.1)+
+  geom_text(aes(label=str_to_title(Antwort)), x = 2, vjust= 0.15, size = 3, nudge_y = -0.1)+
   labs(x = "Fälle",
        y = "Frage: Dort ist kein(e) ***, sondern ein..",
        fill = "Fälle")+ 
