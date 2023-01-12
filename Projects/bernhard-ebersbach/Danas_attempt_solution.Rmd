@@ -1,0 +1,82 @@
+---
+title: "Solution Bernhard's Task by Dana"
+output: html_notebook
+---
+This is my attempted solution to Bernhard's task.
+
+```{r}
+library(readr)
+library(tidyverse)
+
+dat <- read_csv2("https://dr-eberle-zentrum.github.io/Advanced-data-processing-with-R/Projects/bernhard-ebersbach/nmin_jena_2022.csv", col_names = TRUE)
+
+
+```
+
+Then I want to filter only the variables I am interested in. This would be 
+  - sowndiv
+  - numleg
+  - 'Nmin [mg/kg]'
+Additionally, we want to recode the variables "numleg" and "sowndiv" 
+in distinct intervals. (Thanks for your help Martin!) 
+Lastly, we are creating the mean of the Variable "Nmin" in order to save this in our final data set for the visualisation.
+
+The code for that is shown below.
+
+```{r}
+edited_dat <- dat |>
+select(sowndiv, numleg, `Nmin [mg/kg]`) |>
+  mutate(sowndiv = fct_recode(factor(sowndiv),
+                         "0-1" = "0",
+                         "0-1" = "1",
+                         "2-4" = "2",
+                         "2-4" = "4",
+                         "8-16" = "8",
+                         "8-16" = "16",
+                         "60" = "60"),
+    numleg = fct_recode(factor(numleg),
+                        "0-1" = "0",
+                        "0-1" = "1",
+                        "2-3" = "2",
+                        "2-3" = "3",
+                        "4-5" = "4",
+                        "4-5" = "5",
+                        "6-8" = "6",
+                        "6-8" = "8",
+                        "12" = "12")) |>
+  group_by(sowndiv, numleg) |>
+  summarize(mean_Nmin = mean(`Nmin [mg/kg]`))
+
+```
+
+With the dataset "edited_dat" I want to attempt to visualize the data set in
+the way Bernhard wishes for.
+Lets see how this goes.
+
+```{r}
+
+ggplot(edited_dat, aes(x = numleg, y = mean_Nmin, fill = sowndiv)) + 
+   geom_bar(stat = "identity", position = position_dodge()) +
+   scale_fill_brewer(palette="Blues") + theme_minimal() +
+  labs(y = "Nmin [mg/kg]", x = "Number of Legume Species (numleg)",
+  title = "Biodiversity and Nitrogen")
+
+
+```
+
+Okay. For some reason which I do not know, my bar plot does not seem to have
+the same structure as the example picture by Bernhard. 
+
+Since I am behind on time, I will leave it as it is for now and continue with the
+search for a solution.
+
+Open to dos:
+- Why are there 3 barplots only for the first group of numleg but not for the rest?
+- label the legend (sowndiv)
+- hide the numbers for the y-axis
+- centre the title of the plot
+
+Thank you for reading!
+
+Best,
+Dana
