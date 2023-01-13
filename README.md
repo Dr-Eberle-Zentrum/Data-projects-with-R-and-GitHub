@@ -345,12 +345,14 @@ Finally, it is not only about content but presentation matters.
 Thus, you will have to beautify your HTML output. 
 Here some ideas where to start:
 
-- selecting a different theme for styling >> check out [R Markdown - section 3.1 HTML output](https://bookdown.org/yihui/rmarkdown/html-document.html)
-- hide 
+- **hide**
   - loading information
   - code chunks
-- add
+- **add**
   - a narrative why you do/show things
   - (shortly) explain and interprete what you show
+- **style** >> check out [R Markdown - section 3.1 HTML output](https://bookdown.org/yihui/rmarkdown/html-document.html) for details
+  - try a different theme for styling 
+  - try you own CSS directives
 - ...
 
