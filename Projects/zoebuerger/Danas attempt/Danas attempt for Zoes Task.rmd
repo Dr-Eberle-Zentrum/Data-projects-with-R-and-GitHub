@@ -4,9 +4,7 @@ output: html_notebook
 ---
 
 Hello! 
-I am attempting to work on Zoes Task. I've had some struggles to properly
-read the data in, but now I'm a huge step forward.
-
+I am attempting to work on Zoes Task.
 
 ```{r, echo = FALSE}
 library(ggplot2)
