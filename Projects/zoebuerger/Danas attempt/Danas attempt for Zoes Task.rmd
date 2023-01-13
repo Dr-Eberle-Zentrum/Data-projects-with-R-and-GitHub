@@ -18,9 +18,23 @@ library(RPMG)
 ```{r}
 
 dat0 <- read_csv2("https://dr-eberle-zentrum.github.io/Advanced-data-processing-with-R/Projects/zoebuerger/Data_mood_stress.csv") 
+
+dat_clean <- 
+  dat0 |> 
+  # remove obsolete data lines
+  filter( ! item %in% c("count", 
+                        "Gefuehl", "Situation",
+                        "Ekel", "Freude", "Trauer")) |> 
+  # transform table to long format
+  pivot_longer( matches("\\d$"), names_to = "participant", values_to = "value") |> 
+  # annotate participants in their respective groups (removing participant number)
+  mutate( p_group = str_remove(participant,"\\d+"))
   
-dat0 |> 
-rownames_to_column() |> group_by(timepoint, questionnaire)
+
+  
+  
+#dat0 |> 
+#rownames_to_column() |> group_by(timepoint, questionnaire)
 
 
 # mean of negative PANAS items
@@ -31,12 +45,8 @@ rownames_to_column() |> group_by(timepoint, questionnaire)
 # mean_posPANAS <-  mean(dat0$questionnaire == "PANAS" & item = c("entschlossen", "begeistert", "aufmerksam", "stark", "interessiert", "aktiv", "wachsam", "angeregt", "stolz", "schwungvoll")),
 
 # recoding positive STAI items
-# mutate(recode((factor(questionnaire == "STAI"),
-#                 "1" = "5",
-#                 "2" = "4"
-#                 "3" = "3"
-#                 "4" = "2"
-#                 "5" = "1")))
+# 
+
 
 # sum posSTAI
 # sum_postSTAI <- sum(dat0$questionnaire == "STAI" & dat0$item == c("ruhig", "geborgen", "geloest", "ausgeruht", "wohl", "selbstsicher", "entspannt", "zufrieden", "froh", "vergnuegt"))
@@ -53,14 +63,100 @@ rownames_to_column() |> group_by(timepoint, questionnaire)
 #    geom_boxplot()
 # ...... :(
 
+stressfunc <- function(stressscores){
+  stressscores = (stressscores + 200) / 4
+  stressscores
+}
 
 ```
 
-I notice that my boxplots might not work this way...
-Unfortunately, since I did not manage to tidy the data I could not execute and try the code but I wrote
-down the steps that would follow and what I thought of.
-If someone is able to give me tips or hints regarding the tidying of the data, i would love to try and visualize the data again and finish it! You can read on the details on my struggles regarding the tidying of the data in the issue i opened a while ago.
+Plot for Stress
 
-Thank you this far! 
-I wish i could have presented more than that but I think I need the tidied data
-for that in order to find out whether the code i thought of to continue the tasks work out or not.
+```{r, echo = FALSE}
+# recoding:
+  
+stressfunc <- function(stressscores){
+  stressscores = (stressscores + 200) / 4
+  stressscores
+}
+
+  # plot Stress
+dat_clean |>
+  filter(item == "Stress") |> 
+  mutate(newvalues = stressfunc(value)) |> 
+  ggplot() +
+  geom_boxplot(aes(x=timepoint, y=newvalues, fill=p_group)) +
+  labs(y = "Wert", x = "Zeitpunkt der Messung", title = "Boxplot fue Stress")
+
+```
+
+PLOT for negative mood
+Error message: Objekt "timepoint" not found. I dont get why R cant find it tbh
+
+```{r}
+
+dat_clean |> 
+  filter(questionnaire == "PANAS" & item == c("bekuemmert", "beunruhigt", "schuldig", "erschreckt", "feindselig", "reizbar", "beschaemt", "nervoes", "aengstlich", "furchtsam")) |> 
+  group_by(participant, timepoint, p_group) |> 
+  summarize(mean1 = mean(value))
+  ggplot() +
+  geom_boxplot(aes(x=timepoint, y=mean1, fill=p_group)) +
+
+
+```
+
+PLOT for Aerger
+
+
+```{r}
+
+dat_clean |>
+  filter(item == "Aerger") |> 
+  group_by(participant, timepoint, p_group) |> 
+  summarize(mean1 = mean(value)) |> 
+  ggplot() +
+  geom_boxplot(aes(x=timepoint, y=mean1, fill=p_group))
+
+
+```
+
+Plot for positive mood 
+Here as well: Objekt p_group not found. I dont know man
+
+```{r}
+dat_clean |> 
+  filter(questionnaire == "PANAS" & item == c("entschlossen", "begeistert", "aufmerksam", "stark", "interessiert", "aktiv", "wachsam", "angeregt", "stolz", "schwungvoll")) |> 
+  mutate(mean_positive = mean(dat_clean[dat_clean$questionnaire == "STAI" & dat_clean$item == c("entschlossen", "begeistert", "aufmerksam", "stark", "interessiert", "aktiv", "wachsam", "angeregt", "stolz", "schwungvoll"),]$value)) |> 
+  group_by(participant, timepoint, p_group) |> 
+  summarize(means = mean(value, .groups = "drop")) |> 
+  ggplot() +
+  geom_boxplot(aes(x=timepoint, y = means, fill = p_group))
+
+
+```
+
+Plot for anxiety
+
+```{r}
+
+dat_clean |> 
+  filter(questionnaire == "STAI" & item == c("ruhig", "geborgen", "geloest", "ausgeruht", "wohl", "selbstsicher", "entspannt", "zufrieden", "froh", "vergnuegt")) |> 
+  mutate(newvalue2 = 6 - dat_clean[dat_clean$questionnaire == "STAI" & dat_clean$item == c("ruhig", "geborgen", "geloest", "ausgeruht", "wohl", "selbstsicher", "entspannt", "zufrieden", "froh", "vergnuegt"),]$value) |> 
+  group_by(participant, timepoint) |> 
+  ggplot() +
+  geom_boxplot((aes(x=timepoint,y=newvalue2, fill = p_group)))
+
+```
+
+
+Fazit:
+
+Tut mir voll Leid Zoe aber ich kriege es iwie nicht so hin :( Ich habe auch das Gefuehl, dass
+der Boxplot fuer Aerger nicht ganz richtig ist, aber weiß nicht, warum der so aussieht...
+
+Ich lasse es jetzt so mal ruhen und setzte mich endlich mal ans neue Projekt...
+wenn irgendjemand weiß, warum das alles irgendwie nicht so ganzf funktioniert hat bei mir,
+kann mir gerne Bescheid sagen!
+
+Liebe Gruesse,
+Dana
