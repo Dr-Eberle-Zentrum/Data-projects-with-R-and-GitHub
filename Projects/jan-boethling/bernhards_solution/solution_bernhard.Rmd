@@ -5,7 +5,7 @@ output: html_notebook
 
 ## First step: tidying up data.
 
-Column Location gets renamed to Country, Column Period gets renamed to Year and Column FactValueNumeric will be renamed to Cases. 
+Column `Location` gets renamed to `Country`, column `Period` gets renamed to `Year` and column `FactValueNumeric` will be renamed to `Cases`.
 
 Note: I held the plots in a *mourning color* by purpose.
 
@@ -48,7 +48,7 @@ data |>
 
 ```
 
-As we can see 2021 was the year with the most HIV cases during the time period 2000 and 2021.
+As we can see 2021 was the year with the most HIV cases during the time period of 2000 and 2021.
 
 ## Third step: cases by country
 
@@ -74,7 +74,7 @@ data |>
 
 As the chart shows, in all the countries but South Africa the HIV cases are either decreasing or at a relative stable level. South Africa shows a steep increase in case numbers and hence must be the main cause for the rising cases worldwide that the first chart shows.
 
-## Fourth step:
+## Fourth step: 5 year interval *summary*
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 
@@ -88,3 +88,7 @@ data |>
   ggtitle("HIV cases of the 5 countries with the highest \nHIV cases count worldwide in a 5 year interval")
 
 ```
+
+This chart gives an overview over the HIV cases of the five most affected countries worldwide. The cases are shown in a 5 year interval. This chart can be seen as a summary of the foregoing charts.
+
+Hopefully, it's beautiful enough.
