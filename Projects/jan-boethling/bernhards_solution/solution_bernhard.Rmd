@@ -40,7 +40,7 @@ data |>
   ggplot(aes(x = as.factor(Year), y = Cases, fill = Year)) +
   geom_col() +
   guides(fill = "none") + # removes legend
-  dark_theme_bw() +
+  dark_theme_classic() +
   xlab("Year") +
   scale_y_continuous(labels = scales::comma) +
   ggtitle("Worldwide HIV cases by years with highlighted maximum (2000 - 2021)") +
