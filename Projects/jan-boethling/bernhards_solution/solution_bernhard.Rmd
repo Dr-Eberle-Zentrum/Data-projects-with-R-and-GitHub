@@ -13,15 +13,15 @@ Note: I held the plots in a *mourning color* by purpose.
 library(tidyverse)
 library(ggdark)
 library(gghighlight)
-data_raw <- read_csv("https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/main/Projects/jan-boethling/Data_Project_Jan.csv")
-#data_raw <- read_csv("C:\\Users\\berbac\\Google Drive\\Uni\\Geographie\\R2 - Advanced R\\Project\\Advanced-data-processing-with-R\\Projects\\jan-boethling\\Data_Project_Jan.csv")
+#data_raw <- read_csv("https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/main/Projects/jan-boethling/Data_Project_Jan.csv")
+data_raw <- read_csv("C:\\Users\\berbac\\Google Drive\\Uni\\Geographie\\R2 - Advanced R\\Project\\Advanced-data-processing-with-R\\Projects\\jan-boethling\\Data_Project_Jan.csv")
 
 # renaming columns
 data_raw |>
   rename(Country = Location, Year = Period, Cases = FactValueNumeric) |>
   select(Country, Year, Cases) |>
   mutate(
-    Country = as.factor(Country),
+    #Country = as.factor(Country),
     #Year = as.factor(Year),
     Cases = replace_na(Cases, 0) 
     ) -> data
@@ -83,18 +83,19 @@ for (i in 1:length(top_5_countries$Country)) {
     current_country <- top_5_countries$Country[i]
     data[data$Country == current_country,]$Rank = 
       as.integer(
-      data[data$Country == current_country & data$Year == 2020,]$Cases/1000 - 
-      data[data$Country == current_country & data$Year == 2000,]$Cases/1000 
+      data[data$Country == current_country & data$Year == 2020,]$Cases - 
+      data[data$Country == current_country & data$Year == 2000,]$Cases
       )
 }
 
 data |>
   filter(is.element(Country, top_5_countries$Country)) |>
   filter(is.element(Year, Year[Year %% 5 == 0])) |>
-  ggplot(aes(x = Year, y = Cases, fill = fct_reorder(Country, Rank) )) +
+  mutate(Country = str_c(Country, " (", scales::label_comma()(Rank), ")")) |>
+  ggplot(aes(x = Year, y = Cases, fill = fct_reorder(factor(Country), Rank) )) +
   geom_col(position = "stack") +
   dark_theme_classic() +
-  guides(fill = guide_legend(title = "Countries")) +
+  guides(fill = guide_legend(title = "Countries (case difference 2000 - 2020)")) +
   scale_y_continuous(labels = scales::comma) +
   ggtitle("HIV cases of the 5 countries with the highest \nHIV cases count worldwide in a 5 year interval")
 
