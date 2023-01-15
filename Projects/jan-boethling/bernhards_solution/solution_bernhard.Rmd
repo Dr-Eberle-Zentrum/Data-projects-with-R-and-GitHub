@@ -13,8 +13,8 @@ Note: I held the plots in a *mourning color* by purpose.
 library(tidyverse)
 library(ggdark)
 library(gghighlight)
-#data_raw <- read_csv("https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/main/Projects/jan-boethling/Data_Project_Jan.csv")
-data_raw <- read_csv("C:\\Users\\berbac\\Google Drive\\Uni\\Geographie\\R2 - Advanced R\\Project\\Advanced-data-processing-with-R\\Projects\\jan-boethling\\Data_Project_Jan.csv")
+data_raw <- read_csv("https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/main/Projects/jan-boethling/Data_Project_Jan.csv")
+#data_raw <- read_csv("C:\\Users\\berbac\\Google Drive\\Uni\\Geographie\\R2 - Advanced R\\Project\\Advanced-data-processing-with-R\\Projects\\jan-boethling\\Data_Project_Jan.csv")
 
 # renaming columns
 data_raw |>
@@ -67,7 +67,7 @@ data |>
   ggplot(aes(x = Year, y = Cases, group = Country, color = Country, fill = Country)) + 
   geom_line() +
   scale_y_continuous(labels = scales::comma) +
-  ggtitle("Development of HIV cases of the 5 countries with most cases") +
+  ggtitle("Development of HIV cases of the 5 countries with most cases\n(2000 - 2021)") +
   dark_theme_classic()
 
 ```
@@ -91,18 +91,18 @@ for (i in 1:length(top_5_countries$Country)) {
 data |>
   filter(is.element(Country, top_5_countries$Country)) |>
   filter(is.element(Year, Year[Year %% 5 == 0])) |>
-  mutate(Country = str_c(Country, " (", scales::label_comma()(Rank), ")")) |>
+  mutate(Country = str_c(Country, " (", if_else(Rank > 0, "+", ""), scales::label_comma()(Rank), ")")) |>
   ggplot(aes(x = Year, y = Cases, fill = fct_reorder(factor(Country), Rank) )) +
   geom_col(position = "stack") +
   dark_theme_classic() +
   guides(fill = guide_legend(title = "Countries (case difference 2000 - 2020)")) +
   scale_y_continuous(labels = scales::comma) +
-  ggtitle("HIV cases of the 5 countries with the highest \nHIV cases count worldwide in a 5 year interval")
+  ggtitle("HIV cases of the 5 countries with the highest \nHIV cases count worldwide in a 5 year interval (2000 - 2020)")
 
 ```
 
 This chart gives an overview over the HIV cases of the five most affected countries worldwide. The cases are shown in a 5 year interval. This chart can be seen as a summary of the foregoing charts.
 
-In addition, the stacked countriese are sorted by increase/decrease of the case numbers from 2000 to 2020 with the country nearest to the y-axis having the largest increase (South Africa) while the topmost (India) the lowest. As the foregoing chart shows India had a decrease in HIV infections during the analysed time period.
+In addition, the stacked countriese are sorted by increase/decrease of the case numbers from 2000 to 2020 with the country nearest to the x-axis having the largest increase (South Africa) while the topmost (India) the lowest. As the foregoing chart shows India had a decrease in HIV infections during the analysed time period.
 
 Hopefully, it's beautiful enough.
