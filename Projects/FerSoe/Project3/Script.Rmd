@@ -1,0 +1,247 @@
+---
+title: "Project Corona"
+output:
+  html_document:
+    df_print: paged
+---
+
+# Tasks
+
+-   which EU-country has the most cumulative covid-cases and deaths proportional to the number of inhabitants over the entire period of the Covid-pandemic.
+-   Therefore you need to create a bar chart geom_bar().
+    -   On the X-axis of the chart, the different EU-countries should be listed (exclude the countries which are not part of the EU!!).
+    -   The Y-axis should visualize the covid-cases.
+-   The chart-bars should also include the number of deaths.
+    -   Due to the high discrepancy between the "cases" and the "deaths", you should find an adequat method to also visualize the deaths. + group the number of deaths in different categories and to color the boxplot in relation to the respective category (color gradient).
+-   Take care to show the cases and deaths in relation to the population of the countries, mention this also in the legend.
+    -   The relation should be in a way, that you divide the total number of daily cases per country with the population number of that country.
+
+## Optional Task
+
+-   You can try to find out if there is a relation between the Gross domestic product (GDP) per capita and the total daily covid-cases in this country over the entire period.
+    -   One possibility to do this could be by testing the correlation between the two variables and later on creating a Scatterplot that shows the distribution and gives us a correlation coefficient.
+-   More information about how this works can be found on the following website: <http://www.sthda.com/english/wiki/correlation-test-between-two-variables-in-r>
+
+The dataset can be downloaded as XLS-file from this website: <https://de.statista.com/statistik/daten/studie/188766/umfrage/bruttoinlandsprodukt-bip-pro-kopf-in-den-eu-laendern/>
+
+```{r chunk options, include=FALSE}
+
+knitr::opts_chunk$set (echo=FALSE, warning=FALSE, message=FALSE, dpi = 300, root.dir = "./Projects/FerSoe/Project3" )
+
+
+```
+
+Overview about the data structure:
+
+```{r}
+
+read.csv("https://opendata.ecdc.europa.eu/covid19/nationalcasedeath_eueea_daily_ei/csv/data.csv",sep = ",") -> data_or
+
+data <- data_or
+
+head(data_or,10)
+```
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+eu_geold <- c (
+"BE",
+"BG",
+"DK",
+"DE",
+"EE",
+"FI",
+"FR",
+"GR",
+"IE",
+"IT",
+"HR",
+"LV",
+"LT",
+"LU",
+"MT",
+"NL",
+"AT",
+"PL",
+"PT",
+"RO",
+"SE",
+"SK",
+"SI",
+"ES",
+"CZ",
+"HU",
+"CY")
+
+eu_countries <- c (
+"Austria",
+"Belgium",
+"Bulgaria",
+"Croatia",
+"Cyprus",
+"Czech Republic",
+"Denmark",
+"Estonia",
+"Finland",
+"France",
+"Germany",
+"Greece",
+"Hungary",
+"Ireland",
+"Italy",
+"Latvia",
+"Lithuania",
+"Luxembourg",
+"Malta",
+"Netherlands",
+"Poland",
+"Portugal",
+"Romania",
+"Slovakia",
+"Slovenia",
+"Spain",
+"Sweden")
+
+
+
+
+
+```
+
+Countries and deaths in absolut numbers per year as table and figure:
+
+```{r}
+data |> 
+  filter( geoId %in% eu_geold) |> 
+  group_by(countriesAndTerritories, year) |> 
+  summarise(sum_year_deaths = sum(deaths, na.rm = T))
+
+
+```
+
+```{r, fig.width= 15}
+
+data |> 
+  filter( geoId %in% eu_geold) |> 
+  group_by(countriesAndTerritories, year) |> 
+  summarise(sum_year_deaths = sum(deaths, na.rm = T)) |> 
+  ggplot(aes(countriesAndTerritories, sum_year_deaths)) +
+  geom_bar(stat="identity") +
+  xlab("EU-Countries") + 
+  ylab("Corona deaths in absolut numbers")
+  
+
+
+```
+
+Countries and deaths in absolut numbers per year as table and figure:
+
+```{r, fig.width= 15}
+data |> 
+  filter( geoId %in% eu_geold) |> 
+  group_by(countriesAndTerritories, year) |> 
+  summarise(sum_year_cases = sum(cases, na.rm = T))
+
+
+```
+
+## Sum of cases
+
+```{r, fig.width= 15}
+data |> 
+  filter( geoId %in% eu_geold) |> 
+  group_by(countriesAndTerritories, year) |> 
+  summarise(sum_year_cases = sum(cases, na.rm = T)) |> 
+  ggplot(aes(countriesAndTerritories, sum_year_cases)) +
+  geom_bar(stat="identity") +
+  xlab("EU-Countries") + 
+  ylab("Corona cases in absolut numbers")
+  
+```
+
+## Sum of cases and mean deaths
+
+```{r, fig.width= 15}
+
+col <- c ("green", "red")
+
+data |> 
+  filter( geoId %in% eu_geold) |> 
+  group_by(countriesAndTerritories) |> 
+  mutate (sum_year_cases = sum(cases, na.rm = T), sum_year_deaths = mean(deaths, na.rm = T)) |> 
+  ggplot(aes(countriesAndTerritories, sum_year_cases, fill = sum_year_deaths)) +
+  geom_bar(stat="identity") +
+  scale_fill_gradientn ( colours = col, name = "Mean Deaths")  +
+  xlab("EU-Countries") + 
+  ylab("Corona cases in absolut numbers")
+  
+
+
+```
+
+## Sum of cases and mean deaths per capita
+
+```{r, fig.width= 15}
+
+col <- c ("green", "red")
+
+data |> 
+  filter( geoId %in% eu_geold) |> 
+  group_by(countriesAndTerritories) |> 
+  mutate (sum_year_cases = (sum(cases, na.rm = T)), sum_year_deaths = (mean(deaths, na.rm = T)/popData2020)) |> 
+  ggplot(aes(countriesAndTerritories, sum_year_cases, fill = sum_year_deaths)) +
+  geom_bar(stat="identity") +
+  scale_y_continuous(labels = function(x) format (x, scientific = F))+
+    scale_fill_gradientn ( colours = col, name = "Death per capita")  +
+  xlab("EU-Countries") + 
+  ylab("Corona cases in absolut numbers")
+
+
+
+```
+
+## Corona cases per capita and mean deaths per capita
+
+```{r, fig.width= 15}
+
+col <- c ("green", "red")
+
+data |> 
+  filter( geoId %in% eu_geold) |> 
+  group_by(countriesAndTerritories) |> 
+  mutate (sum_year_cases = (sum(cases, na.rm = T)/popData2020), sum_year_deaths = (mean(deaths, na.rm = T)/popData2020)) |> 
+  ggplot(aes(countriesAndTerritories, sum_year_cases, fill = sum_year_deaths)) +
+  geom_bar(stat="identity") +
+  scale_y_continuous(labels = function(x) format (x, scientific = F))+
+  scale_fill_gradientn ( colours = col, name = "Death per capita")  +
+  xlab("EU-Countries") + 
+  ylab("Corona cases  per capita")
+
+
+
+```
+
+```{r eval=FALSE, include=FALSE}
+
+data_BIP<-readxl::read_xlsx("Projects/FerSoe/Project3/Data/statistic_id188766_bruttoinlandsprodukt.xlsx", sheet = 2)
+
+data_BIP <- data_BIP [-c(1,2,41,42),]
+
+data_BIP<-data_BIP |> 
+  rename(Land = 'Bruttoinlandsprodukt (BIP) pro Kopf in den EU-Ländern 2021',
+         BIP = ...2,
+         Währung = ...3)
+
+```
+
+```{r eval=FALSE, include=FALSE}
+
+data_BIP |> 
+  arrange(Land)
+  
+
+
+```

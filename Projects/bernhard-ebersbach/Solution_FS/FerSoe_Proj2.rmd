@@ -103,11 +103,11 @@ RColorBrewer::display.brewer.all()
 ```
 
 ## Barplot  
-First bar plot without error bars:  
+First bar plot without error bars and without the mean:  
 ```{r}
 
 data |> 
-  ggplot(aes(numleg_cat, Nmin, fill = sowndiv)) +
+  ggplot(aes(numleg_cat, Nmin, fill = sowndiv_cat)) +
   geom_bar(stat = "identity", position = position_dodge())+
   scale_fill_brewer ("Diversity Level \n (snowdiv)") +
   theme(panel.background = element_blank(), panel.grid.major = element_line("grey"), panel.grid.major.x = element_blank())+
@@ -124,7 +124,7 @@ data |>
 # Add sd to dataframe
 
 data_sd<-data |> 
-  group_by(sowndiv) |> 
+  group_by(sowndiv_cat) |> 
   mutate(sd = sd (Nmin), mean_nmin = mean(Nmin))
 
 
@@ -136,7 +136,7 @@ data_sd<-data |>
 
 
 data_sd |> 
-  ggplot(aes(numleg_cat, mean_nmin, fill = sowndiv)) +
+  ggplot(aes(numleg_cat, mean_nmin, fill = sowndiv_cat)) +
   geom_bar(stat = "identity", position = position_dodge())+
   scale_fill_brewer ("Diversity Level \n (snowdiv)") +
   theme(panel.background = element_blank(), panel.grid.major = element_line("grey"), panel.grid.major.x = element_blank())+
