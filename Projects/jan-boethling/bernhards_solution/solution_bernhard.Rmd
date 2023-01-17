@@ -1,6 +1,9 @@
 ---
-title: "R Notebook"
-output: html_notebook
+title: "Worldwide HIV cases (Jan's project)"
+author: "Bernhard"
+output: 
+  html_notebook:
+    theme: darkly
 ---
 
 ## First step: tidying up data.
