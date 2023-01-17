@@ -7,9 +7,9 @@ Hello!
 I am attempting to work on Zoes Task.
 
 ```{r, echo = FALSE}
-library(ggplot2)
+# library(ggplot2)
 library(tidyverse)
-library(RPMG)
+# library(RPMG)
 ```
 
 
@@ -17,15 +17,19 @@ library(RPMG)
 
 dat0 <- read_csv2("https://dr-eberle-zentrum.github.io/Advanced-data-processing-with-R/Projects/zoebuerger/Data_mood_stress.csv") 
 
-dat_clean <- 
+dat_clean <-
   dat0 |> 
   # remove obsolete data lines
   filter( ! item %in% c("count", 
                         "Gefuehl", "Situation",
                         "Ekel", "Freude", "Trauer")) |> 
   # transform table to long format
-  pivot_longer( matches("\\d$"), names_to = "participant", values_to = "value") |> 
-  # annotate participants in their respective groups (removing participant number)
+  pivot_longer( 
+    cols = - c(questionnaire,item,timepoint)
+    # matches("\\d$")
+                , names_to = "participant", values_to = "value") |> 
+  
+  # # annotate participants in their respective groups (removing participant number)
   mutate( p_group = str_remove(participant,"\\d+"))
   
 
@@ -81,10 +85,10 @@ stressfunc <- function(stressscores){
   # plot Stress
 dat_clean |>
   filter(item == "Stress") |> 
-  mutate(newvalues = stressfunc(value)) |> 
+  mutate(newvalues = (value+200)/4) |> 
   ggplot() +
   geom_boxplot(aes(x=timepoint, y=newvalues, fill=p_group)) +
-  labs(y = "Wert", x = "Zeitpunkt der Messung", title = "Boxplot fue Stress")
+  labs(y = "Wert", x = "Zeitpunkt der Messung", title = "Boxplot fuer Stress")
 
 ```
 
@@ -94,11 +98,13 @@ Error message: Objekt "timepoint" not found. I dont get why R cant find it tbh
 ```{r}
 
 dat_clean |> 
-  filter(questionnaire == "PANAS" & item == c("bekuemmert", "beunruhigt", "schuldig", "erschreckt", "feindselig", "reizbar", "beschaemt", "nervoes", "aengstlich", "furchtsam")) |> 
-  group_by(participant, timepoint, p_group) |> 
-  summarize(mean1 = mean(value))
+  filter(questionnaire == "PANAS" & 
+           item %in% c("bekuemmert", "beunruhigt", "schuldig", "erschreckt", "feindselig", "reizbar", "beschaemt", "nervoes", "aengstlich", "furchtsam")) |> 
+  group_by(timepoint, p_group, participant) |>
+  summarize(mean1 = mean(value)) |>
+  ungroup() |> 
   ggplot() +
-  geom_boxplot(aes(x=timepoint, y=mean1, fill=p_group)) +
+  geom_boxplot(aes(x=timepoint, y=mean1, fill=p_group)) 
 
 
 ```
