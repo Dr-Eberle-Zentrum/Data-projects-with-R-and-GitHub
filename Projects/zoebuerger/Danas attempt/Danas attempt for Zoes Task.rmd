@@ -77,10 +77,10 @@ Plot for Stress
 ```{r, echo = FALSE}
 # recoding:
   
-stressfunc <- function(stressscores){
-  stressscores = (stressscores + 200) / 4
-  stressscores
-}
+# stressfunc <- function(stressscores){
+#   stressscores = (stressscores + 200) / 4
+#   stressscores
+# }
 
   # plot Stress
 dat_clean |>
@@ -116,10 +116,10 @@ PLOT for Aerger
 
 dat_clean |>
   filter(item == "Aerger") |> 
-  group_by(participant, timepoint, p_group) |> 
-  summarize(mean1 = mean(value)) |> 
+  # group_by(timepoint, p_group,participant) |> 
+  # summarize(mean1 = mean(value)) |> 
   ggplot() +
-  geom_boxplot(aes(x=timepoint, y=mean1, fill=p_group))
+  geom_boxplot(aes(x=timepoint, y=value, fill=p_group))
 
 
 ```
@@ -144,11 +144,21 @@ Plot for anxiety
 ```{r}
 
 dat_clean |> 
-  filter(questionnaire == "STAI" & item == c("ruhig", "geborgen", "geloest", "ausgeruht", "wohl", "selbstsicher", "entspannt", "zufrieden", "froh", "vergnuegt")) |> 
-  mutate(newvalue2 = 6 - dat_clean[dat_clean$questionnaire == "STAI" & dat_clean$item == c("ruhig", "geborgen", "geloest", "ausgeruht", "wohl", "selbstsicher", "entspannt", "zufrieden", "froh", "vergnuegt"),]$value) |> 
-  group_by(participant, timepoint) |> 
+  # reduce to STAI
+  filter(questionnaire == "STAI") |> 
+  # create flag for positive items
+  mutate( isPositive = item %in% c("ruhig", "geborgen", "geloest", "ausgeruht", "wohl", "selbstsicher", "entspannt", "zufrieden", "froh", "vergnuegt")) |> 
+  mutate( newvalue2 = if_else(
+                        isPositive,
+                         6 - value,
+                        value
+                      )) |> 
+  # mutate(newvalue2 = 6 - value) |> 
+  group_by(timepoint, p_group, participant) |> 
+  summarize( anxiety_value = sum(newvalue2), .groups="drop") |> 
   ggplot() +
-  geom_boxplot((aes(x=timepoint,y=newvalue2, fill = p_group)))
+  geom_boxplot((aes(x=timepoint,y=anxiety_value, fill = p_group))) + 
+  ggtitle("Anxiety")
 
 ```
 
