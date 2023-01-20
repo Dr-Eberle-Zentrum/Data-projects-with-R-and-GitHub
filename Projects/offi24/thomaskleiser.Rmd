@@ -1,7 +1,7 @@
 ---
-title: thomaskleiser
-author: thomaskleiser
-output: html_document
+title: "thomaskleiser"
+author: "thomaskleiser"
+output: "html_document"
 
 ---
 
@@ -24,13 +24,11 @@ corona_eu <- corona_eu %>%
   filter(country != "Norway" & country != "Iceland" & country != "Liechtenstein") %>%
 # calculating the number of cases and deaths per country with group_by() and mutate()
   group_by(country) %>%
-  summarise(cases_total = sum(cases),
+  summarize(cases_total = sum(cases),
             deaths_total = sum(deaths),
-            cases_total_per_capita = cases / population_2020 * 100,
-            deaths_total_per_capita = deaths / population_2020 * 1000,
-            population_total = sum(population_2020)) %>%
-  ungroup()
-
+            cases_total_per_capita = cases_total / population_2020 * 100,
+            deaths_total_per_capita = deaths_total / population_2020 * 1000,
+            )
 # calculating the mean number of cases and deaths per capita:
 mean_cases_total_per_capita <- mean(corona_eu$cases_total_per_capita) * 1000
 
@@ -47,9 +45,9 @@ ggplot(corona_eu, aes(x = reorder(country, desc(cases_total_per_capita)), y = ca
   geom_hline(yintercept = mean_cases_total_per_capita, linetype = "dotted") +
   geom_text(x = "Malta", y = 45, label = "EU average") +
   labs(title = "Number of reported Sars-CoV-2 Cases per 100 Inhabitants in EU, 2020-2022",
+       caption = "Source: European Center for Disease Prevention and Control",
        x = element_blank(),
-       y = element_blank(),
-       caption = "Source: European Center for Disease Prevention and Control") +
+       y = element_blank()) +
   theme_classic() +
   theme(axis.text = element_text(angle = 90))
 
@@ -85,18 +83,18 @@ bip_eu <- data.frame("country" = c("Luxembourg","Ireland","Norway","Denmark","Sw
                                14701,12501,9850)
                      )
 
-corona_bip_eu <- right_join(corona_eu,bip_eu, by = "country")
+corona_bip_eu <- left_join(corona_eu,bip_eu, by = "country")
 
 ```
 
 ```{r visualisation_of_cases_vs_bip}
 
-ggplot(corona_bip_eu, aes(x = bip, y = cases_total_per_capita)) +
+ggplot( corona_bip_eu, aes(x = unique(bip), y = unique(cases_total_per_capita)) ) +
   geom_point() +
   geom_smooth(method = "lm") +
   labs(title = "Relation between Sars-CoV-2 cases and GDP",
        subtitel = "measeured in reported cases per capita and GDP per capita",
-       caption = "Source: European Center for Disease Prevention and Control, Statista")
+       caption = "Source: European Center for Disease Prevention and Control, Statista") +
   theme_classic()
 
 ```
