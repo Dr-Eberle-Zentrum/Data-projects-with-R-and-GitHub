@@ -8,6 +8,8 @@ output: html_document
 ### Course: R2 -  Advanced data processing with R
 ### Information of the task can be found on the following Webpage: *https://dr-eberle-zentrum.github.io/Advanced-data-processing-with-R/Projects/bernhard-ebersbach/project-description.html*
 ```{r, echo = F, message=FALSE, warning=FALSE}
+#Project of Bernhard
+#16.01.2023
 library(tidyverse)
 library(ggplot2)
 library(dplyr)
@@ -38,22 +40,17 @@ df1 = df %>%
                             Numleg <=8  ~ '4',
                             Numleg <=12  ~ '5', 
                             Numleg > 12  ~ '6')) %>%
-  #group_by(Nmin) %>%
+  group_by(Numleg1, sowndiv1) %>%
+  summarise(MW = mean(as.numeric(Nmin), na.rm = T),
+             error = sd(as.numeric(Nmin), na.rm = T) / sqrt(n()),
+             .groups = "drop") %>% 
+  
   #summarise(Abweichung = mean(as.numeric(Nmin), na.rm = T),
             #SDW = sd(as.numeric(Abweichung), na.rm = T))
-
-
-  #summarise(mean = mean(as.numeric(Nmin), na.rm = T),
-            #sd = sd(mean), na.rm = T)
-  #müsste dies hier als group erstellen!!
-
-
-  #group_by(sowndiv1)%>%
+  ## Hier gibt es die Probleme mit der Standardabweichung. Mit dem Script rechnet
+  ## es beispielsweise nur die Abweichung und nicht die Standardweichung
   complete(Numleg1, sowndiv1)
   
-  #summarise(Nmin = mean(as.numeric(Nmin), na.rm = T))
-#%>%
-#r
 ```
 
 
@@ -61,18 +58,20 @@ df1 = df %>%
 ```{r hallo, echo=FALSE,message=FALSE, warning=FALSE}
 df1 %>%
   replace_na(list(Nmin="0"))%>%
-  ggplot(aes( y=as.numeric(Nmin), x=Numleg1, fill=as.factor(sowndiv1)) )+ #Hier müsste man irgendwie alle Modelle auf eine Achse laden können
+  ggplot(aes( y=as.numeric(MW), x=Numleg1, fill=as.factor(sowndiv1)) )+ #Hier müsste man irgendwie alle Modelle auf eine Achse laden können
   geom_bar(position = "dodge", stat = "identity") +
-  #geom_errorbar(position = position_dodge(width= 0.9),aes(ymin=Abweichung-mean(SDABW), ymax=Abweichung+mean(SDABW)), width=.2)+
+  geom_errorbar(aes(ymin=MW-error, ymax=MW+error), width=.2,
+               position=position_dodge(.9)) +
   #geom_errorbar(position = position_dodge(width= 0.9),aes(ymin=Abweichung-mean(SDABW), ymax=Abweichung+mean(SDABW)), width=.2)+
   labs(x = "Number of legume species",
-       y = "Nmin(mg/kg)",
+       y = expression("N"[min]*"[mg/kg]"),
        fill = "Diversity level (sowndiv)")+
-  ggtitle("")+
+  ggtitle("Titel des Diagramms")+
   scale_x_discrete(labels = c("0-1","2-3","4-5","6-8","9-12","über 12"))+
   scale_fill_discrete(name = "Diversity level (sowndiv)", labels = c("0-1", "2-4", "4-16", ">16"))
   geom_text(position = position_dodge(width= 1), aes(label = scales::comma(round(Nmin, 1))), hjust = 0.7, vjust = 0.23, angle = 90)#+
   #scale_fill_manual(values = c("slategray1", "skyblue3", "skyblue4", "royalblue3", "royalblue4", "navy"))
+
 
 ```
 
