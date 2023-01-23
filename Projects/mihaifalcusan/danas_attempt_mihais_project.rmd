@@ -1,0 +1,84 @@
+---
+title: "Danas attempt for Mihai's project"
+author: "Dana Jabari"
+date: "23.01.2023"
+output: html_document
+---
+
+# Hey Mihai,
+
+my last project will be yours :)
+
+```{r, include = FALSE}
+
+library(dplyr)
+library(ggplot2)
+
+```
+
+1. First task: Bar plots illustrating the CO2 uptake means (over the conc condition) 
+for type and treatment groups, together with their respective standard errors.
+
+  * My struggle: How to make the error bar in the middle?
+
+
+```{r, include = FALSE}
+
+mean_uptake <- CO2 |> 
+  group_by(Type, Treatment, conc) |> 
+  summarize(means = mean(uptake), SE = sd(uptake) / sqrt(length(uptake)), .groups = "drop") |>
+  ungroup()
+
+```
+
+
+```{r, echo = FALSE, results = "hide" }
+
+mean_uptake |> 
+  ggplot() +
+  geom_bar(mapping = aes(x = conc, y = means, fill = Treatment), 
+           stat = "identity", position = "dodge") +
+  geom_errorbar(aes(x = conc,  ymin = means - SE, ymax = means + SE),
+               width=0.4, colour="black", alpha=0.9) +
+  facet_wrap(~ Type)
+
+```
+
+2. Line plots for each plant's CO2 uptake over the conc condition (x-Axis) for all plants from Quebec.
+  * This kind of worked? At first the left axis the numbers were overlaying and I could not
+    figure out, how to fix this. So I removed them. If you have a tip, I would love to know!
+
+```{r, echo = FALSE, results = "hide"}
+CO2 |> 
+  filter(Type == "Quebec") |> 
+  ggplot(CO2, mapping = aes(x = conc, y = uptake)) +
+  geom_line() +
+  facet_grid(Plant ~ Type) + 
+  labs(title = "Plants of Quebec") +
+  scale_y_discrete(guide=guide_axis(n.dodge=3))
+  theme(axis.text.y.left =element_text(vjust = 0.5,
+                             hjust = 0.5),
+        axis.text = element_text(angle = 90)
+        )
+             
+```
+
+3. Formulating Hypothesises.
+    * H0: Concentration level has no influence on the CO2 uptake of the plants.
+    * H1: Concentration leven has an influence on the CO2 uptake of the plants.
+
+```{r, echo = FALSE}
+
+summary(aov(uptake ~ conc, CO2))
+
+```
+
+With p < .001 H0 will be abolished. 
+This means, that concentration has a significant 
+impact on the C02 uptake of the plants.
+
+
+Thank you for your project!
+
+Best, 
+Dana
