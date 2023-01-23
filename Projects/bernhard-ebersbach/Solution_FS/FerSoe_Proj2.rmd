@@ -1,0 +1,151 @@
+---
+title: "Project Bernhard"
+output:
+  html_document:
+    df_print: paged
+---
+
+
+# Tasks
+
+
+```{r chunk options, include=FALSE}
+
+knitr::opts_chunk$set (echo=FALSE, warning=FALSE, message=FALSE, dpi = 300, root.dir = "./Projects/FerSoe/Project2" )
+
+
+```
+
+
+Make a bar plot that shows the following:
+
+*   Y-axis: the mean of Nmin mith the given unit
+*   X-axis: the grouped numleg-values as shown in the exampel below
+    + the numleg-groups shall contain sub groups as shown in the exampel below
+    + the subgroups shall represent the grouped sowndiv-values
+    + the subgroups must be easily distinguishable (of different colors or symbology)
+    + each bar needs to have an error bar representing the standard error
+    + the symbology/colors of sowndiv shall be described in a legend box
+
+
+
+# Data
+
+```{r include=FALSE}
+library(tidyverse)
+
+```
+
+Quick overview about the data:
+```{r}
+
+read.csv("https://dr-eberle-zentrum.github.io/Advanced-data-processing-with-R/Projects/bernhard-ebersbach/nmin_jena_2022.csv",sep = ";") -> data_or
+
+
+
+head(data_or,10)
+```
+
+
+
+
+
+# Solutions
+
+## Select and rename columns
+
+```{r}
+
+
+data <- data_or |> 
+  rename (Nmin = Nmin..mg.kg.) |> 
+  select(plotcode, sowndiv, Nmin, numleg) 
+
+```
+
+How many entries are there for every category?
+```{r}
+
+data |> 
+  count(sowndiv)
+
+data |> 
+  count(numleg)
+
+```
+
+## Grouping of variables
+
+```{r include=FALSE}
+
+# as factor
+data$sowndiv <- as.factor(data$sowndiv)
+data$numleg <- as.factor(data$numleg)
+
+# recode sowndiv
+levels(data$sowndiv)
+data$sowndiv_cat <- data$sowndiv
+levels(data$sowndiv_cat) <- c("0-1", "0-1", "2-4", "2-4", "8-16", "8-16", "60")
+levels(data$sowndiv_cat)
+
+# recode numleg
+levels(data$numleg)
+data$numleg_cat <- data$numleg
+levels(data$numleg_cat) <- c("0-1", "0-1", "2-3", "2-3", "4-5", "4-5", "6-8", "6-8", "12")
+levels(data$numleg_cat)
+
+```
+
+  
+Color pallets:  
+```{r}
+RColorBrewer::display.brewer.all()
+```
+
+## Barplot  
+First bar plot without error bars:  
+```{r}
+
+data |> 
+  ggplot(aes(numleg_cat, Nmin, fill = sowndiv)) +
+  geom_bar(stat = "identity", position = position_dodge())+
+  scale_fill_brewer ("Diversity Level \n (snowdiv)") +
+  theme(panel.background = element_blank(), panel.grid.major = element_line("grey"), panel.grid.major.x = element_blank())+
+  labs(y = "Nmin [mg/kg]", x = "Number of legume species (numleg)") 
+
+```
+
+## Errorbars
+
+
+
+```{r}
+
+# Add sd to dataframe
+
+data_sd<-data |> 
+  group_by(sowndiv) |> 
+  mutate(sd = sd (Nmin), mean_nmin = mean(Nmin))
+
+
+```
+
+
+```{r}
+
+
+
+data_sd |> 
+  ggplot(aes(numleg_cat, mean_nmin, fill = sowndiv)) +
+  geom_bar(stat = "identity", position = position_dodge())+
+  scale_fill_brewer ("Diversity Level \n (snowdiv)") +
+  theme(panel.background = element_blank(), panel.grid.major = element_line("grey"), panel.grid.major.x = element_blank())+
+  labs(y = "Nmin [mg/kg]", x = "Number of legume species (numleg)") +
+    geom_errorbar( aes(x=numleg_cat, ymin=mean_nmin-sd, ymax=mean_nmin+sd),
+                width = 0.2, position = position_dodge(0.9))
+
+
+
+```
+
+

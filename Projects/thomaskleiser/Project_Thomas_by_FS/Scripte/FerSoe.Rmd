@@ -1,0 +1,223 @@
+---
+title: "Project Thomas Kleiser"
+output: html_notebook
+---
+
+
+# Tasks
+
+
+```{r chunk options, include=FALSE}
+
+knitr::opts_chunk$set (echo=FALSE, warning=FALSE, message=FALSE, dpi = 300, root.dir = "./Projects/FerSoe/Project_Thomas" )
+
+# root does not work here, probably because the project file is stored in the main folder
+
+
+```
+
+
+*  How long is the average duration of interstate-war since 1817?
+*  Which states fought the most interstate-wars during this period?
+*  Which world region saw the most interstate-wars? 
+*  Were there significant changes between the 19th and 20th century in this regard?
+
+# Methods
+
+```{r include=FALSE}
+library(tidyverse)
+library(lubridate)
+```
+
+
+```{r}
+
+read.csv("./Projects/FerSoe/Project_Thomas/Data/Inter-StateWarData_v4.0.csv") -> data_or
+
+# data_or |> 
+
+head(data_or,10)
+```
+```{r}
+
+data_or_date <- data_or %>%
+  mutate(date_start = make_date(year = StartYear1, month = StartMonth1, day = StartDay1),
+         date_end = make_date(year = EndYear1, month = EndMonth1, day = EndDay1))
+
+```
+
+# Solutions
+
+## How long is the average duration of interstate-war since 1817?
+
+Simplifying the tasks:
+Even if there are two dates in the data set, we will use at the moment only the first date.
+
+
+```{r}
+
+data_or_date |> 
+  select(date_start, date_end) |> 
+  summarise(Earlierst_start_date = min(date_start), Latest_end_date =max(date_end))
+
+
+```
+
+
+```{r}
+d1<-
+data_or_date |> 
+  mutate(dur_years = date_end- date_start) 
+ 
+
+```
+The mean duration of all wars included in the calculation since 1823 is `r round (mean (d1$dur_years),3)` years.
+
+The result is not entirely correct as several wars are counted more than once.
+
+
+# Which states fought the most interstate-wars during this period?
+
+```{r}
+d1 |>
+  count(StateName) |> 
+  arrange(desc (n)) |> 
+  head(10)
+
+```
+
+Above are the top 10 countries busy with interstate wars.
+
+
+The result might be again questionable as every war counted at least twice  and there are also the length of the war was not specified.
+
+
+
+##  Which world region saw the most interstate-wars? 
+
+```{r}
+
+ d2 <- d1
+ 
+d2$WhereFought_nam <- as.factor(d1$WhereFought)
+
+
+d2 <-
+d2 |> 
+mutate( WhereFought_nam = recode(WhereFought_nam, 
+                       "1" = "W. Hemisphere",
+"2" = "Europe",
+"4" = "Africa",
+"6" = "Middle East",
+"7" = "Asia",
+"9" = "Oceania",
+"11" = "Europe & Middle East",
+"12" = "Europe & Asia",
+"13" = "W. Hemisphere & Asia",
+"14" = "Europe, Africa & Middle East",
+"15" = "Europe, Africa, Middle East, & Asia",
+"16" = "Africa, Middle East, Asia & Oceania",
+"17" = "Asia & Oceania",
+"18" = "Africa & Middle East",
+"19" = "Europe, Africa, Middle East, Asia & Oceania"
+))
+
+
+
+```
+
+```{r}
+
+
+
+d2 |>
+  distinct(WarName, .keep_all = TRUE) |>
+  count( WhereFought_nam) |> 
+  arrange(desc (n)) 
+
+
+```
+
+
+
+
+Numbers need to be renamed to regions.
+
+It seems that Europe and Asia are the most war prone continents. 
+11, 13 and 18 need to be also added to the numbers.
+
+
+##  Were there significant changes between the 19th and 20th century in this regard?
+
+```{r}
+
+#d3 <-
+d2 |> 
+  mutate(year19th = case_when(
+  StartYear1 < 1900 ~ '19th century',
+  StartYear1 >= 1900 ~ '20th century')) |> 
+  group_by(year19th) |>
+  distinct(WarName, .keep_all = TRUE) |>
+  count( ) |> 
+  arrange(desc (n)) 
+
+
+
+```
+
+According to the data,there were only 29 interstate conflicts in  the 19th century, while there were 66 conflicts in the 20th century. 
+
+```{r}
+
+#d3 <-
+d2 |> 
+  mutate(year19th = case_when(
+  StartYear1 < 1900 ~ '19th century',
+  StartYear1 >= 1900 ~ '20th century')) |> 
+  group_by(year19th) |>
+  distinct(WarName, .keep_all = TRUE) |>
+  count( WhereFought_nam) |> 
+  arrange(desc (WhereFought_nam)) 
+
+
+
+```
+
+In direct comparison, it seems that in Asia, the Middle East and also Africa more interstate-wars were fought during the 20th century than during the 19th century.
+
+# Secondary Goals:
+An optional secondary goal will be to merge the CoW dataset with
+
+*   secondary and 
+*   tertiary datasets
+
+->  to look which variables might explain a variation in the frequency and duration of inter-state wars.
+
+* Does higher military expenditure increases or decreases the likelihood of interstate-wars (In other words, is the popular slogan of the peace movement “Frieden schaffen ohne Waffen” an achievable or unachievable demand?)  
+* Does the regime type influence the likelihood of one state initiating a war? 
+* Are autocracies more likely to initiate wars then democracies? 
+* Are autocracies more likely to win wars then democracies?
+
+## Merging data
+
+
+
+```{r eval=FALSE, include=FALSE}
+data_dem <- readRDS("./Projects/FerSoe/Project_Thomas/Data/V-Dem-CY-Core-v12.rds")
+
+data_NMC <- read.csv("./Projects/FerSoe/Project_Thomas/Data/NMC-60-abridged.csv")
+
+d_comb <- merge(d2,data_NMC, by ="ccode")
+
+data_dem <-
+data_dem |> 
+  rename(StateName = country_name)
+
+
+d_comb <- merge(d_comb, data_dem, by = "StateName")
+
+```
+
+Somehow the merging uses up more than 11 GB of my memory, stops and tells me
+"Error: cannot allocate vector of size 66.2 Mb"
+
