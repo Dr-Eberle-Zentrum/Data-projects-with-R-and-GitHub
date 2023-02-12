@@ -5,17 +5,18 @@ output: "html_document"
 
 ---
 
-
-
-```{r data_importation_manipulation_and_calculation, results = 'hide'}
-# Solution attempt for Eric's Project by Thomas
-
-# loading the neccessary libraries:
+```{r, include = FALSE}
+# loading the necessary libraries:
 library(readr)
 library(tidyverse)
 library(devtools)
+```
 
-# importing the data using read_xcel()
+
+```{r data_importation_manipulation_and_calculation, results = 'hide', warning = FALSE}
+# Solution attempt for Eric's Project by Thomas:
+
+# importing the data using read_csv():
 corona_eu <- read_csv(url("https://opendata.ecdc.europa.eu/covid19/nationalcasedeath_eueea_daily_ei/csv/data.csv")) %>%
   rename("country" = "countriesAndTerritories",
          "population_2020" = "popData2020") %>%
@@ -48,8 +49,8 @@ mean_deaths_total_per_capita <- corona_eu_summary %>%
 
 
 
-```{r visualization_of_cases}
-# visualiszing the number of cases with ggplot() and geom_bar()
+```{r visualization_of_cases, results = 'hide', warning = FALSE}
+# visualiszing the number of cases with ggplot() and geom_bar():
 ggplot( corona_eu_summary, aes(x = reorder(country, desc(cases_total_per_capita) ), y = cases_total_per_capita)) +
   geom_bar(stat = "identity", fill = "lightblue") +
   geom_hline(yintercept = mean_cases_total_per_capita, linetype = "dotted") +
@@ -68,8 +69,8 @@ ggplot( corona_eu_summary, aes(x = reorder(country, desc(cases_total_per_capita)
 
 ```
 
-```{r visualization_of_deaths}
-# visualizing the number of deaths with ggplot() and geom_bar()
+```{r visualization_of_death, results = 'hide', warning = FALSE}
+# visualizing the number of deaths with ggplot() and geom_bar():
 ggplot(corona_eu_summary, aes(x = reorder(country, desc(deaths_total_per_capita) ), y = deaths_total_per_capita)) +
   geom_bar(stat = "identity", fill = "lightgreen") +
   geom_hline(yintercept = mean_deaths_total_per_capita, linetype = "dotted") +
@@ -87,8 +88,8 @@ ggplot(corona_eu_summary, aes(x = reorder(country, desc(deaths_total_per_capita)
         )
 ```
 
-```{r cases_vs_bip}
-
+```{r cases_vs_bip, results = 'hide', warning = FALSE}
+# creation of a dataset that contains GDP per Capita for every EU-country:
 bip_eu <- data.frame("country" = c("Luxembourg","Ireland","Norway","Denmark","Sweden",
                                    "Netherlands","Finland","Austria","Belgium","Germany",
                                    "France","Italy","Malta","Cyprus","Spain",
@@ -103,14 +104,16 @@ bip_eu <- data.frame("country" = c("Luxembourg","Ireland","Norway","Denmark","Sw
                                           14701,12501,9850)
                      )
 
+# Joining the to datasets with left_join():
 corona_bip_eu <- left_join(corona_eu_summary,bip_eu, by = "country")
 
 ```
 
 
 
-```{r visualisation_of_cases_vs_bip}
+```{r visualisation_of_cases_vs_bip, results = 'hide', warning = FALSE}
 
+# Visualisation of the realtion between GDP per Capita and Case numbers:
 ggplot( corona_bip_eu, aes(x = bip_per_capita, y = cases_total_per_capita) ) +
   geom_point() +
   geom_smooth(method = "lm",
@@ -138,8 +141,8 @@ cor(corona_bip_eu$cases_total_per_capita, corona_bip_eu$bip_per_capita)
 # Explanation: Higher GDP correlates with higher economic activity and the means to travel. It therefore probably leads to higher case numbers due to increased business and travel realted activity.
 ```
 
-```{r visualisation_of_deaths_vs_bip}
-
+```{r visualisation_of_deaths_vs_bip, results = 'hide', warning = FALSE}
+# Visualisation of the realtion between GDP per Capita and death numbers:
 ggplot( corona_bip_eu, aes(x = bip_per_capita, y = deaths_total_per_capita) ) +
   geom_point() +
   geom_smooth(method = "lm",

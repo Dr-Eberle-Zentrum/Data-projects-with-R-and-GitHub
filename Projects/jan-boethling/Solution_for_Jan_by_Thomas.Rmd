@@ -4,12 +4,16 @@ author: thomaskleiser
 output: html_document
 ---
 
-```{r data_importation_manipulation, results = 'hide'}
-# Solution attempt for Jahn's project by thomas
-
+```{r, include = FALSE}
+# loading the necessary libraries:
 library(readr)
 library(tidyverse)
 library(RColorBrewer)
+```
+
+
+```{r data_importation_manipulation, results = 'hide', warning = FALSE}
+# Solution attempt for Jahn's project by thomas:
 
 # importing the data using read_csv()
 hiv <- read_csv("C:/Users/thoma/Documents/R/Advanced-data-processing-with-R/Projects/jan-boethling/Data_Project_Jan.csv") %>%
@@ -17,9 +21,10 @@ hiv <- read_csv("C:/Users/thoma/Documents/R/Advanced-data-processing-with-R/Proj
          "year" = Period,
          "cases" = FactValueNumeric) %>% na.omit()
 
-
 ```
-```{r excercise_1}
+
+
+```{r excercise_1, results = 'hide', warning = FALSE}
 hiv %>%
   group_by(year) %>%
   summarise(cases_per_year = sum(cases)) %>%
@@ -28,7 +33,9 @@ hiv %>%
   labs(title = "HIV-cases worldwide",
        y = "cases in milion",
        caption = "source: WHO") +
-  theme(axis.title.x = element_blank(),
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+        axis.title.x = element_blank(),
+        axis.title.y = element_text(face = "bold"),
         panel.grid.major.x = element_blank(),
         panel.grid.major.y = element_line(color = "grey"),
         panel.grid.minor = element_blank(),
@@ -38,7 +45,8 @@ hiv %>%
               
 ```
 
-```{r excercise_2}
+
+```{r excercise_2, rsults = 'hide', warning = FALSE}
 hiv_arranged <- hiv %>%
   arrange(desc(cases))
 
@@ -53,7 +61,9 @@ hiv %>%
     labs(title = "HIV-cases in the countries with the top 5 most cases",
        y = "cases in thousand",
        caption = "source: WHO") +
-  theme(axis.title.x = element_blank(),
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+        axis.title.x = element_blank(),
+        axis.title.y = element_text(face = "bold"),
         panel.grid.major.x = element_blank(),
         panel.grid.major.y = element_line(color = "grey"),
         panel.grid.minor = element_blank(),
@@ -62,7 +72,9 @@ hiv %>%
 # Over a fifth over worldwide HIV-Cases seem to be coming from South Africa.
 
 ```
-```{r excercise_3}
+
+
+```{r excercise_3, results = 'hide', warning = FALSE}
 hiv %>%
   filter(country %in% hiv_arranged_top_5 &
          year %in% c(2000,2005,2010,2015,2020)) %>%
@@ -73,13 +85,12 @@ hiv %>%
        y = "cases in thousand",
        caption = "source: WHO") +
   scale_fill_manual(name = "Country", values = brewer.pal(5,"Blues")) +
-  theme(axis.title.x = element_blank(),
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+        axis.title.x = element_blank(),
+        axis.title.y = element_text(face = "bold"),
         panel.grid.major.x = element_blank(),
         panel.grid.major.y = element_line(color = "grey"),
         panel.grid.minor = element_blank(),
         panel.background = element_blank())
 
-# I do not know if this looks sufficiently beautiful, but I tried to let it look that way.
-
 ```
-
