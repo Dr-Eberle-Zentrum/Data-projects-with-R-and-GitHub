@@ -5,7 +5,9 @@ date: "2023-01-20"
 output: html_document
 ---
 
-```{r data_visualization, results = 'hide'}
+```{r data_visualization_of_mean_uptake_per_origin, results = 'hide'}
+library(tidyverse)
+
 ggplot(CO2, aes(x = Type, y = uptake) ) +
   stat_summary(fun = mean,
                geom = "bar",
@@ -15,22 +17,50 @@ ggplot(CO2, aes(x = Type, y = uptake) ) +
                fun.arg = list(mult = 1),
                geom = "errorbar",
                width = 0.25) +
-  theme_classic()
+  labs(title = "CO2 Concentration Uptake per Plant Origin",
+       y = "Mean Uptake of CO² concentration (μmol/m² per second)") +
+  theme_classic() +
+  theme(plot.title = element_text(face = "bold",
+                                  hjust = 0.5),
+        axis.title.y = element_text(face = "bold",
+                                    size = 10)
+        )
+
+```
 
 
+```{r data_visualization_of_CO2_uptake_per_plant_from_Quebec, results = 'hide'}
 CO2 %>%
   filter(Type == "Quebec") %>%
+  mutate(Plant = fct_collapse(Plant, "Plant 1" = c('Qn1','Qc1'),
+                              "Plant 2" = c('Qn2','Qc2'),
+                              "Plant 3" = c('Qn3','Qc3'),
+                              "Plant 4" = c('Qn4','Qc4')
+                              )
+         ) %>%
 ggplot( aes(x = conc,y = uptake) ) +
   geom_line() +
   facet_grid(rows = vars(Treatment),
              cols = vars(Plant)
              ) +
-    labs(title = "Plants of Quebec") +
+    labs(title = "CO2 Concentration Uptake per Treatment",
+         y = "Uptake of CO² concentration (μmol/m² per second)") +
+  theme_classic() +
   theme(plot.title = element_text(face = "bold",
-                             hjust = 0.5),
-        axis.text = element_text(angle = 90)
+                                  hjust = 0.5),
+        axis.title.y = element_text(face = "bold",
+                                    size = 10)
         )
 
+```
+
+
+```{r}
+# To calculate 
+```
+
+
+```{r data_visualization, echo = FALSE}
 # Hypothesis A: The mean uptake for plants in Quebec is the same as the mean uptake for plants in Mississipi:
 # Hypothesis A: The mean uptake for plants in Quebec is greater than the mean uptake for plants in Mississipi:
 # Method: calculating p-value:
@@ -65,6 +95,8 @@ degrees_of_freedom <- n_quebec + n_mississippi - 2
 
 p_value <- pt(t_stat, df = degrees_of_freedom, lower.tail = FALSE)
 
-# The p-value is below 0.05 and even below 0.01. Therefore there is a statistically significant difference between the mean uptake of the plants from Quebec compred to those from Mississippi.
+print(p_value)
+
+# The p-value is below 0.05 and even below 0.01. Therefore there is a statistically significant difference between the mean uptake of the plants from Quebec compared to those from Mississippi.
   
 ```
