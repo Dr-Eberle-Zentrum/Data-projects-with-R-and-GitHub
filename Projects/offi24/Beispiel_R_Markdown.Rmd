@@ -41,7 +41,8 @@ Take care to show the cases and deaths in relation to the population of the coun
 For those who want to go a little farer. You can try to find out if there is a relation between the Gross domestic product (GDP) per capita and the total daily covid-cases in this country over the entire period. One possibility to do this could be by testing the correlation between the two variables and later on creating a Scatterplot that shows the distribution and gives us a correlation coefficient.
 More information about how this works can be found on the following website: <http://www.sthda.com/english/wiki/correlation-test-between-two-variables-in-r>
 
-The dataset can be downloaded as XLS-file from this website: <https://de.statista.com/statistik/daten/studie/188766/umfrage/bruttoinlandsprodukt-bip-pro-kopf-in-den-eu-laendern/> 
+The dataset can be downloaded as XLS-file from this website: <
+> https://de.statista.com/statistik/daten/studie/188766/umfrage/bruttoinlandsprodukt-bip-pro-kopf-in-den-eu-laendern/
 
 <center>
 

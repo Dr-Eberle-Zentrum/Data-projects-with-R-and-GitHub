@@ -1,0 +1,114 @@
+---
+title: "thomaskleiser"
+author: "Thomas Kleiser"
+date: "2023-01-20"
+output: html_document
+---
+
+```{r, include = FALSE}
+library(tidyverse)
+```
+
+
+```{r data_visualization_of_mean_uptake_per_origin, results = 'hide', warning = FALSE}
+
+# Visualisation of Concentration Uptake per Plat origin:
+ggplot(CO2, aes(x = Type, y = uptake) ) +
+  stat_summary(fun = mean,
+               geom = "bar",
+               fill = "skyblue",
+               width = 0.5) +
+  stat_summary(fun.data = mean_sdl,
+               fun.arg = list(mult = 1),
+               geom = "errorbar",
+               width = 0.25) +
+  labs(title = "CO2 Concentration Uptake per Plant Origin",
+       y = "Mean Uptake of CO² concentration (μmol/m² per second)") +
+  theme_classic() +
+  theme(plot.title = element_text(face = "bold",
+                                  hjust = 0.5),
+        axis.title.y = element_text(face = "bold",
+                                    size = 10)
+        )
+
+```
+
+
+```{r data_visualization_of_CO2_uptake_per_plant_from_Quebec, results = 'hide', warning = FALSE}
+
+# Visualisation of Concentration Uptake per Treatment:
+CO2 %>%
+  filter(Type == "Quebec") %>%
+  mutate(Plant = fct_collapse(Plant, "Plant 1" = c('Qn1','Qc1'),
+                              "Plant 2" = c('Qn2','Qc2'),
+                              "Plant 3" = c('Qn3','Qc3'),
+                              "Plant 4" = c('Qn4','Qc4')
+                              )
+         ) %>%
+ggplot( aes(x = conc,y = uptake) ) +
+  geom_line() +
+  facet_grid(rows = vars(Treatment),
+             cols = vars(Plant)
+             ) +
+    labs(title = "CO2 Concentration Uptake per Treatment",
+         y = "Uptake of CO² concentration (μmol/m² per second)") +
+  theme_classic() +
+  theme(plot.title = element_text(face = "bold",
+                                  hjust = 0.5),
+        axis.title.y = element_text(face = "bold",
+                                    size = 10)
+        )
+
+```
+
+
+```{r data_visualization, results = 'hide', warning = FALSE}
+# Hypothesis A: The mean uptake for plants in Quebec is the same as the mean uptake for plants in Mississipi:
+# Hypothesis B: The mean uptake for plants in Quebec is greater than the mean uptake for plants in Mississipi:
+# Method: calculating p-value:
+
+# To Calculate the p-value we first need to calculate the mean of the uptatek for the Plants from Quebec and Mississippi respectevily:
+
+mean_uptake_quebec <- CO2 %>%
+  filter(Type == "Quebec") %>%
+  summarise(mean = mean(uptake)) %>% pull()
+
+mean_uptake_mississippi <- CO2 %>%
+  filter(Type == "Mississippi") %>%
+  summarise(mean = mean(uptake)) %>% pull()
+
+# We also need to calculate the standardeviation for boith respective samples:
+
+sd_uptake_quebec <- CO2 %>%
+  filter(Type == "Quebec") %>%
+  summarise(sd = sd(uptake)) %>% pull()
+
+sd_uptake_mississippi <- CO2 %>%
+  filter(Type == "Mississippi") %>%
+  summarise(sd = sd(uptake)) %>% pull()
+
+# to calculate the degrees of freedom, a value that controls for sample size, we also need to calculate the number of cases of both samples:
+
+n_quebec <- CO2 %>%
+  filter(Type == "Quebec") %>%
+  summarise(n = n()) %>% pull()
+
+n_mississippi <- CO2 %>%
+  filter(Type == "Mississippi") %>%
+  summarise(n = n()) %>% pull()
+
+# We then use these values to calculate the so called test statistic and the degrees of freedom:
+
+t_stat <- (mean_uptake_quebec - mean_uptake_mississippi) / sqrt(sd_uptake_quebec ^ 2 / n_quebec + sd_uptake_mississippi ^ 2 / n_mississippi)
+
+degrees_of_freedom <- n_quebec + n_mississippi - 2
+
+# We then use the test statistic to calculate the p-value with pt():
+
+p_value <- pt(t_stat, df = degrees_of_freedom, lower.tail = FALSE)
+
+print(p_value)
+
+# The p-value is below 0.05 and even below 0.01 the most common statistically significance levels. Therefore there is a statistically significant difference between the mean uptake of the plants from Quebec compared to those from Mississippi.
+  
+```
