@@ -1,0 +1,111 @@
+---
+title: "Worldwide HIV cases (Jan's project)"
+author: "Bernhard"
+output: 
+  html_notebook:
+    theme: darkly
+---
+
+## First step: tidying up data.
+
+Column `Location` gets renamed to `Country`, column `Period` gets renamed to `Year` and column `FactValueNumeric` will be renamed to `Cases`.
+
+Note: I held the plots in a *mourning color* by purpose.
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(tidyverse)
+library(ggdark)
+library(gghighlight)
+data_raw <- read_csv("https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/main/Projects/jan-boethling/Data_Project_Jan.csv")
+#data_raw <- read_csv("C:\\Users\\berbac\\Google Drive\\Uni\\Geographie\\R2 - Advanced R\\Project\\Advanced-data-processing-with-R\\Projects\\jan-boethling\\Data_Project_Jan.csv")
+
+# renaming columns
+data_raw |>
+  rename(Country = Location, Year = Period, Cases = FactValueNumeric) |>
+  select(Country, Year, Cases) |>
+  mutate(
+    #Country = as.factor(Country),
+    #Year = as.factor(Year),
+    Cases = replace_na(Cases, 0) 
+    ) -> data
+
+```
+
+## Second step: cases by year
+
+The worldwide HIV cases by year from 2000 to 2021 are shown in this plot. The year with the most cases is highlighted.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+data |>
+  group_by(Year) |>
+  summarise(Cases = sum(Cases)) |>
+  ggplot(aes(x = as.factor(Year), y = Cases, fill = Year)) +
+  geom_col() +
+  guides(fill = "none") + # removes legend
+  dark_theme_classic() +
+  xlab("Year") +
+  scale_y_continuous(labels = scales::comma) +
+  ggtitle("Worldwide HIV cases by years with highlighted maximum (2000 - 2021)") +
+  gghighlight(max(Cases), max_highlight = 1)
+
+```
+
+As we can see 2021 was the year with the most HIV cases during the time period of 2000 and 2021.
+
+## Third step: cases by country
+
+This chart shows the development of HIV cases from 2000 to 2021 of the 5 countries with the most cases over that time period.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+data |>
+  group_by(Country) |>
+  summarise(Cases = sum(Cases)) |>
+  arrange(desc(Cases)) |>
+  slice(1:5) -> top_5_countries
+
+data |>
+  filter(is.element(Country, top_5_countries$Country)) |> 
+  ggplot(aes(x = Year, y = Cases, group = Country, color = Country, fill = Country)) + 
+  geom_line() +
+  scale_y_continuous(labels = scales::comma) +
+  ggtitle("Development of HIV cases of the 5 countries with most cases\n(2000 - 2021)") +
+  dark_theme_classic()
+
+```
+
+As the chart shows, in all the countries but South Africa the HIV cases are either decreasing or at a relative stable level. South Africa shows a steep increase in case numbers and hence must be the main cause for the rising cases worldwide that the first chart shows.
+
+## Fourth step: 5 year interval *summary*
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+
+data$Rank = NA
+for (i in 1:length(top_5_countries$Country)) {
+    current_country <- top_5_countries$Country[i]
+    data[data$Country == current_country,]$Rank = 
+      as.integer(
+      data[data$Country == current_country & data$Year == 2020,]$Cases - 
+      data[data$Country == current_country & data$Year == 2000,]$Cases
+      )
+}
+
+data |>
+  filter(is.element(Country, top_5_countries$Country)) |>
+  filter(is.element(Year, Year[Year %% 5 == 0])) |>
+  mutate(Country = str_c(Country, " (", if_else(Rank > 0, "+", ""), scales::label_comma()(Rank), ")")) |>
+  ggplot(aes(x = Year, y = Cases, fill = fct_reorder(factor(Country), Rank) )) +
+  geom_col(position = "stack") +
+  dark_theme_classic() +
+  guides(fill = guide_legend(title = "Countries (case difference 2000 - 2020)")) +
+  scale_y_continuous(labels = scales::comma) +
+  ggtitle("HIV cases of the 5 countries with the highest \nHIV cases count worldwide in a 5 year interval (2000 - 2020)")
+
+```
+
+This chart gives an overview over the HIV cases of the five most affected countries worldwide. The cases are shown in a 5 year interval. This chart can be seen as a summary of the foregoing charts.
+
+In addition, the stacked countriese are sorted by increase/decrease of the case numbers from 2000 to 2020 with the country nearest to the x-axis having the largest increase (South Africa) while the topmost (India) the lowest. As the foregoing chart shows India had a decrease in HIV infections during the analysed time period.
+
+Hopefully, it's beautiful enough.

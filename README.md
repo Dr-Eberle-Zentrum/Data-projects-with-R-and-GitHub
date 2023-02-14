@@ -19,10 +19,11 @@ at the Dr. Eberle Centre for digital competencies at the University Tübingen.
 -   [Tackling a suggested project](#tackling-a-suggested-project)
     -   [Phase 1 - Posting your initial solution](#phase-1---posting-your-initial-solution)
     -   [Phase 2 - Reviewing and finalizing](#phase-2---reviewing-and-finalizing)
+-   [Beautifying your project](#beautifying-your-project)
 
 ------------------------------------------------------------------------
 
-## Project descriptions {#project-descriptions}
+## Project descriptions 
 
 During the course, you have to formulate a data wrangling project.
 That is, you should name or provide a data set, say how the data should be (re)structured and set some visualization goals.
@@ -35,7 +36,7 @@ But first, some details concerning project definition.
 
 ------------------------------------------------------------------------
 
-### Phase 1 - Drafting a project description {#phase-1---drafting-a-project-description}
+### Phase 1 - Drafting a project description 
 
 <img src="https://img.icons8.com/external-flaticons-lineal-color-flat-icons/344/external-project-web-development-flaticons-lineal-color-flat-icons.png" width="100px"/>
 
@@ -126,7 +127,7 @@ At the end of Phase 1 you will have a better understanding of
 
 ------------------------------------------------------------------------
 
-### Phase 2 - Reviewing a project description {#phase-2---reviewing-a-project-description}
+### Phase 2 - Reviewing a project description
 
 <img src="https://img.icons8.com/external-filled-outline-geotatah/344/external-comment-customer-satisfaction-filled-outline-filled-outline-geotatah.png" width="100px"/>
 
@@ -180,7 +181,7 @@ At the end of Phase 2 you will
 
 ------------------------------------------------------------------------
 
-### Phase 3 - Finalizing your project description {#phase-3---finalizing-your-project-description}
+### Phase 3 - Finalizing your project description 
 
 <img src="https://img.icons8.com/external-phatplus-lineal-color-phatplus/344/external-project-design-thinking-phatplus-lineal-color-phatplus-2.png" width="100px"/>
 
@@ -208,7 +209,7 @@ At the end of Phase 3 you will
 
 ------------------------------------------------------------------------
 
-## Tackling a suggested project {#tackling-a-suggested-project}
+## Tackling a suggested project
 
 Given a project description, you will try to solve the task.
 In order to practice real work flow life cycles, you will create your solution first in your own git branch and suggest it via a pull request on GitHub.
@@ -228,7 +229,7 @@ But the overall workflow is more or less the same.
 
 ------------------------------------------------------------------------
 
-### Phase 1 - Posting your initial solution {#phase-1---posting-your-initial-solution}
+### Phase 1 - Posting your initial solution
 
 <img src="https://img.icons8.com/external-justicon-lineal-color-justicon/344/external-coding-responsive-web-design-justicon-lineal-color-justicon-3.png" width="100px"/>
 
@@ -292,7 +293,7 @@ At the end of Phase 1 you will
 -   have worked on a data wrangling and visualization project (in your own independent git branch)
 -   have created a pull request on GitHub to incorporate your suggested project solution
 
-### Phase 2 - Reviewing and finalizing {#phase-2---reviewing-and-finalizing}
+### Phase 2 - Reviewing and finalizing
 
 <img src="https://img.icons8.com/external-parzival-1997-outline-color-parzival-1997/344/external-training-human-resource-management-parzival-1997-outline-color-parzival-1997.png" width="100px"/>
 
@@ -336,3 +337,22 @@ At the end of Phase 2 you will
 -   have experienced the pull request workflow from both sides
 -   have integrated an interactive reviewing cycle in your project solution
 -   be ready for the next project! :grin:
+
+
+## Beautifying your project
+
+Finally, it is not only about content but presentation matters.
+Thus, you will have to beautify your HTML output. 
+Here some ideas where to start:
+
+- **hide**
+  - loading information
+  - code chunks
+- **add**
+  - a narrative why you do/show things
+  - (shortly) explain and interprete what you show
+- **style** >> check out [R Markdown - section 3.1 HTML output](https://bookdown.org/yihui/rmarkdown/html-document.html) for details
+  - try a different theme for styling 
+  - try you own CSS directives
+- ...
+
