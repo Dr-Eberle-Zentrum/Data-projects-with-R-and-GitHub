@@ -30,6 +30,7 @@ data %>%
     ) %>%
   arrange(yIdx) ->
   plotData
+
 plotData %>%
   ggplot(aes(x=Min, y=yIdx, yend=yIdx)) +
   theme_minimal()+
