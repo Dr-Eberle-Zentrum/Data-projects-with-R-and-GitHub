@@ -105,16 +105,16 @@ To this end:
 
 #### Available projects
 
-- [Example project by Martin](Projects/martin-raden/project-description.html)
-- [Project by Dana](Projects/dana-jabari/cloze-task-project.html)
-- [Project by Bernhard](Projects/bernhard-ebersbach/project-description.html)
-- [Project by Fanyi](Projects/meng/project-description.nb.html)
-- [Project by Ferdinand](Projects/FerSoe/Project1/Projectdescription.html)
-- [Project by Jan](Projects/jan-boethling/project-description_Jan.html)
-- [Project by Zoé](Projects/zoebuerger/mood_stress_ZB.html)
-- [Project by Eric](Projects/offi24/Beispiel_R_Markdown.html)
-- [Project by Mihai](Projects/mihaifalcusan/CO2_Project_Description.html)
-- [Project by Thomas](Projects/thomaskleiser/project_description_thomaskleiser.html)
+- [Example project by Martin](https://htmlpreview.github.io/?https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/23-wise-sem/Projects/martin-raden/project-description.html)
+- [Project by Dana](https://htmlpreview.github.io/?https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/23-wise-sem/Projects/dana-jabari/cloze-task-project.html)
+- [Project by Bernhard](https://htmlpreview.github.io/?https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/23-wise-sem/Projects/bernhard-ebersbach/project-description.html)
+- [Project by Fanyi](https://htmlpreview.github.io/?https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/23-wise-sem/Projects/meng/project-description.nb.html)
+- [Project by Ferdinand](https://htmlpreview.github.io/?https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/23-wise-sem/Projects/FerSoe/Project1/Projectdescription.html)
+- [Project by Jan](https://htmlpreview.github.io/?https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/23-wise-sem/Projects/jan-boethling/project-description_Jan.html)
+- [Project by Zoé](https://htmlpreview.github.io/?https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/23-wise-sem/Projects/zoebuerger/mood_stress_ZB.html)
+- [Project by Eric](https://htmlpreview.github.io/?https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/23-wise-sem/Projects/offi24/Beispiel_R_Markdown.html)
+- [Project by Mihai](https://htmlpreview.github.io/?https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/23-wise-sem/Projects/mihaifalcusan/CO2_Project_Description.html)
+- [Project by Thomas](https://htmlpreview.github.io/?https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/23-wise-sem/Projects/thomaskleiser/project_description_thomaskleiser.html)
 
 #### Goals
 
