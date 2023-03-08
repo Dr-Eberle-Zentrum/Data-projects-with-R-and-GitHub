@@ -104,7 +104,13 @@ To this end:
 
 #### Available projects
 
+
+
 - [Example project by Martin](Projects/martin-raden/project-description.html)
+- [Sonja](Projects/sonji-uni/project-description.html)
+
+
+
 
 #### Goals
 
