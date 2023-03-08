@@ -1,0 +1,8 @@
+---
+title: "Getting Started"
+author: "Elizaveta Shcherbinina"
+date: "2023-03-08"
+output: html_document
+---
+
+Hi I am here
