@@ -1,0 +1,43 @@
+---
+title: "Project Description"
+author: "Elizaveta Shcherbinina"
+date: "2023-03-08"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Annotation
+In this project I want to prepare templates for my upcoming bachelor thesis it includes: 
+1. preparing a dummy data set for the parameters I am testing in my experiment (since I dont have any data yet)
+2. preparing graph templates to visualize my expectations of the results or my hypothesis 
+
+## Introduciton 
+Microplastic and Heavy Metals are two strong pollutors in agricultural areas. In my bachelor thesis I want to look into their interaction and represent the effects the produce on two different plant species separately and via interacting. 
+
+## Data Set 
+Since I do not have a data set yet I will create one filled with dummy data the way I expect the plants to perform. Though the data set is not existing now, its structure is already determined. 
+
+**Parameter**  | **Description**
+------------- | -------------
+pot_number  | Number of the plant pot 
+mp_soil  | Amount of microplastic contamination. Needs to be a _factor_, cause represents a treatment group with three levels of contamination.
+hm_soil  | Amount of heavy metal contamination. Needs to be a _factor_, cause represents a treatment group with three levels of contamination.
+species  | Will be a _factor_ representing three groups - no plant, a.halleri, a.thaliana
+ph_soil  | Soil pH value, measured in the end of the experiment. 
+hm_acc  | Amount of heavy metal accumulated by the plant.
+dry_biomass  | Dry Biomass of the plant measured in the end of the experiment.
+root_shoot  | Root to Shoot ration measured in the end of the experiment. 
+abs_cap | Soil absorption capacity measured in the end of the experiment. 
+des_cap  | Soil desorption capacity measured in the end of the experiment. 
+
+## Visualization Goals 
+From my point of perspective, the following type of graph would be reasonable to build regarding the experiment: 
+
+![Figure 3: Li, M., Wu, D., Wu, D. et al. Influence of polyethylene-microplastic on environmental behaviors of metals in soil. Environ Sci Pollut Res 28, 28329–28336 (2021). https://doi.org/10.1007/s11356-021-12718-y](/Users/elizavetashcherbinina/Desktop/R2.png)
+
+
+
+
