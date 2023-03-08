@@ -108,6 +108,7 @@ To this end:
 
 - [Example project by Martin](Projects/martin-raden/project-description.html)
 - [Sonja](Projects/sonji-uni/project-description.html)
+- [Elizaveta](Projects/elizavetashch/project-description.html)
 
 
 
