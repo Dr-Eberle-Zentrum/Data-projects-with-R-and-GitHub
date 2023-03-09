@@ -148,7 +148,7 @@ The *reviewer assignments* are as follows:
 **Each reviewer** is supposed to
 
 -   [read the respective project draft on GitHub Pages](https://dr-eberle-zentrum.github.io/Advanced-data-processing-with-R/#available-projects)
--   [open an Issue](https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/issues) on GitHub within the project
+-   [open an Issue](https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/issues) on GitHub within the course
 -   provide constructive feedback w.r.t.
     -   understandability
     -   missing information
