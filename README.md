@@ -109,7 +109,7 @@ To this end:
 - [Example project by Martin](Projects/martin-raden/project-description.html)
 - [Sonja](Projects/sonji-uni/project-description.html)
 - [Elizaveta](Projects/elizavetashch/project-description.html)
-- [Ziyi](Projects/ZHuang2107/project_description.html)
+- [Ziyi](Projects/ZHuang2107/project idea.html)
 
 
 
