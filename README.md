@@ -110,6 +110,7 @@ To this end:
 - [Sonja](Projects/sonji-uni/project-description.html)
 - [Elizaveta](Projects/elizavetashch/project-description.html)
 - [Ziyi](Projects/ZHuang2107/project-idea.html)
+- Henning (to come)
 
 
 
