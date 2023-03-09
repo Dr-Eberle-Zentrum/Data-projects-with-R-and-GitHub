@@ -152,6 +152,7 @@ The *reviewer assignments* are as follows:
 -   provide constructive feedback w.r.t.
     -   understandability
     -   missing information
+    -   helpful data example views, etc.
     -   possible extensions or other ideas in the scope of the project and data
 -   "ping" the project owner by referencing his/her user name with an "\@", like `Hi @martin-raden, what do you think about my comments!`
 
