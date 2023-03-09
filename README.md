@@ -138,7 +138,10 @@ Review comments should be done via GitHub issues, where you can also discuss you
 For each project draft, we will assign two reviewers at random.
 The *reviewer assignments* are as follows:
 
-- (**project owner**) : gets reviews by : (reviewer)
+- **Sonja** provides reviews for: *Elizaveta + Ziyi*
+- **Elizaveta** provides reviews for: *Ziyi + Henning*
+- **Ziyi** provides reviews for: *Henning + Sonja*
+- **Henning** provides reviews for: *Sonja + Elizaveta*
 
 
 
