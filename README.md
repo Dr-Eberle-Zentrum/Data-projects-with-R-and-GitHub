@@ -9,6 +9,10 @@ at the Dr. Eberle Centre for digital competencies at the University Tübingen.
 ## Tutorials
 -   [Git-ing started](Tutorials/git-started.md)
 
+All tutorials are summarized within the
+
+-   [Aggregated cheatsheet](Tutorials/aggregated-cheatsheet.md)
+
 ## Overview
 
 -   [Project descriptions](#project-descriptions)
