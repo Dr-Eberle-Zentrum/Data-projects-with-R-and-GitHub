@@ -11,7 +11,7 @@ at the Dr. Eberle Centre for digital competencies at the University Tübingen.
 
 All tutorials are summarized within the
 
--   [Aggregated cheatsheet](Tutorials/aggregated-cheatsheet.md)
+-   [Aggregated cheatsheets](Tutorials/aggregated-cheatsheets.md)
 
 ## Overview
 
