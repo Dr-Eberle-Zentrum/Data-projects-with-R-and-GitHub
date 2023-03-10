@@ -110,7 +110,8 @@ To this end:
 - [Sonja](Projects/sonji-uni/project-description.html)
 - [Elizaveta](Projects/elizavetashch/project-description.html)
 - [Ziyi](Projects/ZHuang2107/project-idea.html)
-- Henning (to come)
+- Henning (to come on Saturday)
+- Man (to come on Saturday)
 
 
 
@@ -140,8 +141,9 @@ The *reviewer assignments* are as follows:
 
 - **Sonja** provides reviews for: *Elizaveta + Ziyi*
 - **Elizaveta** provides reviews for: *Ziyi + Henning*
-- **Ziyi** provides reviews for: *Henning + Sonja*
-- **Henning** provides reviews for: *Sonja + Elizaveta*
+- **Ziyi** provides reviews for: *Henning + Man*
+- **Henning** provides reviews for: *Man + Sonja*
+- **Man** provides reviews for: *Sonja + Elizaveta*
 
 
 
