@@ -114,7 +114,7 @@ To this end:
 - [Sonja](Projects/sonji-uni/project-description.html)
 - [Elizaveta](Projects/elizavetashch/project-description.html)
 - [Ziyi](Projects/ZHuang2107/project-idea.html)
-- Henning (to come on Saturday)
+- [Henning](Projects/HenningLa7/project-description.html)
 - [Man](Projects/caoman199711/project-description.html)
 
 
