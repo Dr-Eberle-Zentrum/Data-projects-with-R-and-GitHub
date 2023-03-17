@@ -19,3 +19,4 @@ To modify the following plot (on the 13. page of the datei "wd_covidpaper_ecuado
 ![](Projects/ZHuang2107/plot.png)
 
 Furthermore, I would like to visualize what the students do every day, i.e. they time they spent on sleeping, working, houshold, leisure and education, using bar chart. The x-axis will be the length of time like 1 hour, 2 hours ect., and y-axis will be the students of grade 1, 2 and 3. We will use the average time they spent and we divide each category into male and female. The bars will be divided into different parts with different colors demonstrating the things they do. 
+
