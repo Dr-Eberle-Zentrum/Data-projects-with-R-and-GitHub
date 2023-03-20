@@ -112,7 +112,7 @@ To this end:
 
 - [Example project by Martin](Projects/martin-raden/project-description.html)
 - [Sonja](Projects/sonji-uni/project-description.html)
-- [Elizaveta](Projects/elizavetashch/project-description.html)
+- [Elizaveta](Projects/elizavetashch/2.0-Project-Description.html) version 2.0
 - [Ziyi](Projects/ZHuang2107/project-idea.html)
 - [Henning](Projects/HenningLa7/project-description.html)
 - [Man](Projects/caoman199711/project-description.html)
