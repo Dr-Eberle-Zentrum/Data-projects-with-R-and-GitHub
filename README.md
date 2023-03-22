@@ -348,6 +348,6 @@ Here some ideas where to start:
   - code chunks
 - **add**
   - a narrative why you do/show things
-  - (shortly) explain and interprete what you show
+  - (shortly) explain and interpret what you show
 - ...
 
