@@ -28,7 +28,7 @@ Visualization priorities (from high to low are)
 - relative font sizes
 - animal symbol for brown bear
 
-Let's see how close you can get!
+Let's see how close you can get! As a starting point, you might want to have a look at [The R Graph Gallery](https://r-graph-gallery.com/).
 
 Looking forward to see your solutions!
 
