@@ -16,7 +16,7 @@ inPercent <- function(n) {
 }
 
 library(png)
-img_bear <- readPNG("icons8-bear-67.png", native=TRUE)
+img_bear <- readPNG("icons8-bear-67.png", native=TRUE) # https://icons8.de/icons/set/bear
 library(patchwork)
 
 data %>%
