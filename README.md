@@ -242,16 +242,15 @@ But the overall workflow is more or less the same.
     -   create YOUR branch (remember [Step 4: Branch](https://edav.info/github.html#step-4-branch))
     -   **ensure** you have switched to the branch in RStudio (upper right corner in "Git" pane)
 -   now you are ready to **create your solution file**:
-    -   go into the project folder of the project you are working on
-    -   create a new *R Notebook* (File \> New File \> ...) with name `youGithubName.Rmd`
+    -   go into the project folder *of the target project you are working on*
+    -   create a new *R Markdown* (File \> New File \> ...) with name `youGithubName.Rmd`
+        -   use `output: md_document` in your header to produce a "normal" Markdown file
         -   your will program your solution within this file
-        -   on "Save", RStudio will automatically create an HTML output file for you
-            -   you can check it using Ctrl+Shift+K (or Cmd on Mac)
--   add the `yourGithubName.Rmd` file to `.gitignore` (to keep your solution local)
-    -   "Git" pane \> right-click on the file \> "Ignore" \> "Save"
+        -   on "Save", RStudio will automatically create an `.md` output file for you
+            -   you can check it using Ctrl+Shift+K (or Cmd+Shift+K on Mac)
 -   Commit and Push the following files
-    -   the changed `.gitignore` file
-    -   your solution output file `yourGithubName.nb.html` (knit it, if not existing yet)
+    -   your R Markdown file `yourGithubName.Rmd`
+    -   your solution output file `yourGithubName.md` (knit it, if not existing yet)
 
 #### Work on your solution and call for help
 
@@ -278,12 +277,8 @@ At some point you will be satisfied with your project solution and all changes a
 Now it is time to [open a pull request](https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/pulls).
 
 -   create a new pull request of *your branch* (select from dropdown) into *main* branch
--   post a (Markdown) **link in the pull request** that allows to see your HTML page in the browser:
-    -   this can be done via <https://htmlpreview.github.io/>
-    -   just use `https://htmlpreview.github.io/?MYHTMLLINK`
-    -   here `MYHTMLLINK` corresponds to the URL of the HTML file when you click it in the GitHub page
-    -   e.g. `https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/main/Projects/martin-raden/project-description.html`
--   check the link (here an [example link](https://htmlpreview.github.io/?https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/main/Projects/martin-raden/project-description.html))
+-   post a (Markdown) **link in the pull request** that allows to see your output `.md` page in the browser:
+    -   e.g. `https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/main/Projects/martin-raden/project-description.md`
 -   **invite** the project owner as a **reviewer**
     -   suggest him/her as reviewer (upper right in GitHub Pull Request interface)
     -   send him/her a message via a comment "@USERNAME"
@@ -354,8 +349,5 @@ Here some ideas where to start:
 - **add**
   - a narrative why you do/show things
   - (shortly) explain and interprete what you show
-- **style** >> check out [R Markdown - section 3.1 HTML output](https://bookdown.org/yihui/rmarkdown/html-document.html) for details
-  - try a different theme for styling 
-  - try you own CSS directives
 - ...
 
