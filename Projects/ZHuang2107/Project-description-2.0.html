@@ -393,25 +393,29 @@ on the homework The data of S8B_1 won’t be included</p>
 <p>PS: In some questionnaires these questions are not answered
 (i.e. blamk in the data set). In this case, we can delete these
 rows.</p>
-<p>##Design of the plot I would like to create a plot with points.
+<p>##Design of the plot I would like to create a plot with bars.
 #x-axis: the time spent on homework #y-axis: the number of students who
-spend a certain amount of time on homework #the color of the points: the
+spend a certain amount of time on homework #the color of the bars: the
 access to electric devices. There will be four colors representing the
 following four situations: 1. have all three of them: computer/tablet,
 internet and smartphone 2. have computer/tablet/smart phone but no
 internet 3. have internet but no computer/tablet/smart phone 4. have
-none of them #If possible, small images (like internet, computer, phone
-ect.) and labels beside the points will be added.</p>
+none of them</p>
+<p>I would also like to label the concrete numbers on the bar</p>
 <p>##Data preparation In order to create the plot, we may need to figure
 out the the time for homework, the access to internet and devices and
 the amount of students in the according situations.</p>
 <p>Based on the existing data set we may creat a new csv datei with
 three columns: 1. the time spent on homework 2. the number of the
 students 3. the access to internet and devices</p>
+<div id="possible-result-of-the-visualization" class="section level1">
+<h1>possible result of the visualization</h1>
+<p><img src="data:image/png;base64,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" width="120" /></p>
 <p>##Alternative If you find it too complicated to deal with the data,
 you can reduce the third column into only two situations instead of
 four, i.e.: 1. students who have internet/tablet/smart phone and
 internet 2. students who don’t have internet</p>
+</div>
 
 
 

@@ -41,18 +41,19 @@ The data of S8B_1 won’t be included
 PS: In some questionnaires these questions are not answered (i.e. blamk in the data set). In this case, we can delete these rows. 
 
 ##Design of the plot
-I would like to create a plot with points. 
+I would like to create a plot with bars. 
 #x-axis: 
 the time spent on homework
 #y-axis: 
 the number of students who spend a certain amount of time on homework
-#the color of the points: 
+#the color of the bars: 
 the access to electric devices. There will be four colors representing the following four situations:
 1. have all three of them: computer/tablet, internet and smartphone
 2. have computer/tablet/smart phone but no internet
 3. have internet but no computer/tablet/smart phone
 4. have none of them 
-#If possible, small images (like internet, computer, phone ect.) and labels beside the points will be added.  
+
+I would also like to label the concrete numbers on the bar
 
 ##Data preparation
 In order to create the plot, we may need to figure out the the time for homework, the access to internet and devices and the amount of students in the according situations. 
@@ -61,6 +62,13 @@ Based on the existing data set we may creat a new csv datei with three columns:
 1. the time spent on homework
 2. the number of the students
 3. the access to internet and devices
+
+
+# possible result of the visualization
+
+```{r images,echo=FALSE}
+knitr::include_graphics('images.png')
+``` 
 
 
 ##Alternative
