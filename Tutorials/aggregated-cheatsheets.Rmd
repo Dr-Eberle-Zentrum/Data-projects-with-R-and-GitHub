@@ -1,0 +1,18 @@
+---
+title: "Aggregated cheatsheets of all tutorials"
+author: "Martin Raden"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+This aggregated cheatsheet of our tutorial package 
+[Advanced data processing with R](https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R) 
+summarizes the individual notes from the provided tutorials and additional information from recommended sources.
+
+
+```{r child = 'git-started.cheatsheet.md'}
+```

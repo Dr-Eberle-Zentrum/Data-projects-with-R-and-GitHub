@@ -1,0 +1,82 @@
+---
+title: "How do people from different countries distinguish in their personality?"
+author: "Henning Lang"
+date: "`r format(Sys.time(),'%d %B %Y')`"
+output:
+  pdf_document:
+    toc: yes
+  html_document:
+    toc: yes
+    theme: cosmo
+  word_document:
+    toc: yes
+---
+
+<!--Um pdf-Dokumente zu erstellen:-->
+<!--tinytex::install_tinytex()-->
+
+# Theory
+
+**BIG5 personality dimensions**
+
+The BIG5 model of personality is the most common psychological theory describing personality of human beings.
+The model includes five dimensions of personality:
+
+- Openness
+- Conscientiousness
+- Extraversion
+- Agreeableness
+- Neuroticism
+
+For keeping the dimensions in mind you can think of their first letters which build the word OCEAN.
+
+# Data
+
+**Data-set**
+
+It is a open data-set from this source: http://openpsychometrics.org/_rawdata/. Beside the variables that describe the BIG5 personality dimensions
+there are more variables like age, country or gender. The codebook contains a full overview about the data frame and its variables.The countries are 
+coded with the ISO country code (https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes#UNI2)
+
+**Data preparation**
+
+To prepare data for visualization, please:
+
+- code missing values with NA
+- exclude all values of countries, which are not part of our investigation
+- calculate the mean of each personality dimension (10 items) and safe it in a new variable
+
+# Visualization
+
+**Visualization vision**
+
+The goal of this project is about creating a visualization like the following:
+
+![](C:/Users/henni/OneDrive - bwedu/Dokumente/EBPP/Semester_5/Advanced R/visualization_1.png)
+
+Source: https://www.researchgate.net/figure/Average-scores-on-the-Big-Five-dimensions-for-different-world-regions-Each-bar_fig1_279974917
+
+
+**Visualization goals**
+
+Using ggplot2 and the csv-file, our visualization should contain:
+
+- x-axis: countries: United States, Great Britain, India, Australia and  Brazil *[Country]*
+- y-axis: score in personality dimensions *[Mean]*
+- groups: BIG5 personality dimensions 
+- coloring of the bars
+- explanation of the colors right beside the chart
+
+
+
+
+
+
+
+
+
+
+
+
+
+

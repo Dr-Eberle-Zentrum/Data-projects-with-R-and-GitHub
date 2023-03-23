@@ -1,7 +1,7 @@
 ---
 title: "Image reproduction"
 author: "Martin Raden"
-output: html_document
+output: md_document
 ---
 
 # Reproduce this super nice chart!
@@ -26,5 +26,14 @@ Visualization priorities (from high to low are)
 - annotation of brown bear
 - text coloring
 - relative font sizes
-- animal symbols (no idea where to get them ...)
+- animal symbol for brown bear
+
+Let's see how close you can get! As a starting point, you might want to have a look at [The R Graph Gallery](https://r-graph-gallery.com/).
+
+Looking forward to see your solutions!
+
+Best,
+Martin
+
+
 

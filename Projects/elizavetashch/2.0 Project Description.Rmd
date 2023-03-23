@@ -1,0 +1,46 @@
+---
+title: "2.0 Project Decription"
+author: "Elizaveta Shcherbinina"
+date: "`r Sys.Date()`"
+output: html_document
+---
+## Introduction 
+I write my bachelor thesis in the department of vegetation ecology and would like to have a closer look on the data sampled in previous experiments. In my experiment I will observe the effects of microplastic on soil and plant performance. Microplastic effects on terrestrial systems may differ depending on microplastic shape, polymer structure, degradation, additives, and concentration, as well as on the target plant or soil.
+
+In the experiment that was ran by the authors of [this paper](https://www.frontiersin.org/articles/10.3389/fpls.2021.616645/full) they had 12 microplastic types (i.e., 4 microplastic shapes × 3 polymer types) × 4 concentration levels × 7 replicates = 336 pots. Fourteen additional pots were established as a control without microplastics, which would allow to test the effects of microplastic addition to the soil (added vs not added).
+
+## The Dataset 
+
+Observation  | Description
+------------- | -------------
+`shape`  | Treatment. Four microplastic shapes: fibers, films, foams, and fragments.
+`polymer`   | Treatment. Eight polymer types: PES, PA, polypropylene (PP), lowdensity polyethylene (LDPE), called polyethylene from now on, polyethylene terephthalate (PET), PU, polystyrene (PS), and polycarbonate (PC). 
+`concentration`  | Treatment. Platic concentration in soil. 
+`shoot`   | Measurement. Dry biomass of a plant's shoot. 
+`root`  | Measurement. Dry biomass of plant's roots.
+`CO2`   | Measurement. Soil respiration is considered to be a good proxy of total *microbial activity*. 
+`WSA`   | Measurement. Water-stable soil aggregates (WSA) as a proxy of *soil aggregation*.
+
+```{r setup, echo=FALSE}
+library(ggplot2)
+library(dplyr)
+library(readr)
+setwd("/Users/elizavetashcherbinina/Desktop/Vorlesungen/5_Semester/R2 Advanced ")
+data <- read.csv("Microplastic_Affect_Soil_Properties_and_Plant_Biomass.csv", sep =";")
+glimpse(data)
+```
+
+## Project Idea 
+
+In my bachelor thesis I will be looking for the microplastic effects on soil composition, microbial composition and overall plant performance using 4 mm polyethylene cut from polyethylene films. The concentrations I will be using in my experiments are 0, 0.5 and 1.0 w/w. This paper shows results in a similar experiment, so I want to visualize and analize them first.
+
+## To-Do:
+- [ ]     Only use data collected for polyethylene films. 
+- [ ]     Create a new observaiton *total biomass* that represents a sum of root and shoot. 
+- [ ]     The aim is to be able to observe the interplay between three measurements taken: total biomass microbial activity and soil aggregation. Since that are already three numeric variables you will probably have to work with one concnetration only. If you find another way of bringing the concnetration in the graph that would be even cooler. 
+
+
+## Visual Expectations: 
+![](/Users/elizavetashcherbinina/Desktop/Vorlesungen/5_Semester/R2 Advanced /project2_visual.png)
+[taken from here](https://homepage.divms.uiowa.edu/~luke/classes/STAT4580/threenum.html)
+
