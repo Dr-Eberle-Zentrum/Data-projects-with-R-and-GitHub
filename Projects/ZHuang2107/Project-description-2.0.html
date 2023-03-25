@@ -364,57 +364,105 @@ display: none;
 ## e.g.:
 ##   dat &lt;- vroom(...)
 ##   problems(dat)</code></pre>
-<p>##introduction of data base and project The data base is collected
-through a phone survey, of over 1,500 high school students aged 14 to 18
-in Ecuador to learn how students spend their time during the period of
-quarantine resulting from Covid-19, examine their access to remote
-learning, and measure their mental health status.The informations can be
-found on the website <a href="https://microdata.worldbank.org/index.php/catalog/3772/study-description" class="uri">https://microdata.worldbank.org/index.php/catalog/3772/study-description</a>
+<div id="introduction-of-data-base-and-project" class="section level1">
+<h1>introduction of data base and project</h1>
+<p>The data base is collected through a phone survey, of over 1,500 high
+school students aged 14 to 18 in Ecuador to learn how students spend
+their time during the period of quarantine resulting from Covid-19,
+examine their access to remote learning, and measure their mental health
+status.The informations can be found on the website <a href="https://microdata.worldbank.org/index.php/catalog/3772/study-description" class="uri">https://microdata.worldbank.org/index.php/catalog/3772/study-description</a>
 and you can also find the explanation of the data on this website.</p>
 <p>In this project, I would like to create a plot to describe the time
 spent on housework and the access to electric devices of the
 students.</p>
-<p>##Data explanation I will focus on the data collected from the
-questions of P4 and S8 in the questionnaire.(whic you can also find in
-the website) P4: Which of the following do you have in your home? 1. A
-computer or tablet? 1 = Yes 2. Internet connection? 1 = Yes 3.
-Smartphone (WhatsApp) 1 = Yes 4. Television 1 = Yes 5. Radio 1=Yes 2=No
-I will only include the first three options in the plot, i.e. the access
-to computer/tablet, internet and smartphone</p>
-<p>The meaning of the answers in the csv datei: P4_1: Do you have a
-computer/tablet at home? “1” means “yes” and “2” means “no” P4_2: Do you
-have internet connection at home? “1” means “yes” and “2” means “no”
-P4_3: Do you have a smartphone at home? “1” means “yes” and “2” means
-“no”</p>
-<p>S8. How long did you study/do homework yesterday [if it is Monday,
-the past Friday] _____hours _______ minutes The meaning of the answers:
-S8_1: The hours they spent on the homework S8_2: The minutes they spent
-on the homework The data of S8B_1 won’t be included</p>
+</div>
+<div id="data-explanation" class="section level1">
+<h1>Data explanation</h1>
+<p>I will focus on the data collected from the questions of P4 and S8 in
+the questionnaire.(whic you can also find in the website)</p>
+<p>P4: Which of the following do you have in your home?</p>
+<ol style="list-style-type: decimal">
+<li><p>A computer or tablet? 1 = Yes</p></li>
+<li><p>Internet connection? 1 = Yes</p></li>
+<li><p>Smartphone (WhatsApp) 1 = Yes</p></li>
+<li><p>Television 1 = Yes</p></li>
+<li><p>Radio 1=Yes 2=No</p></li>
+</ol>
+<p>I will only include the first three options in the plot, i.e. the
+access to computer/tablet, internet and smartphone</p>
+<p>The meaning of the answers in the csv datei:</p>
+<ul>
+<li>P4_1: Do you have a computer/tablet at home?</li>
+</ul>
+<p>“1” means “yes” and “2” means “no”</p>
+<ul>
+<li>P4_2: Do you have internet connection at home?</li>
+</ul>
+<p>“1” means “yes” and “2” means “no”</p>
+<ul>
+<li>P4_3: Do you have a smartphone at home?</li>
+</ul>
+<p>“1” means “yes” and “2” means “no”</p>
+<ul>
+<li>S8. How long did you study/do homework yesterday [if it is Monday,
+the past Friday] _____hours _______ minutes</li>
+</ul>
+<p>The meaning of the answers:</p>
+<ul>
+<li><p>S8_1: The hours they spent on the homework</p></li>
+<li><p>S8_2: The minutes they spent on the homework</p></li>
+</ul>
+<p>The data of S8B_1 won’t be included</p>
 <p>PS: In some questionnaires these questions are not answered
 (i.e. blamk in the data set). In this case, we can delete these
 rows.</p>
-<p>##Design of the plot I would like to create a plot with bars.
-#x-axis: the time spent on homework #y-axis: the number of students who
-spend a certain amount of time on homework #the color of the bars: the
-access to electric devices. There will be four colors representing the
-following four situations: 1. have all three of them: computer/tablet,
-internet and smartphone 2. have computer/tablet/smart phone but no
-internet 3. have internet but no computer/tablet/smart phone 4. have
-none of them</p>
+</div>
+<div id="design-of-the-plot" class="section level1">
+<h1>Design of the plot</h1>
+<p>I would like to create a plot with bars.</p>
+<ul>
+<li><p>x-axis: the time spent on homework</p></li>
+<li><p>y-axis: the number of students who spend a certain amount of time
+on homework</p></li>
+<li><p>the color of the bars: the access to electric devices.</p></li>
+</ul>
+<p>There will be four colors representing the following four
+situations:</p>
+<ol style="list-style-type: decimal">
+<li><p>have all three of them: computer/tablet, internet and
+smartphone</p></li>
+<li><p>have computer/tablet/smart phone but no internet</p></li>
+<li><p>have internet but no computer/tablet/smart phone</p></li>
+<li><p>have none of them</p></li>
+</ol>
 <p>I would also like to label the concrete numbers on the bar</p>
-<p>##Data preparation In order to create the plot, we may need to figure
-out the the time for homework, the access to internet and devices and
-the amount of students in the according situations.</p>
+</div>
+<div id="data-preparation" class="section level1">
+<h1>Data preparation</h1>
+<p>In order to create the plot, we may need to figure out the the time
+for homework, the access to internet and devices and the amount of
+students in the according situations.</p>
 <p>Based on the existing data set we may creat a new csv datei with
-three columns: 1. the time spent on homework 2. the number of the
-students 3. the access to internet and devices</p>
+three columns:</p>
+<ol style="list-style-type: decimal">
+<li><p>the time spent on homework</p></li>
+<li><p>the number of the students</p></li>
+<li><p>the access to internet and devices</p></li>
+</ol>
+</div>
 <div id="possible-result-of-the-visualization" class="section level1">
 <h1>possible result of the visualization</h1>
 <p><img src="data:image/png;base64,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" width="120" /></p>
-<p>##Alternative If you find it too complicated to deal with the data,
-you can reduce the third column into only two situations instead of
-four, i.e.: 1. students who have internet/tablet/smart phone and
-internet 2. students who don’t have internet</p>
+</div>
+<div id="alternative" class="section level1">
+<h1>Alternative</h1>
+<p>If you find it too complicated to deal with the data, you can reduce
+the third column into only two situations instead of four, i.e.:</p>
+<ol style="list-style-type: decimal">
+<li><p>students who have internet/tablet/smart phone and
+internet</p></li>
+<li><p>students who don’t have internet</p></li>
+</ol>
 </div>
 
 
