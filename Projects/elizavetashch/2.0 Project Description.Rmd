@@ -41,6 +41,6 @@ In my bachelor thesis I will be looking for the microplastic effects on soil com
 
 
 ## Visual Expectations: 
-![](/Users/elizavetashcherbinina/Desktop/Vorlesungen/5_Semester/R2 Advanced /project2_visual.png)
+![](https://homepage.divms.uiowa.edu/~luke/classes/STAT4580/threenum_files/figure-html/unnamed-chunk-27-1.png)
 [taken from here](https://homepage.divms.uiowa.edu/~luke/classes/STAT4580/threenum.html)
 
