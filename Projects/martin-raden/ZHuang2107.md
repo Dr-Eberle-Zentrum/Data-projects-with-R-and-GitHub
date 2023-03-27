@@ -130,4 +130,3 @@
     print(plot)
 
 
-    print(plot)
