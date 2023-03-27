@@ -1,0 +1,92 @@
+---
+title: "Plot"
+author: "ManCao"
+date: "2023-03-27"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Sonja's project
+
+```{r}
+knitr::opts_chunk$set(echo = FALSE)
+#Sonja's project
+
+#packages
+if (!require(ggpubr)) install.packages("ggpubr")
+library(ggpubr)
+if (!require(dplyr)) install.packages("dplyr")
+library(dplyr)
+if (!require(tidyverse)) install.packages("tidyverse")
+library(tidyverse)
+if (!require(ggrepel)) install.packages("ggrepel")
+library(ggrepel)
+if (!require(lubridate)) install.packages("lubridate")
+library(lubridate)
+
+# set directory
+setwd("D:/WiSe2022-23/R2Course/Advanced-data-processing-with-R/Projects/sonji-uni")
+getwd()
+
+# read data
+dataRaw <- read.csv("I4S_workingMemory_2023-02-26.csv",header=TRUE,sep=';')
+
+# set timestamp
+dataRaw$timestamp <- as.POSIXct(dataRaw$timestamp/1000, origin="1970-01-01")
+dataRaw$timestamp <- trunc(dataRaw$timestamp)
+dataRaw$timestamp<- as_datetime(dataRaw$timestamp)
+
+# remove all instructions and examples
+data<- dataRaw %>% 
+  select(!time_elapsed & !trial_type) %>%
+  filter((trial_index >14 & trial_index<75) |(trial_index >87 & trial_index<148)|(trial_index >160 & trial_index<=220))
+
+# n_back sub_dataframe
+back_1<-dataRaw %>% 
+  select(!time_elapsed & !trial_type) %>%
+  filter(trial_index >14 & trial_index<75)%>%
+  mutate(same_stim=if_else(stim==lag(stim),"0","null"))%>%
+  mutate(accuracy= if_else(response==same_stim,1,0))%>%
+  group_by(SID)%>%
+  summarize(accuracy_1 = round(sum(accuracy == 1) / n() * 100, 2))
+ 
+accuracy_1<- back_1 %>%sum(back_1$accuracy == 1, na.rm = TRUE)/sum(!is.na(back_1$accuracy))
+accuracy_1<- round(accuracy_1,digits = 2)
+  
+
+
+back_2<- dataRaw %>% 
+  select(!time_elapsed & !trial_type) %>%
+  filter(trial_index >87 & trial_index<148)%>%
+  mutate(same_stim= if_else(stim==lag(lag(stim),n=2),"0","null"))%>%
+  mutate(accuracy= if_else(response==same_stim,1,0)) 
+
+back_3<- dataRaw %>% 
+  select(!time_elapsed & !trial_type) %>%
+  filter(trial_index >160 & trial_index<=220)%>%
+  mutate(same_stim= if_else(stim==lag(lag(lag(stim),n=3)),"0","null"))%>%
+  mutate(accuracy= if_else(response==same_stim,1,0)) 
+
+
+
+
+# Plot efficiency against timestamp
+p1<- ggplot(back_1, aes(x=timestamp, y=rt)) +
+  geom_line() +
+  labs(x = "Timestamp", y = "Accuracy") +
+  theme_bw()
+
+p2<- ggplot(back_2, aes(x=timestamp, y=rt)) +
+  geom_point() +
+  labs(x = "Timestamp", y = "Accuracy") +
+  theme_bw()
+
+p3<- ggplot(back_3, aes(x=timestamp, y=rt)) +
+  geom_point() +
+  labs(x = "Timestamp", y = "Accuracy") +
+  theme_bw()
+```
+
