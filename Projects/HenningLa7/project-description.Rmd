@@ -70,7 +70,7 @@ Using ggplot2 and the csv-file, our visualization should contain:
 
 Also, you may feel free to create a plot with the same message but with a different way of visualization. Ziyi and Elizaveta suggested to other possibilities of visualization in their [feedback](https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/issues/78) on github.
 
-I wish you good luck with my project!
+I wish you good luck with the project!
 
 
 
