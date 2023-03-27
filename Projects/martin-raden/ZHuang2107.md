@@ -121,7 +121,7 @@
         aes(label=paste(df$start_year, "to", df$end_year)),
         y=1, hjust=1.5, check_overlap = TRUE, size=2.5
       )+
-      geom_curve(
+        geom_curve(
         aes(x=4, y=950, xend=4, yend=200),
         arrow=arrow(length= unit(0.03,"npc"),
         type="closed"),color="#4a4e69", size=1, angle = 90)
