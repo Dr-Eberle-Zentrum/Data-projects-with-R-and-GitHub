@@ -32,4 +32,7 @@ file.remove("R1-cheatsheet-loops.Rmd")
 ```
 
 
+```{r child = 'loops-functions.cheatsheet.md'}
+```
+
 
