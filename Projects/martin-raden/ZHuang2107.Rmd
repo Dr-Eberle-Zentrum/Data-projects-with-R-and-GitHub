@@ -136,7 +136,6 @@ plot<- ggplot(df, aes (x=df$common_name, y=df$average_change)) +
 print(plot)
 
 
-print(plot)
 
 ```
 
