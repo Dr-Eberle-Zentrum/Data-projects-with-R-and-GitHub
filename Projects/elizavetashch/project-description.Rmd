@@ -34,7 +34,7 @@ abs_cap | Soil absorption capacity measured in the end of the experiment.
 des_cap  | Soil desorption capacity measured in the end of the experiment. 
 
 ## Visualization Goals 
-From my point of perspective, the following type of graph would be reasonable to build regarding the experiment: 
+From perspective the following type of graph would be reasonable to build regarding the experiment: 
 
 ![Figure 3: Li, M., Wu, D., Wu, D. et al. Influence of polyethylene-microplastic on environmental behaviors of metals in soil. Environ Sci Pollut Res 28, 28329–28336 (2021). https://doi.org/10.1007/s11356-021-12718-y](/Users/elizavetashcherbinina/Desktop/R2.png)
 

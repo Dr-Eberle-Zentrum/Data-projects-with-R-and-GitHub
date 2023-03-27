@@ -3,14 +3,20 @@ title: "project idea"
 ---
 
 ```{r raw_data}
-rawdata <- readr::read_csv("/Users/huangziyi/Downloads/ECU_2020_SLO-COVIDRS_v01_M_CSV/project data.csv")
+raw_data <- readr::read_csv("//Users/huangziyi/Desktop/project data.csv")
 ```
 
 ## About the data set
-The data base is collected through a phone survey, of over 1,500 high school students aged 14 to 18 in Ecuador to learn how students spend their time during the period of quarantine resulting from Covid-19, examine their access to remote learning, and measure their mental health status.The informations can be found in the webseite 
+The data base is collected through a phone survey, of over 1,500 high school students aged 14 to 18 in Ecuador to learn how students spend their time during the period of quarantine resulting from Covid-19, examine their access to remote learning, and measure their mental health status.The informations can be found on the website
 https://microdata.worldbank.org/index.php/catalog/3772/study-description 
+and you can also find the explanation of the data on this website. 
+
 
 ## project idea
-To modify the plot on the 13. page of the datei "wd_covidpaper_ecuador_withtablesfigures.pdf" on the webseit, I would like to use points instead of bars, whose colors demonstrate the access of the students to remote learning technologies and forms (like square, triangle, circle …) show the grades of the students. If possible, small images (like TV, computer ect.) at x-axis and labels beside the points will be added.  
+To modify the following plot (on the 13. page of the datei "wd_covidpaper_ecuador_withtablesfigures.pdf" on the webseit), I would like to use points instead of bars, whose colors demonstrate the access of the students to remote learning technologies and forms (like square, triangle, circle …) show the grades of the students. If possible, small images (like TV, computer ect.) at x-axis and labels beside the points will be added too. 
+
+
+![](Projects/ZHuang2107/plot.png)
 
 Furthermore, I would like to visualize what the students do every day, i.e. they time they spent on sleeping, working, houshold, leisure and education, using bar chart. The x-axis will be the length of time like 1 hour, 2 hours ect., and y-axis will be the students of grade 1, 2 and 3. We will use the average time they spent and we divide each category into male and female. The bars will be divided into different parts with different colors demonstrating the things they do. 
+

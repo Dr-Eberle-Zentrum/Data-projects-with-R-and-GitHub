@@ -84,6 +84,10 @@ Write an R Markdown file `project-description.Rmd` to
 
 It is fine to be vague at some points but you should formulate a clear goal and roadmap.
 
+The **output format** should be "normal" Markdown! To this end you have to
+
+-   use `output: md_document` in the Rmd header!
+
 #### Upload to GitHub
 
 In order to submit your project proposal, you have to upload it to GitHub as part of this project!
@@ -93,15 +97,14 @@ To this end:
 -   copy the following files to the folder:
     -   your `project-description.Rmd` file from above
     -   all files linked to, loaded or referenced within the project description (data sets, images, ...)
--   knit the file to `HTML` output
--   check if all is nicely rendered within the created HTML file
+-   knit the file to Markdown (`.md`) output (you have to use in the header `output: md_document`)
 -   `Pull` the recent project version from the GitHub repository
 -   `Commit` all new files to git versioning
-    -   Markdown, images, .html output file, ...
+    -   R-Markdown, images, `.md` output file, ...
 -   `Push` your changes to GitHub
--   Check online if your HTML file is listed on GitHub
+-   Check online if your Markdown file is listed on GitHub
 -   Change this `README.md` file and add your project to the following list of `Available projects` below
-    -   to this end, you have to put a relative link to the html page, see example link
+    -   to this end, you have to put a relative link to the `.md` page, see example link
 -   `Commit` and `Push` your changes to GitHub
 -   wait a minute (to get things published automatically)
 -   check the [project website](https://dr-eberle-zentrum.github.io/Advanced-data-processing-with-R/) if your project draft is listed, linked and correctly rendered
@@ -110,13 +113,13 @@ To this end:
 
 
 
-- [Example project by Martin](Projects/martin-raden/project-description.html)
+- [Example project by Martin](Projects/martin-raden/project-description.md)
+
 - [Sonja](Projects/sonji-uni/project-description.html)
-- [Elizaveta](Projects/elizavetashch/project-description.html)
-- [Ziyi](Projects/ZHuang2107/project-idea.html)
+- [Elizaveta](Projects/elizavetashch/2.0-Project-Description.html) version 2.0
+- [Ziyi](Projects/ZHuang2107/project-idea.html) [version 2.0](Projects/ZHuang2107/Project-description-2.0.html)
 - [Henning](Projects/HenningLa7/project-description.html)
 - [Man](Projects/caoman199711/project-description.html)
-
 
 
 #### Goals
@@ -124,9 +127,9 @@ To this end:
 At the end of Phase 1 you will have a better understanding of
 
 -   How to write stuff in R Markdown
--   How to produce presentable output from it
+-   How to produce presentable output from it (here "normal" Markdown)
 -   How to get things into version control in GitHub
--   See the integration of Markdown and HTML pages in GitHub Pages
+-   See the integration of "normal" Markdown in GitHub Pages
 
 ------------------------------------------------------------------------
 
@@ -192,7 +195,7 @@ In the end, you might do the following:
 -   `Pull` the current state of the project (just to be up-to-date)
 -   revise your R Markdown project description
 -   double check the Issues with the review comments to see if you incorporated everything
--   knit your description to HTML output
+-   knit your description to `.md` output (see [Project description guide](#write-up-your-project-description))
 -   `Pull` again the current project state from GitHub
 -   `Commit` your changes
 -   `Push` your committed changes to GitHub
@@ -239,16 +242,15 @@ But the overall workflow is more or less the same.
     -   create YOUR branch (remember [Step 4: Branch](https://edav.info/github.html#step-4-branch))
     -   **ensure** you have switched to the branch in RStudio (upper right corner in "Git" pane)
 -   now you are ready to **create your solution file**:
-    -   go into the project folder of the project you are working on
-    -   create a new *R Notebook* (File \> New File \> ...) with name `youGithubName.Rmd`
+    -   go into the project folder *of the target project you are working on*
+    -   create a new *R Markdown* (File \> New File \> ...) with name `youGithubName.Rmd`
+        -   use `output: md_document` in your header to produce a "normal" Markdown file
         -   your will program your solution within this file
-        -   on "Save", RStudio will automatically create an HTML output file for you
-            -   you can check it using Ctrl+Shift+K (or Cmd on Mac)
--   add the `yourGithubName.Rmd` file to `.gitignore` (to keep your solution local)
-    -   "Git" pane \> right-click on the file \> "Ignore" \> "Save"
+        -   on "Save", RStudio will automatically create an `.md` output file for you
+            -   you can check it using Ctrl+Shift+K (or Cmd+Shift+K on Mac)
 -   Commit and Push the following files
-    -   the changed `.gitignore` file
-    -   your solution output file `yourGithubName.nb.html` (knit it, if not existing yet)
+    -   your R Markdown file `yourGithubName.Rmd`
+    -   your solution output file `yourGithubName.md` (knit it, if not existing yet)
 
 #### Work on your solution and call for help
 
@@ -275,12 +277,8 @@ At some point you will be satisfied with your project solution and all changes a
 Now it is time to [open a pull request](https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/pulls).
 
 -   create a new pull request of *your branch* (select from dropdown) into *main* branch
--   post a (Markdown) **link in the pull request** that allows to see your HTML page in the browser:
-    -   this can be done via <https://htmlpreview.github.io/>
-    -   just use `https://htmlpreview.github.io/?MYHTMLLINK`
-    -   here `MYHTMLLINK` corresponds to the URL of the HTML file when you click it in the GitHub page
-    -   e.g. `https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/main/Projects/martin-raden/project-description.html`
--   check the link (here an [example link](https://htmlpreview.github.io/?https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/main/Projects/martin-raden/project-description.html))
+-   post a (Markdown) **link in the pull request** that allows to see your output `.md` page in the browser:
+    -   e.g. `https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/main/Projects/martin-raden/project-description.md`
 -   **invite** the project owner as a **reviewer**
     -   suggest him/her as reviewer (upper right in GitHub Pull Request interface)
     -   send him/her a message via a comment "@USERNAME"
@@ -350,9 +348,6 @@ Here some ideas where to start:
   - code chunks
 - **add**
   - a narrative why you do/show things
-  - (shortly) explain and interprete what you show
-- **style** >> check out [R Markdown - section 3.1 HTML output](https://bookdown.org/yihui/rmarkdown/html-document.html) for details
-  - try a different theme for styling 
-  - try you own CSS directives
+  - (shortly) explain and interpret what you show
 - ...
 
