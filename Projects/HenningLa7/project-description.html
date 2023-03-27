@@ -163,7 +163,7 @@ pre code {
 
 <h1 class="title toc-ignore">How do people from different countries distinguish in their personality?</h1>
 <h4 class="author">Henning Lang</h4>
-<h4 class="date">11 März 2023</h4>
+<h4 class="date">22 März 2023</h4>
 
 </div>
 
@@ -179,7 +179,7 @@ pre code {
 <!--tinytex::install_tinytex()-->
 <div id="theory" class="section level1">
 <h1>Theory</h1>
-<p><strong>BIG5 personality dimension</strong></p>
+<p><strong>BIG5 personality dimensions</strong></p>
 <p>The BIG5 model of personality is the most common psychological theory describing personality of human beings. The model includes five dimensions of personality:</p>
 <ul>
 <li>Openness</li>
@@ -193,13 +193,14 @@ pre code {
 <div id="data" class="section level1">
 <h1>Data</h1>
 <p><strong>Data-set</strong></p>
-<p>It is a open data-set from this source: <a href="http://openpsychometrics.org/_rawdata/" class="uri">http://openpsychometrics.org/_rawdata/</a>. Beside the variables that describe the BIG5 personality dimensions there are more variables like age, country or gender. The codebook contains a full overview about the data frame and its variables.The countries are coded with the ISO country code (<a href="https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes#UNI2" class="uri">https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes#UNI2</a>)</p>
+<p>Data-set and codebook are already provided on <a href="https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/tree/main/Projects/HenningLa7">github</a> in the project folder. You don’t have to search it by yourself ;)</p>
+<p>It is a open data-set from <a href="http://openpsychometrics.org/_rawdata/">this source.</a> For each personality dimension there are 10 Items (so all in all 50 items describing OCEAN dimensions) Beside the variables that describe the BIG5 personality dimensions there are more variables like age, country or gender. The codebook contains a full overview about the data frame and its variables. The countries are coded with the <a href="https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes#UNI2">ISO country code.</a></p>
 <p><strong>Data preparation</strong></p>
 <p>To prepare data for visualization, please:</p>
 <ul>
 <li>code missing values with NA</li>
-<li>exclude all values of countries, which are not part of our investigation</li>
-<li>calculate the mean of each personality dimension (10 items) and safe it in a new variable</li>
+<li>create a data-set which only contains data from people of United States, Great Britain, India, Australia and Brazil</li>
+<li>calculate the mean of each personality dimension (10 items) and add it in a new variable to the data-set. (For example: calculate mean of the 10 Items of Extraversion)</li>
 </ul>
 </div>
 <div id="visualization" class="section level1">
@@ -212,11 +213,14 @@ pre code {
 <p>Using ggplot2 and the csv-file, our visualization should contain:</p>
 <ul>
 <li>x-axis: countries: United States, Great Britain, India, Australia and Brazil <em>[Country]</em></li>
-<li>y-axis: score in personality dimensions <em>[Mean]</em></li>
+<li>y-axis: mean of the new mean-scales (see data-preparation) for each dimension and country <em>[Mean]</em></li>
 <li>groups: BIG5 personality dimensions</li>
 <li>coloring of the bars</li>
 <li>explanation of the colors right beside the chart</li>
+<li>Advanced goal: add the number of surveys for each country to the plot (for example Great Britain 1531 surveys). You can put it on top of the bars or below the x-axis labels</li>
 </ul>
+<p>Also, you may feel free to create a plot with the same message but with a different way of visualization. Ziyi and Elizaveta suggested to other possibilities of visualization in their <a href="https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/issues/78">feedback</a> on github.</p>
+<p>I wish you good luck with my project!</p>
 </div>
 
 
