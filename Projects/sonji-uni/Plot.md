@@ -77,48 +77,148 @@
     back_1<-dataRaw %>% 
       select(!time_elapsed & !trial_type) %>%
       filter(trial_index >14 & trial_index<75)%>%
-      mutate(same_stim=if_else(stim==lag(stim),"0","null"))%>%
-      mutate(accuracy= if_else(response==same_stim,1,0))%>%
       group_by(SID)%>%
-      summarize(accuracy_1 = round(sum(accuracy == 1) / n() * 100, 2))
-     
-    accuracy_1<- back_1 %>%sum(back_1$accuracy == 1, na.rm = TRUE)/sum(!is.na(back_1$accuracy))
+      mutate(same_stim= lag(stim,1),oneBack= stim==same_stim)%>%
+      drop_na(oneBack)%>%
+      mutate(correct=(oneBack&response==0)|(!oneBack&is.na(response)))%>%
+      summarise(accuracy =mean(correct,na.rm=T),timezone=format(min(timestamp),'%H:%M'),rt=rt)%>%
+      arrange(timezone)
 
-    ## Warning: Unknown or uninitialised column: `accuracy`.
+    ## Warning: Returning more (or less) than 1 row per `summarise()` group was deprecated in
+    ## dplyr 1.1.0.
+    ## ℹ Please use `reframe()` instead.
+    ## ℹ When switching from `summarise()` to `reframe()`, remember that `reframe()`
+    ##   always returns an ungrouped data frame and adjust accordingly.
 
-    ## Warning: Unknown or uninitialised column: `accuracy`.
-
-    accuracy_1<- round(accuracy_1,digits = 2)
-      
-
+    ## `summarise()` has grouped output by 'SID'. You can override using the `.groups`
+    ## argument.
 
     back_2<- dataRaw %>% 
       select(!time_elapsed & !trial_type) %>%
       filter(trial_index >87 & trial_index<148)%>%
-      mutate(same_stim= if_else(stim==lag(lag(stim),n=2),"0","null"))%>%
-      mutate(accuracy= if_else(response==same_stim,1,0)) 
+      group_by(SID)%>%
+      mutate(same_stim= lag(stim,2),twoBack= stim==same_stim)%>%
+      drop_na(twoBack)%>%
+      mutate(correct=(twoBack&response==0)|(!twoBack&is.na(response)))%>%
+      summarise(accuracy =mean(correct,na.rm=T),timezone=format(min(timestamp),'%H:%M'),rt=rt)%>%
+      arrange(timezone)
+
+    ## Warning: Returning more (or less) than 1 row per `summarise()` group was deprecated in
+    ## dplyr 1.1.0.
+    ## ℹ Please use `reframe()` instead.
+    ## ℹ When switching from `summarise()` to `reframe()`, remember that `reframe()`
+    ##   always returns an ungrouped data frame and adjust accordingly.
+
+    ## `summarise()` has grouped output by 'SID'. You can override using the `.groups`
+    ## argument.
 
     back_3<- dataRaw %>% 
       select(!time_elapsed & !trial_type) %>%
       filter(trial_index >160 & trial_index<=220)%>%
-      mutate(same_stim= if_else(stim==lag(lag(lag(stim),n=3)),"0","null"))%>%
-      mutate(accuracy= if_else(response==same_stim,1,0)) 
+      group_by(SID)%>%
+      mutate(same_stim= lag(stim,3),threeBack= stim==same_stim)%>%
+      drop_na(threeBack)%>%
+      mutate(correct=(threeBack&response==0)|(!threeBack&is.na(response)))%>%
+      summarise(accuracy =mean(correct,na.rm=T),timezone=format(min(timestamp),'%H:%M'),rt=rt)%>%
+      arrange(timezone)
 
+    ## Warning: Returning more (or less) than 1 row per `summarise()` group was deprecated in
+    ## dplyr 1.1.0.
+    ## ℹ Please use `reframe()` instead.
+    ## ℹ When switching from `summarise()` to `reframe()`, remember that `reframe()`
+    ##   always returns an ungrouped data frame and adjust accordingly.
 
-
+    ## `summarise()` has grouped output by 'SID'. You can override using the `.groups`
+    ## argument.
 
     # Plot efficiency against timestamp
-    p1<- ggplot(back_1, aes(x=timestamp, y=rt)) +
-      geom_line() +
-      labs(x = "Timestamp", y = "Accuracy") +
-      theme_bw()
+    p1<- ggplot(back_1, aes(x=timezone, y=rt,fill=timezone)) +
+      geom_point()+
+      labs(x = "Timestamp", y = "RT") +
+      theme_bw()+
+      theme(
+        panel.border = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_rect(fill = NA))
+    print(p1)
 
-    p2<- ggplot(back_2, aes(x=timestamp, y=rt)) +
-      geom_point() +
-      labs(x = "Timestamp", y = "Accuracy") +
-      theme_bw()
+![](Plot_files/figure-markdown_strict/unnamed-chunk-1-1.png)
 
-    p3<- ggplot(back_3, aes(x=timestamp, y=rt)) +
+    p2<- ggplot(back_2, aes(x=timezone, y=rt,fill=timezone)) +
       geom_point() +
+      labs(x = "Timestamp", y = "RT") +
+      theme_bw()+
+      theme(
+        panel.border = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_rect(fill = NA))
+    print(p2)
+
+![](Plot_files/figure-markdown_strict/unnamed-chunk-1-2.png)
+
+    p3<- ggplot(back_3, aes(x=timezone, y=rt,fill=timezone)) +
+      geom_point() +
+      labs(x = "Timestamp", y = "RT") +
+      theme_bw()+
+      theme(
+        panel.border = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_rect(fill = NA))
+    print(p3)
+
+![](Plot_files/figure-markdown_strict/unnamed-chunk-1-3.png)
+
+    # Plot accuracy against timestamp
+    p4<-ggplot(back_1, aes(x=timezone, y=accuracy)) +
+      geom_point()
       labs(x = "Timestamp", y = "Accuracy") +
-      theme_bw()
+      scale_y_continuous(label=scales::percent)+
+      theme_bw()+
+      theme(
+        panel.border = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_rect(fill = NA))
+
+    ## NULL
+
+    print(p4)
+
+![](Plot_files/figure-markdown_strict/unnamed-chunk-1-4.png)
+
+    p5<-ggplot(back_2, aes(x=timezone, y=accuracy)) +
+      geom_point()
+    labs(x = "Timestamp", y = "Accuracy") +
+      scale_y_continuous(label=scales::percent)+
+      theme_bw()+
+      theme(
+        panel.border = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_rect(fill = NA))
+
+    ## NULL
+
+    print(p5)
+
+![](Plot_files/figure-markdown_strict/unnamed-chunk-1-5.png)
+
+    p6<-ggplot(back_3, aes(x=timezone, y=accuracy)) +
+      geom_point()
+    labs(x = "Timestamp", y = "Accuracy") +
+      scale_y_continuous(label=scales::percent)+
+      theme_bw()+
+      theme(
+        panel.border = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_rect(fill = NA))
+
+    ## NULL
+
+    print(p6)
+
+![](Plot_files/figure-markdown_strict/unnamed-chunk-1-6.png)
