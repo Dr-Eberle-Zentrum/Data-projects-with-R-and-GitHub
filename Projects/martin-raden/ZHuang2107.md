@@ -1,9 +1,30 @@
-
     library (tidyverse)
+
+    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+    ## ✔ dplyr     1.1.1     ✔ readr     2.1.4
+    ## ✔ forcats   1.0.0     ✔ stringr   1.5.0
+    ## ✔ ggplot2   3.4.1     ✔ tibble    3.2.1
+    ## ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+    ## ✔ purrr     1.0.1     
+    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ✖ dplyr::filter() masks stats::filter()
+    ## ✖ dplyr::lag()    masks stats::lag()
+    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+
     library (ggplot2)
 
 
-    df <- readr::read_csv("/Users/huangziyi/Mammal-comeback-in-Europe-data-OWID-download .csv", show_col_types = FALSE)
+    #df <- readr::read_csv("/Users/huangziyi/Mammal-comeback-in-Europe-data-OWID-download .csv", show_col_types = FALSE)
+    df <- read_csv("https://ourworldindata.org/uploads/2022/09/Mammal-comeback-in-Europe-data-OWID-download.csv")
+
+    ## Rows: 25 Columns: 6
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## chr (3): Common name of species, Species name, Average relative change in ab...
+    ## dbl (3): Number of mammal populations included, Start year, End year
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
     df <-lapply(df, gsub, pattern="%", replaceme="")
     df<- as_tibble(df)
@@ -42,14 +63,56 @@
         arrow=arrow(length= unit(0.03,"npc"),
         type="closed"),color="#4a4e69", size=1, angle = 90)
 
+    ## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+    ## ℹ Please use `linewidth` instead.
+    ## This warning is displayed once every 8 hours.
+    ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+    ## generated.
 
     print(plot)
+
+    ## Warning: Use of `df$common_name` is discouraged.
+    ## ℹ Use `common_name` instead.
+
+    ## Warning: Use of `df$average_change` is discouraged.
+    ## ℹ Use `average_change` instead.
+    ## Use of `df$average_change` is discouraged.
+    ## ℹ Use `average_change` instead.
+
+    ## Warning: Use of `df$common_name` is discouraged.
+    ## ℹ Use `common_name` instead.
+
+    ## Warning: Use of `df$average_change` is discouraged.
+    ## ℹ Use `average_change` instead.
+
+    ## Warning: Use of `df$start_year` is discouraged.
+    ## ℹ Use `start_year` instead.
+
+    ## Warning: Use of `df$end_year` is discouraged.
+    ## ℹ Use `end_year` instead.
+
+    ## Warning: Use of `df$common_name` is discouraged.
+    ## ℹ Use `common_name` instead.
+
+    ## Warning: Transformation introduced infinite values in continuous y-axis
+
+![](ZHuang2107_files/figure-markdown_strict/unnamed-chunk-1-1.png)
 
     library (tidyverse)
     library (ggplot2)
 
 
-    df <- readr::read_csv("/Users/huangziyi/Mammal-comeback-in-Europe-data-OWID-download .csv", show_col_types = FALSE)
+    #df <- readr::read_csv("/Users/huangziyi/Mammal-comeback-in-Europe-data-OWID-download .csv", show_col_types = FALSE)
+    df <- read_csv("https://ourworldindata.org/uploads/2022/09/Mammal-comeback-in-Europe-data-OWID-download.csv")
+
+    ## Rows: 25 Columns: 6
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## chr (3): Common name of species, Species name, Average relative change in ab...
+    ## dbl (3): Number of mammal populations included, Start year, End year
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
     df <-lapply(df, gsub, pattern="%", replaceme="")
     df<- as_tibble(df)
@@ -82,12 +145,23 @@
       geom_text (
         aes(label=paste(df$start_year, "to", df$end_year)),
         y=1, hjust=1.5, check_overlap = TRUE, size=2.5
-      )+
-      library (tidyverse)
+      )
+
+    library (tidyverse)
     library (ggplot2)
 
 
-    df <- readr::read_csv("/Users/huangziyi/Mammal-comeback-in-Europe-data-OWID-download .csv", show_col_types = FALSE)
+    # df <- readr::read_csv("/Users/huangziyi/Mammal-comeback-in-Europe-data-OWID-download .csv", show_col_types = FALSE)
+    df <- read_csv("https://ourworldindata.org/uploads/2022/09/Mammal-comeback-in-Europe-data-OWID-download.csv")
+
+    ## Rows: 25 Columns: 6
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## chr (3): Common name of species, Species name, Average relative change in ab...
+    ## dbl (3): Number of mammal populations included, Start year, End year
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
     df <-lapply(df, gsub, pattern="%", replaceme="")
     df<- as_tibble(df)
@@ -129,3 +203,29 @@
 
     print(plot)
 
+    ## Warning: Use of `df$common_name` is discouraged.
+    ## ℹ Use `common_name` instead.
+
+    ## Warning: Use of `df$average_change` is discouraged.
+    ## ℹ Use `average_change` instead.
+    ## Use of `df$average_change` is discouraged.
+    ## ℹ Use `average_change` instead.
+
+    ## Warning: Use of `df$common_name` is discouraged.
+    ## ℹ Use `common_name` instead.
+
+    ## Warning: Use of `df$average_change` is discouraged.
+    ## ℹ Use `average_change` instead.
+
+    ## Warning: Use of `df$start_year` is discouraged.
+    ## ℹ Use `start_year` instead.
+
+    ## Warning: Use of `df$end_year` is discouraged.
+    ## ℹ Use `end_year` instead.
+
+    ## Warning: Use of `df$common_name` is discouraged.
+    ## ℹ Use `common_name` instead.
+
+    ## Warning: Transformation introduced infinite values in continuous y-axis
+
+![](ZHuang2107_files/figure-markdown_strict/unnamed-chunk-1-2.png)
