@@ -5,6 +5,9 @@ output: html_document
 
 ```{r raw_data}
 raw_data <- readr::read_csv("project data.csv", show_col_types = FALSE)
+
+ggplot(data=animal_data, mapping = aes (x=Common name of species, y=Average relative change in abundance)) + 
+geom_point ("grey", scale_y_continuous(breaks=c(1%, 10%, 100%, 1000%, 10000%))) 
 ```
 
 

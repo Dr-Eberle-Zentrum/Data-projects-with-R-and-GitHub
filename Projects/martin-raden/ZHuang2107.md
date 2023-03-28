@@ -10,7 +10,7 @@
     colnames(df)<- c("common_name", "species_name", "number_populations", "start_year", "end_year", "average_change")
     df[6]<-as.numeric(unlist(df[6]))
     df$common_name=with(df, reorder(common_name, average_change))
-    br <-10^(0:4)
+    br <-10^(1:5)
 
 
 

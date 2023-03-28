@@ -11,7 +11,7 @@
 
 
 
-<title>project idea</title>
+<title>ZHuang2107</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -348,52 +348,139 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">project idea</h1>
 
 </div>
 
 
-<pre class="r"><code>raw_data &lt;- readr::read_csv(&quot;//Users/huangziyi/Desktop/project data.csv&quot;)</code></pre>
-<pre><code>## Warning: One or more parsing issues, call `problems()` on your data frame for details,
-## e.g.:
-##   dat &lt;- vroom(...)
-##   problems(dat)</code></pre>
-<pre><code>## Rows: 2412 Columns: 318
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;,&quot;
-## chr  (31): startdate, datestamp, A1_other, A2, P3B, S1B_11_3, S1B_13_3, S1B_...
-## dbl (235): id, A1, A3, A4, P1, P2, P3, P4_1, P4_2, P4_3, P4_4, P4_5, P6, S1_...
-## lgl  (52): A1B_1, A1B_2, S1_1_2, S1_1_3, S1_2_2, S1_2_3, S1_3_2, S1_3_3, S1_...
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<div id="about-the-data-set" class="section level2">
-<h2>About the data set</h2>
-<p>The data base is collected through a phone survey, of over 1,500 high
-school students aged 14 to 18 in Ecuador to learn how students spend
-their time during the period of quarantine resulting from Covid-19,
-examine their access to remote learning, and measure their mental health
-status.The informations can be found on the website <a href="https://microdata.worldbank.org/index.php/catalog/3772/study-description" class="uri">https://microdata.worldbank.org/index.php/catalog/3772/study-description</a>
-and you can also find the explanation of the data on this website.</p>
-</div>
-<div id="project-idea" class="section level2">
-<h2>project idea</h2>
-<p>To modify the following plot (on the 13. page of the datei
-“wd_covidpaper_ecuador_withtablesfigures.pdf” on the webseit), I would
-like to use points instead of bars, whose colors demonstrate the access
-of the students to remote learning technologies and forms (like square,
-triangle, circle …) show the grades of the students. If possible, small
-images (like TV, computer ect.) at x-axis and labels beside the points
-will be added too.</p>
-<p><img src="Projects/ZHuang2107/plot.png" /></p>
-<p>Furthermore, I would like to visualize what the students do every
-day, i.e. they time they spent on sleeping, working, houshold, leisure
-and education, using bar chart. The x-axis will be the length of time
-like 1 hour, 2 hours ect., and y-axis will be the students of grade 1, 2
-and 3. We will use the average time they spent and we divide each
-category into male and female. The bars will be divided into different
-parts with different colors demonstrating the things they do.</p>
-</div>
+<pre><code>library (tidyverse)
+library (ggplot2)
+
+
+df &lt;- readr::read_csv(&quot;/Users/huangziyi/Mammal-comeback-in-Europe-data-OWID-download .csv&quot;, show_col_types = FALSE)
+
+df &lt;-lapply(df, gsub, pattern=&quot;%&quot;, replaceme=&quot;&quot;)
+df&lt;- as_tibble(df)
+colnames(df)&lt;- c(&quot;common_name&quot;, &quot;species_name&quot;, &quot;number_populations&quot;, &quot;start_year&quot;, &quot;end_year&quot;, &quot;average_change&quot;)
+df[6]&lt;-as.numeric(unlist(df[6]))
+df$common_name=with(df, reorder(common_name, average_change))
+br &lt;-10^(1:5)
+
+
+
+#Plot
+plot&lt;- ggplot(df, aes (x=df$common_name, y=df$average_change)) + 
+  geom_point(color=&quot;#4682B4&quot;, size=2, alpha=1) +
+  geom_segment(aes(x=common_name, xend=common_name, y=0, yend=average_change),
+               color=&quot;#4a4e69&quot;,
+               arrow = arrow(length=unit(0.02, &quot;npc&quot;), type = &quot;closed&quot;),
+               lineend = &quot;round&quot;) +
+  scale_y_continuous(trans=&quot;log10&quot;,limits = c(1, 100000),
+                    # labels = str_c(br)(comma_format(big.mark = &quot;.&quot;, decimal.mark = &quot;,&quot;), &quot;%&quot;), breaks = br) 
+                    )+
+  geom_text (aes(label=df$average_change), nudge_y = 0.3) +
+  labs(title = &quot;Wildlife is making a comeback in Europe&quot;, 
+       y = &quot;Average relative change in the size of populations &quot;,
+       x = &quot;&quot;) +
+  theme_light() +
+  coord_flip() +
+  annotate (&quot;text&quot;, x=&quot;Brown bear&quot;, y=1000,
+              label=&quot;Between 1960 and 2016, populations \n of brown bears increased by an average of 44%&quot;,
+              color=&quot;#4a4e69&quot;, hjust=0, size=3) +
+  geom_text (
+    aes(label=paste(df$start_year, &quot;to&quot;, df$end_year)),
+    y=1, hjust=1.5, check_overlap = TRUE, size=2.5
+  )+
+  geom_curve(
+    aes(x=4, y=950, xend=4, yend=200),
+    arrow=arrow(length= unit(0.03,&quot;npc&quot;),
+    type=&quot;closed&quot;),color=&quot;#4a4e69&quot;, size=1, angle = 90)
+
+
+print(plot)
+
+library (tidyverse)
+library (ggplot2)
+
+
+df &lt;- readr::read_csv(&quot;/Users/huangziyi/Mammal-comeback-in-Europe-data-OWID-download .csv&quot;, show_col_types = FALSE)
+
+df &lt;-lapply(df, gsub, pattern=&quot;%&quot;, replaceme=&quot;&quot;)
+df&lt;- as_tibble(df)
+colnames(df)&lt;- c(&quot;common_name&quot;, &quot;species_name&quot;, &quot;number_populations&quot;, &quot;start_year&quot;, &quot;end_year&quot;, &quot;average_change&quot;)
+df[6]&lt;-as.numeric(unlist(df[6]))
+df$common_name=with(df, reorder(common_name, average_change))
+br &lt;-10^(0:4)
+
+
+
+#Plot
+plot&lt;- ggplot(df, aes (x=df$common_name, y=df$average_change)) + 
+  geom_point(color=&quot;#4682B4&quot;, size=2, alpha=1) +
+  geom_segment(aes(x=common_name, xend=common_name, y=0, yend=average_change),
+               color=&quot;#4a4e69&quot;,
+               arrow = arrow(length=unit(0.02, &quot;npc&quot;), type = &quot;closed&quot;),
+               lineend = &quot;round&quot;) +
+  scale_y_continuous(trans=&quot;log10&quot;,limits = c(1, 100000),
+                    # labels = str_c(br)(comma_format(big.mark = &quot;.&quot;, decimal.mark = &quot;,&quot;), &quot;%&quot;), breaks = br) 
+                    )+
+  geom_text (aes(label=df$average_change), nudge_y = 0.3) +
+  labs(title = &quot;Wildlife is making a comeback in Europe&quot;, 
+       y = &quot;Average relative change in the size of populations &quot;,
+       x = &quot;&quot;) +
+  theme_light() +
+  coord_flip() +
+  annotate (&quot;text&quot;, x=&quot;Brown bear&quot;, y=1000,
+              label=&quot;Between 1960 and 2016, populations \n of brown bears increased by an average of 44%&quot;,
+              color=&quot;#4a4e69&quot;, hjust=0, size=3) +
+  geom_text (
+    aes(label=paste(df$start_year, &quot;to&quot;, df$end_year)),
+    y=1, hjust=1.5, check_overlap = TRUE, size=2.5
+  )+
+  library (tidyverse)
+library (ggplot2)
+
+
+df &lt;- readr::read_csv(&quot;/Users/huangziyi/Mammal-comeback-in-Europe-data-OWID-download .csv&quot;, show_col_types = FALSE)
+
+df &lt;-lapply(df, gsub, pattern=&quot;%&quot;, replaceme=&quot;&quot;)
+df&lt;- as_tibble(df)
+colnames(df)&lt;- c(&quot;common_name&quot;, &quot;species_name&quot;, &quot;number_populations&quot;, &quot;start_year&quot;, &quot;end_year&quot;, &quot;average_change&quot;)
+df[6]&lt;-as.numeric(unlist(df[6]))
+df$common_name=with(df, reorder(common_name, average_change))
+br &lt;-10^(0:4)
+
+
+
+#Plot
+plot&lt;- ggplot(df, aes (x=df$common_name, y=df$average_change)) + 
+  geom_point(color=&quot;#4682B4&quot;, size=2, alpha=1) +
+  geom_segment(aes(x=common_name, xend=common_name, y=0, yend=average_change),
+               color=&quot;#4a4e69&quot;,
+               arrow = arrow(length=unit(0.02, &quot;npc&quot;), type = &quot;closed&quot;),
+               lineend = &quot;round&quot;) +
+  scale_y_continuous(trans=&quot;log10&quot;,limits = c(1, 100000),
+                    # labels = str_c(br)(comma_format(big.mark = &quot;.&quot;, decimal.mark = &quot;,&quot;), &quot;%&quot;), breaks = br) 
+                    )+
+  geom_text (aes(label=df$average_change), nudge_y = 0.3) +
+  labs(title = &quot;Wildlife is making a comeback in Europe&quot;, 
+       y = &quot;Average relative change in the size of populations &quot;,
+       x = &quot;&quot;) +
+  theme_light() +
+  coord_flip() +
+  annotate (&quot;text&quot;, x=&quot;Brown bear&quot;, y=1000,
+              label=&quot;Between 1960 and 2016, populations \n of brown bears increased by an average of 44%&quot;,
+              color=&quot;#4a4e69&quot;, hjust=0, size=3) +
+  geom_text (
+    aes(label=paste(df$start_year, &quot;to&quot;, df$end_year)),
+    y=1, hjust=1.5, check_overlap = TRUE, size=2.5
+  )+
+    geom_curve(
+    aes(x=4, y=950, xend=4, yend=200),
+    arrow=arrow(length= unit(0.03,&quot;npc&quot;),
+    type=&quot;closed&quot;),color=&quot;#4a4e69&quot;, size=1, angle = 90)
+
+
+print(plot)</code></pre>
 
 
 

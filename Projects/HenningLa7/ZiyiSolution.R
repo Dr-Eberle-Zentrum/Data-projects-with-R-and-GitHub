@@ -1,19 +1,22 @@
----
-title: 'Project description new'
-output: md_document
----
-```{r}
 library(tidyverse)
 library(ggplot2)
 library(dplyr)
 
 
-
+#prepare data
 df<- read.csv("/Users/huangziyi/BIG5.csv")
 target <- c("US", "GB", "IN", "AU", "BR")
 df<-  filter(df, country %in% target)
 
 
+BIG2 <- c("Agreeableness", "Agreeableness","Agreeableness","Agreeableness","Agreeableness", "Conscientiousness", "Conscientiousness","Conscientiousness","Conscientiousness","Conscientiousness", "Extraversion","Extraversion","Extraversion","Extraversion","Extraversion","Neuroticism", "Neuroticism","Neuroticism","Neuroticism","Neuroticism", "Openness","Openness","Openness","Openness","Openness")
+
+
+#df<- group_by("country")%>% summarize(O=sum(starts_with("O")))
+
+#df<-sum(df, starts_with("O"))
+
+#df %>% select(starts_with("O"))
 
 df <- 
   mutate (df, O= (O1+O2+O3+O4+O5+O6+O7+O8+O9+O10)/10) %>%
@@ -83,15 +86,25 @@ noteBRE=mean(dfBRE$note)
 noteBRA=mean(dfBRA$note)
 noteBRN=mean(dfBRN$note)
 
-note_mean <- c(noteUSA, noteUSC, noteUSE, noteUSN, noteUSO, noteGBA, noteGBC, noteGBE, noteGBN, noteGBO, noteINA, noteINC, noteINE, noteINN, noteINO, noteAUA, noteAUC, noteAUE, noteAUN, noteAUO, noteBRA, noteBRC, noteBRE, noteBRN, noteBRO)
 
 
+#note_mean <- c(noteUSA, noteUSC, noteUSE, noteUSN, noteUSO, noteGBA, noteGBC, noteGBE, noteGBN, noteGBO, noteINA, noteINC, noteINE, noteINN, noteINO, noteAUA, noteAUC, noteAUE, noteAUN, noteAUO, noteBRA, noteBRC, noteBRE, noteBRN, noteBRO)
+target2<- c("United_States","United_States","United_States","United_States","United_States", "United_Kingdom", "United_Kingdom","United_Kingdom","United_Kingdom","United_Kingdom","Indian","Indian","Indian","Indian","Indian", "Australia", "Australia","Australia","Australia","Australia","Australia","Brazil", "Brazil","Brazil","Brazil","Brazil")
 
+
+print(note_mean)
 data<-data.frame(COUNTRY=rep(c("US", "GB", "IN", "AU", "BR"), each=5), 
                  PERSONALITY=rep(c("A", "C", "E", "N", "O"), times=5), 
                  NOTE=note_mean)
 
 
+#BIGtarget<-c("O", "C", "E", "A", "N")
+#df %>% pivot_longer (contains(BIGtarget), names_to="personality", values_to = "note")
+#Can't combine `source` <integer> and `country` <character>.
+  
+
+
+#plot
 plot<- ggplot(data, aes (x=COUNTRY, y=NOTE, fill=PERSONALITY))+
   geom_bar(stat = "identity",
            position = "dodge")+
@@ -102,4 +115,6 @@ plot<- ggplot(data, aes (x=COUNTRY, y=NOTE, fill=PERSONALITY))+
 print(plot)
 
 
-```
+
+
+
