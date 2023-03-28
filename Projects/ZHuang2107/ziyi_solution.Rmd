@@ -1,0 +1,116 @@
+---
+title: "ziyi_projekt_solution"
+author: "Elizaveta Shcherbinina"
+date: "`r Sys.Date()`"
+output: md_document
+---
+
+```{r raw_data, echo = FALSE}
+# Packages 
+library(readr)
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(stringr)
+library(graphics)
+library(scales)
+
+df <- read_csv("/Users/elizavetashcherbinina/Desktop/Vorlesungen/5_Semester/R2 Advanced /Ziyi Projekt/project data.csv")
+View(df)
+##########
+# group5 <- 
+#   df %>%
+#   select(P4_1, P4_2, P4_3, S8_1, S8_2) %>%
+#   drop_na() %>%
+#   mutate(time_spent = S8_1 * 60 + S8_2) %>%
+#   select(-(S8_1:S8_2)) %>%
+#   rowwise() %>%
+#   mutate( type_sum = sum(c_across(P4_1:P4_3)) ) %>%
+#   select(-(P4_1:P4_3)) %>%
+#   arrange(desc(time_spent)) %>%
+#   filter(time_spent >= 721)   %>%
+#   mutate(group = "12+ Hours")
+##########
+group4 <- 
+  df %>%
+  select(P4_1, P4_2, P4_3, S8_1, S8_2) %>%
+  drop_na() %>%
+  mutate(time_spent = S8_1 * 60 + S8_2) %>%
+  select(-(S8_1:S8_2)) %>%
+  rowwise() %>%
+  mutate( type_sum = sum(c_across(P4_1:P4_3)) ) %>%
+  select(-(P4_1:P4_3)) %>%
+  arrange(desc(time_spent)) %>%
+  filter(time_spent >= 541) %>%
+  count(type_sum) %>%
+  mutate(group = "9+ Hours")
+##########
+group3 <- 
+  df %>%
+  select(P4_1, P4_2, P4_3, S8_1, S8_2) %>%
+  drop_na() %>%
+  mutate(time_spent = S8_1 * 60 + S8_2) %>%
+  select(-(S8_1:S8_2)) %>%
+  rowwise() %>%
+  mutate( type_sum = sum(c_across(P4_1:P4_3)) ) %>%
+  select(-(P4_1:P4_3)) %>%
+  arrange(desc(time_spent)) %>%
+  filter(time_spent %in% (301:540)) %>%
+  count(type_sum)  %>%
+  mutate(group = "9 Hours")
+##########
+group2 <- 
+  df %>%
+  select(P4_1, P4_2, P4_3, S8_1, S8_2) %>%
+  drop_na() %>%
+  mutate(time_spent = S8_1 * 60 + S8_2) %>%
+  select(-(S8_1:S8_2)) %>%
+  rowwise() %>%
+  mutate( type_sum = sum(c_across(P4_1:P4_3)) ) %>%
+  select(-(P4_1:P4_3)) %>%
+  arrange(desc(time_spent)) %>%
+  filter(time_spent %in% (121:300)) %>%
+  count(type_sum)  %>%
+  mutate(group = "5 Hours")
+##########
+group1 <- 
+  df %>%
+  select(P4_1, P4_2, P4_3, S8_1, S8_2) %>%
+  drop_na() %>%
+  mutate(time_spent = S8_1 * 60 + S8_2) %>%
+  select(-(S8_1:S8_2)) %>%
+  rowwise() %>%
+  mutate( type_sum = sum(c_across(P4_1:P4_3)) ) %>%
+  select(-(P4_1:P4_3)) %>%
+  arrange(desc(time_spent)) %>%
+  filter(time_spent %in% (1:120)) %>%
+  count(type_sum)  %>%
+  mutate(group = "2 Hours")
+##########
+group0 <- 
+  df %>%
+  select(P4_1, P4_2, P4_3, S8_1, S8_2) %>%
+  drop_na() %>%
+  mutate(time_spent = S8_1 * 60 + S8_2) %>%
+  select(-(S8_1:S8_2)) %>%
+  rowwise() %>%
+  mutate( type_sum = sum(c_across(P4_1:P4_3)) ) %>%
+  select(-(P4_1:P4_3)) %>%
+  arrange(desc(time_spent)) %>%
+  filter(time_spent == 0) %>%
+  count(type_sum) %>%
+  mutate(group = "0 Hours")
+
+########
+dff <- 
+  bind_rows(group0, group1, group2, group3, group4)
+dff$group <- as.factor(dff$group)
+dff$type_sum <- as.factor(dff$type_sum)
+
+#######
+
+ggplot(dff, mapping = aes(x = group, y = n, fill = type_sum)) +
+  geom_col() +
+  scale_fill_discrete(labels=c('all', 'comp/tablet/smartphone', 'only internet', 'none'))
+```
+
