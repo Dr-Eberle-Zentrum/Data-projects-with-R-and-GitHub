@@ -97,8 +97,6 @@
                      NOTE=note_mean)
 
 
-
-
     plot<- ggplot(data, aes (x=COUNTRY, y=NOTE, fill=PERSONALITY))+
       geom_bar(stat = "identity",
                position = "dodge")+

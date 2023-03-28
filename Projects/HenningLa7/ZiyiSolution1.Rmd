@@ -92,8 +92,6 @@ data<-data.frame(COUNTRY=rep(c("US", "GB", "IN", "AU", "BR"), each=5),
                  NOTE=note_mean)
 
 
-
-
 plot<- ggplot(data, aes (x=COUNTRY, y=NOTE, fill=PERSONALITY))+
   geom_bar(stat = "identity",
            position = "dodge")+
