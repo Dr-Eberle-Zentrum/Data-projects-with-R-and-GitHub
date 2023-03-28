@@ -94,7 +94,6 @@ data<-data.frame(COUNTRY=rep(c("US", "GB", "IN", "AU", "BR"), each=5),
 
 
 
-
 plot<- ggplot(data, aes (x=COUNTRY, y=NOTE, fill=PERSONALITY))+
   geom_bar(stat = "identity",
            position = "dodge")+
@@ -103,4 +102,5 @@ plot<- ggplot(data, aes (x=COUNTRY, y=NOTE, fill=PERSONALITY))+
   theme(panel.grid.major.y = element_blank())
 
 print(plot)
+
 ```
