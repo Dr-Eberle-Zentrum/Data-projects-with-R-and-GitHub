@@ -1,0 +1,33 @@
+---
+title: "Solution Attempt"
+author: "Sonja"
+output: md_document
+---
+
+# Preparation
+
+```{r}
+library(tidyverse)
+datRaw <- read.csv2('Microplastic_Affect_Soil_Properties_and_Plant_Biomass.csv', encoding = 'UTF-8') |> 
+  rename(shape = X.U.FEFF.shape)
+```
+
+# Filter polyethylene films
+
+```{r}
+dat <- datRaw |> 
+  filter(shape == 'Films')
+```
+
+# Generate total biomass
+
+```{r}
+options(digits = 6)
+
+dat <- dat |> 
+  mutate(shoot = as.numeric(shoot),
+         root = as.double(root),
+         totalBiomass = sum(shoot, root, na.rm = T))
+```
+
+The variable `root` is corrupt, in the sense that it contains a date as well as numbers.
