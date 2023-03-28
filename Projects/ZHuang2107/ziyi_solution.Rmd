@@ -5,8 +5,7 @@ date: "`r Sys.Date()`"
 output: md_document
 ---
 
-```{r raw_data, echo = FALSE}
-# Packages 
+```{r, echo = FALSE}
 library(readr)
 library(tidyverse)
 library(dplyr)
