@@ -1,0 +1,57 @@
+---
+title: "ziyi_projekt_second_solution"
+author: "Elizaveta Shcherbinina"
+date: "`r Sys.Date()`"
+output: md_document
+---
+
+```{r, echo = FALSE}
+setwd("/Users/elizavetashcherbinina/Desktop/Vorlesungen/5_Semester/R2 Advanced /Till_Monday_27march")
+
+# Packages 
+library(readr)
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(stringr)
+library(graphics)
+library(scales)
+
+df <- read_csv("project data.csv")
+
+final_df <- 
+df %>%
+  select(P4_1, P4_2, P4_3, S8_1, S8_2) %>%
+  drop_na() %>%
+  mutate(time_spent = S8_1 * 60 + S8_2) %>%
+  mutate(time_spent = as.numeric(time_spent)) %>%
+  select(-(S8_1:S8_2)) %>% 
+  mutate( code_type =  str_c(P4_1, P4_2, P4_3, sep="_")) %>%
+  mutate(type_of_four = case_when(
+             code_type == "1_1_1" ~ "all",
+             code_type == "1_2_1" ~ "only devices",
+             code_type == "2_1_2" ~ "only internet",
+             code_type == "2_2_2" ~ "none",
+           )) %>%
+  mutate(time_group = case_when(
+             time_spent == 0 ~ "0 hours",
+             time_spent %in% (1:120) ~ "0 to 2 hours",
+             time_spent %in% (121:240) ~ "2 to 4 hours",
+             time_spent %in% (241:360) ~ "4 to 6 hours",
+             time_spent %in% (361:480) ~ "6 to 8 hours",
+             TRUE ~ "8+ hours",
+           )) %>%
+  drop_na() 
+
+
+ggplot(final_df, mapping = aes(x = time_group, fill = type_of_four)) +
+  geom_bar() +
+  labs(x = "Time Spent on Homework",
+       y = "Number of Students") +
+  theme_bw() +
+  theme(panel.grid.major.y = element_blank()) +
+  scale_fill_discrete(name = "Acess to Devices and Internet", labels = c("Both", "Only Devices", "Only Internet", "None"))
+
+
+```
+
