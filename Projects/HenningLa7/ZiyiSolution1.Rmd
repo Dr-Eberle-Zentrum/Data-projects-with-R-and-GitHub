@@ -102,4 +102,5 @@ plot<- ggplot(data, aes (x=COUNTRY, y=NOTE, fill=PERSONALITY))+
 print(plot)
 
 
+
 ```
