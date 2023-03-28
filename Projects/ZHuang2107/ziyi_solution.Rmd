@@ -1,11 +1,14 @@
 ---
-title: "ziyi_projekt_solution"
+title: "ziyi_projekt_second_solution"
 author: "Elizaveta Shcherbinina"
 date: "`r Sys.Date()`"
 output: md_document
 ---
 
 ```{r, echo = FALSE}
+setwd("/Users/elizavetashcherbinina/Desktop/Vorlesungen/5_Semester/R2 Advanced /Till_Monday_27march")
+
+# Packages 
 library(readr)
 library(tidyverse)
 library(dplyr)
@@ -14,102 +17,41 @@ library(stringr)
 library(graphics)
 library(scales)
 
-df <- read_csv("/Users/elizavetashcherbinina/Desktop/Vorlesungen/5_Semester/R2 Advanced /Ziyi Projekt/project data.csv")
-View(df)
-##########
-# group5 <- 
-#   df %>%
-#   select(P4_1, P4_2, P4_3, S8_1, S8_2) %>%
-#   drop_na() %>%
-#   mutate(time_spent = S8_1 * 60 + S8_2) %>%
-#   select(-(S8_1:S8_2)) %>%
-#   rowwise() %>%
-#   mutate( type_sum = sum(c_across(P4_1:P4_3)) ) %>%
-#   select(-(P4_1:P4_3)) %>%
-#   arrange(desc(time_spent)) %>%
-#   filter(time_spent >= 721)   %>%
-#   mutate(group = "12+ Hours")
-##########
-group4 <- 
-  df %>%
-  select(P4_1, P4_2, P4_3, S8_1, S8_2) %>%
-  drop_na() %>%
-  mutate(time_spent = S8_1 * 60 + S8_2) %>%
-  select(-(S8_1:S8_2)) %>%
-  rowwise() %>%
-  mutate( type_sum = sum(c_across(P4_1:P4_3)) ) %>%
-  select(-(P4_1:P4_3)) %>%
-  arrange(desc(time_spent)) %>%
-  filter(time_spent >= 541) %>%
-  count(type_sum) %>%
-  mutate(group = "9+ Hours")
-##########
-group3 <- 
-  df %>%
-  select(P4_1, P4_2, P4_3, S8_1, S8_2) %>%
-  drop_na() %>%
-  mutate(time_spent = S8_1 * 60 + S8_2) %>%
-  select(-(S8_1:S8_2)) %>%
-  rowwise() %>%
-  mutate( type_sum = sum(c_across(P4_1:P4_3)) ) %>%
-  select(-(P4_1:P4_3)) %>%
-  arrange(desc(time_spent)) %>%
-  filter(time_spent %in% (301:540)) %>%
-  count(type_sum)  %>%
-  mutate(group = "9 Hours")
-##########
-group2 <- 
-  df %>%
-  select(P4_1, P4_2, P4_3, S8_1, S8_2) %>%
-  drop_na() %>%
-  mutate(time_spent = S8_1 * 60 + S8_2) %>%
-  select(-(S8_1:S8_2)) %>%
-  rowwise() %>%
-  mutate( type_sum = sum(c_across(P4_1:P4_3)) ) %>%
-  select(-(P4_1:P4_3)) %>%
-  arrange(desc(time_spent)) %>%
-  filter(time_spent %in% (121:300)) %>%
-  count(type_sum)  %>%
-  mutate(group = "5 Hours")
-##########
-group1 <- 
-  df %>%
-  select(P4_1, P4_2, P4_3, S8_1, S8_2) %>%
-  drop_na() %>%
-  mutate(time_spent = S8_1 * 60 + S8_2) %>%
-  select(-(S8_1:S8_2)) %>%
-  rowwise() %>%
-  mutate( type_sum = sum(c_across(P4_1:P4_3)) ) %>%
-  select(-(P4_1:P4_3)) %>%
-  arrange(desc(time_spent)) %>%
-  filter(time_spent %in% (1:120)) %>%
-  count(type_sum)  %>%
-  mutate(group = "2 Hours")
-##########
-group0 <- 
-  df %>%
-  select(P4_1, P4_2, P4_3, S8_1, S8_2) %>%
-  drop_na() %>%
-  mutate(time_spent = S8_1 * 60 + S8_2) %>%
-  select(-(S8_1:S8_2)) %>%
-  rowwise() %>%
-  mutate( type_sum = sum(c_across(P4_1:P4_3)) ) %>%
-  select(-(P4_1:P4_3)) %>%
-  arrange(desc(time_spent)) %>%
-  filter(time_spent == 0) %>%
-  count(type_sum) %>%
-  mutate(group = "0 Hours")
+df <- read_csv("project data.csv")
 
-########
-dff <- 
-  bind_rows(group0, group1, group2, group3, group4)
-dff$group <- as.factor(dff$group)
-dff$type_sum <- as.factor(dff$type_sum)
+final_df <- 
+df %>%
+  select(P4_1, P4_2, P4_3, S8_1, S8_2) %>%
+  drop_na() %>%
+  mutate(time_spent = S8_1 * 60 + S8_2) %>%
+  mutate(time_spent = as.numeric(time_spent)) %>%
+  select(-(S8_1:S8_2)) %>% 
+  mutate( code_type =  str_c(P4_1, P4_2, P4_3, sep="_")) %>%
+  mutate(type_of_four = case_when(
+             code_type == "1_1_1" ~ "all",
+             code_type == "1_2_1" ~ "only devices",
+             code_type == "2_1_2" ~ "only internet",
+             code_type == "2_2_2" ~ "none",
+           )) %>%
+  mutate(time_group = case_when(
+             time_spent == 0 ~ "0 hours",
+             time_spent %in% (1:120) ~ "0 to 2 hours",
+             time_spent %in% (121:240) ~ "2 to 4 hours",
+             time_spent %in% (241:360) ~ "4 to 6 hours",
+             time_spent %in% (361:480) ~ "6 to 8 hours",
+             TRUE ~ "8+ hours",
+           )) %>%
+  drop_na() 
 
-#######
 
-ggplot(dff, mapping = aes(x = group, y = n, fill = type_sum)) +
-  geom_col() +
-  scale_fill_discrete(labels=c('all', 'comp/tablet/smartphone', 'only internet', 'none'))
+ggplot(final_df, mapping = aes(x = time_group, fill = type_of_four)) +
+  geom_bar() +
+  labs(x = "Time Spent on Homework",
+       y = "Number of Students") +
+  theme_bw() +
+  theme(panel.grid.major.y = element_blank()) +
+  scale_fill_discrete(name = "Acess to Devices and Internet", labels = c("Both", "Only Devices", "Only Internet", "None"))
+
+
 ```
 
