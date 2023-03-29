@@ -46,3 +46,71 @@ additional information from recommended sources.
     -   a
         [`pull request`](https://www.atlassian.com/git/tutorials/making-a-pull-request)
         aims at merging your changes back into the project
+
+## Cheatsheet “coding-basics”
+
+-   important data structures
+    -   `vector` = all elements are same data type
+    -   `list` = most general, can contain anything, any size, …
+    -   `data.frame/tibble` = list of vectors (of same lengths)
+        -   ==&gt; if tidy, resp. column values (in one row) are
+            associated with one observation
+-   *subsetting* can be done using
+    -   `[]` = reduces the current object to the selected part(s) (same
+        data container)
+    -   `[[]]` = provides a *single element* (element-specific data
+        container)
+    -   `$` = shortcut for `[[]]` with name
+-   programming of workflows often requires
+    -   *iteration* of code blocks (`for` or `while` loops)
+        -   `for( VARIABLE in DATA ) {...}`
+        -   each *element* of `DATA` is *one by one* stored in
+            `VARIABLE` before running `{...}`
+        -   e.g. `for( d in list( x="haha", y=1:3)) { print(length(d)) }`
+    -   *conditional* code execution (`if/else` statements)
+        -   `if ( CONDITION ) {..T..} else {..F..}`
+        -   `else {..B..}` is optional
+        -   `CONDITION` must evaluate to a *single* `TRUE|FALSE`:
+            triggers execution of respective `{..T|F..}` block
+            -   e.g. `if ( 1:4 == 2 ) {}` not working since check
+                returns four logic values!
+        -   e.g. `if ( version$os == "mingw32" ) { print("MS Windows user?") }`
+    -   *generalization* of code blocks (`function` definition and
+        usage)
+        -   `myFunction <- function (ARGUMENTS) {...}`
+        -   `ARGUMENTS` are optional (first should be the data to work
+            on)
+        -   run via `myFunction( .. )` using appropriate values for
+            `ARGUMENTS`
+        -   return via `return()` in `{...}` (default: last “printed”
+            value is returned)
+        -   to return multiple values, aggregate them in `list()` or
+            vector `c()`
+-   redundant code w.r.t. **values** of a variable ==&gt; `for` loop
+    generalization
+-   redundant code w.r.t. **variables** or **function** calls ==&gt;
+    `function` generalization
+-   iteration tricks
+    -   *best iterate directly on the elements*, if you don’t need the
+        element names or index!
+    -   use `seq_along()` to generate the list of *valid indices* of a
+        vector or list
+    -   use `names()` to access the vector of *element names* of an
+        object
+-   when a function calls itself it is called a *recursive call* or
+    *recursion*
+-   function names (without brackets) can be stored in and used from
+    variables/arguments to call the functions
+
+## How to develop a function
+
+-   first think about `INPUT` and `OUTPUT` of your function, i.e. what
+    do you need and what do you want to create
+-   `INPUT` will be all function arguments, i.e. the needed variables of
+    your code
+-   create example variables with example content
+-   write a piece of code that operates on your example variables doing
+    what you want, i.e. creating your `OUTPUT`
+-   wrap your working code in a `function(){}` construct/body and add a
+    `return()` statement to provide your `OUTPUT`
+-   test your function with your example content as argument values

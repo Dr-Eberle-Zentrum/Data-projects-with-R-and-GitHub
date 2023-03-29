@@ -16,3 +16,23 @@ summarizes the individual notes from the provided tutorials and additional infor
 
 ```{r child = 'git-started.cheatsheet.md'}
 ```
+
+```{r include=FALSE}
+########  GET R1 cheatsheet  #############
+download.file("https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Introduction-to-programming-with-R/master/inst/tutorials/coding-basics/images/cheatsheet.Rmd",
+              "R1-cheatsheet-loops.Rmd")
+```
+
+```{r child = 'R1-cheatsheet-loops.Rmd'}
+```
+
+```{r include=FALSE}
+########  REMOVE R1 cheatsheet  ###########
+file.remove("R1-cheatsheet-loops.Rmd")
+```
+
+
+```{r child = 'loops-functions.cheatsheet.md'}
+```
+
+
