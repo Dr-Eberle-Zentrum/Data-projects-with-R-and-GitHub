@@ -344,10 +344,12 @@ Thus, you will have to beautify your HTML output.
 Here some ideas where to start:
 
 - **hide**
-  - loading information
+  - loading information + warnings
   - code chunks
 - **add**
   - a narrative why you do/show things
+  - add document structure using headers etc.
   - (shortly) explain and interpret what you show
+  - provide used formulas etc. to compute statistics/values/...
 - ...
 
