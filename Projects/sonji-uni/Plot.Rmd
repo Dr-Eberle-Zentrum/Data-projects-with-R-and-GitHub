@@ -54,6 +54,7 @@ back_1<-dataRaw %>%
   mutate(correct=(oneBack&response==0)|(!oneBack&is.na(response)))%>%
   summarise(accuracy =mean(correct,na.rm=T),timezone=format(min(timestamp),'%H:%M'),rt=rt)%>%
   arrange(timezone)
+
 back_2<- dataRaw %>% 
   select(!time_elapsed & !trial_type) %>%
   filter(trial_index >87 & trial_index<148)%>%
@@ -63,7 +64,6 @@ back_2<- dataRaw %>%
   mutate(correct=(twoBack&response==0)|(!twoBack&is.na(response)))%>%
   summarise(accuracy =mean(correct,na.rm=T),timezone=format(min(timestamp),'%H:%M'),rt=rt)%>%
   arrange(timezone)
-
 
 back_3<- dataRaw %>% 
   select(!time_elapsed & !trial_type) %>%
@@ -86,6 +86,7 @@ p1<- ggplot(back_1, aes(x=timezone, y=rt,fill=timezone)) +
     panel.grid.major = element_blank(),
     panel.grid.minor = element_blank(),
     panel.background = element_rect(fill = NA))
+
 print(p1)
   
 p2<- ggplot(back_2, aes(x=timezone, y=rt,fill=timezone)) +
@@ -97,6 +98,7 @@ p2<- ggplot(back_2, aes(x=timezone, y=rt,fill=timezone)) +
     panel.grid.major = element_blank(),
     panel.grid.minor = element_blank(),
     panel.background = element_rect(fill = NA))
+
 print(p2)
 
 p3<- ggplot(back_3, aes(x=timezone, y=rt,fill=timezone)) +
@@ -108,11 +110,12 @@ p3<- ggplot(back_3, aes(x=timezone, y=rt,fill=timezone)) +
     panel.grid.major = element_blank(),
     panel.grid.minor = element_blank(),
     panel.background = element_rect(fill = NA))
+
 print(p3)
 
 # Plot accuracy against timestamp
 p4<-ggplot(back_1, aes(x=timezone, y=accuracy)) +
-  geom_point()
+  geom_point()+
   labs(x = "Timestamp", y = "Accuracy") +
   scale_y_continuous(label=scales::percent)+
   theme_bw()+
@@ -121,11 +124,12 @@ p4<-ggplot(back_1, aes(x=timezone, y=accuracy)) +
     panel.grid.major = element_blank(),
     panel.grid.minor = element_blank(),
     panel.background = element_rect(fill = NA))
+  
 print(p4)
 
 
 p5<-ggplot(back_2, aes(x=timezone, y=accuracy)) +
-  geom_point()
+  geom_point()+
 labs(x = "Timestamp", y = "Accuracy") +
   scale_y_continuous(label=scales::percent)+
   theme_bw()+
@@ -134,10 +138,11 @@ labs(x = "Timestamp", y = "Accuracy") +
     panel.grid.major = element_blank(),
     panel.grid.minor = element_blank(),
     panel.background = element_rect(fill = NA))
+
 print(p5)
 
 p6<-ggplot(back_3, aes(x=timezone, y=accuracy)) +
-  geom_point()
+  geom_point()+
 labs(x = "Timestamp", y = "Accuracy") +
   scale_y_continuous(label=scales::percent)+
   theme_bw()+
@@ -146,6 +151,7 @@ labs(x = "Timestamp", y = "Accuracy") +
     panel.grid.major = element_blank(),
     panel.grid.minor = element_blank(),
     panel.background = element_rect(fill = NA))
+
 print(p6)
 
 ```

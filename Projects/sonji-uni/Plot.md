@@ -63,16 +63,4 @@
     ## `summarise()` has grouped output by 'SID'. You can override using the `.groups`
     ## argument.
 
-![](Plot_files/figure-markdown_strict/unnamed-chunk-1-1.png)![](Plot_files/figure-markdown_strict/unnamed-chunk-1-2.png)![](Plot_files/figure-markdown_strict/unnamed-chunk-1-3.png)
-
-    ## NULL
-
-![](Plot_files/figure-markdown_strict/unnamed-chunk-1-4.png)
-
-    ## NULL
-
-![](Plot_files/figure-markdown_strict/unnamed-chunk-1-5.png)
-
-    ## NULL
-
-![](Plot_files/figure-markdown_strict/unnamed-chunk-1-6.png)
+![](Plot_files/figure-markdown_strict/unnamed-chunk-1-1.png)![](Plot_files/figure-markdown_strict/unnamed-chunk-1-2.png)![](Plot_files/figure-markdown_strict/unnamed-chunk-1-3.png)![](Plot_files/figure-markdown_strict/unnamed-chunk-1-4.png)![](Plot_files/figure-markdown_strict/unnamed-chunk-1-5.png)![](Plot_files/figure-markdown_strict/unnamed-chunk-1-6.png)
