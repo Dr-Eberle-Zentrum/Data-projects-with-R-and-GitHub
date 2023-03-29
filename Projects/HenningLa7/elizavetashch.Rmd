@@ -24,7 +24,7 @@ df <- read_delim("~/Advanced-data-processing-with-R/Projects/HenningLa7/data.csv
 
 ## Creating a new Dataset for the Graph 
 
-```{r pressure}
+```{r pressure }
 df1 <- 
 df %>%
     filter(country %in% c("US", "GB", "IN", "AU", "BR")) %>%
@@ -47,7 +47,7 @@ print(df1)
 ```{r echo = FALSE}
 p_dodged_bars <- 
 df1  %>%
-    ggplot(df1, mapping = aes(x = country, fill = OCEAN)) +
+    ggplot(df1, mapping = aes(x = country, fill = factor(df1$OCEAN, c("O", "C", "E", "A", "N")))) +
     geom_col(aes(y = value), position = "dodge") +
     scale_fill_manual(values = c("#06CDE0", "#7fcdff", "#76b6c4" , "#0A98F2", "#066EC5")) +
     theme_bw() +
@@ -62,17 +62,20 @@ df1  %>%
 ```{r echo = FALSE}
 p_letter <- 
 df1 %>%
-ggplot(mapping = aes(x = country, fill = OCEAN)) +
+mutate(OCEAN = factor(df1$OCEAN, levels=c("O", "C", "E", "A", "N"))) %>%
+ggplot(mapping = aes(x = country, fill = factor(df1$OCEAN, c("O", "C", "E", "A", "N")))) +
 geom_col(aes(y = value), position = "dodge") +
-scale_fill_manual(values = c("#06CDE0", "#7fcdff", "#76b6c4" , "#0A98F2", "#066EC5")) + 
-facet_grid(cols = vars(df1$OCEAN)) +
+scale_fill_manual(values = c("#06CDE0", "#7fcdff", "#76b6c4" , "#0A98F2", "#066EC5"), 
+                  labels = c("O", "C", "E", "A", "N"), 
+                  name = "OCEAN") + 
+facet_grid(cols = vars(OCEAN)) +
 theme_bw() +
 theme(legend.position = "bottom", 
       axis.text.x = element_text(size = 4, angle = -45) )  
 ```
 
 ## Final Graph 
-```{r}
+```{r warning = FALSE}
 
 plot_grid(p_dodged_bars,p_letter, labels = c('A', 'B'))
 
