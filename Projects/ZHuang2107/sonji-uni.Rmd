@@ -1,0 +1,104 @@
+---
+title: "Solution Attempt"
+author: "Sonja"
+output: md_document
+---
+
+# Table of content
+
+1. [Preparation]    
+2. [Data Cleaning]
+3. [Data Processing]    
+4. [Plot]
+
+# Preparation
+
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+
+datRaw <- read.csv('project data.csv')
+```
+
+# Data Cleaning 
+
+## Select columns
+
+```{r}
+dat <- datRaw |> 
+  select(P4_1:P4_3,
+         S8_1:S8_2)
+```
+
+## Remove missings
+
+```{r}
+dat <- dat |> 
+  na.omit()
+```
+
+## Recode columns
+
+```{r}
+dat <- dat |> 
+  mutate_at(vars(starts_with('P4_')),
+            ~ case_match(.x,
+                         1 ~ T, 2 ~ F))
+
+dat <- dat |> 
+  mutate(hw_time = S8_1*60 + S8_2) |> 
+  select(-c(S8_1, S8_2))
+```
+
+## Rename columns
+
+```{r}
+names(dat) <- str_replace(names(dat),
+                          pattern = 'P4',
+                          replacement = 'dev')
+```
+
+# Data Processing
+
+## Add group
+
+> ## Access to electric devices
+> 
+> There will be four colors representing the following four situations:
+> 
+> 1. computer/tablet, internet and smartphone   
+> 2. computer/tablet/smart phone but no internet    
+> 3. have internet but no computer/tablet/smart phone   
+> 4. have none of them
+
+```{r}
+dat <- dat |> 
+  mutate(access = case_when(
+     dev_1 &  dev_2 &  dev_3 ~ 1,
+     dev_1 & !dev_2 &  dev_3 ~ 2,
+    !dev_1 &  dev_2 & !dev_3 ~ 3,
+    !dev_1 & !dev_2 & !dev_3 ~ 4,
+    TRUE                     ~ 5
+  ))
+```
+
+```{r}
+dat <- dat |> 
+  mutate(access = factor(access,
+                         labels = c('Computer/Tablet, Smartphone and Internet',
+                                    'Computer/Tablet and Smartphone',
+                                    'Internet',
+                                    'None',
+                                    'Other')))
+```
+
+# Plot
+
+```{r fig-deviceHomework, warning=FALSE, message=FALSE, fig.cap="Relationship between access to different devices and time spent on homework"}
+
+dat |> 
+  ggplot(aes(x = hw_time,
+             fill = access)) +
+  geom_bar()
+```
+
+The range of total time spent on homework is quite large (`r min(dat$hw_time)` $\leq$ `hw_time` $\geq$ `r max(dat$hw_time)`. Therefore, I think that a bar plot is not really suitable here.
