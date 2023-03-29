@@ -52,7 +52,7 @@ back_1<-dataRaw %>%
   mutate(same_stim= lag(stim,1),oneBack= stim==same_stim)%>%
   drop_na(oneBack)%>%
   mutate(correct=(oneBack&response==0)|(!oneBack&is.na(response)))%>%
-  summarise(accuracy =mean(correct,na.rm=T),timezone=format(min(timestamp),'%H:%M'),rt=rt)%>%
+  summarise(accuracy =mean(correct,na.rm=T),timezone=format(min(timestamp),'%H'),rt=rt)%>%
   arrange(timezone)
 
 back_2<- dataRaw %>% 
@@ -62,7 +62,7 @@ back_2<- dataRaw %>%
   mutate(same_stim= lag(stim,2),twoBack= stim==same_stim)%>%
   drop_na(twoBack)%>%
   mutate(correct=(twoBack&response==0)|(!twoBack&is.na(response)))%>%
-  summarise(accuracy =mean(correct,na.rm=T),timezone=format(min(timestamp),'%H:%M'),rt=rt)%>%
+  summarise(accuracy =mean(correct,na.rm=T),timezone=format(min(timestamp),'%H'),rt=rt)%>%
   arrange(timezone)
 
 back_3<- dataRaw %>% 
@@ -72,13 +72,13 @@ back_3<- dataRaw %>%
   mutate(same_stim= lag(stim,3),threeBack= stim==same_stim)%>%
   drop_na(threeBack)%>%
   mutate(correct=(threeBack&response==0)|(!threeBack&is.na(response)))%>%
-  summarise(accuracy =mean(correct,na.rm=T),timezone=format(min(timestamp),'%H:%M'),rt=rt)%>%
+  summarise(accuracy =mean(correct,na.rm=T),timezone=format(min(timestamp),'%H'),rt=rt)%>%
   arrange(timezone)
 
 
 # Plot efficiency against timestamp
 p1<- ggplot(back_1, aes(x=timezone, y=rt,fill=timezone)) +
-  geom_point()+
+  geom_boxplot()+
   labs(x = "Timestamp", y = "RT") +
   theme_bw()+
   theme(
@@ -90,7 +90,7 @@ p1<- ggplot(back_1, aes(x=timezone, y=rt,fill=timezone)) +
 print(p1)
   
 p2<- ggplot(back_2, aes(x=timezone, y=rt,fill=timezone)) +
-  geom_point() +
+  geom_boxplot() +
   labs(x = "Timestamp", y = "RT") +
   theme_bw()+
   theme(
@@ -102,7 +102,7 @@ p2<- ggplot(back_2, aes(x=timezone, y=rt,fill=timezone)) +
 print(p2)
 
 p3<- ggplot(back_3, aes(x=timezone, y=rt,fill=timezone)) +
-  geom_point() +
+  geom_boxplot() +
   labs(x = "Timestamp", y = "RT") +
   theme_bw()+
   theme(
