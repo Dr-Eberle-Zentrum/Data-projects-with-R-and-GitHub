@@ -1,0 +1,80 @@
+---
+title: "Henning's Project Elizaveta's Solution"
+author: "Elizaveta Shcherbinina"
+date: "`r Sys.Date()`"
+output: md_document
+---
+
+## OCEAN
+
+
+
+```{r include = FALSE}
+# Packages and the Dataset
+
+library(readr)
+library(dplyr)
+library(tidyverse)
+library(stringr)
+library(ggplot2)
+library(cowplot)
+
+df <- read_delim("~/Advanced-data-processing-with-R/Projects/HenningLa7/data.csv", delim = "\t", escape_double = FALSE, trim_ws = TRUE)
+```
+
+## Creating a new Dataset for the Graph 
+
+```{r pressure}
+df1 <- 
+df %>%
+    filter(country %in% c("US", "GB", "IN", "AU", "BR")) %>%
+    select(-race,-age,-engnat,-gender,-hand,-source) %>%
+    group_by(country) %>%
+    summarise(      
+      O = mean(mean(c_across(O1:O10))), 
+      C = mean(mean(c_across(C1:C10))), 
+      E = mean(mean(c_across(E1:E10))), 
+      A = mean(mean(c_across(A1:A10))), 
+      N = mean(mean(c_across(N1:N10)))
+      ) %>%
+    pivot_longer(cols = 2:6, names_to = "OCEAN")
+
+print(df1)
+
+```
+
+
+```{r echo = FALSE}
+p_dodged_bars <- 
+df1  %>%
+    ggplot(df1, mapping = aes(x = country, fill = OCEAN)) +
+    geom_col(aes(y = value), position = "dodge") +
+    scale_fill_manual(values = c("#06CDE0", "#7fcdff", "#76b6c4" , "#0A98F2", "#066EC5")) +
+    theme_bw() +
+    theme(
+      legend.position = "none") + 
+    scale_x_discrete(labels = c("Australia","Brazil","Great Britain", "India", "United States"))
+
+
+```
+
+
+```{r echo = FALSE}
+p_letter <- 
+df1 %>%
+ggplot(mapping = aes(x = country, fill = OCEAN)) +
+geom_col(aes(y = value), position = "dodge") +
+scale_fill_manual(values = c("#06CDE0", "#7fcdff", "#76b6c4" , "#0A98F2", "#066EC5")) + 
+facet_grid(cols = vars(df1$OCEAN)) +
+theme_bw() +
+theme(legend.position = "bottom", 
+      axis.text.x = element_text(size = 4, angle = -45) )  
+```
+
+## Final Graph 
+```{r}
+
+plot_grid(p_dodged_bars,p_letter, labels = c('A', 'B'))
+
+```
+
