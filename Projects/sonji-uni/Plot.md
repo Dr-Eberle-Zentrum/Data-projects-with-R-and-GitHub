@@ -36,31 +36,4 @@
 
     ## [1] "D:/WiSe2022-23/R2Course/Advanced-data-processing-with-R/Projects/sonji-uni"
 
-    ## Warning: Returning more (or less) than 1 row per `summarise()` group was deprecated in
-    ## dplyr 1.1.0.
-    ## ℹ Please use `reframe()` instead.
-    ## ℹ When switching from `summarise()` to `reframe()`, remember that `reframe()`
-    ##   always returns an ungrouped data frame and adjust accordingly.
-
-    ## `summarise()` has grouped output by 'SID'. You can override using the `.groups`
-    ## argument.
-
-    ## Warning: Returning more (or less) than 1 row per `summarise()` group was deprecated in
-    ## dplyr 1.1.0.
-    ## ℹ Please use `reframe()` instead.
-    ## ℹ When switching from `summarise()` to `reframe()`, remember that `reframe()`
-    ##   always returns an ungrouped data frame and adjust accordingly.
-
-    ## `summarise()` has grouped output by 'SID'. You can override using the `.groups`
-    ## argument.
-
-    ## Warning: Returning more (or less) than 1 row per `summarise()` group was deprecated in
-    ## dplyr 1.1.0.
-    ## ℹ Please use `reframe()` instead.
-    ## ℹ When switching from `summarise()` to `reframe()`, remember that `reframe()`
-    ##   always returns an ungrouped data frame and adjust accordingly.
-
-    ## `summarise()` has grouped output by 'SID'. You can override using the `.groups`
-    ## argument.
-
-![](Plot_files/figure-markdown_strict/unnamed-chunk-1-1.png)![](Plot_files/figure-markdown_strict/unnamed-chunk-1-2.png)![](Plot_files/figure-markdown_strict/unnamed-chunk-1-3.png)![](Plot_files/figure-markdown_strict/unnamed-chunk-1-4.png)![](Plot_files/figure-markdown_strict/unnamed-chunk-1-5.png)![](Plot_files/figure-markdown_strict/unnamed-chunk-1-6.png)
+![](Plot_files/figure-markdown_strict/unnamed-chunk-1-1.png)![](Plot_files/figure-markdown_strict/unnamed-chunk-1-2.png)
