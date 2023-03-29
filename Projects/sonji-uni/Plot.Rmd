@@ -115,7 +115,7 @@ print(p3)
 
 # Plot accuracy against timestamp
 p4<-ggplot(back_1, aes(x=timezone, y=accuracy)) +
-  geom_point()+
+  geom_boxplot()+
   labs(x = "Timestamp", y = "Accuracy") +
   scale_y_continuous(label=scales::percent)+
   theme_bw()+
@@ -129,7 +129,7 @@ print(p4)
 
 
 p5<-ggplot(back_2, aes(x=timezone, y=accuracy)) +
-  geom_point()+
+  geom_boxplot()+
 labs(x = "Timestamp", y = "Accuracy") +
   scale_y_continuous(label=scales::percent)+
   theme_bw()+
@@ -142,7 +142,7 @@ labs(x = "Timestamp", y = "Accuracy") +
 print(p5)
 
 p6<-ggplot(back_3, aes(x=timezone, y=accuracy)) +
-  geom_point()+
+  geom_boxplot()+
 labs(x = "Timestamp", y = "Accuracy") +
   scale_y_continuous(label=scales::percent)+
   theme_bw()+
