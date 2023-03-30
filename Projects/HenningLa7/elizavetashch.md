@@ -14,13 +14,14 @@
           A = mean(mean(c_across(A1:A10))), 
           N = mean(mean(c_across(N1:N10)))
           ) %>%
-        pivot_longer(cols = 2:6, names_to = "OCEAN")
+        pivot_longer(cols = 2:6, names_to = "OCEAN") %>%
+        mutate(OCEAN = factor(OCEAN, levels=c("O", "C", "E", "A", "N")))
 
     print(df1)
 
     ## # A tibble: 25 × 3
     ##    country OCEAN value
-    ##    <chr>   <chr> <dbl>
+    ##    <chr>   <fct> <dbl>
     ##  1 AU      O      3.34
     ##  2 AU      C      3.10
     ##  3 AU      E      3.05
@@ -34,7 +35,5 @@
     ## # … with 15 more rows
 
 ## Final Graph
-
-    plot_grid(p_dodged_bars,p_letter, labels = c('A', 'B'))
 
 ![](elizavetashch_files/figure-markdown_strict/unnamed-chunk-4-1.png)
