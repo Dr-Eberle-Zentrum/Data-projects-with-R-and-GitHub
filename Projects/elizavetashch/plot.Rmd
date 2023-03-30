@@ -18,14 +18,14 @@ library(lattice)
 
 #work directory
 getwd()
-setwd("D:/WiSe2022-23/R2Course/Advanced-data-processing-with-R/Projects/elizavetashch")
+# setwd("D:/WiSe2022-23/R2Course/Advanced-data-processing-with-R/Projects/elizavetashch")
 
 #import
 dataRaw<-read.csv("Microplastic_Affect_Soil_Properties_and_Plant_Biomass.csv",header=TRUE,sep=';')
 
 #clean data, add biomass
 dataRaw$CO2[dataRaw$CO2 == ""] <- NA
-drop_na(dataRaw, CO2,root,WSA)
+dataRaw <- drop_na(dataRaw, CO2,root,WSA)
 dataRaw$CO2 <- as.numeric(dataRaw$CO2)
 dataRaw$CO2<-round(dataRaw$CO2,2)
 dataRaw$root <- as.numeric(dataRaw$root)
