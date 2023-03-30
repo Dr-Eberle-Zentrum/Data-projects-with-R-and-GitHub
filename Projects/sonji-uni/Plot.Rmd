@@ -6,12 +6,6 @@ output: md_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-```
-
-## Sonja's project
-
-```{r}
 #Sonja's project
 
 #packages
@@ -22,6 +16,11 @@ library(ggrepel)
 # read data
 dataRaw <- read.csv("I4S_workingMemory_2023-02-26.csv",header=TRUE,sep=';')
 
+```
+
+## Sonja's project
+
+```{r}
 # set timestamp
 dataRaw$timestamp<-dataRaw$timestamp/1000
 dataRaw$timestamp<-as.POSIXlt(dataRaw$timestamp,origin="1970-01-01",tz = "GMT")
@@ -79,7 +78,12 @@ back_1<-data %>%
    mutate(type="3_back")
 
 dataNew<-bind_rows(back_1,back_2,back_3)
+print(dataNew)
+```
 
+## plot
+
+```{r include=FALSE}
 # Plot efficiency against timestamp
 p1<- 
 ggplot(dataNew, aes(x=timezone, y=rt))+
