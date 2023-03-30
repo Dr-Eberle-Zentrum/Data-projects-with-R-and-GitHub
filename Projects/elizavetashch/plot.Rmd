@@ -8,66 +8,41 @@ output: md_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
+
 ```{r}
-knitr::opts_chunk$set(echo = FALSE)
 #packages
 library(tidyverse)
-library(dplyr)
-library(ggplot2)
-library(lattice)
-
-#work directory
-getwd()
-# setwd("D:/WiSe2022-23/R2Course/Advanced-data-processing-with-R/Projects/elizavetashch")
+library(latticeExtra)
 
 #import
 dataRaw<-read.csv("Microplastic_Affect_Soil_Properties_and_Plant_Biomass.csv",header=TRUE,sep=';')
 
 #clean data, add biomass
-dataRaw$CO2[dataRaw$CO2 == ""] <- NA
-dataRaw <- drop_na(dataRaw)
-dataRaw$CO2 <- as.numeric(dataRaw$CO2)
-dataRaw$CO2<-round(dataRaw$CO2,2)
-dataRaw$root <- as.numeric(dataRaw$root)
-dataRaw$WSA<- gsub("(\\..*)\\.", "\\.", dataRaw$WSA)%>%
-  as.numeric(gsub("\\.", "", dataRaw$WSA))
-typeof(dataRaw$WSA)
-
+dataRaw<- dataRaw%>%
+  mutate(CO2=if_else(CO2 == "", NA_real_,as.numeric(CO2)))%>%
+  drop_na()%>%
+  mutate(CO2=round(CO2,2),
+         root = as.numeric(root),
+         WSA = gsub("(\\..*)\\.", "\\.", WSA) %>% as.numeric(gsub("\\.", "", .)))
 
 data<-dataRaw%>%
   na.omit(dataRaw)%>%
   filter(shape=="Films")%>%
-  filter(str_detect(root,"^[0-9.]+$"))
-
-data$CO2 <- gsub("(\\..*)\\.", "\\.", data$CO2)%>%
-  as.numeric(gsub("\\.", "", data$CO2))
-data$CO2<-round(data$CO2,2)
-typeof(data$CO2)
-
-# 检查是否存在无法转换为数字的值
-which(!is.na(as.numeric(data$root)))
-unique(data$root)
-data$root <- as.numeric(data$root)
-typeof(data$root)
-
-data<- mutate(data,biomass=root+shoot)
-
-#plot
-p<-ggplot(data,aes(x=WSA,y=CO2,fill=biomass))+
-  geom_tile()+
-  scale_fill_gradient(low = "pink", high = "darkgreen") +
-  labs(x="WSA",y="CO2",fill="Biomass")+
-  theme(
-    panel.border = element_blank(),
-    panel.grid.major = element_blank(),
-    panel.grid.minor = element_blank(),
-    panel.background = element_rect(fill = NA))
-p
+  filter(str_detect(root,"^[0-9.]+$"))%>%
+  mutate(CO2=gsub("(\\..*)\\.", "\\.", CO2) %>% as.numeric(gsub("\\.", "", CO2)))%>%
+  mutate(biomass=root+shoot)
 ```
 
 
 ```{r}
-p1<- levelplot(biomass~ WSA*CO2,data = data, col.regions = colorRampPalette(c("pink", "blue")), main = "Biomass Levelplot")
+#plot
+p1<- levelplot(biomass~ WSA*CO2,data = data, 
+               panel = panel.levelplot.points, 
+               cex = 1.2, 
+               col.regions = colorRampPalette(c("pink", "blue")),
+               main = "Biomass Levelplot") + 
+    layer_(panel.2dsmoother(..., n = 200))
+
 p1
 ```
 
