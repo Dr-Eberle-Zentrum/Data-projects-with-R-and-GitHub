@@ -1,5 +1,5 @@
 ---
-title: "How do people from different countries distinguish in their personality?"
+title: "Man's project: 2 Broke Girls"
 author: "Henning Lang"
 date: "`r format(Sys.time(),'%d %B %Y')`"
 output: md_document
@@ -32,8 +32,9 @@ data <- read.csv2 ("Datensatz.csv")
 **Prepare dataset**
 ```{r}
 names (data) <- c("date", "episode", "title", "viewers_million", "viewers_change", "ratings")
-data <- data[-139, ] # NA-Zeile entfernt
-table (data$ratings) # Sieht gut aus
+data <- data[-139, ]                      # NA-Zeile entfernt
+table (data$ratings)                      # Sieht gut aus
+data$episode <- as.numeric(data$episode)  # episode should be numeric
 ```
 
 **Add column season**
@@ -69,12 +70,14 @@ data %>%
   ggplot(aes(x=episode, y=ratings, group = season)) +
   geom_line(aes(color = factor(season)), linewidth = 1.3) +
   geom_point(aes(colour = factor(season)), shape=21, color="black", fill="#69b3a2", size=1) +
-  theme(panel.background = element_blank(),
+  theme_minimal() +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.y = element_blank(),
         axis.title.x=element_blank(),
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank(),
         legend.background = element_rect(fill = "white", colour = "black")) +
-  scale_color_manual(values=c("blue", "red", "black", "gray", "orange", "green")) +
+  scale_color_manual(values=c("lightslateblue", "lightblue1", "lightgoldenrod4", "mediumblue", "lightcyan3", "lightcyan4")) +
   xlab (" ") +
   ylab ("Ratings") + 
   ggtitle("Ratings of 2 Broke Girls",
