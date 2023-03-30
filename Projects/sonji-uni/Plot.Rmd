@@ -28,8 +28,9 @@ dataRaw$timestamp<-as.POSIXlt(dataRaw$timestamp,origin="1970-01-01",tz = "GMT")
 
 # remove all instructions and examples
 data<- dataRaw %>% 
-  select(!time_elapsed & !trial_type) %>%
-  filter((trial_index >14 & trial_index<75) |(trial_index >87 & trial_index<148)|(trial_index >160 & trial_index<=220))
+  select(-c(time_elapsed, trial_type)) %>%
+  filter((between(trial_index, 88,147)) |between(trial_index, 15,74)|between(trial_index, 161,220))%>%
+  mutate(timestamp = floor_date(as.POSIXct(timestamp, format = "%Y-%m-%d %H:%M:%S"),"30 mins"))
 
 # n_back sub_dataframe
 back_1<-data %>% 
@@ -40,7 +41,7 @@ back_1<-data %>%
   mutate(correct=(oneBack&response==0)|(!oneBack&is.na(response)))%>%
   filter(rt != "null") |> 
   summarise(accuracy =mean(correct,na.rm=T),
-            timezone=format(min(timestamp),'%H'),
+            timezone=format(min(timestamp),'%H:%M'),
             rt=mean(as.numeric(rt))
             )%>%
   filter(!is.nan(rt)) |> 
@@ -55,7 +56,7 @@ back_1<-data %>%
    mutate(correct=(twoBack&response==0)|(!twoBack&is.na(response)))%>%
    filter(rt != "null") |> 
    summarise(accuracy =mean(correct,na.rm=T),
-             timezone=format(min(timestamp),'%H'),
+             timezone=format(min(timestamp),'%H:%M'),
              rt=mean(as.numeric(rt))
    )%>%
    filter(!is.nan(rt)) |> 
@@ -70,7 +71,7 @@ back_1<-data %>%
    mutate(correct=(threeBack&response==0)|(!threeBack&is.na(response)))%>%
    filter(rt != "null") |> 
    summarise(accuracy =mean(correct,na.rm=T),
-             timezone=format(min(timestamp),'%H'),
+             timezone=format(min(timestamp),'%H:%M'),
              rt=mean(as.numeric(rt))
    )%>%
    filter(!is.nan(rt)) |> 
@@ -83,14 +84,15 @@ dataNew<-bind_rows(back_1,back_2,back_3)
 p1<- 
 ggplot(dataNew, aes(x=timezone, y=rt))+
   geom_boxplot()+
-  labs(x = "Time of day", y = "Response Time", title = "How efficiency is affected by time")+
+  labs(x = "Time of day", y = "Response Time (ms)", title = "How efficiency is affected by time")+
   facet_wrap(~type)+
   theme_bw()+
   theme(
     panel.border = element_blank(),
     panel.grid.major = element_blank(),
     panel.grid.minor = element_blank(),
-    panel.background = element_rect(fill = NA))
+    panel.background = element_rect(fill = NA),
+    axis.text.x = element_text(angle = 30, vjust = 0.5))
 
  print(p1)
 
@@ -98,7 +100,7 @@ ggplot(dataNew, aes(x=timezone, y=rt))+
 p2<-
 ggplot(dataNew, aes(x=timezone, y=accuracy))+
   geom_boxplot()+
-  labs(x = "Time of day", y = "Response Time", title = "How accuracy is affected by time")+
+  labs(x = "Time of day", y = "Response Time (ms)", title = "How accuracy is affected by time")+
   facet_wrap(~type)+
   scale_y_continuous(label=scales::percent)+
   theme_bw()+
@@ -106,7 +108,8 @@ ggplot(dataNew, aes(x=timezone, y=accuracy))+
     panel.border = element_blank(),
     panel.grid.major = element_blank(),
     panel.grid.minor = element_blank(),
-    panel.background = element_rect(fill = NA))
+    panel.background = element_rect(fill = NA),
+    axis.text.x = element_text(angle = 30, vjust = 0.5))
   
 print(p2)
 ```
