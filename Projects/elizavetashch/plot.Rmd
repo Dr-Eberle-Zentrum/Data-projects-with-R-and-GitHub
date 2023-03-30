@@ -21,7 +21,7 @@ getwd()
 setwd("D:/WiSe2022-23/R2Course/Advanced-data-processing-with-R/Projects/elizavetashch")
 
 #import
-dataRaw<-read.csv("Microplastic_Affect_Soil_Properties_and_Plant_Biomass.csv",header=TRUE,sep=',')
+dataRaw<-read.csv("Microplastic_Affect_Soil_Properties_and_Plant_Biomass.csv",header=TRUE,sep=';')
 
 #clean data, add biomass
 dataRaw$CO2[dataRaw$CO2 == ""] <- NA
@@ -40,10 +40,10 @@ data<-dataRaw%>%
     mutate(biomass=root+shoot)
 
 #plot
-p1<-levelplot(biomass~ WSA*CO2,data = data, col.regions = colorRampPalette(c("pink", "blue")), main = "Biomass Levelplot")
+levelplot(biomass~ WSA*CO2,data = data, col.regions = colorRampPalette(c("pink", "blue")), main = "Biomass Levelplot")
 
 
-p2<-ggplot(data,aes(x=WSA,y=CO2,fill=biomass))+
+ggplot(data,aes(x=WSA,y=CO2,fill=biomass))+
   geom_tile()+
   scale_fill_gradient(low = "pink", high = "darkgreen") +
   labs(x="WSA",y="CO2",fill="Biomass")+

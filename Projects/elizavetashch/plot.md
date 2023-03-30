@@ -1,15 +1,15 @@
     ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ## ✔ dplyr     1.1.0     ✔ readr     2.1.4
+    ## ✔ dplyr     1.1.1     ✔ readr     2.1.4
     ## ✔ forcats   1.0.0     ✔ stringr   1.5.0
-    ## ✔ ggplot2   3.4.1     ✔ tibble    3.1.8
+    ## ✔ ggplot2   3.4.1     ✔ tibble    3.2.1
     ## ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
     ## ✔ purrr     1.0.1     
     ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
-    ## ℹ Use the ]8;;http://conflicted.r-lib.org/conflicted package]8;; to force all conflicts to become errors
+    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
 
-    ## [1] "D:/WiSe2022-23/R2Course/Advanced-data-processing-with-R/Projects/elizavetashch"
+    ## [1] "C:/Lehre/Advanced-data-processing-with-R/Projects/elizavetashch"
 
     ##         shape polymer concentration shoot    root       CO2       WSA
     ## 1      Fibers      PP           0.1   110      75  0.919464 2.906.977
@@ -218,6 +218,8 @@
     ## 204   Control Control           0.4   110    64.8  0.589783 5.075.988
     ## 205   Control Control           0.4    92    84.3  0.786727 4.404.762
 
-    ## Warning: 强制改变过程中产生了NA
+    ## Warning: NAs durch Umwandlung erzeugt
 
-    ## Warning: 强制改变过程中产生了NA
+    ## Warning: NAs durch Umwandlung erzeugt
+
+![](plot_files/figure-markdown_strict/unnamed-chunk-1-1.png)![](plot_files/figure-markdown_strict/unnamed-chunk-1-2.png)
