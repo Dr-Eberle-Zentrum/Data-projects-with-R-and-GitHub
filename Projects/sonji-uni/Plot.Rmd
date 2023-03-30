@@ -98,7 +98,7 @@ ggplot(dataNew, aes(x=timezone, y=rt))+
     panel.background = element_rect(fill = NA),
     axis.text.x = element_text(angle = 30, vjust = 0.5))
 
- print(p1)
+ 
 
 # Plot accuracy against timestamp
 p2<-
@@ -114,7 +114,9 @@ ggplot(dataNew, aes(x=timezone, y=accuracy))+
     panel.grid.minor = element_blank(),
     panel.background = element_rect(fill = NA),
     axis.text.x = element_text(angle = 30, vjust = 0.5))
-  
+```
+```{r}
+print(p1) 
 print(p2)
 ```
 

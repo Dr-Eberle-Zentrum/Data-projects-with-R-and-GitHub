@@ -75,3 +75,11 @@
     ## # … with 1,256 more rows
 
 ## plot
+
+    print(p1) 
+
+![](Plot_files/figure-markdown_strict/unnamed-chunk-3-1.png)
+
+    print(p2)
+
+![](Plot_files/figure-markdown_strict/unnamed-chunk-3-2.png)
