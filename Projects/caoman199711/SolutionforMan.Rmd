@@ -1,0 +1,50 @@
+---
+title: 'Project description'
+output: md_document
+---
+```{r}
+library(readr)
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(readxl)
+
+file <- "/Users/huangziyi/Season1-6.xlsx"
+
+file1 <- read_excel("/Users/huangziyi/Season1-6.xlsx", sheet = "Season1") %>% select("Episode", "Ratings")
+file2 <- read_excel("/Users/huangziyi/Season1-6.xlsx", sheet = "Season2") %>%select("Episode", "Ratings")
+file3 <- read_excel("/Users/huangziyi/Season1-6.xlsx", sheet = "Season3") %>% select("Episode", "Ratings")
+file4 <- read_excel("/Users/huangziyi/Season1-6.xlsx", sheet = "Season4") %>%select("Episode", "Ratings")
+file5 <- read_excel("/Users/huangziyi/Season1-6.xlsx", sheet = "Season5") %>%select("Episode", "Ratings")
+file6 <- read_excel("/Users/huangziyi/Season1-6.xlsx", sheet = "Season6") %>% select("Episode", "Ratings")
+
+file <- bind_rows(file1, file2, file3, file4, file5, file6) %>%
+  mutate (Season=
+            case_when(startsWith(Episode, "01-") ~ "Season1",
+                      startsWith(Episode, "02-") ~ "Season2",
+                      startsWith(Episode, "03-") ~ "Season3",
+                      startsWith(Episode, "04-") ~ "Season4",
+                      startsWith(Episode, "05-") ~ "Season5",
+                      startsWith(Episode, "06-") ~ "Season6")) %>%
+  mutate (Session=
+            case_when(endsWith(Episode, "-01") ~ "1.Episode",
+                      endsWith(Episode, "-02") ~ "2.Episode",
+                      endsWith(Episode, "-03") ~ "3.Episode",
+                      endsWith(Episode, "-04") ~ "4.Episode",
+                      endsWith(Episode, "-05") ~ "5.Episode",
+                      endsWith(Episode, "-06") ~ "6.Episode")) %>%
+  drop_na() 
+
+
+
+
+#plot
+Highest<- file%>%group_by(Season)%>%slice_max(Ratings)
+
+plot <- ggplot(file, aes(x=Session, y=Ratings, group=Season, color=fct_reorder2(Season, Session, Ratings)))+
+  geom_line() +
+  labs(colour = "Season") +
+  geom_point (data = Highest, size=5, shape=21, fill="transparent")
+
+print(plot)
+```
