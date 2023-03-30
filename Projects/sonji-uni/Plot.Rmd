@@ -12,32 +12,19 @@ knitr::opts_chunk$set(echo = FALSE)
 ## Sonja's project
 
 ```{r}
-knitr::opts_chunk$set(echo = FALSE)
 #Sonja's project
 
 #packages
-if (!require(ggpubr)) install.packages("ggpubr")
 library(ggpubr)
-if (!require(dplyr)) install.packages("dplyr")
-library(dplyr)
-if (!require(tidyverse)) install.packages("tidyverse")
 library(tidyverse)
-if (!require(ggrepel)) install.packages("ggrepel")
 library(ggrepel)
-if (!require(lubridate)) install.packages("lubridate")
-library(lubridate)
-
-# set directory
-setwd("D:/WiSe2022-23/R2Course/Advanced-data-processing-with-R/Projects/sonji-uni")
-getwd()
 
 # read data
 dataRaw <- read.csv("I4S_workingMemory_2023-02-26.csv",header=TRUE,sep=';')
 
 # set timestamp
-dataRaw$timestamp <- as.POSIXct(dataRaw$timestamp/1000, origin="1970-01-01")
-dataRaw$timestamp <- trunc(dataRaw$timestamp)
-dataRaw$timestamp<- as_datetime(dataRaw$timestamp)
+dataRaw$timestamp<-dataRaw$timestamp/1000
+dataRaw$timestamp<-as.POSIXlt(dataRaw$timestamp,origin="1970-01-01",tz = "GMT")
 
 # remove all instructions and examples
 data<- dataRaw %>% 
@@ -45,8 +32,7 @@ data<- dataRaw %>%
   filter((trial_index >14 & trial_index<75) |(trial_index >87 & trial_index<148)|(trial_index >160 & trial_index<=220))
 
 # n_back sub_dataframe
-back_1<-dataRaw %>% 
-  select(!time_elapsed & !trial_type) %>%
+back_1<-data %>% 
   filter(trial_index >14 & trial_index<75)%>%
   group_by(SID)%>%
   mutate(same_stim= lag(stim,1),oneBack= stim==same_stim)%>%
@@ -58,34 +44,47 @@ back_1<-dataRaw %>%
             rt=mean(as.numeric(rt))
             )%>%
   filter(!is.nan(rt)) |> 
-  arrange(timezone)
+  arrange(timezone)%>%
+  mutate(type="1_back")
 
-# back_2<- dataRaw %>% 
-#   select(!time_elapsed & !trial_type) %>%
-#   filter(trial_index >87 & trial_index<148)%>%
-#   group_by(SID)%>%
-#   mutate(same_stim= lag(stim,2),twoBack= stim==same_stim)%>%
-#   drop_na(twoBack)%>%
-#   mutate(correct=(twoBack&response==0)|(!twoBack&is.na(response)))%>%
-#   summarise(accuracy =mean(correct,na.rm=T),timezone=format(min(timestamp),'%H'),rt=rt)%>%
-#   arrange(timezone)
-# 
-# back_3<- dataRaw %>% 
-#   select(!time_elapsed & !trial_type) %>%
-#   filter(trial_index >160 & trial_index<=220)%>%
-#   group_by(SID)%>%
-#   mutate(same_stim= lag(stim,3),threeBack= stim==same_stim)%>%
-#   drop_na(threeBack)%>%
-#   mutate(correct=(threeBack&response==0)|(!threeBack&is.na(response)))%>%
-#   summarise(accuracy =mean(correct,na.rm=T),timezone=format(min(timestamp),'%H'),rt=rt)%>%
-#   arrange(timezone)
+ back_2<- data %>% 
+   filter(between(trial_index, 88,147))%>%
+   group_by(SID)%>%
+   mutate(same_stim= lag(stim,2),twoBack= stim==same_stim)%>%
+   drop_na(twoBack)%>%
+   mutate(correct=(twoBack&response==0)|(!twoBack&is.na(response)))%>%
+   filter(rt != "null") |> 
+   summarise(accuracy =mean(correct,na.rm=T),
+             timezone=format(min(timestamp),'%H'),
+             rt=mean(as.numeric(rt))
+   )%>%
+   filter(!is.nan(rt)) |> 
+   arrange(timezone)%>%
+   mutate(type="2_back")
+ 
+ back_3<- data %>% 
+   filter(between(trial_index, 161,220))%>%
+   group_by(SID)%>%
+   mutate(same_stim= lag(stim,3),threeBack= stim==same_stim)%>%
+   drop_na(threeBack)%>%
+   mutate(correct=(threeBack&response==0)|(!threeBack&is.na(response)))%>%
+   filter(rt != "null") |> 
+   summarise(accuracy =mean(correct,na.rm=T),
+             timezone=format(min(timestamp),'%H'),
+             rt=mean(as.numeric(rt))
+   )%>%
+   filter(!is.nan(rt)) |> 
+   arrange(timezone)%>%
+   mutate(type="3_back")
 
+dataNew<-bind_rows(back_1,back_2,back_3)
 
 # Plot efficiency against timestamp
-# p1<- 
-  ggplot(back_1, aes(x=timezone, y=rt,fill=timezone)) +
+p1<- 
+ggplot(dataNew, aes(x=timezone, y=rt))+
   geom_boxplot()+
-  labs(x = "Timestamp", y = "RT") +
+  labs(x = "Time of day", y = "Response Time", title = "How efficiency is affected by time")+
+  facet_wrap(~type)+
   theme_bw()+
   theme(
     panel.border = element_blank(),
@@ -93,36 +92,14 @@ back_1<-dataRaw %>%
     panel.grid.minor = element_blank(),
     panel.background = element_rect(fill = NA))
 
-# print(p1)
-#   
-# p2<- ggplot(back_2, aes(x=timezone, y=rt,fill=timezone)) +
-#   geom_boxplot() +
-#   labs(x = "Timestamp", y = "RT") +
-#   theme_bw()+
-#   theme(
-#     panel.border = element_blank(),
-#     panel.grid.major = element_blank(),
-#     panel.grid.minor = element_blank(),
-#     panel.background = element_rect(fill = NA))
-# 
-# print(p2)
-# 
-# p3<- ggplot(back_3, aes(x=timezone, y=rt,fill=timezone)) +
-#   geom_boxplot() +
-#   labs(x = "Timestamp", y = "RT") +
-#   theme_bw()+
-#   theme(
-#     panel.border = element_blank(),
-#     panel.grid.major = element_blank(),
-#     panel.grid.minor = element_blank(),
-#     panel.background = element_rect(fill = NA))
-# 
-# print(p3)
+ print(p1)
 
 # Plot accuracy against timestamp
-ggplot(back_1, aes(x=timezone, y=accuracy)) +
+p2<-
+ggplot(dataNew, aes(x=timezone, y=accuracy))+
   geom_boxplot()+
-  labs(x = "Timestamp", y = "Accuracy") +
+  labs(x = "Time of day", y = "Response Time", title = "How accuracy is affected by time")+
+  facet_wrap(~type)+
   scale_y_continuous(label=scales::percent)+
   theme_bw()+
   theme(
@@ -131,32 +108,6 @@ ggplot(back_1, aes(x=timezone, y=accuracy)) +
     panel.grid.minor = element_blank(),
     panel.background = element_rect(fill = NA))
   
-# 
-# p5<-ggplot(back_2, aes(x=timezone, y=accuracy)) +
-#   geom_boxplot()+
-# labs(x = "Timestamp", y = "Accuracy") +
-#   scale_y_continuous(label=scales::percent)+
-#   theme_bw()+
-#   theme(
-#     panel.border = element_blank(),
-#     panel.grid.major = element_blank(),
-#     panel.grid.minor = element_blank(),
-#     panel.background = element_rect(fill = NA))
-# 
-# print(p5)
-# 
-# p6<-ggplot(back_3, aes(x=timezone, y=accuracy)) +
-#   geom_boxplot()+
-# labs(x = "Timestamp", y = "Accuracy") +
-#   scale_y_continuous(label=scales::percent)+
-#   theme_bw()+
-#   theme(
-#     panel.border = element_blank(),
-#     panel.grid.major = element_blank(),
-#     panel.grid.minor = element_blank(),
-#     panel.background = element_rect(fill = NA))
-# 
-# print(p6)
-
+print(p2)
 ```
 
