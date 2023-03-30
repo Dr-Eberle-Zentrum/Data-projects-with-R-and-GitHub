@@ -6,36 +6,35 @@ output: md_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-```
-
-```{r}
 #packages
 library(tidyverse)
 library(latticeExtra)
 
 #import
 dataRaw<-read.csv("Microplastic_Affect_Soil_Properties_and_Plant_Biomass.csv",header=TRUE,sep=';')
-
-#clean data, add biomass
-dataRaw<- dataRaw%>%
-  mutate(CO2=if_else(CO2 == "", NA_real_,as.numeric(CO2)))%>%
-  drop_na()%>%
-  mutate(CO2=round(CO2,2),
-         root = as.numeric(root),
-         WSA = gsub("(\\..*)\\.", "\\.", WSA) %>% as.numeric(gsub("\\.", "", .)))
-
-data<-dataRaw%>%
-  na.omit(dataRaw)%>%
-  filter(shape=="Films")%>%
-  filter(str_detect(root,"^[0-9.]+$"))%>%
-  mutate(CO2=gsub("(\\..*)\\.", "\\.", CO2) %>% as.numeric(gsub("\\.", "", CO2)))%>%
-  mutate(biomass=root+shoot)
 ```
 
+## clean data, add biomass
 
 ```{r}
-#plot
+
+dataRaw[dataRaw == ""] <- NA
+data<- dataRaw%>%
+  drop_na()%>%
+  filter(shape=="Films",
+         str_detect(root,"^[0-9.]+$"))%>%
+  mutate(root = as.numeric(root),
+         CO2=gsub("(\\..*)\\.", "\\.", CO2) %>% as.numeric(gsub("\\.", "", CO2))%>% round(2),
+         WSA = gsub("(\\..*)\\.", "\\.", WSA) %>% as.numeric(gsub("\\.", "", .)))%>%
+  mutate(biomass=root+shoot)
+
+print(data)
+```
+
+## plot
+
+```{r echo=FALSE} 
+
 p1<- levelplot(biomass~ WSA*CO2,data = data, 
                panel = panel.levelplot.points, 
                cex = 1.2, 
