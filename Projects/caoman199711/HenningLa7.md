@@ -27,7 +27,7 @@ her a lot of inappropriate slang :D Unfortunately, the sitcom didn’t
 last long, ending in its sixth season, before the next phase of my life.
 The story was hastily brought to a close by the writers. Although not
 that perfect, despite the criticism of its high start and low end, it
-doesn’t matter, **it is still the best sitcom by her side**, nothing can
+doesn’t matter, *it is still the best sitcom by her side*, nothing can
 replace it. The girls’ story is continuing in my mind.
 
 **About the project**
@@ -46,6 +46,6 @@ replace it. The girls’ story is continuing in my mind.
     ## 5      6      05        And the College Experience     6.2
     ## 6      6      06                And the Rom-Commie     6.2
 
-\*\*About the solution of the project
+**About the solution of the project**
 
 ![](HenningLa7_files/figure-markdown_strict/unnamed-chunk-3-1.png)

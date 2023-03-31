@@ -61,7 +61,7 @@ subset(df, ratings==max(ratings) | ratings==min(ratings)) -> a
 **About the importance for Man**
 
 The reason Man chose this TV sitcom as her project theme is that she has a lot of feelings for it. It accompanied her throughout high school and two years of her university life. In the days when she was struggling alone and her friends were not around, the two girls were the ones who made me understand that no one’s twenties are easy, everything is full of difficulties and uncertainties, we just hang in there and one day we will find a way out. She is glad that she got to see their lives, it brought her laughter and tears, told her more about New York and taught her a lot of inappropriate slang :D
-Unfortunately, the sitcom didn’t last long, ending in its sixth season, before the next phase of my life. The story was hastily brought to a close by the writers. Although not that perfect, despite the criticism of its high start and low end, it doesn’t matter, **it is still the best sitcom by her side**, nothing can replace it. The girls’ story is continuing in my mind.
+Unfortunately, the sitcom didn’t last long, ending in its sixth season, before the next phase of my life. The story was hastily brought to a close by the writers. Although not that perfect, despite the criticism of its high start and low end, it doesn’t matter, *it is still the best sitcom by her side*, nothing can replace it. The girls’ story is continuing in my mind.
 
 **About the project**
 
@@ -76,7 +76,7 @@ head(df)
 ```
 
 
-**About the solution of the project
+**About the solution of the project**
 
 ```{r, echo=F}
 ggplot(df, aes(x=episode, y=ratings, group = season)) +
