@@ -46,7 +46,7 @@ print(df1)
 
 
 ```{r echo = FALSE}
-# p_dodged_bars <-
+p_dodged_bars <-
 df1  %>%
     ggplot(df1, mapping = aes(x = country, fill = OCEAN)) +
     geom_col(aes(y = value), position = "dodge") +
@@ -86,7 +86,7 @@ theme(legend.position = "bottom",
 
 
 ```{r echo = FALSE}
-# p_letter <-
+p_letter <-
 df1 %>%
 ggplot(mapping = aes(x = country, fill = OCEAN)) +
 geom_col(aes(y = value), position = "dodge") +
@@ -130,18 +130,18 @@ theme(legend.position = "bottom",
 ## Final Graph 
 After long perfection of the plots, the grid stopped working :_)
 ```{r}
-# grid_plot <- 
-# plot_grid(p_dodged_bars, p_letter) + 
-#   labs(caption = "The following items were rated on a five point scale where 1=Disagree, 3=Neutral, 5=Agree, 0=missed")
-# 
-# add_sub(grid_plot, 
-#         "This data was collected through on interactive online personality test. 
-# O : openness to experience (inventive/curious vs. consistent/cautious) 
-# C : conscientiousness (efficient/organized vs. extravagant/careless) 
-# E : extraversion (outgoing/energetic vs. solitary/reserved) 
-# A : agreeableness (friendly/compassionate vs. critical/rational) 
-# N : neuroticism (sensitive/nervous vs. resilient/confident)", 
-#         x = 0, hjust = 0, size = 10) %>%
-#   ggdraw()
+grid_plot <-
+plot_grid(p_dodged_bars, p_letter) +
+  labs(caption = "The following items were rated on a five point scale where 1=Disagree, 3=Neutral, 5=Agree, 0=missed")
+
+add_sub(grid_plot,
+        "This data was collected through on interactive online personality test.
+O : openness to experience (inventive/curious vs. consistent/cautious)
+C : conscientiousness (efficient/organized vs. extravagant/careless)
+E : extraversion (outgoing/energetic vs. solitary/reserved)
+A : agreeableness (friendly/compassionate vs. critical/rational)
+N : neuroticism (sensitive/nervous vs. resilient/confident)",
+        x = 0, hjust = 0, size = 10) %>%
+  ggdraw()
 
 ````
