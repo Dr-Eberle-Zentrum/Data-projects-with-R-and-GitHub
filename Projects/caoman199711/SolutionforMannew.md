@@ -77,8 +77,10 @@
                        data=Highest,
                        box.padding= 0.35, 
                       point.padding = 0.5,
-                      segment.color = 'grey50') +
-      theme_classic()
+                      nudge_y = 1, alpha = 0.8) +
+      theme_classic() +
+      scale_colour_brewer(palette = "Dark2")
+                     
 
 
 
