@@ -74,10 +74,10 @@
       geom_point (data = Highest, size=3, shape=21, fill="transparent") +
       geom_point (data = Lowest, size=3, shape=21, fill="transparent") +
       geom_label_repel(aes(label=(as.character(Highest$Title))),
-                       data=Highest,
+                      data=Highest,
                        box.padding= 0.35, 
-                      point.padding = 0.5,
-                      nudge_y = 1, alpha = 0.8) +
+                       point.padding = 0.5,
+                       nudge_y = 1, alpha = 0.8, size=2) +
       theme_classic() +
       scale_colour_brewer(palette = "Dark2")
                      
