@@ -1,4 +1,11 @@
+## How long can you study based on your device internet access?
+
+### Ziyi’s Project
+
 ## Data Transformation
+
+First I cleaned up the data, and what I am really proud of here id the
+**case\_when** function.
 
     final_df <- 
     df %>%
@@ -25,5 +32,8 @@
       drop_na() 
 
 ## The Plot
+
+I also got some suggestions about changing the usual color palette, so I
+downloaded a brewer palette and here is the result :)
 
 ![](ziyi_second_solution_files/figure-markdown_strict/unnamed-chunk-3-1.png)

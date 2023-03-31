@@ -5,6 +5,11 @@ date: "`r Sys.Date()`"
 output: md_document
 ---
 
+## How long can you study based on your device \nand internet access?
+### Ziyi's Project 
+
+
+
 ```{r, include = FALSE}
 setwd("/Users/elizavetashcherbinina/Desktop/Vorlesungen/5_Semester/R2 Advanced /Till_Monday_27march")
 
@@ -24,6 +29,9 @@ df <- read_csv("project data.csv")
 
 
 ## Data Transformation 
+
+First I cleaned up the data, and what I am really proud of here id the **case_when** function. 
+
 ```{r}
 final_df <- 
 df %>%
@@ -51,6 +59,9 @@ df %>%
 ```
 
 ## The Plot 
+
+I also got some suggestions about changing the usual color palette, so I downloaded a brewer palette and here is the result :) 
+
 ```{r echo = FALSE}
 
 # p1 <- 
