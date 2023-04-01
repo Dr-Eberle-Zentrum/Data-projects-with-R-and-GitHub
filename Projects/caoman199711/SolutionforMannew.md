@@ -15,53 +15,23 @@
     library(readxl)
     library(ggrepel)
 
-    file <- "/Users/huangziyi/Season1-6.xlsx"
+    data <- list()
+    for (n in 1:6) {
+    data [[n]] <- read_excel("/Users/huangziyi/Season1-6.xlsx", sheet = str_c("Season",n)) %>%select("Episode", "Ratings", "Title")} 
 
-    file1 <- read_excel("/Users/huangziyi/Season1-6.xlsx", sheet = "Season1") %>% select("Episode", "Ratings", "Title")
-
+    ## New names:
+    ## New names:
+    ## New names:
+    ## New names:
+    ## New names:
     ## New names:
     ## • `` -> `...2`
     ## • `Viewers` -> `Viewers...7`
     ## • `Viewers` -> `Viewers...8`
 
-    file2 <- read_excel("/Users/huangziyi/Season1-6.xlsx", sheet = "Season2") %>%select("Episode", "Ratings", "Title")
-
-    ## New names:
-    ## • `` -> `...2`
-    ## • `Viewers` -> `Viewers...7`
-    ## • `Viewers` -> `Viewers...8`
-
-    file3 <- read_excel("/Users/huangziyi/Season1-6.xlsx", sheet = "Season3") %>% select("Episode", "Ratings", "Title")
-
-    ## New names:
-    ## • `` -> `...2`
-    ## • `Viewers` -> `Viewers...7`
-    ## • `Viewers` -> `Viewers...8`
-
-    file4 <- read_excel("/Users/huangziyi/Season1-6.xlsx", sheet = "Season4") %>%select("Episode", "Ratings", "Title")
-
-    ## New names:
-    ## • `` -> `...2`
-    ## • `Viewers` -> `Viewers...7`
-    ## • `Viewers` -> `Viewers...8`
-
-    file5 <- read_excel("/Users/huangziyi/Season1-6.xlsx", sheet = "Season5") %>%select("Episode", "Ratings", "Title")
-
-    ## New names:
-    ## • `` -> `...2`
-    ## • `Viewers` -> `Viewers...7`
-    ## • `Viewers` -> `Viewers...8`
-
-    file6 <- read_excel("/Users/huangziyi/Season1-6.xlsx", sheet = "Season6") %>% select("Episode", "Ratings", "Title")
-
-    ## New names:
-    ## • `` -> `...2`
-    ## • `Viewers` -> `Viewers...7`
-    ## • `Viewers` -> `Viewers...8`
-
-    file <- bind_rows(file1, file2, file3, file4, file5, file6) %>%
+    file <- bind_rows(data[1:6]) %>%
       mutate (Season= str_c(str_sub(Episode,start=2,end=2))) %>%
-      mutate (Show=str_c(str_sub(Episode,start=5,end=5))) %>%
+      mutate (Show=str_c(str_sub(Episode,start=4,end=5))) %>%
       drop_na()
 
     Highest<- file%>%group_by(Season)%>%slice_max(Ratings)
@@ -73,7 +43,7 @@
       labs(colour = "Season", x="Episode") +
       geom_point (data = Highest, size=3, shape=21, fill="transparent") +
       geom_point (data = Lowest, size=3, shape=21, fill="transparent") +
-      geom_label_repel(aes(label=(as.character(Highest$Title))),
+      geom_label_repel(aes(label=Title),
                       data=Highest,
                        box.padding= 0.35, 
                        point.padding = 0.5,
