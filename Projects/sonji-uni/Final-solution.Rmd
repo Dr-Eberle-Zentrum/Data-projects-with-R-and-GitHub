@@ -7,7 +7,7 @@ output: md_document
 
 # Sonjas Project: Working Memory Capacity
 
-```{r, included=F}
+```{r message=FALSE, warning=FALSE, include=FALSE}
 # Preparations
 rm (list = ls())
 cat ("\14")
@@ -87,7 +87,6 @@ The data set contains the following variables:
 | `response` | response given to stimulus (none, button clicked, survey choice) |
 | `rt` | response time |
 | `time_elapsed` | time passed since the start of the test |
-: Variables contained in dataset
 
 ## Data Preparation
 
@@ -116,7 +115,6 @@ The n-back task consists of three levels. The following overview is intended to 
 | 150-159 | 3-back example |
 | 160 | instruction |
 | 161-220 | **3-back task** |
-: Types of Trial
 
 ## Project goals
 
@@ -129,12 +127,12 @@ Project goals were to create
 ## Final solution
 
 After transformation data looked like the following: 
-```{r, echo = F}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 head (df)
 ```
 
 First plot shows relationship between Accuracy and Responding Time:
-```{r, echo = F}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 df %>% 
   ggplot (aes (x = Time, y = Accuracy, colour = Back)) +
   geom_jitter(size = 1) +
@@ -150,7 +148,7 @@ df %>%
 ```
 
 Second plot shows differences in Accuracy per task level:
-```{r, echo = F}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 df %>% 
   ggplot (aes (x = Back, y = Accuracy)) +
   geom_boxplot(fill = c("slateblue4", "slateblue1", "lavender")) +

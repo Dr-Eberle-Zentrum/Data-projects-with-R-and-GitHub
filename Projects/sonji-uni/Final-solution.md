@@ -1,94 +1,5 @@
 # Sonjas Project: Working Memory Capacity
 
-    # Preparations
-    rm (list = ls())
-    cat ("\14")
-
-
-
-    graphics.off()
-
-    # Packages
-    if (!require(ggpubr)) install.packages("ggpubr")
-
-    ## Lade nötiges Paket: ggpubr
-
-    ## Warning: Paket 'ggpubr' wurde unter R Version 4.2.3 erstellt
-
-    ## Lade nötiges Paket: ggplot2
-
-    ## Warning: Paket 'ggplot2' wurde unter R Version 4.2.3 erstellt
-
-    library(ggpubr)
-    if (!require(tidyverse)) install.packages("tidyverse")
-
-    ## Lade nötiges Paket: tidyverse
-
-    ## Warning: Paket 'tidyverse' wurde unter R Version 4.2.3 erstellt
-
-    ## Warning: Paket 'readr' wurde unter R Version 4.2.3 erstellt
-
-    ## Warning: Paket 'lubridate' wurde unter R Version 4.2.3 erstellt
-
-    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ## ✔ dplyr     1.1.0     ✔ readr     2.1.4
-    ## ✔ forcats   1.0.0     ✔ stringr   1.5.0
-    ## ✔ lubridate 1.9.2     ✔ tibble    3.1.8
-    ## ✔ purrr     1.0.1     ✔ tidyr     1.3.0
-
-    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ## ✖ dplyr::filter() masks stats::filter()
-    ## ✖ dplyr::lag()    masks stats::lag()
-    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-
-    library(tidyverse)
-
-    # Insert dataset
-    data <- read.csv("https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/main/Projects/sonji-uni/I4S_workingMemory_2023-02-26.csv", 
-                     sep = ";", na.strings = "null")
-
-    # Prepare data
-    names(data) <- c("ID", "Start", "Trial","Type", "Stimulus", "Answer", "Time", "End" )
-
-    # Accuracy back_1
-    data %>% 
-      subset (Trial > 14) %>% 
-      subset (Trial < 75) %>% 
-      mutate (back = lag(Stimulus, 1),
-              correct = (Stimulus == back & Answer == "0")|(Stimulus != back & is.na(Answer))) %>% 
-      # Grouping by mean:
-      group_by (ID) %>% 
-      summarize(Accuracy = mean(correct, na.rm = T),
-                Time = mean (Time, na.rm = T),
-                Back = "1-back")-> df1
-
-    # Accuracy back_2
-    data %>% 
-      subset (Trial >  87) %>% 
-      subset (Trial < 148) %>% 
-      mutate (back = lag(Stimulus, 2),
-              correct = (Stimulus == back & Answer == "0")|(Stimulus != back & is.na(Answer))) %>% 
-      # Grouping by mean:
-      group_by (ID) %>% 
-      summarize(Accuracy = mean(correct, na.rm = T),
-                Time = mean (Time, na.rm = T),
-                Back = "2-back")-> df2
-
-    # Accuracy back_3
-    data %>% 
-      subset (Trial > 160) %>% 
-      mutate (back = lag(Stimulus, 3),
-              correct = (Stimulus == back & Answer == "0")|(Stimulus != back & is.na(Answer))) %>% 
-      # Grouping by mean:
-      group_by (ID) %>% 
-      summarize(Accuracy = mean(correct, na.rm = T),
-                Time = mean (Time, na.rm = T),
-                Back = "3-back")-> df3
-
-    # Combining datasets
-    bind_rows(list(df1, df2, df3))->df
-    factor(df$Back) -> df$Back
-
 ## Working Memory Capacity Test
 
 The working memory capacity test is a self programmed **n-back task**.
@@ -116,7 +27,6 @@ time and response (i. e., whether the button was clicked or not).
 The data set contains the following variables:
 
 <table>
-<caption>Variables contained in dataset</caption>
 <thead>
 <tr class="header">
 <th style="text-align: center;">Variable</th>
@@ -159,8 +69,6 @@ The data set contains the following variables:
 </tbody>
 </table>
 
-Variables contained in dataset
-
 ## Data Preparation
 
 **Timestamp**  
@@ -184,7 +92,6 @@ The n-back task consists of three levels. The following overview is
 intended to make working with the data set easier:
 
 <table>
-<caption>Types of Trial</caption>
 <thead>
 <tr class="header">
 <th style="text-align: center;">Trial Index</th>
@@ -251,8 +158,6 @@ intended to make working with the data set easier:
 </tbody>
 </table>
 
-Types of Trial
-
 ## Project goals
 
 Project goals were to create
@@ -276,17 +181,7 @@ After transformation data looked like the following:
     ## 6 1111109    0.966  833. 1-back
 
 First plot shows relationship between Accuracy and Responding Time:
-
-    ## Scale for y is already present.
-    ## Adding another scale for y, which will replace the existing scale.
-
-    ## Warning: Removed 11 rows containing missing values (`geom_point()`).
-
 ![](Final-solution_files/figure-markdown_strict/unnamed-chunk-3-1.png)
 
 Second plot shows differences in Accuracy per task level:
-
-    ## Scale for y is already present.
-    ## Adding another scale for y, which will replace the existing scale.
-
 ![](Final-solution_files/figure-markdown_strict/unnamed-chunk-4-1.png)
