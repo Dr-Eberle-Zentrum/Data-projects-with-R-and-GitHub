@@ -63,4 +63,13 @@
 
 ## plot
 
+    p1<- levelplot(biomass~ WSA*CO2,data = data, 
+                   panel = panel.levelplot.points, 
+                   cex = 1.2, 
+                   col.regions = colorRampPalette(c("pink", "blue")),
+                   main = "Biomass Levelplot") + 
+        layer_(panel.2dsmoother(..., n = 200))
+
+    p1
+
 ![](plot_files/figure-markdown_strict/unnamed-chunk-2-1.png)

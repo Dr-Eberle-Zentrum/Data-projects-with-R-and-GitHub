@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "Elizavetash's project solution"
 author: "ManCao"
 date: "2023-03-29"
 output: md_document
@@ -33,7 +33,7 @@ print(data)
 
 ## plot
 
-```{r echo=FALSE} 
+```{r} 
 
 p1<- levelplot(biomass~ WSA*CO2,data = data, 
                panel = panel.levelplot.points, 
