@@ -83,7 +83,7 @@ print(dataNew)
 
 ## plot
 
-```{r include=FALSE}
+```{r}
 # Plot efficiency against timestamp
 p1<- 
 ggplot(dataNew, aes(x=timezone, y=rt))+

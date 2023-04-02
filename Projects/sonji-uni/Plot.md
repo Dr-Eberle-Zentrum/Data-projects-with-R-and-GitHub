@@ -76,6 +76,37 @@
 
 ## plot
 
+    # Plot efficiency against timestamp
+    p1<- 
+    ggplot(dataNew, aes(x=timezone, y=rt))+
+      geom_boxplot(outlier.shape = NA)+
+      labs(x = "Time of day", y = "Response Time (ms)", title = "How efficiency is affected by time")+
+      facet_wrap(~type)+
+      theme_bw()+
+      theme(
+        panel.border = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_rect(fill = NA),
+        axis.text.x = element_text(angle = 30, vjust = 0.5))
+
+     
+
+    # Plot accuracy against timestamp
+    p2<-
+    ggplot(dataNew, aes(x=timezone, y=accuracy))+
+      geom_boxplot(outlier.shape = NA)+
+      labs(x = "Time of day", y = "Accuracy", title = "How accuracy is affected by time")+
+      facet_wrap(~type)+
+      scale_y_continuous(label=scales::percent)+
+      theme_bw()+
+      theme(
+        panel.border = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_rect(fill = NA),
+        axis.text.x = element_text(angle = 30, vjust = 0.5))
+
     print(p1) 
 
 ![](Plot_files/figure-markdown_strict/unnamed-chunk-3-1.png)
