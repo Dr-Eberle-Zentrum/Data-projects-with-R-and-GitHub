@@ -1,9 +1,8 @@
 # Table of content
 
 1.  [Preparation](#preparation)  
-2.  [Data Cleaning](#data-cleaning)
-3.  [Data Processing](#data-processing)  
-4.  [Plot](#plot)
+2.  [Data Processing](#data-processing)  
+3.  [Plot](#plot)
 
 # Preparation
 
@@ -11,41 +10,29 @@
 
     datRaw <- read.csv('project data.csv')
 
-# Data Cleaning
-
-## Select columns
+# Data Processing
 
     dat <- datRaw |> 
+      # select columns
       select(P4_1:P4_3,
-             S8_1:S8_2)
-
-## Remove missings
-
-    dat <- dat |> 
-      na.omit()
-
-## Recode columns
-
-    dat <- dat |> 
-      mutate_at(vars(starts_with('P4_')),
-                ~ case_match(.x,
-                             1 ~ T, 2 ~ F))
-
-    dat <- dat |> 
-      mutate(hw_time = S8_1*60 + S8_2) |> 
-      select(-c(S8_1, S8_2))
-
-## Rename columns
-
-    names(dat) <- str_replace(names(dat),
-                              pattern = 'P4',
-                              replacement = 'dev')
-
-# Data Processing
+             S8_1:S8_2) |> 
+      # remove missings
+      na.omit() |> 
+      # recode columns
+      mutate(across(starts_with('P4_'),
+                    ~ case_match(.x,
+                                 1 ~ T, 2 ~ F)),
+             hw_time = round((S8_1*60 + S8_2) / 60)) |> 
+      # rename columns
+      rename('dev_computer' = P4_1,
+             'dev_internet' = P4_2,
+             'dev_smart' = P4_3,
+             'hw_hours' = S8_1,
+             'hw_minutes' = S8_2)
 
 ## Add group
 
-> ## Access to electric devices
+> **Access to electric devices**
 >
 > There will be four colors representing the following four situations:
 >
@@ -56,30 +43,23 @@
 
     dat <- dat |> 
       mutate(access = case_when(
-         dev_1 &  dev_2 &  dev_3 ~ 1,
-         dev_1 & !dev_2 &  dev_3 ~ 2,
-        !dev_1 &  dev_2 & !dev_3 ~ 3,
-        !dev_1 & !dev_2 & !dev_3 ~ 4,
-        TRUE                     ~ 5
-      ))
-
-    dat <- dat |> 
-      mutate(access = factor(access,
-                             labels = c('Computer/Tablet, Smartphone and Internet',
-                                        'Computer/Tablet and Smartphone',
-                                        'Internet',
-                                        'None',
-                                        'Other')))
+         dev_computer &  dev_internet &  dev_smart ~ 'Computer/Tablet, Smartphone and Internet',
+         dev_computer & !dev_internet &  dev_smart ~ 'Computer/Tablet and Smartphone',
+        !dev_computer &  dev_internet & !dev_smart ~ 'Internet',
+        !dev_computer & !dev_internet & !dev_smart ~ 'None',
+                                              TRUE ~ 'Other') |> 
+          factor())
 
 # Plot
 
     dat |> 
       ggplot(aes(x = hw_time,
                  fill = access)) +
-      geom_bar()
+      geom_bar() +
+      labs(title = 'Figure 1',
+           x = 'Time Spent On Homework (in hours)',
+           y = 'Count',
+           fill = 'Access to Device')
 
-![Relationship between access to different devices and time spent on
-homework](sonji-uni_files/figure-markdown_strict/fig-deviceHomework-1.png)
-
-The range of total time spent on homework is quite large (0 ≤ `hw_time`
-≥ 1020. Therefore, I think that a bar plot is not really suitable here.
+![Relationship Between Access To Different Devices And Time Spent On
+Homework](sonji-uni_files/figure-markdown_strict/fig-deviceHomework-1.png)
