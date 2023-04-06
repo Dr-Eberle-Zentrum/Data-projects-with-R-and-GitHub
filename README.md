@@ -118,6 +118,7 @@ To this end:
 - [Sonja](Projects/sonji-uni/project-description.html)
 - [Elizaveta](Projects/elizavetashch/2.0-Project-Description.html) version 2.0
 - [Ziyi](Projects/ZHuang2107/project-idea.html) [version 2.0](Projects/ZHuang2107/Project-description-2.0.html)
+  - solution by [Elizaveta](Projects/ZHuang2107/elizavetashch.md)
 - [Henning](Projects/HenningLa7/project-description.html)
   - solution by [Ziyi](Projects/HenningLa7/ZHuang2107.md)
   - solution by [Elizaveta](Projects/HenningLa7/elizavetashch.md)
