@@ -119,16 +119,17 @@ To this end:
   - solution by [Henning](Projects/sonji-uni/HenningLa7.md)
   - solution by [Man](Projects/sonji-uni/caoman199711.md)
 - [Elizaveta](Projects/elizavetashch/2.0-Project-Description.html) version 2.0
-  - solution by [Sonja](Projects/elizavetashch/sonji-uni.md)
   - solution by [Man](Projects/elizavetashch/caoman199711.md)
+  - solution by [Sonja](Projects/elizavetashch/sonji-uni.md)
 - [Ziyi](Projects/ZHuang2107/project-idea.html) [version 2.0](Projects/ZHuang2107/Project-description-2.0.html)
   - solution by [Elizaveta](Projects/ZHuang2107/elizavetashch.md)
   - solution by [Sonja](Projects/ZHuang2107/sonji-uni.md)
 - [Henning](Projects/HenningLa7/project-description.html)
-  - solution by [Ziyi](Projects/HenningLa7/ZHuang2107.md)
   - solution by [Elizaveta](Projects/HenningLa7/elizavetashch.md)
+  - solution by [Ziyi](Projects/HenningLa7/ZHuang2107.md)
 - [Man](Projects/caoman199711/project-description.html)
   - solution by [Henning](Projects/caoman199711/HenningLa7.md)
+  - solution by [Ziyi](Projects/caoman199711/ZHuan2107.md)
 
 
 #### Goals
