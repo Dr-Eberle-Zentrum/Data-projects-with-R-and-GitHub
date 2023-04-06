@@ -250,7 +250,9 @@ But the overall workflow is more or less the same.
 
 -   **before you start** working on your project solution:
     -   create YOUR branch (remember [Step 4: Branch](https://edav.info/github.html#step-4-branch))
-    -   **ensure** you have switched to the branch in RStudio (upper right corner in "Git" pane)
+    -   **ensure** 
+        - you are **in `main` branch BEFORE creating your new branch** !!! Otherwise, your new branch will be an offspring of the currently loaded branch (and its changes..)!
+        - **AFTER creation**: check you have switched to the branch in RStudio (upper right corner in "Git" pane)
 -   now you are ready to **create your solution file**:
     -   go into the project folder *of the target project you are working on*
     -   create a new *R Markdown* (File \> New File \> ...) with name `youGithubName.Rmd`
