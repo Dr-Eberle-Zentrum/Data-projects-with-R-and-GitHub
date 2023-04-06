@@ -1,0 +1,171 @@
+---
+title: "HenningLa7.Rmd"
+author: "Henning Lang"
+date: "2 4 2023"
+output: md_document
+---
+
+# Sonjas Project: Working Memory Capacity
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+# Preparations
+rm (list = ls())
+cat ("\14")
+graphics.off()
+
+# Packages
+if (!require(ggpubr)) install.packages("ggpubr")
+library(ggpubr)
+if (!require(tidyverse)) install.packages("tidyverse")
+library(tidyverse)
+
+# Insert dataset
+data <- read.csv("https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/main/Projects/sonji-uni/I4S_workingMemory_2023-02-26.csv",
+                 sep = ";", na.strings = "null")
+
+# Prepare data
+names(data) <- c("ID", "Start", "Trial","Type", "Stimulus", "Answer", "Time", "End" )
+
+# Accuracy back_1
+data %>%
+  subset (Trial > 14) %>%
+  subset (Trial < 75) %>%
+  mutate (back = lag(Stimulus, 1),
+          correct = (Stimulus == back & Answer == "0")|(Stimulus != back & is.na(Answer))) %>%
+  # Grouping by mean:
+  group_by (ID) %>%
+  summarize(Accuracy = mean(correct, na.rm = T),
+            Time = mean (Time, na.rm = T),
+            Back = "1-back")-> df1
+
+# Accuracy back_2
+data %>%
+  subset (Trial >  87) %>%
+  subset (Trial < 148) %>%
+  mutate (back = lag(Stimulus, 2),
+          correct = (Stimulus == back & Answer == "0")|(Stimulus != back & is.na(Answer))) %>%
+  # Grouping by mean:
+  group_by (ID) %>%
+  summarize(Accuracy = mean(correct, na.rm = T),
+            Time = mean (Time, na.rm = T),
+            Back = "2-back")-> df2
+
+# Accuracy back_3
+data %>%
+  subset (Trial > 160) %>%
+  mutate (back = lag(Stimulus, 3),
+          correct = (Stimulus == back & Answer == "0")|(Stimulus != back & is.na(Answer))) %>%
+  # Grouping by mean:
+  group_by (ID) %>%
+  summarize(Accuracy = mean(correct, na.rm = T),
+            Time = mean (Time, na.rm = T),
+            Back = "3-back")-> df3
+
+# Combining datasets
+bind_rows(list(df1, df2, df3))->df
+factor(df$Back) -> df$Back
+```
+
+
+## Working Memory Capacity Test
+
+The working memory capacity test is a self programmed **n-back task**. The test consisted of three tasks which differed in their cognitive load. More precisely, this n-back task was divided in 1-back, 2-back, and 3-back. The stimuli were 20 uppercase letters, excluding vocals and the letter X. One of six randomly chosen sequence of letters was shown on the screen, where only one letter appeared at a time.
+Below the stimulus, a button was displayed. Each task was preceded by instructions, an example sequence of 10 trials with 2 matching letters (20% targets), followed by 60 task trials including 20 matching letters (30% targets). The first task (1-back) was to press the button everytime a presented letter was the same as the previous letter. In the second task (2-back), participants had to press the button if the presented letter matched the one presented two trials before. The third task was a 3-back, where the presented letter had to match the one presented three trials before.
+The letters were presented 500 milliseconds and the inter-stimulus duration, in which participants were able to press the button, was 2500 milliseconds. The collected data contains information about reaction time and response (i. e., whether the button was clicked or not).
+
+## Data Set
+
+The data set contains the following variables:
+
+  | Variable | Information |
+  | :--: | :--- |
+  | `SID` | student ID |
+  | `timestamp` | timestamp of start of trial |
+  | `trial_index` | number of trial (0-221) |
+  | `trial_type` | type of trial (html-button-response, survey-multi-choice) |
+  | `stim` | stimulus presented on screen |
+  | `response` | response given to stimulus (none, button clicked, survey choice) |
+  | `rt` | response time |
+  | `time_elapsed` | time passed since the start of the test |
+
+  ## Data Preparation
+
+  **Timestamp**
+  The timestamp is a number in Unix format. It shows the time as a running total of seconds since the Unix epoch on January 1, 1970 in UTC ([unixtimestamp.com](https://www.unixtimestamp.com/)). In our case, the timestamp also includes milliseconds. If this additional information causes problems during data preparation, the last three digits of each timestamp should be removed.
+
+**Performance**
+  Performance can be measured as *accuracy* and *efficiency*. In order to calculate accuracy, the correctness of each trial has to be calculated first. For the calculation you have to know with which letter the respective stimulus has to be compared, if a trial is a target trial and if the button was clicked or not clicked correctly in each case. Efficiency refers to high accuracy in a short time.
+
+**Test Levels**
+  The n-back task consists of three levels. The following overview is intended to make working with the data set easier:
+
+  | Trial Index | Type of Trial |
+  | :--: | :--- |
+  | 0 | instruction |
+  | 1 | multiple choice survey about the device used |
+  | 2-3 | instruction |
+  | 4-13 | 1-back example |
+  | 14 | instruction |
+  | 15-74 | **1-back task** |
+  | 75-76 | instruction |
+  | 77-86 | 2-back example |
+  | 87 | instruction |
+  | 88-147 | **2-back task** |
+  | 148-149 | instruction |
+  | 150-159 | 3-back example |
+  | 160 | instruction |
+  | 161-220 | **3-back task** |
+
+  ## Project goals
+
+  Project goals were to create
+
+- A clean dataset contaning Accuracy and Efficiency per student
+- A plot showing relationship between Accuracy and Responding Time
+- A plot showing differences in Accuracy per task level
+
+## Final solution
+
+After transformation data looked like the following:
+  ```{r echo=FALSE, message=FALSE, warning=FALSE}
+head (df)
+```
+
+First plot shows relationship between Accuracy and Responding Time:
+  ```{r echo=FALSE, message=FALSE, warning=FALSE}
+df %>%
+  ggplot (aes (x = Time, y = Accuracy, colour = Back)) +
+  geom_jitter(size = 1) +
+  facet_wrap(vars(Back), ncol = 1) +
+  labs (title = "Responding Time and Accuracy",
+        subtitle = "Correlation between Responding Time und Accuracy after task levels") +
+  ylab ("Accuracy") +
+  xlab ("Responding Time (in milliseconds)") +
+  ylim (0.38, 1) +
+  theme_minimal() +
+  theme(legend.position =  "none") +
+  scale_y_continuous(label=scales::percent)
+```
+
+Second plot shows differences in Accuracy per task level:
+  ```{r echo=FALSE, message=FALSE, warning=FALSE}
+df %>%
+  ggplot (aes (x = Back, y = Accuracy)) +
+  geom_boxplot(fill = c("slateblue4", "slateblue1", "lavender")) +
+  labs (title = "Accuracy with reference to task levels",
+        subtitle = "Differences between 1-back, 2-back and 3-back tasks") +
+  ylab ("Accuracy (mean)") +
+  xlab ("Task levels") +
+  ylim (0, 100) +
+  theme_minimal()+
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) +
+  scale_y_continuous(label=scales::percent)
+```
+
+
+
+
+
+
+
