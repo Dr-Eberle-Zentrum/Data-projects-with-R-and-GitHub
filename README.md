@@ -117,6 +117,7 @@ To this end:
 
 - [Sonja](Projects/sonji-uni/project-description.html)
   - solution by [Henning](Projects/sonji-uni/HenningLa7.md)
+  - solution by [Man](Projects/sonji-uni/caoman199711.md)
 - [Elizaveta](Projects/elizavetashch/2.0-Project-Description.html) version 2.0
   - solution by [Sonja](Projects/elizavetashch/sonji-uni.md)
 - [Ziyi](Projects/ZHuang2107/project-idea.html) [version 2.0](Projects/ZHuang2107/Project-description-2.0.html)
