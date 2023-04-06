@@ -126,6 +126,7 @@ To this end:
   - solution by [Ziyi](Projects/HenningLa7/ZHuang2107.md)
   - solution by [Elizaveta](Projects/HenningLa7/elizavetashch.md)
 - [Man](Projects/caoman199711/project-description.html)
+  - solution by [Henning](Projects/caoman199711/HenningLa7.md)
 
 
 #### Goals
