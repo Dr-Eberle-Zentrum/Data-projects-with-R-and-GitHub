@@ -119,6 +119,7 @@ To this end:
 - [Elizaveta](Projects/elizavetashch/2.0-Project-Description.html) version 2.0
 - [Ziyi](Projects/ZHuang2107/project-idea.html) [version 2.0](Projects/ZHuang2107/Project-description-2.0.html)
 - [Henning](Projects/HenningLa7/project-description.html)
+  - solution by [Ziyi](Projects/HenningLa7/ZHuang2107.md)
 - [Man](Projects/caoman199711/project-description.html)
 
 
