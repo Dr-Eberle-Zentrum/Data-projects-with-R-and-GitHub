@@ -16,13 +16,13 @@ Which is shown and detailed on [https://ourworldindata.org](https://ourworldinda
 
 ## Goal of the project
 
-The idea of this project is to recreate this plot as close as possible using `ggplot` and the data available in the provided [CSV file](https://ourworldindata.org/uploads/2022/09/Mammal-comeback-in-Europe-data-OWID-download.csv) with the following content:
+The idea of this project is to recreate this plot as close as possible using `ggplot` and the data available in the provided [CSV file](https://ourworldindata.org/uploads/2022/09/Mammal-comeback-in-Europe-data-OWID-download.csv) with the following content (first lines):
 
 ```{r echo=FALSE}
 library(readr)
 knitr::kable(
   read_csv("https://ourworldindata.org/uploads/2022/09/Mammal-comeback-in-Europe-data-OWID-download.csv",
-           show_col_types = F)
+           show_col_types = F)[1:5,]
 )
 ```
 
