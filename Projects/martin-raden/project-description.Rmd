@@ -10,7 +10,7 @@ It is often that you find a chart that you really like but have no idea how to d
 An example might be the following one.
 
 
-![](Wildlife-comeback-in-Europe-1.png){ width=50% }
+[![](Wildlife-comeback-in-Europe-1.png){ width=50% }](https://ourworldindata.org/uploads/2022/05/Wildlife-comeback-in-Europe-1.png)
 
 Which is shown and detailed on [https://ourworldindata.org](https://ourworldindata.org/europe-mammal-comeback).
 
