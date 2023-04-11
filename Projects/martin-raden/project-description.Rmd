@@ -36,7 +36,7 @@ knitr::kable(
 - annotation of brown bear
 - text coloring
 - relative font sizes
-- animal symbol for brown bear
+- animal symbol for brown bear [![](icons8-bear-67.png)](icons8-bear-67.png)
 
 Let's see how close you can get! As a starting point, you might want to have a look at [The R Graph Gallery](https://r-graph-gallery.com/).
 
