@@ -1,9 +1,9 @@
 # Reproduce this super nice chart!
 
 It is often that you find a chart that you really like but have no idea
-how to do. An example might be the following one.
+how to do. An example might be the following one (click to enlarge).
 
-<img src="Wildlife-comeback-in-Europe-1.png" style="width:50.0%" />
+[<img src="Wildlife-comeback-in-Europe-1.png" style="width:50.0%" />](https://ourworldindata.org/uploads/2022/05/Wildlife-comeback-in-Europe-1.png)
 
 Which is shown and detailed on
 [https://ourworldindata.org](https://ourworldindata.org/europe-mammal-comeback).
@@ -90,6 +90,7 @@ included</th>
 -   text coloring
 -   relative font sizes
 -   animal symbol for brown bear
+    [![](icons8-bear-67.png)](icons8-bear-67.png)
 
 Let’s see how close you can get! As a starting point, you might want to
 have a look at [The R Graph Gallery](https://r-graph-gallery.com/).
