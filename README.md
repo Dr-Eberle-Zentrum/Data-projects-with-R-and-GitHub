@@ -66,6 +66,11 @@ Some open data repositories or search engines are listed at
 
 Note down where you got your data from, since you will later have to provide some details about your data!
 
+**Eventually: the more ugly the data the better!** 😜 
+Don't try to be nice but provide what you have. 
+Reality is neither nice nor without errors, bugs and **misformatted data**... 
+Let's get used to it!
+
 #### Visualization goals
 
 Next, formulate some rough idea what you would like to see.
