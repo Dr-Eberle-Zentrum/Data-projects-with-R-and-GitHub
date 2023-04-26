@@ -38,7 +38,7 @@ These have to be done only once and will be forgotten soon after.
 
 9.  Check if you can [access the project on GitHub](https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R) (i.e. we registered you as a collaborator already)
 
-    -   **if not** you will have to *wait until we have added you...* you will get an email notification from GitHub when done and ready
+    -   **if not** you will have to *wait until we have added you...* you will get an email notification from GitHub informing you of the invitation to join the project. **Accept the invitation!**
 
 10. Once you can access the repository online, you will need to get a local copy via RStudio: [Section 16.2.2](https://happygitwithr.com/existing-github-first.html#rstudio-ide-1)
 
