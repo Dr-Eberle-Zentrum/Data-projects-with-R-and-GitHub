@@ -33,8 +33,9 @@ These have to be done only once and will be forgotten soon after.
     -   `library(usethis)`
     -   use `create_github_token(description="R2 course")`
         -   set an **Expiration** *date after the end of the course* (or "No expiration")
-        -   *keep the generated PAT website open for Copy-and-Paste !!!*
-    -   use `credentials::set_github_pat()` (already installed) to store the PAT: [Section 9.4.1.1](https://happygitwithr.com/https-pat.html#credentials-package)
+        -   *keep the generated PAT website open for Copy-and-Paste !!!* of the PAT token
+    -   use `credentials::set_github_pat(force_new=TRUE)` (already installed) to store the PAT: [Section 9.4.1.1](https://happygitwithr.com/https-pat.html#credentials-package)
+        - **TAKE CARE** to click on "Token" within the pop-up window to enter your PAT token!!
 
 9.  Check if you can [access the project on GitHub](https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R) (i.e. we registered you as a collaborator already)
 
