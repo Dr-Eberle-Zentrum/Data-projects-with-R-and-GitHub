@@ -78,6 +78,8 @@ If you want to (re)produce a plot you have seen, store the image.
 Or just draw a sketch by hand of how it should look like and make a photo.
 Anything to transport your idea is fine.
 
+Try to think of something "non-standard"... 
+
 Double check that you think the data set you picked provides (somehow) all information needed to draw your plot of interest.
 
 #### Write up your project description
@@ -85,7 +87,8 @@ Double check that you think the data set you picked provides (somehow) all infor
 Write an R Markdown file `project-description.Rmd` to
 
 -   introduce shortly the general topic of your task (to put it in context)
--   introduce the data set, it's origin and important information of what-is-what, etc.
+-   introduce the data set(s), it's origin and important information of what-is-what, etc.
+-   define data manipulation goals if needed (also fine if this is the main focus of the project!)
 -   define the visualization goal(s) and possible intermediates
 
 It is fine to be vague at some points but you should formulate a clear goal and roadmap.
