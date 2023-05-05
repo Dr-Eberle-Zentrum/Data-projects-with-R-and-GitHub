@@ -198,13 +198,13 @@ Area
 For a dying cell, the fluorescence intensity and cell size show a
 downward tendency over time:
 
-<img src="Project_Idea_JQ_files/figure-markdown_strict/dead_cell-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="project_description_files/figure-markdown_strict/dead_cell-1.png" width="70%" style="display: block; margin: auto;" />
 
 For a viable cell, the fluorescence intensity and cell size remain
-rather stable and only decrease at the end of the movie when a
+rather stable and only decrease at the end of the movie when
 paraformaldehyde is added to preserve the cells:
 
-## <img src="Project_Idea_JQ_files/figure-markdown_strict/viable_cell-1.png" width="70%" style="display: block; margin: auto;" />
+## <img src="project_description_files/figure-markdown_strict/viable_cell-1.png" width="70%" style="display: block; margin: auto;" />
 
 ## **Data and goal**
 
