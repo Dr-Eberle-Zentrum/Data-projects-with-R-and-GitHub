@@ -123,7 +123,7 @@ To this end:
 
 -   [Example project by Martin](Projects/martin-raden/project-description.md)
 
--   [Investigating tumour cell viability by Julia](Projects/juliaquach02/project-description.md)
+-   [Investigating tumour cell viability by Julia](Projects/juliaquach02/project_description.md)
 
 
 #### Goals
