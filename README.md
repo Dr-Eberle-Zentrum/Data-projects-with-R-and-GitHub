@@ -27,38 +27,25 @@ All tutorials are summarized within the
 
 ------------------------------------------------------------------------
 
-## Project descriptions
+## Project descriptions {#project-descriptions}
 
-During the course, you have to formulate a data wrangling project.
-That is, you should name or provide a data set, say how the data should be (re)structured and set some visualization goals.
-You can use a data set you are working on (note, you might have to make it anonymous to share it) or a data set freely available online, from a publication, whatever.
-I strongly suggest "dirty" data that has to be cleaned up and reformatted!
-Data cleanup, transformation and extension should be one (big) part of your project!
+During the course, you have to formulate a data wrangling project. That is, you should name or provide a data set, say how the data should be (re)structured and set some visualization goals. You can use a data set you are working on (note, you might have to make it anonymous to share it) or a data set freely available online, from a publication, whatever. I strongly suggest "dirty" data that has to be cleaned up and reformatted! Data cleanup, transformation and extension should be one (big) part of your project!
 
-The formulated projects are the set of exercises you and your fellow students will pick from during the rest of the course, which is discussed below.
-But first, some details concerning project definition.
+The formulated projects are the set of exercises you and your fellow students will pick from during the rest of the course, which is discussed below. But first, some details concerning project definition.
 
 ------------------------------------------------------------------------
 
-### Phase 1 - Drafting a project description
+### Phase 1 - Drafting a project description {#phase-1---drafting-a-project-description}
 
 <img src="https://img.icons8.com/external-flaticons-lineal-color-flat-icons/344/external-project-web-development-flaticons-lineal-color-flat-icons.png" width="100px"/>
 
-Before you can define a project you need some data!
-In order to select something, you might want to "reach high"!
-That is, think about something you would like to know or see and what data might be needed for that.
-Don't think in terms of "I know how to do" but more "I would like to see" (like "A BOSS")!
-Given an idea, start looking for data sets that might help you to provide the information for your idea.
-Either you find something useful, or you might change your idea while looking for and investigating available data.
+Before you can define a project you need some data! In order to select something, you might want to "reach high"! That is, think about something you would like to know or see and what data might be needed for that. Don't think in terms of "I know how to do" but more "I would like to see" (like "A BOSS")! Given an idea, start looking for data sets that might help you to provide the information for your idea. Either you find something useful, or you might change your idea while looking for and investigating available data.
 
 #### Data sets
 
-Best are data set you are working on anyway or that are connected to your field of interest, such data makes most sense to you and you are most creative about possible analyses.
-Or something you have discussed in some other course or project.
-It would be **best**, if the data is already in some **table form but not tidy**, i.e. there is still need for some (extensive) data cleaning, formatting, ...
+Best are data set you are working on anyway or that are connected to your field of interest, such data makes most sense to you and you are most creative about possible analyses. Or something you have discussed in some other course or project. It would be **best**, if the data is already in some **table form but not tidy**, i.e. there is still need for some (extensive) data cleaning, formatting, ...
 
-You might not have a data set at hand, so check out open data repositories, websites, etc.
-Some open data repositories or search engines are listed at
+You might not have a data set at hand, so check out open data repositories, websites, etc. Some open data repositories or search engines are listed at
 
 -   [https://libguides.graduateinstitute.ch](https://libguides.graduateinstitute.ch/rdm/repositories)
 -   [https://handsondataviz.org](https://handsondataviz.org/opendata.html)
@@ -66,23 +53,17 @@ Some open data repositories or search engines are listed at
 
 Note down where you got your data from, since you will later have to provide some details about your data!
 
-**Eventually: the more ugly the data the better!** 😜 
-Don't try to be nice but provide what you have. 
-Reality is neither nice nor without errors, bugs and **misformatted data**... 
-Let's get used to it!
+**Eventually: the more ugly the data the better!** 😜 Don't try to be nice but provide what you have. Reality is neither nice nor without errors, bugs and **misformatted data**... Let's get used to it!
 
 #### Visualization goals
 
-Next, formulate some rough idea what you would like to see.
-If you want to (re)produce a plot you have seen, store the image.
-Or just draw a sketch by hand of how it should look like and make a photo.
-Anything to transport your idea is fine.
+Next, formulate some rough idea what you would like to see. If you want to (re)produce a plot you have seen, store the image. Or just draw a sketch by hand of how it should look like and make a photo. Anything to transport your idea is fine.
 
-Try to think of something "non-standard"... 
+Try to think of something "non-standard"...
 
 Double check that you think the data set you picked provides (somehow) all information needed to draw your plot of interest.
 
-#### Write up your project description
+#### Write up your project description {#write-up-your-project-description}
 
 Write an R Markdown file `project-description.Rmd` to
 
@@ -93,15 +74,13 @@ Write an R Markdown file `project-description.Rmd` to
 
 It is fine to be vague at some points but you should formulate a clear goal and roadmap.
 
-The **output format** should be "normal" Markdown!
-To this end you have to
+The **output format** should be "normal" Markdown! To this end you have to
 
 -   use `output: md_document` in the Rmd header!
 
 #### Upload to GitHub
 
-In order to submit your project proposal, you have to upload it to GitHub as part of this project!
-To this end:
+In order to submit your project proposal, you have to upload it to GitHub as part of this project! To this end:
 
 -   (if not done already) create a subfolder with **your user account name** in the `Project` folder
 -   copy the following files to the folder:
@@ -125,6 +104,7 @@ To this end:
 
 -   [Investigating tumour cell viability by Julia](Projects/juliaquach02/project_description.md)
 
+-   [Postmaterialism and political trust by Christian](Projects/crudi3/project-description.md)
 
 #### Goals
 
@@ -137,18 +117,15 @@ At the end of Phase 1 you will have a better understanding of
 
 ------------------------------------------------------------------------
 
-### Phase 2 - Reviewing a project description
+### Phase 2 - Reviewing a project description {#phase-2---reviewing-a-project-description}
 
 <img src="https://img.icons8.com/external-filled-outline-geotatah/344/external-comment-customer-satisfaction-filled-outline-filled-outline-geotatah.png" width="100px"/>
 
-To ensure the drafted projects are understandable and doable, we will do a peer reviewing.
-To this end, you will get assigned to two projects to give feedback for them.
-Review comments should be done via GitHub issues, where you can also discuss you ideas and suggestions with the respective project owner.
+To ensure the drafted projects are understandable and doable, we will do a peer reviewing. To this end, you will get assigned to two projects to give feedback for them. Review comments should be done via GitHub issues, where you can also discuss you ideas and suggestions with the respective project owner.
 
 #### Raising issues
 
-For each project draft, we will assign two reviewers at random.
-The *reviewer assignments* are as follows:
+For each project draft, we will assign two reviewers at random. The *reviewer assignments* are as follows:
 
 -   TODO ...
 
@@ -182,13 +159,11 @@ At the end of Phase 2 you will
 
 ------------------------------------------------------------------------
 
-### Phase 3 - Finalizing your project description
+### Phase 3 - Finalizing your project description {#phase-3---finalizing-your-project-description}
 
 <img src="https://img.icons8.com/external-phatplus-lineal-color-phatplus/344/external-project-design-thinking-phatplus-lineal-color-phatplus-2.png" width="100px"/>
 
-Now it is time to rework your project draft in the light of the received reviews and the project drafts you have reviewed yourself.
-You might want/need to change a few bits and pieces.
-In the end, you might do the following:
+Now it is time to rework your project draft in the light of the received reviews and the project drafts you have reviewed yourself. You might want/need to change a few bits and pieces. In the end, you might do the following:
 
 -   `Pull` the current state of the project (just to be up-to-date)
 -   revise your R Markdown project description
@@ -210,12 +185,9 @@ At the end of Phase 3 you will
 
 ------------------------------------------------------------------------
 
-## Tackling a suggested project
+## Tackling a suggested project {#tackling-a-suggested-project}
 
-Given a project description, you will try to solve the task.
-In order to practice real work flow life cycles, you will create your solution first in your own git branch and suggest it via a pull request on GitHub.
-This provides the project owner the possibility to review your solution and to give you feedback, which you can discuss within the pull request.
-Once all are happy with the solution it can be merged into the main branch of the course repository and thus be published.
+Given a project description, you will try to solve the task. In order to practice real work flow life cycles, you will create your solution first in your own git branch and suggest it via a pull request on GitHub. This provides the project owner the possibility to review your solution and to give you feedback, which you can discuss within the pull request. Once all are happy with the solution it can be merged into the main branch of the course repository and thus be published.
 
 This workflow is described and summarized in
 
@@ -223,14 +195,11 @@ This workflow is described and summarized in
 -   [Step 4: Branch](https://edav.info/github.html#step-4-branch)
 -   [Step 5: Work, commit and push](https://edav.info/github.html#step-5-work-commit-and-push)
 
-Note: we are still working all on ONE GITHUB REPOSITORY!
-We do *not create a fork*, i.e. our own copy of the repository on GitHub, which is also detailed in the linked material.
-The latter (forking) is needed, if you don't have writing permissions to a repository.
-But the overall workflow is more or less the same.
+Note: we are still working all on ONE GITHUB REPOSITORY! We do *not create a fork*, i.e. our own copy of the repository on GitHub, which is also detailed in the linked material. The latter (forking) is needed, if you don't have writing permissions to a repository. But the overall workflow is more or less the same.
 
 ------------------------------------------------------------------------
 
-### Phase 1 - Posting your initial solution
+### Phase 1 - Posting your initial solution {#phase-1---posting-your-initial-solution}
 
 <img src="https://img.icons8.com/external-justicon-lineal-color-justicon/344/external-coding-responsive-web-design-justicon-lineal-color-justicon-3.png" width="100px"/>
 
@@ -260,8 +229,7 @@ When you work on your solution, you should at least once a day
 
 This ensures you will not loose your work (backup) and store the stuff where it belong.
 
-Furthermore, it opens up a new way to get help!
-In case you **get stuck somewhere**, it is a good idea to
+Furthermore, it opens up a new way to get help! In case you **get stuck somewhere**, it is a good idea to
 
 -   **Commit and Push to GitHub**
 -   **Call for help** (*and tell us the branch, file and problem*)
@@ -291,13 +259,11 @@ At the end of Phase 1 you will
 -   have worked on a data wrangling and visualization project (in your own independent git branch)
 -   have created a pull request on GitHub to incorporate your suggested project solution
 
-### Phase 2 - Reviewing and finalizing
+### Phase 2 - Reviewing and finalizing {#phase-2---reviewing-and-finalizing}
 
 <img src="https://img.icons8.com/external-parzival-1997-outline-color-parzival-1997/344/external-training-human-resource-management-parzival-1997-outline-color-parzival-1997.png" width="100px"/>
 
-Now it is time for the *project owner* to **check** your solution and for *both of you* to **discuss** possible changes, extensions, ... This should, as before, be done on GitHub, but now **directly within the pull request**!
-All comments, answers, changes etc. will be listed there.
-Even **if you are meeting in person**, please **note down** the main points and goals *within the pull request* (together).
+Now it is time for the *project owner* to **check** your solution and for *both of you* to **discuss** possible changes, extensions, ... This should, as before, be done on GitHub, but now **directly within the pull request**! All comments, answers, changes etc. will be listed there. Even **if you are meeting in person**, please **note down** the main points and goals *within the pull request* (together).
 
 The **project owner** should
 
@@ -320,8 +286,7 @@ The **solution author** should
 -   your can use [GitHub Markdown checkboxes](https://www.w3schools.io/file/markdown-checkbox-github/) to later keep track what you have done and what is still open
 -   best put your plan *in the first post of the pull request* by editing it. That way it is found and updated most easily!
 
-You can already **work on the changes while you are discussing**!
-Any change you commit to your branch is automatically visible in the pull request (and this HTML visualizing link you provided).
+You can already **work on the changes while you are discussing**! Any change you commit to your branch is automatically visible in the pull request (and this HTML visualizing link you provided).
 
 Thus, you can directly discuss if you meet the ideas of the project owner or suggest alternative ideas.
 
@@ -335,11 +300,9 @@ At the end of Phase 2 you will
 -   have integrated an interactive reviewing cycle in your project solution
 -   be ready for the next project! :grin:
 
-## Beautifying your project
+## Beautifying your project {#beautifying-your-project}
 
-Finally, it is not only about content but presentation matters.
-Thus, you will have to beautify your HTML output.
-Here some ideas where to start:
+Finally, it is not only about content but presentation matters. Thus, you will have to beautify your HTML output. Here some ideas where to start:
 
 -   **hide**
     -   loading information + warnings
