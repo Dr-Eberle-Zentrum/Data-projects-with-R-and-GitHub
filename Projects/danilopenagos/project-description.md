@@ -218,7 +218,7 @@ Our data was collected by the [Banco de archivos gitales de Artes en Colombia](h
 </tbody>
 </table>
 
-As you notice, names of variables are in Spanish, if you need some help, don't hesitate to touch me. [Deepl.com](https://www.deepl.com/) is also a good option to translate (if it is necessary).
+As you notice, names of variables are in Spanish, if you need some help, don't hesitate to tell me. [Deepl.com](https://www.deepl.com/) is also a good option to translate (if it is necessary).
 
 ## Visualization goals
 

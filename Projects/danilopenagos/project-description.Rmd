@@ -26,7 +26,7 @@ knitr::kable(
 )
 ```
 
-As you notice, names of variables are in Spanish, if you need some help, don't hesitate to touch me. [Deepl.com](https://www.deepl.com/) is also a good option to translate (if it is necessary).
+As you notice, names of variables are in Spanish, if you need some help, don't hesitate to tell me. [Deepl.com](https://www.deepl.com/) is also a good option to translate (if it is necessary).
 
 ## Visualization goals
 
@@ -37,9 +37,9 @@ One of our references is the following:
 ![Making the University of Miami School of Architecture, Gilda Santana & Alissa Fowers (2019)](https://dataanddragons.files.wordpress.com/2019/05/archgenealogy-proof.png?w=783&h=1024)
 
 In brief, our visualization roadmap includes: 
--Cleaning and organizing the dataset 
--Creating a diagram to visualize the relationships between art galleries, exhibitions, and artists, with colors and labels.
--Using other types of graphs or charts as needed to explore different aspects of the data (i.e. timeline duration of exhibition).
+-   Cleaning and organizing the dataset 
+-   Creating a diagram to visualize the relationships between art galleries, exhibitions, and artists, with colors and labels.
+-   Using other types of graphs or charts as needed to explore different aspects of the data (i.e. timeline duration of exhibition).
 
 Looking forward to see your contributions.
 
