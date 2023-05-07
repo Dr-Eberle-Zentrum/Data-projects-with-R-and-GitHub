@@ -106,6 +106,9 @@ In order to submit your project proposal, you have to upload it to GitHub as par
 
 -   [Postmaterialism and political trust by Christian](Projects/crudi3/project-description.md)
 
+-   [A Visual Exploration of Artistic Landscape in Colombia (1940-2018)](Projects/danilopenagos/project-description.md)
+
+
 #### Goals
 
 At the end of Phase 1 you will have a better understanding of
