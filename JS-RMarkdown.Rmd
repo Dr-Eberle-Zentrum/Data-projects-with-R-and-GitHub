@@ -16,50 +16,22 @@ Biodiversity decline is a real problem around the globe. While for European audi
 
 [According to research published in scientific journal Ecology and Evolution](https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.8282), house sparrow populations in the European Union have almost halved between 1982 and 2017. The researchers estimated that between 2014 and 2017, the EU sparrow population only stood at around [261 million](https://zenodo.org/record/5544548#.ZFkcpi9n6x_).
 
-![](https://ourworldindata.org/uploads/2022/05/Wildlife-comeback-in-Europe-1.png){width="550"}
+The sparrow population remained the largest among the more than 300 birds species analyzed in the study, but also suffered the most dramatic relative decline. According to the makers of the study, species that like the sparrow are using farmland as habitat were hit harder by population declines. Overall, EU bird populations are estimated to have declined by 17 to 19 percent since the early 1980s, the equivalent of the loss of approximately 600 million birds.
 
-Which is shown and detailed on <https://ourworldindata.org>.
+Farmland became a more hostile [environment](https://www.statista.com/topics/4739/environmental-pollution/#topicOverview) to birds due to the [growing industrialization of agriculture and the use of chemicals](https://www.theguardian.com/environment/2021/nov/16/house-sparrow-population-in-europe-drops-by-247m) which shrank insect and subsequently bird populations.
+
+While the overall loss of birds was a grave concern, some bird species increased their populations, for example blackbirds, wrens, robins, woodpidgeons, blue tits and raptors, which benefited from protection and restoration projects. Yellow wagtails, starlings and skylarks, on the other hand, were flagged as having become increasingly rare.
+
+![](images/26309.jpeg)
 
 ## Goal of the project
 
 ------------------------------------------------------------------------
 
-The idea of this project is to recreate this plot as close as possible using \`ggplot and the data available in the provided [CVS file](https://ourworldindata.org/uploads/2022/09/Mammal-comeback-in-Europe-data-OWID-download.csv) with the following content (first lines):
+The idea of this project is to recreate the "Bye Bye Birdie" plot as close as possible using the data from Burns et al. (2021) which is linked above.
+I am not sure if this is even possible but I really liked the chart.
 
-```{r}
-knitr::kable( Mammaldata[1:5, ], )
-```
+Best,
+Jasmin
 
-\|Common name of species \| Species name \| Number of mammal populations included \| Start year \| End year \| Average relative change in abundance \| \|------------\|------------\|------------\|------------\|------------\|------------\| \| Eurasian beaver \| Castor fiber \| 98 \| 1960 \| 2016 \| 16705% \| \| \| \| \| \| \|
 
-| European bison \| Bison bonasus \| 20 \| 1960 \| 2016 \| 16626% \|
-
-| Grey seal \| Halichoerus grypus \| 18 \| 1978 \| 2016 \| 6273% \|
-
-| Geoffroy's bat \| Myotis emarginatus \| 12 \| 1974 \| 2016 \| 5392% \|
-
-| Iberian wild goat \| Capra pyrenaica \| 9 \| 1996 \| 2012 \| 3502% \|
-
-### Visualization priorities (from high to low)
-
--   line style with animal name labels
-
--   percent labels at line ends
-
--   time range label at line start
-
--   x-axis marks
-
--   arrow line style
-
--   annotation of brown bear
-
--   text coloring
-
--   relative font sizes
-
--   animal symbol for brown bear![](https://dr-eberle-zentrum.github.io/Advanced-data-processing-with-R/Projects/martin-raden/icons8-bear-67.png)
-
-Let's see how close you can get!
-
-As a starting point, you might want to have a look at [The R Graph Gallery](%3C%20https://r-graph-gallery.com).
