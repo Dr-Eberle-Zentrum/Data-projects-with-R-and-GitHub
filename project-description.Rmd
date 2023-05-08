@@ -1,53 +1,74 @@
 ---
-title: "project-description"
-output: md_document
-date: "2023-05-06"
+title: "PISA study"
+author: "Yaolu Pan"
+date: "2023-05-08"
+output: html_document
 ---
 
-```{r}
-library(tidyverse)
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Background
+## R Markdown
 
-------------------------------------------------------------------------
+For the project I want to use a data set I have previously dealt with in an assignment, but this time I will have new research questions. 
 
-Charcoal analysis is a valuable tool for reconstructing past human and environmental interactions. It can provide information about the types of wood used, whether green or dry wood was used and whether tree sizes and ages were prioritised. The reconstruction of the original tree diameter is necessary to answer such questions, and this is achievable by measuring the curvature of the last annual ring using different methods. However, understanding the relationship between tree size and woodland management remains a significant challenge. Management is assumed to lead to age and/or diameter peaks, and the diameters of managed trees are supposed to be larger in their age category. Still, unmanaged trees should reach a higher age, as they are not felled in a planned manner. The difference in size is explainable by the access to light, space and nutrients, which is better in managed woods. However, it is also possible that free-standing trees grow faster.
+The data set is from PISA study from the data collection cycle in year 2018 and I will only deal with the results of Germany. 
 
-## Data
+The goal of this project is to visualize how often students and their parents read different types of book. 
 
-------------------------------------------------------------------------
+Visualization goals:
 
-The data is shortened and consists now of nine columns:
+* one single diagramm for barplots or violin plots of different book types 
+* maybe grouped plots for students and parents
 
--   ID: Number of every single piece, because of previous research purpose not abscond
+``` {r cars}
+library(haven)
+dat <- read_sav("D:/Desktop/WS2021-22 & SS2022/WS2022-2023/Sekundärdatenanalyse/CY07_MSU_STU_QQQ.sav")
+sub <- subset(dat, subset = CNT == "DEU") # Subdataset for Germany, N = 5451
+auswahl <- data.frame(sub$ST167Q01IA, sub$ST167Q02IA, sub$ST167Q03IA, sub$ST167Q04IA, sub$ST167Q05IA)
 
--   Localisation: Description of the sampling area
 
--   Taxa: Identified wood species
+#####
+data <- data.frame(Lesevielfalt= c(sub$ST167Q01IA, sub$ST167Q02IA, sub$ST167Q03IA, sub$ST167Q04IA, sub$ST167Q05IA))
+data
 
--   Radius_number: outermost annual ring 1 and then continuous (See fig. below) ![Numbering radius](Projects/muellertabea/description.jpg)
+auflagen_wide <- tibble(Art = c("Der Spiegel", "Stern", "Focus"))
 
--   Radius1_mean & Radius2_mean & Radius3_mean: Each annual ring is measured three times
+auswahl$Art <- cbind(sub$ST167Q01IA, sub$ST167Q02IA, sub$ST167Q03IA, sub$ST167Q04IA, sub$ST167Q05IA)
+structure(auswahl)
+attach(auswahl)
 
--   Radius_tot_mean: The mean of all three measurements
+df_long <- auswahl %>% 
+  pivot_longer(
+    cols = c(sub.ST167Q01IA, sub.ST167Q02IA, sub.ST167Q03IA, sub.ST167Q04IA, sub.ST167Q05IA), # Bücherarten
+    names_to = "Art", # where do we want the names of the columns to go? (time)
+    values_to = "Wie oft") # where do we want the values in the columns to go? (pro_skala)
+df_long
 
--   Radius_tot_sd: The standard deviation of the total mean radius
 
-```{r}
-
-read.csv("Projects/muellertabea/Data_Project1.csv", sep = ";") %>%
-  head(5,)
-
+mean(sub.ST167Q01IA, na.rm = T)
+mean(sub.ST167Q02IA, na.rm = T)
+mean(sub.ST167Q03IA, na.rm = T)
+mean(sub.ST167Q04IA, na.rm = T)
+mean(sub.ST167Q05IA, na.rm = T)
+#####
 
 ```
 
-## Task
+## Including Plots
 
-------------------------------------------------------------------------
+You can also embed plots, for example:
 
--   Plot with the mean radius size of each sample in which only the samples with Radius_number 1 are considered. Differentiation between different taxa, colour gradient from smaller to larger diameter
 
--   Plot in which the number of samples with the different numbers of annual rings is shown
+```{r pressure, echo=FALSE}
+boxplot(sub.ST167Q01IA, xlab="magazine", ylab="How often do you read")
+boxplot(sub.ST167Q02IA)
+boxplot(sub.ST167Q03IA)
+boxplot(sub.ST167Q04IA)
+boxplot(sub.ST167Q05IA)
 
--   Plot with dependence of standard deviation on the mean value of the radius, differentiated by taxa
+```
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
