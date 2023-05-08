@@ -103,11 +103,8 @@ In order to submit your project proposal, you have to upload it to GitHub as par
 -   [Example project by Martin](Projects/martin-raden/project-description.md)
 
 -   [Investigating tumour cell viability by Julia](Projects/juliaquach02/project_description.md)
-
 -   [Postmaterialism and political trust by Christian](Projects/crudi3/project-description.md)
-
 -   [A Visual Exploration of Artistic Landscape in Colombia (1940-2018) by Danilo](Projects/danilopenagos/project-description.md)
-
 -   [Large Scale Energy Production in Germany by Paul](Projects/PaulKirschner/ProjectIdea_Energy.md)
 
 
