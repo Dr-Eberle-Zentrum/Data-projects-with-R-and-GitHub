@@ -1,0 +1,56 @@
+---
+title: "Markdown Mammels"
+output: pdf_document
+date: "2023-04-30"
+---
+
+```{r setup, include=FALSE}
+
+library("ggplot2")
+library("tidyverse")
+library("stringr")
+library("dplyr")
+knitr::opts_chunk$set(echo = TRUE) 
+
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r ggplot Definitionen}
+
+Mammel_data<-read.csv("Mammal-comeback-in-Europe-data-OWID-download.csv", sep=",", strip.white = TRUE)
+colnames(Mammel_data)<-gsub("[[:punct:]]","_", colnames(Mammel_data))
+Mammel_data$Average_relative_change_in_abundance<-gsub("%", "", Mammel_data$Average_relative_change_in_abundance%>%as.character)%>%as.numeric()
+Mammel_data$Common_name_of_species<-factor(Mammel_data$Common_name_of_species, levels = Mammel_data$Common_name_of_species)
+Mammel_data<-Mammel_data%>%arrange(desc(Average_relative_change_in_abundance))
+
+x_label<-"Average relative change in the size of population (logarithmic scale)"
+Mammel_seq<-1:length(Mammel_data[,1])
+
+plot<-ggplot(Mammel_data, aes(y= rev(Common_name_of_species),x= Average_relative_change_in_abundance, label=Average_relative_change_in_abundance)) +
+  geom_col(fill="grey",width=0.1)+
+  theme_classic()+
+  geom_point(size=2,col="slateblue")+
+  scale_x_log10()+
+  coord_cartesian(xlim=c(0.5,17000))+
+  geom_text(position = position_nudge(x=0.15,y=0), size=3, aes(label=paste(Average_relative_change_in_abundance, "%", sep="")))+
+  xlab(x_label)+
+  ylab("")+
+  geom_text(data = Mammel_data, 
+                   size=2,
+                   mapping = aes(x = 0.8, y = 1:length(Mammel_data[,1]), label = paste(Start_year, " to 2016", sep="")),
+                   inherit.aes = FALSE,
+                   hjust = 1)+
+  geom_point(aes(x=0.41, y=Mammel_seq), colour="black")
+
+```
+Wildlife is making a comeback in Europe
+======================================
+
+```{r Plot}
+plot
+```
