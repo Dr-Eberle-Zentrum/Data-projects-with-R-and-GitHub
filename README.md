@@ -106,7 +106,7 @@ In order to submit your project proposal, you have to upload it to GitHub as par
 -   [Postmaterialism and political trust by Christian](Projects/crudi3/project-description.md)
 -   [A Visual Exploration of Artistic Landscape in Colombia (1940-2018) by Danilo](Projects/danilopenagos/project-description.md)
 -   [Large Scale Energy Production in Germany by Paul](Projects/PaulKirschner/ProjectIdea_Energy.md)
-- [Bye Bye Birdie - Estimated population of house sparrows in the EU](Projects/jasmin-schels/jasmin-project-description.md
+- [Bye Bye Birdie - Estimated population of house sparrows in the EU](Projects/jasmin-schels/jasmin-project-description.md)
 
 
 
