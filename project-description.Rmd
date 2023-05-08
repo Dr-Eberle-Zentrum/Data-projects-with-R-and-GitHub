@@ -1,0 +1,74 @@
+---
+title: "PISA study"
+author: "Yaolu Pan"
+date: "2023-05-08"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+For the project I want to use a data set I have previously dealt with in an assignment, but this time I will have new research questions. 
+
+The data set is from PISA study from the data collection cycle in year 2018 and I will only deal with the results of Germany. 
+
+The goal of this project is to visualize how often students and their parents read different types of book. 
+
+Visualization goals:
+
+* one single diagramm for barplots or violin plots of different book types 
+* maybe grouped plots for students and parents
+
+``` {r cars}
+library(haven)
+dat <- read_sav("D:/Desktop/WS2021-22 & SS2022/WS2022-2023/Sekundärdatenanalyse/CY07_MSU_STU_QQQ.sav")
+sub <- subset(dat, subset = CNT == "DEU") # Subdataset for Germany, N = 5451
+auswahl <- data.frame(sub$ST167Q01IA, sub$ST167Q02IA, sub$ST167Q03IA, sub$ST167Q04IA, sub$ST167Q05IA)
+
+
+#####
+data <- data.frame(Lesevielfalt= c(sub$ST167Q01IA, sub$ST167Q02IA, sub$ST167Q03IA, sub$ST167Q04IA, sub$ST167Q05IA))
+data
+
+auflagen_wide <- tibble(Art = c("Der Spiegel", "Stern", "Focus"))
+
+auswahl$Art <- cbind(sub$ST167Q01IA, sub$ST167Q02IA, sub$ST167Q03IA, sub$ST167Q04IA, sub$ST167Q05IA)
+structure(auswahl)
+attach(auswahl)
+
+df_long <- auswahl %>% 
+  pivot_longer(
+    cols = c(sub.ST167Q01IA, sub.ST167Q02IA, sub.ST167Q03IA, sub.ST167Q04IA, sub.ST167Q05IA), # Bücherarten
+    names_to = "Art", # where do we want the names of the columns to go? (time)
+    values_to = "Wie oft") # where do we want the values in the columns to go? (pro_skala)
+df_long
+
+
+mean(sub.ST167Q01IA, na.rm = T)
+mean(sub.ST167Q02IA, na.rm = T)
+mean(sub.ST167Q03IA, na.rm = T)
+mean(sub.ST167Q04IA, na.rm = T)
+mean(sub.ST167Q05IA, na.rm = T)
+#####
+
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+
+```{r pressure, echo=FALSE}
+boxplot(sub.ST167Q01IA, xlab="magazine", ylab="How often do you read")
+boxplot(sub.ST167Q02IA)
+boxplot(sub.ST167Q03IA)
+boxplot(sub.ST167Q04IA)
+boxplot(sub.ST167Q05IA)
+
+```
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
