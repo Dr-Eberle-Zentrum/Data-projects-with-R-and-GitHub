@@ -107,8 +107,12 @@ In order to submit your project proposal, you have to upload it to GitHub as par
 -   [A Visual Exploration of Artistic Landscape in Colombia (1940-2018) by Danilo](Projects/danilopenagos/project-description.md)
 -   [Large Scale Energy Production in Germany by Paul](Projects/PaulKirschner/ProjectIdea_Energy.md)
 - [Bye Bye Birdie - Estimated population of house sparrows in the EU](Projects/jasmin-schels/jasmin-project-description.md)
+<<<<<<< HEAD
 - [Covid-19 mortality rates](Projects/laurens-mauz/project-description.md)
 - [Media Usage in the EU by Nico](https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/main/Projects/NICOtin-macht-suechtig/project-description.md)
+- [Tree ring measurments by Tabea](Projects/muellertabea/project-description.md)
+
+
 
 
 #### Goals
