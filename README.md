@@ -110,17 +110,9 @@ In order to submit your project proposal, you have to upload it to GitHub as par
 <<<<<<< HEAD
 - [Covid-19 mortality rates](Projects/laurens-mauz/project-description.md)
 - [Media Usage in the EU by Nico](https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/main/Projects/NICOtin-macht-suechtig/project-description.md)
-=======
 - [Tree ring measurments by Tabea](Projects/muellertabea/project-description.md)
 
 
->>>>>>> d2cbdb9 (Updated Tabea)
-
-
-
-
-
-- [Tree ring measurements by Tabea](Projects/muellertabea/project-description.md)
 
 
 #### Goals
