@@ -109,7 +109,7 @@ In order to submit your project proposal, you have to upload it to GitHub as par
 - [Bye Bye Birdie - Estimated population of house sparrows in the EU](Projects/jasmin-schels/jasmin-project-description.md)
 <<<<<<< HEAD
 - [Covid-19 mortality rates](Projects/laurens-mauz/project-description.md)
-- [Media Usage in the EU by Nico](https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/ea479ad59ea86eb1be75b50fd344e5eae8615050/Projects/nico-afentoulidis/project-description.md)
+- [Media Usage in the EU by Nico](https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/main/Projects/nico-afentoulidis/project-description.md)
 - [Tree ring measurments by Tabea](Projects/muellertabea/project-description.md)
 
 
