@@ -2,7 +2,7 @@
 title: "project-description.Rmd"
 author: "Daniel Barrera"
 date: "2023-05-08"
-output: html_document
+output: md_document
 ---
 ## Topic: Contemporary Germany
 

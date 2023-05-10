@@ -100,18 +100,21 @@ In order to submit your project proposal, you have to upload it to GitHub as par
 
 #### Available projects
 
--   [Example project by Martin](Projects/martin-raden/project-description.md)
+- Martin - [Example project](Projects/martin-raden/project-description.md)
 
--   [Investigating tumour cell viability by Julia](Projects/juliaquach02/project_description.md)
--   [Postmaterialism and political trust by Christian](Projects/crudi3/project-description.md)
--   [A Visual Exploration of Artistic Landscape in Colombia (1940-2018) by Danilo](Projects/danilopenagos/project-description.md)
--   [Large Scale Energy Production in Germany by Paul](Projects/PaulKirschner/ProjectIdea_Energy.md)
-- [Bye Bye Birdie - Estimated population of house sparrows in the EU](Projects/jasmin-schels/jasmin-project-description.md)
-- [Covid-19 mortality rates](Projects/laurens-mauz/project-description.md)
-- [Media Usage in the EU by Nico](https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/main/Projects/nico-afentoulidis/project-description.md)
-- [Tree ring measurments by Tabea](Projects/muellertabea/project-description.md)
-- [Rotation Curve of M31 (Andromeda) Galaxy](Projects/neopolyglot/project-description.md)
-- [Looking at some Food Information](Projects/DanielaKemp/project-description.md)
+- Julia - [Investigating tumour cell viability](Projects/juliaquach02/project_description.md)
+- Christian - [Postmaterialism and political trust](Projects/crudi3/project-description.md)
+- Danilo - [A Visual Exploration of Artistic Landscape in Colombia (1940-2018)](Projects/danilopenagos/project-description.md)
+- Paul - [Large Scale Energy Production in Germany](Projects/PaulKirschner/ProjectIdea_Energy.md)
+- Jasmin - [Bye Bye Birdie - Estimated population of house sparrows in the EU](Projects/jasmin-schels/jasmin-project-description.md)
+- Laurens - [Covid-19 mortality rates](Projects/laurens-mauz/project-description.md)
+- Nico - [Media Usage in the EU](https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/main/Projects/nico-afentoulidis/project-description.md)
+- Tabea - [Tree ring measurments](Projects/muellertabea/project-description.md)
+- Pleasant - [Rotation Curve of M31 (Andromeda) Galaxy](Projects/neopolyglot/project-description.md)
+- Daniela - [Looking at some Food Information](Projects/DanielaKemp/project-description.md)
+- Alexander - [Analyzing Soccer Data](Projects/alexanderwinterstetter/project_description.md)
+- Daniel - [Contemporary Germany](Projects/neophilology/project-description.md)
+- Yaolu - PISA study
 
 
 

@@ -2,7 +2,7 @@
 title: "PISA study"
 author: "Yaolu Pan"
 date: "2023-05-08"
-output: html_document
+output: md_document
 ---
 
 ```{r setup, include=FALSE}
