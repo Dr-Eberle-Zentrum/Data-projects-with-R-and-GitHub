@@ -139,7 +139,20 @@ To ensure the drafted projects are understandable and doable, we will do a peer 
 
 For each project draft, we will assign two reviewers at random. The *reviewer assignments* are as follows:
 
--   TODO ...
+- *Julia* will review projects of: Christian + Danilo
+- *Christian* will review projects of: Danilo + Paul
+- *Danilo* will review projects of: Paul + Jasmin
+- *Paul* will review projects of: Jasmin + Laurens
+- *Jasmin* will review projects of: Laurens + Nico
+- *Laurens* will review projects of: Nico + Tabea
+- *Nico* will review projects of: Tabea + Pleasant
+- *Tabea* will review projects of: Pleasant + Daniela
+- *Pleasant* will review projects of: Daniela + Alexander
+- *Daniela* will review projects of: Alexander + Daniel
+- *Alexander* will review projects of: Daniel + Yaolu
+- *Daniel* will review projects of: Yaolu + Julia 
+- *Yaolu* will review projects of: Julia + Christian
+
 
 **Each reviewer** is supposed to
 
