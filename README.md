@@ -100,7 +100,7 @@ In order to submit your project proposal, you have to upload it to GitHub as par
 
 #### Available projects
 
-- Martin - [Example project](Projects/martin-raden/project-description.md)
+- Martin (martin-raden) - [Example project](Projects/martin-raden/project-description.md)
 
 - Julia (juliaquach02) - [Investigating tumour cell viability](Projects/juliaquach02/project_description.md)
 - Christian (crudi3) - [Postmaterialism and political trust](Projects/crudi3/project-description.md)
