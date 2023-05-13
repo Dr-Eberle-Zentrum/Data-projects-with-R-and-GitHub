@@ -2,7 +2,7 @@
 title: "project-description.Rmd"
 author: "Daniel Barrera"
 date: "`r Sys.Date()`"
-output: html_document
+output: md_document
 ---
 # NLP: from German speeches to German history
 
