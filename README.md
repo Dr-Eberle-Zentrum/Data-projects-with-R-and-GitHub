@@ -113,7 +113,7 @@ In order to submit your project proposal, you have to upload it to GitHub as par
 - Pleasant (neopolyglot) - [Rotation Curve of M31 (Andromeda) Galaxy](Projects/neopolyglot/project-description.md)
 - Daniela (DKemp98) - [Looking at some Food Information](Projects/DanielaKemp/project-description.md)
 - Alexander (alexanderwinterstetter) - [Analyzing Soccer Data](Projects/alexanderwinterstetter/project_description.md)
-- Daniel (neophilology) - [NLP: from German speeches to German history](Projects/neophilology/project-description_v01.Rmd)
+- Daniel (neophilology) - [NLP: from German speeches to German history](Projects/neophilology/project-description.md)
 - Yaolu (yaolu-pan) - PISA study
 
 
