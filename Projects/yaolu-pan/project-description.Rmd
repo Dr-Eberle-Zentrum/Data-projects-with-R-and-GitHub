@@ -13,46 +13,40 @@ knitr::opts_chunk$set(echo = TRUE)
 
 For the project I want to use a data set I have previously dealt with in an assignment, but this time I will have new research questions. 
 
-The data set is from PISA study from the data collection cycle in year 2018 and I will only deal with the results of Germany. 
+The data set is from PISA study from the data collection cycle in year 2018 and I will only deal with the results of Germany. PISA tests the skills and knowledge of 15-year-old students in reading, mathematics and science. Seventy-nine countries and economies took part in the 2018 assessment, which focused on reading, and the data were released by the OECD on 3rd December 2019.
 
-The goal of this project is to visualize how often students and their parents read different types of book. 
+The goal of this project is to visualize how often (on a scale from 1 = Never or almost never to 5 = Several times a week) students and their parents read different types of book. 
 
 Visualization goals:
 
 * one single diagramm for barplots or violin plots of different book types 
-* maybe grouped plots for students and parents
+* grouped plots for students and parents
 
 ``` {r cars}
 library(haven)
-dat <- read_sav("D:/Desktop/WS2021-22 & SS2022/WS2022-2023/Sekundärdatenanalyse/CY07_MSU_STU_QQQ.sav")
+dat <- read_sav("D:/Desktop/R2/Advanced-data-processing-with-R_old/Projects/yaolu-pan/CY07_MSU_STU_QQQ.sav")
 sub <- subset(dat, subset = CNT == "DEU") # Subdataset for Germany, N = 5451
-auswahl <- data.frame(sub$ST167Q01IA, sub$ST167Q02IA, sub$ST167Q03IA, sub$ST167Q04IA, sub$ST167Q05IA)
+
+pisa_reading <- sub %>% select(ST167Q01IA, ST167Q02IA, ST167Q03IA, ST167Q04IA, ST167Q05IA,
+                               PA160Q01HA, PA160Q02HA, PA160Q03HA, PA160Q04HA, PA160Q05HA)
+
+pisa_reading <- pisa_reading %>% rename(
+"Journals/Magazines_st" = ST167Q01IA,
+"Comics_st" = ST167Q02IA,
+"Fiction (novels, short stories, stories)_st" = ST167Q03IA,
+"Nonfiction (history, biography, science, technology)_st" = ST167Q04IA,
+"Daily newspapers_st" = ST167Q05IA,
+"Journals/Magazines_pa" = PA160Q01HA,
+"Comics_pa" = PA160Q02HA,
+"Fiction (novels, short stories, stories)_pa" = PA160Q03HA,
+"Nonfiction (history, biography, science, technology)_pa" = PA160Q04HA,
+"Daily newspapers_pa" = PA160Q05HA)
+
+write.csv(pisa_reading, "pisa_reading_16-05-2023.csv")
 
 
 #####
-data <- data.frame(Lesevielfalt= c(sub$ST167Q01IA, sub$ST167Q02IA, sub$ST167Q03IA, sub$ST167Q04IA, sub$ST167Q05IA))
-data
 
-auflagen_wide <- tibble(Art = c("Der Spiegel", "Stern", "Focus"))
-
-auswahl$Art <- cbind(sub$ST167Q01IA, sub$ST167Q02IA, sub$ST167Q03IA, sub$ST167Q04IA, sub$ST167Q05IA)
-structure(auswahl)
-attach(auswahl)
-
-df_long <- auswahl %>% 
-  pivot_longer(
-    cols = c(sub.ST167Q01IA, sub.ST167Q02IA, sub.ST167Q03IA, sub.ST167Q04IA, sub.ST167Q05IA), # Bücherarten
-    names_to = "Art", # where do we want the names of the columns to go? (time)
-    values_to = "Wie oft") # where do we want the values in the columns to go? (pro_skala)
-df_long
-
-
-mean(sub.ST167Q01IA, na.rm = T)
-mean(sub.ST167Q02IA, na.rm = T)
-mean(sub.ST167Q03IA, na.rm = T)
-mean(sub.ST167Q04IA, na.rm = T)
-mean(sub.ST167Q05IA, na.rm = T)
-#####
 
 ```
 
@@ -62,11 +56,8 @@ You can also embed plots, for example:
 
 
 ```{r pressure, echo=FALSE}
-boxplot(sub.ST167Q01IA, xlab="magazine", ylab="How often do you read")
-boxplot(sub.ST167Q02IA)
-boxplot(sub.ST167Q03IA)
-boxplot(sub.ST167Q04IA)
-boxplot(sub.ST167Q05IA)
+
+boxplot(pisa_reading$`Journals/Magazines_st`)
 
 ```
 
