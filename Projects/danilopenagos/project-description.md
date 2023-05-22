@@ -340,10 +340,11 @@ labels, a title should be included and the artist with the highest
 participation and the gallery with the most exhibitions should be
 highlighted. Be creative with the latter.
 
-In brief, our visualization roadmap includes: - Cleaning and organizing
-the dataset - Creating a diagram to visualize the relationships between
-art galleries and artists, with colors and labels. - Using other types
-of graphs or charts as needed to explore different aspects of the data
+In brief, our visualization roadmap includes: 
+-  Cleaning and organizing the dataset 
+-  Creating a diagram to visualize the relationships between
+art galleries and artists, with colors and labels. 
+-  Using other types of graphs or charts as needed to explore different aspects of the data
 (i.e. timeline duration of exhibition).
 
 Looking forward to see your contributions.
