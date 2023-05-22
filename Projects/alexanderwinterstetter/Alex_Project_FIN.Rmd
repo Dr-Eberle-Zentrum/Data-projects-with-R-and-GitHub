@@ -10,7 +10,7 @@ output: html_document
 ## Analyzing Soccer Data
 
 The dataset will be attached.
-The dataset contains information on soccer-referee pairings during a soccer season. One row has a player-referee pairing (if a player encountered 32 different referees in the saison, then there are 32 rows for the repsective player). The indicating columsn in this case are "playerShort" and "refNum". Further information on the data can be found via this file [LINK]. It would now be interesting to draw insights from these pairings (soccer player & referee) regarding the success of clubs or the player or how the leagues differ from one another.
+The dataset contains information on soccer-referee pairings during a soccer season. One row has a player-referee pairing (if a player encountered 32 different referees in the saison, then there are 32 rows for the repsective player). The indicating columsn in this case are "playerShort" and "refNum". Further information on the data can be found via the file "Description.docx". It would now be interesting to draw insights from these pairings (soccer player & referee) regarding the success of clubs or the player or how the leagues differ from one another.
 
 ## Prepare the data
 
