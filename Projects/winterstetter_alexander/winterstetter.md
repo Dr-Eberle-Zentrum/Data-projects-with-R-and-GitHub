@@ -1,3 +1,4 @@
 "Hi I am here!"
-install.packages("tidyverse")
-library(tidyverse)
+gert::git_config() |> view()
+library(usethis)
+use_git_config(user.name = "alexanderwinterstetter")
