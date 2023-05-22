@@ -88,10 +88,11 @@ Important columns:
 I am interested in the ratio of deaths and confirmed cases of the
 Covid-19 at different stages of the pandemic for the US, Germany, Italy,
 Australia, China, South Korea, New Zealand, Senegal and to visualize the
-results with heat maps. I hope to answer the following questions: - Did
-healtcare systems adapt to the outbreak virus over time (did the ratio
-shrink)? - Are healthcare systems of different countries equally
-effective?
+results with heat maps. I hope to answer the following questions:
+
+-   Did healtcare systems adapt to the outbreak virus over time (did the
+    ratio shrink)?
+-   Are healthcare systems of different countries equally effective?
 
 ### To do:
 
