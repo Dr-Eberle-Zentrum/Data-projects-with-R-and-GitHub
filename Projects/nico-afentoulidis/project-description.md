@@ -6,7 +6,7 @@ Since the 1970s the Eurobarometer is regularly monitoring the public opinion on 
 
 We want to look at one of the newest surveys of the Eurobarometer from 2022. In this survey the people were asked about their opinion on the EU and the coronavirus, european citizenship, and their media use.
 
-The problem about this [data set](https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/ea479ad59ea86eb1be75b50fd344e5eae8615050/Projects/nico-afentoulidis/ZA7848_v1-0-0.csv) is that its really big and that the variables don't the have right names. This mix makes working with the data set really annoying.
+The problem about this [data set](https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/main/Projects/nico-afentoulidis/ZA7848_v1-0-0.csv) is that its really big and that the variables don't the have right names. This mix makes working with the data set really annoying.
 I already cleared the data a little bit. So that they are only the variables you need.
 
 If you are interested on the other variables asked in the survey you can download the whole data set and get more information about it, for example about the sampling procedure, on the website of the [GESIS Leibniz-Institut fuer Sozialwissenschaften](https://search.gesis.org/research_data/ZA7848).
@@ -30,7 +30,7 @@ Every variable stands for another type of media:
 6. Internet
 7. Social media
 
-![](https://static.wixstatic.com/media/d18dad_00f962f736a448a885bc377ee3caec60~mv2.gif/v1/fill/w_220,h_165,q_90/d18dad_00f962f736a448a885bc377ee3caec60~mv2.gif | width="200")
+![](https://static.wixstatic.com/media/d18dad_00f962f736a448a885bc377ee3caec60~mv2.gif/v1/fill/w_220,h_165,q_90/d18dad_00f962f736a448a885bc377ee3caec60~mv2.gif)
 
 I think that one map for each medium will look good.The map should show the mean for each country. Use 5-7 categories for a better visualization.
 Don't forget that some of the values, e.g. "Inap. (not 1 in eu27b)", should be treated as NAs.
