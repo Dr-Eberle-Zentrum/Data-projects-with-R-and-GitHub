@@ -19,10 +19,10 @@ microscopy image could look like this:
 
 <center>
 
-<img src="Tumour_Cells_0h_new.png" id="id" class="class"
-style="width:30.0%;height:30.0%" />
-<img src="Tumour_Cells_15h.png" id="id" class="class"
-style="width:30.0%;height:30.0%" />
+<img src="Tumor_Cells_Treated_0h.png" id="id" class="class"
+style="width:20.0%;height:20.0%" />
+<img src="Tumor_Cells_Treated_48h.png" id="id" class="class"
+style="width:20.0%;height:20.0%" />
 
 *Fluorescence microscopy images of tumor cells 0 hours after treatment
 and 48 hours after treatment*
@@ -30,16 +30,18 @@ and 48 hours after treatment*
 </center>
 
 The cell size and fluorescence intensity of the cells in the movie can
-be tracked. [This data frame](Track_one_dying_cell.csv) shows the
-measurements of a dying cell whereas [this data
-frame](Track_one_viable_cell.csv) represents the measurements of a
-viable cell. Each row in the data frame represents the respective cell
-at one time point and it includes columns for
+be tracked using automatic cell segmentation and cell tracking tools,
+e.g., the ImageJ plugins [Stardist](https://imagej.net/plugins/stardist)
+and [TrackMate](https://imagej.net/plugins/trackmate/).
+
+[This data frame](Track_one_dying_cell.csv) shows the measurements of a
+dying cell whereas [this data frame](Track_one_viable_cell.csv)
+represents the measurements of a viable cell. Each row in the data frame
+represents the respective cell at one time point and it includes columns
+for
 
 -   the cell name (called cell ID)
 -   the time point
--   the x-coordinate of the cell’s center
--   the y-coordinate of the cell’s center
 -   the fluorescence intensity of this cell at this time point
 -   the area of the cell at this time point
 
@@ -53,12 +55,6 @@ Table: Tumor cell data from live-cell imaging
 <tr>
 <th style="text-align:right;">
 Cell ID
-</th>
-<th style="text-align:right;">
-x
-</th>
-<th style="text-align:right;">
-y
 </th>
 <th style="text-align:right;">
 Time point
@@ -77,12 +73,6 @@ Area
 0
 </td>
 <td style="text-align:right;">
-78.83030
-</td>
-<td style="text-align:right;">
-60.99856
-</td>
-<td style="text-align:right;">
 0
 </td>
 <td style="text-align:right;">
@@ -95,12 +85,6 @@ Area
 <tr>
 <td style="text-align:right;">
 0
-</td>
-<td style="text-align:right;">
-82.19021
-</td>
-<td style="text-align:right;">
-61.25618
 </td>
 <td style="text-align:right;">
 1
@@ -117,12 +101,6 @@ Area
 0
 </td>
 <td style="text-align:right;">
-82.34308
-</td>
-<td style="text-align:right;">
-61.23822
-</td>
-<td style="text-align:right;">
 2
 </td>
 <td style="text-align:right;">
@@ -135,12 +113,6 @@ Area
 <tr>
 <td style="text-align:right;">
 0
-</td>
-<td style="text-align:right;">
-84.21433
-</td>
-<td style="text-align:right;">
-61.35813
 </td>
 <td style="text-align:right;">
 3
@@ -157,12 +129,6 @@ Area
 0
 </td>
 <td style="text-align:right;">
-84.12936
-</td>
-<td style="text-align:right;">
-61.35906
-</td>
-<td style="text-align:right;">
 4
 </td>
 <td style="text-align:right;">
@@ -175,12 +141,6 @@ Area
 <tr>
 <td style="text-align:right;">
 0
-</td>
-<td style="text-align:right;">
-84.91470
-</td>
-<td style="text-align:right;">
-60.22657
 </td>
 <td style="text-align:right;">
 5
@@ -211,21 +171,17 @@ paraformaldehyde is added to preserve the cells:
 ------------------------------------------------------------------------
 
 We have two populations of tumor cells, [the first
-one](Tracks_Tumour_Cells_3_reduced_columns_B2_1_positive.csv) has been
-treated with a new therapy and [the second
-one](Tracks_Tumour_Cells_reduced_columns_B3_1_negative.csv) is a
-negative control. Now, we would like to know which cell die at which
-time point.
+one](Tracks_Treated_Cells.csv) has been treated with a new therapy and
+[the second one](Tracks_Untreated_Cells.csv) is a negative control. Now,
+we would like to know which cell die at which time point. For this, we
+need to identify dying tumor cells by their drop in cell size and their
+declining fluorescence intensity.
 
-For this, we need to identify dying tumor cells via their shrinking size
-and fading fluorescence intensity as two necessary criteria. It would be
-great to get a data frame as result which lists dying cells and their
-rough time point of death. This would also allow us to compare their
-growth behavior in general by computing the survival rate in both
-populations. (Note: At the end of this specific data set, all cells die
-because paraformaldehyde is added to preserve the cells.)
+We aim to add a column to the original data frame that classifies cells
+as either alive or dying for comparison of the growth behavior and the
+survival rate in both populations.
 
-For some visualization, we could plot the results like this:
+For some visualization, we could plot the results like the figure below.
 
 <center>
 
@@ -244,12 +200,38 @@ cell lines are the negative controls. Source: Weigelin et al. (2021) *
 ------------------------------------------------------------------------
 
 -   Identify dying tumor cells in the data sets and estimate the point
-    of death.
+    of death. One suggestion for the criteria would be:
+    -   Observe whether the cell size dropped by 40% or more compared to
+        the inital cell size.
+    -   Observe whether the fluorescence intensity shows a linear
+        downward trend.
 -   Count dying tumor cells and compute the relative number of cell
     deaths.
--   Plot the cell survival for both cell populations in one plot.
+-   Plot the cell survival for both cell populations in one plot. In our
+    case, we opt for two colored lines representing the treated cell
+    population and the untreated cell population.
 
 ------------------------------------------------------------------------
+
+## **Additional notes**
+
+------------------------------------------------------------------------
+
+-   It might happen that the measured cell size of dying cells increase
+    again. This is because the fluorescent area of the cells is not
+    restricted to the cell nucleus anymore after the cell died.
+    Therefore, it is critical to identify a clear drop in cell size
+    rather than only comparing the initial and end size.
+-   It is not sufficient to view the end of a cell track as point of
+    death. This is because cells might move out of the frame and more
+    importantly, cell segmentation and cell tracking is far from
+    perfect. For this reason, cell tracks are often lost despite the
+    cells still being there.
+-   For the data set of untreated set, there is a initial drop of the
+    fluorescence intensity for all cells. This is a technical artifact
+    of the microscope.
+-   For reference: In the data set of treated cells, the cell with the
+    Cell.ID 0 stayed alive and the cell with the Cell.ID 70 died.
 
 Let me know if you have any questions or remarks!
 

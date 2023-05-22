@@ -27,7 +27,7 @@ All tutorials are summarized within the
 
 ------------------------------------------------------------------------
 
-## Project descriptions {#project-descriptions}
+## Project descriptions
 
 During the course, you have to formulate a data wrangling project. That is, you should name or provide a data set, say how the data should be (re)structured and set some visualization goals. You can use a data set you are working on (note, you might have to make it anonymous to share it) or a data set freely available online, from a publication, whatever. I strongly suggest "dirty" data that has to be cleaned up and reformatted! Data cleanup, transformation and extension should be one (big) part of your project!
 
@@ -35,7 +35,7 @@ The formulated projects are the set of exercises you and your fellow students wi
 
 ------------------------------------------------------------------------
 
-### Phase 1 - Drafting a project description {#phase-1---drafting-a-project-description}
+### Phase 1 - Drafting a project description
 
 <img src="https://img.icons8.com/external-flaticons-lineal-color-flat-icons/344/external-project-web-development-flaticons-lineal-color-flat-icons.png" width="100px"/>
 
@@ -63,7 +63,7 @@ Try to think of something "non-standard"...
 
 Double check that you think the data set you picked provides (somehow) all information needed to draw your plot of interest.
 
-#### Write up your project description {#write-up-your-project-description}
+#### Write up your project description
 
 Write an R Markdown file `project-description.Rmd` to
 
@@ -100,14 +100,22 @@ In order to submit your project proposal, you have to upload it to GitHub as par
 
 #### Available projects
 
--   [Example project by Martin](Projects/martin-raden/project-description.md)
+- Martin (martin-raden) - [Example project](Projects/martin-raden/project-description.md)
 
--   [Investigating tumour cell viability by Julia](Projects/juliaquach02/project_description.md)
--   [Postmaterialism and political trust by Christian](Projects/crudi3/project-description.md)
--   [A Visual Exploration of Artistic Landscape in Colombia (1940-2018) by Danilo](Projects/danilopenagos/project-description.md)
--   [Large Scale Energy Production in Germany by Paul](Projects/PaulKirschner/ProjectIdea_Energy.md)
-- [Bye Bye Birdie - Estimated population of house sparrows in the EU](Projects/jasmin-schels/jasmin-project-description.md)
-- [Covid-19 mortality rates](Projects/laurens-mauz/project-description.md)
+- Julia (juliaquach02) - [Investigating tumour cell viability](Projects/juliaquach02/project_description.md)
+- Christian (crudi3) - [Postmaterialism and political trust](Projects/crudi3/project-description.md)
+- Danilo (danilopenagos) - [A Visual Exploration of Artistic Landscape in Colombia (1940-2018)](Projects/danilopenagos/project-description.md)
+- Paul (PaulKirschner) - [Large Scale Energy Production in Germany](Projects/PaulKirschner/ProjectIdea_Energy.md)
+- Jasmin (jasmin-schels) - [Bye Bye Birdie - Estimated population of house sparrows in the EU](Projects/jasmin-schels/jasmin-project-description.md)
+- Laurens (laurens-mauz) - [Covid-19 mortality rates](Projects/laurens-mauz/project-description.md)
+- Nico (NICOtin-macht-suechtig) - [Media Usage in the EU](https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/main/Projects/nico-afentoulidis/project-description.md)
+- Tabea (muellertabea) - [Tree ring measurments](Projects/muellertabea/project-description.md)
+- Pleasant (neopolyglot) - [Rotation Curve of M31 (Andromeda) Galaxy](Projects/neopolyglot/project-description.md)
+- Daniela (DKemp98) - [Looking at some Food Information](Projects/DanielaKemp/project-description.md)
+- Alexander (alexanderwinterstetter) - [Analyzing Soccer Data](Projects/alexanderwinterstetter/project_description.md)
+- Daniel (neophilology) - [NLP: from German speeches to German history](Projects/neophilology/project-description.md)
+- Yaolu (yaolu-pan) - PISA study
+
 
 
 #### Goals
@@ -121,7 +129,7 @@ At the end of Phase 1 you will have a better understanding of
 
 ------------------------------------------------------------------------
 
-### Phase 2 - Reviewing a project description {#phase-2---reviewing-a-project-description}
+### Phase 2 - Reviewing a project description 
 
 <img src="https://img.icons8.com/external-filled-outline-geotatah/344/external-comment-customer-satisfaction-filled-outline-filled-outline-geotatah.png" width="100px"/>
 
@@ -131,7 +139,22 @@ To ensure the drafted projects are understandable and doable, we will do a peer 
 
 For each project draft, we will assign two reviewers at random. The *reviewer assignments* are as follows:
 
--   TODO ...
+- *Julia* will review projects of: Christian + Danilo
+- *Christian* will review projects of: Danilo + Paul
+- *Danilo* will review projects of: Paul + Jasmin
+- *Paul* will review projects of: Jasmin + Laurens
+- *Jasmin* will review projects of: Laurens + Nico
+- *Laurens* will review projects of: Nico + Tabea
+- *Nico* will review projects of: Tabea + Pleasant
+- *Tabea* will review projects of: Pleasant + Daniela
+- *Pleasant* will review projects of: Daniela + Alexander
+- *Daniela* will review projects of: Alexander + Daniel
+- *Alexander* will review projects of: Daniel + Yaolu
+- *Daniel* will review projects of: Yaolu + Julia 
+- *Yaolu* will review projects of: Julia + Christian
+
+See [project list](#available-projects) for respective GitHub user names for contact.
+
 
 **Each reviewer** is supposed to
 
@@ -163,7 +186,7 @@ At the end of Phase 2 you will
 
 ------------------------------------------------------------------------
 
-### Phase 3 - Finalizing your project description {#phase-3---finalizing-your-project-description}
+### Phase 3 - Finalizing your project description
 
 <img src="https://img.icons8.com/external-phatplus-lineal-color-phatplus/344/external-project-design-thinking-phatplus-lineal-color-phatplus-2.png" width="100px"/>
 
@@ -189,7 +212,7 @@ At the end of Phase 3 you will
 
 ------------------------------------------------------------------------
 
-## Tackling a suggested project {#tackling-a-suggested-project}
+## Tackling a suggested project
 
 Given a project description, you will try to solve the task. In order to practice real work flow life cycles, you will create your solution first in your own git branch and suggest it via a pull request on GitHub. This provides the project owner the possibility to review your solution and to give you feedback, which you can discuss within the pull request. Once all are happy with the solution it can be merged into the main branch of the course repository and thus be published.
 
@@ -203,7 +226,7 @@ Note: we are still working all on ONE GITHUB REPOSITORY! We do *not create a for
 
 ------------------------------------------------------------------------
 
-### Phase 1 - Posting your initial solution {#phase-1---posting-your-initial-solution}
+### Phase 1 - Posting your initial solution
 
 <img src="https://img.icons8.com/external-justicon-lineal-color-justicon/344/external-coding-responsive-web-design-justicon-lineal-color-justicon-3.png" width="100px"/>
 
@@ -263,7 +286,7 @@ At the end of Phase 1 you will
 -   have worked on a data wrangling and visualization project (in your own independent git branch)
 -   have created a pull request on GitHub to incorporate your suggested project solution
 
-### Phase 2 - Reviewing and finalizing {#phase-2---reviewing-and-finalizing}
+### Phase 2 - Reviewing and finalizing
 
 <img src="https://img.icons8.com/external-parzival-1997-outline-color-parzival-1997/344/external-training-human-resource-management-parzival-1997-outline-color-parzival-1997.png" width="100px"/>
 
@@ -304,7 +327,7 @@ At the end of Phase 2 you will
 -   have integrated an interactive reviewing cycle in your project solution
 -   be ready for the next project! :grin:
 
-## Beautifying your project {#beautifying-your-project}
+## Beautifying your project
 
 Finally, it is not only about content but presentation matters. Thus, you will have to beautify your HTML output. Here some ideas where to start:
 
