@@ -22,12 +22,19 @@ We are mainly interested in the differences in media usage and their impact betw
 The main goal is to visualise the media usage of the different EU countries. I thought a map could be a nice representation like the one below. But if you have other good ideas I would love see them. The variables from "qd3_1" to "qd3_7" show the amount of usage for different media. The values tell you how often the media is used per month. I think you should use them.
 
 Every variable stands for another type of media:
+
 qd3_1: TV
+
 qd3_2: TV via Internet
+
 qd3_3: Radio
+
 qd3_4: Podcast
+
 qd3_5: Written press
+
 qd3_6: Internet
+
 qd3_7: Social media
 
 ![](https://static.wixstatic.com/media/d18dad_00f962f736a448a885bc377ee3caec60~mv2.gif/v1/fill/w_220,h_165,q_90/d18dad_00f962f736a448a885bc377ee3caec60~mv2.gif)
