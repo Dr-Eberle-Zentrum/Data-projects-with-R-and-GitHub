@@ -1,9 +1,3 @@
----
-editor_options: 
-  markdown: 
-    wrap: 72
----
-
 ## Project description
 
 For the project, I want to use a research question I have previously
@@ -11,7 +5,7 @@ dealt with in an assignment, but have not done any visualization for.
 The broad topic is about how Postmaterialism/Materialism (as seen in the
 data through the Inglehart Index) affects the level of trust towards
 (governmental) institutions. The data set in question would be the same
-I used for my analysis, the [ALLBUS
+I used, the [ALLBUS
 2021](https://search.gesis.org/research_data/ZA5280).
 
 The
@@ -20,12 +14,25 @@ and [Data
 Set](https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/main/Projects/crudi3/ZA5280_v2-0-0.dta)
 are uploaded in my project folder.
 
-Theoretically I would be leaning towards the cultural backlash
-hypoothesis introduced to populism research, explaining why materialists
-tvote for populist parties more so then postmaterialists. Since populism
-involves a certain amount of disagreement with the established political
-culture, political trust should also be affected by
-materialistic/postmaterialistic values of individuals.
+Theoretically, I am leaning on the cultural backlash hypothesis
+introduced to populism research, explaining why materialists vote for
+populist parties more than postmaterialists. The main argument of the
+hypothesis, is that the erosion and takeover of traditionally
+materialistic value systems (existential security, the core family,
+fixed gender roles, etc.) is accompanied by a surge in postmaterialistic
+values (self-expression, tolerance, multiculturalism, etc.). This
+swapping of value systems leads to traditional/materialistic people
+feeling spiteful and misrepresented. Hence the hypothesis, that
+materialistic people would vote more favorably for populists than
+postmaterialists. Since populism involves disagreement with the
+established political culture (the status quo), political trust towards
+the established system should also be affected by
+materialistic/postmaterialistic values of individuals. My hypothesis
+therefore is: If the cultural backlash theory is true, than the degree
+of post-/materialism influences one’s level of political trust. If one
+scores are high in materialism, then one shows low levels of trust
+towards institutions. If one has high scores towards postmaterialism,
+then one shows high levels of trust towards institutions.
 
 The goal of this project is to visualize the average trust levels of
 different institutions according to their
@@ -35,31 +42,40 @@ look similar to this:
 ![](https://listentopeople.eu/wp-content/uploads/2019/10/INSTITUTIONAL-TRUST_all-countries_v2_txt.png)
 
 Instead of countries, the x-axis should show the institutions the
-respondets evaluate their trust towards. Colors may be used to allow for
-easier distinguishing, however colors should primarily be used to be
+respondents evaluate their trust towards. Colors may be used to allow
+for easier distinguishing, however colors should primarily be used to be
 able to see the differences between the groups of post-/materialism.
 ![](https://www.jingege.wang/bioinformatics/ggplot2/48-grouped-barplot-with-ggplot2_files/figure-html/thecode4-1.png)
-The plot should look somewhat like this, with colorcoded groups
+The plot should look somewhat like this, with color coded groups
 according to their level of post-/materialism.The data set provides
-everything you need, from trustlevels to the inglehart index for
-post-/materialism. The documentation of the dataset is in german, if
-that proves to be an issue I will, of course, help with that.
+everything you need, from trust towards institutions (variable names:
+pt01-pt20, although there aren’t 20 institutions, they are just
+inconsistently numbered) to the inglehart index (variable name: ingle)
+for post-/materialism. The documentation of the data set is in German,
+if that proves to be an issue I will, of course, help with that.
 
 # Visualization goals
 
--   barplot with every institutional mean trust level
+-   barplot with every institutional mean trust level –&gt; this shows
+    how much each institution is being trust in general
 -   group the trust levels according to the level of post-/materialism
--   only one bar per institution
+    –&gt; Research Question! Basically, I want you to visualize how much
+    a materialistic person trusts institutions and how much a
+    postmaterialistic person trusts institutions!
+-   only one bar per institution, integrate the
+    materialistic/postmaterialistic groups into the bars
 -   color code materialistic and postmaterialistic groups universally
     accross all bars
--   another option is to give each institution a definitve color and
-    changeing the hue for post-/materialsitic groups (like a more
-    frosted colorversion for materialism and more radiant one for
-    postmateralism)
--   include the average trust level irrespectible of post-/materialism
-    as a number within each bar
+-   another option is to give each institution a definitve color (health
+    administration - green, pol. parties - blue, etc.) and changing the
+    hue for post-/materialsitic groups (lighter green/lighter blue for
+    materialistic, darker green, darker blue for postmaterialistic etc.)
+-   include the average trust level irrespective of post-/materialism as
+    a number within each bar
 -   highlight the biggest and smallest difference between the
-    post-/materialistics groups --\> how, is up to you
+    post-/materialistics groups –&gt; where is the greatest disparity
+    and where is the greatest similarity in trust levels between
+    post-/materialists?
 
 Please let me know, if anything is unclear or wether there are problems
 with the data. Yours, Christian
