@@ -1,11 +1,12 @@
 # Background
 
 Since the outbreak of the SARS-CoV-2, there was a lot of talk about the
-dangers and especially the mortality rate of this new Virus. Mortality
-rates are interesting as they can highlight which countries had the most
-difficulties to combat the virus. Mortality rates may also provide some
-insight into the effectiveness of different measures to protect people
-from severe cases of the disease.
+dangers of the virus and the ability of the healthcare infrastructure to
+prevent deaths. In this context it might be interesting to look at the
+ratio of deaths and confirmed cases of Covid-19. This ratio might
+provide an interesting measure for the effectiveness of a healthcare
+system to cure or prevent the worst outcomes of an infection with
+SARS-CoV-2.
 
 ------------------------------------------------------------------------
 
@@ -30,13 +31,13 @@ Important columns:
 
 <table style="width:100%;">
 <colgroup>
-<col style="width: 22%" />
-<col style="width: 20%" />
-<col style="width: 11%" />
-<col style="width: 13%" />
-<col style="width: 10%" />
-<col style="width: 10%" />
-<col style="width: 10%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -84,24 +85,40 @@ Important columns:
 
 # Goal
 
-I am interested in the average mortality rates for the SARS-COV-2 virus
-at different stages of the pandemic for the US, Germany, Italy,
+I am interested in the ratio of deaths and confirmed cases of the
+Covid-19 at different stages of the pandemic for the US, Germany, Italy,
 Australia, China, South Korea, New Zealand, Senegal and to visualize the
-results with heat maps.
+results with heat maps. I hope to answer the following questions:
+
+-   Did healtcare systems adapt to the outbreak virus over time (did the
+    ratio shrink)?
+-   Are healthcare systems of different countries equally effective?
 
 ### To do:
 
--   calculate the average mortality rate for the time-windows
-    february-april and juni-september of 2020, 2021 and 2022 for the
-    aforementioned countries from the time series.
+-   calculate the ratio of deaths and confirmed cases of Covis-19 for
+    the time-windows february-april and juni-september of 2020, 2021 and
+    2022 for the aforementioned countries from the time series.
+    (remember that the values for confirmed cases and deaths are
+    cumulative, so you will need to subtract the value for the beginning
+    of a time-window from the value for the end of the time-window)
 
 -   visualize the average mortality rates for the aforementioned
     countries and for each time-window using a heat map (you will have
     to create six heat maps since there are six averages/time-windows)
+    (regarding other countries, I think just leaving them uncolored/grey
+    is fine)
 
 The visualitzation should look somewhat like this:
 
 ![](images.jpg)
+
+------------------------------------------------------------------------
+
+# helpful links
+
+-   to create the heatmap
+    [this](https://r-graphics.org/recipe-miscgraph-choropleth) may help
 
 ------------------------------------------------------------------------
 

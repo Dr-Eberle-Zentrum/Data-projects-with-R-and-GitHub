@@ -1,11 +1,24 @@
+---
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
 ## Project description
 
-For the project I want to use a research question I have previously
+For the project, I want to use a research question I have previously
 dealt with in an assignment, but have not done any visualization for.
-The broad topic is about how Postmaterialism/Materialism (Inglehart
-Index) affects the level of trust towards (governmental) institutions.
-The data set in question would be the same I used so the [ALLBUS
+The broad topic is about how Postmaterialism/Materialism (as seen in the
+data through the Inglehart Index) affects the level of trust towards
+(governmental) institutions. The data set in question would be the same
+I used for my analysis, the [ALLBUS
 2021](https://search.gesis.org/research_data/ZA5280).
+
+The
+[Codebook](https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/main/Projects/crudi3/Codebook.pdf)
+and [Data
+Set](https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/main/Projects/crudi3/ZA5280_v2-0-0.dta)
+are uploaded in my project folder.
 
 Theoretically I would be leaning towards the cultural backlash
 hypoothesis introduced to populism research, explaining why materialists
@@ -46,7 +59,7 @@ that proves to be an issue I will, of course, help with that.
 -   include the average trust level irrespectible of post-/materialism
     as a number within each bar
 -   highlight the biggest and smallest difference between the
-    post-/materialistics groups –&gt; how, is up to you
+    post-/materialistics groups --\> how, is up to you
 
 Please let me know, if anything is unclear or wether there are problems
 with the data. Yours, Christian
