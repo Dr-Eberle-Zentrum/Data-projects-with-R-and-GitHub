@@ -36,7 +36,7 @@ parents. The values of the variables show how often (on a scale from 1 =
 Never or almost never to 5 = Several times a week) the subject reads
 this type of book.
 
-    pisa_reading <- read.csv ("D:/Desktop/R2/Advanced-data-processing-with-R/Projects/yaolu-pan/pisa_reading_16-05-2023.csv", header = TRUE, stringsAsFactors = FALSE)
+    pisa_reading <- read.csv ("pisa_reading_16-05-2023.csv", header = TRUE, stringsAsFactors = FALSE)
 
     head(pisa_reading)
 
