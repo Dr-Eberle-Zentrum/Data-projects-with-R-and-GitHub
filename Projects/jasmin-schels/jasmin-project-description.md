@@ -46,9 +46,11 @@ other hand, were flagged as having become increasingly rare.
 
 ------------------------------------------------------------------------
 
-The idea of this project is to recreate the “Bye Bye Birdie” plot as
-close as possible using the data from Burns et al. (2021) which is
-linked above. I am not sure if this is even possible but I really liked
-the chart.
+The idea of this project is to recreate the “Bye Bye Birdie” plot below
+as close as possible using the data from Burns et al. (2021) which is
+linked above. I am particularly interested in which of the bird species
+increased in population and which decreased in population.
+
+![](images/population-changes.jpeg)
 
 Best, Jasmin
