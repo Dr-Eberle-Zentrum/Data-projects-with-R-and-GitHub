@@ -69,7 +69,7 @@ different galaxies. A sample of M31 rotation curve that I found in
 link](https://www.researchgate.net/profile/Alan-Parry/publication/258849339/figure/fig3/AS:669497048461332@1536631943465/The-rotation-curves-both-observed-and-calculated-for-the-Andromeda-galaxy-Credit.jpg)
 is as follows:
 
-![](m31-rotation-curve.png)
+![](m31-rotation-curve.jpeg)
 
 Here the X-axis is in light years. When you do the plot, you have to
 convert kiloparsecs to light years.
