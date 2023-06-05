@@ -19,7 +19,8 @@ summary(data$Taxa)
 
 # Nicos solution on Tabeas project
 
-###The first plot:
+## The first plot 
+
 The exercise was: Scatterplot with the mean radius size of each sample in which only the samples with Radius_number 1 are considered. Differentiation between different taxa, colour gradient from smaller to larger diameter.
 
 ```{r First plot, echo = FALSE}
@@ -32,12 +33,13 @@ data |>
       color = Radius_tot_mean)) +
     theme_classic() +
     ylab(label = "Mean of all measurements") +
+    labs(title = "Radius of the different taxas") +
     scale_color_continuous(name="Mean of all measurements") +
     scale_shape_discrete(labels= c("NA's", "Indet", "Populus", "Salix"))
 ```
 
+## The second plot
 
-###The second plot:
 Then I tried the next exercise: A barplot in which the number of samples with the different numbers of annual rings is shown.
 
 ```{r Second plot, echo = FALSE}
@@ -46,14 +48,15 @@ data |>
   group_by(ID) |> 
   summarise(amount_rings = max(Radius_number)) |> 
     ggplot() +
-    geom_bar(aes(x=as.factor(amount_rings))) +
+    geom_bar(aes(x=as.factor(amount_rings)), fill = "blue") +
     theme_classic() +
+    labs(title = "Number of samples for each amount of annual rings") +
     xlab(label = "Numbers of annual rings") +
     ylab(label = "Number of samples")
 ```
 
+## The third plot
 
-###The third plot:
 Last exercise: Scatterplot with dependence of standard deviation on the mean value of the radius, differentiated by taxa, including for each taxa a linear trend line.
 
 ```{r Third plot, echo = FALSE, message=FALSE, warning=FALSE}
@@ -67,5 +70,6 @@ data |>
   xlab(label = "Mean value of the radius") +
   ylab(label = "Standard deviation") +
   theme_classic() +
+  labs(title = "Standard deviation and mean value for the different wood species") +
   scale_color_discrete(labels= c("NA's", "Indet", "Populus", "Salix"))
 ```
