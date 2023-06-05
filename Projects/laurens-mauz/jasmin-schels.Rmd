@@ -1,4 +1,30 @@
 ---
 output: md_document
 ---
+library(maps)
+map('world', fill = FALSE, col = 1:100)
 
+deaths2 <- read_csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv")
+
+cases <- read_csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv")
+
+
+daten <- list()
+daten["Death"] <- 
+deaths2 %>% 
+  dplyr::filter(`Country/Region` %in% c("US", "Germany", "Italy", "China", "Korea, South", "New Zealand", "Senegal")) %>% 
+  select(matches("^[234]/.+/20$"))
+
+
+
+daten["Case"] <-
+cases %>% 
+  dplyr::filter(`Country/Region` %in% c("US", "Germany", "Italy", "China", "Korea, South", "New Zealand", "Senegal")) %>% 
+  select(matches("^[234]/.+/20$")) %>% 
+  select("2/1/20", "4/30/20") 
+
+daten["Country"] <-
+  cases %>% 
+  dplyr::filter(`Country/Region` %in% c("US", "Germany", "Italy", "China", "Korea, South", "New Zealand", "Senegal"))
+
+bind_rows(daten) 
