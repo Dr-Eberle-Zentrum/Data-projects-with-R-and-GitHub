@@ -1,0 +1,33 @@
+---
+title: "Andromeda"
+output: html_document
+date: "2023-06-05"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(dplyr)
+library(png)
+install.packages("ggpubr")
+library(ggpubr)
+library(readr)
+
+Data <- read_tsv("0224.dat", comment = "#" , col_names = FALSE) %>%
+  separate(X1, c("R", "V"), sep = "\\s+")
+
+Data$R.ly <- Data$V.*3261.56
+backgroundImage <- readPNG("Andromeda_image.png")
+
+
+Plot1 <- ggplot(Data, aes(x=R.ly, y=V.km.s.)) + 
+background_image(backgroundImage)+
+geom_line() +
+geom_segment(aes(x = R.ly, xend = lead(R.ly), y = V.km.s., yend=lead(V.km.s.), color = ifelse(R.ly >= 0 & R.ly <= 27000, "lightblue", "lightgreen"))) +
+scale_color_identity(guide = "none") +
+geom_label(x=10000, y=270, label="ascending", color = "black", size=3, family="Arial", fill="lightblue") +
+geom_label(x=75000, y=270, label="remaining", color="black", size=3, family = "Arial", fill="lightgreen")+
+theme_classic()
+
+```
+
