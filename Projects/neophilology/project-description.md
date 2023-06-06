@@ -1,4 +1,3 @@
-
 # NLP: from German speeches to German history
 
 ## Topic: Contemporary Germany
@@ -41,5 +40,5 @@ Feature engineering to create a tabular dataset.
 
 ## Visualization goals
 
--  Word clouds for each period
--  Frequency plots and time series
+-   Word clouds for each period
+-   Frequency plots and time series
