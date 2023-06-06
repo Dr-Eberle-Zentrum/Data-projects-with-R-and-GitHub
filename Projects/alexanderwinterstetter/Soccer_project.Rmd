@@ -2,7 +2,7 @@
 title: "Soccer Processing"
 author: "Daniela Kemp"
 date: "2023-05-24"
-output: html_document
+output: md_document
 ---
 
 ```{r setup, include=FALSE}
