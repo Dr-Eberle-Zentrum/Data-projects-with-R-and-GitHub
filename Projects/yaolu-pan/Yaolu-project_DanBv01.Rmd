@@ -2,7 +2,7 @@
 title: "Yaolu's Project (v.DanB)"
 author: "Daniel Barrera"
 date: "2023-06-06"
-output: html_document
+output: md_document
 ---
 ### Loading data and libraries
 ```{r setup}
