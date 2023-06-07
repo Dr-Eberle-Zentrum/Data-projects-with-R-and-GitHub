@@ -1,24 +1,32 @@
 ---
-title: "Yaolu's Project (v.DanB)"
+title: "Yaolu's Project (v1.1-DanB)"
 author: "Daniel Barrera"
 date: "2023-06-06"
 output: md_document
 ---
-### Trying branch-Loading data and libraries
-```{r setup}
+
+## TOC
+
+-   to be included in final version
+
+## Exploratory analysis
+
+### Loading data and libraries
+
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 pisa_reading <- read.csv("pisa_reading_16-05-2023.csv", header = TRUE, stringsAsFactors = FALSE)
-library(tidyverse)
-library(ggplot2)
+library(tidyverse, ggplot)
+```
+Loaded and read the csv data, `tidyverse`, \`ggplot2\`, and plotted column names.
+```{r, echo=FALSE}
 df<- pisa_reading
 colnames(df)
 ```
 
+I thought column names were actually a little long to display in the data frame. So I shortened their names. Here is the data frame's head:
 
-### Exploring the data
-
-I thought column names were actually a little long to display in the data frame.
-```{r}
+```{r, echo = FALSE}
 #Shortening columns' names
 names(df)[names(df) == "Journals.Magazines_st"] <- "St_Mags"
 names(df)[names(df) == "Comics_st"] <- "St_Comix"
@@ -31,37 +39,35 @@ names(df)[names(df) == "Fiction..novels..short.stories..stories._pa"] <- "Pa_Fic
 names(df)[names(df) == "Nonfiction..history..biography..science..technology._pa"] <- "Pa_NonFi"
 names(df)[names(df) == "Daily.newspapers_pa"] <- "Pa_Papers"
 
-colnames(df)
+df <- df[,2:11]
 head(df)
 ```
 
-
 ## Describing the data:
-Ranked index (self-assessed?) survey:
-"How often do you read this type of book?"
-* 1 = Never or almost never
-* 5 = Several times a week
+
+Ranked index (self-assessed?) survey: "How often do you read this type of book?" \* 1 = Never or almost never \* 5 = Several times a week
 
 The data is categorical: **Ordinal data or ordered factor**
 
 ### Preliminary questions about the data:
-- NA in all columns, i.e. an empty row, means no observation?
-- NA in parent columns means only student answered or they parents don't read?
-- NA in student columns means means there isn't a student or the student doesn't read?
-- NA in one column means they never read that type or should it be 1?
-- Who answered the survey: students, parents, or both?
 
-## Goal: 
-The goal of this project is to visualize how often students and their parents read different types of book.
-1. diagram for bar plots of different book types
-2. grouped plots for students and parents
+-   NA in all columns, i.e. an empty row, means no observation?
+-   NA in parent columns means only student answered or they parents don't read?
+-   NA in student columns means means there isn't a student or the student doesn't read?
+-   NA in one column means they never read that type or should it be 1?
+-   Who answered the survey: students, parents, or both?
+
+## Goal:
+
+The goal of this project is to visualize how often students and their parents read different types of book. 1. diagram for bar plots of different book types 2. grouped plots for students and parents
 
 ## Plan
-1. Stat summary
-2. Boxplots by column
-3. Clean data: remove outliers and NA
-4. Explore relations and correlations
-5. Add aggregated column for student and parents
+
+1.  Stat summary
+2.  Boxplots by column
+3.  Clean data: remove outliers and NA
+4.  Explore relations and correlations
+5.  Add aggregated column for student and parents
 
 ```{r}
 #Removing NA values and replace them with 1
@@ -71,23 +77,26 @@ any(is.na(df))
 lengths(df)
 ```
 
-* Looking at STUDENTS only
+-   Looking at STUDENTS only
+
 ```{r}
-df_st <- df[,(2:6)]
+df_st <- df[,(1:5)]
 head(df_st)
 boxplot(df_st)
 ```
-* Looking at PARENTS only
+
+-   Looking at PARENTS only
+
 ```{r}
-df_pa <- df[,(7:11)]
+df_pa <- df[,(6:10)]
 head(df_pa)
 boxplot(df_pa)
 ```
 
-
 ### summary statistics
+
 ```{r}
-df_all <- df[,2:11]
+df_all <- df#[,2:11]
 head(df_all)
 boxplot(df_all)
 str(df_all)
@@ -97,6 +106,7 @@ summary(df_pa)
 ```
 
 ### Plotting
+
 ```{r}
 barplot(as.matrix(df_st), cex.axis=0.6, cex.names=0.6,
         xlab='Type of text', ylab='Count from 5451 obs')
@@ -108,17 +118,19 @@ barplot(as.matrix(df_all), cex.axis=0.6, cex.names=0.6,
         xlab='Type of text', ylab='Count from 5451 obs')
 ```
 
-
 ## Preliminary findings
-* What students and parents read the most are newspapers
-* The same tendency is evident in both groups
-* As they read more papers, they read more
-* magazines, nonfiction, fiction, then comics (in that order)
+
+-   What students and parents read the most are newspapers
+-   The same tendency is evident in both groups
+-   As they read more papers, they read more
+-   magazines, nonfiction, fiction, then comics (in that order)
 
 ### Plotting type of book side by side
+
 The next plot illustrates better student-parent comparison
 
-* First we need to change the order of columns
+-   First we need to change the order of columns
+
 ```{r}
 colnames(df_all)
 col_order <- c(
@@ -131,7 +143,8 @@ colnames(df_reord)
 View(df_reord)
 ```
 
-* Then we can plot
+-   Then we can plot
+
 ```{r}
 barplot(as.matrix(df_reord), cex.axis=0.6, cex.names=0.6,
         xlab='Type of text', ylab='Count from 5451 obs')
@@ -140,7 +153,8 @@ type_sum <- colSums(df_reord)
 type_sum
 ```
 
-* Now, we change the value, from count to mean
+-   Now, we change the value, from count to mean
+
 ```{r}
 columns <- colnames(df_reord)
 type_mean <- colMeans(df_reord)
@@ -149,16 +163,21 @@ columns <- names(type_mean)
 df_p <- data.frame(columns,type_mean)
 df_p
 ```
-* Finally, we can plot
+
+-   Finally, we can plot
+
 ```{r}
 barplot(type_mean, cex.axis=0.6, cex.names=0.6,
         xlab='Type of text', ylab='Average')
 boxplot(df_reord)
 ```
 
---------------
+------------------------------------------------------------------------
+
 ### Data frame types by reader
+
 The values are indicated by the mean, not count.
+
 ```{r}
 students_mean <- colMeans(df_st)
 parents_mean <- colMeans(df_pa)
@@ -180,7 +199,9 @@ barplot(as.matrix(df_means), cex.axis=0.6, cex.names=0.6,
 ```
 
 ## Final plot by types
+
 I think the best way to display book types is to plot readers side by side
+
 ```{r}
 barplot(as.matrix(df_means), cex.axis=0.6, cex.names=0.6,
         xlab='Type of text', ylab='Mean', 
@@ -189,4 +210,3 @@ barplot(as.matrix(df_means), cex.axis=0.6, cex.names=0.6,
         legend.text = c("Students","Parents"))
 
 ```
-
