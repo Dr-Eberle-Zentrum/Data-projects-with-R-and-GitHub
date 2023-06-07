@@ -1,3 +1,10 @@
+## Erste Schritte
+
+Nachdem ich mich noch als Anfänger in R bezeichnen würde, habe ich bis
+jetzt nur eine Tabelle mit den relevaten Daten erstellt für die ersten
+beiden Zeitspannen. Im nächsten Schritt möchte ich die restlichen Daten
+aufnehmen und diese dann in die Karte einfügen.
+
     library(tidyverse)
 
     ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
@@ -33,9 +40,8 @@
     ## ℹ Use `spec()` to retrieve the full column specification for this data.
     ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
-    #daten["Case"] <-
     bind_rows(list("Death" = deaths2, "Cases" = cases), .id="table") %>% 
-    #cases %>% 
+
       dplyr::filter(`Country/Region` %in% c("US", "Germany", "Italy", "China", "Korea, South", "New Zealand", "Senegal")) %>% 
 
     transmute(
@@ -43,7 +49,7 @@
       early2020 = `4/30/20`-`2/1/20`,
       late2020 = `9/30/20`-`6/1/20`, 
     ) %>% 
-    #  dplyr::filter( `Country/Region` == "Germany") %>% 
+
       pivot_longer(ends_with("2020"), names_to = "Time") %>% 
       pivot_wider(names_from = "table", values_from = "value") %>% 
       mutate(Mortality= Death / Cases)
