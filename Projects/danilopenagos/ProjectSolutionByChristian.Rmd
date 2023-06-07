@@ -1,0 +1,61 @@
+---
+title: "ProjectSolutionByChristian"
+author: "Christian Rudi"
+date: "2023-06-07"
+output: md_document
+---
+
+# First Attempt at solving the art gallery project
+
+## Data Wrangling
+
+### Load and merge the spreadsheets to r
+
+First thing to do, would be loading the file with all slides. For that reason the rio package would first need to be installed. The rio package is used to merge all the spreadsheets within the excel document together. Please be aware, that you might have to install rio first, using install.packages("rio").
+
+```{r}
+library(tidyverse)
+library(rio)
+df <- import_list("PG_BD_INVITACIONES_SM05-20-2021.xlsx", rbind = TRUE)
+df
+```
+
+### Creating a working data frame
+
+The second step would be to slim the data down and clean it up. The Variable I chose are the ones you recommended, "Nombre, Galeria, Espacio" and "Artistas". The other issue concerns the documentation of the artists. Since galleries have invited multiple artists to an exhibition, the documentation in the data frame consist of multiple Artists in a single row separated by commas. Using the seperate_rows function, the rows where multiple artists were documented are being separated by their separating comma and stored in their individual row. The last clean-up is about the rows containing NAs, omitting them from the data.
+
+```{r}
+# Create a subset dataset using the variables: "Nombre / Galeria / Espacio", "Artistas", 
+data <- subset(df, select = c("Nombre / Galeria / Espacio", "Artistas"))
+
+# splitting the strings of Artistas and saving as new variable
+data1<-data |> separate_rows(Artistas, sep = ", ")
+
+# removing all the cases with NA
+data2<-data1[complete.cases(data1), ]
+data2
+```
+
+### Counting the time artists were invited to which galleries and merging a complete data frame
+
+Lastly, the data set needs a variable that displays, how many times artists were invited to each gallery. To create such a data frame, we need to group the data according to the artists and galleries and then count how many times a gallery invited the artist. That way, duplicated information is eliminated and the data frame is reduced from 30.982 to 10.542 rows
+
+```{r}
+artgal<-data2|>
+  group_by(Artistas, `Nombre / Galeria / Espacio`) |>
+  count(Artistas)
+artgal
+
+```
+
+# To-Do and questions:
+
+-   generate the JSON file
+    -   Why do I need a JSON format? Has it something to do with the Sankey diagram?
+    -   a unique identifier for each artist would be pointless with a number of \>10.000, the diagram would be so over saturated, that the smaller artists/galleries would get drowned out or it would be so chaotic that they are indistinguishable. You mentioned, that only those invited more than three times would be considered, however if you run this code: sort(artgal\$n, decreasing = TRUE), you see how many times some have been invited. Additionally, this sample shows just the number of invitations from just one gallery, some artists are invited to multiple galleries (I think the highest count I saw was over 500) --\> What should I do about that?
+-   create the Sankey diagram
+    -   what context do you want explored? which gallery invited which artist or which artist was invited by the most galleries,...?
+
+## JSON file
+
+## Visualization
