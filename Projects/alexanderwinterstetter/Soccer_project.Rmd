@@ -2,11 +2,8 @@
 title: "Soccer Processing"
 author: "Daniela Kemp"
 date: "2023-05-24"
-<<<<<<< HEAD
-output: html_document
-=======
+
 output: md_document
->>>>>>> e08fdff59432238093cc98d47bc7af0f7a1de8e5
 ---
 
 ```{r setup, include=FALSE}
@@ -60,11 +57,8 @@ unique_players_df$pos<-ifelse(is.na(unique_players_df$position),NA,
 
 ```
 
-Create a new column with the age of the players
-<<<<<<< HEAD
-=======
+# Create a new column with the age of the players
 
->>>>>>> e08fdff59432238093cc98d47bc7af0f7a1de8e5
 ```{r}
 library("lubridate")
 unique_players_df$birthday<-gsub("[[:punct:]]","-",unique_players_df$birthday) %>% dmy()
@@ -113,7 +107,6 @@ tail(unique_players_df[order(unique_players_df$yellowReds),],n=15)
 
 ```{r}
 library("plotly")
-#!!!!!!coords_fixed values have to be adjusted if age is adjusted
 
 level_order<-c("Goalkeeper","Defense","Midfielder","Offense")
 
@@ -134,17 +127,14 @@ plot
 ```
 
 ```{r echo=FALSE}
-<<<<<<< HEAD
+
 ggplot(data=unique_players_df, aes(x=age, y=leagueCountry))+theme_classic()+geom_violin(aes(fill=leagueCountry))+labs(title="Age of players vs league county",y ="")
-=======
 ggplot(data=unique_players_df, aes(x=age, y=leagueCountry))+theme_classic()+geom_violin(aes(fill=leagueCountry))
->>>>>>> e08fdff59432238093cc98d47bc7af0f7a1de8e5
 
 ```
 
 \- visualize the ratio in the league: redcards // yellow cards
 
-<<<<<<< HEAD
 Preprocessing, define a column ratio of Red/Yellow for all players where not yellow and red =0, here I'd default to 0.
 
 ```{r}
@@ -159,47 +149,31 @@ limits<-boxplot.stats(unique_players_df$ratioRedYellow)$stats[c(1, 5)]
 Plotting it
 
 ```{r}
-
-=======
-```{r}
 unique_players_df$ratioRedYellow<-ifelse(unique_players_df$redCards==0|
                                            unique_players_df$yellowCards==0, 
                                          yes = 0, 
                                          no =                          unique_players_df$redCards/unique_players_df$yellowCards)
 
 limits<-boxplot.stats(unique_players_df$ratioRedYellow)$stats[c(1, 5)]
->>>>>>> e08fdff59432238093cc98d47bc7af0f7a1de8e5
 
 ggplot(data=unique_players_df, aes(x=ratioRedYellow, y=leagueCountry))+
   theme_classic()+
   theme(legend.position="none")+
   geom_boxplot(aes(color=leagueCountry))+
-<<<<<<< HEAD
   coord_cartesian(xlim = limits*1.3)+
-=======
   coord_cartesian(xlim = limits*1.05)+
->>>>>>> e08fdff59432238093cc98d47bc7af0f7a1de8e5
   labs(title="Ratio of red to yellow cards for different countries", x= "Red cards/yellow cards",y="")+
   annotate("text",
            y = 1:length(table(unique_players_df$leagueCountry)),
            x = limits[ 2],
            label = paste(table(unique_players_df$leagueCountry), "players"),
-<<<<<<< HEAD
            vjust= -0.8)+
-=======
-           vjust= -1)+
->>>>>>> e08fdff59432238093cc98d47bc7af0f7a1de8e5
-  
+
   annotate("text",
            y = 1:length(table(unique_players_df$leagueCountry)),
            x = aggregate(ratioRedYellow~leagueCountry,unique_players_df,median)[,2],
            label = signif(aggregate(ratioRedYellow~leagueCountry,unique_players_df,median)[,2],digits=3),
-<<<<<<< HEAD
            hjust = -0.1,
            vjust = -0.8)
-=======
-           hjust =0.005,
-           vjust = - 1)
->>>>>>> e08fdff59432238093cc98d47bc7af0f7a1de8e5
 
 ```
