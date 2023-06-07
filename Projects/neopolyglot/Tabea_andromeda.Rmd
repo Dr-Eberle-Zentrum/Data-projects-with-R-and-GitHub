@@ -1,34 +1,36 @@
 ---
 title: "Andromeda"
-output: html_document
+output: md_document
 date: "2023-06-05"
 ---
 
-```{r setup, include=FALSE}
+```{r setup, echo=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(ggplot2)
 library(dplyr)
-library(png)
-install.packages("ggpubr")
+install.packages("ggpubr", repos = "http://cran.us.r-project.org")
 library(ggpubr)
 library(readr)
+library(jpeg)
+library(tidyverse)
 
-Data <- read_tsv("0224.dat", comment = "#" , col_names = FALSE) %>%
-  separate(X1, c("R", "V"), sep = "\\s+", convert = TRUE) %>%
-  mutate(R.ly = V *3261.56)
+backgroundImage <- readJPEG("Andromeda_Galaxy.jpg")
 
+Data <- read_csv("0224.dat", comment = "#", col_names = F) |> 
+  separate(X1, into=c("R","V"), sep="\\s+", convert=T) |> 
+  mutate( row = row_number(),
+          ascending = row <= row[V == max(V)][[1]],
+          R.ly= R *3261.56) 
 
-backgroundImage <- readPNG("Andromeda_image.png")
-
-
-Plot1 <- ggplot(Data, aes(x=R.ly, y=V)) + 
-background_image(backgroundImage)+
-geom_line() +
-geom_segment(aes(x = R.ly, xend = lead(R.ly), y = V, yend=lead(V), color = ifelse(R.ly >= 0 & R.ly <= 27000, "lightblue", "lightgreen"))) +
-scale_color_identity(guide = "none") +
-geom_label(x=10000, y=270, label="ascending", color = "black", size=3, family="Arial", fill="lightblue") +
-geom_label(x=75000, y=270, label="remaining", color="black", size=3, family = "Arial", fill="lightgreen")+
-theme_classic()
+ggplot(Data, aes(x= R.ly ,y= V, color = ascending))+
+  background_image(backgroundImage)+
+  geom_line()+
+  geom_label(x=10000, y=270, label="ascending", color = "black", size=3, family="Arial", fill="lightblue") +
+  geom_label(x=75000, y=270, label="remaining", color="black", size=3, family = "Arial", fill="orange")+
+  xlab("Distance (light years)") +
+  ylab("Velocity (km s^-1)")+
+  theme(legend.position = "none") +
+  theme_classic()
 
 ```
 
