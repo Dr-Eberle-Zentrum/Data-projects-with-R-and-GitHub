@@ -20,6 +20,8 @@ To better understand the tasks, briefly learn about the Nutri-score, most import
 3.  Preprocess some (for you) relevant data columns as you need (eg. transform packaging to plastic, not-plastic, unknown)
 
 # Tasks
+**You don't have to do all the tasks, but I'd suggest you pick at least three**
+
 
 -   The Nutriscore consists of a score between -15 and 40 and a class assignment depending on this score. Plot the frequency of each score and color them by class for a selection of the data (eg. beverages from 2020 or 2500 random rows where no column is empty). Is there anything striking about this result?
 
