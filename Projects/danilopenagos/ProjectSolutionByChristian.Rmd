@@ -17,7 +17,7 @@ First thing to do, would be loading the file with all slides. For that reason th
 library(tidyverse)
 library(rio)
 df <- import_list("PG_BD_INVITACIONES_SM05-20-2021.xlsx", rbind = TRUE)
-df
+
 ```
 
 ### Creating a working data frame
@@ -26,27 +26,77 @@ The second step would be to slim the data down and clean it up. The Variable I c
 
 ```{r}
 # Create a subset dataset using the variables: "Nombre / Galeria / Espacio", "Artistas", 
-data <- subset(df, select = c("Nombre / Galeria / Espacio", "Artistas"))
+data <- subset(df, select = c("Nombre / Galeria / Espacio", "Artistas","Año de fecha de inauguracion (aaaa)"))
 
 # splitting the strings of Artistas and saving as new variable
 data1<-data |> separate_rows(Artistas, sep = ", ")
+data1$Artistas<-iconv(data1$Artistas, to='ASCII//TRANSLIT')
+data1$`Nombre / Galeria / Espacio`<- iconv(data1$`Nombre / Galeria / Espacio`, to='ASCII//TRANSLIT')
 
 # removing all the cases with NA
+length(data1$`Año de fecha de inauguracion (aaaa)`)
+table(data1$`Año de fecha de inauguracion (aaaa)`)
+
+list <- c("2011-2012-2013", "marzo", "29", "n", "N/A", "NN", "S.I", "s.i.", "S.I/S.I/2009", "S/F")
+
+for (i in list) {
+data1$`Año de fecha de inauguracion (aaaa)` <- na_if(data1$`Año de fecha de inauguracion (aaaa)`, i)
+} #removing values that aren't helpful and can't be deciphered
+
+data1$`Año de fecha de inauguracion (aaaa)`<-ifelse(data1$`Año de fecha de inauguracion (aaaa)`=="[2004]","2004", ifelse(data1$`Año de fecha de inauguracion (aaaa)`=="[2011]","2011",data1$`Año de fecha de inauguracion (aaaa)`))
+
 data2<-data1[complete.cases(data1), ]
 data2
+
+```
+
+### Date-Variable recoding to a decade-Variable
+
+To compact the data set further, individual years may be a bit overkill for the later diagram. To solve this, while still remaining accurate, I use decades.
+
+```{r}
+data2$`Año de fecha de inauguracion (aaaa)`<- as.integer(data2$`Año de fecha de inauguracion (aaaa)`)
+
+list <- c(1940,1950,1960,1970,1980,1990,2000,2010,2020)
+data2$decade=data2$`Año de fecha de inauguracion (aaaa)`
+
+data2$decade <- ifelse(data2$decade>=1940 & data2$decade<1950,1950,
+                       ifelse(data2$decade>=1950 & data2$decade<1960,1960,
+                              ifelse(data2$decade>=1960 & data2$decade<1970,1970,
+                                     ifelse(data2$decade>=1970 & data2$decade<1980,1980,
+                                            ifelse(data2$decade>=1980 & data2$decade<1990,1990,
+                                                   ifelse(data2$decade>=1990 & data2$decade<2000,2000,
+                                                          ifelse(data2$decade>=2000 & data2$decade<2010,2010,2020)))))))
+
+table(data2$decade)
+length(data2$decade)
 ```
 
 ### Counting the time artists were invited to which galleries and merging a complete data frame
 
-Lastly, the data set needs a variable that displays, how many times artists were invited to each gallery. To create such a data frame, we need to group the data according to the artists and galleries and then count how many times a gallery invited the artist. That way, duplicated information is eliminated and the data frame is reduced from 30.982 to 10.542 rows
+Lastly, the data set needs a variable that displays, how many times artists were invited to each gallery. To create such a data frame, we need to group the data according to the artists and galleries and then count how many times a gallery invited the artist. That way, duplicated information is eliminated and the data frame is reduced from 19.738 to 8,567 rows
 
 ```{r}
 artgal<-data2|>
-  group_by(Artistas, `Nombre / Galeria / Espacio`) |>
+  group_by(Artistas, `Nombre / Galeria / Espacio`,decade) |>
   count(Artistas)
 artgal
 
 ```
+# Further reduction
+Since more than 8.000 unique cases are still too much for the diagram, I should reduce the data based on the number of invitations, omitting those with just 1,2,3, etc. invitations. 
+
+```{r}
+list=1:10
+for (i in list) {
+  artgal$n <- na_if(artgal$n,i)
+}
+artgal<-artgal[complete.cases(artgal), ]
+artgal
+```
+
+Now there are only 179 rows in the data set. It has been set to only include those artists who have been invited more than 10 times to a specific gallery in a decade. While that might seem very specific, the previous data sets would be too large for the diagram. Depending on the visualization task, further slimming down might be required.
+
 
 # To-Do and questions:
 
@@ -59,3 +109,8 @@ artgal
 ## JSON file
 
 ## Visualization
+
+```{r}
+
+
+```
