@@ -81,36 +81,91 @@ artgal<-data2|>
   group_by(Artistas, `Nombre / Galeria / Espacio`,decade) |>
   count(Artistas)
 artgal
-
 ```
 # Further reduction
-Since more than 8.000 unique cases are still too much for the diagram, I should reduce the data based on the number of invitations, omitting those with just 1,2,3, etc. invitations. 
+Since more than 8.000 unique cases are still too much for the diagram, I should reduce the data based on the number of invitations, omitting those with just 1,2,3, etc. invitations. Further, the data should be dividable into the decade of interest.
 
 ```{r}
-list=1:10
-for (i in list) {
-  artgal$n <- na_if(artgal$n,i)
-}
-artgal<-artgal[complete.cases(artgal), ]
-artgal
+# creating a df that only permits cases with invitations over a certain threshold (as indicated by `NumberOfInvitations`, default value of 0 returns every observation)
+
+ReduceInvitations <- function(NumberOfInvitations) {
+  if (NumberOfInvitations>0){
+  list=1:NumberOfInvitations
+    for (i in list) {
+      artgal$n <- artgal$n|>na_if(i)
+    }
+    artgal<-artgal[complete.cases(artgal), ]
+  } else {
+    artgal<-artgal[complete.cases(artgal), ]
+  }
+}  
+
+
+# separator to split the data set containing only those of a given decade (as indicated by `TargetDecade`, default value of 0 returns complete df)
+FindDecadeDF <- function(TargetDecade, TargetDF) {
+  if (TargetDecade>0){
+    sanart<-TargetDF|>group_by(TargetDF$decade)|>nest()
+    indexpos<-match(TargetDecade, sanart$`TargetDF$decade`)
+    sanart$data[[indexpos]]
+  } else {
+    sanart<-TargetDF
+  }
+}  
+
 ```
 
-Now there are only 179 rows in the data set. It has been set to only include those artists who have been invited more than 10 times to a specific gallery in a decade. While that might seem very specific, the previous data sets would be too large for the diagram. Depending on the visualization task, further slimming down might be required.
+To achieve this, two functions have been developed for this purpose. 
+
+The first function *overwrites* the existing data frame "artgal" with a new data frame also called artgal. In this new data frame, the rows contain only those cases, that exceed the number of observations specified. E.G.: if you want to include only the cases, where artists have been invited more than 10 times execute ReduceInvitations(10). This overwrites the data set, omitting any cases, that have less than 10 invitations in a decade. The default 0, returns the complete artgal data frame.
+
+The other function splits the data frame into grouped data frames according to the decades and returns the data frame of the decade you specified. E.G.: if you want to observe the invitations of the decade 1990 to 2000 you input FindDecadeDF(2000). This returns a tibble containing only the cases for the decade 1990-2000. The default 0 returns nothing. If you don't want to specify the decade, use the data frame **artgal**, if you want to use a decade-specific data frame, use **sanart**
 
 
-# To-Do and questions:
+### Visualization
+# Packages and preparation
+To create the sankey diagram I chose the networkD3 package. If you need to install the package use install.packages("networkD3") in your console. After that, specify your desired parameters using the above mentioned functions. As we will see in a bit, leaving the parameters unspecified and using all 8.000+ cases results in an indistinguishable diagram. The code below develops the sankey diagram. If you want to look at the diagram without specifications, I recommend running the complete chunk as is. 
 
--   generate the JSON file
-    -   Why do I need a JSON format? Has it something to do with the Sankey diagram?
-    -   a unique identifier for each artist would be pointless with a number of \>10.000, the diagram would be so over saturated, that the smaller artists/galleries would get drowned out or it would be so chaotic that they are indistinguishable. You mentioned, that only those invited more than three times would be considered, however if you run this code: sort(artgal\$n, decreasing = TRUE), you see how many times some have been invited. Additionally, this sample shows just the number of invitations from just one gallery, some artists are invited to multiple galleries (I think the highest count I saw was over 500) --\> What should I do about that?
--   create the Sankey diagram
-    -   what context do you want explored? which gallery invited which artist or which artist was invited by the most galleries,...?
+# Specifications
+This will be a little complicated, but I tried to phrase it as easily as possible.
 
-## JSON file
+There are three values, that impact what sankey diagram you want. The first value, is the value of the *ReduceInvitations* function. As explained earlier, specify how many invitations are a minimum requirement for the graph. The output is saved into the data frame x. 
 
-## Visualization
+If you want to **add** the *FindDecadeDF* function and specify the decade of the graph, the first argument of the function should be the desired decade and the second should be the data frame you want the information from. E.G.: you reduce the data with ReduceInvitations and want to reduce further. *You have to use ReduceInvitations first and specify x as the data set* you want to pull the information from. If you *dont want to reduce the invitations*, but are interested in reducing the decade, use *artgal* as data set. This way you can play around yourself. 
+
+Additionally, I recommend running the entire chunk every time. If there is an error or an empty sankey diagram pops up, go through it line by line. Pay special attention to **x** in you Environment. If the specification of the functions are too limited, **x** will have 0 observations or obtain the value NULL. Play around with the values, I hope this at least to a degree what you wished for your project. There might be limited time before the finalization, but if there is anything you wish to be handled differently don't hesitate to write me :)
 
 ```{r}
+library(networkD3)
+# Failsafe reloading the data set: since the ReduceInvitations function uses the original artgal, we have to reload the data set every time we want to change the number of invitations --> This is subject to improvement, but for now it works
+artgal<-data2|>
+  group_by(Artistas, `Nombre / Galeria / Espacio`,decade) |>
+  count(Artistas)
 
+x <- ReduceInvitations(0)
+x <- FindDecadeDF(0, x)
+
+
+links <- data.frame(
+  source=x$`Nombre / Galeria / Espacio`,
+  target=x$Artistas,
+  value=x$n
+)
+
+nodes <- data.frame(
+  name=c(as.character(links$source),
+         as.character(links$target))|>unique()
+)
+
+links$IDsource <- match(links$source, nodes$name)-1
+links$IDtarget <- match(links$target, nodes$name)-1
+
+#Network
+sankey <- sankeyNetwork(Links = links, Nodes = nodes, 
+                        Source = "IDsource", Target = "IDtarget",
+                        Value = "value", NodeID = "name",
+                        sinksRight = FALSE)
+sankey
 
 ```
+
+There might be limited time before the finalization, but if there is anything you wish to be handled differently don't hesitate to write me :)
