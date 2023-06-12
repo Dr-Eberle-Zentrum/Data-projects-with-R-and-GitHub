@@ -76,7 +76,7 @@ ________________________________________________________________________________
 Calculate a histogram that shows the age distribution of the five major leagues in the data set in one plot (use [ggplot] + geom_histogram + facet_wrap(. ~))
 Have one red line that shows the mean age and one blue line that shows the median age
 
-__*Statement: "Players are youngest in the Spanish League while they are oldest in the Italian League"*__
+__*Statement: "Players are youngest in the Spanish League while they are oldest in the English League"*__
 
 
 #### Exercise 2.2 - Fair Play within the Bundesliga
