@@ -57,113 +57,14 @@ are organized into 15 variables, including the locations of the power
 generation companies, the raw materials used, the amount of energy
 produced, among others.
 
-<table style="width:95%;">
-<caption>Power Plants in Germany over 100 MW in the year 2022</caption>
-<colgroup>
-<col style="width: 9%" />
-<col style="width: 9%" />
-<col style="width: 9%" />
-<col style="width: 9%" />
-<col style="width: 9%" />
-<col style="width: 9%" />
-<col style="width: 9%" />
-<col style="width: 9%" />
-<col style="width: 9%" />
-<col style="width: 9%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;"><p>Kraftwerksname / Standort</p></th>
-<th style="text-align: left;"><p>Betreiber</p></th>
-<th style="text-align: left;"><p>Bundesland</p></th>
-<th style="text-align: left;"><p>Standort-PLZ</p></th>
-<th style="text-align: left;"><p>Kraftwerksstandort</p></th>
-<th style="text-align: right;"><p>Elektrische Bruttoleistung MW</p></th>
-<th style="text-align: left;"><p>Fernwärme-leistung MW</p></th>
-<th style="text-align: left;"><p>Inbetriebnahme ggf.
-Ertüchtigung</p></th>
-<th style="text-align: left;"><p>Anlagenart</p></th>
-<th style="text-align: left;"><p>Primärenergieträger</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;"><p>Albatros</p></td>
-<td style="text-align: left;"><p>EnBW Albatros GmbH &amp; Co. KG /
-Enbridge Inc.</p></td>
-<td style="text-align: left;"><p>Offshore</p></td>
-<td style="text-align: left;"><p>NA</p></td>
-<td style="text-align: left;"><p>Nordsee</p></td>
-<td style="text-align: right;"><p>112.0</p></td>
-<td style="text-align: left;"><p>NA</p></td>
-<td style="text-align: left;"><p>2019</p></td>
-<td style="text-align: left;"><p>WEA</p></td>
-<td style="text-align: left;"><p>Wind O</p></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><p>Albbruck-Dogern / Rhein</p></td>
-<td style="text-align: left;"><p>Rheinkraftwerk Albbruck-Dogern AG / RWE
-Vertrieb AG</p></td>
-<td style="text-align: left;"><p>BW</p></td>
-<td style="text-align: left;"><p>79774</p></td>
-<td style="text-align: left;"><p>Albbruck</p></td>
-<td style="text-align: right;"><p>108.9</p></td>
-<td style="text-align: left;"><p>NA</p></td>
-<td style="text-align: left;"><p>1933 / 2009 2020</p></td>
-<td style="text-align: left;"><p>LWK</p></td>
-<td style="text-align: left;"><p>Wasser</p></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><p>Altbach/Deizisau GT A-C, E</p></td>
-<td style="text-align: left;"><p>EnBW Kraftwerke AG</p></td>
-<td style="text-align: left;"><p>BW</p></td>
-<td style="text-align: left;"><p>73776</p></td>
-<td style="text-align: left;"><p>Altbach</p></td>
-<td style="text-align: right;"><p>305.0</p></td>
-<td style="text-align: left;"><p>NA</p></td>
-<td style="text-align: left;"><p>1971-1997</p></td>
-<td style="text-align: left;"><p>GT</p></td>
-<td style="text-align: left;"><p>Erdgas</p></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><p>Altbach/Deizisau HKW 1</p></td>
-<td style="text-align: left;"><p>EnBW Kraftwerke AG</p></td>
-<td style="text-align: left;"><p>BW</p></td>
-<td style="text-align: left;"><p>73776</p></td>
-<td style="text-align: left;"><p>Altbach</p></td>
-<td style="text-align: right;"><p>476.0</p></td>
-<td style="text-align: left;"><p>280</p></td>
-<td style="text-align: left;"><p>1985 2006</p></td>
-<td style="text-align: left;"><p>HKW</p></td>
-<td style="text-align: left;"><p>Steinkohle</p></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><p>Altbach/Deizisau HKW 2</p></td>
-<td style="text-align: left;"><p>EnBW Kraftwerke AG</p></td>
-<td style="text-align: left;"><p>BW</p></td>
-<td style="text-align: left;"><p>73776</p></td>
-<td style="text-align: left;"><p>Altbach</p></td>
-<td style="text-align: right;"><p>379.0</p></td>
-<td style="text-align: left;"><p>280</p></td>
-<td style="text-align: left;"><p>1997 2012</p></td>
-<td style="text-align: left;"><p>HKW DT</p></td>
-<td style="text-align: left;"><p>Steinkohle</p></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><p>Alttrebbin</p></td>
-<td style="text-align: left;"><p>EnBW Solarpark GmbH /
-ALH-Gruppe</p></td>
-<td style="text-align: left;"><p>BB</p></td>
-<td style="text-align: left;"><p>15320</p></td>
-<td style="text-align: left;"><p>Neutrebbin</p></td>
-<td style="text-align: right;"><p>150.0</p></td>
-<td style="text-align: left;"><p>NA</p></td>
-<td style="text-align: left;"><p>2022</p></td>
-<td style="text-align: left;"><p>PV</p></td>
-<td style="text-align: left;"><p>Licht</p></td>
-</tr>
-</tbody>
-</table>
+| Kraftwerksname / Standort  | Betreiber                                           | Bundesland | Standort-PLZ | Kraftwerksstandort | Elektrische Bruttoleistung MW | Fernwärme-leistung MW | Inbetriebnahme ggf. Ertüchtigung | Anlagenart | Primärenergieträger |
+|:---------------------------|:----------------------------------------------------|:-----------|:-------------|:-------------------|------------------------------:|:----------------------|:---------------------------------|:-----------|:--------------------|
+| Albatros                   | EnBW Albatros GmbH & Co. KG / Enbridge Inc.         | Offshore   | NA           | Nordsee            |                         112.0 | NA                    | 2019                             | WEA        | Wind O              |
+| Albbruck-Dogern / Rhein    | Rheinkraftwerk Albbruck-Dogern AG / RWE Vertrieb AG | BW         | 79774        | Albbruck           |                         108.9 | NA                    | 1933 / 2009 2020                 | LWK        | Wasser              |
+| Altbach/Deizisau GT A-C, E | EnBW Kraftwerke AG                                  | BW         | 73776        | Altbach            |                         305.0 | NA                    | 1971-1997                        | GT         | Erdgas              |
+| Altbach/Deizisau HKW 1     | EnBW Kraftwerke AG                                  | BW         | 73776        | Altbach            |                         476.0 | 280                   | 1985 2006                        | HKW        | Steinkohle          |
+| Altbach/Deizisau HKW 2     | EnBW Kraftwerke AG                                  | BW         | 73776        | Altbach            |                         379.0 | 280                   | 1997 2012                        | HKW DT     | Steinkohle          |
+| Alttrebbin                 | EnBW Solarpark GmbH / ALH-Gruppe                    | BB         | 15320        | Neutrebbin         |                         150.0 | NA                    | 2022                             | PV         | Licht               |
 
 : Power Plants in Germany over 100 MW in the year 2022
 
@@ -213,21 +114,14 @@ fossil and renewable).
     ## `summarise()` has grouped output by 'bundesland'. You can override using the
     ## `.groups` argument.
 
-+------------+-----------+------------------+
 | bundesland | energie   | total_renewbable |
-+:===========+:==========+=================:+
-| BB         | Fossil    | 62.65760         |
-+------------+-----------+------------------+
-| BB         | Renewable | 37.34240         |
-+------------+-----------+------------------+
-| BE         | Fossil    | 100.00000        |
-+------------+-----------+------------------+
-| BW         | Fossil    | 72.70887         |
-+------------+-----------+------------------+
-| BW         | Renewable | 24.52884         |
-+------------+-----------+------------------+
-| BW         | NA        | 2.76229          |
-+------------+-----------+------------------+
+|:-----------|:----------|-----------------:|
+| BB         | Fossil    |         62.65760 |
+| BB         | Renewable |         37.34240 |
+| BE         | Fossil    |        100.00000 |
+| BW         | Fossil    |         72.70887 |
+| BW         | Renewable |         24.52884 |
+| BW         | NA        |          2.76229 |
 
 : Percent of Energie Production by Bundesland and Type
 
