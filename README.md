@@ -140,7 +140,7 @@ To ensure the drafted projects are understandable and doable, we will do a peer 
 For each project draft, we will assign two reviewers at random. The *reviewer assignments* are as follows:
 
 - *Julia* will review projects of: Christian + Danilo
-- *Christian* will review projects of: Danilo + Paul
+- *Christian* will review projects of: Danilo + Jasmin (Paul == `NA`)
 - *Danilo* will review projects of: Paul + Jasmin
 - *Paul* will review projects of: Jasmin + Laurens
 - *Jasmin* will review projects of: Laurens + Nico
@@ -149,7 +149,7 @@ For each project draft, we will assign two reviewers at random. The *reviewer as
 - *Tabea* will review projects of: Pleasant + Daniela
 - *Pleasant* will review projects of: Daniela + Alexander
 - *Daniela* will review projects of: Alexander + Daniel
-- *Alexander* will review projects of: Daniel + Yaolu
+- *Alexander* will review projects of: Daniel + Julia (Yaolu == `NA`)
 - *Daniel* will review projects of: Yaolu + Julia 
 - *Yaolu* will review projects of: Julia + Christian
 
