@@ -7,13 +7,14 @@ output: md_document
 
 ```{r}
 # Project Daniel
-library(ggplot2)
+library(tidyverse)
 library(assertr)
 library(tm)
 library(SnowballC)
 library(qdap)
 library(stopwords)
 library(foreign)
+
 herzog_data <- read.csv(file = "herzog.csv")
 herzog_data$German.words <- as.character(herzog_data$German.words)
 herzog_data_words <- data.frame(herzog_data$German.words)
@@ -25,7 +26,6 @@ single_string <- gsub(",", "", single_string)
 single_string <- gsub(",", "", single_string)
 single_string <- gsub("  ", " ", single_string)
 
-
 single_string_source <- VectorSource(single_string)
 single_string_corpus <- VCorpus(single_string_source)
 single_string_corpus <- tm_map(single_string_corpus, removePunctuation)
@@ -34,8 +34,6 @@ single_string_corpus <- tm_map(single_string_corpus, stripWhitespace)
 single_string_corpus <- tm_map(single_string_corpus, removeWords, stopwords("de"))
 single_string_corpus <- tm_map(single_string_corpus, removeWords, c("quot", "die", "ich", "sie", "mehr", "das", "heute", "es", "immer", "müssen"))
 single_string_corpus <- tm_map(single_string_corpus, removeWords, c("in", "ja", "der"))
-single_string_corpus <- tm_map(single_string_corpus, removeWords, a$WORD[1:7])
-
 
 word_count <- freq_terms(single_string_corpus, 10000)
 
