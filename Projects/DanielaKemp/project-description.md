@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ## ![Nutri-Score Picture](1920px-Nutri-score-A_light_background_logo.svg.png){width="250"}
 
 ## Looking at Food Facts
@@ -73,8 +72,8 @@ neg_point_cutoff<-matrix(data=c(1 , 40 , 0.9 , 1.6
   ,4 ,NA, 3.7 , 6.4
   ,5 , 80 , 4.7 , 8.0  ), nrow = 5, byrow=TRUE)
 ```
-=======
-## ![Nutri-Score Picture](1920px-Nutri-score-A_light_background_logo.svg.png){width="250"}
+
+======= \## ![Nutri-Score Picture](1920px-Nutri-score-A_light_background_logo.svg.png){width="250"}
 
 ## Looking at Food Facts
 
@@ -148,4 +147,3 @@ neg_point_cutoff<-matrix(data=c(1 , 40 , 0.9 , 1.6
   ,4 ,NA, 3.7 , 6.4
   ,5 , 80 , 4.7 , 8.0  ), nrow = 5, byrow=TRUE)
 ```
->>>>>>> 0096c1705b983d31da71681c1751dc577edd3fe2
