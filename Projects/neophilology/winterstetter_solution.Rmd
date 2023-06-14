@@ -2,7 +2,7 @@
 title: "Untitled"
 author: "Winterstetter, Alexander"
 date: "`r Sys.Date()`"
-output: html_document
+output: md_document
 ---
 
 ```{r}
@@ -13,8 +13,6 @@ library(tm)
 library(SnowballC)
 library(qdap)
 library(stopwords)
-
-setwd("C:\\Users\\alexa\\Documents\\01_Universität\\01_B. Sc. International Business Administration\\07_7. Semester\\05_Advanced Data Processing with R\\Peer_Projects\\Daniels_Project")
 library(foreign)
 herzog_data <- read.csv(file = "herzog.csv")
 herzog_data$German.words <- as.character(herzog_data$German.words)
