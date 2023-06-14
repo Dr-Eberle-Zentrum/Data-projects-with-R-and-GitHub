@@ -345,21 +345,8 @@ result_subgroups %>%
       annotate("text", x = 8.5, y = 4.3, hjust = 0, size = 3, label = "min.Diff.") 
 
 
-# df_plot %>%  
-#     ggplot( aes(fill= Gruppe, y= Trust_level , x= Institution)) +
-#       geom_bar( position = 'dodge', stat="identity", alpha=.6, width=.8 ) +
-#       xlab("") +
-#       theme_classic() +
-#       labs( y= "Vertrauenslevel", x = "" ) +
-#       theme( axis.text.x = element_text(angle = 45, hjust=1) ) +
-#       coord_cartesian( ylim=c(0,2) )+
-#       scale_y_continuous( expand = c(0, 0), labels = 0:2, breaks= c(0, 1, 2) ) +
-#       theme( plot.margin = margin(1,1,1,1.2, "cm") ) +
-#       annotate("text", x = 0.5, y = 1.42, hjust = 0, size = 3, label = "max.Diff.") +
-#       annotate("text", x = 8.5, y = 1.1, hjust = 0, size = 3, label = "min.Diff.") 
-
-
 ```
+
 Let me know if you have further remarks!
 
 Best

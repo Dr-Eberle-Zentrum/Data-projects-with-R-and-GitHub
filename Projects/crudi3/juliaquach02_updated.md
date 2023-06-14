@@ -1350,6 +1350,7 @@ plot:
 ![](juliaquach02_updated_files/figure-markdown_strict/plot_w_label_1-1.png)
 
 ![](juliaquach02_updated_files/figure-markdown_strict/plot_w_label_2-1.png)
+
 Let me know if you have further remarks!
 
 Best Julia
