@@ -4,7 +4,7 @@ output: md_document
 date: "2023-06-05"
 ---
 
-```{r setup, echo=FALSE}
+```{r setup, echo=FALSE, warning=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 library(ggplot2)
 library(dplyr)
