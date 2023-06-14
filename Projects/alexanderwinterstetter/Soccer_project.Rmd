@@ -19,16 +19,18 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### Data Cleaning
 
-```{r cars}
-#library(readr)
-#soccer_referee_data <- read_csv("Projects/alexanderwinterstetter/soccer_referee_data.csv")
-soccer_referee_data <- read_csv("C:/users/danie/Documents/Aktuelles/R_Kurs/R_Kurs_Git/Projects/alexanderwinterstetter/soccer_referee_data.csv")
+```{r label='read-in-data',echo=FALSE}
+#Should work from the base folder, gets files directly from git-hub
+library(readr)
+soccer_referee_data <- read_csv("Projects/alexanderwinterstetter/soccer_referee_data.csv")
+
+#soccer_referee_data <- read_csv("C:/users/danie/Documents/Aktuelles/R_Kurs/R_Kurs_Git/Projects/alexanderwinterstetter/soccer_referee_data.csv")
 View(soccer_referee_data)
 ```
 
-Create a new table with just the personal info of the players:
+*Create a new table with just the personal info of the players:*
 
-```{r}
+```{r, label='create-new-df-players', echo=FALSE}
 unique_players<-unique(soccer_referee_data$playerShort)
 unique_players_df <- data.frame(matrix(ncol = 28, nrow =0 ))
 colnames(unique_players_df)<-colnames(soccer_referee_data)
@@ -39,9 +41,9 @@ for (player in unique_players){
 
 ```
 
--   Create a new variable, which contains information on whether the player is "Goalkeeper", "Defense", "Midfielder" or "Offense" (4 possible values the variables can take on)
+Create a new variable, which contains information on whether the player is "Goalkeeper", "Defense", "Midfielder" or "Offense" (4 possible values the variables can take on)
 
-```{r}
+```{r label='compute-pos', echo=FALSE}
 library("stringr")
 
 #included to remove mistakes in classification due to whitespaces
@@ -57,9 +59,9 @@ unique_players_df$pos<-ifelse(is.na(unique_players_df$position),NA,
 
 ```
 
-# Create a new column with the age of the players
+Create a new column with the age of the players
 
-```{r}
+```{r, label='compute-age', echo=FALSE}
 library("lubridate")
 unique_players_df$birthday<-gsub("[[:punct:]]","-",unique_players_df$birthday) %>% dmy()
 
@@ -70,16 +72,22 @@ for (i in 1:dim(unique_players_df)[1]){
 
 ```
 
-Change the unique_players_df to only contain data that remains the same for all games. To also include some data regarding the outcome of games, aggregate over Red and Yellow Cards, as well as Losses, Ties and Wins. I will use ratios for this, to be able to better compare the values between players.
+Change the unique_players_df to only contain data that remains the same for all games. To also include some data regarding the outcome of games, aggregate over Red and Yellow Cards, as well as Losses, Ties and Wins.
 
-```{r}
-unchanged_cols<-c("playerShort","player","club","leagueCountry","birthday","height","weight","position","photoID", "pos", "age")
-#"games",   
+*I will use ratios for this, to be able to better compare the values between players.*
+
+```{r echo=FALSE, label='combine-columns'}
+unchanged_cols<-c("playerShort","player","club","leagueCountry","birthday","height","weight","position","photoID", "pos", "age", "skinRating")
+
+unique_players_df$skinRating<-(unique_players_df$rater1+unique_players_df$rater2)/2
+
 aggregate_col_names<-c("victories","ties","defeats","goals","yellowCards","yellowReds","redCards" )
 
 aggregate_cols<-aggregate(cbind(games,victories,ties,defeats,goals,yellowCards,yellowReds,redCards)  ~ playerShort, data = soccer_referee_data, sum)
 
 aggregate_cols[aggregate_col_names]<-aggregate_cols[aggregate_col_names]/aggregate_cols$games
+
+
 
 unique_players_df<-merge(unique_players_df[unchanged_cols],aggregate_cols, by.x="playerShort",by.y = "playerShort")
 
@@ -89,7 +97,19 @@ unique_players_df<-merge(unique_players_df[unchanged_cols],aggregate_cols, by.x=
 
 *This is impossible, there is no way to get to the number of games in a league from this data. The Bundeliga does have \~34 games for each club (but there are other countries teams here too!), but a some players meet over 60 referees in this time period, which is probably not all from league game play, but also friendly or national matches, making it impossible to find the number of points for each club.*
 
-```{r pressure, echo=FALSE}
+Fairplayvalue: Create a new column fair_play that evaluates how fair a player plays. yellow = 0.5 points per card yellowRed = 1 points per card Red = 2 points per card
+
+This means that players ho receive more cards have a higher fair_play value.
+
+*For comparability, this is per game, not summed up for all games.*
+
+```{r, label='compute-fairplay', echo=FALSE}
+unique_players_df$fair_play<-unique_players_df$redCards*2+unique_players_df$yellowCards*0.5+unique_players_df$yellowReds
+```
+
+Show the players with the highest number of victories, goals, red-,yellow- and yellow-red-cards.
+
+```{r, label='print-top-players', echo=FALSE}
 tail(unique_players_df[order(unique_players_df$victories),],n=15)
 tail(unique_players_df[order(unique_players_df$goals),],n=15)
 tail(unique_players_df[order(unique_players_df$redCards),],n=15)
@@ -105,7 +125,25 @@ tail(unique_players_df[order(unique_players_df$yellowReds),],n=15)
 
 \- visualize a distribution of the age of the players per league (maybe with facet\\\_grid from ggplot2)\#
 
-```{r}
+Calculate a histogram that shows the age distribution of the five major leagues in the data set in one plot (use [ggplot] + geom_histogram + facet_wrap(. \~)) Have one red line that shows the mean age and one blue line that shows the median age
+
+```{r label='plot-age-vs-country',echo=FALSE}
+mean_age_league<-unique_players_df %>% group_by(leagueCountry) %>% summarise(mean_age=mean(age))
+median_age_league<-unique_players_df %>% group_by(leagueCountry) %>% summarise(median_age=median(age))
+
+plot<-ggplot(data=unique_players_df, aes(x=age, y=leagueCountry))+
+  theme_classic()+
+  theme(legend.position="none")+
+  geom_violin(aes(fill=leagueCountry))+
+  stat_summary(fun="mean",geom="crossbar",color="red")+
+    stat_summary(fun="median",geom="crossbar",color="blue")+
+  labs(title="Age of players by league county",y ="")
+  
+plot+scale_color_manual("Legend", values=c("mean"="red","median"="blue"))
+
+```
+
+```{r echo=TRUE, label='plot-age-vs-pos'}
 library("plotly")
 
 level_order<-c("Goalkeeper","Defense","Midfielder","Offense")
@@ -126,18 +164,11 @@ plot<-ggplot(data=unique_players_df[complete.cases(unique_players_df),] )+
 plot  
 ```
 
-```{r echo=FALSE}
-
-ggplot(data=unique_players_df, aes(x=age, y=leagueCountry))+theme_classic()+geom_violin(aes(fill=leagueCountry))+labs(title="Age of players vs league county",y ="")
-ggplot(data=unique_players_df, aes(x=age, y=leagueCountry))+theme_classic()+geom_violin(aes(fill=leagueCountry))
-
-```
-
 \- visualize the ratio in the league: redcards // yellow cards
 
-Preprocessing, define a column ratio of Red/Yellow for all players where not yellow and red =0, here I'd default to 0.
+*for all players where yellow and red =0, here I default to 0*
 
-```{r}
+```{r, label='Preprocessing to get stat data for cards', echo=FALSE}
 unique_players_df$ratioRedYellow<-ifelse(unique_players_df$redCards==0|                                    unique_players_df$yellowCards==0, 
                                          yes = 0, 
                                          no =                        unique_players_df$redCards/unique_players_df$yellowCards
@@ -146,9 +177,9 @@ unique_players_df$ratioRedYellow<-ifelse(unique_players_df$redCards==0|         
 limits<-boxplot.stats(unique_players_df$ratioRedYellow)$stats[c(1, 5)]
 ```
 
-Plotting it
+*Plotting it*
 
-```{r}
+```{r, label='red-yellow-ratio-vs-country', echo=FALSE}
 unique_players_df$ratioRedYellow<-ifelse(unique_players_df$redCards==0|
                                            unique_players_df$yellowCards==0, 
                                          yes = 0, 
@@ -160,7 +191,6 @@ ggplot(data=unique_players_df, aes(x=ratioRedYellow, y=leagueCountry))+
   theme_classic()+
   theme(legend.position="none")+
   geom_boxplot(aes(color=leagueCountry))+
-  coord_cartesian(xlim = limits*1.3)+
   coord_cartesian(xlim = limits*1.05)+
   labs(title="Ratio of red to yellow cards for different countries", x= "Red cards/yellow cards",y="")+
   annotate("text",
@@ -176,4 +206,49 @@ ggplot(data=unique_players_df, aes(x=ratioRedYellow, y=leagueCountry))+
            hjust = -0.1,
            vjust = -0.8)
 
+```
+
+#### Exercise 2.2 - Fair Play within the Bundesliga
+
+Visualize for the German league the average `fair_play` value for each position.
+
+```{r,label='Plot-fairplay-vs-pos', echo=FALSE}
+ggplot(unique_players_df[unique_players_df$leagueCountry=="Germany",])+
+  
+    annotate("point",
+           y = 1,
+           x = aggregate(fair_play~pos,unique_players_df,mean)[,2])+
+  
+  annotate("text",
+           y = c(0.98,1.02,1.02,0.98),
+           x = aggregate(fair_play~pos,unique_players_df,mean)[,2],
+           label = paste(signif(aggregate(fair_play~pos,unique_players_df,mean)[,2],digits=3),unique(unique_players_df$pos[complete.cases(unique_players_df$pos)])))+
+  theme_classic()+
+  
+  theme( axis.text.y = element_blank(),axis.ticks = element_blank())+
+  
+    labs(title="Fairplay Value by position in Germany", x= "Fairplay value",y="")+
+  
+  coord_fixed(ratio=0.2,ylim=c(0.9,1.1),xlim=c(0.02,0.12))
+  
+```
+
+Create a boxplot for each `general_position` regarding how many goals players in these positions score, regardless to which league they belong.
+
+```{r, label='plot-pos-vs-goals',echo=FALSE}
+level_order<-c("Goalkeeper","Defense","Midfielder","Offense")
+limits<-c(0.0,0.55)
+
+ggplot(data=unique_players_df[complete.cases(unique_players_df$pos),], aes(x=goals,y=pos, color=pos))+
+    theme_classic()+
+  geom_point(x=limits[2]/2,y=2.5, color="white",size=3)+
+  geom_point(x=limits[2]/2,y=2.5, color="white",shape=1,size=36, fill="springgreen4", stroke=3)+
+    theme(panel.background = element_rect(fill = "springgreen4"),
+        panel.border = element_rect(colour = "white", fill=NA, size=5),
+        legend.position="none")+
+
+  geom_boxplot(aes(x=goals,alpha=0.75, y=factor(pos, levels = level_order), col=pos, fill=pos))+
+      geom_hline(yintercept=2.5, color = "white", size=1.5)+
+    coord_flip(xlim=limits,ylim=c(1,4))+
+ labs(title="Goals/game vs. Position",y="position", x="goals/game")
 ```
