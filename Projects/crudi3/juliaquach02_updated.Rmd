@@ -259,15 +259,22 @@ df_plot %>%
 We can also plot the groups in separate bars next to each other:
 
 ```{r plot_rearranged, echo = FALSE, fig.width=10, fig.height=5}
-df_plot %>%  
+result_subgroups %>% 
+    mutate( OVERALL_MEAN = result$mean_trust) %>% 
+    pivot_longer( ., 
+          2:5, 
+          names_to = "Gruppe", 
+          values_to = "Trust_level",
+          values_drop_na = T) %>% 
+    mutate( Institution = fct_reorder( Institution, desc( OVERALL_MEAN ))) %>%  
     ggplot( aes(fill= Gruppe, y= Trust_level , x= Institution)) +
       geom_bar( position = 'dodge', stat="identity", alpha=.6, width=.8 ) +
       xlab("") +
       theme_classic() +
       labs( y= "Vertrauenslevel", x = "" ) +
       theme( axis.text.x = element_text(angle = 45, hjust=1) ) +
-      coord_cartesian( ylim=c(0,2) )+
-      scale_y_continuous( expand = c(0, 0), labels = 0:2, breaks= c(0, 1, 2) ) +
+      coord_cartesian( ylim=c(0,7) )+
+      scale_y_continuous( expand = c(0, 0), labels = 0:7, breaks= c(0:7) ) +
       theme( plot.margin = margin(1,1,1,1.2, "cm") ) 
 
 ```
@@ -316,18 +323,40 @@ df_plot %>%
 ```
 
 ```{r plot_w_label_2, echo = FALSE, fig.width=10, fig.height=5}
-df_plot %>%  
+
+result_subgroups %>% 
+    mutate( OVERALL_MEAN = result$mean_trust) %>% 
+    pivot_longer( ., 
+          2:5, 
+          names_to = "Gruppe", 
+          values_to = "Trust_level",
+          values_drop_na = T) %>% 
+    mutate( Institution = fct_reorder( Institution, desc( OVERALL_MEAN ))) %>%  
     ggplot( aes(fill= Gruppe, y= Trust_level , x= Institution)) +
       geom_bar( position = 'dodge', stat="identity", alpha=.6, width=.8 ) +
       xlab("") +
       theme_classic() +
       labs( y= "Vertrauenslevel", x = "" ) +
       theme( axis.text.x = element_text(angle = 45, hjust=1) ) +
-      coord_cartesian( ylim=c(0,2) )+
-      scale_y_continuous( expand = c(0, 0), labels = 0:2, breaks= c(0, 1, 2) ) +
+      coord_cartesian( ylim=c(0,7) )+
+      scale_y_continuous( expand = c(0, 0), labels = 0:7, breaks= c(0:7) ) +
       theme( plot.margin = margin(1,1,1,1.2, "cm") ) +
-      annotate("text", x = 0.5, y = 1.42, hjust = 0, size = 3, label = "max.Diff.") +
-      annotate("text", x = 8.5, y = 1.1, hjust = 0, size = 3, label = "min.Diff.") 
+      annotate("text", x = 0.5, y = 5.5, hjust = 0, size = 3, label = "max.Diff.") +
+      annotate("text", x = 8.5, y = 4.3, hjust = 0, size = 3, label = "min.Diff.") 
+
+
+# df_plot %>%  
+#     ggplot( aes(fill= Gruppe, y= Trust_level , x= Institution)) +
+#       geom_bar( position = 'dodge', stat="identity", alpha=.6, width=.8 ) +
+#       xlab("") +
+#       theme_classic() +
+#       labs( y= "Vertrauenslevel", x = "" ) +
+#       theme( axis.text.x = element_text(angle = 45, hjust=1) ) +
+#       coord_cartesian( ylim=c(0,2) )+
+#       scale_y_continuous( expand = c(0, 0), labels = 0:2, breaks= c(0, 1, 2) ) +
+#       theme( plot.margin = margin(1,1,1,1.2, "cm") ) +
+#       annotate("text", x = 0.5, y = 1.42, hjust = 0, size = 3, label = "max.Diff.") +
+#       annotate("text", x = 8.5, y = 1.1, hjust = 0, size = 3, label = "min.Diff.") 
 
 
 ```
