@@ -92,11 +92,13 @@ Each column in a data frame are of the same length but the data frames
 don’t have the same length. The good news is we don’t have any NA
 values.
 
+    {
     lengths <- c(length(dying_cell$Cell.ID),length(viable_cell$Cell.ID),length(df_treat$Cell.ID),length(df_untreat$Cell.ID) )
     any_NA <- c(any(is.na(dying_cell)), any(is.na(viable_cell)),any(is.na(df_treat)),any(is.na(df_untreat)) )
     all_dfs <- data.frame(lengths, any_NA)
     rownames(all_dfs) <- c("dying_cell", "viable_cell", "df_treat", "df_untreat")
     print(all_dfs)
+    }
 
     ##             lengths any_NA
     ## dying_cell     1962  FALSE
@@ -138,13 +140,13 @@ Accordingly to the following correlation matrix:
 
 <!-- -->
 
+    {
     # Correlation
+    colnames(dying_cell)
     dying_corr <- dying_cell[-1]
     colnames(dying_corr)
-
-    ## [1] "x"          "y"          "Time.point" "Intensity"  "Area"
-
     corrplot(cor(dying_corr), method = "number")
+    }
 
 ![](Cell-viability_files/figure-markdown_strict/unnamed-chunk-7-1.png)
 
@@ -160,26 +162,32 @@ and **time and intensity**.
     ## 
     ## function (x, y, ...) 
     ## standardGeneric("plot")
-    ## <environment: 0x145bfe848>
+    ## <environment: 0x10907d9a8>
     ## Methods may be defined for arguments: x, y
     ## Use  showMethods(plot)  for currently available ones.
 
-Here are plot one in top of the other. Note that the data is scaled so
-the plots have the same proportion.
-
-    ## [1] "x"          "y"          "Time.point" "Intensity"  "Area"
+Here are the plots overlapping. Note that the data is scaled so the
+plots have the same proportion.
 
 ![](Cell-viability_files/figure-markdown_strict/unnamed-chunk-9-1.png)
-
-    ## integer(0)
 
     ## standardGeneric for "plot" defined from package "base"
     ## 
     ## function (x, y, ...) 
     ## standardGeneric("plot")
-    ## <environment: 0x145bfe848>
+    ## <environment: 0x10907d9a8>
     ## Methods may be defined for arguments: x, y
     ## Use  showMethods(plot)  for currently available ones.
+
+We can observe a general downward trend for intensity and area with
+intervals in which move in opposite directions, like mirroring their
+their trend in an opposite direction. This is shown by the vertical
+light blue lines.
+
+**CAUTION \#1** I made this comment knowing next to nothing about cell
+physiology. I think *Intensity* is a confounding factor here. It is
+reacting to size decrease. If a cell’s size decrease maybe the
+fluorescence concentrates and shows with more intensity.
 
 Line plots can be misleading because they trace all observations with
 the same “weight,” which makes harder to probe the real correlation in
@@ -189,7 +197,9 @@ distribution of variables correlated to time.
 ![](Cell-viability_files/figure-markdown_strict/unnamed-chunk-10-1.png)![](Cell-viability_files/figure-markdown_strict/unnamed-chunk-10-2.png)
 
 We do find some positive correlation between *area and intensity*
-(**0.29**) but with not as significant.
+(**0.29**) but with not as significant. The horizontal blue line
+represents the 40 percentile of size. Below means cells will die or are
+dying.
 
 ![](Cell-viability_files/figure-markdown_strict/unnamed-chunk-11-1.png)![](Cell-viability_files/figure-markdown_strict/unnamed-chunk-11-2.png)
 
@@ -197,7 +207,7 @@ We do find some positive correlation between *area and intensity*
     ## 
     ## function (x, y, ...) 
     ## standardGeneric("plot")
-    ## <environment: 0x145bfe848>
+    ## <environment: 0x10907d9a8>
     ## Methods may be defined for arguments: x, y
     ## Use  showMethods(plot)  for currently available ones.
 
@@ -215,13 +225,20 @@ intensity.
     ## 
     ## function (x, y, ...) 
     ## standardGeneric("plot")
-    ## <environment: 0x145bfe848>
+    ## <environment: 0x10907d9a8>
     ## Methods may be defined for arguments: x, y
     ## Use  showMethods(plot)  for currently available ones.
 
 Following Julia’s recommendation and accordingly to what is shown in the
 plots above, **size (area) is a good indicator of a cell’s point of
-death**.
+death**. The recommended threshold is 40% size decrease. So, all cells
+under the 40 percentile relative to their own saize will die. This
+metric is shown by the purple line in the plot above. The dying cell
+crossed the 40 percentile threshold, then spikes up to consistently
+decrease in size (die). The green line section under the purple 40
+percentile makes sense because the purple line is relative to the dying
+cell and all cells have different sizes. The green line never decreases
+under 40% of its size.
 
 Now it’s time to tackle the goal.
 
@@ -256,9 +273,9 @@ data by the sum of the minimal squared distance to the mean-cluster.*
     ## # A tibble: 3 × 5
     ##   Cell.ID Time.point Intensity  Area cluster
     ##     <dbl>      <dbl>     <dbl> <dbl> <fct>  
-    ## 1       0          0    13966.  545  1      
-    ## 2       1          0    18490.  188. 1      
-    ## 3       2          0    12720.  479  1
+    ## 1       0          0    13966.  545  2      
+    ## 2       1          0    18490.  188. 2      
+    ## 3       2          0    12720.  479  2
 
 ![](Cell-viability_files/figure-markdown_strict/unnamed-chunk-14-1.png)
 
@@ -286,8 +303,8 @@ Studying the centers of the clusters’ mean give more information. And
 show intensity as the defining factor.
 
     ##   cluster  Cell.ID Time.point Intensity     Area
-    ## 1       1 119.1074   1228.374 15314.008 255.3668
-    ## 2       2 175.5486   1567.044  9066.779 312.8506
+    ## 1       1 175.5486   1567.044  9066.779 312.8506
+    ## 2       2 119.1074   1228.374 15314.008 255.3668
 
 The labels are not precise enough nor consistent because of the data
 organization.
@@ -318,3 +335,10 @@ Count dying tumor cells and compute the relative number of cell deaths.
     ##        Count Relat_num
     ## Viable    79  56.02837
     ## Dying     62  43.97163
+
+The next plot represents the relative frequency of death and viable
+cells according to area.
+
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+
+![](Cell-viability_files/figure-markdown_strict/unnamed-chunk-22-1.png)
