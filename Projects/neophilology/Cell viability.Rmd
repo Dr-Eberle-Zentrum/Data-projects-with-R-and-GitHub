@@ -503,7 +503,7 @@ print(Goal2)
 
 ```
 
-The next plot represents the relative frequency of death and viable cells according to area.
+The next plot represents the relative frequency of death and viable cells according to area. It shows that bigger cells respond to treatment more than smaller cells, thus, the smaller cells tend to stay alive.
 
 ```{r, echo=FALSE}
 
