@@ -3,9 +3,10 @@ title: "Andromeda"
 output: md_document
 date: "2023-06-05"
 ---
-
-```{r setup, echo=FALSE, warning=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+```{r setup, echo=FALSE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      message = FALSE,
+                      warning = FALSE)
 library(ggplot2)
 library(dplyr)
 install.packages("ggpubr", repos = "http://cran.us.r-project.org")
