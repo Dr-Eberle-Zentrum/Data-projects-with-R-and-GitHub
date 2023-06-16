@@ -47,7 +47,7 @@ SHP_27 <- SHP_0 %>%
   arrange(isocntry) %>%
   st_as_sf()
 
-# merging both data sets
+# merging both data sets and plot
 
 data %>%
   inner_join(SHP_27, by = "isocntry") %>%
