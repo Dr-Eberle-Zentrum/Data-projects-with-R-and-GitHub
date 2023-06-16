@@ -38,7 +38,9 @@ cells |>
   group_by(data) |>
   slice_head(n=2)
 
-cells|> group_by(data) |> summarize( length=n(), numNAs = sum(is.na(Intensity)|is.na(Area)))
+cells|>
+  group_by(data) |>
+  summarize( length=n(), numNAs = sum(is.na(Intensity)|is.na(Area)))
 
 cells |>
   select(-Cell.ID, ) |>
@@ -48,18 +50,37 @@ cells |>
 cells |>
   select(-Cell.ID, ) |>
   group_by(data) |>
-  group_walk( .f= \(table, groupName) corrplot(cor(table), method = "number", title = groupName))
+  group_walk( .f= \(table, groupName)
+              corrplot(cor(table), method = "number", title = groupName))
 
-dying_corr |> mutate(Intensity=scale(Intensity), Area=scale(Area)) |> pivot_longer(c(Intensity,Area)) |> ggplot(aes(x=Time.point,y=value,col=name)) + geom_line()
+dying_corr |>
+  mutate(Intensity=scale(Intensity), Area=scale(Area)) |>
+  pivot_longer(c(Intensity,Area)) |>
+  ggplot(aes(x=Time.point,y=value,col=name)) +
+  geom_line()
 
 cells |>
   group_by(data,Cell.ID) |>
-  filter(Time.point <= max(Time.point)*0.9) |>
+  summarize(maxTime = max(Time.point), .groups = "drop") |>
+  ggplot()+
+  geom_histogram(aes(x=maxTime))
+
+cells |>
+  group_by(data,Cell.ID) |>
+  filter( max(Time.point) < 100) |>
+  filter( Time.point < 1000) |>
+  filter(Time.point >= max(Time.point)*0) |>
+  filter(Time.point <= max(Time.point)*0.8) |>
   mutate(Area = scale(Area)) |>
   mutate(Time.point = Time.point / max(Time.point)) |>
   ungroup() |>
-  ggplot(aes(x=Time.point, y=Area, col=data))+
-  geom_smooth(se=F, method="loess")
+  ggplot(aes(x=Time.point, y=Area, col=data
+             # , group=Cell.ID
+             ))+
+  geom_smooth(se=F,
+              # method="lm"
+              method="loess"
+  )
   # guides(col=F)
 
 
