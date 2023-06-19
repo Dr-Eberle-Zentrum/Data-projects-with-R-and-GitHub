@@ -12,271 +12,88 @@ library(sf)
 
 media_data <- read.csv("ZA7848_v1-0-0.csv", sep=";")
 
-df_tv <- media_data %>%
-  dplyr::filter(qd3_1 != "Inap. (not 1 in eu27b)" ,
-              qd3_1 != "No access to this medium (SPONTANEOUS)"
-                     ,
-              qd3_1 != "Don't know (SPONTANEOUS)") %>%
-  mutate(qd3_1=strtoi(qd3_1)) %>%
-  drop_na(qd3_1) %>%
-  group_by(isocntry) %>%
-  summarize(mean_tv = mean(qd3_1)) 
+
+media_data$isocntry[media_data$isocntry == "DE-W"] <- "DE"
+media_data$isocntry[media_data$isocntry == "DE-E"] <- "DE"
+new_colnames <- c( TV = "qd3_1", TVviaInternet = "qd3_2", Radio = "qd3_3", Podcast = "qd3_4", WrittenPress = "qd3_5", 
+                  Internet = "qd3_6", SocialMedia = "qd3_8")
+
+
+cool <- media_data %>%
+  select( isocntry, country, starts_with("qd3_")) %>%
+  mutate(across(everything(), \(x)ifelse(str_detect(x,"Inap."),NA, x))) %>%
+  mutate(across(starts_with("qd3_"), strtoi)) %>% 
+  drop_na() %>%
+  rename(all_of(new_colnames)) %>%
+  pivot_longer(!isocntry & !country, names_to = "media_type") %>%
+  group_by(isocntry, media_type) %>%
+  summarise(mean_usage = mean(value))
 
 
 
-df_tv_internet <- media_data %>%
-  mutate(qd3_2=strtoi(qd3_2)) %>%
-  drop_na(qd3_2) %>%
-  group_by(isocntry) %>%
-  summarize(mean_tv_internet = mean(qd3_2)) 
 
-df_radio <- media_data %>%
-  mutate(qd3_3=strtoi(qd3_3)) %>%
-  drop_na(qd3_3) %>%
-  group_by(isocntry) %>%
-  summarize(mean_radio = mean(qd3_3)) 
-
-df_podcast <- media_data %>%
-  mutate(qd3_4=strtoi(qd3_4)) %>%
-  drop_na(qd3_4) %>%
-  group_by(isocntry) %>%
-  summarize(mean_podcast = mean(qd3_4)) 
-
-df_written_press <- media_data %>%
-  mutate(qd3_5=strtoi(qd3_5)) %>%
-  drop_na(qd3_5) %>%
-  group_by(isocntry) %>%
-  summarize(mean_written_press = mean(qd3_5)) 
-
-df_internet <- media_data %>%
-  mutate(qd3_6=strtoi(qd3_6)) %>%
-  drop_na(qd3_6) %>%
-  group_by(isocntry) %>%
-  summarize(mean_internet = mean(qd3_6)) 
-
-df_social_media <- media_data %>%
-  mutate(qd3_8=strtoi(qd3_8)) %>%
-  drop_na(qd3_8) %>%
-  group_by(isocntry) %>%
-  summarize(mean_social_media = mean(qd3_8)) 
-
-
-
+# getting the shapefiles for the map of Europe
 SHP_0 <- get_eurostat_geospatial(resolution = 10,
                                  nuts_level = 0,
                                  year = 2016)
 
-
+# dropping UK, because it isn't included in media_data
 EU27 <- eu_countries %>% 
   dplyr::filter(code != "UK") %>%
   select(isocntry = code, name)
 
-
+# final shapefile
 SHP_27 <- SHP_0 %>% 
   select(isocntry = NUTS_ID, geometry) %>% 
   inner_join(EU27, by = "isocntry") %>% 
   arrange(isocntry) %>%
+  st_as_sf() 
+
+
+SHP_DATA <- cool %>%
+  inner_join(SHP_27, by = "isocntry") %>% 
   st_as_sf()
-  
-TV_SHP <- df_tv %>% 
-  inner_join(SHP_27, by = "isocntry") %>% 
-  st_as_sf()  
 
-TV_INTERNET_SHP <- df_tv_internet %>% 
-  inner_join(SHP_27, by = "isocntry") %>% 
-  st_as_sf()  
 
-RADIO_SHP <- df_radio %>% 
-  inner_join(SHP_27, by = "isocntry") %>% 
-  st_as_sf()  
-
-PODCAST_SHP <- df_podcast %>% 
-  inner_join(SHP_27, by = "isocntry") %>% 
-  st_as_sf()  
-
-WRITTEN_PRESS_SHP <- df_written_press %>% 
-  inner_join(SHP_27, by = "isocntry") %>% 
-  st_as_sf()  
-
-INTERNET_SHP <- df_internet %>% 
-  inner_join(SHP_27, by = "isocntry") %>% 
-  st_as_sf()  
-
-SOCIAL_MEDIA_SHP <- df_social_media %>% 
-  inner_join(SHP_27, by = "isocntry") %>% 
-  st_as_sf()  
 ```
 
 ## R Markdown
 
-The map for the mean TV usage:
+The maps for the mean media usage:
 
-```{r TV Map}
-TV_SHP %>%
-  ggplot(aes(fill=mean_tv)) +
+```{r mean media usage map}
+SHP_DATA %>%
+  ggplot(aes(fill=mean_usage)) +
   geom_sf() +
   scale_x_continuous(limits = c(-10, 35)) +
   scale_y_continuous(limits = c(35, 75)) +
   theme_void() +
-  labs(title="Mean TV usage in EU",
-       fill="Financial situation") 
+  labs(title="Mean Media usage in EU",
+       fill="Media usage") +
+  facet_wrap(~media_type)
 ```
 
-The map for the mean TV via Internet usage:
+The boxplots for the social media usage and financial situation:
 
-```{r TV via Internet Map}
-TV_SHP %>%
-  ggplot(aes(fill=mean_tv)) +
-  geom_sf() +
-  scale_x_continuous(limits = c(-10, 35)) +
-  scale_y_continuous(limits = c(35, 75)) +
-  theme_void() +
-  labs(title="Mean TV via Internet usage in EU",
-       fill="Financial situation") 
-```
-
-The map for the mean Radio usage:
-
-```{r Radio Map}
-TV_SHP %>%
-  ggplot(aes(fill=mean_tv)) +
-  geom_sf() +
-  scale_x_continuous(limits = c(-10, 35)) +
-  scale_y_continuous(limits = c(35, 75)) +
-  theme_void() +
-  labs(title="Mean Radio usage in EU",
-       fill="Financial situation") 
-```
-
-The map for the mean Podcast usage:
-
-```{r Podcast Map}
-TV_SHP %>%
-  ggplot(aes(fill=mean_tv)) +
-  geom_sf() +
-  scale_x_continuous(limits = c(-10, 35)) +
-  scale_y_continuous(limits = c(35, 75)) +
-  theme_void() +
-  labs(title="Mean Podcast usage in EU",
-       fill="Financial situation") 
-```
-
-The map for the mean Internet usage:
-
-```{r Internet Map}
-TV_SHP %>%
-  ggplot(aes(fill=mean_tv)) +
-  geom_sf() +
-  scale_x_continuous(limits = c(-10, 35)) +
-  scale_y_continuous(limits = c(35, 75)) +
-  theme_void() +
-  labs(title="Mean internet usage in EU",
-       fill="Financial situation") 
-```
-
-The map for the mean Social Media usage:
-
-```{r Social Media Map}
-TV_SHP %>%
-  ggplot(aes(fill=mean_tv)) +
-  geom_sf() +
-  scale_x_continuous(limits = c(-10, 35)) +
-  scale_y_continuous(limits = c(35, 75)) +
-  theme_void() +
-  labs(title="Mean Social Media usage in EU",
-       fill="Financial situation") 
-```
-
-The map for the mean Written Press usage:
-
-```{r Written Press Map}
-TV_SHP %>%
-  ggplot(aes(fill=mean_tv)) +
-  geom_sf() +
-  scale_x_continuous(limits = c(-10, 35)) +
-  scale_y_continuous(limits = c(35, 75)) +
-  theme_void() +
-  labs(title="Mean Written Press usage in EU",
-       fill="Financial situation") 
-```
-
-The Boxplot for Greece
-
-```{r Greece Boxplot}
+```{r boxplots}
 media_data %>%
-  dplyr::filter(isocntry == "GR") %>%
+  select(qa1_5, qd3_8, isocntry) %>%
+  dplyr::filter(isocntry == "GR" | isocntry == "ES" | isocntry =="DE") %>%
   dplyr::filter(qa1_5 != "Don't know (SPONTANEOUS)") %>%
   mutate(qd3_8 = strtoi(qd3_8)) %>%
+  drop_na() %>%
   ggplot(aes(x=qa1_5, y=qd3_8, fill=qa1_5)) +
   geom_boxplot() +
   theme(axis.text.x = element_text(angle = 90)) +
-  ggtitle(" Financial situation and social media usage",
-          subtitle="Greece") +
+  ggtitle(" Financial situation and social media usage") +
   xlab("Financial situation") +
   ylab("Social media usage") +
   labs(fill="Financial Situation") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  facet_wrap(~isocntry)
 
-```
 
-The Boxplot for Spain
-
-```{r Spain Boxplot}
-media_data %>%
-  dplyr::filter(isocntry == "ES") %>%
-  dplyr::filter(qa1_5 != "Don't know (SPONTANEOUS)") %>%
-  mutate(qd3_8 = strtoi(qd3_8)) %>%
-  ggplot(aes(x=qa1_5, y=qd3_8, fill=qa1_5)) +
-  geom_boxplot() +
-  theme(axis.text.x = element_text(angle = 90)) +
-  ggtitle(" Financial situation and social media usage",
-          subtitle="Spain") +
-  xlab("Financial situation") +
-  ylab("Social media usage") +
-  labs(fill="Financial Situation") +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_blank(), axis.line = element_line(colour = "black"))
-
-```
-
-The Boxplot for East-Germany
-
-```{r East-Germany Boxplot}
-media_data %>%
-  dplyr::filter(isocntry == "DE-E") %>%
-  dplyr::filter(qa1_5 != "Don't know (SPONTANEOUS)") %>%
-  mutate(qd3_8 = strtoi(qd3_8), rm.na = TRUE) %>%
-  ggplot(aes(x=qa1_5, y=qd3_8, fill=qa1_5)) +
-  geom_boxplot() +
-  ylim(0, 7.5) +
-  theme(axis.text.x = element_text(angle = 90)) +
-  ggtitle(" Financial situation and social media usage",
-          subtitle="East-Germany") +
-  xlab("Financial situation") +
-  ylab("Social media usage") +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_blank(), axis.line = element_line(colour = "black"))
-  
   
 ```
 
-The Boxplot for West-Germany
-
-```{r West-Germany Boxplot}
-media_data %>%
-  dplyr::filter(isocntry == "DE-W") %>%
-  dplyr::filter(qa1_5 != "Don't know (SPONTANEOUS)") %>%
-  mutate(qd3_8 = strtoi(qd3_8)) %>%
-  ggplot(aes(x=qa1_5, y=qd3_8, fill=qa1_5)) +
-  geom_boxplot() +
-  theme(axis.text.x = element_text(angle = 90)) +
-  labs(title = "Financial Situation and Social media usage",
-       subtitle = "West-Germany") +
-  xlab("Financial situation") +
-  ylab("Social media usage") +
-  labs(fill= "Financial situation") +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_blank(), axis.line = element_line(colour = "black"))
-  
-```
