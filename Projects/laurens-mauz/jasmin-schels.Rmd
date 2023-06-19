@@ -8,13 +8,14 @@ Below is my best try at a solution. I have managed to produce some sort of heat 
 
 ```{r}
 library(tidyverse)
+library(maps)
 deaths2 <- read_csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv")
 
 cases <- read_csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv")
 
 
 
-
+daten <-
 bind_rows(list("Death" = deaths2, "Cases" = cases), .id="table") %>% 
 
   dplyr::filter(`Country/Region` %in% c("US", "Germany", "Italy", "China", "Korea, South", "New Zealand", "Senegal")) %>% 
@@ -30,9 +31,10 @@ transmute(
 
 
  world_map <- map_data("world")
- 
- ggplot(daten, aes(map_id = `Country/Region`, fill = Mortality)) +
+
+ daten %>%  
+ggplot( aes(map_id = `Country/Region`, fill = Mortality)) +
   geom_map(map = world_map) +
  expand_limits(x = world_map$long, y = world_map$lat) +
-  coord_map("polyconic")
+  coord_map("conic", lat0 = 30)
 ```

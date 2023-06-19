@@ -1,9 +1,7 @@
-## Erste Schritte
+## My best try at a solution
 
-Nachdem ich mich noch als Anfänger in R bezeichnen würde, habe ich bis
-jetzt nur eine Tabelle mit den relevaten Daten erstellt für die ersten
-beiden Zeitspannen. Im nächsten Schritt möchte ich die restlichen Daten
-aufnehmen und diese dann in die Karte einfügen.
+Below is my best try at a solution. I have managed to produce some sort
+of heat map for the first set of data.
 
     library(tidyverse)
 
@@ -17,6 +15,15 @@ aufnehmen und diese dann in die Karte einfügen.
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
     ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+
+    library(maps)
+
+    ## 
+    ## Attaching package: 'maps'
+    ## 
+    ## The following object is masked from 'package:purrr':
+    ## 
+    ##     map
 
     deaths2 <- read_csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv")
 
@@ -40,31 +47,27 @@ aufnehmen und diese dann in die Karte einfügen.
     ## ℹ Use `spec()` to retrieve the full column specification for this data.
     ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
+    daten <-
     bind_rows(list("Death" = deaths2, "Cases" = cases), .id="table") %>% 
 
       dplyr::filter(`Country/Region` %in% c("US", "Germany", "Italy", "China", "Korea, South", "New Zealand", "Senegal")) %>% 
 
     transmute(
      table,  `Country/Region`, `Province/State`, Lat, Long, 
-      early2020 = `4/30/20`-`2/1/20`,
-      late2020 = `9/30/20`-`6/1/20`, 
+      early2020 = `4/30/20`-`2/1/20`
     ) %>% 
 
       pivot_longer(ends_with("2020"), names_to = "Time") %>% 
       pivot_wider(names_from = "table", values_from = "value") %>% 
       mutate(Mortality= Death / Cases)
 
-    ## # A tibble: 84 × 8
-    ##    `Country/Region` `Province/State`   Lat  Long Time      Death Cases Mortality
-    ##    <chr>            <chr>            <dbl> <dbl> <chr>     <dbl> <dbl>     <dbl>
-    ##  1 China            Anhui             31.8  117. early2020     6   694   0.00865
-    ##  2 China            Anhui             31.8  117. late2020      0     0 NaN      
-    ##  3 China            Beijing           40.2  116. early2020     8   425   0.0188 
-    ##  4 China            Beijing           40.2  116. late2020      0   343   0      
-    ##  5 China            Chongqing         30.1  108. early2020     5   332   0.0151 
-    ##  6 China            Chongqing         30.1  108. late2020      0     5   0      
-    ##  7 China            Fujian            26.1  118. early2020     1   212   0.00472
-    ##  8 China            Fujian            26.1  118. late2020      0    51   0      
-    ##  9 China            Gansu             35.8  104. early2020     2    99   0.0202 
-    ## 10 China            Gansu             35.8  104. late2020      0    31   0      
-    ## # ℹ 74 more rows
+
+     world_map <- map_data("world")
+
+     daten %>%  
+    ggplot( aes(map_id = `Country/Region`, fill = Mortality)) +
+      geom_map(map = world_map) +
+     expand_limits(x = world_map$long, y = world_map$lat) +
+      coord_map("conic", lat0 = 30)
+
+![](jasmin-schels_files/figure-markdown_strict/unnamed-chunk-1-1.png)
