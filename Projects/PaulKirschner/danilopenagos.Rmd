@@ -15,11 +15,16 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(stringr)
+library(ggtext)
 
-path <- "/Advanced-data-processing-with-R/Projects/PaulKirschner/kraftwerke_de_ab_100_mw_0.xls"
+library(showtext)
+font_add_google("Lato")
+showtext_auto()
+
+path <- "kraftwerke_de_ab_100_mw_0.xls"
 
 # GIS data (Longitude - Latitude)
-locations <- read.delim("/Advanced-data-processing-with-R/Projects/PaulKirschner/locations.csv", sep = "\t")
+locations <- read.csv("locations.csv", sep = "\t")
 
 # Classification variables
 renewable_anlagenart <- c("LWK", "PSW", "PV", "SSA", "SWK", "WEA", "Wind (L)", "Wind (O)")
@@ -29,23 +34,6 @@ fossil_anlagenart <- c("BoA", "DKW", "DT", "DWR", "G/AK", "GT", "GuD", "HEL", "I
 renewable_primary_source <- c("Wind (O)", "Wasser", "Licht", "Wind (L)", "Biomasse", "Licht / Wind (L) / Batteriespeicher")
 
 fossil_primary_source <- c("Erdgas", "Steinkohle", "Braunkohle", "Erdgas, Steinkohle", "Gichtgas", "Konvertergas", "Uran", "Steinkohle, Erdgas", "HEL", "HS", "HEL, Crack\u00F6l", "Crack\u00F6l", "Erdgas, Raffineriegas", "Braunkohle, Erdgas", "Erdgas, HEL", "Raffineriegas", "Biomasse, Erdgas", "Erdgas, Biomasse", "\u00D6lrückstand", "Steinkohle, HEL, Abfall", "Erdgas, HS, Cracker\u00F6l", "Cracker\u00F6l")
-
-
-# Classification function
-classify <- function(variable, renewable_list, fossil_list) {
-  new_variable <- rep(NA, length(variable))
-  
-  for (i in 1:length(variable)) {
-    tipo <- variable[i]
-    if (is.element(tipo, renewable_list)){
-      new_variable[i] <- "Renewable"
-    } else if (is.element(tipo, fossil_list)){
-      new_variable[i] <- "Fossil"
-    }
-  }
-  
-  return(new_variable)
-}
 
 ```
 
@@ -66,7 +54,7 @@ knitr::kable(
 
 ```
 
-In order to meet the objectives proposed in the project, these data need to be modified or expanded. First, we add to our data the longitude and latitude for each of the locations or cities, where the producing companies are located. For the identification of these variables we use the Batch geocoder for journalist tool.
+In order to meet the objectives proposed in the project, these data need to be modified or expanded. First, we add to our data the longitude and latitude for each of the locations or cities, where the producing companies are located. For the identification of these variables we use the [Batch geocoder for journalist tool](https://geocode.localfocus.nl/). It allows us to find automatically the longitude and the latitude of each place or locations in our data set. For some of those locations the tool offer different options to chose, therefore we can select the correct one, manually. 
 
 Secondly, we created a variable to normalize the date to a single year.
 
@@ -75,15 +63,22 @@ Thirdly, we separate the raw materials for the cases in which the power plant ma
 Finally, we will classify them based on whether the materials are renewable or fossil fuels.
 
 ```{r processed_data, echo=FALSE}
-colnames(data) = c("power_plant", "operator", "bundesland", "zip_code", "site", "electric_gross", "heating_capacity", "comissioning", "plant_type", "primary_source")
+# Changing the names of the variables
+colnames(data) = c("Power_Plant", "Operator", "Bundesland", "Zip_Code", "Location", "Electric_Gross", "Heating_Capacity", "Comissioning", "Plant_Type", "Primary_Source")
 
+# Adding new columns: locations (long & lat) and type of primary source
 processed_data <- data |>
-  cbind(latitude = locations$Latitude, longitude = locations$Longitude) |>
-  mutate(year = as.integer(str_extract(comissioning, ".{4}"))) |>
-  separate_rows(plant_type, sep="\\s/\\s") |>
-  separate_rows(primary_source, sep=", ") |>
-  separate_rows(primary_source, sep="\\s/\\s") |>
-  mutate(energie = classify(primary_source, renewable_primary_source, fossil_primary_source))
+  merge(locations, by.x = "Location", by.y = "Location") |>
+  mutate(Year = as.integer(str_extract(Comissioning, "\\d{4}"))) |>
+  separate_rows(Plant_Type, sep="\\s/\\s") |>
+  separate_rows(Plant_Type, sep="\\s[u]\\.\\s") |>
+  separate_rows(Primary_Source, sep=", ") |>
+  separate_rows(Primary_Source, sep="\\s/\\s") |>
+  mutate(
+    Energie = if_else( Primary_Source %in% renewable_primary_source, 
+         "Renewable",
+         if_else( Primary_Source %in% fossil_primary_source,
+                  "Fossil", NA)))
 
 ```
 
@@ -91,9 +86,14 @@ processed_data <- data |>
 
 ```{r historic_eras, echo=FALSE}
 processed_data |>
-  ggplot(aes(x = year, y = primary_source, colour = energie )) +
+  ggplot(aes(x = Year, y = Primary_Source, colour = Energie )) +
   geom_line() +
-  theme_minimal()
+  theme_minimal(base_family = "Lato") +
+  labs(
+    y = "Primary Source",
+    title = "Historic Eras for Primary Sources by Year",
+    subtitle = "This chart show up the use of the different primary source since 1900 to nowdays"
+  )
 ```
 
 We can see that water is a resource that has been present all the time. Renewable energies are a phenomenon that appeared in the last quarter of the 20th century and the beginning of the 21st century. Fossil resources such as gas and coal have dominated since the 1930s.
@@ -108,9 +108,15 @@ ggplot() +
                aes(x = long, y = lat, group=group),
                colour = "grey", fill="white") +
   geom_point(data = processed_data, 
-             aes(x = longitude, y = latitude, size = electric_gross, color = energie)) +
+             aes(x = Longitude, y = Latitude, size = Electric_Gross, color = Energie)) +
   coord_map() +
-  theme_minimal()
+  theme_minimal(base_family = "Lato") +
+  labs(
+    x = "Latitude",
+    y = "Longitude",
+    title = "Type of Energie and Place of Production",
+    subtitle = "Map with the locations and type of energie produced and mesured by electric gross"
+  )
 
 ```
 
@@ -122,10 +128,10 @@ First we calculate the percentage of energy produced by Bundesland (both fossil 
 
 ```{r percent_calcule, echo=FALSE}
 percent_renew <- processed_data |>
-  group_by(bundesland) |>
-  mutate("percent" = electric_gross / sum(electric_gross) * 100) |>
-  group_by(bundesland, energie) |>
-  summarise("total_renewbable" = sum(percent))
+  group_by(Bundesland) |>
+  mutate("Percent" = Electric_Gross / sum(Electric_Gross) * 100) |>
+  group_by(Bundesland, Energie) |>
+  summarise("Total_Renewable" = sum(Percent))
 
 knitr::kable(
   head(percent_renew),
@@ -140,19 +146,13 @@ Finally, with the `choroLayer` function of the `cartography` library, we color t
 
 ```{r challenge_renewable, echo=FALSE}
 renew <- percent_renew |>
-  mutate(HASC_1 = gsub(" ", "", paste(c("DE."),bundesland))) |>
-  subset(energie == "Renewable")
+  mutate(HASC_1 = if_else(Bundesland == "BB","DE.BR", gsub(" ", "", paste(c("DE."), Bundesland))))|>
+  subset(Energie == "Renewable")
 
 de_agg <- merge(de, renew , by.x = "HASC_1", by.y = "HASC_1", 
                 duplicateGeoms = TRUE, no.dups = TRUE )
 
-choroLayer(spdf = de_agg, var = "total_renewbable",
-           nclass = 5)
+choroLayer(spdf = de_agg, var = "Total_Renewable",
+           nclass = 5, legend.title.txt = "Percent by Bundesland")
 
 ```
-
-### To Improve
-
--   Calculate percent of renewable energies
--   Create a interactive map using leaflet library
--   Improve labels
