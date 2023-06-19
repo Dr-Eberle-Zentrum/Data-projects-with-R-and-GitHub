@@ -2,8 +2,7 @@
 title: "ProjectSolutionByChristian"
 author: "Christian Rudi"
 date: "2023-06-07"
-output: md_document
-always_allow_html: true
+output: html_document
 ---
 
 # First Attempt at solving the art gallery project
@@ -66,7 +65,7 @@ data2<-drop_na(data2)
 
 Lastly, the data set needs a variable that displays, how many times artists were invited to each gallery. To create such a data frame, we need to group the data according to the artists and galleries and then count how many times a gallery invited the artist. That way, duplicated information is eliminated and the data frame is reduced from 19.738 to 8,567 rows
 
-```{r echo = FALSE}
+```{r}
 artgal<-data2|>
   group_by(artists, galleries,decade) |>
   count(artists)
@@ -161,3 +160,107 @@ sankey <- sankeyNetwork(Links = links, Nodes = nodes,
 sankey
 
 ```
+
+
+
+
+
+# Playing around with the functions:
+## First Case: Every artist invited >5 times in 1970
+```{r eval=TRUE, echo=FALSE}
+artgal<-data2|>
+  group_by(artists, galleries,decade) |>
+  count(artists)
+
+x <- ReduceInvitations(5)
+x <- FindDecadeDF(1970, x)
+
+
+links <- data.frame(
+  source=x$galleries,
+  target=x$artists,
+  value=x$n
+)
+
+nodes <- data.frame(
+  name=c(as.character(links$source),
+         as.character(links$target))|>unique()
+)
+
+links$IDsource <- match(links$source, nodes$name)-1
+links$IDtarget <- match(links$target, nodes$name)-1
+
+#Network
+sankey <- sankeyNetwork(Links = links, Nodes = nodes, 
+                        Source = "IDsource", Target = "IDtarget",
+                        Value = "value", NodeID = "name",
+                        sinksRight = FALSE)
+sankey
+```
+
+
+## Second Case: Every artist invited >10 times in 1970
+
+```{r eval=TRUE, echo=FALSE}
+artgal<-data2|>
+  group_by(artists, galleries,decade) |>
+  count(artists)
+
+x <- ReduceInvitations(10)
+x <- FindDecadeDF(1970, x)
+
+
+links <- data.frame(
+  source=x$galleries,
+  target=x$artists,
+  value=x$n
+)
+
+nodes <- data.frame(
+  name=c(as.character(links$source),
+         as.character(links$target))|>unique()
+)
+
+links$IDsource <- match(links$source, nodes$name)-1
+links$IDtarget <- match(links$target, nodes$name)-1
+
+#Network
+sankey <- sankeyNetwork(Links = links, Nodes = nodes, 
+                        Source = "IDsource", Target = "IDtarget",
+                        Value = "value", NodeID = "name",
+                        sinksRight = FALSE)
+sankey
+```
+
+## Third case: Every artist invited >5 times in 2010
+```{r eval=TRUE, echo=FALSE}
+artgal<-data2|>
+  group_by(artists, galleries,decade) |>
+  count(artists)
+
+x <- ReduceInvitations(5)
+x <- FindDecadeDF(2010, x)
+
+
+links <- data.frame(
+  source=x$galleries,
+  target=x$artists,
+  value=x$n
+)
+
+nodes <- data.frame(
+  name=c(as.character(links$source),
+         as.character(links$target))|>unique()
+)
+
+links$IDsource <- match(links$source, nodes$name)-1
+links$IDtarget <- match(links$target, nodes$name)-1
+
+#Network
+sankey <- sankeyNetwork(Links = links, Nodes = nodes, 
+                        Source = "IDsource", Target = "IDtarget",
+                        Value = "value", NodeID = "name",
+                        sinksRight = FALSE)
+sankey
+```
+
