@@ -156,3 +156,4 @@ choroLayer(spdf = de_agg, var = "Total_Renewable",
            nclass = 5, legend.title.txt = "Percent by Bundesland")
 
 ```
+As we can see, the production of renewable energies are centralize in the east of the country. The no data cases are states where the production is 100% derivative from fossil primary sources. 

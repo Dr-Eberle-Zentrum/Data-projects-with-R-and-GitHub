@@ -271,3 +271,6 @@ Finally, with the `choroLayer` function of the `cartography` library, we
 color the Bundesland by percentage of renewable energy production.
 
 ![](danilopenagos_files/figure-markdown_strict/challenge_renewable-1.png)
+As we can see, the production of renewable energies are centralize in
+the east of the country. The no data cases are states where the
+production is 100% derivative from fossil primary sources.
