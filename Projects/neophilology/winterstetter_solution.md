@@ -89,7 +89,9 @@
     single_string_count <- single_string |> VectorSource() |> VCorpus() |> tm_map(removePunctuation) |>
       tm_map(removeNumbers) |> tm_map(stripWhitespace) |>
       tm_map(removeWords, stopwords("de")) |>
-      tm_map(removeWords, c("quot", "die", "ich", "sie", "mehr", "das", "heute", "es", "immer", "müssen")) |>     tm_map(removeWords, c("in", "ja", "der"))
+      tm_map(removeWords, c("quot", "die", "ich", "sie", "mehr", "das", "heute", "es", "immer", "müssen")) |>
+      tm_map(removeWords, c("und", "muß", "in", "gerade", "wenn", "auch", "viele", "deshalb", "gibt", "geht")) |>
+      tm_map(removeWords, c("in", "ja", "der"))
 
     single_string_count |> freq_terms(10000) |> 
       arrange(desc(FREQ)) |> top_n(n = 50) |> 
