@@ -1,7 +1,7 @@
 ---
 title: "Nutriscore Frequency Plotting"
 author: "Pleasant Pillai Vijayakumari"
-date: "2023-06-05"
+date: "2023-06-20"
 output: md_document
 ---
 
@@ -12,61 +12,27 @@ knitr::opts_chunk$set(echo = TRUE)
 ## R Markdown
 
 ```{r}
-library(readr)
 library(ggplot2)
+library(readr)
 
-setwd("C:/Users/Pleasant Pillai/Desktop/R Programming/R2/Advanced-data-processing-with-R/Projects/DanielaKemp")
+# Read the data from Food_data_0.txt
+data <- read_delim("Food_data_0.txt", delim = "\t", col_names = TRUE)
 
-# Read the output.csv file
-output_data <- read_csv("output.csv")
+# Filter the subset based on conditions
+subset_data <- subset(data, !(brands == "Nestle" & grepl("palm oil", ingredients_text, ignore.case = TRUE)))
 
-# Define the Nutriscore categories
-nutriscore_categories <- c("A", "B", "C", "D", "E")
+# Filter out rows where nutriscore_score is 0
+filtered_data <- subset(subset_data, nutriscore_score != 0)
 
-# Create a function to map Nutriscore labels
-map_nutriscore_label <- function(label) {
-  if (grepl("A", label, ignore.case = TRUE)) {
-    return("A")
-  } else if (grepl("B", label, ignore.case = TRUE)) {
-    return("B")
-  } else if (grepl("C", label, ignore.case = TRUE)) {
-    return("C")
-  } else if (grepl("D", label, ignore.case = TRUE)) {
-    return("D")
-  } else if (grepl("E", label, ignore.case = TRUE)) {
-    return("E")
-  } else {
-    return(NA)
-  }
-}
+# Define the colors for nutriscore_grade
+Nutri_Colors <- c("#058b49", "#74c928", "#fbc801", "#f4730e", "#ef2d1a")
 
-# Apply the mapping function to create Nutriscore category column
-output_data$nutriscore_category <- sapply(output_data$labels, map_nutriscore_label)
-output_data$nutriscore_category[is.na(output_data$nutriscore_category)] <- sapply(output_data$emb_codes, map_nutriscore_label)
-
-# Remove NA values in nutriscore_category
-output_data <- output_data[complete.cases(output_data$nutriscore_category), ]
-
-# Count the frequency of Nutriscore categories
-nutriscore_counts <- table(output_data$nutriscore_category)
-
-# Order the counts based on the Nutriscore categories
-nutriscore_counts <- nutriscore_counts[nutriscore_categories]
-
-# Create a data frame for plotting
-plot_data <- data.frame(Nutriscore = nutriscore_categories, Frequency = as.numeric(nutriscore_counts))
-
-# Define colors for the bars
-colors <- c("A" = "green", "B" = "lightgreen", "C" = "yellow", "D" = "orange", "E" = "red")
-
-# Create the bar plot
-bar_plot <- ggplot(plot_data, aes(x = Nutriscore, y = Frequency, fill = Nutriscore)) +
-  geom_bar(stat = "identity") +
-  scale_fill_manual(values = colors) +
-  labs(x = "Nutriscore", y = "Frequency", title = "Frequency of Nutriscore Categories") +
+# Plot histogram of nutriscore_score with colors based on nutriscore_grade
+ggplot(filtered_data, aes(x = nutriscore_score, fill = toupper(nutriscore_grade))) +
+  geom_histogram(binwidth = 0.5, position = "identity", alpha = 1) +
+  scale_fill_manual(values = Nutri_Colors) +
+  labs(x = "Nutriscore Score", y = "Frequency", fill = "Nutriscore Grade") +
   theme_minimal()
 
-# Display the bar plot
-print(bar_plot)
 ```
 
