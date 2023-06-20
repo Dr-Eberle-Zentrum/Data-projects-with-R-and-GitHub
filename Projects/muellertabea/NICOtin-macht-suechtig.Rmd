@@ -36,15 +36,14 @@ data |>
       aes( fill = Taxa) ,
       alpha = 0.5 ) +
     geom_jitter( aes(
-      shape = Taxa,
-      color = Radius_tot_mean),
+      shape = Taxa),
       height = 0 ,
       width = 0.18 ,
       alpha = 0.6) +
     theme_classic() +
     ylab(label = "Mean of all three measurements") +
     labs(title = "Radius of the different taxas") +
-    scale_color_continuous(name="Mean of all three measurements")
+    theme(legend.position = "none")
 ```
 
 ## The second plot
