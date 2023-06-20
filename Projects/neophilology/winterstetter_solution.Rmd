@@ -27,16 +27,15 @@ freq_words <- paste0(c("quot", "die", "ich", "sie", "mehr", "das", "heute", "es"
 
 freq <- str_c(freq_words, sep = "", collapse = " ")
 
-single_string_corpus <- single_string |>
-  str_replace_all("^(0|[1-9][0-9]*)$", '') |>
-  str_replace_all(stopwords("de"), '') |>
-  str_replace_all(freq,'')
+single_string_count <- single_string |> VectorSource() |> VCorpus() |> tm_map(removePunctuation) |>
+  tm_map(removeNumbers) |> tm_map(stripWhitespace) |>
+  tm_map(removeWords, stopwords("de")) |>
+  tm_map(removeWords, c("quot", "die", "ich", "sie", "mehr", "das", "heute", "es", "immer", "müssen")) |>     tm_map(removeWords, c("in", "ja", "der"))
 
-freq_terms(single_string_corpus, 10000) |> arrange( desc(FREQ)) |> top_n( n = 25) |> 
+single_string_count |> freq_terms(10000) |> 
+  arrange(desc(FREQ)) |> top_n(n = 50) |> 
   ggplot(aes(x = reorder(WORD, desc(FREQ)), y = FREQ)) + geom_col() +
   labs(x = "Word", y = "Word Frequency") + geom_hline(aes(yintercept = 0)) + theme_bw() + 
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
   ggtitle("Word Frequency of Roman Herzog speeches")
-
-
 ```
