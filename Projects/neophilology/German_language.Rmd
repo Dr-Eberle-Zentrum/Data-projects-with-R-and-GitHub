@@ -24,7 +24,7 @@ speech_herzog<-speech_herzog[,-1]
  Removing the noise: filtering out stopwords and words and characters without content 
 ```{r}
 library("stopwords")
-stopwords_de<-c(stopwords::stopwords("de", source = "marimo"),stopwords::stopwords("de", source = "snowball"))
+stopwords_de<-c(stopwords::stopwords("de", source = "marimo"),stopwords::stopwords("de", source = "snowball")) %>% unique()
 
 #set all words to lowercase to not have duplicates because of the word sometimes appearing at the start of the sentence
 speech_herzog[,1]<-lapply(speech_herzog[,1],str_to_lower)
@@ -69,7 +69,7 @@ smallest_val<-min(top_50$pos)
 color_fd<-rep(c("red2","purple2","blue","green4","gold2"),10)
 
 ggplot(top_50, aes(y=freq, x=pos))+
-  geom_point(show.legend = FALSE,color = color_fd,aes( size=freq*0.005))+
+  #geom_point(show.legend = FALSE,color = color_fd,aes( size=freq*0.005))+
   theme_classic()+
   theme(plot.title=element_text(size=24),axis.text=element_text(size=16),axis.text.x=element_blank(),axis.ticks.x=element_blank(),axis.title=element_text(size=14,face="bold"))+
 geom_text(show.legend = FALSE,aes(label=words, angle=90,family="mono",  hjust="top", vjust="middle"), color = color_fd, size=945/max(top_50$freq)*0.125*top_50$freq/str_length(top_50$words))+
