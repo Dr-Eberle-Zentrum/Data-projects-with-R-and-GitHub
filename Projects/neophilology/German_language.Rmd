@@ -2,18 +2,21 @@
 title: "German_Project"
 author: "Daniela Kemp"
 date: "2023-06-08"
-output: pdf_document
+output: md_document
 ---
+
 ```{r}
 #install.packages("Rtools")
 #install.packages("stopwords")
 #install.packages("wordcloud")
 #install.packages("tm")
 options(encoding="utf8")
+library('stats')
+library('tidyverse')
 ```
 
-
 Using the predone .csv table, since I can't bring myself to do work that already has be done.
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(readr)
@@ -21,7 +24,8 @@ speech_herzog <- read_csv("C:/Users/Danie/Documents/Aktuelles/R_Kurs/R_Kurs_Git/
 speech_herzog<-speech_herzog[,-1]
 ```
 
- Removing the noise: filtering out stopwords and words and characters without content 
+Removing the noise: filtering out stopwords and words and characters without content
+
 ```{r}
 library("stopwords")
 stopwords_de<-c(stopwords::stopwords("de", source = "marimo"),stopwords::stopwords("de", source = "snowball")) %>% unique()
@@ -38,14 +42,20 @@ Include_pos<-apply(cbind(Punctuation_pos,Stopwords_pos), 1L,all)
 words_freq<-speech_herzog[Include_pos,1] %>% table() %>% data.frame()
 colnames(words_freq)<-c("words","freq")
 ```
+
 A frequency diagram and a word cloud would be sufficient to paint a bird's eye view of the topics discussed in the aggregated speeches
 
 plotting a wordcloud
+
 ```{r}
 library("wordcloud")
+png("wordcloud.png")
 wordcloud(words_freq$words,words_freq$freq, max.words = 100,scale=c(2, .5))
+dev.off()
 ```
+
 A frequency Diagramm:
+
 ```{r fig.height=5, fig.width=13}
 top_50<-words_freq %>% arrange(desc(freq)) %>% head(50)
 top_50$pos<-0
@@ -67,6 +77,7 @@ largest_val<-max(top_50$pos)
 smallest_val<-min(top_50$pos)
 #color_fd<-rep(c("darkblue","grey5"),25)
 color_fd<-rep(c("red2","purple2","blue","green4","gold2"),10)
+png("frequency_diagram.png",height=5,width=13.5, units = "cm")
 
 ggplot(top_50, aes(y=freq, x=pos))+
   #geom_point(show.legend = FALSE,color = color_fd,aes( size=freq*0.005))+
@@ -75,9 +86,8 @@ ggplot(top_50, aes(y=freq, x=pos))+
 geom_text(show.legend = FALSE,aes(label=words, angle=90,family="mono",  hjust="top", vjust="middle"), color = color_fd, size=945/max(top_50$freq)*0.125*top_50$freq/str_length(top_50$words))+
 labs(x="words", y="frequencies",title="Word frequencies", caption="Frequency of non-filler words used in the speeches of Roman Herzog between 1994 and 1999")+
 coord_fixed(ratio=0.31,ylim=c(0,top_freq),xlim=c(smallest_val,largest_val))
+dev.off()
 
 ```
 
 Improving the result to show relevant information
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

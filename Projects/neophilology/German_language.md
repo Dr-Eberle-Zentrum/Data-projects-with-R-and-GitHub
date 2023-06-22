@@ -1,28 +1,29 @@
----
-title: "German_Project"
-author: "Daniela Kemp"
-date: "2023-06-08"
-output: pdf_document
----
-```{r}
+```         
 #install.packages("Rtools")
 #install.packages("stopwords")
 #install.packages("wordcloud")
 #install.packages("tm")
 options(encoding="utf8")
-```
+library('stats')
+library('tidyverse')
 
+## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.2     ✔ readr     2.1.4
+## ✔ forcats   1.0.0     ✔ stringr   1.5.0
+## ✔ ggplot2   3.4.2     ✔ tibble    3.2.1
+## ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+## ✔ purrr     1.0.1     
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+```
 
 Using the predone .csv table, since I can't bring myself to do work that already has be done.
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-library(readr)
-speech_herzog <- read_csv("C:/Users/Danie/Documents/Aktuelles/R_Kurs/R_Kurs_Git/Projects/neophilology/herzog.csv")
-speech_herzog<-speech_herzog[,-1]
-```
 
- Removing the noise: filtering out stopwords and words and characters without content 
-```{r}
+Removing the noise: filtering out stopwords and words and characters without content
+
+```         
 library("stopwords")
 stopwords_de<-c(stopwords::stopwords("de", source = "marimo"),stopwords::stopwords("de", source = "snowball")) %>% unique()
 
@@ -38,15 +39,24 @@ Include_pos<-apply(cbind(Punctuation_pos,Stopwords_pos), 1L,all)
 words_freq<-speech_herzog[Include_pos,1] %>% table() %>% data.frame()
 colnames(words_freq)<-c("words","freq")
 ```
+
 A frequency diagram and a word cloud would be sufficient to paint a bird's eye view of the topics discussed in the aggregated speeches
 
 plotting a wordcloud
-```{r}
+
+```         
 library("wordcloud")
+
+## Lade nötiges Paket: RColorBrewer
+
 wordcloud(words_freq$words,words_freq$freq, max.words = 100,scale=c(2, .5))
 ```
+
+![](German_language_files/figure-markdown_strict/unnamed-chunk-3-1.png)
+
 A frequency Diagramm:
-```{r fig.height=5, fig.width=13}
+
+```         
 top_50<-words_freq %>% arrange(desc(freq)) %>% head(50)
 top_50$pos<-0
 top_50$freq<-top_50$freq*1.1
@@ -75,8 +85,9 @@ ggplot(top_50, aes(y=freq, x=pos))+
 geom_text(show.legend = FALSE,aes(label=words, angle=90,family="mono",  hjust="top", vjust="middle"), color = color_fd, size=945/max(top_50$freq)*0.125*top_50$freq/str_length(top_50$words))+
 labs(x="words", y="frequencies",title="Word frequencies", caption="Frequency of non-filler words used in the speeches of Roman Herzog between 1994 and 1999")+
 coord_fixed(ratio=0.31,ylim=c(0,top_freq),xlim=c(smallest_val,largest_val))
-
 ```
+
+![](German_language_files/figure-markdown_strict/unnamed-chunk-4-1.png)
 
 Improving the result to show relevant information
 

@@ -1,0 +1,40 @@
+---
+title: "Better Result"
+author: "Daniela Kemp"
+date: "2023-06-09"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r Read Data}
+food_data_0<-read.table(file="Food_data_0.txt",allowEscapes = TRUE, header=TRUE, sep="\t", dec="\n",  fill=TRUE,quote = "", comment.char = "")
+
+```
+
+```{r}
+important_cols<-c("product_name","abbreviated_product_name","generic_name","quantity","packaging","packaging_tags","packaging_en","brands","brands_tags","countries_en","ingredients_tags","ingredients_analysis_tags","traces_tags","traces_en","additives","additives_n","additives_tags","nutriscore_grade","nutriscore_score","pnns_groups_1","pnns_groups_2","food_groups","food_groups_tags","food_groups_en","brand_owner","energy.kj_100g","energy.kcal_100g","energy_100g","energy.from.fat_100g","saturated.fat_100g","unsaturated.fat_100g","cholesterol_100g","carbohydrates_100g","sugars_100g","added.sugars_100g","fiber_100g","proteins_100g","salt_100g","added.salt_100g","sodium_100g","fruits.vegetables.nuts_100g")
+nutriscore_cols<-c("nutriscore_grade","nutriscore_score","energy_100g","sugars_100g","saturated.fat_100g","fruits.vegetables.nuts_100g","fiber_100g","proteins_100g","salt_100g") 
+food_data_subset<-food_data_0[rel_cols]
+nutriscore_cols_pos<-which(colnames(food_data_subset) %in% nutriscore_cols)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r Histogramm, echo=FALSE}
+Nutri_Colors<-c("#058b49","#74c928","#fbc801","#f4730e","#ef2d1a")
+ggplot(food_data_subset[(food_data_subset$nutriscore_grade %in% c('a','b','c','d','e')),], aes(x=nutriscore_score, fill=nutriscore_grade))+geom_histogram(binwidth = 1)+scale_fill_manual(values=Nutri_Colors)
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

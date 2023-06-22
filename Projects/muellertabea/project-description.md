@@ -1,3 +1,9 @@
+---
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
 # Charcoal analysis
 
 ## Background
@@ -34,112 +40,56 @@ columns:
 
 -   **Taxa**: Identified wood species
 
--   **Radius\_number**: outermost annual ring 1 and then continuous (See
+-   **Radius_number**: outermost annual ring 1 and then continuous (See
     fig.1)
 
--   **Radius1\_mean** & **Radius2\_mean** & **Radius3\_mean**: Each
-    annual ring is measured three times and every measurement is written
-    down
+-   **Radius1_mean** & **Radius2_mean** & **Radius3_mean**: Each annual
+    ring is measured three times and every measurement is written down
 
--   **Radius\_tot\_mean**: The mean of all three measurements
+-   **Radius_tot_mean**: The mean of all three measurements
 
--   **Radius\_tot\_sd**: The standard deviation of the total mean radius
+-   **Radius_tot_sd**: The standard deviation of the total mean radius
 
-<table style="width:100%;">
-<colgroup>
-<col style="width: 3%" />
-<col style="width: 12%" />
-<col style="width: 7%" />
-<col style="width: 12%" />
-<col style="width: 12%" />
-<col style="width: 12%" />
-<col style="width: 12%" />
-<col style="width: 14%" />
-<col style="width: 12%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: right;">ID</th>
-<th style="text-align: left;">Localisation</th>
-<th style="text-align: left;">Taxa</th>
-<th style="text-align: right;">Radius_number</th>
-<th style="text-align: right;">Radius1_mean</th>
-<th style="text-align: right;">Radius2_mean</th>
-<th style="text-align: right;">Radius3_mean</th>
-<th style="text-align: right;">Radius_tot_mean</th>
-<th style="text-align: left;">Radius_tot_sd</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: right;">30</td>
-<td style="text-align: left;">80/50-22</td>
-<td style="text-align: left;">Populus</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">31.31</td>
-<td style="text-align: right;">32.86</td>
-<td style="text-align: right;">32.91</td>
-<td style="text-align: right;">32.36000</td>
-<td style="text-align: left;">0.90967027</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">46</td>
-<td style="text-align: left;">80/50-22</td>
-<td style="text-align: left;">Indet</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">7.68</td>
-<td style="text-align: right;">7.55</td>
-<td style="text-align: right;">7.45</td>
-<td style="text-align: right;">7.56000</td>
-<td style="text-align: left;">0.115325626</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">166</td>
-<td style="text-align: left;">80/50-22</td>
-<td style="text-align: left;">Indet</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">22.38</td>
-<td style="text-align: right;">22.53</td>
-<td style="text-align: right;">23.68</td>
-<td style="text-align: right;">22.86333</td>
-<td style="text-align: left;">0.71121961</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">166</td>
-<td style="text-align: left;">80/50-22</td>
-<td style="text-align: left;">Indet</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">12.44</td>
-<td style="text-align: right;">12.43</td>
-<td style="text-align: right;">12.29</td>
-<td style="text-align: right;">12.38667</td>
-<td style="text-align: left;">0.083864971</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">154</td>
-<td style="text-align: left;">80/50-22</td>
-<td style="text-align: left;">Indet</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">22.47</td>
-<td style="text-align: right;">21.95</td>
-<td style="text-align: right;">21.68</td>
-<td style="text-align: right;">22.03333</td>
-<td style="text-align: left;">0.401538707</td>
-</tr>
-</tbody>
-</table>
++-----+-------+-------+-------+-------+-------+-------+-------+-------+
+| ID  | Loca  | Taxa  | R     | Radi  | Radi  | Radi  | Rad   | R     |
+|     | lisa  |       | adiu  | us1\_ | us2\_ | us3\_ | ius\_ | adiu  |
+|     | tion  |       | s_nu  | mean  | mean  | mean  | tot\_ | s_to  |
+|     |       |       | mber  |       |       |       | mean  | t_sd  |
++====:+:======+:======+======:+======:+======:+======:+======:+:======+
+| 30  | 80/5  | Pop   | 1     | 3     | 3     | 3     | 32.3  | 0.    |
+|     | 0-22  | ulus  |       | 1.31  | 2.86  | 2.91  | 6000  |  9096 |
+|     |       |       |       |       |       |       |       |       |
+|     |       |       |       |       |       |       |       |  7027 |
++-----+-------+-------+-------+-------+-------+-------+-------+-------+
+| 46  | 80/5  | I     | 1     | 7.68  | 7.55  | 7.45  | 7.5   | 0.1   |
+|     | 0-22  | ndet  |       |       |       |       | 6000  | 1532  |
+|     |       |       |       |       |       |       |       | 5626  |
++-----+-------+-------+-------+-------+-------+-------+-------+-------+
+| 166 | 80/5  | I     | 1     | 2     | 2     | 2     | 22.8  | 0.    |
+|     | 0-22  | ndet  |       | 2.38  | 2.53  | 3.68  | 6333  |  7112 |
+|     |       |       |       |       |       |       |       |       |
+|     |       |       |       |       |       |       |       |  1961 |
++-----+-------+-------+-------+-------+-------+-------+-------+-------+
+| 166 | 80/5  | I     | 2     | 1     | 1     | 1     | 12.3  | 0.0   |
+|     | 0-22  | ndet  |       | 2.44  | 2.43  | 2.29  | 8667  | 8386  |
+|     |       |       |       |       |       |       |       | 4971  |
++-----+-------+-------+-------+-------+-------+-------+-------+-------+
+| 154 | 80/5  | I     | 1     | 2     | 2     | 2     | 22.0  | 0.4   |
+|     | 0-22  | ndet  |       | 2.47  | 1.95  | 1.68  | 3333  | 0153  |
+|     |       |       |       |       |       |       |       | 8707  |
++-----+-------+-------+-------+-------+-------+-------+-------+-------+
 
 ## Task
 
 ------------------------------------------------------------------------
 
 1.  Scatterplot with the mean radius size of each sample in which only
-    the samples with Radius\_number 1 are considered. Differentiation
+    the samples with Radius_number 1 are considered. Differentiation
     between different taxa, colour gradient from smaller to larger
     diameter
 
 -   I would assume that there is no difference between Populus and
-    Indet. It’s interessting to see if there is a cluster by a specific
+    Indet. It's interessting to see if there is a cluster by a specific
     radius size or if they are randomly distributed
 
 1.  Barplot/Boxplot in which the number of samples with the different
@@ -158,6 +108,6 @@ columns:
 1.  **optional** (i) compute for each taxon a linear model of the radius
     1 data. (ii) substract the model value from each value and (iii)
     identify all points that are above/below the standard deviation of
-    this “mean normalized” data, to identify “interesting” outlier. plot
+    this "mean normalized" data, to identify "interesting" outlier. plot
     the original data with linear trendline and highlight (color) all
     outliers.

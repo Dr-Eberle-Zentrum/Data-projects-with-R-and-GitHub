@@ -11,7 +11,7 @@ library("tidyverse")
 library("stringr")
 library("dplyr")
 knitr::opts_chunk$set(echo = TRUE) 
-
+setwd("C:/Users/danie/Documents/Aktuelles/R_Kurs")
 ```
 
 ## R Markdown
@@ -21,6 +21,7 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
 ```{r ggplot Definitionen}
+setwd("C:/Users/danie/Documents/Aktuelles/R_Kurs")
 
 Mammel_data<-read.csv("Mammal-comeback-in-Europe-data-OWID-download.csv", sep=",", strip.white = TRUE)
 colnames(Mammel_data)<-gsub("[[:punct:]]","_", colnames(Mammel_data))
@@ -37,7 +38,7 @@ plot<-ggplot(Mammel_data, aes(y= rev(Common_name_of_species),x= Average_relative
   geom_point(size=2,col="slateblue")+
   scale_x_log10()+
   coord_cartesian(xlim=c(0.5,17000))+
-  geom_text(position = position_nudge(x=0.15,y=0), size=3, aes(label=paste(Average_relative_change_in_abundance, "%", sep="")))+
+  geom_text(position = position_nudge(x=0.15,y=0),size=3,aes(label=paste(format(Average_relative_change_in_abundance,big.mark=","), "%", sep="")))+
   xlab(x_label)+
   ylab("")+
   geom_text(data = Mammel_data, 
@@ -46,11 +47,30 @@ plot<-ggplot(Mammel_data, aes(y= rev(Common_name_of_species),x= Average_relative
                    inherit.aes = FALSE,
                    hjust = 1)+
   geom_point(aes(x=0.41, y=Mammel_seq), colour="black")
-
+plot
 ```
 Wildlife is making a comeback in Europe
 ======================================
 
 ```{r Plot}
-plot
+df %>%
+  mutate( value = as.double( str_replace( Average.relative.change.in.abundance, '%', '') ) ) %>% # Casting to variable type "double"
+  mutate( value = log( value )) %>% # Changing to logarithmic scale
+  mutate( Common.name.of.species = factor( Common.name.of.species) ) %>%
+  mutate( start.and.end = paste( Start.year, "to", End.year )) %>%  # Time range label at line start
+  mutate( Common.name.of.species = fct_reorder(Common.name.of.species, value)) %>% # Reorder animals by size
+  ggplot( aes( x = Common.name.of.species, y = value, label = Average.relative.change.in.abundance)) +
+    geom_segment( aes( xend=Common.name.of.species , yend= 0, y = value*0.98), arrow = arrow( length=unit(0.25,"cm"), ends = "first", type = "closed"), colour = "#B7B7B7") + # Adding arrows
+    geom_label( aes( label= start.and.end),  y = 1, label.size = NA, color = "#4D4D4D" ) + # Adding time range label at line start
+    geom_point( size=4, pch = 21, bg ="#6A7996") + # Adding points
+    coord_flip() +
+    theme_classic() +
+    geom_text( nudge_y = 0.7, color = "#6A7996", fontface = "bold") + # Adding percentage to points
+    theme(axis.ticks = element_blank(), axis.line = element_blank(), axis.text.y = element_text(face="bold")) + # Removing axes and making tick marks bold
+    xlab("") +
+    ylab(bold("Average relative change in the size of population")~"(logarithmic scale)") + # x-label with partially bold text
+    scale_y_continuous(labels = x.axis.labels, breaks= c(0, 2.5, 5, 7.5, 10)) +
+    annotate("segment", x = 4, xend = 4, y = 5, yend = 5.5,  arrow = arrow( length=unit(0.15,"cm"), ends = "first", type = "closed"), colour = "#B7B7B7") +
+    annotate("text", x = 4, y = 5.5, hjust = 0, size = 3, label = "Between 1960 and 2016, populations\nof brown bears increased by an average of 44%") +
+    geom_point( aes( x = 1:length(Common.name.of.species), y = 0.04), colour = "#6A7996",  size=4, pch = 21, bg ="#6A7996")
 ```
