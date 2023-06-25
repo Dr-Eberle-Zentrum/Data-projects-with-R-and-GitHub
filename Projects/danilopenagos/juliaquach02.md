@@ -60,7 +60,7 @@ Year
 Centro Colombo Americano
 </td>
 <td style="text-align:left;">
-Antonio MarA-a Benitez
+Antonio Maria Benitez
 </td>
 <td style="text-align:right;">
 1980
@@ -82,7 +82,7 @@ Lorena Espitia
 Centro Colombo Americano
 </td>
 <td style="text-align:left;">
-Alejandro CastaA?o
+Alejandro Castano
 </td>
 <td style="text-align:right;">
 2007
@@ -93,7 +93,7 @@ Alejandro CastaA?o
 Centro Colombo Americano
 </td>
 <td style="text-align:left;">
-Mauricio MA”ller
+Mauricio MOller
 </td>
 <td style="text-align:right;">
 1995
@@ -144,7 +144,7 @@ Number of Invitations
 Angel Rodriguez.
 </td>
 <td style="text-align:left;">
-Aexandes / GalerA-a Espacio Alterno
+Aexandes / Galeria Espacio Alterno
 </td>
 <td style="text-align:right;">
 2000
@@ -158,7 +158,7 @@ Aexandes / GalerA-a Espacio Alterno
 Arnulfo Luna
 </td>
 <td style="text-align:left;">
-GalerA-a Alfred Wild
+Galeria Alfred Wild
 </td>
 <td style="text-align:right;">
 1980
@@ -172,7 +172,7 @@ GalerA-a Alfred Wild
 Jhon de Rhodes
 </td>
 <td style="text-align:left;">
-GalerA-a Belarca
+Galeria Belarca
 </td>
 <td style="text-align:right;">
 1990
@@ -186,7 +186,7 @@ GalerA-a Belarca
 Josh Blackwell
 </td>
 <td style="text-align:left;">
-GalerA-a Casas Riegner
+Galeria Casas Riegner
 </td>
 <td style="text-align:right;">
 2010
@@ -197,7 +197,7 @@ GalerA-a Casas Riegner
 </tr>
 <tr>
 <td style="text-align:left;">
-Juan MejA-a
+Juan Mejia
 </td>
 <td style="text-align:left;">
 SN MaCarena

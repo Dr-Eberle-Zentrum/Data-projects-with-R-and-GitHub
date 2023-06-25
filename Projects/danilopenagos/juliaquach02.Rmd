@@ -2,7 +2,7 @@
 title: "A Visual Exploration of the Artistic Landscape in Colombia (1940-2018)"
 author: "Julia Quach"
 date: "2023-06-22"
-output: md_document
+output: html_document
 always_allow_html: true
 ---
 
@@ -23,7 +23,7 @@ df <- import_list("PG_BD_INVITACIONES_SM05-20-2021.xlsx", rbind = TRUE)
 -------------------------------------------------------------------------------
 
 
-In this project, we would like to get an insight into the art scene in Colombia in the second half of the 20th century. For this, we observe and visualise the transformation of the art scene of Bogotá. In particular, we take a closer look at the relations between the artists and galleries at that time as well as the art critics and their media outlets.
+In this project, we would like to get an insight into the art scene in Colombia in the second half of the 20th century. For this, we observe and visualise the transformation of the art scene of Bogotá. In particular, we take a closer look at the relations between the artists and galleries at that time.
 
 -------------------------------------------------------------------------------
 
@@ -53,13 +53,24 @@ data <- df %>%
   separate_rows( artists, sep = ", ") %>% # Splitting strings of artists and saving as new variable
   mutate( across( c( artists, galleries ), function(x){ iconv(x, to='ASCII//TRANSLIT') } ) ) %>%
   mutate( year = as.integer( str_extract( year, regex("^[0-9]{4}") ) ) ) %>%  # Cast year format
-  na.omit() %>% # remove all rows with NA entries 
-  mutate( decade = year%/%10*10) # add decade information
+  #na.omit() %>% # remove all rows with NA entries 
+  mutate( decade = year%/%10*10) # add decade information 
 
+list <- c("2011-2012-2013", "marzo", "29", "n", "N/A", "NN", "S.I", "s.i.", "S.I/S.I/2009", "S/F")
+for (i in list) {
+  data$artists<-na_if(data$artists,i)
+}
+
+data<- data[complete.cases(data), ] 
+
+# select und slice_head
+# data %>% 
+#     select( ) %>% 
+#     slice_head() %>%
+#     knitr::kable( )
 
 knitr::kable( data[1:5,1:3], col.names = c("Galleries", "Artists", "Year"), caption = "Table 1: First five rows of our data set after reduction of our initial data set.") %>%
     kable_styling(c("bordered", "striped"), full_width = T)
-
 
 ```
 
@@ -68,11 +79,10 @@ We classify the galleries by their decade and group the data set by the artists 
 
 ```{r grouping, echo=FALSE}
 
-data <- data %>% 
-  group_by(artists, galleries,decade) %>% 
-  count(artists) %>% 
+data_w_count <- data %>%
+  group_by(artists, galleries, decade) %>%
+  count( artists ) %>% 
   ungroup()
-
 
 knitr::kable( data[1:5,], col.names = c("Galleries", "Artists", "Decade", "Number of Invitations"), caption = "Table 2: First five rows of our data set after computing the decade and counting of invitations") %>%
     kable_styling(c("bordered", "striped"), full_width = T)
@@ -83,49 +93,82 @@ knitr::kable( data[1:5,], col.names = c("Galleries", "Artists", "Decade", "Numbe
 
 # Visualisation
 
--------------------------------------------------------------------------------
+To avoid a cluttered visualisation, we choose a minimum number of invitations for the artists to be included in the Sankey diagram and a certain decade which we want to visualise.
 
-To avoid a cluttered visualisation, we either choose a minimum number of invitations for the artists to be included in the Sankey diagram or a certain decade which we want to visualise.
+```{r visualization_function, echo=FALSE}
+library( networkD3 )
 
-```{r visualization, echo=FALSE}
-
-# creating a df that only permits cases with invitations over the threshold 'minNumInvitations'
-
-minNumInvitations <- 3
-df1 <- data[ ( data$n > minNumInvitations ), ]
-
-# creating a df that only permits cases from one decade
-chosenDecade <- "1990"
-df2 <- data[ ( data$decade == chosenDecade ), ]
-
-### WIP #########################################################################
-# Choose data frame which you want to plot
-# x <- df1
-# 
-# # Plotting
-# 
-# links <- data.frame(
-#   source=x$galleries,
-#   target=x$artists,
-#   value=x$n
-# )
-# 
-# nodes <- data.frame(
-#   name=c(as.character(links$source),
-#          as.character(links$target))|>unique()
-# )
-# 
-# links$IDsource <- match(links$source, nodes$name)-1
-# links$IDtarget <- match(links$target, nodes$name)-1
-# 
-# #Network
-# sankey <- sankeyNetwork(Links = links, Nodes = nodes, 
-#                         Source = "IDsource", Target = "IDtarget",
-#                         Value = "value", NodeID = "name",
-#                         sinksRight = FALSE)
-# sankey
+# function to create sankey diagram with filtering options for the minimum number
+# of invitations and a chosenDecade
+create_sankey <- function( data_w_count, minNumInvitations, chosenDecade){
+  
+  x <- filter( data_w_count, n > minNumInvitations ) %>% 
+            filter( decade == chosenDecade)
+  
+  links <- data.frame(
+    source=x$galleries,
+    target=x$artists,
+    value=x$n
+  )
+  
+  nodes <- data.frame(
+    name=c(as.character(links$source),
+           as.character(links$target))|>unique()
+  )
+  
+  links$IDsource <- match(links$source, nodes$name)-1
+  links$IDtarget <- match(links$target, nodes$name)-1
+  
+  #Network
+  sankey <- sankeyNetwork(Links = links, Nodes = nodes, 
+                          Source = "IDsource", Target = "IDtarget",
+                          Value = "value", NodeID = "name",
+                          sinksRight = FALSE)
+  return( sankey )
+}
 
 ```
+
+For the 1950s, we visualise the artists that were invited:
+
+```{r visualization 1950s, echo=FALSE}
+
+#decades <- 1950 + 10*c(1:6)
+# 
+# minNumInvitations <- 0
+# 
+# for( i in 1:6){
+#   x <- filter( data_w_count, n > minNumInvitations ) %>% 
+#             filter( decade == decades[[i]])
+#   create_sankey( x, 1, decades[[i]]) 
+# }
+
+create_sankey( data_w_count, 1, "1950") 
+```
+
+
+For the 1960s, 1970s and 2010s, we visualise the artists that were invited more than five times:
+
+```{r visualization 1960s and 1970s, echo=FALSE}
+
+create_sankey( data_w_count, 5, "1960") 
+create_sankey( data_w_count, 5, "1970") 
+create_sankey( data_w_count, 5, "1980") 
+create_sankey( data_w_count, 5, "1990") 
+create_sankey( data_w_count, 5, "2000") 
+create_sankey( data_w_count, 5, "2010") 
+
+```
+
+
+In the 1980s and 1990s, the art scene was apparently particularly busy. Therefore, we visualise the artists that were invited ten times ore more:
+
+```{r visualization 1980s and 2000s, echo=FALSE}
+
+create_sankey( data_w_count, 10, "1980") 
+create_sankey( data_w_count, 10, "1990") 
+```
+
 
 -------------------------------------------------------------------------------
 
@@ -133,3 +176,5 @@ df2 <- data[ ( data$decade == chosenDecade ), ]
 
 -------------------------------------------------------------------------------
 
+
+Apparently, there was an increase of exhibitions and inivitations in the 1980s and 1990s.
