@@ -1,0 +1,131 @@
+---
+title: "Tabea's Project"
+author: "Laurens Mauz"
+date: "2023-06-21"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+
+data <- read.csv("Data_Project1.csv", sep=";")
+
+```
+
+I first tried to make a simple scatterplot for the total mean radius of the three measurements of each Taxa.
+
+```{r ex1}
+data %>%
+  dplyr::filter(Radius_number == 1) %>%
+  dplyr::filter(Taxa == "Populus" | Taxa == "Indet" | Taxa == "Salix") %>%
+  ggplot(aes(x=Taxa, y=Radius_tot_mean, color=Radius_tot_mean)) +
+    geom_point() +
+    geom_jitter() +
+    scale_color_gradient(low="blue", high="red") +
+    labs(title="Mean Radius of all Measurements",
+          x="Taxa",
+          y="Total mean Radius",
+         color="Mean total Radius") +
+    theme_bw() + 
+    theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
+  
+
+
+```
+I remembered that Martin advised Nico to make Violin plots, so I did as well. I think with violin plots the distribution of the data is a little bit easier to see.
+
+```{r ex1 violin}
+
+data %>%
+  dplyr::filter(Radius_number == 1) %>%
+  dplyr::filter(Taxa == "Populus" | Taxa == "Indet") %>%
+  ggplot(aes(x=Taxa, y=Radius_tot_mean, color=Radius_tot_mean)) +
+    geom_violin() +
+    geom_point() +
+    geom_jitter() +
+    scale_color_gradient(low="blue", high="red") +
+    labs(title="Mean Radius of all Measurements",
+          x="Taxa",
+          y="Total mean Radius") +
+    theme_bw() + 
+    theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
+    
+    
+
+```
+
+Here I make a Barplot for the number of tree rings. I was not sure why there were rows in the data with the same ID but different values for Standard deviation etc.
+
+```{r ex2}
+data %>%
+  select(Radius_number, Taxa) %>%
+  dplyr::filter(Taxa == "Populus" | Taxa == "Indet" | Taxa == "Salix") %>%
+  drop_na() %>%
+  group_by(Radius_number) %>%
+  count() %>%
+  mutate(Radius_number = as.factor(Radius_number)) %>%
+  ggplot(aes(x=Radius_number, y=n)) +
+    geom_bar(stat="identity") +
+    labs(title="Number of Tree-rings",
+         x="Number of Rings",
+         y="Amount of Trees") +
+    theme_bw() + 
+    theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
+
+
+
+
+
+```
+I made the scatterfplot of mean radius against the standard deviation of the mean radius and added a linear approximation of the data for INdet and Populus.
+
+```{r ex3}
+data %>%
+  select(Radius_tot_mean, Radius_tot_sd, Radius_number, Taxa) %>%
+  dplyr::filter(Radius_number == 1) %>%
+  dplyr::filter(Taxa == "Populus" | Taxa == "Indet") %>%
+  mutate(Radius_tot_sd = as.numeric(Radius_tot_sd)) %>% 
+  drop_na() %>%
+  ggplot(aes(x=Radius_tot_mean, y=Radius_tot_sd, color=Taxa)) +
+    geom_point() +
+    stat_smooth(method="lm") +
+    labs(title="Correlation between Mean Radius and Standard Deviation of Mean Radius",
+         x="Mean Radius of all Measurements",
+         y="Standard Deviation of Radius") +
+         theme_bw() + 
+         theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
+```
+I wanted to see how good the linear regression fits the data. You can see that R squared for Populus is ca. 0,7 and for Indet it is ca. 0,35. The linear model seems to fit the Populs Taxa a lot better
+
+```{r linear model}
+lm_data_pop <- data %>%
+  select(Radius_tot_mean, Radius_tot_sd, Radius_number, Taxa) %>%
+  dplyr::filter(Radius_number == 1) %>%
+  dplyr::filter(Taxa == "Populus") %>%
+  mutate(Radius_tot_sd = as.numeric(Radius_tot_sd)) %>% 
+  drop_na() 
+
+lm_data_indet <- data %>%
+  select(Radius_tot_mean, Radius_tot_sd, Radius_number, Taxa) %>%
+  dplyr::filter(Radius_number == 1) %>%
+  dplyr::filter(Taxa == "Indet") %>%
+  mutate(Radius_tot_sd = as.numeric(Radius_tot_sd)) %>% 
+  drop_na() 
+  
+lm_std_radius_indet <- lm(Radius_tot_mean~Radius_tot_sd, data = lm_data_indet) #Create the linear regression
+summary(lm_std_radius_indet)
+
+lm_std_radius_pop <- lm(Radius_tot_mean~Radius_tot_sd, data = lm_data_pop)
+
+summary(lm_std_radius_pop)
+
+
+
+
+```
+
+
