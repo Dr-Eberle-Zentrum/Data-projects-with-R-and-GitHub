@@ -5,7 +5,7 @@ output: md_document
 
 ## Initial solution
 
-This is my first try at a solution of your project. I have all the relevant data in one table. Now the only thing left to do is to visulize it.
+This is my first try at a solution of your project. I have all the relevant data in one table. Now the only thing left to do is to visualize it in a map.
 
 ```{r}
 library(tidyverse)
@@ -13,7 +13,7 @@ library(maps)
 library(viridis)
 
 
-media_use <- read_csv2("Projects/nico-afentoulidis/ZA7848_v1-0-0.csv")
+media_use <- read_csv2("ZA7848_v1-0-0.csv")
 
 mean_media <-
   media_use %>% 
@@ -34,7 +34,6 @@ mean_media <-
 
 
 ```
-
 
 The boxplots are ready:
 

@@ -1,15 +1,27 @@
 ## Initial solution
 
 This is my first try at a solution of your project. I have all the
-relevant data in one table. Now the only thing left to do is to visulize
-it.
+relevant data in one table. Now the only thing left to do is to
+visualize it in a map.
 
     library(tidyverse)
+
+    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+    ## ✔ dplyr     1.1.2     ✔ readr     2.1.4
+    ## ✔ forcats   1.0.0     ✔ stringr   1.5.0
+    ## ✔ ggplot2   3.4.2     ✔ tibble    3.2.1
+    ## ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+    ## ✔ purrr     1.0.1     
+    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ✖ dplyr::filter() masks stats::filter()
+    ## ✖ dplyr::lag()    masks stats::lag()
+    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+
     library(maps)
 
     ## 
     ## Attaching package: 'maps'
-
+    ## 
     ## The following object is masked from 'package:purrr':
     ## 
     ##     map
@@ -17,24 +29,20 @@ it.
     library(viridis)
 
     ## Loading required package: viridisLite
-
     ## 
     ## Attaching package: 'viridis'
-
+    ## 
     ## The following object is masked from 'package:maps':
     ## 
     ##     unemp
 
-    media_use <- read_csv2("Projects/nico-afentoulidis/ZA7848_v1-0-0.csv")
+    media_use <- read_csv2("ZA7848_v1-0-0.csv")
 
     ## ℹ Using "','" as decimal and "'.'" as grouping mark. Use `read_delim()` for more control.
-
-    ## Rows: 37487 Columns: 16
-    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Rows: 37487 Columns: 16── Column specification ────────────────────────────────────────────────────────
     ## Delimiter: ";"
     ## chr (15): country, isocntry, eu27b, d11, d70, d70a, qa1_5, qd3_1, qd3_2, qd3...
     ## dbl  (1): uniqid
-    ## 
     ## ℹ Use `spec()` to retrieve the full column specification for this data.
     ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
