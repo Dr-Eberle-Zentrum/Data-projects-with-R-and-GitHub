@@ -1,0 +1,56 @@
+---
+output: md_document
+---
+
+
+## Initial solution
+
+This is my first try at a solution of your project. I have all the relevant data in one table. Now the only thing left to do is to visulize it.
+
+```{r}
+library(tidyverse)
+library(maps)
+library(viridis)
+
+
+media_use <- read_csv2("Projects/nico-afentoulidis/ZA7848_v1-0-0.csv")
+
+mean_media <-
+  media_use %>% 
+  mutate(across(starts_with("qd3_"), as.double),
+         isocntry = str_sub(isocntry, start= 1, end = 2)) %>% 
+
+    group_by(isocntry) %>% 
+   summarize(mean_TV = mean(qd3_1, na.rm = TRUE),
+             mean_TVviaInternet = mean(qd3_2, na.rm = TRUE),
+             mean_radio = mean(qd3_3, na.rm = TRUE),
+             mean_podcast = mean(qd3_4, na.rm = TRUE),
+             mean_writtenPress = mean(qd3_5, na.rm = TRUE),
+             mean_Internet = mean(qd3_6, na.rm = TRUE),
+             mean_SocialMedia = mean(qd3_8, na.rm = TRUE)
+             )  %>% 
+     drop_na() %>% 
+  print()
+
+
+```
+
+
+The boxplots are ready:
+
+```{r}
+media_use %>%
+  mutate(isocntry = str_sub(isocntry, start= 1, end = 2),
+         across(starts_with("qd3_"), as.double) ) %>% 
+  select(qa1_5, qd3_8, isocntry) %>%
+  filter(isocntry == "GR" | isocntry == "ES" | isocntry =="DE", 
+  qa1_5 != "Don't know (SPONTANEOUS)") %>%
+  drop_na() %>%
+  ggplot(aes(x=qa1_5, y=qd3_8, fill=qa1_5)) +
+  geom_boxplot() +
+  ggtitle(" Financial Situation in relation to Social Media Usage") +
+  labs(fill="Financial Situation", y = "Social Media usage", x = "Financial situation") +
+  theme(axis.text.x = element_text(angle = 90)) +
+  scale_fill_viridis(discrete = TRUE, alpha = 0.5, option="A") +
+  facet_wrap(~isocntry)
+```
