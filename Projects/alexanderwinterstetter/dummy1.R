@@ -20,7 +20,7 @@ data$newposition <- ifelse(data$position == "Goalkeeper", "Goalkeeper",
 data$points <- (data$victories * 3) + (data$ties * 1) + (data$defeats * 0)
 
 # Save the updated data frame to a new CSV file
-write.csv(data, "new_soccer_referee_data.csv", row.names = FALSE)
+#write.csv(data, "new_soccer_referee_data.csv", row.names = FALSE)
 
 # Find the player with the most victories
 player_most_victories <- data$player[which.max(data$victories)]
