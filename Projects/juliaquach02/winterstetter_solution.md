@@ -115,4 +115,4 @@ one point, while in the *control group* five cells died.
 
 ------------------------------------------------------------------------
 
-![](winterstetter_quach_solution_files/figure-markdown_strict/unnamed-chunk-4-1.png)![](winterstetter_quach_solution_files/figure-markdown_strict/unnamed-chunk-4-2.png)
+![](winterstetter_solution_files/figure-markdown_strict/unnamed-chunk-4-1.png)![](winterstetter_solution_files/figure-markdown_strict/unnamed-chunk-4-2.png)
