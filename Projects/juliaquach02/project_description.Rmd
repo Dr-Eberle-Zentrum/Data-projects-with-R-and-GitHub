@@ -49,6 +49,7 @@ The first rows of the measurements of a dying cell is shown below:
 
 ```{r, echo = FALSE}
 df <- read.csv("Track_one_dying_cell.csv")
+
 df <- df[ , c("Cell.ID","Time.point", "Intensity", "Area")]
 knitr::kable( head( df ), col.names = gsub("[.]", " ", names(df)), caption = "Table: Tumor cell data from live-cell imaging") %>%
     kable_styling(c("bordered", "striped"), full_width = T)
@@ -120,8 +121,8 @@ plot_area_viable_cell <- ggplot( df_viable, aes(x = Time.in.hours, y = Area) ) +
 
 
 plot_grid(plot_intens_viable_cell, plot_area_viable_cell)
-
 ```
+
 --------------------------------------------------------------------------------
 
 ## __Data and goal__

@@ -102,14 +102,19 @@ library( networkD3 )
 # of invitations and a chosenDecade
 create_sankey <- function( data_w_count, minNumInvitations, chosenDecade){
   
-  x <- filter( data_w_count, n > minNumInvitations ) %>% 
-            filter( decade == chosenDecade)
+  links <- filter( data_w_count, n > minNumInvitations ) %>% 
+            filter( decade == chosenDecade) %>% 
+            select( galleries, artists, n ) %>% 
+            rename( source = galleries, target = artists, value = n) %>%
+            as.data.frame()
+    
+    
   
-  links <- data.frame(
-    source=x$galleries,
-    target=x$artists,
-    value=x$n
-  )
+  # links <- data.frame(
+  #   source=x$galleries,
+  #   target=x$artists,
+  #   value=x$n
+  # )
   
   nodes <- data.frame(
     name=c(as.character(links$source),
@@ -123,7 +128,7 @@ create_sankey <- function( data_w_count, minNumInvitations, chosenDecade){
   sankey <- sankeyNetwork(Links = links, Nodes = nodes, 
                           Source = "IDsource", Target = "IDtarget",
                           Value = "value", NodeID = "name",
-                          sinksRight = FALSE)
+                          sinksRight = FALSE, width = 1000)
   return( sankey )
 }
 
@@ -133,30 +138,24 @@ For the 1950s, we visualise the artists that were invited:
 
 ```{r visualization 1950s, echo=FALSE}
 
-#decades <- 1950 + 10*c(1:6)
-# 
-# minNumInvitations <- 0
-# 
-# for( i in 1:6){
-#   x <- filter( data_w_count, n > minNumInvitations ) %>% 
-#             filter( decade == decades[[i]])
-#   create_sankey( x, 1, decades[[i]]) 
-# }
-
 create_sankey( data_w_count, 1, "1950") 
 ```
 
 
 For the 1960s, 1970s and 2010s, we visualise the artists that were invited more than five times:
 
-```{r visualization 1960s and 1970s, echo=FALSE}
+```{r visualization 1960s and 1970s, echo=FALSE, warning = FALSE }
 
-create_sankey( data_w_count, 5, "1960") 
-create_sankey( data_w_count, 5, "1970") 
-create_sankey( data_w_count, 5, "1980") 
-create_sankey( data_w_count, 5, "1990") 
-create_sankey( data_w_count, 5, "2000") 
-create_sankey( data_w_count, 5, "2010") 
+decades <- 1950 + 10*c(1:6)
+
+minNumInvitations <- 5
+
+create_sankey( data_w_count, 5, "1960")
+create_sankey( data_w_count, 5, "1970")
+create_sankey( data_w_count, 5, "1980")
+create_sankey( data_w_count, 5, "1990")
+create_sankey( data_w_count, 5, "2000")
+create_sankey( data_w_count, 5, "2010")
 
 ```
 
