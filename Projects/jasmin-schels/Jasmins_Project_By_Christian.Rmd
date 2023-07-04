@@ -1,0 +1,66 @@
+---
+title: "Bye Bye Birdie by Christian"
+output: html_document
+date: "2023-06-27"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Project Solution of Jasmin's 'Bye Bye Birdie' Project
+First we need to load the data set and take the variables of interest into a working data set.
+```{r}
+library(tidyverse)
+library(readxl)
+df <- read_csv("https://zenodo.org/record/5544548/files/pop_size20_080421_zenodo.csv?download=1", show_col_types = FALSE)
+
+# Some Data Documentation
+
+# species:			species accepted latin name in HBW and BirdLife International (2019)
+
+# common_name:			species common name in English
+
+# pop_est_yr_min:			the minimum year of the national species population estimate
+# pop_est_yr_max:			the maximum year of the national species population estimate
+
+# unit:				the unit the population was measured in: p = pairs, i = individuals, males = males, bfemales = breeding females, cmales = calling males
+
+# pop_min_size_rnd_n:		the minimum population estimate
+# pop_bsv:			the best single value of the population estimate
+# pop_max_size_rnd_n:		the maximum population estimate of that species in that country
+
+# population_trend_long:		a categorical assessment of the long-term trend in national species abundance: (I) Increasing, (D) Decreasing, (F) Fluctuating around zero, (U) Uncertain, (UNK) Unknown, or (S) Stable.
+
+df_reduced <- subset(df, select = c(species, common_name, population_trend_long, pop_ltrend_mag_bsv, population_trend, pop_trend_mag_bsv))
+
+
+```
+
+
+```{r}
+# Two Dataframes: one longterm one shortterm
+# Long:
+
+dflong <- subset(df_reduced, select = c(species, common_name, population_trend_long, pop_ltrend_mag_bsv))
+ # category 'other' as a extension of the common name variable
+
+
+dflong <- dflong |> drop_na(pop_ltrend_mag_bsv)|> group_by(common_name) |> summarise('EU-wide longterm trend'=sum(pop_ltrend_mag_bsv))
+
+
+# Short
+
+dfshort <- subset(df_reduced, select = c(species, common_name, population_trend, pop_trend_mag_bsv))
+dfshort <- dfshort |> drop_na(pop_trend_mag_bsv)|> group_by(common_name)|> summarise('EU-wide shortterm trend'=sum(pop_trend_mag_bsv))
+
+```
+
+With the data frames assembled, now we can tackle the visualization. 
+
+```{r}
+dflong|>
+  ggplot(aes(common_name,as_factor('EU-wide longterm trend')))+ 
+  geom_bar(position = "stack", stat = "identity")
+
+```
+
