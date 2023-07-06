@@ -1,6 +1,6 @@
 ---
 title: "Bye Bye Birdie by Christian"
-output: html_document
+output: md_document
 date: "2023-06-27"
 ---
 
@@ -12,7 +12,7 @@ First we need to load the data set and take the variables of interest into a wor
 ```{r}
 library(tidyverse)
 library(readxl)
-df <- read_csv("https://zenodo.org/record/5544548/files/pop_size20_080421_zenodo.csv?download=1", show_col_types = FALSE)
+df <- read_csv("https://zenodo.org/record/5544548/files/EU%20birds%20decline%20overall%20in%20line%20with%20global%20patterns_species_results.csv?download=1", show_col_types = FALSE)
 
 # Some Data Documentation
 
@@ -53,6 +53,9 @@ dflong <- dflong |> drop_na(pop_ltrend_mag_bsv)|> group_by(common_name) |> summa
 dfshort <- subset(df_reduced, select = c(species, common_name, population_trend, pop_trend_mag_bsv))
 dfshort <- dfshort |> drop_na(pop_trend_mag_bsv)|> group_by(common_name)|> summarise('EU-wide shortterm trend'=sum(pop_trend_mag_bsv))
 
+
+
+# Having the numbers in percentage?
 ```
 
 With the data frames assembled, now we can tackle the visualization. 
@@ -64,3 +67,5 @@ dflong|>
 
 ```
 
+final markdown notes:
+no code, only important graphs, tables (use knitr::kable(df[], caption="xy")), focus on visualizations
