@@ -8,8 +8,6 @@ positive values now mean a gain in population instead of a loss and
 rounded the values to full values. Now, mean, SD and median values
 represent the gains/losses of that specific species across Europe.
 
-    library(tidyverse)
-
     ## Warning: Paket 'stringr' wurde unter R Version 4.3.0 erstellt
 
     ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
@@ -22,25 +20,6 @@ represent the gains/losses of that specific species across Europe.
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
     ## ℹ Use the ]8;;http://conflicted.r-lib.org/conflicted package]8;; to force all conflicts to become errors
-
-    library(readxl)
-    df <- read_csv("https://zenodo.org/record/5544548/files/EU%20birds%20decline%20overall%20in%20line%20with%20global%20patterns_species_results.csv?download=1", show_col_types = FALSE)
-
-    # Some Data Documentation
-
-    # species: species accepted latin name in HBW and BirdLife International (2019)
-
-    # common_name: species common name in English
-
-    # Loss_mean: Mean loss of individuals (1980-2017)
-    # Loss_sd: Standard deviation of mean loss of individuals 
-    # Loss_med: Median loss of individuals (1980-2017)
-
-    # total_proportional_change: Proportional change 1980:2017
-    # annual rate of change:        Annual rate of change 1980:2017
-
-    # population_trend_long:        a categorical assessment of the long-term trend in national species abundance: (I) Increasing, (D) Decreasing, (F) Fluctuating around zero, (U) Uncertain, (UNK) Unknown, or (S) Stable.
-    df$`annual rate of change`
 
     ##   [1] 0.9961543 0.9645488 1.0180385 1.0720973 0.9888308 1.0001834 1.0290858
     ##   [8] 1.0568908 1.0078788 0.9891875 1.0244488 0.9863606 1.0163254 0.9988304
@@ -96,26 +75,6 @@ represent the gains/losses of that specific species across Europe.
     ## [358] 0.9973041 1.0018767 1.0004504 1.0005207 0.9778347 1.0168507 0.9982501
     ## [365] 0.9756691 1.0229197 1.0075593 1.0128213 0.9802128 1.0095203 0.9877036
     ## [372] 1.0132114 1.0277397 1.0067056 1.0037422 1.0072260 0.9997471 0.9806326
-
-    df_reduced <- subset(df, select = c(species, common_name, Loss_mean, Loss_sd, Loss_med, total_proportional_change, `annual rate of change`))
-    list <- c("Loss_mean", "Loss_sd", "Loss_med")
-    for (i in list) {
-      df_reduced[i] <- round(df_reduced[i],1)
-      
-    }
-    list <- c("total_proportional_change", "annual rate of change")
-    for (i in list) {
-      df_reduced[i] <- round(df_reduced[i],3)
-      
-    }
-    # Since the dataframe is orientated in Losses, it is somewhat confusing, since negative values mean population growth, while positive values equal a decline --> reframe the dataset
-    bird <- df_reduced
-
-    flip <- function(x){
-      x*(-1)
-    }
-    bird<-bird|>mutate(across(c(Loss_mean, Loss_sd, Loss_med), flip))
-    knitr::kable(head(bird[1:20,]))
 
 <table>
 <colgroup>
@@ -205,46 +164,121 @@ than these two species, into a “other” category. To accomplish this, we
 have to create a new variable, that copies the name of the species if it
 is outside the range specified, or changes its name to “other”.
 
-    # match("Cyanistes caeruleus",bird$species)
-    # match("Passer montanus", bird$species)     #only needed to find index position: 370 & 353 
-    x1<-print(bird$Loss_mean[370])
-
     ## [1] 19141749
 
-    x2<-print(bird$Loss_mean[353])
-
     ## [1] -29831444
-
-    x=0
-    for (i in bird$Loss_mean) {
-      x=x+1
-      if (x1>i & x2<i){
-        bird$category_name[x]<-"other"
-        bird$category_species[x]<-"other"
-      } else {
-        bird$category_name[x]<-bird$common_name[x]
-        bird$category_species[x]<-bird$species[x]
-        }
-    }
 
     ## Warning: Unknown or uninitialised column: `category_name`.
 
     ## Warning: Unknown or uninitialised column: `category_species`.
 
+    ## [1] "mean(test2$Loss_mean)\nmean(test2$Loss_med)\nnrow(test2)"
+
+    ## [1] "mean(test3$Loss_mean)\nmean(test3$Loss_med)\nnrow(test3)"
+
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Loss_mean</th>
+<th style="text-align: right;">Loss_med</th>
+<th style="text-align: left;">category_name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">-280.8</td>
+<td style="text-align: right;">-281.3</td>
+<td style="text-align: left;">other species; N = 163</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">118.7</td>
+<td style="text-align: right;">114.4</td>
+<td style="text-align: left;">other species; N = 198</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">-98.2</td>
+<td style="text-align: right;">-97.0</td>
+<td style="text-align: left;">Yellow Wagtail</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">-29.8</td>
+<td style="text-align: right;">-29.7</td>
+<td style="text-align: left;">Eurasian Tree Sparrow</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">-33.8</td>
+<td style="text-align: right;">-33.7</td>
+<td style="text-align: left;">Eurasian Linnet</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">-35.1</td>
+<td style="text-align: right;">-34.9</td>
+<td style="text-align: left;">European Serin</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">21.4</td>
+<td style="text-align: right;">21.3</td>
+<td style="text-align: left;">Common Woodpigeon</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">-75.1</td>
+<td style="text-align: right;">-74.6</td>
+<td style="text-align: left;">Common Starling</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">29.7</td>
+<td style="text-align: right;">29.4</td>
+<td style="text-align: left;">Common Chiffchaff</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">23.6</td>
+<td style="text-align: right;">22.7</td>
+<td style="text-align: left;">European Goldfinch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">-68.1</td>
+<td style="text-align: right;">-68.0</td>
+<td style="text-align: left;">Eurasian Skylark</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">19.1</td>
+<td style="text-align: right;">19.0</td>
+<td style="text-align: left;">Blue Tit</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">-36.9</td>
+<td style="text-align: right;">-36.9</td>
+<td style="text-align: left;">Willow Warbler</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">28.8</td>
+<td style="text-align: right;">28.2</td>
+<td style="text-align: left;">Winter Wren</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">55.2</td>
+<td style="text-align: right;">54.9</td>
+<td style="text-align: left;">Blackcap</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">22.2</td>
+<td style="text-align: right;">21.9</td>
+<td style="text-align: left;">European Robin</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">29.5</td>
+<td style="text-align: right;">29.2</td>
+<td style="text-align: left;">Eurasian Blackbird</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">-247.3</td>
+<td style="text-align: right;">-246.7</td>
+<td style="text-align: left;">House Sparrow</td>
+</tr>
+</tbody>
+</table>
+
 With the data frame assembled, now we can tackle the visualization.
-
-    library(RColorBrewer)
-
-    ## Warning: Paket 'RColorBrewer' wurde unter R Version 4.3.0 erstellt
-
-    bird$x<-1
-    bird|>
-      mutate(across(c(Loss_mean, Loss_sd, Loss_med), function(x)(x/1000000)))|>
-      group_by(category_name)|>
-      ggplot(aes(x="",Loss_mean, fill=Loss_mean))+ 
-      geom_col()+
-      geom_text(aes(label = category_name), position = position_stack(vjust = 0.5))+
-      scale_color_gradient2()
 
 ![](Jasmins_Project_By_Christian_files/figure-markdown_strict/unnamed-chunk-3-1.png)
 

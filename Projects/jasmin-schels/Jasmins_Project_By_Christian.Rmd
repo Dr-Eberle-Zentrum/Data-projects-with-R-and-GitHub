@@ -8,62 +8,125 @@ date: "2023-06-27"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 # Project Solution of Jasmin's 'Bye Bye Birdie' Project
-First we need to load the data set and take the variables of interest into a working data set.
-```{r}
+First we need to load the data set and take the variables of interest into a working data set. Since the Data Set is organized in Losses, a higher positive number means that that species experienced higher losses and vice versa.To make it more clear, I flipped the values, so that positive values now mean a gain in population instead of a loss and rounded the values to full values. Now, mean, SD and median values represent the gains/losses of that specific species across Europe. 
+
+```{r echo=FALSE}
 library(tidyverse)
 library(readxl)
 df <- read_csv("https://zenodo.org/record/5544548/files/EU%20birds%20decline%20overall%20in%20line%20with%20global%20patterns_species_results.csv?download=1", show_col_types = FALSE)
 
 # Some Data Documentation
 
-# species:			species accepted latin name in HBW and BirdLife International (2019)
+# species: species accepted latin name in HBW and BirdLife International (2019)
 
-# common_name:			species common name in English
+# common_name: species common name in English
 
-# pop_est_yr_min:			the minimum year of the national species population estimate
-# pop_est_yr_max:			the maximum year of the national species population estimate
+# Loss_mean: Mean loss of individuals (1980-2017)
+# Loss_sd: Standard deviation of mean loss of individuals 
+# Loss_med: Median loss of individuals (1980-2017)
 
-# unit:				the unit the population was measured in: p = pairs, i = individuals, males = males, bfemales = breeding females, cmales = calling males
-
-# pop_min_size_rnd_n:		the minimum population estimate
-# pop_bsv:			the best single value of the population estimate
-# pop_max_size_rnd_n:		the maximum population estimate of that species in that country
+# total_proportional_change: Proportional change 1980:2017
+# annual rate of change:		Annual rate of change 1980:2017
 
 # population_trend_long:		a categorical assessment of the long-term trend in national species abundance: (I) Increasing, (D) Decreasing, (F) Fluctuating around zero, (U) Uncertain, (UNK) Unknown, or (S) Stable.
+df$`annual rate of change`
+df_reduced <- subset(df, select = c(species, common_name, Loss_mean, Loss_sd, Loss_med, total_proportional_change, `annual rate of change`))
+list <- c("Loss_mean", "Loss_sd", "Loss_med")
+for (i in list) {
+  df_reduced[i] <- round(df_reduced[i],1)
+  
+}
+list <- c("total_proportional_change", "annual rate of change")
+for (i in list) {
+  df_reduced[i] <- round(df_reduced[i],3)
+  
+}
+# Since the dataframe is orientated in Losses, it is somewhat confusing, since negative values mean population growth, while positive values equal a decline --> reframe the dataset
+bird <- df_reduced
 
-df_reduced <- subset(df, select = c(species, common_name, population_trend_long, pop_ltrend_mag_bsv, population_trend, pop_trend_mag_bsv))
+bird<-bird|>mutate(across(c(Loss_mean, Loss_sd, Loss_med),function(x)(x*-1) ))
+knitr::kable(head(bird[1:20,]))
+```
+Now with the working Data Set, the next step would be to implement the "other" category. In the graph you provided, the cutoff was at these two species:
+  - Cyanistes caeruleus 
+  - Passer montanus 
+
+We want to summarize every species, that has a lower/higher mean value than these two species, into a "other" category. To accomplish this, we have to create a new variable, that copies the name of the species if it is outside the range specified, or changes its name to "other". 
+
+```{r echo=FALSE}
+# match("Cyanistes caeruleus",bird$species)
+# match("Passer montanus", bird$species)     #only needed to find index position: 370 & 353 
+x1<-print(bird$Loss_mean[370])
+x2<-print(bird$Loss_mean[353])
+
+x=0
+for (i in bird$Loss_mean) {
+  x=x+1
+  if (x1>i & x2<i){
+    bird$category_name[x]<-"other"
+    bird$category_species[x]<-"other"
+  }  else {
+    bird$category_name[x]<-bird$common_name[x]
+    bird$category_species[x]<-bird$species[x]
+    }
+}
 
 
+
+test <- bird
+# filter nach Bedingungen
+test2<-test|> 
+  filter(category_name=="other" & Loss_mean<0)|>
+  mutate(Loss_mean=sum(Loss_mean),Loss_med=sum(Loss_med))
+'mean(test2$Loss_mean)
+mean(test2$Loss_med)
+nrow(test2)'
+  # Mean: -280815724, Median: -281267170, Name: other species; N = 163
+
+test3<-test|> 
+  filter(category_name=="other" & Loss_mean>0)|>
+  mutate(Loss_mean=sum(Loss_mean),Loss_med=sum(Loss_med))
+'mean(test3$Loss_mean)
+mean(test3$Loss_med)
+nrow(test3)'
+  # Mean: 118702281, Median: 114432915, Name: other species; N = 198
+
+
+# adding the values to the dataframe and removing those, that are not necessary for analysis (all the duplicate other entries)
+bird<-bird|>
+  mutate(Loss_mean = ifelse(category_name=="other" & Loss_mean>0,mean(test3$Loss_mean),
+                            ifelse(category_name=="other" & Loss_mean<0,mean(test2$Loss_mean),Loss_mean)),
+         Loss_med = ifelse(category_name=="other" & Loss_med>0,mean(test3$Loss_med),
+                            ifelse(category_name=="other" & Loss_med<0,mean(test2$Loss_med),Loss_med)),
+         category_name = ifelse(category_name=="other" & Loss_mean>0,"other species; N = 198",
+                            ifelse(category_name=="other" & Loss_mean<0,"other species; N = 163",category_name)))
+
+bird<-bird|>select(c(Loss_mean,Loss_med,category_name))|>distinct()
+bird<-bird[c(-1,-4),]
+# Notiz: Das war wahrscheinlich ein extrem "roundabout way" das Problem zu lösen aber, hey irgendwie hat es doch noch geklappt...
+
+
+bird<-bird|>
+  mutate(across(c(Loss_mean, Loss_med), function(x)(x/1000000)))
+
+list <- c("Loss_mean", "Loss_med")
+for (i in list) {
+  bird[i]<-round(bird[i],1)
+}  
+
+knitr::kable(bird)
 ```
 
+With the data frame assembled, now we can tackle the visualization. 
 
-```{r}
-# Two Dataframes: one longterm one shortterm
-# Long:
+```{r echo=FALSE}
 
-dflong <- subset(df_reduced, select = c(species, common_name, population_trend_long, pop_ltrend_mag_bsv))
- # category 'other' as a extension of the common name variable
+bird|>
+  ggplot(aes(x="",Loss_mean, fill=Loss_mean))+ 
+  geom_col(width = 0.3)+
+  geom_text(aes(label = category_name), position = position_stack(vjust = 0.5))+
+  scale_y_continuous()
 
-
-dflong <- dflong |> drop_na(pop_ltrend_mag_bsv)|> group_by(common_name) |> summarise('EU-wide longterm trend'=sum(pop_ltrend_mag_bsv))
-
-
-# Short
-
-dfshort <- subset(df_reduced, select = c(species, common_name, population_trend, pop_trend_mag_bsv))
-dfshort <- dfshort |> drop_na(pop_trend_mag_bsv)|> group_by(common_name)|> summarise('EU-wide shortterm trend'=sum(pop_trend_mag_bsv))
-
-
-
-# Having the numbers in percentage?
-```
-
-With the data frames assembled, now we can tackle the visualization. 
-
-```{r}
-dflong|>
-  ggplot(aes(common_name,as_factor('EU-wide longterm trend')))+ 
-  geom_bar(position = "stack", stat = "identity")
 
 ```
 
