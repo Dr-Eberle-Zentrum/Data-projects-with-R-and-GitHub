@@ -73,9 +73,6 @@ example of this approach below:
 </tbody>
 </table>
 
-    ## `summarise()` has grouped output by 'group'. You can override using the
-    ## `.groups` argument.
-
 <table>
 <thead>
 <tr class="header">
@@ -115,9 +112,9 @@ one point, while in the *control group* six cells died.
 
 ------------------------------------------------------------------------
 
-![](winterstetter_solution_files/figure-markdown_strict/unnamed-chunk-2-1.png)
-
 ![](winterstetter_solution_files/figure-markdown_strict/unnamed-chunk-3-1.png)
+
+![](winterstetter_solution_files/figure-markdown_strict/unnamed-chunk-4-1.png)
 
 It is notable that the cells in the treatment group are nearly all the
 time all alive. In the control group there is a significant drop in the

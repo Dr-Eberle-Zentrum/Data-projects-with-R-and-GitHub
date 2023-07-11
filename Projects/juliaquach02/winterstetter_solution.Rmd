@@ -27,7 +27,7 @@ Please see an example of this approach below:
 | 3 | 0 | 100 | 35 | 0.35 | 0 |
 | 4 | 0 | 100 | 25 | 0.25 | 0 |
 
-```{r, echo=FALSE}
+```{r, include=FALSE}
 setwd("~/01_Universität/Advanced-data-processing-with-R/Projects/juliaquach02")
 treated_cells <- read.csv("Tracks_Treated_Cells.csv")
 treated_cells$group <- "Treatment group"
@@ -49,6 +49,9 @@ all_cells <- merge(all_cells, all_cells_mean, by = c("Cell.ID", "group"))
 
 df <- as.data.frame(table(all_cells_mean$group, all_cells_mean$total_alive))
 df <- plyr::rename(df, c("Var1" = "Group", "Var2" = "Status"))
+```
+
+```{r, echo=FALSE}
 knitr::kable(df)
 ```
 
