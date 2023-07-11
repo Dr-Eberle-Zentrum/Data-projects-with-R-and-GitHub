@@ -76,11 +76,37 @@ example of this approach below:
     ## `summarise()` has grouped output by 'group'. You can override using the
     ## `.groups` argument.
 
-    ##             Group Status Freq
-    ## 1   Control group  Alive  123
-    ## 2 Treatment group  Alive  140
-    ## 3   Control group   Dead    6
-    ## 4 Treatment group   Dead    1
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Group</th>
+<th style="text-align: left;">Status</th>
+<th style="text-align: right;">Freq</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Control group</td>
+<td style="text-align: left;">Alive</td>
+<td style="text-align: right;">123</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Treatment group</td>
+<td style="text-align: left;">Alive</td>
+<td style="text-align: right;">140</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Control group</td>
+<td style="text-align: left;">Dead</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Treatment group</td>
+<td style="text-align: left;">Dead</td>
+<td style="text-align: right;">1</td>
+</tr>
+</tbody>
+</table>
 
 You can see that in the *treatment group* only one cell (250) died at
 one point, while in the *control group* six cells died.
