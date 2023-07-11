@@ -82,10 +82,6 @@
       str_replace_all('[",]', '') |>
       str_replace_all("\\s{2,}"," ")
 
-    freq_words <- paste0(c("quot", "die", "ich", "sie", "mehr", "das", "heute", "es", "immer", "müssen"))
-
-    freq <- str_c(freq_words, sep = "", collapse = " ")
-
     single_string_count <- single_string |> VectorSource() |> VCorpus() |> tm_map(removePunctuation) |>
       tm_map(removeNumbers) |> tm_map(stripWhitespace) |>
       tm_map(removeWords, stopwords("de")) |>
@@ -94,10 +90,10 @@
       tm_map(removeWords, c("in", "ja", "der"))
 
     single_string_count |> freq_terms(10000) |> 
-      arrange(desc(FREQ)) |> top_n(n = 50) |> 
-      ggplot(aes(x = reorder(WORD, desc(FREQ)), y = FREQ)) + geom_col() +
-      labs(x = "Word", y = "Word Frequency") + geom_hline(aes(yintercept = 0)) + theme_bw() + 
-      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+      arrange(desc(FREQ)) |> top_n(n = 75) |> 
+      ggplot(aes(y = reorder(WORD, desc(FREQ)), x = FREQ)) + geom_col() +
+      labs(y = "Word", x = "Word Frequency") + geom_vline(aes(xintercept = 0)) + theme_bw() + 
+      theme(axis.text.y = element_text(angle = 90, vjust = 0.5, hjust=1)) +
       ggtitle("Word Frequency of Roman Herzog speeches")
 
     ## Selecting by FREQ
