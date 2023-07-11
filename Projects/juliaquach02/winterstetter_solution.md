@@ -138,20 +138,8 @@ one point, while in the *control group* five cells died.
 You can see that only a small amount of cells died completely die during
 the time of observation.
 
-    all_cells_new <- all_cells %>% group_by(group, Time.point)  %>% dplyr::count(current_alive) %>% plyr::rename(c("n" = "no_alive")) %>%
-      subset(current_alive == 1, select = c("group", "Time.point", "no_alive"))
-
-    all_cells_count <- all_cells %>% group_by(Time.point) %>% dplyr::count(group) %>% plyr::rename(c("n" = "no_group"))
-
-    all_cells_merge <- merge(all_cells_new, all_cells_count, by = c("group", "Time.point"))
-
-    all_cells_merge %>% group_by(group, Time.point) %>% mutate(rel_alive_group = no_alive/no_group) %>%
-      ggplot(aes(x = Time.point, y = rel_alive_group, col = group)) + geom_line() + labs(x = "Point in time", y = "Relative amount of cells alive") + ylim(c(0.75,1)) + geom_hline(yintercept = 0.75, col = "red") + annotate("text", label = "75% of population alive", x = 2200, y = 0.76, col = "red") + theme_bw()
-
 ![](winterstetter_solution_files/figure-markdown_strict/unnamed-chunk-4-1.png)
 
-    ?geom_label
-
-    ## starte den http Server für die Hilfe fertig
-
-It is notable that
+It is notable that the cells in the treatment group are nearly all the
+time all alive. In the untreated group there is a signficant drop in the
+relative amount of cells that are alive at the same time.
