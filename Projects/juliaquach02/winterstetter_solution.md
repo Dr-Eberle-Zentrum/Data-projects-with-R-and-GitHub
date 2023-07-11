@@ -73,70 +73,25 @@ example of this approach below:
 </tbody>
 </table>
 
-Afterwards I calculated the average value of this dummy variable. As
-soon as this variable was once 0 (at some point the cell died), the mean
-will also be below 1. Thus, I identified the cells that died in each
-respective group.
+    ## `summarise()` has grouped output by 'group'. You can override using the
+    ## `.groups` argument.
 
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: left;">group</th>
-<th style="text-align: right;">Cell.ID</th>
-<th style="text-align: right;">rel_intensity_above_40</th>
-<th style="text-align: left;">total_alive</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">Control group</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: left;">Alive</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Control group</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: left;">Alive</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Control group</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: left;">Alive</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Control group</td>
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: left;">Alive</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Control group</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: left;">Alive</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Control group</td>
-<td style="text-align: right;">6</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: left;">Alive</td>
-</tr>
-</tbody>
-</table>
+    ##             Group Status Freq
+    ## 1   Control group  Alive  123
+    ## 2 Treatment group  Alive  140
+    ## 3   Control group   Dead    6
+    ## 4 Treatment group   Dead    1
+
+You can see that in the *treatment group* only one cell (250) died at
+one point, while in the *control group* six cells died.
 
 ## **Visualization of the population**
 
 ------------------------------------------------------------------------
 
+![](winterstetter_solution_files/figure-markdown_strict/unnamed-chunk-2-1.png)
+
 ![](winterstetter_solution_files/figure-markdown_strict/unnamed-chunk-3-1.png)
-
-You can see that in the *treatment group* only one cell (250) died at
-one point, while in the *control group* five cells died.
-
-![](winterstetter_solution_files/figure-markdown_strict/unnamed-chunk-4-1.png)
 
 It is notable that the cells in the treatment group are nearly all the
 time all alive. In the control group there is a significant drop in the
