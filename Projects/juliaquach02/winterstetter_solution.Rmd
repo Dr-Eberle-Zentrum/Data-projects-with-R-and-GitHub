@@ -64,11 +64,12 @@ knitr::kable(all_cells_mean |> arrange(total_alive) |> head())
 ________________________________________________________________________________
 
 ```{r, echo=FALSE}
-ggplot(df, aes(x = Group, y = Freq, fill = Status)) + geom_col(position = "stack") + labs(x = "Status (0 = Dead 1 = Alive)", y = "Count") +
+ggplot(df, aes(x = Group, y = Freq, fill = Status)) + geom_col(position = "stack") + labs(x = "", y = "Count") +
   ggtitle("Status of cell in the treatment group") + theme_bw()
 ```
-You can see that only a small amount of cells died completely die during the time of observation.
 
+
+You can see that only a small amount of cells died completely die during the time of observation.
 
 ```{r, echo = FALSE}
 all_cells_new <- all_cells %>% group_by(group, Time.point)  %>% dplyr::count(current_alive) %>% plyr::rename(c("n" = "no_alive")) %>%
@@ -79,7 +80,7 @@ all_cells_count <- all_cells %>% group_by(Time.point) %>% dplyr::count(group) %>
 all_cells_merge <- merge(all_cells_new, all_cells_count, by = c("group", "Time.point"))
 
 all_cells_merge %>% group_by(group, Time.point) %>% mutate(rel_alive_group = no_alive/no_group) %>%
-  ggplot(aes(x = Time.point, y = rel_alive_group, col = group)) + geom_line() + labs(x = "Point in time", y = "Relative amount of cells alive") + ylim(c(0.75,1)) + geom_hline(yintercept = 0.75, col = "red") + annotate("text", label = "75% of population alive", x = 2200, y = 0.76, col = "red") + theme_bw()
+  ggplot(aes(x = Time.point, y = rel_alive_group, col = group)) + geom_line() + labs(x = "Point in time", y = "Relative amount of cells alive") + ylim(c(0.75,1)) + geom_hline(yintercept = 0.75, col = "red") + annotate("text", label = "75% of population alive", x = 2200, y = 0.76, col = "red") + theme_bw() + ggtitle("Relative amount of cells in the respective population that are alive at the same time")
 ```
 
-It is notable that the cells in the treatment group are nearly all the time all alive. In the untreated group there is a signficant drop in the relative amount of cells that are alive at the same time.
+It is notable that the cells in the treatment group are nearly all the time all alive. In the untreated group there is a significant drop in the relative amount of cells that are alive at the same time.

@@ -135,11 +135,12 @@ one point, while in the *control group* five cells died.
 ------------------------------------------------------------------------
 
 ![](winterstetter_solution_files/figure-markdown_strict/unnamed-chunk-3-1.png)
+
 You can see that only a small amount of cells died completely die during
 the time of observation.
 
 ![](winterstetter_solution_files/figure-markdown_strict/unnamed-chunk-4-1.png)
 
 It is notable that the cells in the treatment group are nearly all the
-time all alive. In the untreated group there is a signficant drop in the
-relative amount of cells that are alive at the same time.
+time all alive. In the untreated group there is a significant drop in
+the relative amount of cells that are alive at the same time.
