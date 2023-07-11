@@ -76,10 +76,7 @@ example of this approach below:
 Afterwards I calculated the average value of this dummy variable. As
 soon as this variable was once 0 (at some point the cell died), the mean
 will also be below 1. Thus, I identified the cells that died in each
-repsective group.
-
-You can see that in the *treatment group* only one cell (250) died at
-one point, while in the *control group* five cells died.
+respective group.
 
 <table>
 <thead>
@@ -130,29 +127,16 @@ one point, while in the *control group* five cells died.
 </tbody>
 </table>
 
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: left;">group</th>
-<th style="text-align: right;">Cell.ID</th>
-<th style="text-align: right;">rel_intensity_above_40</th>
-<th style="text-align: left;">total_alive</th>
-</tr>
-</thead>
-<tbody>
-</tbody>
-</table>
-
 ## **Visualization of the population**
 
 ------------------------------------------------------------------------
 
+![](winterstetter_solution_files/figure-markdown_strict/unnamed-chunk-3-1.png)
+
+You can see that in the *treatment group* only one cell (250) died at
+one point, while in the *control group* five cells died.
+
 ![](winterstetter_solution_files/figure-markdown_strict/unnamed-chunk-4-1.png)
-
-You can see that only a small amount of cells did completely die during
-the time of observation.
-
-![](winterstetter_solution_files/figure-markdown_strict/unnamed-chunk-5-1.png)
 
 It is notable that the cells in the treatment group are nearly all the
 time all alive. In the control group there is a significant drop in the
