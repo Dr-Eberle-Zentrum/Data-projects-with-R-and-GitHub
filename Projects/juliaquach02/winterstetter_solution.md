@@ -81,38 +81,77 @@ repsective group.
 You can see that in the *treatment group* only one cell (250) died at
 one point, while in the *control group* five cells died.
 
-    ## # A tibble: 141 × 3
-    ##    Cell.ID rel_intensity_above_40 alive
-    ##      <int>                  <dbl> <dbl>
-    ##  1     250                  0.697     0
-    ##  2       0                  1         1
-    ##  3       1                  1         1
-    ##  4       2                  1         1
-    ##  5       3                  1         1
-    ##  6       4                  1         1
-    ##  7       5                  1         1
-    ##  8       6                  1         1
-    ##  9       7                  1         1
-    ## 10       8                  1         1
-    ## # ℹ 131 more rows
-
-    ## # A tibble: 129 × 3
-    ##    Cell.ID rel_intensity_above_40 alive
-    ##      <int>                  <dbl> <dbl>
-    ##  1       0                 0.508      0
-    ##  2       2                 0.130      0
-    ##  3       3                 0.195      0
-    ##  4       6                 0.752      0
-    ##  5       8                 0.0835     0
-    ##  6       1                 1          1
-    ##  7       5                 1          1
-    ##  8       7                 1          1
-    ##  9       9                 1          1
-    ## 10      10                 1          1
-    ## # ℹ 119 more rows
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">group</th>
+<th style="text-align: right;">Cell.ID</th>
+<th style="text-align: right;">rel_intensity_above_40</th>
+<th style="text-align: right;">total_alive</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">treated</td>
+<td style="text-align: right;">250</td>
+<td style="text-align: right;">0.6970149</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">untreated</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">0.9992775</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">untreated</td>
+<td style="text-align: right;">75</td>
+<td style="text-align: right;">0.9979592</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">untreated</td>
+<td style="text-align: right;">207</td>
+<td style="text-align: right;">0.0000000</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">untreated</td>
+<td style="text-align: right;">221</td>
+<td style="text-align: right;">0.0000000</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">untreated</td>
+<td style="text-align: right;">232</td>
+<td style="text-align: right;">0.0000000</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
 
 ## **Visualization of the population**
 
 ------------------------------------------------------------------------
 
-![](winterstetter_solution_files/figure-markdown_strict/unnamed-chunk-4-1.png)![](winterstetter_solution_files/figure-markdown_strict/unnamed-chunk-4-2.png)
+![](winterstetter_solution_files/figure-markdown_strict/unnamed-chunk-3-1.png)
+You can see that only a small amount of cells died completely die during
+the time of observation.
+
+    all_cells_new <- all_cells %>% group_by(group, Time.point)  %>% dplyr::count(current_alive) %>% plyr::rename(c("n" = "no_alive")) %>%
+      subset(current_alive == 1, select = c("group", "Time.point", "no_alive"))
+
+    all_cells_count <- all_cells %>% group_by(Time.point) %>% dplyr::count(group) %>% plyr::rename(c("n" = "no_group"))
+
+    all_cells_merge <- merge(all_cells_new, all_cells_count, by = c("group", "Time.point"))
+
+    all_cells_merge %>% group_by(group, Time.point) %>% mutate(rel_alive_group = no_alive/no_group) %>%
+      ggplot(aes(x = Time.point, y = rel_alive_group, col = group)) + geom_line() + labs(x = "Point in time", y = "Relative amount of cells alive") + ylim(c(0.75,1)) + geom_hline(yintercept = 0.75, col = "red") + annotate("text", label = "75% of population alive", x = 2200, y = 0.76, col = "red") + theme_bw()
+
+![](winterstetter_solution_files/figure-markdown_strict/unnamed-chunk-4-1.png)
+
+    ?geom_label
+
+    ## starte den http Server für die Hilfe fertig
+
+It is notable that

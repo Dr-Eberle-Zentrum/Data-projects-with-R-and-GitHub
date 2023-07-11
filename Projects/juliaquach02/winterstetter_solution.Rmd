@@ -30,37 +30,26 @@ Please see an example of this approach below:
 ```{r, include=FALSE}
 setwd("~/01_Universität/Advanced-data-processing-with-R/Projects/juliaquach02")
 treated_cells <- read.csv("Tracks_Treated_Cells.csv")
+treated_cells$group <- "treated"
 untreated_cells <- read.csv("Tracks_Untreated_Cells.csv")
+untreated_cells$group <- "untreated"
 
-treated_cells<- treated_cells %>% group_by(Cell.ID) %>%
+all_cells <- rbind(treated_cells, untreated_cells)
+
+all_cells<- all_cells %>% group_by(Cell.ID) %>%
   dplyr::mutate(
-    First_Value = dplyr::first(Intensity))
+    First_Value = dplyr::first(Intensity)) %>% dplyr::mutate(perc = Intensity/First_Value) %>%
+  dplyr::mutate(above_40 = ifelse(Intensity/First_Value > 0.4, 1, 0)) %>% dplyr::mutate(current_alive = ifelse(above_40 == 1, 1, 0))
 
-treated_cells$perc <- treated_cells$Intensity/treated_cells$First_Value
-treated_cells$above_40 <- ifelse(treated_cells$Intensity/treated_cells$First_Value > 0.4, 1, 0)
+all_cells_mean <- all_cells %>% group_by(group, Cell.ID) %>% dplyr::summarize(rel_intensity_above_40 = mean(above_40))
 
-treated_cells_mean <- treated_cells %>% group_by(Cell.ID) %>% dplyr::summarize(rel_intensity_above_40 = mean(above_40))
+all_cells_mean$total_alive <- ifelse(all_cells_mean$rel_intensity_above_40 == 1, 1, 0) 
 
-treated_cells_mean$alive <- ifelse(treated_cells_mean$rel_intensity_above_40 == 1, 1, 0) 
+all_cells <- merge(all_cells, all_cells_mean, by = c("Cell.ID", "group"))
 
-treated_cells <- merge(treated_cells, treated_cells_mean, by = "Cell.ID")
-
-df_t <- as.data.frame(table(treated_cells_mean$alive))
-
-untreated_cells <- untreated_cells %>% group_by(Cell.ID) %>%
-  dplyr::mutate(
-    First_Value = dplyr::first(Intensity))
-
-untreated_cells$perc <- untreated_cells$Intensity/untreated_cells$First_Value
-untreated_cells$above_40 <- ifelse(untreated_cells$Intensity/untreated_cells$First_Value > 0.4, 1, 0)
-
-untreated_cells_mean <- untreated_cells %>% group_by(Cell.ID) %>% dplyr::summarize(rel_intensity_above_40 = mean(above_40))
-
-untreated_cells_mean$alive <- ifelse(untreated_cells_mean$rel_intensity_above_40 == 1, 1, 0) 
-
-untreated_cells <- merge(untreated_cells, untreated_cells_mean, by = "Cell.ID")
-
-df_u <- as.data.frame(table(untreated_cells_mean$alive))
+df <- as.data.frame(table(all_cells_mean$group, all_cells_mean$total_alive))
+df <- plyr::rename(df, c("Var1" = "Group", "Var2" = "Status"))
+df
 ```
 
 
@@ -68,21 +57,30 @@ Afterwards I calculated the average value of this dummy variable. As soon as thi
 
 You can see that in the *treatment group* only one cell (250) died at one point, while in the *control group* five cells died.
 ```{r, echo=FALSE}
-treated_cells_mean |> arrange(alive) |> print(n = 10)
+knitr::kable(all_cells_mean |> arrange(total_alive) |> head())
 ```
-
-```{r,echo=FALSE}
-untreated_cells_mean |> arrange(alive) |> print(n = 10)
-```
-
 
 ## **Visualization of the population**
 ________________________________________________________________________________
 
 ```{r, echo=FALSE}
-ggplot(df_t, aes(x = Var1, y = Freq)) + geom_col(position = "stack") + labs(x = "Status (0 = Dead 1 = Alive)", y = "Count") +
+ggplot(df, aes(x = Group, y = Freq, fill = Status)) + geom_col(position = "stack") + labs(x = "Status (0 = Dead 1 = Alive)", y = "Count") +
   ggtitle("Status of cell in the treatment group") + theme_bw()
-
-ggplot(df_u, aes(x = Var1, y = Freq)) + geom_col(position = "stack") + labs(x = "Status (0 = Dead 1 = Alive)", y = "Count") +
-  ggtitle("Status of cell in the control group") + theme_bw()
 ```
+You can see that only a small amount of cells died completely die during the time of observation.
+
+
+```{r}
+all_cells_new <- all_cells %>% group_by(group, Time.point)  %>% dplyr::count(current_alive) %>% plyr::rename(c("n" = "no_alive")) %>%
+  subset(current_alive == 1, select = c("group", "Time.point", "no_alive"))
+
+all_cells_count <- all_cells %>% group_by(Time.point) %>% dplyr::count(group) %>% plyr::rename(c("n" = "no_group"))
+
+all_cells_merge <- merge(all_cells_new, all_cells_count, by = c("group", "Time.point"))
+
+all_cells_merge %>% group_by(group, Time.point) %>% mutate(rel_alive_group = no_alive/no_group) %>%
+  ggplot(aes(x = Time.point, y = rel_alive_group, col = group)) + geom_line() + labs(x = "Point in time", y = "Relative amount of cells alive") + ylim(c(0.75,1)) + geom_hline(yintercept = 0.75, col = "red") + annotate("text", label = "75% of population alive", x = 2200, y = 0.76, col = "red") + theme_bw()
+?geom_label
+```
+
+It is notable that 
