@@ -101,7 +101,7 @@ data %>%
 
 I wanted to see how good the linear regression fits the data. You can see that R squared for Populus is ca. 0,7 and for Indet it is ca. 0,35. The linear model seems to fit the Populs Taxa a lot better
 
-```{r linear model, echo=FALSE, warning=FALSE}
+```{r linear model, echo=FALSE, warning=FALSE, message=FALSE, results='hide'}
 lm_data_pop <- data %>%
   select(Radius_tot_mean, Radius_tot_sd, Radius_number, Taxa) %>%
   dplyr::filter(Radius_number == 1) %>%
