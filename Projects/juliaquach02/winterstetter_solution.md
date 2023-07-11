@@ -87,45 +87,45 @@ one point, while in the *control group* five cells died.
 <th style="text-align: left;">group</th>
 <th style="text-align: right;">Cell.ID</th>
 <th style="text-align: right;">rel_intensity_above_40</th>
-<th style="text-align: right;">total_alive</th>
+<th style="text-align: left;">total_alive</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">treated</td>
-<td style="text-align: right;">250</td>
-<td style="text-align: right;">0.6970149</td>
+<td style="text-align: left;">Control group</td>
 <td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Alive</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">untreated</td>
-<td style="text-align: right;">8</td>
-<td style="text-align: right;">0.9992775</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: left;">Control group</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Alive</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">untreated</td>
-<td style="text-align: right;">75</td>
-<td style="text-align: right;">0.9979592</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: left;">Control group</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Alive</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">untreated</td>
-<td style="text-align: right;">207</td>
-<td style="text-align: right;">0.0000000</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: left;">Control group</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Alive</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">untreated</td>
-<td style="text-align: right;">221</td>
-<td style="text-align: right;">0.0000000</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: left;">Control group</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Alive</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">untreated</td>
-<td style="text-align: right;">232</td>
-<td style="text-align: right;">0.0000000</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: left;">Control group</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Alive</td>
 </tr>
 </tbody>
 </table>
@@ -136,11 +136,11 @@ one point, while in the *control group* five cells died.
 
 ![](winterstetter_solution_files/figure-markdown_strict/unnamed-chunk-3-1.png)
 
-You can see that only a small amount of cells died completely die during
+You can see that only a small amount of cells did completely die during
 the time of observation.
 
 ![](winterstetter_solution_files/figure-markdown_strict/unnamed-chunk-4-1.png)
 
 It is notable that the cells in the treatment group are nearly all the
-time all alive. In the untreated group there is a significant drop in
-the relative amount of cells that are alive at the same time.
+time all alive. In the control group there is a significant drop in the
+relative amount of cells that are alive at the same time.
