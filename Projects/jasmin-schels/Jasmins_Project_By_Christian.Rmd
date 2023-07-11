@@ -1,16 +1,19 @@
 ---
 title: "Bye Bye Birdie by Christian"
 output: md_document
-date: "2023-06-27"
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-# Project Solution of Jasmin's 'Bye Bye Birdie' Project
-First we need to load the data set and take the variables of interest into a working data set. Since the Data Set is organized in Losses, a higher positive number means that that species experienced higher losses and vice versa.To make it more clear, I flipped the values, so that positive values now mean a gain in population instead of a loss and rounded the values to full values. Now, mean, SD and median values represent the gains/losses of that specific species across Europe. 
 
-```{r echo=FALSE}
+# Project Solution of Jasmin's 'Bye Bye Birdie' Project
+
+## Preparing the Dataset
+
+First we need to load the data set and take the variables of interest into a working data set. Since the Data Set is organized in Losses, a higher positive number means that that species experienced higher losses and vice versa.To make it more clear, I flipped the values, so that positive values now mean a gain in population instead of a loss and rounded the values to full values. Now, mean, SD and median values represent the gains/losses of that specific species across Europe.
+
+```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(readxl)
 df <- read_csv("https://zenodo.org/record/5544548/files/EU%20birds%20decline%20overall%20in%20line%20with%20global%20patterns_species_results.csv?download=1", show_col_types = FALSE)
@@ -28,8 +31,6 @@ df <- read_csv("https://zenodo.org/record/5544548/files/EU%20birds%20decline%20o
 # total_proportional_change: Proportional change 1980:2017
 # annual rate of change:		Annual rate of change 1980:2017
 
-# population_trend_long:		a categorical assessment of the long-term trend in national species abundance: (I) Increasing, (D) Decreasing, (F) Fluctuating around zero, (U) Uncertain, (UNK) Unknown, or (S) Stable.
-df$`annual rate of change`
 df_reduced <- subset(df, select = c(species, common_name, Loss_mean, Loss_sd, Loss_med, total_proportional_change, `annual rate of change`))
 list <- c("Loss_mean", "Loss_sd", "Loss_med")
 for (i in list) {
@@ -47,17 +48,16 @@ bird <- df_reduced
 bird<-bird|>mutate(across(c(Loss_mean, Loss_sd, Loss_med),function(x)(x*-1) ))
 knitr::kable(head(bird[1:20,]))
 ```
-Now with the working Data Set, the next step would be to implement the "other" category. In the graph you provided, the cutoff was at these two species:
-  - Cyanistes caeruleus 
-  - Passer montanus 
 
-We want to summarize every species, that has a lower/higher mean value than these two species, into a "other" category. To accomplish this, we have to create a new variable, that copies the name of the species if it is outside the range specified, or changes its name to "other". 
+Now with the working Data Set, the next step would be to implement the "other" category. In the graph you provided, the cutoff was at these two species: Cyanistes caeruleus, Passer montanus
 
-```{r echo=FALSE}
-# match("Cyanistes caeruleus",bird$species)
-# match("Passer montanus", bird$species)     #only needed to find index position: 370 & 353 
-x1<-print(bird$Loss_mean[370])
-x2<-print(bird$Loss_mean[353])
+We want to summarize every species, that has a lower/higher mean value than these two species, into a "other" category. To accomplish this, we have to create a new variable, that copies the name of the species if it is outside the range specified, or changes its name to "other".
+
+```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
+#match("Cyanistes caeruleus",bird$species)
+#match("Passer montanus", bird$species)     #only needed to find index position: 370 & 353 
+x1<-bird$Loss_mean[370]
+x2<-bird$Loss_mean[353]
 
 x=0
 for (i in bird$Loss_mean) {
@@ -78,17 +78,13 @@ test <- bird
 test2<-test|> 
   filter(category_name=="other" & Loss_mean<0)|>
   mutate(Loss_mean=sum(Loss_mean),Loss_med=sum(Loss_med))
-'mean(test2$Loss_mean)
-mean(test2$Loss_med)
-nrow(test2)'
-  # Mean: -280815724, Median: -281267170, Name: other species; N = 163
+
+#Mean: -280815724, Median: -281267170, Name: other species; N = 163
 
 test3<-test|> 
   filter(category_name=="other" & Loss_mean>0)|>
   mutate(Loss_mean=sum(Loss_mean),Loss_med=sum(Loss_med))
-'mean(test3$Loss_mean)
-mean(test3$Loss_med)
-nrow(test3)'
+
   # Mean: 118702281, Median: 114432915, Name: other species; N = 198
 
 
@@ -102,8 +98,9 @@ bird<-bird|>
                             ifelse(category_name=="other" & Loss_mean<0,"other species; N = 163",category_name)))
 
 bird<-bird|>select(c(Loss_mean,Loss_med,category_name))|>distinct()
-bird<-bird[c(-1,-4),]
-# Notiz: Das war wahrscheinlich ein extrem "roundabout way" das Problem zu lösen aber, hey irgendwie hat es doch noch geklappt...
+bird<-bird[c(-1,-4),] #These two are outliers, one has no changes at all, and the other probably has small differences in Mean/Median values, that one is positive and the other is negative --> omitting them from the calculations
+
+# Notiz: Das war wahrscheinlich ein extrem "roundabout way" das Problem zu lösen, aber hey irgendwie hat es doch noch geklappt...
 
 
 bird<-bird|>
@@ -117,18 +114,102 @@ for (i in list) {
 knitr::kable(bird)
 ```
 
-With the data frame assembled, now we can tackle the visualization. 
+With the data frame assembled, now we can tackle the visualization.
 
-```{r echo=FALSE}
+# Visualization
 
-bird|>
-  ggplot(aes(x="",Loss_mean, fill=Loss_mean))+ 
-  geom_col(width = 0.3)+
-  geom_text(aes(label = category_name), position = position_stack(vjust = 0.5))+
-  scale_y_continuous()
+The goal of this task is to try and reproduce this [chart](https://onlinelibrary.wiley.com/cms/asset/c4301ccb-4375-41ff-95e5-b92db8ae4463/ece38282-fig-0004-m.jpg) The results can be seen below. What I have not managed so far is the correct coloring of the graph as well as the annotations. The lines and the spacing of the annotations are also not perfectly optimized.
+
+```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
+# graduelle steigerung der Werte berechnen, aufgrund des Abstandes zu Null --> beginnend mit den Other Ausprägungen, aufaddieren der werte für die Farbskala
+test<-bird
+
+cumsum_range <- function(x, start_index, end_index) {
+  cumsum(x[start_index:end_index])
+}
+
+test<-arrange(test,test$Loss_mean)
+
+x<-cumsum_range(test$Loss_mean,9,2)
+y<-cumsum_range(test$Loss_mean,10,17)
+x<-rev(x)
+list<-c(-280.8,x,y,118.7)
+test$text<-list
+bird<-merge(bird,subset(test,select=c("category_name","text")),by="category_name")
+bird<-arrange(bird,bird$Loss_mean)
 
 
+bird$cat<-c(-9,-1:-8,2:9,1)
+bird$x <- 1
+bird$y <- 1:18
+
+graph<-bird|>
+  mutate(Label_loss_mean=paste0(category_name, "(",Loss_mean,")"), Label_loss_med=paste0(category_name, "(",Loss_med,")"))|>
+  mutate(color=1:18)|>
+  arrange(cat)|>
+  ggplot()+
+  geom_col(aes(x=x,y=Loss_mean, fill=as.numeric(cat)),col="black",width = 0.3, show.legend = FALSE)+
+  scale_fill_continuous(low="#8B3A8C" ,high="#96B3D9")+
+  #geom_text(aes(x=x,y=Loss_mean,label = category_name), position = position_stack(vjust = 0.5))+
+  #annotate(geom = "segment", x=1.7, y=bird$text[1]/2, xend = 1,yend = bird$text[1]/2)+
+  scale_y_continuous(name = "Change in number of birds (millions)",limits = c(-1000,800),breaks = c(600,400,200,0,-200,-400,-600,-800,-1000))+
+  scale_x_continuous(name = "Timespan: 1980 - 2017", limits = c(0.7,3))+
+  theme_minimal()
+
+# get y positions for annotations using text variable
+bird$textpos <- 1:18
+x=0
+for (i in bird$text) {
+  x=x+1
+  if (bird$text[x]==-280.8|bird$text[x]==118.7){
+    bird$textpos[x]=i/2
+  } else if(bird$text[x]<0 & bird$text[x]!=-280.8){
+    bird$textpos[x]=(i-bird$text[x+1])/2+bird$text[x+1]+bird$text[1]
+  } else if(bird$text[x]<0 & bird$text[x]!=-280.8 & bird$text[x]>0){
+    bird$textpos[x]=i/2+bird$text[1]
+  } else if(bird$text[x]>0 & bird$text[x]!=118.7 & bird$text[x-1]<0){
+    bird$textpos[x]=i/2+bird$text[18]
+    x_new=bird$text[x]
+  } else if(bird$text[x]>0 & bird$text[x]!=118.7){
+    x_new=x_new+bird$text[x]
+    bird$textpos[x]=(i-bird$text[x-1])/2+bird$text[18]+bird$text[x-1]
+  }
+}
+# determine x position for annotations as to avoid constant overlapping 
+bird$xpos<-c(1.3,2.3)
+
+# create a method to apply the annotations automatically via index position
+
+
+annoline <- function(x){
+  annotation_line <- annotate(geom = "segment", x=bird$xpos[x], y=bird$textpos[x]*1.2,xend = 1, yend = bird$textpos[x])
+}
+
+
+bird<-bird|>
+  mutate(Label_loss_mean=paste0(category_name, "(",Loss_mean,")"), Label_loss_med=paste0(category_name, "(",Loss_med,")"))
+annotext <- function(x){
+  annotation_text <- annotate(geom = "text",x=bird$xpos[x]+0.005,y=bird$textpos[x]*1.2,label=bird$Label_loss_mean[x], hjust = "left")
+}
+
+graph2<-graph + 
+  annoline(1)+annotext(1)+
+  annoline(2)+annotext(2)+
+  annoline(3)+annotext(3)+
+  annoline(4)+annotext(4)+
+  annoline(5)+annotext(5)+
+  annoline(6)+annotext(6)+
+  annoline(7)+annotext(7)+
+  annoline(8)+annotext(8)+
+  annoline(9)+annotext(9)+
+  annoline(10)+annotext(10)+
+  annoline(11)+annotext(11)+
+  annoline(12)+annotext(12)+
+  annoline(13)+annotext(13)+
+  annoline(14)+annotext(14)+
+  annoline(15)+annotext(15)+
+  annoline(16)+annotext(16)+
+  annoline(17)+annotext(17)+
+  annoline(18)+annotext(18)
+graph2
 ```
-
-final markdown notes:
-no code, only important graphs, tables (use knitr::kable(df[], caption="xy")), focus on visualizations
