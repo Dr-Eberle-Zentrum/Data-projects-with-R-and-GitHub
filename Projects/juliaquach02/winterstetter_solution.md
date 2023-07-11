@@ -73,6 +73,9 @@ example of this approach below:
 </tbody>
 </table>
 
+You can see that in the *treatment group* only one cell (250) died at
+one point, while in the *control group* six cells died.
+
 <table>
 <thead>
 <tr class="header">
@@ -104,9 +107,6 @@ example of this approach below:
 </tr>
 </tbody>
 </table>
-
-You can see that in the *treatment group* only one cell (250) died at
-one point, while in the *control group* six cells died.
 
 ## **Visualization of the population**
 
