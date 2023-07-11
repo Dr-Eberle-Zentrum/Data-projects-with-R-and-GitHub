@@ -5,7 +5,7 @@ date: "2023-06-21"
 output: md_document
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, warning=FALSE}
 library(tidyverse)
 
 data <- read.csv("Data_Project1.csv", sep=";")
@@ -14,13 +14,12 @@ data <- read.csv("Data_Project1.csv", sep=";")
 
 I first tried to make a simple scatterplot for the total mean radius of the three measurements of each Taxa.
 
-```{r ex1}
+```{r ex1, echo=FALSE, warning=FALSE}
 data %>%
   dplyr::filter(Radius_number == 1) %>%
   dplyr::filter(Taxa == "Populus" | Taxa == "Indet" | Taxa == "Salix") %>%
   ggplot(aes(x=Taxa, y=Radius_tot_mean, color=Radius_tot_mean)) +
-    geom_point() +
-    geom_jitter() +
+    geom_jitter(width = 0.2) +
     scale_color_gradient(low="blue", high="red") +
     labs(title="Mean Radius of all Measurements",
           x="Taxa",
@@ -33,17 +32,17 @@ data %>%
 
 
 ```
-I remembered that Martin advised Nico to make Violin plots, so I did as well. I think with violin plots the distribution of the data is a little bit easier to see.
 
-```{r ex1 violin}
+I remembered that Martin advised Nico to make Violin plots, so I did as well. I think with violin plots the distribution of the data is a little bit easier to see. It seems that most rings have a mean radius between 0 and 50, although there are some exceptions.
+
+```{r ex1 violin, echo=FALSE, warning=FALSE}
 
 data %>%
   dplyr::filter(Radius_number == 1) %>%
   dplyr::filter(Taxa == "Populus" | Taxa == "Indet") %>%
   ggplot(aes(x=Taxa, y=Radius_tot_mean, color=Radius_tot_mean)) +
     geom_violin() +
-    geom_point() +
-    geom_jitter() +
+    geom_jitter(width = 0.2) +
     scale_color_gradient(low="blue", high="red") +
     labs(title="Mean Radius of all Measurements",
           x="Taxa",
@@ -56,9 +55,8 @@ data %>%
 
 ```
 
-Here I make a Barplot for the number of tree rings. I was not sure why there were rows in the data with the same ID but different values for Standard deviation etc.
-
-```{r ex2}
+Here I make a Barplot for the number of tree rings. There seems to be a clear trend: more trees have a fewer number of rings
+```{r ex2, echo=FALSE, warning=FALSE}
 data %>%
   select(Radius_number, Taxa) %>%
   dplyr::filter(Taxa == "Populus" | Taxa == "Indet" | Taxa == "Salix") %>%
@@ -80,9 +78,10 @@ data %>%
 
 
 ```
+
 I made the scatterfplot of mean radius against the standard deviation of the mean radius and added a linear approximation of the data for INdet and Populus.
 
-```{r ex3}
+```{r ex3, echo=FALSE, warning=FALSE}
 data %>%
   select(Radius_tot_mean, Radius_tot_sd, Radius_number, Taxa) %>%
   dplyr::filter(Radius_number == 1) %>%
@@ -99,9 +98,10 @@ data %>%
          theme(panel.border = element_blank(), panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
 ```
+
 I wanted to see how good the linear regression fits the data. You can see that R squared for Populus is ca. 0,7 and for Indet it is ca. 0,35. The linear model seems to fit the Populs Taxa a lot better
 
-```{r linear model}
+```{r linear model, echo=FALSE, warning=FALSE}
 lm_data_pop <- data %>%
   select(Radius_tot_mean, Radius_tot_sd, Radius_number, Taxa) %>%
   dplyr::filter(Radius_number == 1) %>%
@@ -115,6 +115,22 @@ lm_data_indet <- data %>%
   dplyr::filter(Taxa == "Indet") %>%
   mutate(Radius_tot_sd = as.numeric(Radius_tot_sd)) %>% 
   drop_na() 
+
+lm_data_fancy <- data %>%
+  select(Radius_tot_mean, Radius_tot_sd, Radius_number, Taxa) %>%
+  dplyr::filter(Radius_number == 1) %>%
+  dplyr::filter(Taxa != "Salix") %>%
+  group_by(Taxa) %>%
+  nest()
+
+Taxa_model <- function(df) {
+  lm(Radius_tot_mean~Radius_tot_sd, data = df) %>%
+  summary()
+}
+
+models <- map(lm_data_fancy$data, Taxa_model)
+
+
   
 lm_std_radius_indet <- lm(Radius_tot_mean~Radius_tot_sd, data = lm_data_indet) #Create the linear regression
 summary(lm_std_radius_indet)
@@ -127,5 +143,3 @@ summary(lm_std_radius_pop)
 
 
 ```
-
-
