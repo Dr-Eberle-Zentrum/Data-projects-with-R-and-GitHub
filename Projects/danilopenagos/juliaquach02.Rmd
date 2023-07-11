@@ -84,7 +84,7 @@ data_w_count <- data %>%
   count( artists ) %>% 
   ungroup()
 
-knitr::kable( data[1:5,], col.names = c("Galleries", "Artists", "Decade", "Number of Invitations"), caption = "Table 2: First five rows of our data set after computing the decade and counting of invitations") %>%
+knitr::kable( data_w_count[1:4,], col.names = c("Galleries", "Artists", "Decade", "Number of Invitations"), caption = "Table 2: First five rows of our data set after computing the decade and counting of invitations") %>%
     kable_styling(c("bordered", "striped"), full_width = T)
 
 ```
@@ -152,15 +152,20 @@ minNumInvitations <- 5
 
 create_sankey( data_w_count, 5, "1960")
 create_sankey( data_w_count, 5, "1970")
-create_sankey( data_w_count, 5, "1980")
-create_sankey( data_w_count, 5, "1990")
-create_sankey( data_w_count, 5, "2000")
 create_sankey( data_w_count, 5, "2010")
 
 ```
 
 
-In the 1980s and 1990s, the art scene was apparently particularly busy. Therefore, we visualise the artists that were invited ten times ore more:
+In the 1980s and 1990s, the art scene was apparently particularly busy:
+
+```{r visualization 1980s and 2000s w 10, echo=FALSE}
+
+create_sankey( data_w_count, 5, "1980") 
+create_sankey( data_w_count, 5, "1990") 
+```
+
+Therefore, we visualise the artists that were invited ten times or more:
 
 ```{r visualization 1980s and 2000s, echo=FALSE}
 
