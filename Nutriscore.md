@@ -1,4 +1,4 @@
-## Nutriscore project
+## Nutriscore project by Tabea
 
 The goal of this project was to play around with a messy data set and
 doing some visualisations.

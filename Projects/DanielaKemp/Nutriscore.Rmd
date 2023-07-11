@@ -88,7 +88,7 @@ print(Country)
 
 ```
 
-## Nutriscore project
+## Nutriscore project by Tabea
 The goal of this project was to play around with a messy data set and doing some visualisations.  
 
 The data set was quite a mess so data preparation took quite a lot of time. I used the read_tsv() function to import the data sets. The second data set didn't have column names so I added the column names of the first data set to the second and merged the two tables. I tried to do a for-loop but somehow it was not possible. Then I did a pipe to delete all columns except of those which I needed. So the table shrank from 201 variable to 13. Then I dropped all rows from Nestle.
