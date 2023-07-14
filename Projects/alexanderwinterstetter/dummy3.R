@@ -4,6 +4,7 @@ library(dplyr)
 library(lubridate)
 library(gridExtra)
 library(cowplot)
+library(knitr)
 
 # Set the working directory to the directory where your CSV file is located
 setwd("C:/Users/Pleasant Pillai/Desktop/R Programming/R2/Advanced-data-processing-with-R/Projects/alexanderwinterstetter")
@@ -53,58 +54,63 @@ leagueCountry_most_red_cards <- data$leagueCountry[which.max(data$redCards)]
 # Find the club with the most victories
 club_most_victories <- data$club[which.max(data$victories)]
 
-# Print the results
-# print(paste("Player with the most wins:", player_most_victories))
-# print(paste("Player with the most goals:", player_most_goals))
-# print(paste("Player with the most red cards:", player_most_red_cards))
-# print("")
-# print(paste("Position with the most wins:", newposition_most_victories))
-# print(paste("Position with the most goals:", newposition_most_goals))
-# print(paste("Position with the most red cards:", newposition_most_red_cards))
-# print("")
-# print(paste("League with the most wins:", leagueCountry_most_victories))
-# print(paste("League with the most goals:", leagueCountry_most_goals))
-# print(paste("League with the most red cards:", leagueCountry_most_red_cards))
-# print("")
-# print(paste("Club with the most wins:", club_most_victories))
 
-# Create a data frame for the labels
-label_data <- data.frame(
-  label = c(
-    paste("Player with the most wins:", player_most_victories),
-    paste("Player with the most goals:", player_most_goals),
-    paste("Player with the most red cards:", player_most_red_cards),
+# Create a data frame for the questions and answers
+qa_data <- data.frame(
+  Question = c(
+    "Player with the most wins",
+    "Player with the most goals",
+    "Player with the most red cards",
     "",
-    paste("Position with the most wins:", newposition_most_victories),
-    paste("Position with the most goals:", newposition_most_goals),
-    paste("Position with the most red cards:", newposition_most_red_cards),
+    "Position with the most wins",
+    "Position with the most goals",
+    "Position with the most red cards",
     "",
-    paste("League with the most wins:", leagueCountry_most_victories),
-    paste("League with the most goals:", leagueCountry_most_goals),
-    paste("League with the most red cards:", leagueCountry_most_red_cards),
+    "League with the most wins",
+    "League with the most goals",
+    "League with the most red cards",
     "",
-    paste("Club with the most wins:", club_most_victories)
+    "Club with the most wins"
   ),
-  x = rep(1, 13),
-  y = 13:1
+  Answer = c(
+    player_most_victories,
+    player_most_goals,
+    player_most_red_cards,
+    "",
+    newposition_most_victories,
+    newposition_most_goals,
+    newposition_most_red_cards,
+    "",
+    leagueCountry_most_victories,
+    leagueCountry_most_goals,
+    leagueCountry_most_red_cards,
+    "",
+    club_most_victories
+  )
 )
 
-# Create the plot
-plot1 <- ggplot() +
-  geom_text(data = label_data, aes(x, y, label = label), size = 2) +
-  xlim(0.5, 1.5) +
-  ylim(0.5, 13.5) +
-  theme_void()
-
+# Create the table plot
+plot1 <- tableGrob(qa_data, cols = c("Question", "Answer"), rows = NULL,
+                   theme = ttheme_minimal(core = list(padding = unit(c(1, 0.4), "mm"))))
 
 # Create a bar plot of points per club, grouped by leagueCountry
 plot2 <- ggplot(data, aes(x = club, y = points, fill = leagueCountry)) +
-  geom_bar(stat = "identity", position = position_dodge(width = 2)) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.8)) +
   labs(x = "Club", y = "Points", fill = "League") +
   ggtitle("Points per Club by League") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 55, hjust = 1),
         text = element_text(size = 7))
+  
+# Create a bar plot of points per club, grouped by leagueCountry
+# plot2 <- ggplot(data, aes(x = club, y = points, fill = leagueCountry)) +
+#   geom_bar(stat = "identity", position = position_dodge(width = 0.8)) +
+#   labs(x = "Club", y = "Points", fill = "League") +
+#   ggtitle("Points per Club by League") +
+#   theme_minimal() +
+#   theme(axis.text.x = element_text(angle = 55, hjust = 1),
+#         strip.text = element_text(size = 8, hjust = 0.5, vjust = 0.5)) +
+#   facet_wrap(~ leagueCountry, ncol = 1, scales = "free_x")
 
 # Convert the "birthday" column to a Date format
 data$birthday <- as.Date(data$birthday, format = "%d.%m.%Y")
