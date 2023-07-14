@@ -2,7 +2,7 @@
 title: "Nutriscore Frequency Plotting"
 author: "Pleasant Pillai Vijayakumari"
 date: "2023-06-20"
-output: md_document
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
