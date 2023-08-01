@@ -63,11 +63,19 @@ We have four data frames with the following structures:
 
 - `viable_cell` = Time points observations of a **viable cell's** *intensity* (fluorescence luminosity) and *area* (size). *x* and *y* data don`t really help for analyzing treatment efficacy-only the cell's position in the frame.
 
-- `df_treat` = A data frame containing **multiple cells that received a treatment** and their **time points observations**. *intensity* and *area* are the same as in the individual cell data frames. *x* and *y* has been removed.
+- `df_treat` = A data frame containing **multiple cells that received a treatment** and their **time points observations**. *intensity* and *area* are the same as in the individual cell data frames. *x* and *y* had been removed.
 
-- `df_untreat` = A data frame containing **multiple cells from the control group** (cells that DON'T received treatment) and their time points observations. *intensity* and *area* are the same as in the individual cell data frames. *x* and *y* has been removed.
+- `df_untreat` = A data frame containing **multiple cells from the control group** (cells that DON'T received treatment) and their time points observations. *intensity* and *area* are the same as in the individual cell data frames. *x* and *y* had been removed.
 
  Next, I'll show their head (three rows). 
+ 
+ 
+```{r, echo=FALSE}
+head(viable_cell, n=3)
+``` 
+
+
+
 
 ```{r, echo=FALSE}
 head(viable_cell, n=3)

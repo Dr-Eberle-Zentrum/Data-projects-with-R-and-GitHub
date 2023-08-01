@@ -1,0 +1,77 @@
+---
+title: "Cells_DOA"
+author: "Daniel Barrera"
+date: "2023-07-09"
+output: html_document
+---
+``` {r, include=FALSE, echo=FALSE}
+{
+library(tidyverse) 
+library(ggplot2)
+library(dplyr)
+library(hexbin)
+library(corrplot)
+
+# --- Observations ---
+# Individual cells
+dying_cell <- read_csv("Track_one_dying_cell.csv", show_col_types = FALSE)
+viable_cell <- read_csv("Track_one_viable_cell.csv", show_col_types = FALSE)
+
+# Group of cells
+# Treated cells
+df_treat <- read_csv("Tracks_Treated_Cells.csv", show_col_types = FALSE)
+# Control group
+df_untreat <- read_csv("Tracks_Untreated_Cells.csv", show_col_types = FALSE)
+
+}
+
+```
+
+
+
+
+```{r, echo=FALSE}
+
+dfs |> list( dying_cell = select(dying_cell, -c(x,y)), df_treat = df_treat, ...)
+call bind_rows( .id="data")
+``` 
+
+
+
+
+```{r, echo=FALSE}
+head(viable_cell, n=3)
+``` 
+
+
+
+
+```{r, echo=FALSE}
+head(viable_cell, n=3)
+``` 
+
+
+
+
+```{r, echo=FALSE}
+head(viable_cell, n=3)
+``` 
+
+
+
+
+```{r, echo=FALSE}
+head(viable_cell, n=3)
+``` 
+
+
+
+```{r, echo=FALSE}
+head(viable_cell, n=3)
+``` 
+
+
+
+```{r, echo=FALSE}
+head(viable_cell, n=3)
+``` 
