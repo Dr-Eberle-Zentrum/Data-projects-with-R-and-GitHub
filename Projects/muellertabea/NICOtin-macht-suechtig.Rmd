@@ -1,0 +1,81 @@
+---
+title: "NICOtin-macht-suechtig"
+author: "Nico Afentoulidis"
+date: "`r Sys.Date()`"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+data <- (
+  read_delim("Data_Project1.csv",
+             delim = ";",
+             locale = locale(decimal_mark = "."),
+             show_col_types = F) |> 
+    mutate(Radius_tot_mean = as.numeric( str_c(Radius_tot_mean))) |> 
+    drop_na()
+  )
+
+```
+
+# Nicos solution on Tabeas project
+
+## The first plot 
+
+The exercise was: Scatterplot with the mean radius size of each sample in which only the samples with Radius_number 1 are considered. Differentiation between different taxa, colour gradient from smaller to larger diameter.
+
+```{r First plot, echo = FALSE, warning=FALSE}
+data |> 
+  dplyr::filter(Radius_number==1) |> 
+  dplyr::filter( Taxa == c("Populus", "Indet")) |> 
+    ggplot(aes( y = Radius_tot_mean, 
+                x = Taxa )) +
+    geom_violin(
+      aes( fill = Taxa) ,
+      alpha = 0.5 ) +
+    geom_jitter( aes(
+      shape = Taxa),
+      height = 0 ,
+      width = 0.18 ,
+      alpha = 0.6) +
+    theme_classic() +
+    ylab(label = "Mean of all three measurements") +
+    labs(title = "Radius of the different taxas") +
+    theme(legend.position = "none")
+```
+
+## The second plot
+
+Then I tried the next exercise: A barplot in which the number of samples with the different numbers of annual rings is shown.
+
+```{r Second plot, echo = FALSE}
+data |> 
+  group_by(ID) |> 
+  summarise(amount_rings = max(Radius_number)) |> 
+    ggplot() +
+    geom_bar(aes(x=as.factor(amount_rings)), fill = "blue") +
+    theme_classic() +
+    labs(title = "Number of samples for each amount of annual rings") +
+    xlab(label = "Numbers of annual rings") +
+    ylab(label = "Number of samples")
+```
+
+## The third plot
+
+Last exercise: Scatterplot with dependence of standard deviation on the mean value of the radius, differentiated by taxa, including for each taxa a linear trend line.
+
+```{r Third plot, echo = FALSE, message=FALSE, warning=FALSE}
+data |> 
+  dplyr::filter( Taxa == c("Populus", "Indet")) |> 
+  ggplot(aes(x= Radius_tot_mean,
+             y= as.numeric(Radius_tot_sd))) +
+  geom_point(aes(color = Taxa)) +
+  stat_smooth(method = lm,
+              aes (color = Taxa)) +
+  xlab(label = "Mean value of the radius") +
+  ylab(label = "Standard deviation") +
+  theme_classic() +
+  labs(title = "Standard deviation and mean value for the different wood species")
+```
