@@ -1,7 +1,7 @@
 ---
-title: "Solution #1 to project: Postmaterialism and political trust"
+title: "Solution #2 to project: Postmaterialism and political trust"
 author: "Julia Quach"
-date: "2023-06-02"
+date: "2023-06-13"
 output: md_document
 always_allow_html: true
 ---
@@ -17,6 +17,8 @@ library(viridis)
 library(forcats)
 library(kableExtra)
 library(cowplot)
+library(stringr)
+library(tidyverse)
 
 # Library to load the data in dta format
 library( haven )
@@ -68,13 +70,19 @@ knitr::include_graphics( paste0( path, "/crudi3/project_solution_julia/abbreviat
 We reduced the data frame to the relevant columns and renamed them with meaningful names.
 
 
-```{r data_cleaning, warning = FALSE}
+```{r data_cleaning, warning = FALSE, include = FALSE}
 
-relevant_cols <- c("ingle", "pt01", "pt02", "pt03", "pt04", "pt06", "pt08", "pt09", "pt10", "pt11", "pt12", "pt14", "pt15", "pt19", "pt20")
+# anstatt die Spalten explizit zu listen (für das select würde ich das Entwickeln einer entsprechenden regex vorschlagen, das alle spaltennamen, die du haben willst, beschreibt. die regex kannst du dann im select() mit matches() direkt verwenden. # damit dein spaltenrename via colnames() dann noch geht, musst du ggf. die ingle spalte via relocate() nach vorn holen..
 
-df <- data %>% select( relevant_cols ) 
-
-colnames( df ) <- c("Inglehart-Index", "Gesundheitswesen", "Bundesverfassungsgericht", "Bundestag", "Stadt- und Gemeindeverwaltung", "Katholische Kirche", "Evangelische Kirche", "Justiz", "Fernsehen", "Zeitungswesen", "Hochschulen/Universitäten", "Bundesregierung", "Polizei", "Politische Parteien", "Kommission der EU", "Europ. Parlament")
+df <- data %>% 
+  .[ ,  grepl("ingle", colnames( . )) | grepl( "pt", colnames( . ))  ] %>%  
+  relocate( ., ingle, .before = pt01) %>% 
+  `colnames<-`( lapply( ., function(x){ # The columns' labels are the names of the institution in capital letters.
+    
+    name <- str_to_title( get_label(x) ) # Getting labels and changing uppercase to lowercase titles
+    
+    return( name )
+  }) )
 
 ```
 
@@ -89,20 +97,22 @@ Apparently, each column contains labelled data with discrete values. Negative va
 We computed the mean trust level for each institution. For this, we had replaced non-available information (i.e., negative values) with NA values.
 
 ```{r computing_means, include = FALSE}
+#  deine result Berechnung lässt sich auf 3 Zeilen eindampfen, wenn du "im tidyverse Stil" rangehst. Im moment ist deine df Tabelle im wide table format und damit nicht "tidy", weil in jeder Zeile mehrere trust level Zahlen vorliegen. was du brauchst, um mit tidyverse darauf effizient rumzurödeln ist eine Tabelle, die 3 spalten hat: Inglehart-Index, Institution, Trust-Level. Die kannst du ganz einfach erzeugen, indem du die wide table tabelle via pivot_longer() ins long-table Format überführst...
+#  anschliessend kannst du mit grouping und summarize() direkt die Mittelwerte pro Institution bestimmen. sprich df %>% privot_longer(..) %>% group_by(..) %>% summarize(...) -> result ! versuchs mal! 😀
+
 # Replace non-available information with NAs
 df[ df < 0] <- NA
 
-# Compute means and save them in a data frame
-result <- data.frame( institution = colnames(df[1:length(df)]))
+result <- df %>% 
+  pivot_longer( ., 
+                starts_with("Vertrauen"), 
+                names_to = "Institution", 
+                values_to = "Trust_level",
+                values_drop_na = T) %>% 
+  group_by( `Institution` ) %>% 
+  summarise( mean_trust = mean(Trust_level)) %>% 
+  ungroup()
 
-computed_means <- vector( "list", length = ncol(df))
-
-for( i in 1:length( computed_means ) ){
-  computed_means[[i]] <- mean( as.double( unlist( na.omit( df[,i] ) ) ) )
-}
-
-result$mean <- unlist( computed_means )
-result <- result[ result$institution != "Inglehart-Index",  ]
 ```
 
 # Tackling the visualization
@@ -111,23 +121,45 @@ Firstly, we create a bar plot with one bar per institution and the mean trust le
 
 
 ```{r ggplot, warning = FALSE, echo = FALSE}
-result %>%
-  mutate( mean = round( mean, digits = 2)) %>% 
-  mutate( Institution = fct_reorder(institution, desc(mean)) ) %>% 
-  ggplot( aes(x= Institution, y= mean, fill = Institution) ) +
-    geom_bar(position = 'dodge', stat="identity", alpha=.6, width=.8) +
+
+# Helper function to remove the "Vertrauen: " part from the institution labels 
+# and to get the upper and lower case correct
+
+rename_institution <- function( name ){ 
+  
+  if( length(  str_split( name, ": ")[[1]]) > 1 ){ 
+      name <- str_split( name, ": ")[[1]][[2]] 
+  } 
+  
+  if( name == "Kommission Der Eu"){
+    name <- "Kommission der EU"
+  }
+  
+  return( name )
+}
+
+
+result <- result %>%
+  mutate( Institution = unlist( lapply( Institution, rename_institution)) ) %>% 
+  mutate( Institution = fct_reorder(Institution, desc(mean_trust)) )
+
+result %>%  
+  mutate( mean_trust = round( mean_trust, digits = 2)) %>% 
+  ggplot( aes(x= Institution, y= mean_trust,fill = Institution) ) +
+    geom_bar( position = 'dodge', stat="identity", alpha=.6, width=.8 ) +
     xlab("") +
     theme_classic() +
-    labs(y= "Mean Trust Level", x = "") +
-    theme(axis.text.x = element_text(angle = 45, hjust=1)) +
-    # theme(axis.title.x=element_blank(),
-    #     axis.text.x=element_blank(),
-    #     axis.ticks.x=element_blank()) +
-    coord_cartesian(ylim=c(0,7))+
-    scale_y_continuous(expand = c(0, 0), labels = 0:7, breaks= c(0, 1, 2, 3, 4, 5, 6, 7)) +
-    geom_text(aes(label=mean), position=position_dodge(width=0.9), vjust=-0.25, size = 2.5) +
-    theme(plot.margin = margin(1,1,1,1.2, "cm")) +
-    guides(fill="none")
+    labs( y= "Vertrauenslevel", x = "" ) +
+    theme( axis.text.x = element_text(angle = 45, hjust=1) ) +
+    coord_cartesian( ylim=c(0,7) )+
+    scale_y_continuous( expand = c(0, 0), labels = 0:7, breaks= c(0, 1, 2, 3, 4, 5, 6, 7) ) +
+    geom_text( aes( label=mean_trust), position=position_dodge(width=0.9), vjust=-0.25, size = 2.5 ) +
+    theme( plot.margin = margin(1,1,1,1.2, "cm") ) +
+    guides( fill="none" )
+
+knitr::kable( result, col.names = c("Institution", "Mean Trust"), caption = "Table 1: Mean trust levels for institutions.") %>%
+    kable_styling(c("bordered", "striped"), full_width = T)
+
 
 ```
 
@@ -135,34 +167,27 @@ Secondly, we would like to split the bars by the Inglehart-Index of the study pa
 For each group, we compute the __mean trust levels in each group__ for all available institutions:
 
 ```{r Grouping, echo = FALSE}
-# For each Inglehart-Index value, create a group
-groups <- vector( "list", length = 4)
 
-for( i in 1:4){
-  indices <- which( df$`Inglehart-Index` == i)  
-  groups[[i]] <- df[indices,]
-}
+# gleiches hilft dir nämlich dann auch bei deinem letzten coding: das grouping kann auch auf zwei spalten basieren, sprich Inglehart-Index UND Institution.. damit bekommst du dann direkt die Mittelwerte pro Kombination raus, etc...
 
-# Helper function to compute means
-compute_mean <- function(x){
-  return( mean( as.double( unlist( na.omit( x ) ) ) ) )
-}
+result_subgroups <- df %>% 
+  pivot_longer( ., 
+                starts_with("Vertrauen"), 
+                names_to = "Institution", 
+                values_to = "Trust_level",
+                values_drop_na = T) %>% 
+  mutate( Institution = unlist( lapply( Institution, rename_institution)) ) %>% 
+  group_by( `Inglehart-Index`, `Institution`) %>% 
+  summarise( mean_trust_group = mean(Trust_level), .groups = "keep" ) %>% 
+  ungroup() %>% 
+  pivot_wider(names_from = "Inglehart-Index", values_from = "mean_trust_group") %>% 
+  `colnames<-`(c("Institution", get_labels( df$`Inglehart-Index`)[3:6])) %>% 
+  .[, 1:5] # Remove the column for the Inglehart-Index "NA" 
 
 
-# Create a data frame in which the means for each of the groups above is listed
-
-means <- data.frame( matrix(ncol = length(groups) , nrow = ncol( df )))
-colnames(means) <- get_labels( df$`Inglehart-Index`)[3:6] # getting only non-negative labels
-
-for( i in 1:4){
-  means[,i]  <- unlist( unname( lapply( groups[[i]][, 1:ncol( groups[[i]] ) ], compute_mean) ) )
-}
-
-means$'Institution' <- colnames( df )[1:length(df)] 
-means <- means[, c(5, 1:4)]
-
-knitr::kable( means, col.names = colnames( means), caption = "Table 2: Mean trust levels in materialistic/postmaterialistic groups") %>%
+knitr::kable( result_subgroups, col.names = colnames( result_subgroups ), caption = "Table 2: Mean trust levels in materialistic/postmaterialistic groups") %>%
     kable_styling(c("bordered", "striped"), full_width = T)
+
 
 ```
 
@@ -170,77 +195,160 @@ We compute the __proportion of the mean trust level relative to the other groups
 
 
 ```{r relative_mean_trust , echo = FALSE}
+# I am not sure how to do this in another way than a for-loop:
 
-sums_cols <- vector( "list", length = nrow( means) )
+rowSums <- unlist( rowSums( result_subgroups[,2:5] ) )
 
-for( i in 1:nrow( means)){
-  sums_cols[[i]] <- sum( means[i,2:5])
+result_subgroups_relative <- result_subgroups[,1:5]
+
+for( i in 1:nrow( result_subgroups_relative)){
+  result_subgroups_relative[i,2:5] <-  result_subgroups_relative[i,2:5]/rowSums[[i]]
 }
 
-means_relative <- means[2:nrow(means),]
-rownames( means_relative ) <- NULL
+result_subgroups_relative$SUM <- rowSums( result_subgroups_relative[2:5] ) # Just to double check
 
-for( i in 1:nrow( means_relative)){
-  means_relative[i,2:5] <- means[i,2:5] / unlist( sums_cols )[[i]]
-}
-
-means_relative$Sum <- 1
-
-knitr::kable( means_relative, col.names = colnames( means_relative ), caption = "Table 3: Relative mean trust levels in materialistic/postmaterialistic groups") %>%
-    kable_styling(c("bordered", "striped"), full_width = T)
+knitr::kable( result_subgroups_relative, col.names = colnames( result_subgroups_relative ), caption = "Table 3: Relative mean trust levels in materialistic/postmaterialistic groups") %>%
+  kable_styling(c("bordered", "striped"), full_width = T)
 ```
 
 We would like to split the bars according to the relative mean trust levels of the groups. For this, we need to multiply the relative proportion of the mean trust value to the absolute value of mean trust for this institution.
 
 ```{r mean_trust_level_split_plot, echo = FALSE}
+# I am not sure how to do this in another way than a for-loop:
 
-means_relative_to_result <- means_relative
+result_subgroups_relative_to_mean <- result_subgroups_relative
 
-for( i in 1:nrow( result) ){
-  means_relative_to_result[i, 2:5]  <-  means_relative_to_result[i, 2:5] * result[ i, 2]
+for( i in seq_along( result$mean_trust )){
+  result_subgroups_relative_to_mean[i, 2:6] <- result_subgroups_relative_to_mean[i, 2:6] * result$mean_trust[[i]]
 }
 
-means_relative_to_result$Sum <- result$mean 
+result_subgroups_relative_to_mean$SUM <- unlist( rowSums( result_subgroups_relative_to_mean[,2:5] ) ) # Just to double check
+
+knitr::kable( result_subgroups_relative_to_mean, col.names = colnames( result_subgroups_relative_to_mean ), caption = "Table 4: Mean trust levels in materialistic/postmaterialistic groups relative to the absolute mean trust value of the respective institution") %>%
+     kable_styling(c("bordered", "striped"), full_width = T)
+
+```
+
+Now, we can split the bars into four groups, each group representing one level of the Inglehart index. The height of each section in a bar represents the relative proportion of the mean trust value in comparison to the other groups. 
+
+```{r final_plot, echo = FALSE, fig.width=7.5, fig.height=5}
+
+df_plot <- result_subgroups_relative_to_mean %>% 
+    pivot_longer( ., 
+          2:5, 
+          names_to = "Gruppe", 
+          values_to = "Trust_level",
+          values_drop_na = T) %>% 
+    mutate( Institution = fct_reorder( Institution, desc( SUM )))
+    
   
-knitr::kable( means_relative_to_result, col.names = colnames( means_relative ), caption = "Table 4: Mean trust levels in materialistic/postmaterialistic groups relative to the absolute mean trust value of the respective institution") %>%
-    kable_styling(c("bordered", "striped"), full_width = T)
-
-```
-
-Now, we can split the bars into four groups, each group representing one level of the Inglehart index. The height of each section in a bar represents the relative proportion of the mean trust value in comparison to the other groups.
-
-```{r final_plot, echo = FALSE}
-# Rearrange the data frame 'means_relative' for plotting
-pairs <- expand.grid( means_relative_to_result$Institution, colnames(means_relative_to_result)[2:5])
-
-df_plot <- data.frame( matrix(ncol = 4 , nrow = (nrow( means_relative_to_result ) * length( groups ) ) ))
-colnames( df_plot ) <- c("Institution", "Group", "value", "sum_of_institution")
-df_plot[, 1:2] <- pairs
-
-k <- 1
-for( i in 1:length( groups )){
-  rows <- c( k:(k+13) )
-  df_plot[ rows, 3] <- means_relative_to_result[,1+i]
-  df_plot[ rows, 4] <- result[,2]
-  k <- k+14
-}
-
-
-for( i in 1:nrow( means_relative_to_result)){
-  means_relative_to_result$Sum[[i]] <- sum( means_relative_to_result[i,2:5])
-}
-
-
-# Plotting
-
 df_plot %>% 
-  mutate( Institution = fct_reorder( Institution, desc( sum_of_institution ))) %>% 
-  ggplot(aes(fill=Group, y=value , x=Institution)) +
-    geom_bar(position="stack", stat="identity", alpha=.6, width=.8)+
-    xlab("") +
-    theme_classic() +
-    labs(y= "Mean Trust Level", x = "") +
-    theme(axis.text.x = element_text(angle = 45, hjust=1)) +
-    theme(plot.margin = margin(1,1,1,1.2, "cm"))
+    ggplot( aes(fill= Gruppe, y= Trust_level , x= Institution)) +
+      geom_bar(position="stack", stat="identity", alpha=.6, width=.8) +
+      #geom_bar( position = 'dodge', stat="identity", alpha=.6, width=.8 ) +
+      xlab("") +
+      theme_classic() +
+      labs( y= "Vertrauenslevel", x = "" ) +
+      theme( axis.text.x = element_text(angle = 45, hjust=1) ) +
+      coord_cartesian( ylim=c(0,7) )+
+      scale_y_continuous( expand = c(0, 0), labels = 0:7, breaks= c(0, 1, 2, 3, 4, 5, 6, 7) ) +
+      theme( plot.margin = margin(1,1,1,1.2, "cm") ) 
 
 ```
+
+We can also plot the groups in separate bars next to each other:
+
+```{r plot_rearranged, echo = FALSE, fig.width=10, fig.height=5}
+result_subgroups %>% 
+    mutate( OVERALL_MEAN = result$mean_trust) %>% 
+    pivot_longer( ., 
+          2:5, 
+          names_to = "Gruppe", 
+          values_to = "Trust_level",
+          values_drop_na = T) %>% 
+    mutate( Institution = fct_reorder( Institution, desc( OVERALL_MEAN ))) %>%  
+    ggplot( aes(fill= Gruppe, y= Trust_level , x= Institution)) +
+      geom_bar( position = 'dodge', stat="identity", alpha=.6, width=.8 ) +
+      xlab("") +
+      theme_classic() +
+      labs( y= "Vertrauenslevel", x = "" ) +
+      theme( axis.text.x = element_text(angle = 45, hjust=1) ) +
+      coord_cartesian( ylim=c(0,7) )+
+      scale_y_continuous( expand = c(0, 0), labels = 0:7, breaks= c(0:7) ) +
+      theme( plot.margin = margin(1,1,1,1.2, "cm") ) 
+
+```
+
+To observe the deviation of trust levels, we compute for each institution the maximum difference within the trust levels of the groups.
+
+```{r min_max, including = FALSE}
+
+Diff <- list()
+for( i in 1:nrow(result_subgroups)){
+  Diff[[i]] <- max( result_subgroups[ i, 2:5] ) - min( result_subgroups[ i, 2:5])
+}
+
+index_max <- which.max( Diff )
+index_min <-which.min( Diff )
+  
+result_subgroups[ index_max, ]
+result_subgroups[ index_min, ]
+
+```
+```{r min_max_table, echo= FALSE,including = FALSE}
+table <- result_subgroups[,1]
+table$Diff <- Diff
+
+knitr::kable( table, col.names = c("Institution", "Max. Diff. within the group"), caption = "Table 5: Maximum difference of mean trust levels between the groups") %>%
+     kable_styling(c("bordered", "striped"), full_width = T)
+```
+
+Apparently, the biggest difference of trust level can be found for the "Bundesverfassungsgericht" between the "MATERIAL-MISCHTYP" and "MATERIALISTEN" and the minimum difference can be found for the "Zeitungswesen". We annotate the minimum and maximum difference in the plot:
+
+```{r plot_w_label_1, echo = FALSE, fig.width=7.5, fig.height=5}
+df_plot %>%  
+    ggplot( aes(fill= Gruppe, y= Trust_level , x= Institution)) +
+      geom_bar(position="stack", stat="identity", alpha=.6, width=.8) +
+      #geom_bar( position = 'dodge', stat="identity", alpha=.6, width=.8 ) +
+      xlab("") +
+      theme_classic() +
+      labs( y= "Vertrauenslevel", x = "" ) +
+      theme( axis.text.x = element_text(angle = 45, hjust=1) ) +
+      coord_cartesian( ylim=c(0,7) )+
+      scale_y_continuous( expand = c(0, 0), labels = 0:7, breaks= c(0, 1, 2,3,4,5,6,7) ) +
+      theme( plot.margin = margin(1,1,1,1.2, "cm") ) +
+      annotate("text", x = 0.5, y = 5.5, hjust = 0, size = 2.5, label = "max.Diff.") +
+      annotate("text", x = 8.5, y = 4.3, hjust = 0, size = 2.5, label = "min.Diff.") 
+
+```
+
+```{r plot_w_label_2, echo = FALSE, fig.width=10, fig.height=5}
+
+result_subgroups %>% 
+    mutate( OVERALL_MEAN = result$mean_trust) %>% 
+    pivot_longer( ., 
+          2:5, 
+          names_to = "Gruppe", 
+          values_to = "Trust_level",
+          values_drop_na = T) %>% 
+    mutate( Institution = fct_reorder( Institution, desc( OVERALL_MEAN ))) %>%  
+    ggplot( aes(fill= Gruppe, y= Trust_level , x= Institution)) +
+      geom_bar( position = 'dodge', stat="identity", alpha=.6, width=.8 ) +
+      xlab("") +
+      theme_classic() +
+      labs( y= "Vertrauenslevel", x = "" ) +
+      theme( axis.text.x = element_text(angle = 45, hjust=1) ) +
+      coord_cartesian( ylim=c(0,7) )+
+      scale_y_continuous( expand = c(0, 0), labels = 0:7, breaks= c(0:7) ) +
+      theme( plot.margin = margin(1,1,1,1.2, "cm") ) +
+      annotate("text", x = 0.5, y = 5.5, hjust = 0, size = 3, label = "max.Diff.") +
+      annotate("text", x = 8.5, y = 4.3, hjust = 0, size = 3, label = "min.Diff.") 
+
+
+```
+
+
+Let me know if you have further remarks!
+
+Best
+Julia

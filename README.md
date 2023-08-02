@@ -114,7 +114,7 @@ In order to submit your project proposal, you have to upload it to GitHub as par
   - solution by [Jasmin](Projects/laurens-mauz/jasmin-schels.md)
 - Nico (NICOtin-macht-suechtig) - [Media Usage in the EU](Projects/nico-afentoulidis/project-description.md)
 - Tabea (muellertabea) - [Tree ring measurments](Projects/muellertabea/project-description.md)
-  - solution by [Tabea](Projects/muellertabea/NICOtin-macht-suechtig.md)
+  - solution by [Nico](Projects/muellertabea/NICOtin-macht-suechtig.md)
 - Pleasant (neopolyglot) - [Rotation Curve of M31 (Andromeda) Galaxy](Projects/neopolyglot/project-description.md)
   - solution by [Tabea](Projects/neopolyglot/Tabea_andromeda.md)
 - Daniela (DKemp98) - [Looking at some Food Information](Projects/DanielaKemp/project-description.md)
