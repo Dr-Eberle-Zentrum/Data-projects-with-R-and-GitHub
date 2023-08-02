@@ -106,7 +106,7 @@ In order to submit your project proposal, you have to upload it to GitHub as par
 - Christian (crudi3) - [Postmaterialism and political trust](Projects/crudi3/project-description.md)
   - solution by [Julia](Projects/crudi3/juliaquach02.md)
 - Danilo (danilopenagos) - [A Visual Exploration of Artistic Landscape in Colombia (1940-2018)](Projects/danilopenagos/project-description.md)
-  - solution by [Christian](Projects/danilopenagos/ProjectSolutionByChristian.Rmd)
+  - solution by [Christian](https://Dr-Eberle-Zentrum.github.io/Advanced-data-processing-with-R/Projects/danilopenagos/ProjectSolutionByChristian.html)
 - Paul (PaulKirschner) - [Large Scale Energy Production in Germany](Projects/PaulKirschner/ProjectIdea_Energy.md)
   - solution by [Danilo ](Projects/PaulKirschner/danilopenagos.md)
 - Jasmin (jasmin-schels) - [Bye Bye Birdie - Estimated population of house sparrows in the EU](Projects/jasmin-schels/jasmin-project-description.md)
