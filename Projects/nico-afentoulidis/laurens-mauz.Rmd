@@ -1,0 +1,99 @@
+---
+title: "Media usage in EU"
+output: md_document
+date: "2023-06-08"
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(maps)
+library(eurostat)
+library(sf)
+
+media_data <- read.csv("ZA7848_v1-0-0.csv", sep=";")
+
+
+media_data$isocntry[media_data$isocntry == "DE-W"] <- "DE"
+media_data$isocntry[media_data$isocntry == "DE-E"] <- "DE"
+new_colnames <- c( TV = "qd3_1", TVviaInternet = "qd3_2", Radio = "qd3_3", Podcast = "qd3_4", WrittenPress = "qd3_5", 
+                  Internet = "qd3_6", SocialMedia = "qd3_8")
+
+
+cool <- media_data %>%
+  select( isocntry, country, starts_with("qd3_")) %>%
+  mutate(across(everything(), \(x)ifelse(str_detect(x,"Inap."),NA, x))) %>%
+  mutate(across(starts_with("qd3_"), strtoi)) %>% 
+  drop_na() %>%
+  rename(all_of(new_colnames)) %>%
+  pivot_longer(!isocntry & !country, names_to = "media_type") %>%
+  group_by(isocntry, media_type) %>%
+  summarise(mean_usage = mean(value))
+
+
+
+
+# getting the shapefiles for the map of Europe
+SHP_0 <- get_eurostat_geospatial(resolution = 10,
+                                 nuts_level = 0,
+                                 year = 2016)
+
+# dropping UK, because it isn't included in media_data
+EU27 <- eu_countries %>% 
+  dplyr::filter(code != "UK") %>%
+  select(isocntry = code, name)
+
+# final shapefile
+SHP_27 <- SHP_0 %>% 
+  select(isocntry = NUTS_ID, geometry) %>% 
+  inner_join(EU27, by = "isocntry") %>% 
+  arrange(isocntry) %>%
+  st_as_sf() 
+
+
+SHP_DATA <- cool %>%
+  inner_join(SHP_27, by = "isocntry") %>% 
+  st_as_sf()
+
+
+```
+
+## R Markdown
+
+The maps for the mean media usage:
+
+```{r mean media usage map}
+SHP_DATA %>%
+  ggplot(aes(fill=mean_usage)) +
+  geom_sf() +
+  scale_x_continuous(limits = c(-10, 35)) +
+  scale_y_continuous(limits = c(35, 75)) +
+  theme_void() +
+  labs(title="Mean Media usage in EU",
+       fill="Media usage") +
+  facet_wrap(~media_type)
+```
+
+The boxplots for the social media usage and financial situation:
+
+```{r boxplots}
+media_data %>%
+  select(qa1_5, qd3_8, isocntry) %>%
+  dplyr::filter(isocntry == "GR" | isocntry == "ES" | isocntry =="DE") %>%
+  dplyr::filter(qa1_5 != "Don't know (SPONTANEOUS)") %>%
+  mutate(qd3_8 = strtoi(qd3_8)) %>%
+  drop_na() %>%
+  ggplot(aes(x=qa1_5, y=qd3_8, fill=qa1_5)) +
+  geom_boxplot() +
+  theme(axis.text.x = element_text(angle = 90)) +
+  ggtitle(" Financial situation and social media usage") +
+  xlab("Financial situation") +
+  ylab("Social media usage") +
+  labs(fill="Financial Situation") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  facet_wrap(~isocntry)
+
+
+  
+```
+
