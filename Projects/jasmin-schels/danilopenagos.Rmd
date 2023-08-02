@@ -1,0 +1,87 @@
+---
+title: "EU-Birds-Decline"
+author: "Danilo Penagos"
+date: "2023-06-26"
+output: md_document
+---
+
+``` {r, setup}
+#| echo: false
+library(dplyr)
+library(ggplot2)
+library(ggrepel) # Library with extra geom for ggplot for text and label treatment
+
+data <- read.csv('EU-birds-declines.csv')
+```
+
+
+# Bye Bye Birdie
+
+Biodiversity decline is a real problem around the globe. While for European audiences, the word normally conjures up images of rare orchids or reptiles in the world's rain forests, there is also biodiversity loss that hits a lot closer to home with a species that is considered omnipresent.
+
+[According to research published in scientific journal Ecology and Evolution](https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.8282), there are a "considerable numerical loss in the avifauna of EU" since 1980. This biodiversity loss is "also heterogeneous across habitats". 
+
+The following [data set](https://zenodo.org/record/5544548#.ZFkcpi9n6x_) allows find patterns of change about the bird species decline. In the table, we can find a first look to the variables of the data:
+
+``` {r, data_head}
+#| echo: false
+
+knitr::kable(
+  data[1:5, ]
+)
+```
+
+## Which species is decreasing its population?
+
+We particularly interested in which of the bird species increased in population and which decreased in population. 
+
+To answer this question through a graph, we should first extract the data we are most interested in terms of minimum and maximum values, and then create a column graph to show the which bird species have decrease or increase its population to 2017.
+
+```{r, processing data}
+#| echo: false
+
+
+# Colour Palette variable for the graph
+colores <- c(RColorBrewer::brewer.pal(7,"Purples"),
+             RColorBrewer::brewer.pal(3,"PuBu"))
+
+# We reduce the data set to a specific variables, transform the variable "Loss_med" to a 
+# manipulable figure, create a rank of values, choosing the first and the last ones. 
+# Then we put together the other species (min and max). By grouping by name and year,
+# we can visualize the summarize data with the column graph
+
+data |>
+  select(species, common_name, Loss_med, lastyear, popest) |>
+  mutate(
+    Loss_med = round(-(Loss_med/1000000), 2),
+    Rank = rank(Loss_med, ties.method = "first"),
+    toptail = between(Rank, 9, n()-8),
+    ) |>
+  mutate(name = ifelse(toptail, 
+                       (ifelse(Loss_med < 0, "Other species min", "Other species max")), 
+                       ifelse(Loss_med == 0, common_name, common_name)))|>
+  group_by(name, lastyear) |>
+  summarize(
+    Loss_med_mean = mean(Loss_med),
+    Loss_med_sum = sum(Loss_med)
+  ) |>
+  arrange(Loss_med_mean) |>
+  # view() |>
+  mutate(Label = paste0(name, " (", Loss_med_sum, ")")) |>
+  ggplot(aes(x=factor(lastyear), y=Loss_med_sum, fill=Loss_med_mean,
+             label=Label)) +
+  scale_fill_gradientn(colors = colores) +
+  geom_col(color = "black", width = .2, show.legend = F,
+           na.rm = T) +
+  geom_text_repel(position = "stack", na.rm = T,
+                   direction = "x", force_pull = -1.2, force=2,
+                   max.overlaps = 20, size=3) +
+  labs(title="Extreme Patterns in Species' Change",
+       subtitle = "Change in bird species’ population size (millions of individuals) in the EU from 1980 to 2017",
+       x="",
+       y = "Change in number of birds (millions)")
+  
+
+```
+
+As graph show, house sparrow it is the bird specie more affected in the last 30 years. On the other side, black cap have increase its population.
