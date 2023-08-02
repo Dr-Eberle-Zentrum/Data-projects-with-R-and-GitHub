@@ -21,7 +21,7 @@ suppressPackageStartupMessages(library(gridExtra))
 suppressPackageStartupMessages(library(cowplot))
 
 # Set the working directory to the directory where the CSV file is located
-setwd("C:/Users/Pleasant Pillai/Desktop/R Programming/R2/Advanced-data-processing-with-R/Projects/alexanderwinterstetter")
+#setwd("C:/Users/Pleasant Pillai/Desktop/R Programming/R2/Advanced-data-processing-with-R/Projects/alexanderwinterstetter")
 
 # Read the CSV file
 data <- read.csv("soccer_referee_data.csv")
