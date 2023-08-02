@@ -1,0 +1,159 @@
+---
+title: "danilopenagos"
+author: "Danilo Penagos"
+date: "2023-06-03"
+output: md_document
+---
+
+# Power Plants in Germany
+
+```{r setup, echo=FALSE}
+library(readxl)
+library(raster)
+library(cartography)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(stringr)
+library(ggtext)
+
+library(showtext)
+font_add_google("Lato")
+showtext_auto()
+
+path <- "kraftwerke_de_ab_100_mw_0.xls"
+
+# GIS data (Longitude - Latitude)
+locations <- read.csv("locations.csv", sep = "\t")
+
+# Classification variables
+renewable_anlagenart <- c("LWK", "PSW", "PV", "SSA", "SWK", "WEA", "Wind (L)", "Wind (O)")
+
+fossil_anlagenart <- c("BoA", "DKW", "DT", "DWR", "G/AK", "GT", "GuD", "HEL", "IKW", "SWR")
+
+renewable_primary_source <- c("Wind (O)", "Wasser", "Licht", "Wind (L)", "Biomasse", "Licht / Wind (L) / Batteriespeicher")
+
+fossil_primary_source <- c("Erdgas", "Steinkohle", "Braunkohle", "Erdgas, Steinkohle", "Gichtgas", "Konvertergas", "Uran", "Steinkohle, Erdgas", "HEL", "HS", "HEL, Crack\u00F6l", "Crack\u00F6l", "Erdgas, Raffineriegas", "Braunkohle, Erdgas", "Erdgas, HEL", "Raffineriegas", "Biomasse, Erdgas", "Erdgas, Biomasse", "\u00D6lrückstand", "Steinkohle, HEL, Abfall", "Erdgas, HS, Cracker\u00F6l", "Cracker\u00F6l")
+
+```
+
+The following is a proposed solution to the project [Large Scale Energy Production](https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/main/Projects/PaulKirschner/ProjectIdea_Energy.md) created by Paul Kishner.
+
+## Data Table - Power Plants in Germany over 100 MW in the year 2022
+
+The data collected by National Environmental Agency: [UBA](https://www.umweltbundesamt.de/dokument/datenbank-kraftwerke-in-deutschland) are organized into 15 variables, including the locations of the power generation companies, the raw materials used, the amount of energy produced, among others.
+
+```{r first_sight_to_data, echo=FALSE}
+
+data <- read_xls(path, range = "A10:J306", col_names = TRUE)
+
+knitr::kable(
+  head(data),
+  caption = "Power Plants in Germany over 100 MW in the year 2022"
+)
+
+```
+
+In order to meet the objectives proposed in the project, these data need to be modified or expanded. First, we add to our data the longitude and latitude for each of the locations or cities, where the producing companies are located. For the identification of these variables we use the [Batch geocoder for journalist tool](https://geocode.localfocus.nl/). It allows us to find automatically the longitude and the latitude of each place or locations in our data set. For some of those locations the tool offer different options to chose, therefore we can select the correct one, manually. 
+
+Secondly, we created a variable to normalize the date to a single year.
+
+Thirdly, we separate the raw materials for the cases in which the power plant manipulates or works with different sources.
+
+Finally, we will classify them based on whether the materials are renewable or fossil fuels.
+
+```{r processed_data, echo=FALSE}
+# Changing the names of the variables
+colnames(data) = c("Power_Plant", "Operator", "Bundesland", "Zip_Code", "Location", "Electric_Gross", "Heating_Capacity", "Comissioning", "Plant_Type", "Primary_Source")
+
+# Adding new columns: locations (long & lat) and type of primary source
+processed_data <- data |>
+  merge(locations, by.x = "Location", by.y = "Location") |>
+  mutate(Year = as.integer(str_extract(Comissioning, "\\d{4}"))) |>
+  separate_rows(Plant_Type, sep="\\s/\\s") |>
+  separate_rows(Plant_Type, sep="\\s[u]\\.\\s") |>
+  separate_rows(Primary_Source, sep=", ") |>
+  separate_rows(Primary_Source, sep="\\s/\\s") |>
+  mutate(
+    Energie = if_else( Primary_Source %in% renewable_primary_source, 
+         "Renewable",
+         if_else( Primary_Source %in% fossil_primary_source,
+                  "Fossil", NA)))
+
+```
+
+#### Identify historic eras for energy sources (coal, water, renewable)
+
+```{r historic_eras, echo=FALSE}
+processed_data |>
+  ggplot(aes(x = Year, y = Primary_Source, colour = Energie )) +
+  geom_line() +
+  theme_minimal(base_family = "Lato") +
+  labs(
+    y = "Primary Source",
+    title = "Historic Eras for Primary Sources by Year",
+    subtitle = "This chart show up the use of the different primary source since 1900 to nowdays"
+  )
+```
+
+We can see that water is a resource that has been present all the time. Renewable energies are a phenomenon that appeared in the last quarter of the 20th century and the beginning of the 21st century. Fossil resources such as gas and coal have dominated since the 1930s.
+
+### Group the energy sources by renewable vs. fossil types Bundesland
+
+```{r fossil_vs_renewable, echo=FALSE}
+de <- getData(country = "DEU", level = 1)
+
+ggplot() +
+  geom_polygon(data = de,
+               aes(x = long, y = lat, group=group),
+               colour = "grey", fill="white") +
+  geom_point(data = processed_data, 
+             aes(x = Longitude, y = Latitude, size = Electric_Gross, color = Energie)) +
+  coord_map() +
+  theme_minimal(base_family = "Lato") +
+  labs(
+    x = "Latitude",
+    y = "Longitude",
+    title = "Type of Energie and Place of Production",
+    subtitle = "Map with the locations and type of energie produced and mesured by electric gross"
+  )
+
+```
+
+With this map we see that renewable energy production is located in the east of the country. While the fossil production is centralized in Nordrhein-Westfalen and the Rhine river basin.
+
+### Challenge (first try)
+
+First we calculate the percentage of energy produced by Bundesland (both fossil and renewable).
+
+```{r percent_calcule, echo=FALSE}
+percent_renew <- processed_data |>
+  group_by(Bundesland) |>
+  mutate("Percent" = Electric_Gross / sum(Electric_Gross) * 100) |>
+  group_by(Bundesland, Energie) |>
+  summarise("Total_Renewable" = sum(Percent))
+
+knitr::kable(
+  head(percent_renew),
+  caption = "Percent of Energie Production by Bundesland and Type"
+)
+
+```
+
+Then, we filtered by renewable energy and merged this data with the spacial dataframe.
+
+Finally, with the `choroLayer` function of the `cartography` library, we color the Bundesland by percentage of renewable energy production.
+
+```{r challenge_renewable, echo=FALSE}
+renew <- percent_renew |>
+  mutate(HASC_1 = if_else(Bundesland == "BB","DE.BR", gsub(" ", "", paste(c("DE."), Bundesland))))|>
+  subset(Energie == "Renewable")
+
+de_agg <- merge(de, renew , by.x = "HASC_1", by.y = "HASC_1", 
+                duplicateGeoms = TRUE, no.dups = TRUE )
+
+choroLayer(spdf = de_agg, var = "Total_Renewable",
+           nclass = 5, legend.title.txt = "Percent by Bundesland")
+
+```
+As we can see, the production of renewable energies are centralize in the east of the country. The no data cases are states where the production is 100% derivative from fossil primary sources. 
