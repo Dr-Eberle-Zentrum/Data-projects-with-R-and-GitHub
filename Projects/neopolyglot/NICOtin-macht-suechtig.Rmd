@@ -1,0 +1,85 @@
+---
+title: "NICOtin-macht-suechtig"
+author: "Nico Afentoulidis"
+date: "`r Sys.Date()`"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+#Needed packages (except tidyverse):
+#install.packages("jpeg")
+#install.packages("ggpubr")
+#install.packages("ggimage")
+
+#Loading all packages:
+library(tidyverse)
+library(jpeg)
+library(ggpubr)
+library(ggimage)
+
+#Getting the data into R:
+data <- read.table("http://www.ioa.s.u-tokyo.ac.jp/~sofue/RC99/0224.dat",
+                   skip = 12) |> 
+        rename("R" = V1,
+               "V" = V2) |> 
+        mutate("R_lightyears" = R * 3261.5637769443) #(Source: https://www.unitconverters.net/length/kiloparsec-to-light-year.htm)
+
+#Preparing the background image:
+img = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Andromeda_Galaxy_560mm_FL.jpg/800px-Andromeda_Galaxy_560mm_FL.jpg"
+```
+
+# Pleasants project by Nico
+
+Thanks to your nice project description it was really doable.
+
+This is my plot:
+
+```{r plotting, warning=FALSE, echo=FALSE}
+
+
+(ggplot(data, mapping = aes(x = R_lightyears,
+                           y = V,
+                           color = (R_lightyears < data$R_lightyears[which.max(data$V)] ))) + 
+        #background_image(img) +
+        geom_line(linewidth = 2,) +
+        geom_text(x=14500, y=195, 
+                 label="ascending", 
+                 color="red",
+                 size=6,
+                 family = "sans",
+                 fontface = "bold") +
+        geom_text(x=75000, y=280, 
+                  label="descending", 
+                  color="cyan",
+                  size=6,
+                  family = "sans",
+                  fontface = "bold") +
+        xlab(label = "Distance from center (light years)") +
+        ylab(label = "Rotation velocity (km/s)") +
+        scale_y_continuous(limits = c(110, 310)) +
+        theme_classic() +
+        theme(legend.position = "none",
+              axis.title.y = element_text(colour = "white") ,
+              axis.title.x = element_text(colour = "white"),
+              axis.text = element_text(colour = "white"),
+              axis.line = element_line(colour = "white"))+
+        scale_color_discrete(type = c("cyan","red")) ) |> 
+
+ggbackground(background = img)
+
+```
+
+I had two little problems, I could solve with Martins help:
+
+1. I wanted to put the picture of the andromeda galaxy also behind the axes, but It didn't work with the function I used in the beginning. With the new function R doesn't need to save the image as an object.
+
+2. I couldn't find a way to automatically coloring the ascending part in a different way than the descending part. I looked up the maximum myself and divided the plot into two parts.Now the maximum is determined automatically.
+
+I hope you like my final solution!
+
+Greetings,
+Nico
+
+  
