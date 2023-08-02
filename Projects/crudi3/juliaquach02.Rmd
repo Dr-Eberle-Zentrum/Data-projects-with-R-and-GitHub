@@ -1,0 +1,246 @@
+---
+title: "Solution #1 to project: Postmaterialism and political trust"
+author: "Julia Quach"
+date: "2023-06-02"
+output: md_document
+always_allow_html: true
+---
+
+
+```{r setup, include=FALSE}
+library(ggplot2)
+library(dplyr)
+library(knitr)
+library(labelled)
+library(sjlabelled)
+library(viridis)
+library(forcats)
+library(kableExtra)
+library(cowplot)
+
+# Library to load the data in dta format
+library( haven )
+setwd('..')
+path <- getwd()
+# Importing the dta file
+```
+
+--------------------------------------------
+
+# Introduction
+
+--------------------------------------------
+
+
+In this document, I describe my solution for Christian's project [Postmaterialism and political trust](https://dr-eberle-zentrum.github.io/Advanced-data-processing-with-R/Projects/crudi3/project-description.html) and how I developed it.
+
+--------------------------------------------
+
+# Understanding the data set
+
+--------------------------------------------
+
+
+First, I checked the structure of the data:
+
+```{r data_structure}
+data <- read_dta( paste0( path ,"/crudi3/ZA5280_v2-0-0.dta"))
+dim( data )
+head( colnames( data ) )
+```
+
+
+We see that the data frame contains observations of 544 variables for 5342 participants of the study. Having 544 variables means that we first need to filter for the relevant columns for our goals Therefore, I checked the meaning of the abbreviated column names in the supplement of the "Codebook" (pp.879-895). Based on the following two pages in the supplement, I assume that the columns with the abbreviation _pt[xy]_ encode the the _trust levels_ and that the column _ingle_ represents the  _materialistic/postmaterialistic value_.
+
+
+```{r image_grobs, fig.show = "hold", out.width = "50%", fig.align = "default", echo= FALSE }
+knitr::include_graphics( paste0( path, "/crudi3/project_solution_julia/abbreviations_trust_levels.JPG") )
+knitr::include_graphics( paste0( path, "/crudi3/project_solution_julia/abbreviations_ingle.JPG"))
+```
+
+
+--------------------------------------------
+
+# Cleaning the data
+
+--------------------------------------------
+
+We reduced the data frame to the relevant columns and renamed them with meaningful names.
+
+
+```{r data_cleaning, warning = FALSE}
+
+relevant_cols <- c("ingle", "pt01", "pt02", "pt03", "pt04", "pt06", "pt08", "pt09", "pt10", "pt11", "pt12", "pt14", "pt15", "pt19", "pt20")
+
+df <- data %>% select( relevant_cols ) 
+
+colnames( df ) <- c("Inglehart-Index", "Gesundheitswesen", "Bundesverfassungsgericht", "Bundestag", "Stadt- und Gemeindeverwaltung", "Katholische Kirche", "Evangelische Kirche", "Justiz", "Fernsehen", "Zeitungswesen", "Hochschulen/Universitäten", "Bundesregierung", "Polizei", "Politische Parteien", "Kommission der EU", "Europ. Parlament")
+
+```
+
+Afterwards, we took a closer look at the variable labels:
+
+```{r variable_labels, results = "hide"}
+lapply( df, get_labels, values = "n", drop.na = FALSE)
+```
+
+Apparently, each column contains labelled data with discrete values. Negative values indicate non-available information for the respective study participant. The Inglehart index (column "ingle") has four levels encoded with the numbers 1 to 4. For the trust levels, there are seven levels where 1 indicates _no trust_ and 7 indicates _high trust_.
+
+We computed the mean trust level for each institution. For this, we had replaced non-available information (i.e., negative values) with NA values.
+
+```{r computing_means, include = FALSE}
+# Replace non-available information with NAs
+df[ df < 0] <- NA
+
+# Compute means and save them in a data frame
+result <- data.frame( institution = colnames(df[1:length(df)]))
+
+computed_means <- vector( "list", length = ncol(df))
+
+for( i in 1:length( computed_means ) ){
+  computed_means[[i]] <- mean( as.double( unlist( na.omit( df[,i] ) ) ) )
+}
+
+result$mean <- unlist( computed_means )
+result <- result[ result$institution != "Inglehart-Index",  ]
+```
+
+# Tackling the visualization
+
+Firstly, we create a bar plot with one bar per institution and the mean trust level on the y-axis:
+
+
+```{r ggplot, warning = FALSE, echo = FALSE}
+result %>%
+  mutate( mean = round( mean, digits = 2)) %>% 
+  mutate( Institution = fct_reorder(institution, desc(mean)) ) %>% 
+  ggplot( aes(x= Institution, y= mean, fill = Institution) ) +
+    geom_bar(position = 'dodge', stat="identity", alpha=.6, width=.8) +
+    xlab("") +
+    theme_classic() +
+    labs(y= "Mean Trust Level", x = "") +
+    theme(axis.text.x = element_text(angle = 45, hjust=1)) +
+    # theme(axis.title.x=element_blank(),
+    #     axis.text.x=element_blank(),
+    #     axis.ticks.x=element_blank()) +
+    coord_cartesian(ylim=c(0,7))+
+    scale_y_continuous(expand = c(0, 0), labels = 0:7, breaks= c(0, 1, 2, 3, 4, 5, 6, 7)) +
+    geom_text(aes(label=mean), position=position_dodge(width=0.9), vjust=-0.25, size = 2.5) +
+    theme(plot.margin = margin(1,1,1,1.2, "cm")) +
+    guides(fill="none")
+
+```
+
+Secondly, we would like to split the bars by the Inglehart-Index of the study participants. For this, we group the data by the Inglehart-Index of the study participants. For simplicity, we omit observations of study participants with non-available Inglehart-Index. We obtain four groups which are named by the labels of the Inglehart-Index.
+For each group, we compute the __mean trust levels in each group__ for all available institutions:
+
+```{r Grouping, echo = FALSE}
+# For each Inglehart-Index value, create a group
+groups <- vector( "list", length = 4)
+
+for( i in 1:4){
+  indices <- which( df$`Inglehart-Index` == i)  
+  groups[[i]] <- df[indices,]
+}
+
+# Helper function to compute means
+compute_mean <- function(x){
+  return( mean( as.double( unlist( na.omit( x ) ) ) ) )
+}
+
+
+# Create a data frame in which the means for each of the groups above is listed
+
+means <- data.frame( matrix(ncol = length(groups) , nrow = ncol( df )))
+colnames(means) <- get_labels( df$`Inglehart-Index`)[3:6] # getting only non-negative labels
+
+for( i in 1:4){
+  means[,i]  <- unlist( unname( lapply( groups[[i]][, 1:ncol( groups[[i]] ) ], compute_mean) ) )
+}
+
+means$'Institution' <- colnames( df )[1:length(df)] 
+means <- means[, c(5, 1:4)]
+
+knitr::kable( means, col.names = colnames( means), caption = "Table 2: Mean trust levels in materialistic/postmaterialistic groups") %>%
+    kable_styling(c("bordered", "striped"), full_width = T)
+
+```
+
+We compute the __proportion of the mean trust level relative to the other groups for each institution__:
+
+
+```{r relative_mean_trust , echo = FALSE}
+
+sums_cols <- vector( "list", length = nrow( means) )
+
+for( i in 1:nrow( means)){
+  sums_cols[[i]] <- sum( means[i,2:5])
+}
+
+means_relative <- means[2:nrow(means),]
+rownames( means_relative ) <- NULL
+
+for( i in 1:nrow( means_relative)){
+  means_relative[i,2:5] <- means[i,2:5] / unlist( sums_cols )[[i]]
+}
+
+means_relative$Sum <- 1
+
+knitr::kable( means_relative, col.names = colnames( means_relative ), caption = "Table 3: Relative mean trust levels in materialistic/postmaterialistic groups") %>%
+    kable_styling(c("bordered", "striped"), full_width = T)
+```
+
+We would like to split the bars according to the relative mean trust levels of the groups. For this, we need to multiply the relative proportion of the mean trust value to the absolute value of mean trust for this institution.
+
+```{r mean_trust_level_split_plot, echo = FALSE}
+
+means_relative_to_result <- means_relative
+
+for( i in 1:nrow( result) ){
+  means_relative_to_result[i, 2:5]  <-  means_relative_to_result[i, 2:5] * result[ i, 2]
+}
+
+means_relative_to_result$Sum <- result$mean 
+  
+knitr::kable( means_relative_to_result, col.names = colnames( means_relative ), caption = "Table 4: Mean trust levels in materialistic/postmaterialistic groups relative to the absolute mean trust value of the respective institution") %>%
+    kable_styling(c("bordered", "striped"), full_width = T)
+
+```
+
+Now, we can split the bars into four groups, each group representing one level of the Inglehart index. The height of each section in a bar represents the relative proportion of the mean trust value in comparison to the other groups.
+
+```{r final_plot, echo = FALSE}
+# Rearrange the data frame 'means_relative' for plotting
+pairs <- expand.grid( means_relative_to_result$Institution, colnames(means_relative_to_result)[2:5])
+
+df_plot <- data.frame( matrix(ncol = 4 , nrow = (nrow( means_relative_to_result ) * length( groups ) ) ))
+colnames( df_plot ) <- c("Institution", "Group", "value", "sum_of_institution")
+df_plot[, 1:2] <- pairs
+
+k <- 1
+for( i in 1:length( groups )){
+  rows <- c( k:(k+13) )
+  df_plot[ rows, 3] <- means_relative_to_result[,1+i]
+  df_plot[ rows, 4] <- result[,2]
+  k <- k+14
+}
+
+
+for( i in 1:nrow( means_relative_to_result)){
+  means_relative_to_result$Sum[[i]] <- sum( means_relative_to_result[i,2:5])
+}
+
+
+# Plotting
+
+df_plot %>% 
+  mutate( Institution = fct_reorder( Institution, desc( sum_of_institution ))) %>% 
+  ggplot(aes(fill=Group, y=value , x=Institution)) +
+    geom_bar(position="stack", stat="identity", alpha=.6, width=.8)+
+    xlab("") +
+    theme_classic() +
+    labs(y= "Mean Trust Level", x = "") +
+    theme(axis.text.x = element_text(angle = 45, hjust=1)) +
+    theme(plot.margin = margin(1,1,1,1.2, "cm"))
+
+```
