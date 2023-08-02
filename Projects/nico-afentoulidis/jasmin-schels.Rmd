@@ -1,0 +1,155 @@
+---
+output: md_document
+---
+
+
+## Initial solution
+
+Here is the data in a table and the maps:
+
+```{r}
+library(tidyverse)
+library(maps)
+library(viridis)
+library(eurostat)
+library(leaflet)
+library(sf)
+library(scales)
+library(cowplot)
+library(ggthemes)
+
+media_use <- read_csv2("ZA7848_v1-0-0.csv")
+
+mean_media <-
+  media_use %>% 
+  mutate(across(starts_with("qd3_"), as.double),
+         isocntry = str_sub(isocntry, start= 1, end = 2)) %>% 
+
+    group_by(isocntry) %>% 
+   summarize(mean_TV = mean(qd3_1, na.rm = TRUE),
+             mean_TVviaInternet = mean(qd3_2, na.rm = TRUE),
+             mean_radio = mean(qd3_3, na.rm = TRUE),
+             mean_podcast = mean(qd3_4, na.rm = TRUE),
+             mean_writtenPress = mean(qd3_5, na.rm = TRUE),
+             mean_Internet = mean(qd3_6, na.rm = TRUE),
+             mean_SocialMedia = mean(qd3_8, na.rm = TRUE)
+             )  %>% 
+     drop_na()
+  
+
+
+  SHP_0 <- get_eurostat_geospatial(resolution = 10, 
+                                   nuts_level = 0, 
+                                   year = 2016)
+EU28 <- eu_countries %>% 
+  select(geo = code, name)
+  
+SHP_28 <- get_eurostat_geospatial(resolution = 10, 
+                                  nuts_level = 0, 
+                                  year = 2016) %>% 
+  select(geo = NUTS_ID, geometry) %>% 
+  inner_join(EU28, by = "geo") %>% 
+  arrange(geo) %>% 
+  st_as_sf()
+  
+
+ 
+  colnames(mean_media)[1] ="geo"
+
+ media_map <- mean_media %>% 
+  inner_join(SHP_28, by = "geo") %>% 
+  st_as_sf()
+ 
+ media_map %>% 
+   ggplot((aes(fill = mean_TV ))) +
+   geom_sf() +
+   scale_x_continuous(limits = c(-10, 35)) +
+   scale_y_continuous(limits = c(35, 75)) +
+   theme_void() +
+   labs(title="Mean TV usage in the EU",
+        fill="Media usage")
+ 
+ 
+ # TV via Internet Usage
+ media_map %>% 
+   ggplot((aes(fill = mean_TVviaInternet ))) +
+   geom_sf() +
+   scale_x_continuous(limits = c(-10, 35)) +
+   scale_y_continuous(limits = c(35, 75)) +
+   theme_void() +
+   labs(title="Mean TV via Internet usage in the EU",
+        fill="Media usage")
+
+ 
+# Radio Usage  
+ media_map %>% 
+   ggplot((aes(fill = mean_radio))) +
+   geom_sf() +
+   scale_x_continuous(limits = c(-10, 35)) +
+   scale_y_continuous(limits = c(35, 75)) +
+   theme_void() +
+   labs(title="Mean Radio usage in the EU",
+        fill="Media usage")
+
+# Podcast Usage  
+ media_map %>% 
+   ggplot((aes(fill = mean_podcast ))) +
+   geom_sf() +
+   scale_x_continuous(limits = c(-10, 35)) +
+   scale_y_continuous(limits = c(35, 75)) +
+   theme_void() +
+   labs(title="Mean Podcast usage in the EU",
+        fill="Media usage")
+
+# Written Press Usage  
+ media_map %>% 
+   ggplot((aes(fill = mean_writtenPress ))) +
+   geom_sf() +
+   scale_x_continuous(limits = c(-10, 35)) +
+   scale_y_continuous(limits = c(35, 75)) +
+   theme_void() +
+   labs(title="Mean Written Press usage in the EU",
+        fill="Media usage")
+
+ # Internet Usage  
+ media_map %>% 
+   ggplot((aes(fill = mean_Internet ))) +
+   geom_sf() +
+   scale_x_continuous(limits = c(-10, 35)) +
+   scale_y_continuous(limits = c(35, 75)) +
+   theme_void() +
+   labs(title="Mean Internet usage in the EU",
+        fill="Media usage")
+ 
+ # Social Media 
+ media_map %>% 
+   ggplot((aes(fill = mean_SocialMedia ))) +
+   geom_sf() +
+   scale_x_continuous(limits = c(-10, 35)) +
+   scale_y_continuous(limits = c(35, 75)) +
+   theme_void() +
+   labs(title="Mean Social Media usage in the EU",
+        fill="Media usage")
+
+
+```
+
+And here are the violin plots:
+
+```{r}
+  
+   media_use %>%
+  mutate(isocntry = str_sub(isocntry, start= 1, end = 2),
+         across(starts_with("qd3_"), as.double) ) %>% 
+  select(qa1_5, qd3_8, isocntry) %>%
+  filter(isocntry %in% c("GR","ES","DE"), 
+  qa1_5 != "Don't know (SPONTANEOUS)") %>%
+  drop_na() %>%
+  ggplot(aes(x=qa1_5, y=qd3_8, fill=qa1_5)) +
+  geom_violin() +
+  ggtitle(" Financial Situation in relation to Social Media Usage") +
+  labs(fill="Financial Situation", y = "Social Media usage", x = "Financial situation") +
+  theme(axis.text.x = element_text(angle = 90)) +
+  scale_fill_viridis(discrete = TRUE, alpha = 0.5, option="A") +
+  facet_wrap(~isocntry)
+```
