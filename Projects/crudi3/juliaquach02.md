@@ -46,12 +46,6 @@ encode the the *trust levels* and that the column *ingle* represents the
 We reduced the data frame to the relevant columns and renamed them with
 meaningful names.
 
-    relevant_cols <- c("ingle", "pt01", "pt02", "pt03", "pt04", "pt06", "pt08", "pt09", "pt10", "pt11", "pt12", "pt14", "pt15", "pt19", "pt20")
-
-    df <- data %>% select( relevant_cols ) 
-
-    colnames( df ) <- c("Inglehart-Index", "Gesundheitswesen", "Bundesverfassungsgericht", "Bundestag", "Stadt- und Gemeindeverwaltung", "Katholische Kirche", "Evangelische Kirche", "Justiz", "Fernsehen", "Zeitungswesen", "Hochschulen/Universitäten", "Bundesregierung", "Polizei", "Politische Parteien", "Kommission der EU", "Europ. Parlament")
-
 Afterwards, we took a closer look at the variable labels:
 
     lapply( df, get_labels, values = "n", drop.na = FALSE)
@@ -72,6 +66,143 @@ Firstly, we create a bar plot with one bar per institution and the mean
 trust level on the y-axis:
 
 ![](juliaquach02_files/figure-markdown_strict/ggplot-1.png)
+<table class="table table-bordered table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+Table 1: Mean trust levels for institutions.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Institution
+</th>
+<th style="text-align:right;">
+Mean Trust
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Bundesregierung
+</td>
+<td style="text-align:right;">
+4.051450
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bundestag
+</td>
+<td style="text-align:right;">
+4.055080
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bundesverfassungsgericht
+</td>
+<td style="text-align:right;">
+5.233419
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Europaeisches Parlament
+</td>
+<td style="text-align:right;">
+3.542484
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Evangelische Kirche
+</td>
+<td style="text-align:right;">
+3.060737
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fernsehen
+</td>
+<td style="text-align:right;">
+3.597112
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gesundheitswesen
+</td>
+<td style="text-align:right;">
+4.942906
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hochschulen,Universitaeten
+</td>
+<td style="text-align:right;">
+5.188934
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Justiz
+</td>
+<td style="text-align:right;">
+4.566022
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Katholische Kirche
+</td>
+<td style="text-align:right;">
+2.340401
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Kommission der EU
+</td>
+<td style="text-align:right;">
+3.498296
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Politische Parteien
+</td>
+<td style="text-align:right;">
+3.190381
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Polizei
+</td>
+<td style="text-align:right;">
+4.939841
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Stadt-,Gemeindeverwaltung
+</td>
+<td style="text-align:right;">
+4.484442
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zeitungswesen
+</td>
+<td style="text-align:right;">
+4.019351
+</td>
+</tr>
+</tbody>
+</table>
 
 Secondly, we would like to split the bars by the Inglehart-Index of the
 study participants. For this, we group the data by the Inglehart-Index
@@ -107,53 +238,19 @@ MATERIALISTEN
 <tbody>
 <tr>
 <td style="text-align:left;">
-Inglehart-Index
+Bundesregierung
 </td>
 <td style="text-align:right;">
-1.000000
+3.792601
 </td>
 <td style="text-align:right;">
-2.000000
+3.951042
 </td>
 <td style="text-align:right;">
-3.000000
+4.330321
 </td>
 <td style="text-align:right;">
-4.000000
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Gesundheitswesen
-</td>
-<td style="text-align:right;">
-4.727374
-</td>
-<td style="text-align:right;">
-4.906832
-</td>
-<td style="text-align:right;">
-5.161211
-</td>
-<td style="text-align:right;">
-4.869969
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Bundesverfassungsgericht
-</td>
-<td style="text-align:right;">
-5.278965
-</td>
-<td style="text-align:right;">
-5.252862
-</td>
-<td style="text-align:right;">
-5.358848
-</td>
-<td style="text-align:right;">
-4.818182
+4.052795
 </td>
 </tr>
 <tr>
@@ -175,19 +272,121 @@ Bundestag
 </tr>
 <tr>
 <td style="text-align:left;">
-Stadt- und Gemeindeverwaltung
+Bundesverfassungsgericht
 </td>
 <td style="text-align:right;">
-4.445444
+5.278965
 </td>
 <td style="text-align:right;">
-4.425753
+5.252862
 </td>
 <td style="text-align:right;">
-4.605634
+5.358848
 </td>
 <td style="text-align:right;">
-4.372240
+4.818182
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Europaeisches Parlament
+</td>
+<td style="text-align:right;">
+3.527436
+</td>
+<td style="text-align:right;">
+3.452752
+</td>
+<td style="text-align:right;">
+3.671605
+</td>
+<td style="text-align:right;">
+3.389408
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Evangelische Kirche
+</td>
+<td style="text-align:right;">
+2.906426
+</td>
+<td style="text-align:right;">
+2.945321
+</td>
+<td style="text-align:right;">
+3.235146
+</td>
+<td style="text-align:right;">
+3.158730
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fernsehen
+</td>
+<td style="text-align:right;">
+3.335571
+</td>
+<td style="text-align:right;">
+3.602485
+</td>
+<td style="text-align:right;">
+3.748154
+</td>
+<td style="text-align:right;">
+3.633540
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gesundheitswesen
+</td>
+<td style="text-align:right;">
+4.727374
+</td>
+<td style="text-align:right;">
+4.906832
+</td>
+<td style="text-align:right;">
+5.161211
+</td>
+<td style="text-align:right;">
+4.869969
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hochschulen,Universitaeten
+</td>
+<td style="text-align:right;">
+5.198653
+</td>
+<td style="text-align:right;">
+5.200000
+</td>
+<td style="text-align:right;">
+5.258765
+</td>
+<td style="text-align:right;">
+4.962264
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Justiz
+</td>
+<td style="text-align:right;">
+4.565804
+</td>
+<td style="text-align:right;">
+4.531185
+</td>
+<td style="text-align:right;">
+4.688066
+</td>
+<td style="text-align:right;">
+4.380062
 </td>
 </tr>
 <tr>
@@ -209,126 +408,7 @@ Katholische Kirche
 </tr>
 <tr>
 <td style="text-align:left;">
-Evangelische Kirche
-</td>
-<td style="text-align:right;">
-4.565804
-</td>
-<td style="text-align:right;">
-4.531185
-</td>
-<td style="text-align:right;">
-4.688066
-</td>
-<td style="text-align:right;">
-4.380062
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Justiz
-</td>
-<td style="text-align:right;">
-3.335571
-</td>
-<td style="text-align:right;">
-3.602485
-</td>
-<td style="text-align:right;">
-3.748154
-</td>
-<td style="text-align:right;">
-3.633540
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Fernsehen
-</td>
-<td style="text-align:right;">
-3.922210
-</td>
-<td style="text-align:right;">
-4.018711
-</td>
-<td style="text-align:right;">
-4.124178
-</td>
-<td style="text-align:right;">
-3.896552
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Zeitungswesen
-</td>
-<td style="text-align:right;">
-5.198653
-</td>
-<td style="text-align:right;">
-5.200000
-</td>
-<td style="text-align:right;">
-5.258765
-</td>
-<td style="text-align:right;">
-4.962264
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Hochschulen/Universitäten
-</td>
-<td style="text-align:right;">
-3.792601
-</td>
-<td style="text-align:right;">
-3.951042
-</td>
-<td style="text-align:right;">
-4.330321
-</td>
-<td style="text-align:right;">
-4.052795
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Bundesregierung
-</td>
-<td style="text-align:right;">
-4.652174
-</td>
-<td style="text-align:right;">
-4.967842
-</td>
-<td style="text-align:right;">
-5.139095
-</td>
-<td style="text-align:right;">
-4.987421
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Polizei
-</td>
-<td style="text-align:right;">
-3.091825
-</td>
-<td style="text-align:right;">
-3.121369
-</td>
-<td style="text-align:right;">
-3.347073
-</td>
-<td style="text-align:right;">
-3.075000
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Politische Parteien
+Kommission der EU
 </td>
 <td style="text-align:right;">
 3.432886
@@ -345,19 +425,70 @@ Politische Parteien
 </tr>
 <tr>
 <td style="text-align:left;">
-Kommission der EU
+Politische Parteien
 </td>
 <td style="text-align:right;">
-3.527436
+3.091825
 </td>
 <td style="text-align:right;">
-3.452752
+3.121369
 </td>
 <td style="text-align:right;">
-3.671605
+3.347073
 </td>
 <td style="text-align:right;">
-3.389408
+3.075000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Polizei
+</td>
+<td style="text-align:right;">
+4.652174
+</td>
+<td style="text-align:right;">
+4.967842
+</td>
+<td style="text-align:right;">
+5.139095
+</td>
+<td style="text-align:right;">
+4.987421
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Stadt-,Gemeindeverwaltung
+</td>
+<td style="text-align:right;">
+4.445444
+</td>
+<td style="text-align:right;">
+4.425753
+</td>
+<td style="text-align:right;">
+4.605634
+</td>
+<td style="text-align:right;">
+4.372240
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zeitungswesen
+</td>
+<td style="text-align:right;">
+3.922210
+</td>
+<td style="text-align:right;">
+4.018711
+</td>
+<td style="text-align:right;">
+4.124178
+</td>
+<td style="text-align:right;">
+3.896552
 </td>
 </tr>
 </tbody>
@@ -389,46 +520,26 @@ MATERIAL.-MISCHTYP
 MATERIALISTEN
 </th>
 <th style="text-align:right;">
-Sum
+SUM
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align:left;">
-Gesundheitswesen
+Bundesregierung
 </td>
 <td style="text-align:right;">
-0.1000000
+0.2351744
 </td>
 <td style="text-align:right;">
-0.2000000
+0.2449991
 </td>
 <td style="text-align:right;">
-0.3000000
+0.2685177
 </td>
 <td style="text-align:right;">
-0.4000000
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Bundesverfassungsgericht
-</td>
-<td style="text-align:right;">
-0.2403906
-</td>
-<td style="text-align:right;">
-0.2495162
-</td>
-<td style="text-align:right;">
-0.2624515
-</td>
-<td style="text-align:right;">
-0.2476417
+0.2513087
 </td>
 <td style="text-align:right;">
 1
@@ -437,26 +548,6 @@ Bundesverfassungsgericht
 <tr>
 <td style="text-align:left;">
 Bundestag
-</td>
-<td style="text-align:right;">
-0.2549134
-</td>
-<td style="text-align:right;">
-0.2536529
-</td>
-<td style="text-align:right;">
-0.2587708
-</td>
-<td style="text-align:right;">
-0.2326629
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Stadt- und Gemeindeverwaltung
 </td>
 <td style="text-align:right;">
 0.2415086
@@ -476,19 +567,39 @@ Stadt- und Gemeindeverwaltung
 </tr>
 <tr>
 <td style="text-align:left;">
-Katholische Kirche
+Bundesverfassungsgericht
 </td>
 <td style="text-align:right;">
-0.2490575
+0.2549134
 </td>
 <td style="text-align:right;">
-0.2479542
+0.2536529
 </td>
 <td style="text-align:right;">
-0.2580321
+0.2587708
 </td>
 <td style="text-align:right;">
-0.2449562
+0.2326629
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Europaeisches Parlament
+</td>
+<td style="text-align:right;">
+0.2512204
+</td>
+<td style="text-align:right;">
+0.2459015
+</td>
+<td style="text-align:right;">
+0.2614880
+</td>
+<td style="text-align:right;">
+0.2413902
 </td>
 <td style="text-align:right;">
 1
@@ -499,36 +610,16 @@ Katholische Kirche
 Evangelische Kirche
 </td>
 <td style="text-align:right;">
-0.2307428
+0.2373441
 </td>
 <td style="text-align:right;">
-0.2380909
+0.2405203
 </td>
 <td style="text-align:right;">
-0.2646952
+0.2641880
 </td>
 <td style="text-align:right;">
-0.2664712
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Justiz
-</td>
-<td style="text-align:right;">
-0.2513501
-</td>
-<td style="text-align:right;">
-0.2494443
-</td>
-<td style="text-align:right;">
-0.2580807
-</td>
-<td style="text-align:right;">
-0.2411249
+0.2579477
 </td>
 <td style="text-align:right;">
 1
@@ -556,19 +647,19 @@ Fernsehen
 </tr>
 <tr>
 <td style="text-align:left;">
-Zeitungswesen
+Gesundheitswesen
 </td>
 <td style="text-align:right;">
-0.2457271
+0.2403906
 </td>
 <td style="text-align:right;">
-0.2517729
+0.2495162
 </td>
 <td style="text-align:right;">
-0.2583804
+0.2624515
 </td>
 <td style="text-align:right;">
-0.2441196
+0.2476417
 </td>
 <td style="text-align:right;">
 1
@@ -576,7 +667,7 @@ Zeitungswesen
 </tr>
 <tr>
 <td style="text-align:left;">
-Hochschulen/Universitäten
+Hochschulen,Universitaeten
 </td>
 <td style="text-align:right;">
 0.2521209
@@ -596,19 +687,19 @@ Hochschulen/Universitäten
 </tr>
 <tr>
 <td style="text-align:left;">
-Bundesregierung
+Justiz
 </td>
 <td style="text-align:right;">
-0.2351744
+0.2513501
 </td>
 <td style="text-align:right;">
-0.2449991
+0.2494443
 </td>
 <td style="text-align:right;">
-0.2685177
+0.2580807
 </td>
 <td style="text-align:right;">
-0.2513087
+0.2411249
 </td>
 <td style="text-align:right;">
 1
@@ -616,19 +707,39 @@ Bundesregierung
 </tr>
 <tr>
 <td style="text-align:left;">
-Polizei
+Katholische Kirche
 </td>
 <td style="text-align:right;">
-0.2355945
+0.2307428
 </td>
 <td style="text-align:right;">
-0.2515805
+0.2380909
 </td>
 <td style="text-align:right;">
-0.2602530
+0.2646952
 </td>
 <td style="text-align:right;">
-0.2525720
+0.2664712
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Kommission der EU
+</td>
+<td style="text-align:right;">
+0.2471087
+</td>
+<td style="text-align:right;">
+0.2457549
+</td>
+<td style="text-align:right;">
+0.2632074
+</td>
+<td style="text-align:right;">
+0.2439291
 </td>
 <td style="text-align:right;">
 1
@@ -656,19 +767,59 @@ Politische Parteien
 </tr>
 <tr>
 <td style="text-align:left;">
-Kommission der EU
+Polizei
 </td>
 <td style="text-align:right;">
-0.2471087
+0.2355945
 </td>
 <td style="text-align:right;">
-0.2457549
+0.2515805
 </td>
 <td style="text-align:right;">
-0.2632074
+0.2602530
 </td>
 <td style="text-align:right;">
-0.2439291
+0.2525720
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Stadt-,Gemeindeverwaltung
+</td>
+<td style="text-align:right;">
+0.2490575
+</td>
+<td style="text-align:right;">
+0.2479542
+</td>
+<td style="text-align:right;">
+0.2580321
+</td>
+<td style="text-align:right;">
+0.2449562
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zeitungswesen
+</td>
+<td style="text-align:right;">
+0.2457271
+</td>
+<td style="text-align:right;">
+0.2517729
+</td>
+<td style="text-align:right;">
+0.2583804
+</td>
+<td style="text-align:right;">
+0.2441196
 </td>
 <td style="text-align:right;">
 1
@@ -705,206 +856,26 @@ MATERIAL.-MISCHTYP
 MATERIALISTEN
 </th>
 <th style="text-align:right;">
-Sum
+SUM
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align:left;">
-Gesundheitswesen
+Bundesregierung
 </td>
 <td style="text-align:right;">
-0.4942906
+0.9527973
 </td>
 <td style="text-align:right;">
-0.9885811
+0.9926016
 </td>
 <td style="text-align:right;">
-1.4828717
+1.0878861
 </td>
 <td style="text-align:right;">
-1.9771622
-</td>
-<td style="text-align:right;">
-4.942906
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Bundesverfassungsgericht
-</td>
-<td style="text-align:right;">
-1.2580647
-</td>
-<td style="text-align:right;">
-1.3058227
-</td>
-<td style="text-align:right;">
-1.3735188
-</td>
-<td style="text-align:right;">
-1.2960125
-</td>
-<td style="text-align:right;">
-5.233419
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Bundestag
-</td>
-<td style="text-align:right;">
-1.0336942
-</td>
-<td style="text-align:right;">
-1.0285828
-</td>
-<td style="text-align:right;">
-1.0493364
-</td>
-<td style="text-align:right;">
-0.9434665
-</td>
-<td style="text-align:right;">
-4.055080
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Stadt- und Gemeindeverwaltung
-</td>
-<td style="text-align:right;">
-1.0830313
-</td>
-<td style="text-align:right;">
-1.1021460
-</td>
-<td style="text-align:right;">
-1.1984390
-</td>
-<td style="text-align:right;">
-1.1008256
-</td>
-<td style="text-align:right;">
-4.484442
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Katholische Kirche
-</td>
-<td style="text-align:right;">
-0.5828944
-</td>
-<td style="text-align:right;">
-0.5803124
-</td>
-<td style="text-align:right;">
-0.6038987
-</td>
-<td style="text-align:right;">
-0.5732957
-</td>
-<td style="text-align:right;">
-2.340401
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Evangelische Kirche
-</td>
-<td style="text-align:right;">
-1.0535766
-</td>
-<td style="text-align:right;">
-1.0871280
-</td>
-<td style="text-align:right;">
-1.2086039
-</td>
-<td style="text-align:right;">
-1.2167131
-</td>
-<td style="text-align:right;">
-4.566022
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Justiz
-</td>
-<td style="text-align:right;">
-0.9041345
-</td>
-<td style="text-align:right;">
-0.8972791
-</td>
-<td style="text-align:right;">
-0.9283451
-</td>
-<td style="text-align:right;">
-0.8673533
-</td>
-<td style="text-align:right;">
-3.597112
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Fernsehen
-</td>
-<td style="text-align:right;">
-0.9362475
-</td>
-<td style="text-align:right;">
-1.0111664
-</td>
-<td style="text-align:right;">
-1.0520539
-</td>
-<td style="text-align:right;">
-1.0198834
-</td>
-<td style="text-align:right;">
-4.019351
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Zeitungswesen
-</td>
-<td style="text-align:right;">
-1.2750615
-</td>
-<td style="text-align:right;">
-1.3064329
-</td>
-<td style="text-align:right;">
-1.3407187
-</td>
-<td style="text-align:right;">
-1.2667204
-</td>
-<td style="text-align:right;">
-5.188934
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Hochschulen/Universitäten
-</td>
-<td style="text-align:right;">
-1.0214552
-</td>
-<td style="text-align:right;">
-1.0217199
-</td>
-<td style="text-align:right;">
-1.0332662
-</td>
-<td style="text-align:right;">
-0.9750084
+1.0181647
 </td>
 <td style="text-align:right;">
 4.051450
@@ -912,62 +883,182 @@ Hochschulen/Universitäten
 </tr>
 <tr>
 <td style="text-align:left;">
-Bundesregierung
+Bundestag
 </td>
 <td style="text-align:right;">
-1.1617242
+0.9793367
 </td>
 <td style="text-align:right;">
-1.2102568
+0.9966213
 </td>
 <td style="text-align:right;">
-1.3264349
+1.0836947
 </td>
 <td style="text-align:right;">
-1.2414252
+0.9954273
 </td>
 <td style="text-align:right;">
-4.939841
+4.055080
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Polizei
+Bundesverfassungsgericht
 </td>
 <td style="text-align:right;">
-0.7516362
+1.3340686
 </td>
 <td style="text-align:right;">
-0.8026377
+1.3274719
 </td>
 <td style="text-align:right;">
-0.8303064
+1.3542561
 </td>
 <td style="text-align:right;">
-0.8058010
+1.2176222
 </td>
 <td style="text-align:right;">
-3.190381
+5.233419
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Politische Parteien
+Europaeisches Parlament
 </td>
 <td style="text-align:right;">
-0.8560263
+0.8899441
 </td>
 <td style="text-align:right;">
-0.8642061
+0.8711019
 </td>
 <td style="text-align:right;">
-0.9266962
+0.9263168
 </td>
 <td style="text-align:right;">
-0.8513679
+0.8551208
 </td>
 <td style="text-align:right;">
-3.498296
+3.542484
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Evangelische Kirche
+</td>
+<td style="text-align:right;">
+0.7264478
+</td>
+<td style="text-align:right;">
+0.7361693
+</td>
+<td style="text-align:right;">
+0.8086099
+</td>
+<td style="text-align:right;">
+0.7895100
+</td>
+<td style="text-align:right;">
+3.060737
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fernsehen
+</td>
+<td style="text-align:right;">
+0.8378932
+</td>
+<td style="text-align:right;">
+0.9049418
+</td>
+<td style="text-align:right;">
+0.9415340
+</td>
+<td style="text-align:right;">
+0.9127431
+</td>
+<td style="text-align:right;">
+3.597112
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gesundheitswesen
+</td>
+<td style="text-align:right;">
+1.1882281
+</td>
+<td style="text-align:right;">
+1.2333350
+</td>
+<td style="text-align:right;">
+1.2972732
+</td>
+<td style="text-align:right;">
+1.2240694
+</td>
+<td style="text-align:right;">
+4.942906
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hochschulen,Universitaeten
+</td>
+<td style="text-align:right;">
+1.3082387
+</td>
+<td style="text-align:right;">
+1.3085776
+</td>
+<td style="text-align:right;">
+1.3233657
+</td>
+<td style="text-align:right;">
+1.2487515
+</td>
+<td style="text-align:right;">
+5.188934
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Justiz
+</td>
+<td style="text-align:right;">
+1.1476700
+</td>
+<td style="text-align:right;">
+1.1389681
+</td>
+<td style="text-align:right;">
+1.1784020
+</td>
+<td style="text-align:right;">
+1.1009816
+</td>
+<td style="text-align:right;">
+4.566022
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Katholische Kirche
+</td>
+<td style="text-align:right;">
+0.5400307
+</td>
+<td style="text-align:right;">
+0.5572281
+</td>
+<td style="text-align:right;">
+0.6194929
+</td>
+<td style="text-align:right;">
+0.6236494
+</td>
+<td style="text-align:right;">
+2.340401
 </td>
 </tr>
 <tr>
@@ -975,19 +1066,99 @@ Politische Parteien
 Kommission der EU
 </td>
 <td style="text-align:right;">
-0.8753784
+0.8644594
 </td>
 <td style="text-align:right;">
-0.8705826
+0.8597234
 </td>
 <td style="text-align:right;">
-0.9324078
+0.9207774
 </td>
 <td style="text-align:right;">
-0.8641149
+0.8533363
 </td>
 <td style="text-align:right;">
-3.542484
+3.498296
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Politische Parteien
+</td>
+<td style="text-align:right;">
+0.7806801
+</td>
+<td style="text-align:right;">
+0.7881399
+</td>
+<td style="text-align:right;">
+0.8451297
+</td>
+<td style="text-align:right;">
+0.7764317
+</td>
+<td style="text-align:right;">
+3.190381
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Polizei
+</td>
+<td style="text-align:right;">
+1.1637993
+</td>
+<td style="text-align:right;">
+1.2427677
+</td>
+<td style="text-align:right;">
+1.2856086
+</td>
+<td style="text-align:right;">
+1.2476656
+</td>
+<td style="text-align:right;">
+4.939841
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Stadt-,Gemeindeverwaltung
+</td>
+<td style="text-align:right;">
+1.1168837
+</td>
+<td style="text-align:right;">
+1.1119364
+</td>
+<td style="text-align:right;">
+1.1571301
+</td>
+<td style="text-align:right;">
+1.0984916
+</td>
+<td style="text-align:right;">
+4.484442
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zeitungswesen
+</td>
+<td style="text-align:right;">
+0.9876634
+</td>
+<td style="text-align:right;">
+1.0119637
+</td>
+<td style="text-align:right;">
+1.0385216
+</td>
+<td style="text-align:right;">
+0.9812024
+</td>
+<td style="text-align:right;">
+4.019351
 </td>
 </tr>
 </tbody>
@@ -999,3 +1170,187 @@ represents the relative proportion of the mean trust value in comparison
 to the other groups.
 
 ![](juliaquach02_files/figure-markdown_strict/final_plot-1.png)
+
+We can also plot the groups in separate bars next to each other:
+
+![](juliaquach02_files/figure-markdown_strict/plot_rearranged-1.png)
+
+To observe the deviation of trust levels, we compute for each
+institution the maximum difference within the trust levels of the
+groups.
+
+    Diff <- list()
+    for( i in 1:nrow(result_subgroups)){
+      Diff[[i]] <- max( result_subgroups[ i, 2:5] ) - min( result_subgroups[ i, 2:5])
+    }
+
+    index_max <- which.max( Diff )
+    index_min <-which.min( Diff )
+      
+    result_subgroups[ index_max, ]
+
+    ## # A tibble: 1 × 5
+    ##   Institution         POSTMATERIALISTEN `POSTMAT.-MISCHTYP` `MATERIAL.-MISCHTYP`
+    ##   <chr>                           <dbl>               <dbl>                <dbl>
+    ## 1 Bundesverfassungsg…              5.28                5.25                 5.36
+    ## # ℹ 1 more variable: MATERIALISTEN <dbl>
+
+    result_subgroups[ index_min, ]
+
+    ## # A tibble: 1 × 5
+    ##   Institution   POSTMATERIALISTEN `POSTMAT.-MISCHTYP` `MATERIAL.-MISCHTYP`
+    ##   <chr>                     <dbl>               <dbl>                <dbl>
+    ## 1 Zeitungswesen              3.92                4.02                 4.12
+    ## # ℹ 1 more variable: MATERIALISTEN <dbl>
+
+<table class="table table-bordered table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+Table 5: Maximum difference of mean trust levels between the groups
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Institution
+</th>
+<th style="text-align:left;">
+Max. Diff. within the group
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Bundesregierung
+</td>
+<td style="text-align:left;">
+0.5377196
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bundestag
+</td>
+<td style="text-align:left;">
+0.4147197
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bundesverfassungsgericht
+</td>
+<td style="text-align:left;">
+0.5406659
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Europaeisches Parlament
+</td>
+<td style="text-align:left;">
+0.2821968
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Evangelische Kirche
+</td>
+<td style="text-align:left;">
+0.3287203
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fernsehen
+</td>
+<td style="text-align:left;">
+0.4125838
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gesundheitswesen
+</td>
+<td style="text-align:left;">
+0.4338368
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hochschulen,Universitaeten
+</td>
+<td style="text-align:left;">
+0.2965005
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Justiz
+</td>
+<td style="text-align:left;">
+0.3080035
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Katholische Kirche
+</td>
+<td style="text-align:left;">
+0.33627
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Kommission der EU
+</td>
+<td style="text-align:left;">
+0.2678177
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Politische Parteien
+</td>
+<td style="text-align:left;">
+0.2720734
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Polizei
+</td>
+<td style="text-align:left;">
+0.4869207
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Stadt-,Gemeindeverwaltung
+</td>
+<td style="text-align:left;">
+0.2333941
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zeitungswesen
+</td>
+<td style="text-align:left;">
+0.2276259
+</td>
+</tr>
+</tbody>
+</table>
+
+Apparently, the biggest difference of trust level can be found for the
+“Bundesverfassungsgericht” between the “MATERIAL-MISCHTYP” and
+“MATERIALISTEN” and the minimum difference can be found for the
+“Zeitungswesen”. We annotate the minimum and maximum difference in the
+plot:
+
+![](juliaquach02_files/figure-markdown_strict/plot_w_label_1-1.png)
+
+![](juliaquach02_files/figure-markdown_strict/plot_w_label_2-1.png)
+
+Let me know if you have further remarks!
+
+Best Julia
