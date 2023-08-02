@@ -103,6 +103,7 @@ In order to submit your project proposal, you have to upload it to GitHub as par
 - Martin (martin-raden) - [Example project](Projects/martin-raden/project-description.md)
 
 - Julia (juliaquach02) - [Investigating tumour cell viability](Projects/juliaquach02/project_description.md)
+  - solution by [Daniel](Projects/juliaquach02/Cell_viability_DanB.md)
 - Christian (crudi3) - [Postmaterialism and political trust](Projects/crudi3/project-description.md)
   - solution by [Julia](Projects/crudi3/juliaquach02.md)
 - Danilo (danilopenagos) - [A Visual Exploration of Artistic Landscape in Colombia (1940-2018)](Projects/danilopenagos/project-description.md)
@@ -113,6 +114,7 @@ In order to submit your project proposal, you have to upload it to GitHub as par
 - Laurens (laurens-mauz) - [Covid-19 mortality rates](Projects/laurens-mauz/project-description.md)
   - solution by [Jasmin](Projects/laurens-mauz/jasmin-schels.md)
 - Nico (NICOtin-macht-suechtig) - [Media Usage in the EU](Projects/nico-afentoulidis/project-description.md)
+  - solution by [Laurens](Projects/nico-afentoulidis/laurens-mauz.md)
 - Tabea (muellertabea) - [Tree ring measurments](Projects/muellertabea/project-description.md)
   - solution by [Nico](Projects/muellertabea/NICOtin-macht-suechtig.md)
 - Pleasant (neopolyglot) - [Rotation Curve of M31 (Andromeda) Galaxy](Projects/neopolyglot/project-description.md)
@@ -120,7 +122,9 @@ In order to submit your project proposal, you have to upload it to GitHub as par
 - Daniela (DKemp98) - [Looking at some Food Information](Projects/DanielaKemp/project-description.md)
   - solution by [Pleasant](Projects/DanielaKemp/neopolyglot.md)
 - Alexander (alexanderwinterstetter) - [Analyzing Soccer Data](Projects/alexanderwinterstetter/project_description.md)
+  - solution by [Daniela](Projects/alexanderwinterstetter/Daniela.md)
 - Daniel (neophilology) - [NLP: from German speeches to German history](Projects/neophilology/project-description.md)
+  - solution by [Alexander](Projects/neophilology/winterstetter_solution.md)
 - Yaolu (yaolu-pan) - [PISA Study](Projects/yaolu-pan/project-description_final.md)
   - solution by [Daniel](Projects/yaolu-pan/Yaolu-project_DanBv01.md)
 
