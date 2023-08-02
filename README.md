@@ -124,7 +124,8 @@ In order to submit your project proposal, you have to upload it to GitHub as par
 - Alexander (alexanderwinterstetter) - [Analyzing Soccer Data](Projects/alexanderwinterstetter/project_description.md)
   - solution by [Daniela](Projects/alexanderwinterstetter/Daniela.md)
 - Daniel (neophilology) - [NLP: from German speeches to German history](Projects/neophilology/project-description.md)
-  - solution by [Alexander](Projects/neophilology/winterstetter_solution.md)
+  - solutions by [Alexander](Projects/neophilology/winterstetter_solution.md)
+    and [Daniela](Projects/neophilology/German_language.md)
 - Yaolu (yaolu-pan) - [PISA Study](Projects/yaolu-pan/project-description_final.md)
   - solution by [Daniel](Projects/yaolu-pan/Yaolu-project_DanBv01.md)
 
