@@ -37,14 +37,14 @@ These have to be done only once and will be forgotten soon after.
     -   use `credentials::set_github_pat(force_new=TRUE)` (already installed) to store the PAT: [Section 9.4.1.1](https://happygitwithr.com/https-pat.html#credentials-package)
         - **TAKE CARE** to click on "Token" within the pop-up window to enter your PAT token!!
 
-9.  Check if you can [access the project on GitHub](https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R) (i.e. we registered you as a collaborator already)
+9.  Check if you can [access the project on GitHub](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub) (i.e. we registered you as a collaborator already)
 
     -   **if not** you will have to *wait until we have added you...* 
     -   you will get an email notification from GitHub informing you of the invitation to join the project. **Accept the invitation!**
 
 10. Once you can access the repository online, you will need to get a local copy via RStudio: [Section 16.2.2](https://happygitwithr.com/existing-github-first.html#rstudio-ide-1)
 
-    -   the HTTPS URL is `https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R.git`
+    -   the HTTPS URL is `https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub.git`
 
 11. Get ready to work with it
 

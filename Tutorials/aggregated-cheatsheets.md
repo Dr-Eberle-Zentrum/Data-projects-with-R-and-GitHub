@@ -1,6 +1,5 @@
-This aggregated cheatsheet of our tutorial package [Advanced data
-processing with
-R](https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R)
+This aggregated cheatsheet of our tutorial package
+[Data-projects-with-R-and-GitHub](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub)
 summarizes the individual notes from the provided tutorials and
 additional information from recommended sources.
 
