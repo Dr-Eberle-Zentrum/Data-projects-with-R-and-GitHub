@@ -1,8 +1,8 @@
-# Advanced-data-processing-with-R
+# Data-projects-with-R-and-GitHub
 
 This project accompanies the course
 
-**"R2 - Advanced data processing in R"**
+**"R2 - Data projects with R and Github"**
 
 at the Dr. Eberle Centre for digital competencies at the University Tübingen.
 
@@ -102,42 +102,6 @@ In order to submit your project proposal, you have to upload it to GitHub as par
 
 - Martin (martin-raden) - [Example project](Projects/martin-raden/project-description.md)
 
-- Julia (juliaquach02) - [Investigating tumour cell viability](Projects/juliaquach02/project_description.md)
-  - solutions by [Daniel](Projects/juliaquach02/Cell_viability_DanB.md)
-    and [Alexander](Projects/juliaquach02/winterstetter_solution.md)
-- Christian (crudi3) - [Postmaterialism and political trust](Projects/crudi3/project-description.md)
-  - solution by [Julia](Projects/crudi3/juliaquach02.md)
-- Danilo (danilopenagos) - [A Visual Exploration of Artistic Landscape in Colombia (1940-2018)](Projects/danilopenagos/project-description.md)
-  - solutions by [Christian](https://Dr-Eberle-Zentrum.github.io/Advanced-data-processing-with-R/Projects/danilopenagos/ProjectSolutionByChristian.html)
-    and [Julia](https://Dr-Eberle-Zentrum.github.io/Advanced-data-processing-with-R/Projects/danilopenagos/juliaquach02.html)
-- Paul (PaulKirschner) - [Large Scale Energy Production in Germany](Projects/PaulKirschner/ProjectIdea_Energy.md)
-  - solution by [Danilo ](Projects/PaulKirschner/danilopenagos.md)
-- Jasmin (jasmin-schels) - [Bye Bye Birdie - Estimated population of house sparrows in the EU](Projects/jasmin-schels/jasmin-project-description.md)
-  - solutions by [Christian](Projects/jasmin-schels/Jasmins_Project_By_Christian.md)
-    and [Danilo](Projects/jasmin-schels/danilopenagos.md)
-- Laurens (laurens-mauz) - [Covid-19 mortality rates](Projects/laurens-mauz/project-description.md)
-  - solution by [Jasmin](Projects/laurens-mauz/jasmin-schels.md)
-- Nico (NICOtin-macht-suechtig) - [Media Usage in the EU](Projects/nico-afentoulidis/project-description.md)
-  - solutions by [Laurens](Projects/nico-afentoulidis/laurens-mauz.md)
-    and [Jasmin](Projects/DanielaKemp/Nutriscore.md)
-- Tabea (muellertabea) - [Tree ring measurments](Projects/muellertabea/project-description.md)
-  - solutions by [Nico](Projects/muellertabea/NICOtin-macht-suechtig.md)
-    and [Laurens](Projects/muellertabea/laurens-mauz.md)
-- Pleasant (neopolyglot) - [Rotation Curve of M31 (Andromeda) Galaxy](Projects/neopolyglot/project-description.md)
-  - solutions by [Tabea](Projects/neopolyglot/Tabea_andromeda.md)
-    and [Nico](Projects/neopolyglot/NICOtin-macht-suechtig.md)
-- Daniela (DKemp98) - [Looking at some Food Information](Projects/DanielaKemp/project-description.md)
-  - solutions by [Pleasant](Projects/DanielaKemp/neopolyglot.md)
-    and [Tabea](Projects/DanielaKemp/Nutriscore.md)
-- Alexander (alexanderwinterstetter) - [Analyzing Soccer Data](Projects/alexanderwinterstetter/project_description.md)
-  - solutions by [Daniela](Projects/alexanderwinterstetter/Daniela.md)
-    and [Pleasant](Projects/alexanderwinterstetter/neopolyglot.md)
-- Daniel (neophilology) - [NLP: from German speeches to German history](Projects/neophilology/project-description.md)
-  - solutions by [Alexander](Projects/neophilology/winterstetter_solution.md)
-    and [Daniela](Projects/neophilology/German_language.md)
-- Yaolu (yaolu-pan) - [PISA Study](Projects/yaolu-pan/project-description_final.md)
-  - solution by [Daniel](Projects/yaolu-pan/Yaolu-project_DanBv01.md)
-
 
 
 #### Goals
@@ -161,19 +125,7 @@ To ensure the drafted projects are understandable and doable, we will do a peer 
 
 For each project draft, we will assign two reviewers at random. The *reviewer assignments* are as follows:
 
-- *Julia* will review projects of: Christian + Danilo
-- *Christian* will review projects of: Danilo + Jasmin (Paul == `NA`)
-- *Danilo* will review projects of: Paul + Jasmin
-- *Paul* will review projects of: Jasmin + Laurens
-- *Jasmin* will review projects of: Laurens + Nico
-- *Laurens* will review projects of: Nico + Tabea
-- *Nico* will review projects of: Tabea + Pleasant
-- *Tabea* will review projects of: Pleasant + Daniela
-- *Pleasant* will review projects of: Daniela + Alexander
-- *Daniela* will review projects of: Alexander + Daniel
-- *Alexander* will review projects of: Daniel + Julia (Yaolu == `NA`)
-- *Daniel* will review projects of: Yaolu + Julia 
-- *Yaolu* will review projects of: Julia + Christian
+- *X* will review projects of: Y + Z
 
 See [project list](#available-projects) for respective GitHub user names for contact.
 
