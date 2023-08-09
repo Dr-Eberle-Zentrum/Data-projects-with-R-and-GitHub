@@ -96,7 +96,7 @@ In order to submit your project proposal, you have to upload it to GitHub as par
     -   to this end, you have to put a relative link to the `.md` page, see example link
 -   `Commit` and `Push` your changes to GitHub
 -   wait a minute (to get things published automatically)
--   check the [project website](https://dr-eberle-zentrum.github.io/Advanced-data-processing-with-R/) if your project draft is listed, linked and correctly rendered
+-   check the [project website](https://dr-eberle-zentrum.github.io/Data-projects-with-R-and-GitHub/) if your project draft is listed, linked and correctly rendered
 
 #### Available projects
 
@@ -132,8 +132,8 @@ See [project list](#available-projects) for respective GitHub user names for con
 
 **Each reviewer** is supposed to
 
--   [read the respective project draft on GitHub Pages](https://dr-eberle-zentrum.github.io/Advanced-data-processing-with-R/#available-projects)
--   [open an Issue](https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/issues) on GitHub within the course
+-   [read the respective project draft on GitHub Pages](https://dr-eberle-zentrum.github.io/Data-projects-with-R-and-GitHub/#available-projects)
+-   [open an Issue](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/issues) on GitHub within the course
 -   provide constructive feedback w.r.t.
     -   understandability
     -   missing information
@@ -173,7 +173,7 @@ Now it is time to rework your project draft in the light of the received reviews
 -   `Pull` again the current project state from GitHub
 -   `Commit` your changes
 -   `Push` your committed changes to GitHub
--   Check your changes on the [project website](https://dr-eberle-zentrum.github.io/Advanced-data-processing-with-R/) (after a minute or two)
+-   Check your changes on the [project website](https://dr-eberle-zentrum.github.io/Data-projects-with-R-and-GitHub/) (after a minute or two)
 -   Close the Issues *you received for your project* (with a nice comment) :-)
 
 #### Goals
@@ -234,7 +234,7 @@ Furthermore, it opens up a new way to get help! In case you **get stuck somewher
 
 -   **Commit and Push to GitHub**
 -   **Call for help** (*and tell us the branch, file and problem*)
-    -   either by [raising an Issue](https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/issues), describing your problem (*preferred solution*)
+    -   either by [raising an Issue](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/issues), describing your problem (*preferred solution*)
     -   or writing an Email to us
     -   or rushing our office (hope we are there)
     -   or ...
@@ -243,11 +243,11 @@ Furthermore, it opens up a new way to get help! In case you **get stuck somewher
 
 At some point you will be satisfied with your project solution and all changes are **committed and pushed to GitHub**.
 
-Now it is time to [open a pull request](https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/pulls).
+Now it is time to [open a pull request](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/pulls).
 
 -   create a new pull request of *your branch* (select from dropdown) into *main* branch
 -   post a (Markdown) **link in the pull request** that allows to see your output `.md` page in the browser:
-    -   e.g. `https://github.com/Dr-Eberle-Zentrum/Advanced-data-processing-with-R/blob/main/Projects/martin-raden/project-description.md`
+    -   e.g. `https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/martin-raden/project-description.md`
 -   **invite** the project owner as a **reviewer**
     -   suggest him/her as reviewer (upper right in GitHub Pull Request interface)
     -   send him/her a message via a comment "@USERNAME"
