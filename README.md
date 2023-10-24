@@ -1,6 +1,6 @@
 # Data-projects-with-R-and-GitHub
 
-This project accompanies the super course
+This project accompanies the nice course
 
 **"R2 - Data projects with R and Github"**
 
