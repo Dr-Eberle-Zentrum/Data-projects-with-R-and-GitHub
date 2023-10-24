@@ -1,10 +1,11 @@
 # Data-projects-with-R-and-GitHub
 
-This project accompanies the course
+This project accompanies the super course
 
 **"R2 - Data projects with R and Github"**
 
 at the Dr. Eberle Centre for digital competencies at the University of Tübingen.
+
 
 ## Tutorials
 
