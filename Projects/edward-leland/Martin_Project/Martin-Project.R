@@ -62,7 +62,7 @@ varmits <- ggplot(animals, aes(x=reorder(names, avg_change), y=avg_change)) +
   #Labels have boxes around them that overlay everything else. Turn off the 
   #border outline and it looks like you've got two segments.
   geom_label(aes(label=str_c(animals$`Start year`, " to ", animals$`End year`),
-                 x=names, y=2.1), size=2.5, color="#4d4d4d", label.size = NA) +
+                 x=names, y=2.3), size=2.5, color="#4d4d4d", label.size = NA) +
   
   #Transform y axis to log10 and reformat tick values to have , and %
   scale_y_continuous( label = function(x) 
@@ -175,12 +175,4 @@ varmits +
   )
 
 #Save the image
-ggsave("plottest.png", width =  7.94, height = 6.86, units = "in")
-
-
-
-
-
-
-
-
+ggsave("DistilledAngst.png", width =  7.94, height = 6.86, units = "in")
