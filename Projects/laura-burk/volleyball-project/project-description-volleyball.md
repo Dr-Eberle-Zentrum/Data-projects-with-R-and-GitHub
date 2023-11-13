@@ -159,22 +159,15 @@ hit the ball over the net and score a point for their team.
 I ask you to create an [interactive
 treemap](https://r-graph-gallery.com/237-interactive-treemap.html) for
 my favourite team, the Berlin Recycling Volleys 🍊 🖤 , as well as their
-biggest opponent, the VfB Friedrichshafen 📘 🦳 .
+biggest opponent, the VfB Friedrichshafen 😰 🦳 .
 
 (If you feel the strong urge to create an interactive plot for each of
 the teams, I would greatly appreciate your effort, but also remind you
 of the things you possibly procrastinated while creating these.)
 
-<figure>
-<img src="attacker-comparison-treemap.png" alt="Treemap" />
-<figcaption aria-hidden="true">Treemap</figcaption>
-</figure>
+![](attacker-comparison-treemap.png)
 
-<figure>
-<img src="attacker-comparison-interactive-treemap.png"
-alt="Interactive Treemap" />
-<figcaption aria-hidden="true">Interactive Treemap</figcaption>
-</figure>
+![](attacker-comparison-interactive-treemap.png)
 
 -   As broad categories (green, blue and orange in the first picture),
     please use the three attacking positions.
@@ -189,7 +182,7 @@ in the plot.
 
 In case you are into volleyball: yes I know that this visualization
 over-simplifies the game, but there are no free stats available on the
-VBL, that are both detailed and R-readable. 😞
+VBL, that are both detailed and R-readable. 😭
 
 ------------------------------------------------------------------------
 
@@ -208,37 +201,51 @@ their biggest opponent, the VfB Friedrichshafen 📘 🦳 .
 the teams, I would greatly appreciate your effort, but also remind you
 of the things you possibly procrastinated while creating these.)
 
-<figure>
-<img src="team_overview-circular-barplot.png" alt="Circular barplot" />
-<figcaption aria-hidden="true">Circular barplot</figcaption>
-</figure>
+![](team_overview-circular-barplot.png)
 
 Include the following groups, described below in more detail:
 
-Results \* number of overall played games \* number of victories \*
-number of losses (if none skip this bar) \* average number of sets per
-game \* average number of points per set \* highest ballpoints in a set
-\* lowest ballpoints in a set
+#### Results
 
-Attacking \* average points per set over all outside hitters over the
-entire season \* average points per set over all middle blockers over
-the entire season \* average points per set over all opposite hitters
-over the entire season \* average points per set over all setters over
-the entire season
+-   number of overall played games
+-   number of victories
+-   number of losses (if none skip this bar)
+-   average number of sets per game
+-   average number of points per set
+-   highest ballpoints in a set
+-   lowest ballpoints in a set
 
-Stadium \* number of home games \* number of away games \* average
-ballpoints per game in home stadium \* average ballpoints per game in
-away stadium \* average attendance in home stadium
+#### Attacking
 
-Top Scorer \* top scoring (over the entire season) outside hitter \* top
-scoring (over the entire season) middle blocker \* top scoring (over the
-entire season) opposite hitter \* top scoring (over the entire season)
-setter
+-   average points per set over all outside hitters over the entire
+    season
+-   average points per set over all middle blockers over the entire
+    season
+-   average points per set over all opposite hitters over the entire
+    season
+-   average points per set over all setters over the entire season
 
-Errors \* outside hitter with most errors per set across the season \*
-middle blocker with most errors per set across the season \* opposite
-hitter with most errors per set across the season \* setter with most
-errors per set across the season
+#### Stadium
+
+-   number of home games
+-   number of away games
+-   average ballpoints per game in home stadium
+-   average ballpoints per game in away stadium
+-   average attendance in home stadium
+
+#### Top Scorer
+
+-   top scoring (over the entire season) outside hitter
+-   top scoring (over the entire season) middle blocker
+-   top scoring (over the entire season) opposite hitter
+-   top scoring (over the entire season) setter
+
+#### Errors
+
+-   outside hitter with most errors per set across the season
+-   middle blocker with most errors per set across the season
+-   opposite hitter with most errors per set across the season
+-   setter with most errors per set across the season
 
 A,B,C and D in the picture correspond to the categories above. Please
 include the names in the plot.

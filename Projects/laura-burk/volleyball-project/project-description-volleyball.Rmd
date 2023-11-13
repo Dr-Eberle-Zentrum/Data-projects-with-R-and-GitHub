@@ -122,9 +122,10 @@ I ask you to create an [interactive treemap](https://r-graph-gallery.com/237-int
 (If you feel the strong urge to create an interactive  plot for each of the teams, I would greatly appreciate your effort, but also remind you of the things you possibly procrastinated while creating these.)
 
 
-![Treemap](attacker-comparison-treemap.png)
+![](attacker-comparison-treemap.png)
 
-![Interactive Treemap](attacker-comparison-interactive-treemap.png)
+![](attacker-comparison-interactive-treemap.png)
+
 
 * As broad categories (green, blue and orange in the first picture), please use the three attacking positions.
 * As subcategories (shades of green in the second picture), please use the individual attackers on the respective position of *one team*.
@@ -145,11 +146,11 @@ I ask you to create an [circular barplot](https://r-graph-gallery.com/297-circul
 
 (If you feel the strong urge to create an interactive  plot for each of the teams, I would greatly appreciate your effort, but also remind you of the things you possibly procrastinated while creating these.)
 
-![Circular barplot](team_overview-circular-barplot.png)       
+![](team_overview-circular-barplot.png)       
 
 Include the following groups, described below in more detail:
 
-Results
+#### Results
 * number of overall played games
 * number of victories
 * number of losses (if none skip this bar)
@@ -158,26 +159,26 @@ Results
 * highest ballpoints in a set
 * lowest ballpoints in a set
 
-Attacking
+#### Attacking
 * average points per set over all outside hitters over the entire season
 * average points per set over all middle blockers over the entire season
 * average points per set over all opposite hitters over the entire season
 * average points per set over all setters over the entire season
 
-Stadium
+#### Stadium
 * number of home games
 * number of away games
 * average ballpoints per game in home stadium
 * average ballpoints per game in away stadium
 * average attendance in home stadium
 
-Top Scorer
+#### Top Scorer
 * top scoring (over the entire season) outside hitter
 * top scoring (over the entire season) middle blocker 
 * top scoring (over the entire season) opposite hitter 
 * top scoring (over the entire season) setter
 
-Errors
+#### Errors
 * outside hitter with most errors per set across the season
 * middle blocker with most errors per set across the season
 * opposite hitter with most errors per set across the season
