@@ -1,0 +1,41 @@
+---
+title: "project-description-volleyball"
+author: "laura-burk"
+date: "2023-11-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(knitr)
+```
+
+# Laura's Volleyball Project
+
+
+## The Data
+
+Source of the data: https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_maenner/archiv/ergebnisse.xhtml
+
+
+Mannschaftslisten (Team Roster)
+
+Unfortunately, ...
+
+Deutsche Länderbezichnungen statt internationale country codes
+Positionsbezeichnungen Deutsch und uneinheitlich statt einheitlich englisch
+gender auch nicht einheitlich und noch deutsch
+
+We don't need staff on the roster, only keep the headcoach
+Is the roster even complete?
+
+we want height in meter instead of cm
+
+
+
+## Visualization Goals
+
+https://r-graph-gallery.com/237-interactive-treemap.html
+
+Country Icons and Player Gallery: https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_maenner/archiv/statistikrankings/saison_2022_23.xhtml
+
