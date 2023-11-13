@@ -2,7 +2,7 @@
 
 ------------------------------------------------------------------------
 
-I have a passion for Volleyball! 🏐 Yay! 🎂
+I have a passion for Volleyball! 🏐 Yay! 🥳
 
 Before I deep-dive into the ongoing 2023/24 indoor season and fangirl
 about my favourite club 🍊 🖤 , I would love to recap the 2022/23
@@ -127,8 +127,9 @@ The columns are explained here shortly:
     playing on court
 -   `top-scorer = points overall - errors overall`
 
-Please add a column with the players’ errors per set and the team name
-to the top scorer files and update them on GitHub.
+Please add a column with the players’ errors per set
+(`errors per set = errors overall / sets played`) and the team name to
+the top scorer files and update them on GitHub.
 
 If a player appears in the top scorer ranking but not in the roster,
 please add the available information to the roster .csv-file and update
@@ -158,10 +159,11 @@ hit the ball over the net and score a point for their team.
 I ask you to create an [interactive
 treemap](https://r-graph-gallery.com/237-interactive-treemap.html) for
 my favourite team, the Berlin Recycling Volleys 🍊 🖤 , as well as their
-biggest opponent, the VfB Friedrichshafen 💙 🦳 . (If you feel the
-strong urge to create an interactive plot for each of the teams, I would
-greatly appreciate your effort, but also remind you of the things you
-possibly procrastinated while creating these.)
+biggest opponent, the VfB Friedrichshafen 📘 🦳 .
+
+(If you feel the strong urge to create an interactive plot for each of
+the teams, I would greatly appreciate your effort, but also remind you
+of the things you possibly procrastinated while creating these.)
 
 <figure>
 <img src="attacker-comparison-treemap.png" alt="Treemap" />
@@ -182,9 +184,12 @@ alt="Interactive Treemap" />
     scorer value of each attacker across all parts of the season. Note:
     not all attackers might appear on all top scorer lists.
 
+Similar to the example, please print the category and subcategory names
+in the plot.
+
 In case you are into volleyball: yes I know that this visualization
 over-simplifies the game, but there are no free stats available on the
-VBL, that are both detailed and R-readable. 😿
+VBL, that are both detailed and R-readable. 😞
 
 ------------------------------------------------------------------------
 
@@ -197,10 +202,11 @@ folder, how can we describe the season of a team?
 I ask you to create an [circular
 barplot](https://r-graph-gallery.com/297-circular-barplot-with-groups.html)
 for my favourite team, the Berlin Recycling Volleys 🍊 🖤 , as well as
-their biggest opponent, the VfB Friedrichshafen 😰 🦳 . (If you feel the
-strong urge to create an interactive plot for each of the teams, I would
-greatly appreciate your effort, but also remind you of the things you
-possibly procrastinated while creating these.)
+their biggest opponent, the VfB Friedrichshafen 📘 🦳 .
+
+(If you feel the strong urge to create an interactive plot for each of
+the teams, I would greatly appreciate your effort, but also remind you
+of the things you possibly procrastinated while creating these.)
 
 <figure>
 <img src="team_overview-circular-barplot.png" alt="Circular barplot" />
@@ -209,50 +215,37 @@ possibly procrastinated while creating these.)
 
 Include the following groups, described below in more detail:
 
-1.  Results
+Results \* number of overall played games \* number of victories \*
+number of losses (if none skip this bar) \* average number of sets per
+game \* average number of points per set \* highest ballpoints in a set
+\* lowest ballpoints in a set
 
--   number of overall played games
--   number of victories
--   number of losses (if none skip this bar)
--   average number of sets per game
--   average number of points per set
--   highest ballpoints in a set
--   lowest ballpoints in a set
+Attacking \* average points per set over all outside hitters over the
+entire season \* average points per set over all middle blockers over
+the entire season \* average points per set over all opposite hitters
+over the entire season \* average points per set over all setters over
+the entire season
 
-1.  Attacking
+Stadium \* number of home games \* number of away games \* average
+ballpoints per game in home stadium \* average ballpoints per game in
+away stadium \* average attendance in home stadium
 
--   average points per set over all outside hitters over the entire
-    season
--   average points per set over all middle blockers over the entire
-    season
--   average points per set over all opposite hitters over the entire
-    season
--   average points per set over all setters over the entire season
+Top Scorer \* top scoring (over the entire season) outside hitter \* top
+scoring (over the entire season) middle blocker \* top scoring (over the
+entire season) opposite hitter \* top scoring (over the entire season)
+setter
 
-1.  Stadium
+Errors \* outside hitter with most errors per set across the season \*
+middle blocker with most errors per set across the season \* opposite
+hitter with most errors per set across the season \* setter with most
+errors per set across the season
 
--   number of home games
--   number of away games
--   average ballpoints per game in home stadium
--   average ballpoints per game in away stadium
--   average attendance in home stadium
+A,B,C and D in the picture correspond to the categories above. Please
+include the names in the plot.
 
-1.  Top Scorer
+Similar to the example, please print the value above the respective bar.
 
--   top scoring (over the entire season) outside hitter
--   top scoring (over the entire season) middle blocker
--   top scoring (over the entire season) opposite hitter
--   top scoring (over the entire season) setter
-
-1.  Errors
-
--   outside hitter with most errors per set across the season
--   middle blocker with most errors per set across the season
--   opposite hitter with most errors per set across the season
--   setter with most errors per set across the season
-
-Colouring: please adhere to the team colours (see team logo or emoji
-colour above).
+Colouring: please adhere to the team colours (see team logo).
 
 If possible, include the team logo as a picture in the middle of the
 circular bar plot.
