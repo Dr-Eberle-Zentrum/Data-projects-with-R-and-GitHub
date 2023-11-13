@@ -1,4 +1,3 @@
-#Top ten formula one driver in the years 2000-2020
 
 # Goal of the project
 
