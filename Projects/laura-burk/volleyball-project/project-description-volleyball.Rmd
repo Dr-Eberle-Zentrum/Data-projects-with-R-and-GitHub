@@ -18,7 +18,7 @@ I have a passion for Volleyball! `r emo::ji("volleyball")`  Yay! `r emo::ji("par
 Before I deep-dive into the ongoing 2023/24 indoor season and fangirl about my favourite club `r emo::ji("orange")` `r emo::ji("black")` , I would love to recap the 2022/23 season.
 This is where I need your support! `r emo::ji("strong")`
 
-## Background Knowlegde
+### Background Knowlegde
 
 The 'Volleyball Bundesliga' (short: VBL) is the highest Volleyball league in Germany.
 Compared to Eastern or Southern European leagues, the VBL has a lower level, but we are getting there. `r emo::ji("up")`
@@ -26,7 +26,7 @@ Compared to Eastern or Southern European leagues, the VBL has a lower level, but
 You have absolutely no clue about Volleyball and its rules, but are eager to find out more?
 I recommend [this](https://www.youtube.com/watch?v=OWCkPbzq81g) short video or the [Wikipedia page](https://en.wikipedia.org/wiki/Volleyball).
 
-### What you might want to google at some point
+#### What you might want to google at some point
 * the different positions, explained in [video](https://www.youtube.com/watch?v=aHZQfyl-hEA) or [text](https://en.wikipedia.org/wiki/Volleyball#Player_specialization) 
 * game mode: best of five sets (first to three sets wins)
 * first to 25 (two points gap) wins the set
@@ -70,6 +70,16 @@ The four files in this folder contain the results of all games played in differe
 2. intermediate round (*Zwischenrunde*): The league table is split into two groups - the top teams (4 teams) and the bottom teams (5 teams). Within these groups, each team plays each of the other teams twice - once at home and once away. (It's basically like regular season in two groups with fewer teams each.) Note: after the intermediate round, VCO Berlin was on 5th place in the bottom group and ended its season (as had been announced within the VBL before). Eight teams entered the play-off's.
 3. Play-off's: Based on the team ranking achieved in the intermediate round, the first-ranked team from the top group faces the eighth-ranked team of the bottom group in the quarter-finals and so on. The game mode is noted in column *Spielgruppe* in the Play-off's .csv-file, that should help in understanding.
 
+As the column names are in German, you might consider these comments helpful (or maybe not):
+
+* Ergebnis - result; sets / ball points, for example 3:0 / 75:45
+* Satzpunkte: result in sets, for example 3:0
+* Ballpunkte: results in ball points (points per set added for both teams), for example 75:45
+
+The rear columns provide detail on the (ball point) scores of each set for both teams.
+
+
+
 #### Folder **topscorers**
 As you learned about the different parts of the season above, the four provided files should be named straightforward to you.
 The four files are not based on overlapping time periods! `r emo::ji("warning")`
@@ -96,24 +106,40 @@ Here I provide you with the team logos, needed for a visualization goal.
 
 ***
 
+## Visualization Goals
 
+***
 
+### 1. Compare the attackers of a team - which position contributes most?
 
-### Visualization Goals
+Reminder: attackers is collective term for outside hitters, middle blockers and opposite hitters, thus all positions that are supposed to hit the ball over the net and score a point for their team.
 
 Compare the attackers: Which attacker contributes how much?
 
-Categories: position, but only attackers, i.e. middle blockers, outside hitters and opposite hitters.
-In category: based on the topscorer lists across all parts of the season, how much did the players contribute?
-The goal is to visualize which attacking position contributed the most to the team result.
-In case you are into volleyball: yes I know that this visualization over-simplifies the game, but there are no free stats available on the VBL, that are both detailed and R-readable.
+I ask you to create an [interactive treemap](https://r-graph-gallery.com/237-interactive-treemap.html) for my favourite team, the Berlin Recycling Volleys, as well as their biggest opponent, the VfB Friedrichshafen.
+(If you feel the strong urge to create an interactive  plot for each of the teams, I would greatly appreciate your effort, but also remind you of the things you possibly procrastinated while creating these.)
 
-https://r-graph-gallery.com/237-interactive-treemap.html
+The goal is to visualize which attacking position contributed the most to the teams' results. 
+Based on the combined top scorer lists across all parts of the season, how much did the players on the attacking positions contribute?
 
-Country Icons and Player Gallery: https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_maenner/archiv/statistikrankings/saison_2022_23.xhtml
+![](attacker-comparison-treemap.png)
+
+
+![](attacker-comparison-interactive-treemap.png)
+
+* As broad categories (green, blue and orange in the example), please use the three attacking positions.
+* As subcategories (shades of green in the example), please use the individual attackers on the respective position of *one team*.
+* As the value determining the size of the chart, use the combined top scorer value of each attacker across all parts of the season. Note: not all attackers might appear on all top scorer lists.
+
+In case you are into volleyball: yes I know that this visualization over-simplifies the game, but there are no free stats available on the VBL, that are both detailed and R-readable. `r emo::ji("sad")`
+
+***
+
+#### Team Comparison Plot
 
 per Team create a circular Bar Plot
 https://r-graph-gallery.com/297-circular-barplot-with-groups.html
 
 different stats grouped by topic 
 
+### Optional (if you happen to have a statistics background):
