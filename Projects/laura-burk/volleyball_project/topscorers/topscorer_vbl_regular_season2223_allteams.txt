@@ -1,0 +1,101 @@
+Rank	Name	Position	Points overall	Errors overall	Points per Set	Sets played	Games played	Top-Scorer
+45	Homberger, Lovis 	Diagonal	1	1	0,5	2	2	0
+42	Engelmann, Linus Jonas 	Au·enangriff	4	3	0,7	6	4	1
+53	Rîling, Jan 	Zuspiel	1	4	0,0	28	11	-3
+58	Kirsch, Benjamin 	Mittelblock	2	6	0,3	7	4	-4
+61	Kînig, Maximilian 	Mittelblock	2	7	0,5	4	2	-5
+62	Engemann, Norbert 	Mittelblock	5	11	0,5	11	6	-6
+69	Brandt, Severin 	Zuspiel	2	11	0,1	15	10	-9
+56	Dosanjh, Arshdeep 	Zuspiel	9	13	0,6	14	7	-4
+44	Urban, Melf 	Mittelblock	15	14	1,4	11	6	1
+50	Trinidad, µngel 	Zuspiel	14	15	0,7	19	6	-1
+55	Andrae, Bjîrn 	Au·enangriff	13	17	1,4	9	3	-4
+78	Gerken, Hannes 	Zuspiel	4	17	0,1	27	11	-13
+46	Kohn, Simon 	Universal	19	19	1,1	18	10	0
+64	GÅnther, Daniel 	Mittelblock	12	19	1,1	11	7	-7
+75	Gehringer, Paul 	Mittelblock	8	20	0,4	18	7	-12
+60	Ferch, Iven Fietje	Mittelblock	17	22	1,3	13	7	-5
+25	Martinez Palacios, Miguel	Diagonal	45	28	3,8	12	7	17
+49	Cacic, Vojin 	Au·enangriff	29	30	1,1	26	9	-1
+88	Kvrzic, Milan 	Zuspiel	8	31	0,2	35	13	-23
+90	Paduretu, Eric 	Zuspiel	7	32	0,2	33	13	-25
+66	Vincic, Dejan 	Zuspiel	27	34	0,8	35	10	-7
+74	Mîller, Carl 	Mittelblock	26	37	1,5	17	9	-11
+76	Biernat, Mateusz 	Zuspiel	24	37	0,8	32	11	-13
+86	Schmidgall, Mario 	Zuspiel	18	37	0,4	44	15	-19
+52	Mohwinkel, Theo 	Universal	35	38	2,1	17	7	-3
+65	Krenkel, Florian 	Au·enangriff	32	39	1	32	14	-7
+41	van de Kamp, Auke 	Au·enangriff	44	41	2	22	9	3
+33	Presho, Kyler 	Mittelblock	53	42	1,8	29	11	11
+39	Seybering, David 	Mittelblock	48	43	1,7	28	10	5
+40	Wiesner, Jannes 	Au·enangriff	47	44	2,2	21	10	3
+31	Krauchuk, Matheus 	Diagonal	57	46	2,3	25	11	11
+100	Amedegnato, Djifa 	Zuspiel	10	46	0,2	45	16	-36
+85	BurggrÑf, Eric 	Zuspiel	28	47	0,5	57	16	-19
+93	Jung, Fabian 	Mittelblock	19	48	0,6	34	14	-29
+95	Mikul†ss Koch, Marcell 	Zuspiel	19	48	0,4	46	16	-29
+63	Rîhrs, Erik Johannes 	Au·enangriff	43	49	1,4	31	11	-6
+94	Kocian-Falkenbach, Tomas 	Zuspiel	20	49	0,5	39	12	-29
+91	Tille, Johannes 	Zuspiel	26	51	0,5	49	16	-25
+51	Nissen, Maximilian 	Au·enangriff	50	52	1,4	37	16	-2
+79	Keturakis, Byron 	Zuspiel	41	54	0,8	50	14	-13
+28	Mote, Nehemiah 	Mittelblock	69	56	2,0	34	11	13
+11	Wagner, Hauke 	Diagonal	95	57	2,9	33	13	38
+17	Kessel, Cody 	Au·enangriff	83	57	2,8	30	14	26
+27	Ronkainen, Antti 	Au·enangriff	71	57	1,4	50	16	14
+35	Pettersson, David 	Mittelblock	67	57	2,1	32	11	10
+30	Iribarne Fernandez, Francisco  	Au·enangriff	69	58	1,9	37	14	11
+87	Ivanov, Fedor 	Zuspiel	36	59	0,8	43	12	-23
+68	Ketrzynski, Xander Wolf Wassenaar 	Mittelblock	53	61	1,4	37	13	-8
+71	Petrusic, Juro 	Diagonal	52	61	2,1	25	11	-9
+12	Bîhme, Yann Niclas 	Diagonal	93	63	3	31	13	30
+97	Gumenjuk, Mark 	Mittelblock	31	63	0,7	42	15	-32
+8	John, Filip 	Diagonal	111	64	2,6	43	14	47
+34	van der Ent, Luuc 	Mittelblock	82	71	1,8	45	14	11
+77	Brown, Andre 	Mittelblock	60	73	1,8	33	11	-13
+26	van Tilburg, Stijn	Diagonal	89	74	3,4	26	8	15
+24	Bîhme, Marcus 	Mittelblock	93	75	2,0	46	13	18
+37	Eshenko, Pearson 	Mittelblock	88	79	2,0	45	13	9
+18	Goralik Yannick 	Mittelblock	103	80	1,7	60	16	23
+73	Jung, Anton 	Au·enangriff	70	80	2,3	30	13	-10
+82	Kunstmann, Joscha 	Diagonal	64	80	2	32	11	-16
+9	Schott, Ruben 	Au·enangriff	122	81	3,1	39	12	41
+16	Zeller, Quentin	Au·enangriff	108	81	2,3	46	16	27
+14	Cowell, Colton Mark 	Au·enangriff	110	83	2,9	38	11	27
+21	GÅnthîr, Jakob 	Mittelblock	105	84	2,2	47	14	21
+47	Andrei, Michael 	Mittelblock	84	85	1,8	48	13	-1
+22	Nedeljkovic, Aleksandar 	Mittelblock	105	86	2,3	46	14	19
+72	Chamberlain, Max 	Mittelblock	76	86	2,1	37	10	-10
+80	Schulz, Max 	Au·enangriff	73	86	2,6	28	10	-13
+83	Sagstetter, Jonas	Au·enangriff	70	87	1,6	44	16	-17
+92	Rupprecht, Patrick 	Au·enangriff	59	87	1,6	37	14	-28
+57	Ilic, Djordje 	Mittelblock	85	89	1,8	48	14	-4
+59	Baxpîhler, Noah 	Mittelblock	84	89	1,5	55	15	-5
+15	Peter, Tim 	Au·enangriff	117	90	2,8	42	12	27
+99	Shaw, James Walker	Zuspiel	59	91	1,2	51	15	-32
+3	Gevert, Sebasti†n 	Diagonal	173	92	4,0	43	13	81
+13	Brehme, Anton 	Mittelblock	125	97	2,7	46	15	28
+29	Kaminski, Jonas 	Diagonal	111	99	2,3	48	15	12
+98	Klehm, Karl-Lennart 	Mittelblock	68	100	1,7	39	13	-32
+10	Maase, Lukas 	Diagonal	144	105	2,9	49	14	39
+96	Nogueira Silva, Thiago Vanole	Au·enangriff	75	105	2,1	35	11	-30
+20	Carle, TimothÇe 	Au·enangriff	130	109	3,5	37	12	21
+38	Westphal, Dirk 	Au·enangriff	116	109	2,1	56	16	7
+23	Schnitzer, Jordan 	Mittelblock	132	113	2,5	53	16	19
+70	Deweese, Randy 	Diagonal	104	113	2,4	44	16	-9
+84	Welsch, Laurenz 	Universal	99	116	2,4	41	16	-17
+5	Sotola, Marek 	Diagonal	198	120	4,4	45	14	78
+67	Borris, Maciej	Mittelblock	112	120	2,2	51	14	-8
+7	Colito, Augusto Renato 	Diagonal	171	121	3,2	53	16	50
+81	Baumann, Felix 	Au·enangriff	115	130	3,2	36	14	-15
+32	Mantha, Jori Alexander 	Au·enangriff	146	135	3,2	46	12	11
+48	Barsemian, Raymond Sarkis 	Diagonal	134	135	3,3	41	12	-1
+43	Timmermann, Theo 	Au·enangriff	139	138	3,2	44	12	1
+4	Brand, Tobias 	Au·enangriff	218	139	4,0	54	14	79
+36	Vicentin, Luciano 	Au·enangriff	151	141	3,3	46	13	10
+1	Superlak, Michal 'Supi'	Diagonal	236	144	4,5	53	14	92
+6	Hurt, Albert	Au·enangriff	218	145	4,0	55	16	73
+89	Ernastowicz, Marcin 	Au·enangriff	131	155	2,4	55	16	-24
+2	Ewert, Jordan 	Au·enangriff	244	159	4,2	58	16	85
+54	Schumann, Philipp 	Diagonal	168	171	3,5	48	16	-3
+19	Karlitzek, Lorenz 	Au·enangriff	199	177	3,6	55	15	22
