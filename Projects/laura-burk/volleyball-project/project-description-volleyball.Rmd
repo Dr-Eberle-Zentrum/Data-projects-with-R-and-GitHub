@@ -80,7 +80,7 @@ The rear columns provide detail on the (ball point) scores of each set for both 
 
 ***
 
-#### Folder **topscorers**
+### Folder **topscorers**
 As you learned about the different parts of the season above, the four provided files should be named straightforward to you.
 The four files are not based on overlapping time periods! `r emo::ji("warning")`
 
@@ -102,7 +102,7 @@ If a player appears in the top scorer ranking but not in the roster, please add 
 
 ***
 
-#### Folder **team-logos**
+### Folder **team-logos**
 Here I provide you with the team logos, needed for a visualization goal.
 
 ***
