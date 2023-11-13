@@ -15,14 +15,15 @@ league in Germany. Compared to Eastern or Southern European leagues, the
 VBL has a lower level, but we are getting there. 🆙
 
 You have absolutely no clue about Volleyball and its rules, but are
-eager to find out more? I recommend [this](insert%20video%20link) short
-video or the [Wikipedia page](https://en.wikipedia.org/wiki/Volleyball).
+eager to find out more? I recommend
+[this](https://www.youtube.com/watch?v=OWCkPbzq81g) short video or the
+[Wikipedia page](https://en.wikipedia.org/wiki/Volleyball).
 
 ### What you might want to google at some point
 
--   You might find it helpful to look into the different
-    [Positions](https://en.wikipedia.org/wiki/Volleyball#Player_specialization)
-    at some point in this project.
+-   the different positions, explained in
+    [video](https://www.youtube.com/watch?v=aHZQfyl-hEA) or
+    [text](https://en.wikipedia.org/wiki/Volleyball#Player_specialization)
 -   game mode: best of five sets (first to three sets wins)
 -   first to 25 (two points gap) wins the set
 -   tie-break: fifth set is first to 15 (two points gap)
@@ -94,8 +95,31 @@ different parts of the season.
 #### Folder **topscorers**
 
 As you learned about the different parts of the season above, the four
-provided files should be named straightforward to you. The top scorer
-files are not based on overlapping time periods! ⚠️
+provided files should be named straightforward to you. The four files
+are not based on overlapping time periods! ⚠️
+
+The columns are explained here shortly:
+
+-   top scorer ranking in the respective part of the season
+-   name, might be slightly different to the name in the roster files
+-   position
+-   points overall: all the points the player scored in the respective
+    part of the season
+-   errors overall: all the errors of a player in the respective part of
+    the season
+-   `points per set = points overall / sets played`
+-   sets played: number of sets a player was (at least partially)
+    playing on court
+-   games played: number of games a player was (at least partially)
+    playing on court
+-   `top-scorer = points overall - errors overall`
+
+Please add a column with the players’ errors per set and the team name
+to the top scorer files and update them on GitHub.
+
+If a player appears in the top scorer ranking but not in the roster,
+please add the available information to the roster .csv-file and update
+it on GitHub.
 
 #### Folder **team-logos**
 
