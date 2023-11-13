@@ -2,7 +2,7 @@
 
 ------------------------------------------------------------------------
 
-I have a passion for Volleyball! 🏐 Yay! 🥳
+I have a passion for Volleyball! 🏐 Yay! 🎂
 
 Before I deep-dive into the ongoing 2023/24 indoor season and fangirl
 about my favourite club 🍊 🖤 , I would love to recap the 2022/23
@@ -103,6 +103,8 @@ helpful (or maybe not):
 The rear columns provide detail on the (ball point) scores of each set
 for both teams.
 
+------------------------------------------------------------------------
+
 #### Folder **topscorers**
 
 As you learned about the different parts of the season above, the four
@@ -132,6 +134,8 @@ If a player appears in the top scorer ranking but not in the roster,
 please add the available information to the roster .csv-file and update
 it on GitHub.
 
+------------------------------------------------------------------------
+
 #### Folder **team-logos**
 
 Here I provide you with the team logos, needed for a visualization goal.
@@ -140,55 +144,118 @@ Here I provide you with the team logos, needed for a visualization goal.
 
 ## Visualization Goals
 
-------------------------------------------------------------------------
-
 ### 1. Compare the attackers of a team - which position contributes most?
-
-Reminder: attackers is collective term for outside hitters, middle
-blockers and opposite hitters, thus all positions that are supposed to
-hit the ball over the net and score a point for their team.
-
-Compare the attackers: Which attacker contributes how much?
-
-I ask you to create an [interactive
-treemap](https://r-graph-gallery.com/237-interactive-treemap.html) for
-my favourite team, the Berlin Recycling Volleys, as well as their
-biggest opponent, the VfB Friedrichshafen. (If you feel the strong urge
-to create an interactive plot for each of the teams, I would greatly
-appreciate your effort, but also remind you of the things you possibly
-procrastinated while creating these.)
 
 The goal is to visualize which attacking position contributed the most
 to the teams’ results. Based on the combined top scorer lists across all
 parts of the season, how much did the players on the attacking positions
 contribute?
 
-![](attacker-comparison-treemap.png)
+Reminder: attackers is a collective term for outside hitters, middle
+blockers and opposite hitters, thus all positions that are supposed to
+hit the ball over the net and score a point for their team.
 
-![](attacker-comparison-interactive-treemap.png)
+I ask you to create an [interactive
+treemap](https://r-graph-gallery.com/237-interactive-treemap.html) for
+my favourite team, the Berlin Recycling Volleys 🍊 🖤 , as well as their
+biggest opponent, the VfB Friedrichshafen 💙 🦳 . (If you feel the
+strong urge to create an interactive plot for each of the teams, I would
+greatly appreciate your effort, but also remind you of the things you
+possibly procrastinated while creating these.)
 
--   As broad categories (green, blue and orange in the example), please
-    use the three attacking positions.
--   As subcategories (shades of green in the example), please use the
-    individual attackers on the respective position of *one team*.
+<figure>
+<img src="attacker-comparison-treemap.png" alt="Treemap" />
+<figcaption aria-hidden="true">Treemap</figcaption>
+</figure>
+
+<figure>
+<img src="attacker-comparison-interactive-treemap.png"
+alt="Interactive Treemap" />
+<figcaption aria-hidden="true">Interactive Treemap</figcaption>
+</figure>
+
+-   As broad categories (green, blue and orange in the first picture),
+    please use the three attacking positions.
+-   As subcategories (shades of green in the second picture), please use
+    the individual attackers on the respective position of *one team*.
 -   As the value determining the size of the chart, use the combined top
     scorer value of each attacker across all parts of the season. Note:
     not all attackers might appear on all top scorer lists.
 
 In case you are into volleyball: yes I know that this visualization
 over-simplifies the game, but there are no free stats available on the
-VBL, that are both detailed and R-readable. 😭
+VBL, that are both detailed and R-readable. 😿
 
 ------------------------------------------------------------------------
 
-#### Team Comparison Plot
+### 2. Overall Team Facts Plot
 
-per Team create a circular Bar Plot
-<https://r-graph-gallery.com/297-circular-barplot-with-groups.html>
+The goals is to visualize many different aspects of a teams’ season in
+one plot. Based on all available sources, thus all files in the project
+folder, how can we describe the season of a team?
 
-different stats grouped by topic
+I ask you to create an [circular
+barplot](https://r-graph-gallery.com/297-circular-barplot-with-groups.html)
+for my favourite team, the Berlin Recycling Volleys 🍊 🖤 , as well as
+their biggest opponent, the VfB Friedrichshafen 😰 🦳 . (If you feel the
+strong urge to create an interactive plot for each of the teams, I would
+greatly appreciate your effort, but also remind you of the things you
+possibly procrastinated while creating these.)
 
-### Optional (if you happen to have a statistics background):
+<figure>
+<img src="team_overview-circular-barplot.png" alt="Circular barplot" />
+<figcaption aria-hidden="true">Circular barplot</figcaption>
+</figure>
+
+Include the following groups, described below in more detail:
+
+1.  Results
+
+-   number of overall played games
+-   number of victories
+-   number of losses (if none skip this bar)
+-   average number of sets per game
+-   average number of points per set
+-   highest ballpoints in a set
+-   lowest ballpoints in a set
+
+1.  Attacking
+
+-   average points per set over all outside hitters over the entire
+    season
+-   average points per set over all middle blockers over the entire
+    season
+-   average points per set over all opposite hitters over the entire
+    season
+-   average points per set over all setters over the entire season
+
+1.  Stadium
+
+-   number of home games
+-   number of away games
+-   average ballpoints per game in home stadium
+-   average ballpoints per game in away stadium
+-   average attendance in home stadium
+
+1.  Top Scorer
+
+-   top scoring (over the entire season) outside hitter
+-   top scoring (over the entire season) middle blocker
+-   top scoring (over the entire season) opposite hitter
+-   top scoring (over the entire season) setter
+
+1.  Errors
+
+-   outside hitter with most errors per set across the season
+-   middle blocker with most errors per set across the season
+-   opposite hitter with most errors per set across the season
+-   setter with most errors per set across the season
+
+Colouring: please adhere to the team colours (see team logo or emoji
+colour above).
+
+If possible, include the team logo as a picture in the middle of the
+circular bar plot.
 
 [1] Source:
 <https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_maenner/archiv/ergebnisse.xhtml>

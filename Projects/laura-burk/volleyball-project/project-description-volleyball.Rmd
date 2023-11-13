@@ -78,7 +78,7 @@ As the column names are in German, you might consider these comments helpful (or
 
 The rear columns provide detail on the (ball point) scores of each set for both teams.
 
-
+***
 
 #### Folder **topscorers**
 As you learned about the different parts of the season above, the four provided files should be named straightforward to you.
@@ -100,6 +100,7 @@ Please add a column with the players' errors per set and the team name to the to
 
 If a player appears in the top scorer ranking but not in the roster, please add the available information to the roster .csv-file and update it on GitHub.
 
+***
 
 #### Folder **team-logos**
 Here I provide you with the team logos, needed for a visualization goal.
@@ -108,38 +109,76 @@ Here I provide you with the team logos, needed for a visualization goal.
 
 ## Visualization Goals
 
-***
 
 ### 1. Compare the attackers of a team - which position contributes most?
-
-Reminder: attackers is collective term for outside hitters, middle blockers and opposite hitters, thus all positions that are supposed to hit the ball over the net and score a point for their team.
-
-Compare the attackers: Which attacker contributes how much?
-
-I ask you to create an [interactive treemap](https://r-graph-gallery.com/237-interactive-treemap.html) for my favourite team, the Berlin Recycling Volleys, as well as their biggest opponent, the VfB Friedrichshafen.
-(If you feel the strong urge to create an interactive  plot for each of the teams, I would greatly appreciate your effort, but also remind you of the things you possibly procrastinated while creating these.)
 
 The goal is to visualize which attacking position contributed the most to the teams' results. 
 Based on the combined top scorer lists across all parts of the season, how much did the players on the attacking positions contribute?
 
-![](attacker-comparison-treemap.png)
+Reminder: attackers is a collective term for outside hitters, middle blockers and opposite hitters, thus all positions that are supposed to hit the ball over the net and score a point for their team.
+
+I ask you to create an [interactive treemap](https://r-graph-gallery.com/237-interactive-treemap.html) for my favourite team, the Berlin Recycling Volleys  `r emo::ji("orange")` `r emo::ji("black")` , as well as their biggest opponent, the VfB Friedrichshafen  `r emo::ji("blue")` `r emo::ji("white")` .
+(If you feel the strong urge to create an interactive  plot for each of the teams, I would greatly appreciate your effort, but also remind you of the things you possibly procrastinated while creating these.)
 
 
-![](attacker-comparison-interactive-treemap.png)
+![Treemap](attacker-comparison-treemap.png)
 
-* As broad categories (green, blue and orange in the example), please use the three attacking positions.
-* As subcategories (shades of green in the example), please use the individual attackers on the respective position of *one team*.
+![Interactive Treemap](attacker-comparison-interactive-treemap.png)
+
+* As broad categories (green, blue and orange in the first picture), please use the three attacking positions.
+* As subcategories (shades of green in the second picture), please use the individual attackers on the respective position of *one team*.
 * As the value determining the size of the chart, use the combined top scorer value of each attacker across all parts of the season. Note: not all attackers might appear on all top scorer lists.
 
 In case you are into volleyball: yes I know that this visualization over-simplifies the game, but there are no free stats available on the VBL, that are both detailed and R-readable. `r emo::ji("sad")`
 
 ***
 
-#### Team Comparison Plot
+### 2. Overall Team Facts Plot
 
-per Team create a circular Bar Plot
-https://r-graph-gallery.com/297-circular-barplot-with-groups.html
+The goals is to visualize many different aspects of a teams' season in one plot.
+Based on all available sources, thus all files in the project folder, how can we describe the season of a team?
 
-different stats grouped by topic 
+I ask you to create an [circular barplot](https://r-graph-gallery.com/297-circular-barplot-with-groups.html) for my favourite team, the Berlin Recycling Volleys  `r emo::ji("orange")` `r emo::ji("black")` , as well as their biggest opponent, the VfB Friedrichshafen  `r emo::ji("blue")` `r emo::ji("white")` .
+(If you feel the strong urge to create an interactive  plot for each of the teams, I would greatly appreciate your effort, but also remind you of the things you possibly procrastinated while creating these.)
 
-### Optional (if you happen to have a statistics background):
+![Circular barplot](team_overview-circular-barplot.png)       
+
+Include the following groups, described below in more detail:
+
+1. Results
+* number of overall played games
+* number of victories
+* number of losses (if none skip this bar)
+* average number of sets per game
+* average number of points per set
+* highest ballpoints in a set
+* lowest ballpoints in a set
+
+2. Attacking
+* average points per set over all outside hitters over the entire season
+* average points per set over all middle blockers over the entire season
+* average points per set over all opposite hitters over the entire season
+* average points per set over all setters over the entire season
+
+3. Stadium
+* number of home games
+* number of away games
+* average ballpoints per game in home stadium
+* average ballpoints per game in away stadium
+* average attendance in home stadium
+
+4. Top Scorer
+* top scoring (over the entire season) outside hitter
+* top scoring (over the entire season) middle blocker 
+* top scoring (over the entire season) opposite hitter 
+* top scoring (over the entire season) setter
+
+5. Errors
+* outside hitter with most errors per set across the season
+* middle blocker with most errors per set across the season
+* opposite hitter with most errors per set across the season
+* setter with most errors per set across the season
+
+Colouring: please adhere to the team colours (see team logo or emoji colour above).
+
+If possible, include the team logo as a picture in the middle of the circular bar plot.
