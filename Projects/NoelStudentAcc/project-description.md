@@ -1,5 +1,7 @@
 # Self-control, sleep quality and smartphone usage
 
+## The data
+
 -   Data: data\_smaschkon\_2023-02-11\_09-11.xlsx
 -   Variables: variables\_smaschkon\_2023-02-11\_09-24.csv
 -   Values: values\_smaschkon\_2023-02-11\_09-24.csv
@@ -29,7 +31,7 @@ The following columns (so-called “items”) are relevant for my project:
         and which values can actually be found in the column (e.g. with
         the “table()” function). Make appropriate adjustments.
 
-# How do I create a scale/variable?
+## How do I create a scale/variable?
 
     # For example 3 Items
     data <- data.frame(item1 = c(4, 2, 3, 1), # You good in math?
@@ -44,10 +46,10 @@ The following columns (so-called “items”) are relevant for my project:
 
     head(data) # quick check
 
-# Aim of the project
+## Aim of the project
 
-I would like to have a cool graphic in which you can see the connection
-between self-control and smartphone use. The study participants should
+I would like to have a cool graphic in which you can see the correlation
+between self-control and smartphone usage. The study participants should
 be divided into groups for the graph: The groups should result from the
 answers to item “PS03\_01”.
 

@@ -4,6 +4,8 @@ output: md_document
 
 # Self-control, sleep quality and smartphone usage 
 
+## The data
+
 * Data: data_smaschkon_2023-02-11_09-11.xlsx
 * Variables: variables_smaschkon_2023-02-11_09-24.csv
 * Values: values_smaschkon_2023-02-11_09-24.csv
@@ -33,7 +35,7 @@ The following columns (so-called "items") are relevant for my project:
   * What is wrong here? Pay attention to which values are possible and        which values can actually be found in the column (e.g. with the           "table()" function). Make appropriate adjustments.
 
 
-# How do I create a scale/variable?
+## How do I create a scale/variable?
 
 ```{r, eval=FALSE}
 # For example 3 Items
@@ -51,9 +53,9 @@ head(data) # quick check
 ```
 
 
-# Aim of the project
+## Aim of the project
 
-I would like to have a cool graphic in which you can see the connection between self-control and smartphone use. The study participants should be divided into groups for the graph: The groups should result from the answers to item "PS03_01". 
+I would like to have a cool graphic in which you can see the correlation between self-control and smartphone usage. The study participants should be divided into groups for the graph: The groups should result from the answers to item "PS03_01". 
 
 I have tried to create a graph but I just can't get it any better than this:
 
