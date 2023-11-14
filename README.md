@@ -111,7 +111,7 @@ Current project:
 - Laura (laura-burk) - [volleyball project](Projects/laura-burk/volleyball-project/project-description-volleyball.md)
 - Edward (edward-leland) - [Correlation Catastrophe](Projects/edward-leland/Data_Project/project-description.md)
 - Tim (HaasTim) - [..]()
-- Noel (NoelStudentAcc) - [..]()
+- Noel (NoelStudentAcc) - [Self-control, sleep quality and smartphone usage](Projects/NoelStudentAcc/project-description.md)
 - Yunji (Yuuunji) - [..]()
 - Nicolai () - [..]()
 
