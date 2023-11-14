@@ -113,6 +113,7 @@ Current project:
 - Tim (HaasTim) - [..]()
 - Noel (NoelStudentAcc) - [..]()
 - Yunji (Yuuunji) - [..]()
+- Nicolai () - [..]()
 
 
 
@@ -141,8 +142,9 @@ For each project draft, we will assign two reviewers at random. The *reviewer as
 - *Laura* will review projects of: Edward + Tim
 - *Edward* will review projects of: Tim + Noel
 - *Tim* will review projects of: Noel + Yunji
-- *Noel* will review projects of: Yunji + Jana
-- *Yunji* will review projects of: Jana + Laura
+- *Noel* will review projects of: Yunji + Nicolai
+- *Yunji* will review projects of: Nicolai + Jana 
+- *Nicolai* will review projects of: Jana + Laura
 
 See [project list](#available-projects) for respective GitHub user names for contact.
 
