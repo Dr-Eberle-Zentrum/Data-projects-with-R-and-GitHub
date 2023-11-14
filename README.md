@@ -101,10 +101,18 @@ In order to submit your project proposal, you have to upload it to GitHub as par
 
 #### Available projects
 
+Example:
+
 - Martin (martin-raden) - [Example project](Projects/martin-raden/project-description.md)
+
+Current project:
+
 - Jana (JanaKimmich) - [formula one project](Projects/JanaKimmich/project-description.md)
 - Laura (laura-burk) - [volleyball project](Projects/laura-burk/volleyball-project/project-description-volleyball.md)
 - Edward (edward-leland) - [Correlation Catastrophe](Projects/edward-leland/Data_Project/project-description.md)
+- Tim (HaasTim) - [..]()
+- Noel (NoelStudentAcc) - [..]()
+- Yunji (Yuuunji) - [..]()
 
 
 
@@ -129,7 +137,12 @@ To ensure the drafted projects are understandable and doable, we will do a peer 
 
 For each project draft, we will assign two reviewers at random. The *reviewer assignments* are as follows:
 
-- *X* will review projects of: Y + Z
+- *Jana* will review projects of: Laura + Edward
+- *Laura* will review projects of: Edward + Tim
+- *Edward* will review projects of: Tim + Noel
+- *Tim* will review projects of: Noel + Yunji
+- *Noel* will review projects of: Yunji + Jana
+- *Yunji* will review projects of: Jana + Laura
 
 See [project list](#available-projects) for respective GitHub user names for contact.
 
