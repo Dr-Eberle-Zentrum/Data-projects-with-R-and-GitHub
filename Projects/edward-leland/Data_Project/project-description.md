@@ -84,8 +84,8 @@ beneficial to look at data from a purely abstract perspective. Hell,
 there are probably those among us that think this exercise might be an
 awesome practical warning to not believe every chart we find on the
 internet. But I say NO! This exercise is designed to help any of us who
-want to make it big in the worlds of politics, tabloids, social media or
-any other truly pointless but quintessentially human endeavors. So go to
+want to make it big in the world of politics, tabloids, social media or
+any other truly pointless but quintessentially human endeavor. So go to
 the dark side of YouTube, watch Fox News, and duct tape your tinfoil hat
 firmly to your head because we are about to contribute our own shovelful
 of manure to the compost heap that is the internet.
