@@ -9,6 +9,53 @@ output: md_document
 * Values: values_smaschkon_2023-02-11_09-24.csv
 
 The data was collected as part of a data collection seminar. The aim was to investigate the relationship between self-control, sleep quality and smartphone usage. 
-The first challenge will be to form the scales in order to test hypotheses and visualize the results. The PSQI scale for sleep quality is particularly tricky. 
-Sum scores can be created to form a scale for both self-control and smartphone usage. The PSQI scale, on the other hand, is a complex scale, the formation of which is described in the document "assessment, pittsburgh psqi.pdf". However, this may be too complex to work out on your own without further information (alternatively, I can help with the scale formation or pass on my code). 
-Once the first steps have been taken and the data or scales have been prepared, various visualizations can be created in which the distributions of the variables are described in various ways or correlations are made visible. 
+
+The following columns (so-called "items") are relevant for my project:
+
+* Sleep quality: 
+"PS03_01"
+
+* Self-control: 
+"SC01_14", "SC01_02", "SC01_03", "SC01_04", "SC01_05", "SC01_06", 
+"SC01_07", "SC01_08", "SC01_09", "SC01_10", "SC01_11", "SC01_12",
+"SC01_13"
+
+Attention! Item "SC01_09" must be "recoded"!
+-> Find out what this means and adjust accordingly.
+
+* Smartphone Usage:
+"TS01_01", "TS01_02", "TS01_03", "TS01_04", "TS01_05", "TS01_06",
+"TS01_07", "TS01_08", "TS01_09", "TS01_10", "TS01_11", "TS01_12",
+"TS01_13", "TS01_14", "TS01_15", "TS01_16", "TS01_17", "TS01_18",
+"TS01_19"
+
+Attention! Error with "TS01_17"! 
+-> What is wrong here? Pay attention to which values are possible and which values can actually be found in the column (e.g. with the "table()" function). Make appropriate adjustments.
+
+# How do I create a scale/variable?
+
+
+# For example 3 Items
+data <- data.frame(item1 = c(4, 2, 3, 1), # You good in math?
+                   item2 = c(4, 2, 3, 1), # You like math?
+                   item3 = c(3, 3, 3, 2)) # You want to work on something that requires math skills
+
+# Simple (but not necessarily the most efficient) way:
+
+item123 <-c("item1", "item2", "item3") # building vector
+
+data$variable <-rowMeans(data[,item123]) # creating variable by building Means at each row
+
+head(data) # quick check
+
+
+# Aim of the project
+
+I would like to have a cool graphic in which you can see the connection between self-control and smartphone use. The study participants should be divided into groups for the graph: The groups should result from the answers to item "PS03_01". 
+
+I have tried to create a graph but I just can't get it any better than this:
+
+![](Rplot.png)
+
+Please try to recreate the graphic and add colors that are easier to distinguish, a legend, a clear axis label and choose a nice theme. Good luck!
+
