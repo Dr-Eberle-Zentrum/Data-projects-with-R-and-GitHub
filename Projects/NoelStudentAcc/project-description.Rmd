@@ -20,8 +20,8 @@ The following columns (so-called "items") are relevant for my project:
 "SC01_07", "SC01_08", "SC01_09", "SC01_10", "SC01_11", "SC01_12",
 "SC01_13"
 
-Attention! Item "SC01_09" must be "recoded"!
--> Find out what this means and adjust accordingly.
+  * Attention! Item "SC01_09" must be "recoded"!
+  * Find out what this means and adjust accordingly.
 
 * Smartphone Usage:
 "TS01_01", "TS01_02", "TS01_03", "TS01_04", "TS01_05", "TS01_06",
@@ -29,12 +29,13 @@ Attention! Item "SC01_09" must be "recoded"!
 "TS01_13", "TS01_14", "TS01_15", "TS01_16", "TS01_17", "TS01_18",
 "TS01_19"
 
-Attention! Error with "TS01_17"! 
--> What is wrong here? Pay attention to which values are possible and which values can actually be found in the column (e.g. with the "table()" function). Make appropriate adjustments.
+  * Attention! Error with "TS01_17"! 
+  * What is wrong here? Pay attention to which values are possible and        which values can actually be found in the column (e.g. with the           "table()" function). Make appropriate adjustments.
+
 
 # How do I create a scale/variable?
 
-
+```{r, eval=FALSE}
 # For example 3 Items
 data <- data.frame(item1 = c(4, 2, 3, 1), # You good in math?
                    item2 = c(4, 2, 3, 1), # You like math?
@@ -47,6 +48,7 @@ item123 <-c("item1", "item2", "item3") # building vector
 data$variable <-rowMeans(data[,item123]) # creating variable by building Means at each row
 
 head(data) # quick check
+```
 
 
 # Aim of the project
