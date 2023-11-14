@@ -17,9 +17,8 @@ of the subject matter is: Where is the humanity?
 
 While it may be useful for us to engage in these exercises, to pretend that we live
 in a world dictated by facts, means, and medians, it is not the mode of the modern era
-to care about facts. For every New York Times reader there are a thousand New York Post
-subscribers, for every Süddeutsche Zeitung subscriber there are roughly five Bild consumers,
-and for every Tuebingen student in a R data science course they probably have at least
+to care about facts. More people read the Daily Mail than the New York Times, for every Süddeutsche Zeitung subscriber there are roughly five Bild consumers,
+and every Tuebingen student in a R data science course probably has at least
 one insane relative that gets their news from Facebook.
 
 We live in an era where fake news and alternative facts are vastly more popular than
