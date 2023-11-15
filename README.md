@@ -110,7 +110,7 @@ Current project:
 - Jana (JanaKimmich) - [formula one project](Projects/JanaKimmich/project-description.md)
 - Laura (laura-burk) - [volleyball project](Projects/laura-burk/volleyball-project/project-description-volleyball.md)
 - Edward (edward-leland) - [Correlation Catastrophe](Projects/edward-leland/Data_Project/project-description.md)
-- Tim (HaasTim) - [..]()
+- Tim (HaasTim) - [Bilateral Trade](Projects/HaasTim/My%20Project/project-description.md)
 - Noel (NoelStudentAcc) - [Self-control, sleep quality and smartphone usage](Projects/NoelStudentAcc/project-description.md)
 - Yunji (Yuuunji) - [..]()
 - Nicolai () - [..]()
