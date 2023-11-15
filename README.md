@@ -112,7 +112,7 @@ Current project:
 - Edward (edward-leland) - [Correlation Catastrophe](Projects/edward-leland/Data_Project/project-description.md)
 - Tim (HaasTim) - [Bilateral Trade](Projects/HaasTim/My%20Project/project-description.md)
 - Noel (NoelStudentAcc) - [Self-control, sleep quality and smartphone usage](Projects/NoelStudentAcc/project-description.md)
-- Yunji (Yuuunji) - [..]()
+- Yunji (Yuuunji) - [Crimes in EU countries](Projects/Yunji%20Kang/project-description.md)
 - Nicolai () - [..]()
 
 
