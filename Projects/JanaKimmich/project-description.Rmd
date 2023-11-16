@@ -1,0 +1,31 @@
+---
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Goal of the project
+The goal of the project is to display the top ten formula one drivers in the range
+of the years 2000-2020. "Top" in this case is for simplicity defined as the count of
+the races that a driver won over the years. The chart should also contain the information 
+in which year the driver drove for which constructor, his nationality and how many races
+he won in that special year.
+
+The data is from (https://www.kaggle.com/datasets/rohanrao/formula-1-world-championship-1950-2020).
+
+The chart should look something like this (and be interactive :D):
+![](image.png)
+
+The box shows a tooltip, meaning, if one hovers over the bar at a specific place, the tooltip with
+the information shows up. For this, the package [plotly](https://plotly.com/r/) might be useful.
+
+# Visualizaion priorities (high to low)
+- bar chart with x-axis and y-axis as displayed above
+- tooltip (when hovering over the bar, show the name and the nationality of the driver)
+- bar colored according to the constructor the driver worked for in the corresponding year and add
+the information to the tooltip
+- bar separated according to years (does not have to be visible, only important for the tooltip, add the year
+and the count of the races won in this year to the tooltip)
+- formula one font type
+- clicking on bar to open wikipedia page of driver
