@@ -1,0 +1,75 @@
+---
+title: "SOP"
+
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(knitr)
+library(emo)
+```
+---
+title: "SOP"
+output: html_document
+---
+
+<style>
+.invisible-link a {
+    opacity: 0;
+}
+
+.invisible-link a:hover {
+    opacity: 1;
+}
+</style>
+
+# **Topic of the Project <span class="invisible-link">[🔗](#Topic-of-the-Project)</span>**
+***
+You probably know [Elon's Cybertruck](https://s1.cdn.autoevolution.com/images/news/elon-musk-suggesting-the-cybertruck-is-bulletproof-is-reckless-and-nothing-new-223201_1.jpg).
+
+This hell of a ride looks like direct from an post apokalyptic times.
+
+But its still a way too ugly and edgy.
+
+For this Reason, we create in this Project an [SOP](https://www.digimojo.de/blog/was-ist-eine-sop-standard-operating-procedure-standardarbeitsanweisung) Layout in an Excel or .md Format (Your Choice)for Elon and togather we'll safe his place in the Billionärs Ranklist. <https://www.bloomberg.com/billionaires/>
+
+***
+
+## Dataset <span class="invisible-link">[🔗](#Dataset)</span>
+
+Take care, one cell can contain more than one value. `r emo::ji("warning")`
+
+### **Codebook <span class="invisible-link">[🔗](#Codebook)</span>**
+
+Each Codebook will later get its own row in the final Excel layout. The Dataset contains one folder with tables; you can merge them by the ID (col1). Under **Section**, you see the corresponding column headers; the sequence should be following "Arbeitsschritt", "Ablauf", "Hilfsmittel".
+
+### **The Layout <span class="invisible-link">[🔗](#The-Layout)</span>**
+
+The final Layout should contain a:
+
+- Headnote contains: "Standard Operating Procedure" \n Artikel:[articel_number/articel_number_couple]
+
+- Logo on the right top corner
+
+- A Header: Manufacturing of Rawprodukt:[articel_number/articel_number_couple]
+
+- A table of the manufacturing steps.
+
+- A footnote containing: date / name / page
+
+### **The Table-layout <span class="invisible-link">[🔗](#The-Table-layout)</span>**
+
+- Make an extra row for each manufacturing step (each Codebook).
+
+- The sequence of the manufacturing steps is determined by the Codebook according to the number.
+
+- Above each manufacturing step, there should be a row that contains the column header.
+
+
+[<img src="Layout example.png" alt="Bildbeschreibung" width="500" style="display: block; margin: 0 auto;"/>](Layout example.png)
+
+**Elon be ready, togather we will fix your mistake !**
+
+[<img src="elon_musk_jesus_meme.png" alt="Bildbeschreibung" width="300" style="display: block; margin: 0 auto;"/>](elon_musk_jesus_meme.png)
+
