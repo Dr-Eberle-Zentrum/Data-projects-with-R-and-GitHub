@@ -28,48 +28,85 @@ output: html_document
 ***
 You probably know [Elon's Cybertruck](https://s1.cdn.autoevolution.com/images/news/elon-musk-suggesting-the-cybertruck-is-bulletproof-is-reckless-and-nothing-new-223201_1.jpg).
 
-This hell of a ride looks like direct from an post apokalyptic times.
+This remarkable ride looks like it's straight from a post-apocalyptic era.
 
-But its still a way too ugly and edgy.
+However, it's still way too ugly and edgy.
 
-For this Reason, we create in this Project an [SOP](https://www.digimojo.de/blog/was-ist-eine-sop-standard-operating-procedure-standardarbeitsanweisung) Layout in an Excel or .md Format (Your Choice)for Elon and togather we'll safe his place in the Billionärs Ranklist. <https://www.bloomberg.com/billionaires/>
+For this reason, in this project, we are creating a  [SOP](https://www.digimojo.de/blog/was-ist-eine-sop-standard-operating-procedure-standardarbeitsanweisung) layout in either Excel or .md format (your choice) for Elon, and together we'll secure his place in the billionaire's rank list.  <https://www.bloomberg.com/billionaires/>
 
 ***
 
+## **The SOP Layout <span class="invisible-link">[🔗](#The-SOP-Layout)</span>**
+
+The final layout should contain:
+
+- A Headnote containing: "Standard Operating Procedure" \n Article: [article_number]/[article_number_coupl]
+
+- A logo in the top-right corner
+
+- A Header: Manufacturing of Raw Product: [article_number]/[article_coupl]
+
+- A table of the manufacturing steps (3 columns).
+
+- A footnote containing: date / name / page
+
+
+
+### **The Table-layout <span class="invisible-link">[🔗](#The-Table-layout)</span>**
+
+- Above each manufacturing step, there should be a row that contains the column headers.
+
+- You can find the Column headers in the [Codebook](#Codebook) under **Section**
+
+- Make an extra row for each manufacturing step (each Codebook entry).
+
+- The headers of each manufacturing steps should be numbered consecutively.
+Beginnig with Overview "Arbeitschritt 1:" and so on...
+
+- The sequence of the manufacturing steps is determined by the Codebook according to their number.
+
+- The Column sequence should be following "Arbeitsschritt", "Ablauf", "Hilfsmittel".
+
+- If there is no value for a Manufacturing Step, don't show it in the final layout.
+
+
+[<img src="Layout example.png" alt="Bildbeschreibung" width="500" style="display: block; margin: 0 auto;"/>](Layout example.png)
+
 ## Dataset <span class="invisible-link">[🔗](#Dataset)</span>
+
+The Dataset contains one folder with tables, you can merge them by the ID (col1).
+
+In the Codebook folder, you'll receive the corresponding Codes.
+
+In the Image folder, you'll find the corresponding images.
 
 Take care, one cell can contain more than one value. `r emo::ji("warning")`
 
 ### **Codebook <span class="invisible-link">[🔗](#Codebook)</span>**
 
-Each Codebook will later get its own row in the final Excel layout. The Dataset contains one folder with tables; you can merge them by the ID (col1). Under **Section**, you see the corresponding column headers; the sequence should be following "Arbeitsschritt", "Ablauf", "Hilfsmittel".
+Under **Section**,  you see the corresponding columns names for the final layout.
 
-### **The Layout <span class="invisible-link">[🔗](#The-Layout)</span>**
+The Column **Image** contains the images that should be shown in the corresponding row section.
 
-The final Layout should contain a:
+1. Overview.xlsv contains a column **"TextBaustein"**.
 
-- Headnote contains: "Standard Operating Procedure" \n Artikel:[articel_number/articel_number_couple]
+- The label "Introtext" is always shown.
+- The label "InfoVarX" one of the variants is always shown, depending on the value in Column [Stempel].
+- The label "InfoAddVarX" is shown in addition if the values of `Handschuhe == TRUE` or `if_gew == TRUE`.
 
-- Logo on the right top corner
+Codebook 2. - 5. containing a column named **TableId** those will either represent a condition or correlate to a table value with the represented strings and images.
 
-- A Header: Manufacturing of Rawprodukt:[articel_number/articel_number_couple]
+6.Verpackung.xlsv the value "InfoAddVar" is only shown if `vp_count_layer2 != 0`.
 
-- A table of the manufacturing steps.
+You Probably need to mutate a new column [count_total] to show the right total amount per box. `[vp_count_layer]x[vp_count_layer_pcs]+[vp_count_layer2]`
 
-- A footnote containing: date / name / page
+**If the Codebook contains square brackets, they represent a table value.**
 
-### **The Table-layout <span class="invisible-link">[🔗](#The-Table-layout)</span>**
+The value ["always"] in **TableID** means this message part is always shown.
 
-- Make an extra row for each manufacturing step (each Codebook).
-
-- The sequence of the manufacturing steps is determined by the Codebook according to the number.
-
-- Above each manufacturing step, there should be a row that contains the column header.
-
-
-[<img src="Layout example.png" alt="Bildbeschreibung" width="500" style="display: block; margin: 0 auto;"/>](Layout example.png)
-
-**Elon be ready, togather we will fix your mistake !**
+***
+ 
+**Elon be ready, together we will fix your mistake !**
 
 [<img src="elon_musk_jesus_meme.png" alt="Bildbeschreibung" width="300" style="display: block; margin: 0 auto;"/>](elon_musk_jesus_meme.png)
 
