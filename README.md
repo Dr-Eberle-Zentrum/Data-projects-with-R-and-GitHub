@@ -109,7 +109,7 @@ Current project:
 
 - Jana (JanaKimmich) - [formula one project](Projects/JanaKimmich/project-description.md)
 - Laura (laura-burk) - [volleyball project](Projects/laura-burk/volleyball-project/project-description-volleyball.md)
-- Edward (edwardarchaeology) - [Correlation Catastrophe](Projects/edward-leland/Data_Project/project-description.md)
+- Edward (edwardarchaeology) - [Waffle Disaster](Projects/edward-leland/Waffle_Disaster/Project_Description.md)
 - Tim (HaasTim) - [Bilateral Trade](Projects/HaasTim/My-Project/project-description.md)
 - Noel (NoelStudentAcc) - [Self-control, sleep quality and smartphone usage](Projects/NoelStudentAcc/project-description.md)
 - Yunji (Yuuunji) - [Crimes in EU countries](Projects/YunjiKang/project-description.md)
