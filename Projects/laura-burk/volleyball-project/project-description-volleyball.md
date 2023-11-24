@@ -1,14 +1,27 @@
+# [Data-projects-with-R-and-GitHub](https://dr-eberle-zentrum.github.io/Data-projects-with-R-and-GitHub/)
+
+------------------------------------------------------------------------
+
 # Laura’s Volleyball Project
 
 ------------------------------------------------------------------------
 
-I have a passion for Volleyball! 🏐 Yay! 🎂
+I have a passion for Volleyball! 🏐 Yay! 🎉
 
 Before I deep-dive into the ongoing 2023/24 indoor season and fangirl
 about my favourite club 🍊 🖤 , I would love to recap the 2022/23
 season. This is where I need your support! 💪
 
-### Background Knowlegde
+1.  [Background Knowledge](#background-knowledge)
+2.  [The Data](#the-data)
+    -   [Folder team-rosters](#team-rosters)
+    -   [Folder games](#games)
+    -   [Folder topscorers](#topscorers)
+    -   [Folder team-logos](#team-logos)
+3.  [Visualization Task](#visualization-task)
+4.  [Visualization Priorities](#visualization-priorities)
+
+### Background Knowledge (#background-knowledge)
 
 The ‘Volleyball Bundesliga’ (short: VBL) is the highest Volleyball
 league in Germany. Compared to Eastern or Southern European leagues, the
@@ -21,22 +34,24 @@ eager to find out more? I recommend
 
 #### What you might want to google at some point
 
--   the different positions, explained in
+-   the different positions\[^1\], explained in
     [video](https://www.youtube.com/watch?v=aHZQfyl-hEA) or
     [text](https://en.wikipedia.org/wiki/Volleyball#Player_specialization)
+    \[^1\]: Positions: outside hitter, middle blocker, opposite hitter,
+    setter, libero
 -   game mode: best of five sets (first to three sets wins)
--   first to 25 (two points gap) wins the set
+-   first to 25 (with two points apart) wins the set
 -   tie-break: fifth set is first to 15 (two points gap)
 
 ------------------------------------------------------------------------
 
-## The Data
+## The Data (#the-data)
 
 The data was downloaded from the official VBL website [1] and is free to
 use for private purposes. Surprisingly, it went from tidy to somewhat
 chaotic… 👻
 
-### Folder **team-rosters**
+### Folder **team-rosters** (#team-rosters)
 
 These files each contain a(n) (in)complete list of a teams’ roster and
 staff, including relevant information about the team members:
@@ -71,7 +86,7 @@ the *team-rosters*-folder.
 
 ------------------------------------------------------------------------
 
-### Folder **games**
+### Folder **games** (#games)
 
 The four files in this folder contain the results of all games played in
 different parts of the season.
@@ -105,7 +120,7 @@ for both teams.
 
 ------------------------------------------------------------------------
 
-### Folder **topscorers**
+### Folder **topscorers** (#topscorers)
 
 As you learned about the different parts of the season above, the four
 provided files should be named straightforward to you. The four files
@@ -143,7 +158,7 @@ Here I provide you with the team logos, needed for a visualization goal.
 
 ------------------------------------------------------------------------
 
-## Visualization Goals
+## Visualization Goals (#visualization-goals)
 
 ### 1. Compare the attackers of a team - which position contributes most?
 
@@ -159,18 +174,15 @@ hit the ball over the net and score a point for their team.
 I ask you to create an [interactive
 treemap](https://r-graph-gallery.com/237-interactive-treemap.html) for
 my favourite team, the Berlin Recycling Volleys 🍊 🖤 , as well as their
-biggest opponent, the VfB Friedrichshafen 🔹 🦳 .
+biggest opponent, the VfB Friedrichshafen 💙 🦳 .
 
 (If you feel the strong urge to create an interactive plot for each of
 the teams, I would greatly appreciate your effort, but also remind you
 of the things you possibly procrastinated while creating these.)
 
-![](attacker-comparison-treemap.png){height = 50, width = 50}
+<img src="examples/attacker-comparison-treemap.png" width="300">
 
-<img src="examples/attacker-comparison-treemap.png" width="200">
-
-![](attacker-comparison-interactive-treemap.png){height = 50, width =
-50}
+<img src="examples/attacker-comparison-interactive-treemap.png" width="300">
 
 -   As broad categories (green, blue and orange in the first picture),
     please use the three attacking positions.
@@ -185,7 +197,7 @@ in the plot.
 
 In case you are into volleyball: yes I know that this visualization
 over-simplifies the game, but there are no free stats available on the
-VBL, that are both detailed and R-readable. 🙍
+VBL, that are both detailed and R-readable. 😭
 
 ------------------------------------------------------------------------
 
@@ -204,7 +216,7 @@ their biggest opponent, the VfB Friedrichshafen 🔹 🦳 .
 the teams, I would greatly appreciate your effort, but also remind you
 of the things you possibly procrastinated while creating these.)
 
-![](team_overview-circular-barplot.png)
+<img src="examples/team_overview-circular-barplot.png" width="300">
 
 Include the following groups, described below in more detail:
 
@@ -259,6 +271,8 @@ Colouring: please adhere to the team colours (see team logo).
 
 If possible, include the team logo as a picture in the middle of the
 circular bar plot.
+
+## Visualization Priorities (#visualization-priorities)
 
 [1] Source:
 <https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_maenner/archiv/ergebnisse.xhtml>
