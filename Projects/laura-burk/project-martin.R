@@ -15,6 +15,13 @@ dat <- dat %>%
 dat <- dat %>%
     mutate(abs_change=as.numeric(gsub("%", "", abs_change))) 
 
+#  |> # base R 4.1.*
+"juhu" |> str_c("trallala")
+
+# %>% # tidyverse's magritr package
+library(magrittr)
+"juhu" %>% str_c("trallala", .)
+
 # reformat change col to char for plot labels
 dat <- dat %>%
     add_column(change=paste0(format(dat$abs_change,

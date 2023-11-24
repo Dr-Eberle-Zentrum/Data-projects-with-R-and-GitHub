@@ -2,7 +2,7 @@
 
 ------------------------------------------------------------------------
 
-I have a passion for Volleyball! 🏐 Yay! 🎉
+I have a passion for Volleyball! 🏐 Yay! 🎂
 
 Before I deep-dive into the ongoing 2023/24 indoor season and fangirl
 about my favourite club 🍊 🖤 , I would love to recap the 2022/23
@@ -165,9 +165,12 @@ biggest opponent, the VfB Friedrichshafen 🔹 🦳 .
 the teams, I would greatly appreciate your effort, but also remind you
 of the things you possibly procrastinated while creating these.)
 
-![](attacker-comparison-treemap.png)
+![](attacker-comparison-treemap.png){height = 50, width = 50}
 
-![](attacker-comparison-interactive-treemap.png)
+<img src="examples/attacker-comparison-treemap.png" width="200">
+
+![](attacker-comparison-interactive-treemap.png){height = 50, width =
+50}
 
 -   As broad categories (green, blue and orange in the first picture),
     please use the three attacking positions.
@@ -195,7 +198,7 @@ folder, how can we describe the season of a team?
 I ask you to create an [circular
 barplot](https://r-graph-gallery.com/297-circular-barplot-with-groups.html)
 for my favourite team, the Berlin Recycling Volleys 🍊 🖤 , as well as
-their biggest opponent, the VfB Friedrichshafen 🔵 🦳 .
+their biggest opponent, the VfB Friedrichshafen 🔹 🦳 .
 
 (If you feel the strong urge to create an interactive plot for each of
 the teams, I would greatly appreciate your effort, but also remind you
