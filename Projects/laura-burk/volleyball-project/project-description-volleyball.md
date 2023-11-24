@@ -1,18 +1,14 @@
 # [Data-projects-with-R-and-GitHub](https://dr-eberle-zentrum.github.io/Data-projects-with-R-and-GitHub/)
 
-------------------------------------------------------------------------
-
 # Laura’s Volleyball Project
 
-------------------------------------------------------------------------
-
-I have a passion for Volleyball! 🏐 Yay! 🎂
+I have a passion for Volleyball! 🏐 Yay! 🎉
 
 Before I deep-dive into the ongoing 2023/24 indoor season and fangirl
 about my favourite club 🍊 🖤 , I would love to recap the 2022/23
 season. This is where I need your support! 💪
 
-1.  [Background Knowledge](#background-knowledge)
+1.  [Introduction to Volleyball](#background-knowledge)
 2.  [The Data](#the-data)
     -   [Folder team-rosters](#team-rosters)
     -   [Folder games](#games)
@@ -21,7 +17,7 @@ season. This is where I need your support! 💪
 3.  [Visualization Task](#visualization-task)
 4.  [Visualization Priorities](#visualization-priorities)
 
-### Background Knowledge
+## Introduction to Volleyball
 
 The ‘Volleyball Bundesliga’ (short: VBL) is the highest Volleyball
 league in Germany. Compared to Eastern or Southern European leagues, the
@@ -32,7 +28,7 @@ eager to find out more? I recommend
 [this](https://www.youtube.com/watch?v=OWCkPbzq81g) short video or the
 [Wikipedia page](https://en.wikipedia.org/wiki/Volleyball).
 
-#### What you might want to google at some point
+### What you might want to google at some point
 
 -   the different positions\[^1\], explained in
     [video](https://www.youtube.com/watch?v=aHZQfyl-hEA) or
@@ -43,9 +39,7 @@ eager to find out more? I recommend
 -   first to 25 (with two points apart) wins the set
 -   tie-break: fifth set is first to 15 (two points gap)
 
-------------------------------------------------------------------------
-
-## The Data (#the-data)
+## The Data
 
 The data was downloaded from the official VBL website [1] and is free to
 use for private purposes. Surprisingly, it went from tidy to somewhat
@@ -86,7 +80,7 @@ the *team-rosters*-folder.
 
 ------------------------------------------------------------------------
 
-### Folder **games** (#games)
+### Folder **games**
 
 The four files in this folder contain the results of all games played in
 different parts of the season.
@@ -120,7 +114,7 @@ for both teams.
 
 ------------------------------------------------------------------------
 
-### Folder **topscorers** (#topscorers)
+### Folder **topscorers**
 
 As you learned about the different parts of the season above, the four
 provided files should be named straightforward to you. The four files
@@ -158,65 +152,22 @@ Here I provide you with the team logos, needed for a visualization goal.
 
 ------------------------------------------------------------------------
 
-## Visualization Goals (#visualization-goals)
-
-### 1. Compare the attackers of a team - which position contributes most?
-
-The goal is to visualize which attacking position contributed the most
-to the teams’ results. Based on the combined top scorer lists across all
-parts of the season, how much did the players on the attacking positions
-contribute?
-
-Reminder: attackers is a collective term for outside hitters, middle
-blockers and opposite hitters, thus all positions that are supposed to
-hit the ball over the net and score a point for their team.
-
-I ask you to create an [interactive
-treemap](https://r-graph-gallery.com/237-interactive-treemap.html) for
-my favourite team, the Berlin Recycling Volleys 🍊 🖤 , as well as their
-biggest opponent, the VfB Friedrichshafen 🔹 🦳 .
-
-(If you feel the strong urge to create an interactive plot for each of
-the teams, I would greatly appreciate your effort, but also remind you
-of the things you possibly procrastinated while creating these.)
-
-<img src="examples/attacker-comparison-treemap.png" width="300">
-
-<img src="examples/attacker-comparison-interactive-treemap.png" width="300">
-
--   As broad categories (green, blue and orange in the first picture),
-    please use the three attacking positions.
--   As subcategories (shades of green in the second picture), please use
-    the individual attackers on the respective position of *one team*.
--   As the value determining the size of the chart, use the combined top
-    scorer value of each attacker across all parts of the season. Note:
-    not all attackers might appear on all top scorer lists.
-
-Similar to the example, please print the category and subcategory names
-in the plot.
-
-In case you are into volleyball: yes I know that this visualization
-over-simplifies the game, but there are no free stats available on the
-VBL, that are both detailed and R-readable. 😢
-
-------------------------------------------------------------------------
-
-### 2. Overall Team Facts Plot
+## Visualization Task: Overall Team Facts Plot
 
 The goals is to visualize many different aspects of a teams’ season in
-one plot. Based on all available sources, thus all files in the project
-folder, how can we describe the season of a team?
+one plot. Based on all available sources - thus all files in the project
+folder - how can we describe the season of a team?
 
 I ask you to create an [circular
 barplot](https://r-graph-gallery.com/297-circular-barplot-with-groups.html)
-for my favourite team, the Berlin Recycling Volleys 🍊 🖤 , as well as
-their biggest opponent, the VfB Friedrichshafen 🔹 🦳 .
+for my favourite team, the Berlin Recycling Volleys 🍊🖤 , as well as
+their biggest opponent, the VfB Friedrichshafen 💙🦳.
 
-(If you feel the strong urge to create an interactive plot for each of
-the teams, I would greatly appreciate your effort, but also remind you
-of the things you possibly procrastinated while creating these.)
+<img src="examples/team_overview-circular-barplot.png" width="400">
 
-<img src="examples/team_overview-circular-barplot.png" width="300">
+(If you feel the strong urge to create a plot for each of the teams, I
+would greatly appreciate your effort, but also remind you of the things
+you possibly procrastinated while creating these.)
 
 Include the following groups, described below in more detail:
 
@@ -263,16 +214,55 @@ Include the following groups, described below in more detail:
 -   setter with most errors per set across the season
 
 A,B,C and D in the picture correspond to the categories above. Please
-include the names in the plot.
+include the category names in the plot.
 
 Similar to the example, please print the value above the respective bar.
-
-Colouring: please adhere to the team colours (see team logo).
 
 If possible, include the team logo as a picture in the middle of the
 circular bar plot.
 
-## Visualization Priorities (#visualization-priorities)
+Colouring: please adhere to the team colours (see team logos).
+
+### Second and optional: Compare the attackers of a team - which position contributes most?
+
+The goal is to visualize which attacking position contributed the most
+to the teams’ results. Based on the combined top scorer lists across all
+parts of the season, how much did the players on the attacking positions
+contribute?
+
+Reminder: attackers is a collective term for outside hitters, middle
+blockers and opposite hitters, thus all positions that are supposed to
+hit the ball over the net and score a point for their team.
+
+I ask you to create an [interactive
+treemap](https://r-graph-gallery.com/237-interactive-treemap.html) for
+my favourite team, the Berlin Recycling Volleys 🍊 🖤 , as well as their
+biggest opponent, the VfB Friedrichshafen 🔷 🦳 .
+
+(If you feel the strong urge to create an interactive plot for each of
+the teams, I would greatly appreciate your effort, but also remind you
+of the things you possibly procrastinated while creating these.)
+
+<img src="examples/attacker-comparison-treemap.png" width="300">
+
+<img src="examples/attacker-comparison-interactive-treemap.png" width="300">
+
+-   As broad categories (green, blue and orange in the first picture),
+    please use the three attacking positions.
+-   As subcategories (shades of green in the second picture), please use
+    the individual attackers on the respective position of *one team*.
+-   As the value determining the size of the chart, use the combined top
+    scorer value of each attacker across all parts of the season. Note:
+    not all attackers might appear on all top scorer lists.
+
+Similar to the example, please print the category and subcategory names
+in the plot.
+
+In case you are into volleyball: yes I know that this visualization
+over-simplifies the game, but there are no free stats available on the
+VBL, that are both detailed and R-readable. 😿
+
+## Visualization Priorities
 
 [1] Source:
 <https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_maenner/archiv/ergebnisse.xhtml>
