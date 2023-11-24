@@ -32,7 +32,7 @@ This is where I need your support! `r emo::ji("strong")`
 4. [Visualization Priorities](#visualization-priorities)
 
 
-### Background Knowledge (#background-knowledge)
+### Background Knowledge {#background-knowledge}
 
 The 'Volleyball Bundesliga' (short: VBL) is the highest Volleyball league in Germany.
 Compared to Eastern or Southern European leagues, the VBL has a lower level, but we are getting there. `r emo::ji("up")`

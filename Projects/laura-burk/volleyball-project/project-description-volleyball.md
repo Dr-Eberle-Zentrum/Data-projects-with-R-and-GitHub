@@ -6,7 +6,7 @@
 
 ------------------------------------------------------------------------
 
-I have a passion for Volleyball! 🏐 Yay! 🎉
+I have a passion for Volleyball! 🏐 Yay! 🎂
 
 Before I deep-dive into the ongoing 2023/24 indoor season and fangirl
 about my favourite club 🍊 🖤 , I would love to recap the 2022/23
@@ -21,7 +21,7 @@ season. This is where I need your support! 💪
 3.  [Visualization Task](#visualization-task)
 4.  [Visualization Priorities](#visualization-priorities)
 
-### Background Knowledge (#background-knowledge)
+### Background Knowledge
 
 The ‘Volleyball Bundesliga’ (short: VBL) is the highest Volleyball
 league in Germany. Compared to Eastern or Southern European leagues, the
@@ -174,7 +174,7 @@ hit the ball over the net and score a point for their team.
 I ask you to create an [interactive
 treemap](https://r-graph-gallery.com/237-interactive-treemap.html) for
 my favourite team, the Berlin Recycling Volleys 🍊 🖤 , as well as their
-biggest opponent, the VfB Friedrichshafen 💙 🦳 .
+biggest opponent, the VfB Friedrichshafen 🔹 🦳 .
 
 (If you feel the strong urge to create an interactive plot for each of
 the teams, I would greatly appreciate your effort, but also remind you
@@ -197,7 +197,7 @@ in the plot.
 
 In case you are into volleyball: yes I know that this visualization
 over-simplifies the game, but there are no free stats available on the
-VBL, that are both detailed and R-readable. 😭
+VBL, that are both detailed and R-readable. 😢
 
 ------------------------------------------------------------------------
 
