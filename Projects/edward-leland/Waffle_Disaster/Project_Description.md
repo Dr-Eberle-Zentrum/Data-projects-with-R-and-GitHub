@@ -143,10 +143,7 @@ your code.
 
 ## What About (optional) Web Apps!?
 
-    ## PhantomJS not found. You can install it with webshot::install_phantomjs(). If it is installed, please make sure the phantomjs executable can be found via the PATH variable.
-
-<iframe src="https://edwardarchaeology.shinyapps.io/app_testing/?showcase=0" width="100%" height="800px" data-external="1">
-</iframe>
+[![](Project_Description_files/figure-markdown_strict/unnamed-chunk-2-1.png)](https://edwardarchaeology.shinyapps.io/app_testing/)
 
 You can order appetizers at Waffle House and the coding world is also
 obsessed with apps. So if you’ve got some kind of programmatic masochist
