@@ -95,7 +95,7 @@ Next we are going to simulate a natural disaster by choosing a center point and 
 
 ## What About (optional) Web Apps!?
 
-```{r}
+```{r, echo=FALSE}
 knitr::include_app(url = "https://edwardarchaeology.shinyapps.io/app_testing/")
 ```
 
