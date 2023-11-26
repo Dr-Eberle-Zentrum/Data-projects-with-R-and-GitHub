@@ -143,6 +143,11 @@ your code.
 
 ## What About (optional) Web Apps!?
 
+    ## PhantomJS not found. You can install it with webshot::install_phantomjs(). If it is installed, please make sure the phantomjs executable can be found via the PATH variable.
+
+<iframe src="https://edwardarchaeology.shinyapps.io/app_testing/?showcase=0" width="100%" height="800px" data-external="1">
+</iframe>
+
 You can order appetizers at Waffle House and the coding world is also
 obsessed with apps. So if you’ve got some kind of programmatic masochist
 complex you can complete this **completely optional** project extension.
@@ -151,7 +156,7 @@ R has a super cool package called shiny that allows you to build Graphic
 User Interfaces or GUIs. In a fit of insanity I decided that the only
 way this project could truly honor Waffle House is by building an
 interactive web application to its greatness. You can see the results
-here:
+here if they aren’t displaying above:
 
 [Waffle’s of Doom](https://edwardarchaeology.shinyapps.io/app_testing/)
 
