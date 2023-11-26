@@ -143,7 +143,7 @@ your code.
 
 ## What About (optional) Web Apps!?
 
-    knitr::include_url("https://edwardarchaeology.shinyapps.io/app_testing/")
+    knitr::include_app("https://edwardarchaeology.shinyapps.io/app_testing/")
 
 <a href="https://edwardarchaeology.shinyapps.io/app_testing/" target="_blank"><img src="Project_Description_files/figure-markdown_strict/embed-1.png" style="border: none;" /></a>
 
