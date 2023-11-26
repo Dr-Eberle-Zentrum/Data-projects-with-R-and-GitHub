@@ -143,7 +143,9 @@ your code.
 
 ## What About (optional) Web Apps!?
 
-[![](Project_Description_files/figure-markdown_strict/unnamed-chunk-2-1.png)](https://edwardarchaeology.shinyapps.io/app_testing/)
+    knitr::include_app(url = "https://edwardarchaeology.shinyapps.io/app_testing/", height = "800px")
+
+<a href="https://edwardarchaeology.shinyapps.io/app_testing/" target="_blank"><img src="Project_Description_files/figure-markdown_strict/unnamed-chunk-2-1.png" width="100%" /></a>
 
 You can order appetizers at Waffle House and the coding world is also
 obsessed with apps. So if you’ve got some kind of programmatic masochist
