@@ -95,8 +95,8 @@ Next we are going to simulate a natural disaster by choosing a center point and 
 
 ## What About (optional) Web Apps!?
 
-```{r , out.width =  "100%"}
-knitr::include_app(url = "https://edwardarchaeology.shinyapps.io/app_testing/", height = "800px")
+```{r}
+knitr::include_app(url = "https://edwardarchaeology.shinyapps.io/app_testing/")
 ```
 
 You can order appetizers at Waffle House and the coding world is also obsessed with apps. So if you've got some kind of programmatic masochist complex you can complete this **completely optional** project extension.
