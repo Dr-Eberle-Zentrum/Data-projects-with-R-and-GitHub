@@ -24,22 +24,29 @@ Concerning the colors of the constructors, you should decide which color
 matches which constructor the best and assign this color to a specific
 constructor e.g. display the bar in this color according to the years
 the driver drove for this constructor. For instance for Ferrari I would
-suggest the color red.
-
-The box shows a tooltip, meaning, if one hovers over the bar at a
-specific place, the tooltip with the information shows up. For this, the
-package [plotly](https://plotly.com/r/) might be useful. It is also
-important to notice, that to be interactive the plot should be in an
-html output.
+suggest the color red. The box shows a tooltip, meaning, if one hovers
+over the bar at a specific place, the tooltip with the information shows
+up. For this, the package [plotly](https://plotly.com/r/) might be
+useful. It is also important to notice, that to be interactive the plot
+should be in an html output.
 
 # Visualization priorities (high to low)
 
-\##Static part (very important) - bar chart with x-axis and y-axis as
-displayed above - bar colored according to the constructor the driver
-worked for in the corresponding year and add a legend at the right to
-display which color corresponds to which constructor \##Interactive part
-(nice-to-have) - tooltip (when hovering over the bar, show the name and
-the nationality of the driver) - bar segmented by year (does not have to
-be visible, only important for the tooltip, add the year and the count
-of the races won in this year to the tooltip) \##Extra nice-to-have -
-formula one font type
+### Static part (very important)
+
+-   bar chart with x-axis and y-axis as displayed above
+-   bar colored according to the constructor the driver worked for in
+    the corresponding year and add a legend at the right to display
+    which color corresponds to which constructor
+
+### Interactive part (nice-to-have)
+
+-   tooltip (when hovering over the bar, show the name and the
+    nationality of the driver)
+-   bar segmented by year (does not have to be visible, only important
+    for the tooltip, add the year and the count of the races won in this
+    year to the tooltip)
+
+### Extra nice-to-have
+
+-   formula one font type
