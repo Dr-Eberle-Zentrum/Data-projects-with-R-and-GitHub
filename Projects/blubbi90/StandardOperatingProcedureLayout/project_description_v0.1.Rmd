@@ -9,10 +9,6 @@ knitr::opts_chunk$set(echo = FALSE)
 library(knitr)
 library(emo)
 ```
----
-title: "SOP"
-output: md_document
----
 
 <style>
 .invisible-link a {
