@@ -120,7 +120,7 @@ Now, here is a list of all the items to build scales with:
     “TS01\_10”, “TS01\_11”, “TS01\_12”, “TS01\_13”, “TS01\_14”,
     “TS01\_15”, “TS01\_16”, “TS01\_17”, “TS01\_18”, “TS01\_19”
 
-
+---
 
 1.  Some preparation is needed: Item “SC01\_09” must be recoded.
 
