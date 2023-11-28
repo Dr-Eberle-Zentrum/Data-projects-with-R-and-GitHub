@@ -61,8 +61,9 @@ We have a dataset with 3 items about confidence in math:
 
 From 1 (no confidence) to 4 (full confidence)
 
-item1: i am good im math item2: i am never afraid of taking tasks in
-math class item3: i hope math will be part in my future job
+item1: i am good im math 
+item2: i am never afraid of taking tasks in math class 
+item3: i hope math will be part in my future job
 
 <table>
 <thead>
@@ -146,8 +147,8 @@ this:
 
 ![](Rplot.png)
 
-Please try to recreate the graphic and add a few things: \* Use colors
-that are easier to distinguish. 
+Please try to recreate the graphic and add a few things: 
+- Use colors that are easier to distinguish. 
 - Include a legend. 
 - Provide clear axis labels. 
 - Set axis ticks analogous to the answer options of the items. 
