@@ -1,7 +1,7 @@
 ---
 title: "SOP"
 
-output: html_document
+output: md_document
 ---
 
 ```{r setup, include=FALSE}
@@ -166,7 +166,7 @@ The final layout should include:
 
 ***
 
-[<img src="overview.png" alt="Bildbeschreibung" width="500" style="display: block; margin: 0 auto;"Datasets/images/overview.png)
+[<img src="overview.png" alt="Bildbeschreibung" width="500" style="display: block; margin: 0 auto;"/>](overview.png)
 
 
 
