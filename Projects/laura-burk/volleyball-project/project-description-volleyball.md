@@ -2,7 +2,7 @@
 
 # Laura’s Volleyball Project
 
-I have a passion for Volleyball! 🏐 Yay! 🎉
+I have a passion for Volleyball! 🏐 Yay! 🎈
 
 Before I deep-dive into the ongoing 2023/24 indoor season and fangirl
 about my favourite club 🍊 🖤 , I would love to recap the 2022/23
@@ -43,7 +43,7 @@ The data was downloaded from the official VBL website [2] and is free to
 use for private purposes. Surprisingly, it went from tidy to somewhat
 chaotic… 👻
 
-### Folder **team-rosters** (#team-rosters)
+### Folder `team-rosters`
 
 These
 [files](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/main/Projects/laura-burk/volleyball-project/team-rosters)
@@ -77,37 +77,40 @@ Unfortunately, not all information is in the desired format yet.
 
 If a teams’ roster happens to be incomplete, please upload a new
 `roster_TEAMNAME_YourName.csv`-file in the folder
-[team-roster](/team-rosters) and include the missing players with all
-the available information. {#here} (In the VBL, transfers are possible
-from the end of *Zwischenrunde*, thus before all parts of the season
-have ended, see [below](#games). That is why the same player can have
-two different teams within one season and appear in only one
-[team-roster](Projects/laura-burk/volleyball-project/team-rosters)
+[team-roster](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/main/Projects/laura-burk/volleyball-project/team-rosters)
+and include the missing players with all the available information.
+{#here} (In the VBL, transfers are possible from the end of
+*Zwischenrunde*, thus before all parts of the season have ended, see
+[below](#games). That is why the same player can have two different
+teams within one season and appear in only one
+[roster](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/main/Projects/laura-burk/volleyball-project/team-rosters)
 file.)
 
 ------------------------------------------------------------------------
 
-### Folder **games**
+### Folder `games`
 
-The four [files](Projects/laura-burk/volleyball-project/games) contain
-the results of all games played in different parts of the season.
+The four
+[files](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/main/Projects/laura-burk/volleyball-project/games)
+contain the results of all games played in different parts of the
+season.
 
 1.  [regular
-    season](Projects/laura-burk/volleyball-project/games/Spielplan_1._Bundesliga_Männer_regular_season.csv):
+    season](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/main/Projects/laura-burk/volleyball-project/games/Spielplan_1._Bundesliga_Männer_regular_season.csv):
     Each team plays each of the other teams twice - once at home and
     once away.
 2.  intermediate round (*Zwischenrunde*): The league table is split into
     two groups - the [top
-    teams](Projects/laura-burk/volleyball-project/games/Spielplan_1._Bundesliga_Männer_Zwischenrunde_1-4.csv)
+    teams](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/main/Projects/laura-burk/volleyball-project/games/Spielplan_1._Bundesliga_Männer_Zwischenrunde_1-4.csv)
     (4 teams) and the [bottom
-    teams](Projects/laura-burk/volleyball-project/games/Spielplan_1._Bundesliga_Männer_Zwischenrunde_5-9.csv)
+    teams](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/main/Projects/laura-burk/volleyball-project/games/Spielplan_1._Bundesliga_Männer_Zwischenrunde_5-9.csv)
     (5 teams). Within these groups, each team plays each of the other
     teams twice - once at home and once away. (It’s basically like
     regular season in two groups with fewer teams each.) Note: after the
     intermediate round, VCO Berlin was on 5th place in the bottom group
     and ended its season (as had been announced within the VBL before).
     Eight teams entered the play-off’s.
-3.  [Play-off’s](Projects/laura-burk/volleyball-project/games/Spielplan_1._Bundesliga_Männer_Playoff.csv):
+3.  [Play-off’s](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/main/Projects/laura-burk/volleyball-project/games/Spielplan_1._Bundesliga_Männer_Playoff.csv):
     Based on the team ranking achieved in the intermediate round, the
     first-ranked team from the top group faces the eighth-ranked team of
     the bottom group in the quarter-finals and so on. The game mode is
@@ -126,10 +129,11 @@ for both teams.
 
 ------------------------------------------------------------------------
 
-### Folder **topscorers**
+### Folder `topscorers`
 
 As you learned about the different parts of the season above, the four
-[provided files](Projects/laura-burk/volleyball-project/topscorers)
+[provided
+files](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/main/Projects/laura-burk/volleyball-project/topscorers)
 should be named straightforward to you. The four files are not based on
 overlapping time periods! ⚠️
 
@@ -156,17 +160,17 @@ the top scorer files and update them on GitHub.
 If a player appears in the top scorer ranking but not in the roster of a
 team, please upload a new `roster_TEAMNAME_YourName`.csv-file in the
 folder
-[team-roster](Projects/laura-burk/volleyball-project/team-rosters) and
-include the missing player with all the available information (see
+\[team-roster\](Phttps://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/main/Projects/laura-burk/volleyball-project/team-rosters
+and include the missing player with all the available information (see
 [Explanation](#here)).
 
 ------------------------------------------------------------------------
 
-### Folder **team-logos**
+### Folder `team-logos`
 
 Here I provide you with the [team
-logos](Projects/laura-burk/volleyball-project/team-logos), needed for a
-visualization task
+logos](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/main/Projects/laura-burk/volleyball-project/team-logos),
+needed for a visualization task
 
 ------------------------------------------------------------------------
 
@@ -236,11 +240,10 @@ include the category names in the plot.
 
 Similar to the example, please print the value above the respective bar.
 
-If possible, include the team logo as a picture in the middle of the
-circular bar plot.
-
-Colouring: please adhere to the team colours (see [team
-logos](Projects/laura-burk/volleyball-project/team-logos)).
+If possible, include the [team
+logo](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/main/Projects/laura-burk/volleyball-project/team-logos)
+as a picture in the middle of the circular bar plot. For plot colouring,
+please adhere to the team colours.
 
 ### Second and optional: Compare the attackers of a team - which position contributes most?
 
@@ -255,21 +258,16 @@ hit the ball over the net and score a point for their team.*
 
 I ask you to create a [treemap with
 subgroups](https://r-graph-gallery.com/235-treemap-with-subgroups.html)
-for my favourite team, the Berlin Recycling Volleys 🍊 🖤 , as well as
-their biggest opponent, the VfB Friedrichshafen 🔷 🦳 .
-
-(If you feel the strong urge to create a treeplot for each of the teams,
-I would greatly appreciate your effort, but also remind you of the
-things you possibly procrastinated while creating these.)
+for my favourite team, the Berlin Recycling Volleys 🍊 🖤 .
 
 <img src="examples/attacker-comparison-treemap.png" width="300">
-
-<img src="examples/attacker-comparison-interactive-treemap.png" width="300">
 
 -   As broad categories (green, blue and orange in the first picture),
     please use the three attacking positions.
 -   As subcategories (shades of green in the second picture), please use
-    the individual attackers on the respective position of *one team*.
+    the individual attackers on the respective position of the [Berlin
+    Recycling
+    Volleys](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/laura-burk/volleyball-project/team-rosters/roster_BERLIN_RECYCLING_Volleys.csv).
 -   As the value determining the size of the chart, use the combined top
     scorer value of each attacker across all parts of the season. Note:
     not all attackers might appear on all top scorer lists.
@@ -279,9 +277,28 @@ in the plot.
 
 In case you are into volleyball: yes I know that this visualization
 over-simplifies the game, but there are no free stats available on the
-VBL, that are both detailed and R-readable. 😭
+VBL, that are both detailed and R-readable. 😿
 
 ## Visualization Priorities
+
+### Static part (very important)
+
+-   bar chart with x-axis and y-axis as displayed above
+-   bar colored according to the constructor the driver worked for in
+    the corresponding year and add a legend at the right to display
+    which color corresponds to which constructor
+
+### Interactive part (nice-to-have)
+
+-   tooltip (when hovering over the bar, show the name and the
+    nationality of the driver)
+-   bar segmented by year (does not have to be visible, only important
+    for the tooltip, add the year and the count of the races won in this
+    year to the tooltip)
+
+### Extra nice-to-have
+
+-   formula one font type
 
 [1] Positions: outside hitter, middle blocker, opposite hitter, setter,
 libero
