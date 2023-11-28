@@ -1,7 +1,7 @@
 ---
 title: "SOP"
 
-output: md_document
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -35,7 +35,10 @@ However, it's still way too ugly and edgy.
 For this reason, in this project, we are creating a Standard Operating Procedure or [SOP](https://www.digimojo.de/blog/was-ist-eine-sop-standard-operating-procedure-standardarbeitsanweisung) Layout in .md format for Elon, and together we'll secure his place in the billionaire's rank list.  <https://www.bloomberg.com/billionaires/>
 
 ***
-# **Dataset** <span class="invisible-link">[🔗](#Dataset)</span>**
+
+[<img src="overview.png" alt="Bildbeschreibung" width="500" style="display: block; margin: 0 auto;"/>](overview.png)
+
+# **Dataset** <span class="invisible-link">[🔗](#Dataset)</span>
 
 The Dataset contains one folder with tables, you can merge them by the ID (col1).
 
@@ -166,7 +169,6 @@ The final layout should include:
 
 ***
 
-[<img src="overview.png" alt="Bildbeschreibung" width="500" style="display: block; margin: 0 auto;"/>](overview.png)
 
 
 
