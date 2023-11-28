@@ -2,7 +2,7 @@
 
 # Laura’s Volleyball Project
 
-I have a passion for Volleyball! 🏐 Yay! 🎈
+I have a passion for Volleyball! 🏐 Yay! 🎉
 
 Before I deep-dive into the ongoing 2023/24 indoor season and fangirl
 about my favourite club 🍊 🖤 , I would love to recap the 2022/23
@@ -78,11 +78,11 @@ Unfortunately, not all information is in the desired format yet.
 If a teams’ roster happens to be incomplete, please upload a new
 `roster_TEAMNAME_YourName.csv`-file in the folder
 [team-roster](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/main/Projects/laura-burk/volleyball-project/team-rosters)
-and include the missing players with all the available information.
-{#here} (In the VBL, transfers are possible from the end of
-*Zwischenrunde*, thus before all parts of the season have ended, see
-[below](#games). That is why the same player can have two different
-teams within one season and appear in only one
+and include the missing players with all the available information. (In
+the VBL, transfers are possible from the end of *Zwischenrunde*, thus
+before all parts of the season have ended, see below. That is why the
+same player can have two different teams within one season and appear in
+only one
 [roster](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/main/Projects/laura-burk/volleyball-project/team-rosters)
 file.)
 
@@ -162,7 +162,7 @@ team, please upload a new `roster_TEAMNAME_YourName`.csv-file in the
 folder
 \[team-roster\](Phttps://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/main/Projects/laura-burk/volleyball-project/team-rosters
 and include the missing player with all the available information (see
-[Explanation](#here)).
+[Explanation](#team-rosters)).
 
 ------------------------------------------------------------------------
 
@@ -183,7 +183,7 @@ folder - how can we describe the season of a team?
 I ask you to create an [circular
 barplot](https://r-graph-gallery.com/297-circular-barplot-with-groups.html)
 for my favourite team, the Berlin Recycling Volleys 🍊🖤 , as well as
-their biggest opponent, the VfB Friedrichshafen 🔵🦳.
+their biggest opponent, the VfB Friedrichshafen 😰🦳.
 
 <img src="examples/team_overview-circular-barplot.png" width="400">
 
@@ -191,7 +191,7 @@ their biggest opponent, the VfB Friedrichshafen 🔵🦳.
 would greatly appreciate your effort, but also remind you of the things
 you possibly procrastinated while creating these.)
 
-Include the following groups, described below in more detail:
+Include the following categories, described below in more detail:
 
 #### Results
 
@@ -262,9 +262,9 @@ for my favourite team, the Berlin Recycling Volleys 🍊 🖤 .
 
 <img src="examples/attacker-comparison-treemap.png" width="300">
 
--   As broad categories (green, blue and orange in the first picture),
-    please use the three attacking positions.
--   As subcategories (shades of green in the second picture), please use
+-   As broad categories (yellow-ish, blue and pink), please use the
+    three attacking positions.
+-   As subcategories (shades of yellow-ish, blue and pink), please use
     the individual attackers on the respective position of the [Berlin
     Recycling
     Volleys](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/laura-burk/volleyball-project/team-rosters/roster_BERLIN_RECYCLING_Volleys.csv).
@@ -281,24 +281,22 @@ VBL, that are both detailed and R-readable. 😿
 
 ## Visualization Priorities
 
-### Static part (very important)
+### very important
 
--   bar chart with x-axis and y-axis as displayed above
--   bar colored according to the constructor the driver worked for in
-    the corresponding year and add a legend at the right to display
-    which color corresponds to which constructor
+-   circular bar chart with 5 categories
+-   3 bars per category
+-   labels for bars
+-   some kind of colour
 
-### Interactive part (nice-to-have)
+### very nice
 
--   tooltip (when hovering over the bar, show the name and the
-    nationality of the driver)
--   bar segmented by year (does not have to be visible, only important
-    for the tooltip, add the year and the count of the races won in this
-    year to the tooltip)
+-   all bars per category
+-   different shades of the team colours for different categories
 
-### Extra nice-to-have
+### extra super duper nice
 
--   formula one font type
+-   team logo in the middle of the circular bar plot
+-   Visualization Task 2
 
 [1] Positions: outside hitter, middle blocker, opposite hitter, setter,
 libero

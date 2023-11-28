@@ -63,6 +63,7 @@ These [files](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitH
 * `nationality`
 * `position`
 
+
 Unfortunately, not all information is in the desired format yet.
 
 * I would love to have `height` measured in meters, instead of centimetres.
@@ -71,8 +72,8 @@ Unfortunately, not all information is in the desired format yet.
 * Additionally, the German `position` names are annoying me, please change them into English. You can use the Wikipedia page linked above as a guide, but I prefer *middle blocker*, *outside hitter* and *opposite hitter* over the suggestions from Wikipedia.
 * Considering the staff, we only need data on the head coach. Feel free to ignore the other staffs' entries or delete them from your local copies and thank them silently for their contribution to this wonderful, wonderful sport.
 
-If a teams' roster happens to be incomplete, please upload a new `roster_TEAMNAME_YourName.csv`-file in the folder [team-roster](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/main/Projects/laura-burk/volleyball-project/team-rosters) and include the missing players with all the available information. {#here}
-(In the VBL, transfers are possible from the end of *Zwischenrunde*, thus before all parts of the season have ended, see [below](#games). That is why the same player can have two different teams within one season and appear in only one [roster](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/main/Projects/laura-burk/volleyball-project/team-rosters) file.)
+If a teams' roster happens to be incomplete, please upload a new `roster_TEAMNAME_YourName.csv`-file in the folder [team-roster](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/main/Projects/laura-burk/volleyball-project/team-rosters) and include the missing players with all the available information. 
+(In the VBL, transfers are possible from the end of *Zwischenrunde*, thus before all parts of the season have ended, see below. That is why the same player can have two different teams within one season and appear in only one [roster](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/main/Projects/laura-burk/volleyball-project/team-rosters) file.)
 
 ***
 
@@ -111,7 +112,7 @@ The columns are explained here shortly:
 
 Please add the column with the players' errors per set (`errors per set = errors overall / sets played `) and the team name to the top scorer files and update them on GitHub.
 
-If a player appears in the top scorer ranking but not in the roster of a team, please upload a new `roster_TEAMNAME_YourName`.csv-file in the folder [team-roster](Phttps://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/main/Projects/laura-burk/volleyball-project/team-rosters and include the missing player with all the available information (see [Explanation](#here)).
+If a player appears in the top scorer ranking but not in the roster of a team, please upload a new `roster_TEAMNAME_YourName`.csv-file in the folder [team-roster](Phttps://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/main/Projects/laura-burk/volleyball-project/team-rosters and include the missing player with all the available information (see [Explanation](#team-rosters)).
 
 ***
 
@@ -132,7 +133,7 @@ I ask you to create an [circular barplot](https://r-graph-gallery.com/297-circul
 (If you feel the strong urge to create a plot for each of the teams, I would greatly appreciate your effort, but also remind you of the things you possibly procrastinated while creating these.)
 
 
-Include the following groups, described below in more detail:
+Include the following categories, described below in more detail:
 
 #### Results
 * number of overall played games
@@ -186,8 +187,8 @@ I ask you to create a [treemap with subgroups](https://r-graph-gallery.com/235-t
 
 <img src="examples/attacker-comparison-treemap.png" width="300">
 
-* As broad categories (green, blue and orange in the first picture), please use the three attacking positions.
-* As subcategories (shades of green in the second picture), please use the individual attackers on the respective position of the [Berlin Recycling Volleys](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/laura-burk/volleyball-project/team-rosters/roster_BERLIN_RECYCLING_Volleys.csv).
+* As broad categories (yellow-ish, blue and pink), please use the three attacking positions.
+* As subcategories (shades of yellow-ish, blue and pink), please use the individual attackers on the respective position of the [Berlin Recycling Volleys](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/laura-burk/volleyball-project/team-rosters/roster_BERLIN_RECYCLING_Volleys.csv).
 * As the value determining the size of the chart, use the combined top scorer value of each attacker across all parts of the season. Note: not all attackers might appear on all top scorer lists.
 
 Similar to the example, please print the category and subcategory names in the plot.
@@ -196,21 +197,20 @@ In case you are into volleyball: yes I know that this visualization over-simplif
 
 ## Visualization Priorities {#visualization-priorities}
 
-### Static part (very important)
+### very important
 
--   bar chart with x-axis and y-axis as displayed above
--   bar colored according to the constructor the driver worked for in
-    the corresponding year and add a legend at the right to display
-    which color corresponds to which constructor
+* circular bar chart with 5 categories
+* 3 bars per category
+* labels for bars
+* some kind of colour
 
-### Interactive part (nice-to-have)
 
--   tooltip (when hovering over the bar, show the name and the
-    nationality of the driver)
--   bar segmented by year (does not have to be visible, only important
-    for the tooltip, add the year and the count of the races won in this
-    year to the tooltip)
+### very nice
 
-### Extra nice-to-have
+* all bars per category
+* different shades of the team colours for different categories
 
--   formula one font type
+### extra super duper nice
+
+* team logo in the middle of the circular bar plot
+* Visualization Task 2
