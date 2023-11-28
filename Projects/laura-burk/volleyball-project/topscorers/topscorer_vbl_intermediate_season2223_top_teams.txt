@@ -1,0 +1,41 @@
+Rank	Name	Position	Team	Country	Points overall	Errors overall	Points per Set	Sets played	Games played	Top-Scorer
+1	Brand, Tobias 	Außenangriff	Düren 		97	59	4,2	23	6	38
+2	Sotola, Marek 	Diagonal	Berlin 		102	73	5,1	20	6	29
+3	Ewert, Jordan 	Außenangriff	Lüneburg 		97	69	4,4	22	6	28
+4	Kessel, Cody 	Außenangriff	Berlin 		47	28	3,1	15	6	19
+5	Cacic, Vojin 	Außenangriff	Friedrichshafen 		56	41	3,3	17	5	15
+6	Superlak, Michal 	Diagonal	Friedrichshafen 		92	78	4,4	21	6	14
+7	Ketrzynski, Xander Wolf Wassenaar 	Mittelblock	Lüneburg 		52	39	3,5	15	5	13
+8	Röhrs, Erik Johannes 	Außenangriff	Düren 		41	30	3,7	11	3	11
+9	Ernastowicz, Marcin 	Außenangriff	Düren 		53	44	2,3	23	6	9
+10	Nedeljkovic, Aleksandar 	Mittelblock	Friedrichshafen 		50	43	2,5	20	6	7
+10	Peter, Tim 	Außenangriff	Friedrichshafen 		30	23	1,6	19	6	7
+10	Pettersson, David 	Mittelblock	Düren 		19	12	2,7	7	2	7
+10	Schnitzer, Jordan Ralph 	Mittelblock	Lüneburg 		46	39	2,6	18	6	7
+14	Gevert, Sebastián 	Diagonal	Düren 		68	62	3,8	18	5	6
+15	Mote, Nehemiah 	Mittelblock	Berlin 		27	24	1,7	16	5	3
+15	Schott, Ruben 	Außenangriff	Berlin 		47	44	2,9	16	5	3
+17	van de Kamp, Auke 	Außenangriff	Lüneburg 		29	27	2,6	11	4	2
+18	Eshenko, Pearson 	Mittelblock	Lüneburg 		23	22	1,5	15	5	1
+19	Andrae, Björn 	Außenangriff	Düren 		14	14	2,8	5	2	0
+19	Brehme, Anton 	Mittelblock	Berlin 		51	51	2,7	19	6	0
+21	Cowell, Colton Mark 	Außenangriff	Lüneburg 		35	36	2,3	15	5	-1
+21	John, Filip 	Diagonal	Düren 		9	10	2,3	4	3	-1
+21	Vicentin, Luciano 	Außenangriff	Friedrichshafen 		30	31	2,5	12	4	-1
+24	Biernat, Mateusz 	Zuspiel	Friedrichshafen 		1	3	0,3	4	2	-2
+24	Martinez Palacios, Miguel Angel 	Diagonal	Friedrichshafen 		6	8	2	3	2	-2
+26	Urban, Melf 	Mittelblock	Düren 		2	5	0,7	3	1	-3
+27	Böhme, Yann Niclas 	Diagonal	Lüneburg 		9	13	3	3	2	-4
+27	Carle, Timothée 	Außenangriff	Berlin 		39	43	3,3	12	5	-4
+27	Tille, Johannes 	Zuspiel	Berlin 		11	15	0,6	18	6	-4
+30	Böhme, Marcus 	Mittelblock	Friedrichshafen 		10	15	1,4	7	2	-5
+30	Maase, Lukas 	Diagonal	Lüneburg 		46	51	2,2	21	6	-5
+30	Trinidad, Ángel 	Zuspiel	Berlin 		6	11	1,2	5	2	-5
+30	van der Ent, Luuc 	Mittelblock	Düren 		28	33	1,6	17	5	-5
+34	Ronkainen, Antti 	Außenangriff	Berlin 		5	12	0,3	15	6	-7
+35	Andrei, Michael 	Mittelblock	Düren 		29	38	1,5	19	5	-9
+36	Burggräf, Eric 	Zuspiel	Düren 		4	14	0,2	23	6	-10
+37	Brown, Andre 	Mittelblock	Friedrichshafen 		34	46	1,7	20	6	-12
+38	Kocian-Falkenbach, Tomas 	Zuspiel	Düren 		15	32	0,8	18	5	-17
+39	Worsley, Joseph 	Zuspiel	Lüneburg 		9	34	0,4	22	6	-25
+40	Vincic, Dejan 	Zuspiel	Friedrichshafen 		6	32	0,3	21	6	-26
