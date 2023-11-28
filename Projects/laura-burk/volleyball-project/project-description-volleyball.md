@@ -2,7 +2,7 @@
 
 # Laura’s Volleyball Project
 
-I have a passion for Volleyball! 🏐 Yay! 🥳
+I have a passion for Volleyball! 🏐 Yay! 🎈
 
 Before I deep-dive into the ongoing 2023/24 indoor season and fangirl
 about my favourite club 🍊 🖤 , I would love to recap the 2022/23
@@ -30,18 +30,19 @@ eager to find out more? I recommend
 
 ### What you might want to google at some point
 
--   the different positions\[^1\], explained in
+-   the different positions [1], explained in
     [video](https://www.youtube.com/watch?v=aHZQfyl-hEA) or
     [text](https://en.wikipedia.org/wiki/Volleyball#Player_specialization)
-    \[^1\]: Positions: outside hitter, middle blocker, opposite hitter,
-    setter, libero
+
+<!-- -->
+
 -   game mode: best of five sets (first to three sets wins)
 -   first to 25 (with two points apart) wins the set
 -   tie-break: fifth set is first to 15 (two points gap)
 
 ## The Data
 
-The data was downloaded from the official VBL website [1] and is free to
+The data was downloaded from the official VBL website [2] and is free to
 use for private purposes. Surprisingly, it went from tidy to somewhat
 chaotic… 👻
 
@@ -83,7 +84,9 @@ include the missing players with all the available information. {#here}
 (In the VBL, transfers are possible from the end of *Zwischenrunde*,
 thus before all parts of the season have ended, see [below](#games).
 That is why the same player can have two different teams within one
-season.)
+season and appear in only one
+[team-roster](Projects/laura-burk/volleyball-project/team-rosters)
+file.)
 
 ------------------------------------------------------------------------
 
@@ -179,7 +182,7 @@ folder - how can we describe the season of a team?
 I ask you to create an [circular
 barplot](https://r-graph-gallery.com/297-circular-barplot-with-groups.html)
 for my favourite team, the Berlin Recycling Volleys 🍊🖤 , as well as
-their biggest opponent, the VfB Friedrichshafen 🔹🦳.
+their biggest opponent, the VfB Friedrichshafen 😰🦳.
 
 <img src="examples/team_overview-circular-barplot.png" width="400">
 
@@ -256,7 +259,7 @@ hit the ball over the net and score a point for their team.*
 I ask you to create a [treemap with
 subgroups](https://r-graph-gallery.com/235-treemap-with-subgroups.html)
 for my favourite team, the Berlin Recycling Volleys 🍊 🖤 , as well as
-their biggest opponent, the VfB Friedrichshafen 🔵 🦳 .
+their biggest opponent, the VfB Friedrichshafen 😰 🦳 .
 
 (If you feel the strong urge to create a treeplot for each of the teams,
 I would greatly appreciate your effort, but also remind you of the
@@ -279,9 +282,12 @@ in the plot.
 
 In case you are into volleyball: yes I know that this visualization
 over-simplifies the game, but there are no free stats available on the
-VBL, that are both detailed and R-readable. 😭
+VBL, that are both detailed and R-readable. 😞
 
 ## Visualization Priorities
 
-[1] Source:
+[1] Positions: outside hitter, middle blocker, opposite hitter, setter,
+libero
+
+[2] Source:
 <https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_maenner/archiv/ergebnisse.xhtml>

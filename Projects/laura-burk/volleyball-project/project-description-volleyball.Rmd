@@ -40,8 +40,10 @@ You have absolutely no clue about Volleyball and its rules, but are eager to fin
 I recommend [this](https://www.youtube.com/watch?v=OWCkPbzq81g) short video or the [Wikipedia page](https://en.wikipedia.org/wiki/Volleyball).
 
 ### What you might want to google at some point
-* the different positions[^1], explained in [video](https://www.youtube.com/watch?v=aHZQfyl-hEA) or [text](https://en.wikipedia.org/wiki/Volleyball#Player_specialization) 
+* the different positions [^1], explained in [video](https://www.youtube.com/watch?v=aHZQfyl-hEA) or [text](https://en.wikipedia.org/wiki/Volleyball#Player_specialization) 
+
 [^1]: Positions: outside hitter, middle blocker, opposite hitter, setter, libero
+
 * game mode: best of five sets (first to three sets wins)
 * first to 25 (with two points apart) wins the set
 * tie-break: fifth set is first to 15 (two points gap)
@@ -72,7 +74,7 @@ Unfortunately, not all information is in the desired format yet.
 * Considering the staff, we only need data on the head coach. Feel free to ignore the other staffs' entries or delete them from your local copies and thank them silently for their contribution to this wonderful, wonderful sport.
 
 If a teams' roster happens to be incomplete, please upload a new `roster_TEAMNAME_YourName`.csv-file in the folder [team-roster](Projects/laura-burk/volleyball-project/team-rosters) and include the missing players with all the available information. {#here}
-(In the VBL, transfers are possible from the end of *Zwischenrunde*, thus before all parts of the season have ended, see [below](#games). That is why the same player can have two different teams within one season.)
+(In the VBL, transfers are possible from the end of *Zwischenrunde*, thus before all parts of the season have ended, see [below](#games). That is why the same player can have two different teams within one season and appear in only one [team-roster](Projects/laura-burk/volleyball-project/team-rosters) file.)
 
 ***
 
