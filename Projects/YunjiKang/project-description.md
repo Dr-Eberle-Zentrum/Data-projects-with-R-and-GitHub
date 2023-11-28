@@ -34,13 +34,13 @@ Plot **a bubble map** with ggplot 2 to visualize the number of Police-recorded o
 
 -   color: Police-recorded offence *(unit Number)*
 
--   time : 2021
+-   time : 2019
 
 *-You can see data in different units by changing Unit of measure section.*
 
 *-You can see different types of offence by changing International classification of crime for statistical purposes.*
 
-*-If this is too easy for you, add an animation according to the years Image example*
+*-If this is too easy for you, add an animation according to the years(Markdown output does not support interactive/animated graphics formats like SVG or GIF, so HTML output might be necessary for the animated/interactive components this task) Image example*
 
 ![](images/bubble-map.png)
 
@@ -70,6 +70,6 @@ Plot **a bubble chart (with animation)** to visualize the relationship of Police
 
 *-You can see data in different years by changing time section. You can see different types of offence by changing International classification of crime for statistica purposes.*
 
-*-If this is too easy for you, add an interactive componet to each bubbles*
+*-If this is too easy for you, add an interactive componet to each bubbles(Markdown output does not support interactive/animated graphics formats like SVG or GIF, so HTML output might be necessary for the animated/interactive components this task)*
 
 ![](images/thecode2-1.png)
