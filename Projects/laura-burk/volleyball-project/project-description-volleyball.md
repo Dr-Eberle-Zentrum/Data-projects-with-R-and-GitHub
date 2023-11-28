@@ -2,7 +2,7 @@
 
 # Laura’s Volleyball Project
 
-I have a passion for Volleyball! 🏐 Yay! 🎂
+I have a passion for Volleyball! 🏐 Yay! 🎉
 
 Before I deep-dive into the ongoing 2023/24 indoor season and fangirl
 about my favourite club 🍊 🖤 , I would love to recap the 2022/23
@@ -45,9 +45,10 @@ chaotic… 👻
 
 ### Folder **team-rosters** (#team-rosters)
 
-These [files](/team-rosters) each contain a(n) (in)complete list of a
-teams’ roster and staff, including relevant information about the team
-members:
+These
+[files](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/main/Projects/laura-burk/volleyball-project/team-rosters)
+each contain a(n) (in)complete list of a teams’ roster and staff,
+including relevant information about the team members:
 
 -   correct (!) `name`
 -   `height` in cm
@@ -76,12 +77,11 @@ Unfortunately, not all information is in the desired format yet.
 
 If a teams’ roster happens to be incomplete, please upload a new
 `roster_TEAMNAME_YourName.csv`-file in the folder
-[team-roster](Projects/laura-burk/volleyball-project/team-rosters) and
-include the missing players with all the available information. {#here}
-(In the VBL, transfers are possible from the end of *Zwischenrunde*,
-thus before all parts of the season have ended, see [below](#games).
-That is why the same player can have two different teams within one
-season and appear in only one
+[team-roster](/team-rosters) and include the missing players with all
+the available information. {#here} (In the VBL, transfers are possible
+from the end of *Zwischenrunde*, thus before all parts of the season
+have ended, see [below](#games). That is why the same player can have
+two different teams within one season and appear in only one
 [team-roster](Projects/laura-burk/volleyball-project/team-rosters)
 file.)
 
@@ -179,7 +179,7 @@ folder - how can we describe the season of a team?
 I ask you to create an [circular
 barplot](https://r-graph-gallery.com/297-circular-barplot-with-groups.html)
 for my favourite team, the Berlin Recycling Volleys 🍊🖤 , as well as
-their biggest opponent, the VfB Friedrichshafen 🔷🦳.
+their biggest opponent, the VfB Friedrichshafen 🔵🦳.
 
 <img src="examples/team_overview-circular-barplot.png" width="400">
 
@@ -256,7 +256,7 @@ hit the ball over the net and score a point for their team.*
 I ask you to create a [treemap with
 subgroups](https://r-graph-gallery.com/235-treemap-with-subgroups.html)
 for my favourite team, the Berlin Recycling Volleys 🍊 🖤 , as well as
-their biggest opponent, the VfB Friedrichshafen 📘 🦳 .
+their biggest opponent, the VfB Friedrichshafen 🔷 🦳 .
 
 (If you feel the strong urge to create a treeplot for each of the teams,
 I would greatly appreciate your effort, but also remind you of the

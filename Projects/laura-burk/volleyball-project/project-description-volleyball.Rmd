@@ -53,7 +53,7 @@ The data was downloaded from the official VBL website [^2] and is free to use fo
 [^2]: Source: https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_maenner/archiv/ergebnisse.xhtml
 
 ### Folder **team-rosters** (#team-rosters)
-These [files](/team-rosters) each contain a(n) (in)complete list of a teams' roster and staff, including relevant information about the team members:
+These [files](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/main/Projects/laura-burk/volleyball-project/team-rosters) each contain a(n) (in)complete list of a teams' roster and staff, including relevant information about the team members:
 
 * correct (!) `name`
 * `height` in cm
@@ -71,7 +71,7 @@ Unfortunately, not all information is in the desired format yet.
 * Additionally, the German `position` names are annoying me, please change them into English. You can use the Wikipedia page linked above as a guide, but I prefer *middle blocker*, *outside hitter* and *opposite hitter* over the suggestions from Wikipedia.
 * Considering the staff, we only need data on the head coach. Feel free to ignore the other staffs' entries or delete them from your local copies and thank them silently for their contribution to this wonderful, wonderful sport.
 
-If a teams' roster happens to be incomplete, please upload a new `roster_TEAMNAME_YourName.csv`-file in the folder [team-roster](Projects/laura-burk/volleyball-project/team-rosters) and include the missing players with all the available information. {#here}
+If a teams' roster happens to be incomplete, please upload a new `roster_TEAMNAME_YourName.csv`-file in the folder [team-roster](/team-rosters) and include the missing players with all the available information. {#here}
 (In the VBL, transfers are possible from the end of *Zwischenrunde*, thus before all parts of the season have ended, see [below](#games). That is why the same player can have two different teams within one season and appear in only one [team-roster](Projects/laura-burk/volleyball-project/team-rosters) file.)
 
 ***
