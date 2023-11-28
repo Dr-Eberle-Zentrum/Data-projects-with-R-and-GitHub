@@ -26,7 +26,7 @@ instead use the answers for item “PS03\_01”).
 
 ## Task 1 - Get in Touch with the Material
 
-1.  Take a look at the dataset in R
+1.  Take a look at the dataset in R [data_smaschkon_2023-02-11_09-11.xlsx](data_smaschkon_2023-02-11_09-11.xlsx)
 
     -   How many oberservations do we have?
 
@@ -120,7 +120,7 @@ Now, here is a list of all the items to build scales with:
     “TS01\_10”, “TS01\_11”, “TS01\_12”, “TS01\_13”, “TS01\_14”,
     “TS01\_15”, “TS01\_16”, “TS01\_17”, “TS01\_18”, “TS01\_19”
 
----
+------------------------------------------------------------------------
 
 1.  Some preparation is needed: Item “SC01\_09” must be recoded.
 
@@ -147,9 +147,11 @@ this:
 ![](Rplot.png)
 
 Please try to recreate the graphic and add a few things: \* Use colors
-that are easier to distinguish. \* Include a legend. \* Provide clear
-axis labels. \* Set axis ticks analogous to the answer options of the
-items. \* Choose a nice theme. \* Try to add a convex hull for each
-group.
+that are easier to distinguish. 
+- Include a legend. 
+- Provide clear axis labels. 
+- Set axis ticks analogous to the answer options of the items. 
+- Choose a nice theme. 
+- Try to add a convex hull for each group.
 
 Good luck!
