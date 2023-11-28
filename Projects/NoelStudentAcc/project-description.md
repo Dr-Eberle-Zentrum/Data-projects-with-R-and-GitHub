@@ -30,12 +30,12 @@ instead use the answers for item “PS03\_01”).
 -   How many oberservations do we have?
 
 1.  Examine the table
-    [![](variables_smaschkon_2023-02-11_09-24.csv)](variables_smaschkon_2023-02-11_09-24.csv)
+    [variables\_smaschkon\_2023-02-11\_09-24.csv](variables_smaschkon_2023-02-11_09-24.csv)
 
 -   What is the question behind the items “SC01\_14”, “TS01\_01”?
 
 1.  Examine the table
-    [![](values_smaschkon_2023-02-11_09-24.csv)](values_smaschkon_2023-02-11_09-24.csv)
+    [values\_smaschkon\_2023-02-11\_09-24.csv](values_smaschkon_2023-02-11_09-24.csv)
 
 -   What are the possible values for the item “PS03\_01”, “SC01\_14”,
     “TS01\_01”?
@@ -131,8 +131,8 @@ Now, here is a list of all the items to build scales with:
 
 1.  **Find a way to build the scales.** Different methods can be used.
     As mentioned earlier, we want row-wise means over the items that
-    belong to the specific scale. (You can use either \[Base R\] or
-    \[tidyverse\].)
+    belong to the specific scale. (You can use either `Base R` or
+    `tidyverse`.)
 
 ## Task 3 - Plot Something Beautiful for Me
 
