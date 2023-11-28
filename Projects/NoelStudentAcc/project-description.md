@@ -23,33 +23,30 @@ this case, we have items to build scales for the variables
 in this project, we won’t construct a scale for sleep quality and
 instead use the answers for item “PS03\_01”).
 
+
 ## Task 1 - Get in Touch with the Material
 
 1.  Take a look at the dataset in R
 
--   How many oberservations do we have?
+    -   How many oberservations do we have?
 
-1.  Examine the table
+2.  Examine the table
     [variables\_smaschkon\_2023-02-11\_09-24.csv](variables_smaschkon_2023-02-11_09-24.csv)
 
--   What is the question behind the items “SC01\_14”, “TS01\_01”?
+    -   What is the question behind the items “SC01\_14”, “TS01\_01”?
 
-1.  Examine the table
+3.  Examine the table
     [values\_smaschkon\_2023-02-11\_09-24.csv](values_smaschkon_2023-02-11_09-24.csv)
 
--   What are the possible values for the item “PS03\_01”, “SC01\_14”,
-    “TS01\_01”?
--   What does “-9” mean? And how should “-9” be presented in R?
+    -   What are the possible values for the item “PS03\_01”, “SC01\_14”, “TS01\_01”?
+    -   What does “-9” mean? And how should “-9” be presented in R?
 
-1.  Back to R
+4.  Back to R
 
--   Check with R for the observed values for “PS03\_01,” “SC01\_14,”
-    “TS01\_17” (use, for example, the table() function).
--   Check whether you have successfully imported the data so that the
-    codes for “not answered” are noted as “NA” in the table.
-    -   If so: great! If not: find a way to correct this, perhaps by
-        adjusting the import or defining missing values as NAs
-        throughout the dataset.
+    -   Check with R for the observed values for “PS03\_01,” “SC01\_14,”, “TS01\_17” (use, for example, the table() function).
+    -   Check whether you have successfully imported the data so that the codes for “not answered” are noted as “NA” in the table.
+        -   If so: great! If not: find a way to correct this, perhaps by adjusting the import or defining missing values as NAs throughout the dataset.
+
 
 ## Task 2 - Building Scales
 
@@ -123,16 +120,19 @@ Now, here is a list of all the items to build scales with:
     “TS01\_10”, “TS01\_11”, “TS01\_12”, “TS01\_13”, “TS01\_14”,
     “TS01\_15”, “TS01\_16”, “TS01\_17”, “TS01\_18”, “TS01\_19”
 
+
+
 1.  Some preparation is needed: Item “SC01\_09” must be recoded.
 
--   Examine the question behind item “SC01\_09” again. What is unique
-    about this question, and why should this item be “recoded”?
--   Find a way to recode the item in the dataset.
+    -   Examine the question behind item “SC01\_09” again. What is unique
+        about this question, and why should this item be “recoded”?
+    -   Find a way to recode the item in the dataset.
 
-1.  **Find a way to build the scales.** Different methods can be used.
+2.  **Find a way to build the scales.** Different methods can be used.
     As mentioned earlier, we want row-wise means over the items that
     belong to the specific scale. (You can use either `Base R` or
     `tidyverse`.)
+
 
 ## Task 3 - Plot Something Beautiful for Me
 
