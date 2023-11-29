@@ -38,7 +38,7 @@ place in the billionaire’s rank list.
 
 ##### *“From the improved aerodynamic shape of the body to the overhaul of the autopilot, which previously thought”left” and “right” were merely directional instructions from another galaxy.”*
 
-##### **Each component** undergoes a transformation, and we want to create a **separate** [**SOP**](https://www.digimojo.de/blog/was-ist-eine-sop-standard-operating-procedure-standardarbeitsanweisung) for each part as **own** **.md-output !** ⚠️
+##### **Each component** / **work part** undergoes a transformation, and we want to create a **separate** [**SOP**](https://www.digimojo.de/blog/was-ist-eine-sop-standard-operating-procedure-standardarbeitsanweisung) for each part as **own** **.md-output !** ⚠️
 
 ⇒ **Note:**
 `Each row "component" from table 1-3 gets its own .md-output`
@@ -71,9 +71,9 @@ only in distant worlds but also on Earth.
 
 ##### *“The cyber engineers, also known as ‘Tech Pioneers,’ tirelessly combed through every corner of the digital universe day and night, gathering with dedication all pertinent component data.*
 
-##### *The sound of their keyboards became a symphonic anthem 🎵 of innovation .*
+##### *The sound of their keyboards became a symphonic anthem 🎙 of innovation .*
 
-##### *Yet, while we speak of their passionate quest and unwavering dedication here, **the next chapter** will reveal how you can utilize this data and transform the CyberTruck into a space epic.*”
+##### *Yet, while we speak of their passionate quest and unwavering dedication here, **the next chapter’s** will reveal how you can utilize this data and transform the CyberTruck into a space epic.*”
 
 ------------------------------------------------------------------------
 
@@ -93,7 +93,7 @@ only in distant worlds but also on Earth.
 -   The [folder
     **images**](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/main/Projects/blubbi90/StandardOperatingProcedureLayout/Datasets/images)
     : contains all the **requiered images** for the SOP’s as **.png
-    files**.
+    files** 📸.
 
 ------------------------------------------------------------------------
 
@@ -168,7 +168,7 @@ only in distant worlds but also on Earth.
 
 ------------------------------------------------------------------------
 
-### **String:** ➿ <span class="invisible-link">[🔗](#String:)</span>
+### **String:** 📃 <span class="invisible-link">[🔗](#String:)</span>
 
 -   Indicates the string/text to be displayed in the corresponding
     **Section**. It may contain values in square brackets for notes,

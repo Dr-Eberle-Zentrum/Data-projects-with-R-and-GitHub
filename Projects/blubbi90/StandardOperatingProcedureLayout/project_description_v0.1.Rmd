@@ -1,7 +1,7 @@
 ---
-title: "SOP"
+title: "Standard Operating Procedure Layout"
 
-output: html_document; md_document
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -37,7 +37,7 @@ This remarkable ride looks like it's straight from a post-apocalyptic era.
 For this **reason**, in this project, we are creating a **Standard Operating Procedure** or [**SOP**](https://www.digimojo.de/blog/was-ist-eine-sop-standard-operating-procedure-standardarbeitsanweisung) **Layout** in **.md format** for Elon, and together we'll secure his place in the billionaire's rank list.  <https://www.bloomberg.com/billionaires/>
 
 <div style="text-align:center;">
-  <img src="https://www.investopedia.com/thmb/InYiGcJ61RPwg7A6vvMZTNfHuqo=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/GettyImages-1229893385-660e28619bce4b86b26897be614e36ff.jpg" alt="Alt Text" width="300" height="225" />
+  <img src="https://www.investopedia.com/thmb/InYiGcJ61RPwg7A6vvMZTNfHuqo=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/GettyImages-1229893385-660e28619bce4b86b26897be614e36ff.jpg" alt="Alt Text" width="350" height="225" />
 </div>
 
 
@@ -51,23 +51,13 @@ For this **reason**, in this project, we are creating a **Standard Operating Pro
 
 ##### *"From the improved aerodynamic shape of the body to the overhaul of the autopilot, which previously thought "left" and "right" were merely directional instructions from another galaxy."*
 
-##### **Each component** undergoes a transformation, and we want to create a **separate** [**SOP**](https://www.digimojo.de/blog/was-ist-eine-sop-standard-operating-procedure-standardarbeitsanweisung) for each part as **own** **.md-output !** `r emo::ji("warning")`
+##### **Each component** / **work part** undergoes a transformation, and we want to create a **separate** [**SOP**](https://www.digimojo.de/blog/was-ist-eine-sop-standard-operating-procedure-standardarbeitsanweisung) for each part as **own** **.md-output !** `r emo::ji("warning")`
 
  ⇒ **Note:** ` Each row "component" from table 1-3 gets its own .md-output`  
 
 This way, we aim to ensure that Elon can once again fully focus on implementing his mission `r emo::ji("rocket")` and vision `r emo::ji("dizzy")` `r emo::ji("sparkles")` – leading humanity into the vastness of interplanetary space and guiding it to the next stage of development as an interstellar species.
 
  Moreover, it would be quite delightful if the Cybertruck soon shines not only in distant worlds but also on Earth.
-
-***
-
-\n
-
-#### **So this is how the final SOP-Layout should look alike:**
-
-***
-
-[<img src="overview.png" alt="Bildbeschreibung" width="700" style="display: block; margin: 0 auto;"/>](overview.png)
 
 ***
 
@@ -83,18 +73,18 @@ This way, we aim to ensure that Elon can once again fully focus on implementing 
 
 ##### *The sound of their keyboards became a symphonic anthem `r emo::ji("music")` of innovation .*
 
-##### *Yet, while we speak of their passionate quest and unwavering dedication here, **the next chapter** will reveal how you can utilize this data and transform the CyberTruck into a space epic.*"
+##### *Yet, while we speak of their passionate quest and unwavering dedication here, **the next chapter's** will reveal how you can utilize this data and transform the CyberTruck into a space epic.*"
 
 ***
 
 **The Dataset contains 3 subfolder:**
 
-- The [folder **tables**](./Datasets/tables): contains **3 .csv tables** `r emo::ji("bar_chart")`, these tables represent **the data** what should be done for **each component/ work part**.
+- The [folder **tables**](./Datasets/tables): contains **3 .csv tables** `r emo::ji("chart_with_upwards_trend")`, these tables represent **the data** what should be done for **each component/ work part**.
   These tables can be **mergeed to one** by the column `#`
 
-- The [folder **codebooks**](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/main/Projects/blubbi90/StandardOperatingProcedureLayout/Datasets/codebooks) : contains **7** single **.xlsv table's**, which containing **all informations**, what's the meaning of the single values in **table 1-3**.
+- The [folder **codebooks**](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/main/Projects/blubbi90/StandardOperatingProcedureLayout/Datasets/codebooks) : contains **7** single **.xlsv table's**, which containing **all informations** `r emo::ji("ballpoint")`, what's the meaning of the single values in **table 1-3**.
 
-- The [folder **images**](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/main/Projects/blubbi90/StandardOperatingProcedureLayout/Datasets/images) : contains all the **requiered images** for the SOP's as **.png files**.
+- The [folder **images**](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/main/Projects/blubbi90/StandardOperatingProcedureLayout/Datasets/images) : contains all the **requiered images** for the SOP's as **.png files** `r emo::ji("photo")`.
 
 ***
 
@@ -196,6 +186,15 @@ The **Table 1-3** can contain multiple values per cell, each with different mean
 ***
 
 # **The Final SOP Layout** `r emo::ji("warning")`  <span class="invisible-link">[🔗](#The-SOP-Layout)</span> 
+
+***
+\n
+
+#### **So this is how the final SOP-Layout should look alike:**
+
+***
+
+[<img src="overview.png" alt="Bildbeschreibung" width="700" style="display: block; margin: 0 auto;"/>](overview.png)
 
 ***
 
