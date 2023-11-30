@@ -30,7 +30,7 @@ Operating Procedure** or
 place in the billionaire’s rank list.
 <https://www.bloomberg.com/billionaires/>
 
-<img src="https://www.investopedia.com/thmb/InYiGcJ61RPwg7A6vvMZTNfHuqo=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/GettyImages-1229893385-660e28619bce4b86b26897be614e36ff.jpg" alt="Alt Text" width="300" height="225" />
+<img src="https://www.investopedia.com/thmb/InYiGcJ61RPwg7A6vvMZTNfHuqo=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/GettyImages-1229893385-660e28619bce4b86b26897be614e36ff.jpg" alt="Alt Text" width="350" height="225" />
 
 ------------------------------------------------------------------------
 
@@ -53,14 +53,6 @@ only in distant worlds but also on Earth.
 
 ------------------------------------------------------------------------
 
-#### **So this is how the final SOP-Layout should look alike:**
-
-------------------------------------------------------------------------
-
-[<img src="overview.png" alt="Bildbeschreibung" width="700" style="display: block; margin: 0 auto;"/>](overview.png)
-
-------------------------------------------------------------------------
-
 # **Dataset** 📊 <span class="invisible-link">[🔗](#Dataset)</span>
 
 ------------------------------------------------------------------------
@@ -71,7 +63,7 @@ only in distant worlds but also on Earth.
 
 ##### *“The cyber engineers, also known as ‘Tech Pioneers,’ tirelessly combed through every corner of the digital universe day and night, gathering with dedication all pertinent component data.*
 
-##### *The sound of their keyboards became a symphonic anthem 🎙 of innovation .*
+##### *The sound of their keyboards became a symphonic anthem 🎺 of innovation .*
 
 ##### *Yet, while we speak of their passionate quest and unwavering dedication here, **the next chapter’s** will reveal how you can utilize this data and transform the CyberTruck into a space epic.*”
 
@@ -80,14 +72,14 @@ only in distant worlds but also on Earth.
 **The Dataset contains 3 subfolder:**
 
 -   The [folder **tables**](./Datasets/tables): contains **3 .csv
-    tables** 📊, these tables represent **the data** what should be done
+    tables** 📈, these tables represent **the data** what should be done
     for **each component/ work part**. These tables can be **mergeed to
     one** by the column `#`
 
 -   The [folder
     **codebooks**](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/main/Projects/blubbi90/StandardOperatingProcedureLayout/Datasets/codebooks)
     : contains **7** single **.xlsv table’s**, which containing **all
-    informations**, what’s the meaning of the single values in **table
+    informations** 🖊, what’s the meaning of the single values in **table
     1-3**.
 
 -   The [folder
@@ -168,7 +160,7 @@ only in distant worlds but also on Earth.
 
 ------------------------------------------------------------------------
 
-### **String:** 📃 <span class="invisible-link">[🔗](#String:)</span>
+### **String:** ➿ <span class="invisible-link">[🔗](#String:)</span>
 
 -   Indicates the string/text to be displayed in the corresponding
     **Section**. It may contain values in square brackets for notes,
@@ -220,6 +212,14 @@ different meanings based on their format:
 ------------------------------------------------------------------------
 
 # **The Final SOP Layout** ⚠️ <span class="invisible-link">[🔗](#The-SOP-Layout)</span>
+
+------------------------------------------------------------------------
+
+#### **So this is how the final SOP-Layout should look alike:**
+
+------------------------------------------------------------------------
+
+[<img src="overview.png" alt="Bildbeschreibung" width="700" style="display: block; margin: 0 auto;"/>](overview.png)
 
 ------------------------------------------------------------------------
 
