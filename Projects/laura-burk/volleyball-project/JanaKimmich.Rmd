@@ -2,3 +2,152 @@
 output: md_document
 ---
 
+```{r setup, include=FALSE}
+library(tidyverse)
+
+########## load, adjust, join tables ##########
+# original tables
+roster <-
+  read.csv("team-rosters/roster_BERLIN_RECYCLING_Volleys.csv", sep = ";",encoding="latin-1")
+topscorer_intermediate_bottom <- read.csv("topscorers/topscorer_vbl_intermediate_season2223_bottom_teams.txt", sep = "\t",encoding="UTF-8")
+topscorer_intermediate_top <- read.csv("topscorers/topscorer_vbl_intermediate_season2223_top_teams.txt", sep = "\t",encoding="UTF-8")
+topscorer_playoffs <- read.csv("topscorers/topscorer_vbl_playoffs_season2223_allteams.txt", sep = "\t",encoding="UTF-8")
+topscorer_regular <- read.csv("topscorers/topscorer_vbl_regular_season2223_allteams.txt", sep = "\t",encoding="UTF-8")
+games_playoff <- read.csv("games/Spielplan_1._Bundesliga_Männer_Playoff.csv", sep = ";",encoding="UTF-8")
+games_regular <- read.csv("games/Spielplan_1._Bundesliga_Männer_Playoff.csv", sep = ";",encoding="UTF-8")
+games_zwr14 <- read.csv("games/Spielplan_1._Bundesliga_Männer_Playoff.csv", sep = ";",encoding="UTF-8")
+games_zwr59 <- read.csv("games/Spielplan_1._Bundesliga_Männer_Playoff.csv", sep = ";",encoding="UTF-8")
+
+# new tables
+new_roster <- roster
+# add new column errors_per_set to all topscorer files
+new_topscorer_intermediate_bottom <- topscorer_intermediate_bottom %>%mutate(errors_per_set = Errors.overall / Sets.played)
+new_topscorer_intermediate_top <- topscorer_intermediate_top %>%mutate(errors_per_set = Errors.overall / Sets.played)
+new_topscorer_playoffs <- topscorer_playoffs %>%mutate(errors_per_set = Errors.overall / Sets.played)
+new_topscorer_regular <- topscorer_regular %>%mutate(errors_per_set = Errors.overall / Sets.played)
+
+# adjust gender encoding
+new_roster$Gender <- str_replace(new_roster$Gender,pattern="^f.*|^F.*|2",replacement="female")
+new_roster$Gender <-  str_replace(new_roster$Gender,"^m.*|^M.*|1","male")
+  #{gsub("^\\f.*|^\\F.*|2","female",useBytes = TRUE,.)} %>%
+  #{gsub("^\\m.*|^\\M.*|1","male",roster$Gender,useBytes = TRUE,.)}
+
+
+# adjust position
+new_roster$Position <- str_replace(new_roster$Position,"^Au.*","outside hitter")
+new_roster$Position <- str_replace(new_roster$Position,"^D.*|^d.*","opposite hitter")
+new_roster$Position <- str_replace(new_roster$Position,"^Z.*|^z.*","setter")
+new_roster$Position <- str_replace(new_roster$Position,"^M.*|^m.*","middle blocker")
+new_roster$Position <- str_replace(new_roster$Position,"^Libero","libero")
+new_roster$Position <- str_replace(new_roster$Position,"^Chef.*","head coach")
+
+# deleting staff except of head coach
+new_roster <- subset(new_roster, new_roster$Position=="opposite hitter"| new_roster$Position=="setter"|new_roster$Position=="libero"|new_roster$Position=="middle blocker"|new_roster$Position=="head coach"|new_roster$Position=="outside hitter")
+
+# adjust height
+new_roster$Height <- as.numeric(new_roster$Height)
+new_roster$Height <- new_roster$Height/100
+
+# join tables 
+new_roster <- new_roster %>% rename("Name"="Last.Name.First.Name")
+joined_topscorer_intermediate_bottom <- full_join(new_topscorer_intermediate_bottom,new_roster,"Name")
+joined_topscorer_intermediate_top <- full_join(new_topscorer_intermediate_top,new_roster,"Name")
+joined_topscorer_playoffs <- full_join(new_topscorer_playoffs,new_roster,"Name")
+joined_topscorer_regular <- full_join(new_topscorer_regular,new_roster,"Name")
+
+########### compute values for bar plot ##########
+
+##### results 
+# number of overall played games
+num_all_games <- games_playoff%>%
+  filter(Mannschaft.1=="BERLIN RECYCLING Volleys"|Mannschaft.2=="BERLIN RECYCLING Volleys") %>%
+  nrow()
+num_all_games <- num_all_games + games_regular%>%
+  filter(Mannschaft.1=="BERLIN RECYCLING Volleys"|Mannschaft.2=="BERLIN RECYCLING Volleys") %>%
+  nrow()
+num_all_games <- num_all_games + games_zwr14%>%
+  filter(Mannschaft.1=="BERLIN RECYCLING Volleys"|Mannschaft.2=="BERLIN RECYCLING Volleys") %>%
+  nrow()
+num_all_games <- num_all_games + games_zwr59%>%
+  filter(Mannschaft.1=="BERLIN RECYCLING Volleys"|Mannschaft.2=="BERLIN RECYCLING Volleys") %>%
+  nrow()
+
+##### attacking
+
+##### stadium
+# number of home games
+num_home_games <- games_playoff%>%
+  filter(Mannschaft.1=="BERLIN RECYCLING Volleys") %>%
+  nrow()
+num_home_games <- num_home_games + games_regular%>%
+  filter(Mannschaft.1=="BERLIN RECYCLING Volleys") %>%
+  nrow()
+num_home_games <- num_home_games + games_zwr14%>%
+  filter(Mannschaft.1=="BERLIN RECYCLING Volleys") %>%
+  nrow()
+num_home_games <- num_home_games + games_zwr59%>%
+  filter(Mannschaft.1=="BERLIN RECYCLING Volleys") %>%
+  nrow()
+# number of away games
+num_away_games <- games_playoff%>%
+  filter(Mannschaft.2=="BERLIN RECYCLING Volleys") %>%
+  nrow()
+num_away_games <- num_away_games + games_regular%>%
+  filter(Mannschaft.2=="BERLIN RECYCLING Volleys") %>%
+  nrow()
+num_away_games <- num_away_games + games_zwr14%>%
+  filter(Mannschaft.2=="BERLIN RECYCLING Volleys") %>%
+  nrow()
+num_away_games <- num_away_games + games_zwr59%>%
+  filter(Mannschaft.2=="BERLIN RECYCLING Volleys") %>%
+  nrow()
+# average attendance in home stadium
+num_attendance <- games_playoff%>%
+  filter(Mannschaft.1=="BERLIN RECYCLING Volleys") %>%
+  select(Zuschauerzahl)%>%
+  colSums()
+num_attendance <- num_attendance + games_regular%>%
+  filter(Mannschaft.1=="BERLIN RECYCLING Volleys") %>%
+  select(Zuschauerzahl)%>%
+  colSums()
+num_attendance <- num_attendance + games_zwr14%>%
+  filter(Mannschaft.1=="BERLIN RECYCLING Volleys") %>%
+  select(Zuschauerzahl)%>%
+  colSums()
+num_attendance <- num_attendance + games_zwr59%>%
+  select(Zuschauerzahl)%>%
+  colSums()
+avg_attendance <- num_attendance/num_home_games
+
+##### top scorer
+
+##### errors
+
+
+########## circular bar plot, not done yet #########
+stadium <- as.data.frame(c(c(num_home_games),c(num_away_games),c(avg_attendance)))
+rownames(stadium) = c("home games", "away games", "avg attendance")
+colnames(stadium) = "amount"
+
+p <- ggplot(stadium) +       
+# Note that id is a factor. If x is numeric, there is some space between the first bar
+  
+# This add the bars with a blue color
+#geom_bar(stat="identity", fill=alpha("blue", 0.3)) +
+  geom_bar()
+  
+# Limits of the plot = very important. The negative value controls the size of the inner circle, the positive one is useful to add size over each bar
+ylim(-100,120) +
+# Custom the theme: no axis title and no cartesian grid
+theme_minimal() +
+theme(axis.text = element_blank(),
+  axis.title = element_blank(),
+  panel.grid = element_blank(),
+  plot.margin = unit(rep(-2,4), "cm")     
+  # This remove unnecessary margin around plot
+  )+
+# This makes the coordinate polar instead of cartesian.
+coord_polar(start = 0)
+
+
+```
