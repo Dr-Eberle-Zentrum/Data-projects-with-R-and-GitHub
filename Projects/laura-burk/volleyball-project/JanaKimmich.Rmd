@@ -123,31 +123,44 @@ avg_attendance <- num_attendance/num_home_games
 
 ##### errors
 
-
+# to test better
+avg_attendance <- 49
 ########## circular bar plot, not done yet #########
-stadium <- as.data.frame(c(c(num_home_games),c(num_away_games),c(avg_attendance)))
-rownames(stadium) = c("home games", "away games", "avg attendance")
-colnames(stadium) = "amount"
+stadium <- as.data.frame(cbind(c(num_all_games,num_home_games,num_away_games,avg_attendance),c("all games","home games", "away games", "avg attendance"),c("results","stadium","stadium","stadium")))
+colnames(stadium) = c("amount","name","group")
 
-p <- ggplot(stadium) +       
+# ----- This section prepare a dataframe for labels ---- #
+# Get the name and the y position of each label
+label_data <- stadium
+# calculate the ANGLE of the labels
+number_of_bar <- nrow(label_data)
+angle <-  90 - 360 * (as.numeric(label_data$amount)-0.5) /number_of_bar     
+# substract 0.5 because the letter must have the angle of the center of the bars. Not extreme right(1) or extreme left (0)
+# calculate the alignment of labels: right or left
+# If on the left part of the plot, labels have currently an angle < -90
+label_data$hjust<-ifelse(angle < -90, 1, 0)
+# flip angle BY to make them readable
+label_data$angle<-ifelse(angle < -90, angle+180, angle)
+# ----- ------------------------------------------- ---- #
+
+p <- ggplot(stadium,aes(x=name,y=as.numeric(amount),fill=group)) +  
 # Note that id is a factor. If x is numeric, there is some space between the first bar
-  
 # This add the bars with a blue color
-#geom_bar(stat="identity", fill=alpha("blue", 0.3)) +
-  geom_bar()
-  
+geom_bar(stat="identity",alpha=0.3 ) +
 # Limits of the plot = very important. The negative value controls the size of the inner circle, the positive one is useful to add size over each bar
-ylim(-100,120) +
+ylim(-10,75) +
 # Custom the theme: no axis title and no cartesian grid
 theme_minimal() +
 theme(axis.text = element_blank(),
   axis.title = element_blank(),
-  panel.grid = element_blank(),
-  plot.margin = unit(rep(-2,4), "cm")     
+  panel.grid = element_blank())+
+  #plot.margin = unit(rep(-2,4), "cm")+     
   # This remove unnecessary margin around plot
-  )+
+  #)+
 # This makes the coordinate polar instead of cartesian.
-coord_polar(start = 0)
-
+coord_polar(start = 0)+
+geom_text(data=label_data, aes(x=name, y=as.numeric(amount)+10, label=name, hjust=hjust), color="black", fontface="bold",alpha=0.6, size=2.5, angle= label_data$angle, inherit.aes = FALSE ) 
+ 
+p
 
 ```
