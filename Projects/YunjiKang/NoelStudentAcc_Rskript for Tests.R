@@ -25,21 +25,27 @@ ggplot() +
 
 ### Task 2 ---------------------------------------------------------------------
 
-crime_task2 <- crimedata2 |> 
-  select(c("geo", "TIME_PERIOD", "OBS_VALUE")) |> 
-  mutate(Type = "Crime")
+crimedata2 <- data.table::fread("Projects/YunjiKang/Crime_data_for_Task2.gz")
+incomedata <- data.table::fread("Projects/YunjiKang/Income of households.gz")
+povertydata <- data.table::fread("Projects/YunjiKang/At-risk-of-poverty rate.gz")
+names(crimedata2)
+names(incomedata)
+names(povertydata)
 
-income_task2 <- incomedata |> 
-  select(c("geo", "TIME_PERIOD", "OBS_VALUE")) |> 
-  mutate(Type = "Income")
+#df1 <- data.frame(x=c(1,2,3), y=c(2,3,4), a=c(7,6,7))
+#df2 <- data.frame(x=c(3,2,3), z=c(2,3,4), b=c(8,8,9))
+#df3 <- data.frame(x=c(3,2,3), z=c(2,3,4), b=c(8,8,9))
+#df <- bind_rows(select(df1, x,y), select(df2,x,z), select(df2,x,z))
 
-poverty_task2 <- povertydata |> 
-  select(c("geo", "TIME_PERIOD", "OBS_VALUE")) |> 
-  mutate(Type = "Poverty")
+data <- bind_rows(
+  select(rename(crimedata2, crime = OBS_VALUE), geo, TIME_PERIOD, crime), 
+  select(rename(incomedata, income = OBS_VALUE), geo, TIME_PERIOD, income),
+  select(rename(povertydata, poverty = OBS_VALUE), geo, TIME_PERIOD, poverty)
+  ) |> arrange(geo)
 
-datatask2 <- merge(crime_task2, income_task2, by = "Type")
+rm(crimedata2) & rm(incomedata) & rm(povertydata)
 
-ggplot(aes(x=gdpPercap, y=lifeExp, size=pop, color=continent)) +
+data |> ggplot(aes(x=income, y=crime, size=poverty, color=geo)) +
   geom_point(alpha=0.5) +
   scale_size(range = c(.1, 24), name="Population (M)")
 
