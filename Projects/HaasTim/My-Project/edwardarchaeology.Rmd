@@ -1,0 +1,255 @@
+---
+output: md_document
+---
+
+```{r, setup, include=FALSE}
+library(tidyverse)
+library(haven)
+library(stringr)
+library(dplyr)
+library(ggplot2)
+library(ggpmisc)
+```
+
+```{r, include=FALSE}
+#Import data
+Data2019 <- read_dta("Data2019.dta")
+Data2020 <- read_dta("Data2020.dta")
+HS_list <- read.csv("HS_2Digit_List.csv")
+
+#Grab 2019 data with only first two numbers of product code
+Data2019_2d <- Data2019 %>% mutate(
+  hs_product_code = str_extract(hs_product_code, "\\w\\w")) %>%
+  group_by(partner_code,hs_product_code) %>%
+  summarize(total_import = sum(import_value), total_export = sum(export_value))
+
+#Grab 2020 data with only first two numbers of product code
+Data2020_2d <- Data2020 %>% mutate(
+  hs_product_code = str_extract(hs_product_code, "\\w\\w")) %>%
+  group_by(partner_code,hs_product_code) %>%
+  summarize(total_import = sum(import_value), total_export = sum(export_value))
+
+#Merge 2020 and 2019 data. Rename Columns for clarity
+Years_Combined <- merge(Data2019_2d, Data2020_2d, 
+                         by=c("partner_code", "hs_product_code")) %>%
+  dplyr::rename(import_2019 = total_import.x, export_2019 = total_export.x, 
+                import_2020 = total_import.y, export_2020 = total_export.y)
+
+#Quick way to kill the weird ANS country code value and helps with HS_list merge
+Years_Combined <- Years_Combined %>%
+  mutate(
+    hs_product_code = as.numeric(hs_product_code)
+  )
+Years_Combined <- na.omit(Years_Combined)
+
+HS_list <- HS_list %>%
+  dplyr::rename(hs_product_code = code)
+
+#Summarize across product categories and remove any product codes from the
+#Years_Combined data frame that don't have a corresponding codename in the 
+#HS_list. This is probably not the right way to perform this operation but it 
+#works and Years_Combined has a product code of 99 in it which idk what it is.
+Years_Combined <- merge(Years_Combined, HS_list, by="hs_product_code") %>%
+  ungroup() %>%
+  group_by(hs_product_code) %>%
+  summarize(total_import_2019 = sum(import_2019), 
+            total_export_2019 = sum(export_2019),
+            total_import_2020 = sum(import_2020), 
+            total_export_2020 = sum(export_2020))
+
+#Calculate Surplus/Deficit between 2019/2020
+Years_Combined$Import_Diff <- (Years_Combined$total_import_2020 
+                               - Years_Combined$total_import_2019)
+Years_Combined$Export_Diff <- (Years_Combined$total_export_2020 
+                               - Years_Combined$total_export_2019)
+
+#The insanity below is necessary due to the way CSB's work
+
+#Displaying the absolute max differences for import/export requires sorting
+#the Export and Import differences individually. A more R solution probabaly 
+#Exists but idk what that might be.
+
+Exports <- Years_Combined %>% 
+  arrange(desc(abs(Export_Diff))) %>%
+  head(,n=5) %>%
+  dplyr::rename(value2 = Export_Diff, junk = Import_Diff)
+
+Imports <- Years_Combined %>% 
+  arrange(desc(abs(Import_Diff))) %>%
+  head(,n=5) %>%
+  dplyr::rename(value2 = Import_Diff, junk = Export_Diff)
+
+#We are working with values in the billions. We could scale the data down by some
+#orders of magnitude but the big numbers seemed funny at the time so I kept them.
+#The bars are just placeholder values that control the size of the purple/blue
+#Import/Export bars. Values 3/4 allow the purple/blue regions to appear. Each
+#bit of color you add to a CSB has to have its own bars.
+export_bar = 3000000000
+import_bar = 3000000000
+Imports$value3 <- import_bar
+Imports$value4 <- 0
+Exports$value3 <- 0
+Exports$value4 <- export_bar
+
+#Group allows the copied ggplot code to separate the Import/Exports with empty bars
+Exports$group = "Exports"
+Imports$group = "Imports"
+
+#Combine for plotting
+data <- rbind(Imports, Exports)
+
+#Sort suplus/deficit values into value1/value2 for red/green colors
+data$value1 <- ifelse(data$value2 > 0, data$value2, 0)
+data$value2 <- ifelse(data$value2 < 0, data$value2, 0)
+
+#Create table for plot
+codes <- unique(data$hs_product_code)
+table <- HS_list[HS_list$hs_product_code %in% codes,] %>%
+  dplyr::rename(Code = hs_product_code, Product = codename)
+
+#Rename necessary for copied ggplot code
+data <- data %>%
+  dplyr::rename(individual = hs_product_code)
+
+#Format data for cleaning
+data <- data %>%
+  relocate(value4) %>%
+  relocate(value3) %>%
+  relocate(value2) %>%
+  relocate(value1) %>%
+  relocate(group) %>%
+  relocate(individual)
+
+#Clean data for copied ggplot code
+data <- data[c("individual","group","value1","value2","value3","value4")]
+
+# Transform data in a tidy format (long format)
+data <- data %>% gather(key = "observation", value="value", -c(1,2)) 
+
+#Transform values to work with copied ggplot code
+data <- data %>%
+  transform(
+    value = as.numeric(value),
+    individual = as.character(individual)
+  )
+
+# Set a number of 'empty bar' to add at the end of each group
+empty_bar <- 2
+nObsType <- nlevels(as.factor(data$observation))
+to_add <- data.frame( matrix(NA, empty_bar*nlevels(as.factor(data$group))*nObsType, ncol(data)) )
+colnames(to_add) <- colnames(data)
+to_add$group <- rep(levels(as.factor(data$group)), each=empty_bar*nObsType )
+data <- rbind(data, to_add)
+data <- data %>% arrange(group, individual)
+data$id <- rep( seq(1, nrow(data)/nObsType) , each=nObsType)
+
+#Dataframe for product labels
+label_data <- data %>% group_by(id, individual) %>% summarize(tot=sum(abs(value)))
+number_of_bar <- nrow(label_data)
+# I substract 0.5 because the letter must have the angle of the center of the bars.
+#Not extreme right(1) or extreme left (0)
+angle <- 90 - 360 * (label_data$id-0.5) /number_of_bar     
+label_data$hjust <- ifelse( angle < -90, 1, 0)
+label_data$angle <- ifelse(angle < -90, angle+180, angle)
+
+# Prepare a data frame for base lines. Not used unless code is uncommented in 
+#ggplot call
+base_data <- data %>% 
+  group_by(group) %>% 
+  summarize(start=min(id), end=max(id) - empty_bar) %>% 
+  rowwise() %>% 
+  mutate(title=mean(c(start, end)))
+
+# prepare a data frame for grid (scales)
+grid_data <- base_data
+grid_data$end <- grid_data$end[ c( nrow(grid_data), 1:nrow(grid_data)-1)] + 1
+grid_data$start <- grid_data$start - 1
+grid_data <- grid_data[-1,]
+
+#Add in second group of scale lines
+grid_data <- rbind(grid_data, list("Exports", 14, 13, 10))
+
+#Scale line positioning
+point1 <- 1000000000
+point2 <- 10000000000
+point3 <- 20000000000
+point4 <- 30000000000
+
+#The plot call below is copied almost exactly from: https://r-graph-gallery.com/299-circular-stacked-barplot.html#:~:text=A%20circular%20barplot%20is%20a,barplot%20with%20R%20and%20ggplot2%20.&text=bar%20section%20Warning-,A%20circular%20barplot%20is%20a%20barplot%20where%20bars%20are%20displayed,circle%20instead%20of%20a%20line.
+
+# Make the plot. 
+p <- ggplot(data) +      
+  
+  # Add the stacked bar. This isn't really a stack here. I've overlayed the
+  #two bars with position = "identity" as the import/export label colors aren't
+  #representative of any import/export numerical data
+  geom_bar(aes(x=as.factor(id), y=abs(value), fill=observation), 
+           stat="identity", position="identity") +
+  scale_fill_manual("legend", breaks = c("value1","value2", "value3", "value4"), 
+                    labels = c("Surplus", "Deficit", "Import", "Export"), 
+                    values = c("green","red","purple","blue")) +
+  
+  # Add scale lines
+  geom_segment(data=grid_data, 
+               aes(x = end, y = point1, xend = start, yend = point1), 
+               colour = "grey", alpha=1, size=0.3 , inherit.aes = FALSE ) +
+  geom_segment(data=grid_data, 
+               aes(x = end, y = point2, xend = start, yend = point2), 
+               colour = "grey", alpha=1, size=0.3 , inherit.aes = FALSE ) +
+  geom_segment(data=grid_data, 
+               aes(x = end, y = point3, xend = start, yend = point3), 
+               colour = "grey", alpha=1, size=0.3 , inherit.aes = FALSE ) +
+  geom_segment(data=grid_data, 
+               aes(x = end, y = point4, xend = start, yend = point4), 
+               colour = "grey", alpha=1, size=0.3 , inherit.aes = FALSE ) +
+
+  #Add text to scale lines
+  ggplot2::annotate("text", x = rep(max(data$id),4), 
+                    y = c(point1, point2, point3, point4), 
+                    label = c( "1Bn", "10Bn", "20Bn", "30Bn") , 
+                    color="grey", size=3 , angle=25, fontface="bold", 
+                    hjust=1, vjust=-1) +
+
+  #The larger negative number you put for the min the bigger the circle in the middle
+  ylim(-10000000000,max(abs(label_data$tot), na.rm=T)+100) +
+  
+  #Title
+  ggtitle("Import/Export Surplus/Deficit by Product Category for Germany, 2019-20") +
+  
+  #Theme
+  theme_minimal() +
+  theme(
+    axis.text = element_blank(),
+    axis.title = element_blank(),
+    panel.grid = element_blank(),
+    plot.title = element_text(vjust = -8, hjust = 0.5),
+    plot.margin = margin(c(0, 0, 5, 0), unit="cm")
+  ) +
+  coord_polar() +
+  
+  # Add labels on top of each bar
+  geom_text(data=label_data, aes(x=id, y=tot+10, label=individual, hjust=hjust),
+            color="black", fontface="bold",alpha=0.6, size=5, 
+            angle= label_data$angle, inherit.aes = FALSE ) +
+  
+  #Add in table for clarity.
+  annotate(geom = "table", x = 10, y = 20000000000, label = list(table), 
+           vjust = 3, hjust = 0.33, size = 2) 
+  
+  # Reactivate to have imports and exports as annotations, remove values 3 and 4
+  #from above code to eliminate blue and purple. Results in a less confusing plot.
+
+  #geom_segment(data=base_data, aes(x = start, y = -5, xend = end, yend = -5), 
+               #colour = "black", alpha=0.8, size=1 , inherit.aes = FALSE )  +
+  #geom_text(data=base_data, aes(x = title, y = -5000000000, label=group), 
+            #colour = "black", alpha=0.8, size=2, fontface="bold", inherit.aes = FALSE)
+
+#Save it with huge height and width to include the table with a readable font size
+ggsave("CSB.pdf", width = 30, height = 20, units = "cm")
+
+
+```
+
+![](CSB.pdf)
+
+
