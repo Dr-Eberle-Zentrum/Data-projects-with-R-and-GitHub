@@ -3,6 +3,9 @@ output: md_document
 ---
 
 ```{r, setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+
 library(tidyverse)
 library(haven)
 library(stringr)
@@ -244,12 +247,11 @@ p <- ggplot(data) +
   #geom_text(data=base_data, aes(x = title, y = -5000000000, label=group), 
             #colour = "black", alpha=0.8, size=2, fontface="bold", inherit.aes = FALSE)
 
-#Save it with huge height and width to include the table with a readable font size
-ggsave("CSB.jpg", width = 30, height = 20, units = "cm")
-
-
 ```
 
-![](CSB.jpg)
+```{r, echo=FALSE, fig.dim=c(30,20)}
+#Show it with huge height and width to include the table with a readable font size
+show(p)
+```
 
 
