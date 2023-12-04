@@ -245,11 +245,11 @@ p <- ggplot(data) +
             #colour = "black", alpha=0.8, size=2, fontface="bold", inherit.aes = FALSE)
 
 #Save it with huge height and width to include the table with a readable font size
-ggsave("CSB.pdf", width = 30, height = 20, units = "cm")
+ggsave("CSB.jpg", width = 30, height = 20, units = "cm")
 
 
 ```
 
-![](CSB.pdf)
+![](CSB.jpg)
 
 

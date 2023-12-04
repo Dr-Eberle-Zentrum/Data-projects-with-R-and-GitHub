@@ -1,1 +1,1 @@
-![](CSB.pdf)
+![](CSB.jpg)
