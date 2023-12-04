@@ -14,7 +14,7 @@ library(ggplot2)
 library(ggpmisc)
 ```
 
-```{r, include=FALSE}
+```{r, echo=FALSE}
 #Import data
 Data2019 <- read_dta("Data2019.dta")
 Data2020 <- read_dta("Data2020.dta")
@@ -247,11 +247,9 @@ p <- ggplot(data) +
   #geom_text(data=base_data, aes(x = title, y = -5000000000, label=group), 
             #colour = "black", alpha=0.8, size=2, fontface="bold", inherit.aes = FALSE)
 
+plot(p)
 ```
 
-```{r, echo=FALSE, fig.dim=c(30,20)}
-#Show it with huge height and width to include the table with a readable font size
-show(p)
-```
+
 
 
