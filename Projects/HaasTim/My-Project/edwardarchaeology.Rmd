@@ -246,10 +246,11 @@ p <- ggplot(data) +
                #colour = "black", alpha=0.8, size=1 , inherit.aes = FALSE )  +
   #geom_text(data=base_data, aes(x = title, y = -5000000000, label=group), 
             #colour = "black", alpha=0.8, size=2, fontface="bold", inherit.aes = FALSE)
-
-plot(p)
 ```
 
+```{r, echo=FALSE, fig.dim=c(30,20)}
+p
+```
 
 
 
