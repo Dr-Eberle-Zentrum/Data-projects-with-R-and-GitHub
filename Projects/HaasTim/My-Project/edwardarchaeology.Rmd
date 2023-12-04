@@ -248,9 +248,9 @@ p <- ggplot(data) +
             #colour = "black", alpha=0.8, size=2, fontface="bold", inherit.aes = FALSE)
 ```
 
-```{r, echo=FALSE, fig.dim=c(30,20)}
-p
+```{r, echo=FALSE}
+ggsave("CSB.jpg", width = 30, height = 20, units = "cm")
 ```
 
-
+![](CSB.jpg)
 
