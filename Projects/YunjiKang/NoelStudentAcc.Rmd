@@ -8,10 +8,10 @@ output: md_document
 
 *Plot a bubble map of Crime data for Task1 with ggplot 2 to visualize the number of Police-recorded offence in Germany. Use facet_wrap() to visualize all of the different crimes ( Intentional homicide, Assault, Robbery... Theft)*
 
-```{r, include=TRUE, eval=FALSE}
-
+```{r, include=TRUE, eval=TRUE}
 library(maps)
-crimedata1 <- data.table::fread("Projects/YunjiKang/Crime_data_for_Task1.gz")
+library(tidyverse)
+crimedata1 <- data.table::fread("Crime_data_for_Task1.gz")
 Germany <- map_data("world", region = "Germany")
 
 # NUTS Data
@@ -25,20 +25,20 @@ Germany <- map_data("world", region = "Germany")
 
 ```
 
-I really failed at this task. The challenge I can't cope with is to translate the names in the variable "geo" into coordinates using the NUTS-3 system.
-I urgently need help with this. 
-The code for the plot should work in theory as soon as I have the coordinates.
+I really failed at this task. The challenge I can't cope with is to translate the names in the variable "geo" into coordinates using the NUTS-3 system. I urgently need help with this. The code for the plot should work in theory as soon as I have the coordinates.
 
-## Task 2 
+## Task 2
+
+*Plot a bubble chart (with animation) to visualize the relationship of Police-recorded offence, income of house hold and at risk of poverty in each EU country. Use facet_wrap() to visualize all of the different crimes ( Intentional homicide, Assault, Robbery... Theft) If there is some data missing to plot a certain bubble, you can exclude it.*
 
 ### Preparation:
 
-```{r, include=TRUE, eval=FALSE}
+```{r, include=TRUE, eval=TRUE}
 # data
 rm(list = ls())
-crimedata2 <- data.table::fread("Projects/YunjiKang/Crime_data_for_Task2.gz")
-incomedata <- data.table::fread("Projects/YunjiKang/Income of households.gz")
-povertydata <- data.table::fread("Projects/YunjiKang/At-risk-of-poverty rate.gz")
+crimedata2 <- data.table::fread("Crime_data_for_Task2.gz")
+incomedata <- data.table::fread("Income of households.gz")
+povertydata <- data.table::fread("At-risk-of-poverty rate.gz")
 
 # reshape crimedata2 because of unit and value
 crimedata2_reshaped <- crimedata2 |> 
@@ -58,7 +58,7 @@ data <- merge(merge(crimedata2_reshaped,
   select(rename(povertydata, poverty = OBS_VALUE), geo, TIME_PERIOD, poverty),
   by = c("geo", "TIME_PERIOD"))
 
-str(data)
+#str(data)
 rm(list = setdiff(ls(), "data"))
 
 data <- data %>% 
@@ -83,10 +83,9 @@ data <- data %>%
 
 ```
 
-The challenge here was the combination of the three data sets and the so-called "reshaping" of the data from "Crime_data_for_Task2.gz". 
-That took me a lot of time. I hope I succeeded.
+The challenge here was the combination of the three data sets and the so-called "reshaping" of the data from "Crime_data_for_Task2.gz". That took me a lot of time. I hope I succeeded.
 
-```{r, include=FALSE}
+```{r}
 head(data)
 ```
 
@@ -113,7 +112,6 @@ data |> filter(TIME_PERIOD == 2020) |>
 
 ```
 
-
 Bubble Chart with animation (doesn't work!)
 
 ```{r, include=TRUE}
@@ -137,9 +135,3 @@ library(gganimate)
 # This is a Error cause of package version (?)
 
 ```
-
-
-
-
-
-
