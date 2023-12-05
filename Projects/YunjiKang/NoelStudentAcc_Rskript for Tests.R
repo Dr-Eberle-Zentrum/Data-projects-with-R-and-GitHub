@@ -1,13 +1,5 @@
 
 
-#install.packages("data.table")
-#install.packages("R.utils")
-library(maps)
-
-crimedata1 <- data.table::fread("Projects/YunjiKang/Crime_data_for_Task1.gz")
-crimedata2 <- data.table::fread("Projects/YunjiKang/Crime_data_for_Task2.gz")
-incomedata <- data.table::fread("Projects/YunjiKang/Income of households.gz")
-povertydata <- data.table::fread("Projects/YunjiKang/At-risk-of-poverty rate.gz")
 
 ### Task 1 ---------------------------------------------------------------------
 
@@ -15,8 +7,14 @@ povertydata <- data.table::fread("Projects/YunjiKang/At-risk-of-poverty rate.gz"
 #' number of Police-recorded offence in Germany. Use facet_wrap() to visualize 
 #' all of the different crimes ( Intentional homicide, Assault, Robbery... Theft)
 
+library(maps)
+crimedata1 <- data.table::fread("Projects/YunjiKang/Crime_data_for_Task1.gz")
 Germany <- map_data("world", region = "Germany")
 
+# NUTS Data
+shape <- sf::read_sf(dsn = "Projects/YunjiKang/", layer = "NUTS_LB_2021_3035")
+
+# Plotting (would probably work if i got the translation from NUTS to Coordinates)
 ggplot() +
   geom_polygon(data = Germany, aes(x=long, y = lat, group = group), fill="grey", alpha=0.3) +
   geom_point( data=data, aes(x=long, y=lat)) +
@@ -26,6 +24,7 @@ ggplot() +
 ### Task 2 ---------------------------------------------------------------------
 
 # data
+rm(list = ls())
 crimedata2 <- data.table::fread("Projects/YunjiKang/Crime_data_for_Task2.gz")
 incomedata <- data.table::fread("Projects/YunjiKang/Income of households.gz")
 povertydata <- data.table::fread("Projects/YunjiKang/At-risk-of-poverty rate.gz")
@@ -49,16 +48,37 @@ data <- merge(merge(crimedata2_reshaped,
   by = c("geo", "TIME_PERIOD"))
 
 str(data)
-rm(crimedata2) & rm(incomedata) & rm(povertydata) & rm(crimedata2_reshaped)
+rm(list = setdiff(ls(), "data"))
 
+data <- data %>% 
+  mutate(geo = recode(geo,
+                      "AT" = "Austria", "BE" = "Belgium", "BG" = "Bulgaria", 
+                      "CY" = "Cyprus", "CZ" = "Czech Republic", "DE" = "Germany", 
+                      "DK" = "Denmark", "EE" = "Estonia", "ES" = "Spain", 
+                      "FI" = "Finland", "FR" = "France", "GR" = "Greece", 
+                      "HR" = "Croatia", "HU" = "Hungary", "IE" = "Ireland", 
+                      "IT" = "Italy", "LT" = "Lithuania", "LU" = "Luxembourg", 
+                      "LV" = "Latvia", "MT" = "Malta", "NL" = "Netherlands", 
+                      "PL" = "Poland", "PT" = "Portugal", "RO" = "Romania", 
+                      "SE" = "Sweden", "SI" = "Slovenia", "SK" = "Slovakia"))
+
+data <- data %>% 
+  mutate(iccs = recode(iccs,
+                      "ICCS0101" = "Intentional homicide", "ICCS02011" = "Assault", 
+                      "ICCS0401" = "Robbery ", "ICCS0501" = "Burglary", 
+                      "ICCS05012" = "Burglary of private residential premises", "ICCS0502" = "Theft ",
+                      "ICCS050211" = "Theft of a motorized land vehicle"
+                      ))
 
 # Bubble Chart without animation
 
-data |> ggplot(aes(x = income, y = crime_phthab, size = crime_nr, 
-                   color = as.factor(poverty))) +
+# i do it for year 2020
+
+data |> filter(TIME_PERIOD == 2020) |> 
+  ggplot(aes(x = income, y = crime_phthab, size = crime_nr, color = as.factor(poverty))) +
   geom_point(alpha = 0.7) +
   scale_size_continuous(range = c(3, 15)) + 
-  # facet_wrap(~iccs) +
+  facet_wrap(~iccs) +
   labs(title = "Police-recorded Offence vs. Income vs. At Risk of Poverty Rate",
        x = "Income of Households (Euro per inhabitant)",
        y = "Police-recorded Offence (Per hundred thousand inhabitants)",
@@ -67,7 +87,8 @@ data |> ggplot(aes(x = income, y = crime_phthab, size = crime_nr,
   theme_minimal() +
   guides(size = "none", color = "none")
 
-# Bubble Chart with animation
+
+# Bubble Chart with animation (doesn't work)
 
 library(gganimate)
 
@@ -85,55 +106,7 @@ library(gganimate)
 # Save at gif:
 #anim_save("271-ggplot2-animated-gif-chart-with-gganimate1.gif")
 
-# Error: The animation object does not specify a save_animation method
+# "Error: The animation object does not specify a save_animation method"
 # This is a Error cause of package version (?)
-
-
-## Tests -----------------------------------------------------------------------
-
-## Task 1
-
-library(maps)
-UK <- map_data("world") %>% filter(region=="UK")
-data <- world.cities %>% filter(country.etc=="UK")
-ggplot() +
-  geom_polygon(data = UK, aes(x=long, y = lat, group = group), fill="grey", alpha=0.3) +
-  geom_point( data=data, aes(x=long, y=lat)) +
-  theme_void() + ylim(50,59) + coord_map() 
-
-
-## Task 2
-
-# Convert the 'year' column to a factor for animation
-crime_data$year <- as.factor(crime_data$year)
-
-# Mapping country codes to country names
-country_mapping <- data.frame(code = c("AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "GR", "HR", "HU", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO", "SE", "SI", "SK"),
-                              country = c("Austria", "Belgium", "Bulgaria", "Cyprus", "Czech Republic", "Germany", "Denmark", "Estonia", "Spain", "Finland", "France", "Greece", "Croatia", "Hungary", "Ireland", "Italy", "Lithuania", "Luxembourg", "Latvia", "Malta", "Netherlands", "Poland", "Portugal", "Romania", "Sweden", "Slovenia", "Slovakia"))
-
-# Merge data with country names
-crime_data <- merge(crime_data, country_mapping, by.x = "country_code", by.y = "code")
-
-# Create a bubble chart using ggplot2
-p <- ggplot(crime_data, aes(x = income_per_inhabitant, y = police_recorded_offence_per_100k, size = police_recorded_offence_number, color = at_risk_of_poverty_rate)) +
-  geom_point(alpha = 0.7) +
-  scale_size_continuous(range = c(3, 15)) +
-  scale_color_viridis_c() +  # You can choose any color scale you prefer
-  facet_wrap(~crime_type) +
-  labs(title = "Police-recorded Offence vs. Income vs. At Risk of Poverty Rate",
-       x = "Income of Households (Euro per inhabitant)",
-       y = "Police-recorded Offence (Per hundred thousand inhabitants)",
-       size = "Police-recorded Offence (Number)",
-       color = "At Risk of Poverty Rate") +
-  theme_minimal()
-
-# Animate the chart over the 'year' variable
-animation <- p + transition_states(year, transition_length = 2, state_length = 1) +
-  enter_fade() +
-  exit_fade()
-
-# Save the animation as a gif or view it interactively
-anim_save("crime_animation.gif", animation, renderer = gifski_renderer())
-
 
 

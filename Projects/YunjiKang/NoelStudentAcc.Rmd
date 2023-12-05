@@ -2,6 +2,144 @@
 output: md_document
 ---
 
-# Solution of Yunji's Project by Noel
+# Crime Project
+
+## Task 1
+
+*Plot a bubble map of Crime data for Task1 with ggplot 2 to visualize the number of Police-recorded offence in Germany. Use facet_wrap() to visualize all of the different crimes ( Intentional homicide, Assault, Robbery... Theft)*
+
+```{r, include=TRUE, eval=FALSE}
+
+library(maps)
+crimedata1 <- data.table::fread("Projects/YunjiKang/Crime_data_for_Task1.gz")
+Germany <- map_data("world", region = "Germany")
+
+# NUTS Data
+#shape <- sf::read_sf(dsn = "Projects/YunjiKang/", layer = "NUTS_LB_2021_3035")
+
+# Plotting (would probably work if i got the translation from NUTS to Coordinates)
+#ggplot() +
+#  geom_polygon(data = Germany, aes(x=long, y = lat, group = group), fill="grey", alpha=0.3) +
+#  geom_point( data=data, aes(x=long, y=lat)) +
+#  theme_void() + ylim(50,59) + coord_map() 
+
+```
+
+I really failed at this task. The challenge I can't cope with is to translate the names in the variable "geo" into coordinates using the NUTS-3 system.
+I urgently need help with this. 
+The code for the plot should work in theory as soon as I have the coordinates.
+
+## Task 2 
+
+### Preparation:
+
+```{r, include=TRUE, eval=FALSE}
+# data
+rm(list = ls())
+crimedata2 <- data.table::fread("Projects/YunjiKang/Crime_data_for_Task2.gz")
+incomedata <- data.table::fread("Projects/YunjiKang/Income of households.gz")
+povertydata <- data.table::fread("Projects/YunjiKang/At-risk-of-poverty rate.gz")
+
+# reshape crimedata2 because of unit and value
+crimedata2_reshaped <- crimedata2 |> 
+  select(c(unit, OBS_VALUE, geo, TIME_PERIOD, iccs)) |> 
+  mutate(counter = ave(seq_along(unit), unit, FUN = seq_along)) |> 
+  reshape(idvar = "counter", timevar = "unit", direction = "wide") |> 
+  rename(crime_phthab = OBS_VALUE.P_HTHAB, 
+         crime_nr = OBS_VALUE.NR,
+         geo = geo.NR,
+         TIME_PERIOD = TIME_PERIOD.NR,
+         iccs = iccs.NR) |> 
+  select(c( geo, crime_phthab, crime_nr, TIME_PERIOD, iccs))
+
+data <- merge(merge(crimedata2_reshaped, 
+  select(rename(incomedata, income = OBS_VALUE), geo, TIME_PERIOD, income), 
+  by = c("geo", "TIME_PERIOD")), 
+  select(rename(povertydata, poverty = OBS_VALUE), geo, TIME_PERIOD, poverty),
+  by = c("geo", "TIME_PERIOD"))
+
+str(data)
+rm(list = setdiff(ls(), "data"))
+
+data <- data %>% 
+  mutate(geo = recode(geo,
+                      "AT" = "Austria", "BE" = "Belgium", "BG" = "Bulgaria", 
+                      "CY" = "Cyprus", "CZ" = "Czech Republic", "DE" = "Germany", 
+                      "DK" = "Denmark", "EE" = "Estonia", "ES" = "Spain", 
+                      "FI" = "Finland", "FR" = "France", "GR" = "Greece", 
+                      "HR" = "Croatia", "HU" = "Hungary", "IE" = "Ireland", 
+                      "IT" = "Italy", "LT" = "Lithuania", "LU" = "Luxembourg", 
+                      "LV" = "Latvia", "MT" = "Malta", "NL" = "Netherlands", 
+                      "PL" = "Poland", "PT" = "Portugal", "RO" = "Romania", 
+                      "SE" = "Sweden", "SI" = "Slovenia", "SK" = "Slovakia"))
+
+data <- data %>% 
+  mutate(iccs = recode(iccs,
+                      "ICCS0101" = "Intentional homicide", "ICCS02011" = "Assault", 
+                      "ICCS0401" = "Robbery ", "ICCS0501" = "Burglary", 
+                      "ICCS05012" = "Burglary of private residential premises", "ICCS0502" = "Theft ",
+                      "ICCS050211" = "Theft of a motorized land vehicle"
+                      ))
+
+```
+
+The challenge here was the combination of the three data sets and the so-called "reshaping" of the data from "Crime_data_for_Task2.gz". 
+That took me a lot of time. I hope I succeeded.
+
+```{r, include=FALSE}
+head(data)
+```
+
+### Plots:
+
+Bubble Chart without animation:
+
+```{r, include=TRUE}
+# i do it for year 2020
+library(ggplot2)
+
+data |> filter(TIME_PERIOD == 2020) |> 
+  ggplot(aes(x = income, y = crime_phthab, size = crime_nr, color = as.factor(poverty))) +
+  geom_point(alpha = 0.7) +
+  scale_size_continuous(range = c(3, 15)) + 
+  facet_wrap(~iccs) +
+  labs(title = "Police-recorded Offence vs. Income vs. At Risk of Poverty Rate",
+       x = "Income of Households (Euro per inhabitant)",
+       y = "Police-recorded Offence (Per hundred thousand inhabitants)",
+       size = "Police-recorded Offence (Number)",
+       color = "At Risk of Poverty Rate") +
+  theme_minimal() +
+  guides(size = "none", color = "none")
+
+```
+
+
+Bubble Chart with animation (doesn't work!)
+
+```{r, include=TRUE}
+library(gganimate)
+
+# Make a ggplot, but add frame=year: one image per year
+#data |> ggplot(aes(x = income, y = crime_phthab, size = crime_nr, 
+#                   color = as.factor(poverty))) +
+#  geom_point() +
+#  scale_x_log10() +
+#  theme_bw() +
+#  # gganimate specific bits:
+#  labs(title = 'Year: {frame_time}', x = 'GDP per capita', y = 'life expectancy') +
+#  transition_time(TIME_PERIOD) +
+#  ease_aes('linear')
+
+# Save at gif:
+#anim_save("271-ggplot2-animated-gif-chart-with-gganimate1.gif")
+
+# "Error: The animation object does not specify a save_animation method"
+# This is a Error cause of package version (?)
+
+```
+
+
+
+
 
 
