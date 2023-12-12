@@ -50,7 +50,8 @@ left_join(countryCodes, by = c("Nationality" = "country")) |>
     .default = code
   )) |>
   # check unmapped Nationalities
-  # filter(is.na(code)) |> pull(Position) |> unique
+  # filter(is.na(code)) |> pull(Position) |> unique()
+  # drop verbose nationality information
   select(-Nationality) |>
 
   #####  POSITION INFORMATION  #######
