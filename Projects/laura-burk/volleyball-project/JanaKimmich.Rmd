@@ -2,7 +2,15 @@
 output: md_document
 ---
 
-```{r setup, include=FALSE}
+# Solution for the volleyball project
+
+Unfortunately the circular bar plot does not contain much information, since I could not figure out how to join the tables (see the issue).
+
+# Code for solving the project
+
+I tried to do it with piping but after spending much time on it, I thought maybe it would be better having an ugly solution than no one... 
+
+```{r setup}
 library(tidyverse)
 
 ########## load, adjust, join tables ##########
