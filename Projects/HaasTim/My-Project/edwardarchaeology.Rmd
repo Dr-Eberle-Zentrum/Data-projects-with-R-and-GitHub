@@ -190,7 +190,7 @@ p <- ggplot(data) +
            stat="identity", position="identity") +
   scale_fill_manual("legend", breaks = c("value1","value2", "value3", "value4"), 
                     labels = c("Surplus", "Deficit", "Import", "Export"), 
-                    values = c("green","red","purple","blue")) +
+                    values = c("green","red","#efe3fd","#add8e6")) +
   
   # Add scale lines
   geom_segment(data=grid_data, 
@@ -225,7 +225,7 @@ p <- ggplot(data) +
     axis.text = element_blank(),
     axis.title = element_blank(),
     panel.grid = element_blank(),
-    plot.title = element_text(vjust = -8, hjust = 0.5),
+    plot.title = element_text(vjust = -8, hjust = .4, size = 20, face="bold"),
     plot.margin = margin(c(0, 0, 5, 0), unit="cm")
   ) +
   coord_polar() +
@@ -237,7 +237,7 @@ p <- ggplot(data) +
   
   #Add in table for clarity.
   annotate(geom = "table", x = 10, y = 20000000000, label = list(table), 
-           vjust = 3, hjust = 0.33, size = 2) 
+           vjust = 3, hjust = 0.33, size = 2.5) 
   
   # Reactivate to have imports and exports as annotations, remove values 3 and 4
   #from above code to eliminate blue and purple. Results in a less confusing plot.
