@@ -1,6 +1,6 @@
 #install_packages
 
-required_packages <- c("shiny", "plotly", "usethis", "emo", "git2r","shinyFiles")
+required_packages <- c("tidyverse", "shiny", "plotly", "usethis", "emo", "git2r","shinyFiles", "shinyalert")
 
 new_packages <- required_packages[!(required_packages %in% installed.packages()[,"Package"])]
 
