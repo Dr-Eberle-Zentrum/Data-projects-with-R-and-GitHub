@@ -20,121 +20,94 @@ Data2019 <- read_dta("Data2019.dta")
 Data2020 <- read_dta("Data2020.dta")
 HS_list <- read.csv("HS_2Digit_List.csv")
 
-#Grab 2019 data with only first two numbers of product code
-Data2019_2d <- Data2019 %>% mutate(
-  hs_product_code = str_extract(hs_product_code, "\\w\\w")) %>%
+#The holy pipe. Begins with mergeing 2019 and 2020 import/export data
+data <- merge(Data2019, Data2020,  by=c("partner_code", "hs_product_code")) %>%
+  
+  #reduce product codes to 2 digits
+  mutate(
+    hs_product_code = str_extract(hs_product_code, "\\w\\w")
+    ) %>%
+  
+  #Accumulate all import/exports across the new 2 digit code
   group_by(partner_code,hs_product_code) %>%
-  summarize(total_import = sum(import_value), total_export = sum(export_value))
-
-#Grab 2020 data with only first two numbers of product code
-Data2020_2d <- Data2020 %>% mutate(
-  hs_product_code = str_extract(hs_product_code, "\\w\\w")) %>%
-  group_by(partner_code,hs_product_code) %>%
-  summarize(total_import = sum(import_value), total_export = sum(export_value))
-
-#Merge 2020 and 2019 data. Rename Columns for clarity
-Years_Combined <- merge(Data2019_2d, Data2020_2d, 
-                         by=c("partner_code", "hs_product_code")) %>%
-  dplyr::rename(import_2019 = total_import.x, export_2019 = total_export.x, 
-                import_2020 = total_import.y, export_2020 = total_export.y)
-
-#Quick way to kill the weird ANS country code value and helps with HS_list merge
-Years_Combined <- Years_Combined %>%
+  summarize(
+    import_2019 = sum(import_value.x), 
+    export_2019 = sum(export_value.x),
+    import_2020 = sum(import_value.y), 
+    export_2020 = sum(export_value.y)
+    ) %>%
+  
+  #Prepping for next merge
   mutate(
     hs_product_code = as.numeric(hs_product_code)
-  )
-Years_Combined <- na.omit(Years_Combined)
-
-HS_list <- HS_list %>%
-  dplyr::rename(hs_product_code = code)
-
-#Summarize across product categories and remove any product codes from the
-#Years_Combined data frame that don't have a corresponding codename in the 
-#HS_list. This is probably not the right way to perform this operation but it 
-#works and Years_Combined has a product code of 99 in it which idk what it is.
-Years_Combined <- merge(Years_Combined, HS_list, by="hs_product_code") %>%
+  ) %>%
+  
+  #Simple way to delete the ANS country code which isn't actually a country.
+  #Verified by @HaasTim
+  na.omit(.) %>%
+  
+  #Summarize across product categories and remove any product codes from the
+  #Years_Combined data frame that don't have a corresponding codename in the 
+  #HS_list. This is probably not the right way to perform this operation but it 
+  #works and Years_Combined has a product code of 99 in it which idk what it is.
+  merge(., HS_list, by.x="hs_product_code",by.y="code") %>%
   ungroup() %>%
   group_by(hs_product_code) %>%
   summarize(total_import_2019 = sum(import_2019), 
             total_export_2019 = sum(export_2019),
             total_import_2020 = sum(import_2020), 
-            total_export_2020 = sum(export_2020))
-
-#Calculate Surplus/Deficit between 2019/2020
-Years_Combined$Import_Diff <- (Years_Combined$total_import_2020 
-                               - Years_Combined$total_import_2019)
-Years_Combined$Export_Diff <- (Years_Combined$total_export_2020 
-                               - Years_Combined$total_export_2019)
-
-#The insanity below is necessary due to the way CSB's work
-
-#Displaying the absolute max differences for import/export requires sorting
-#the Export and Import differences individually. A more R solution probabaly 
-#Exists but idk what that might be.
-
-Exports <- Years_Combined %>% 
-  arrange(desc(abs(Export_Diff))) %>%
-  head(,n=5) %>%
-  dplyr::rename(value2 = Export_Diff, junk = Import_Diff)
-
-Imports <- Years_Combined %>% 
-  arrange(desc(abs(Import_Diff))) %>%
-  head(,n=5) %>%
-  dplyr::rename(value2 = Import_Diff, junk = Export_Diff)
-
-#We are working with values in the billions. We could scale the data down by some
-#orders of magnitude but the big numbers seemed funny at the time so I kept them.
-#The bars are just placeholder values that control the size of the purple/blue
-#Import/Export bars. Values 3/4 allow the purple/blue regions to appear. Each
-#bit of color you add to a CSB has to have its own bars.
-export_bar = 3000000000
-import_bar = 3000000000
-Imports$value3 <- import_bar
-Imports$value4 <- 0
-Exports$value3 <- 0
-Exports$value4 <- export_bar
-
-#Group allows the copied ggplot code to separate the Import/Exports with empty bars
-Exports$group = "Exports"
-Imports$group = "Imports"
-
-#Combine for plotting
-data <- rbind(Imports, Exports)
-
-#Sort suplus/deficit values into value1/value2 for red/green colors
-data$value1 <- ifelse(data$value2 > 0, data$value2, 0)
-data$value2 <- ifelse(data$value2 < 0, data$value2, 0)
-
-#Create table for plot
-codes <- unique(data$hs_product_code)
-table <- HS_list[HS_list$hs_product_code %in% codes,] %>%
-  dplyr::rename(Code = hs_product_code, Product = codename)
-
-#Rename necessary for copied ggplot code
-data <- data %>%
-  dplyr::rename(individual = hs_product_code)
-
-#Format data for cleaning
-data <- data %>%
-  relocate(value4) %>%
-  relocate(value3) %>%
-  relocate(value2) %>%
-  relocate(value1) %>%
-  relocate(group) %>%
-  relocate(individual)
-
-#Clean data for copied ggplot code
-data <- data[c("individual","group","value1","value2","value3","value4")]
-
-# Transform data in a tidy format (long format)
-data <- data %>% gather(key = "observation", value="value", -c(1,2)) 
-
-#Transform values to work with copied ggplot code
-data <- data %>%
+            total_export_2020 = sum(export_2020)) %>%
+  
+  #Calculate Surplus/Deficit values
+  mutate(
+    Import_Diff = (total_import_2020 
+                   - total_import_2019),
+    Export_Diff = (total_export_2020 
+                   - total_export_2019)
+  ) %>%
+  
+  #Grab the 5 largest in terms of abs value numbers for import and export
+  pivot_longer(c(Import_Diff, Export_Diff)) %>%
+  group_by(name) %>%
+  slice_max(abs(value), n=5) %>%
+  ungroup() %>%
+  #pivot wider was merging/deleting some rows. A unique ID stops this behavior
+  mutate(
+    ID = row_number(),
+    #Massive numbers are arbitrary and just need to be big enough to show up 
+    value3 = ifelse(name == "Export_Diff", 0, 3000000000),
+    value4 = ifelse(name == "Import_Diff", 0, 3000000000)
+  )%>%
+  pivot_wider(names_from = name, values_from = value) %>%
+  
+  #We need individual, group, and value1-4 to make the copy/pasted code from
+  #R Graph Gallery happy. value1 = surplus (green), value2 = deficit (red),
+  #value3 = import (light purple), value4 = export (light blue). The renames, 
+  #type changes, and pivoting are all just to make the data frame look the way
+  #the RGG code wants. 
+  mutate(
+    value2 = coalesce(Export_Diff, Import_Diff),
+    value1 = ifelse(value2 > 0, value2, 0),
+    value2 = ifelse(value2 < 0, value2, 0),
+    group = ifelse(is.na(Export_Diff), "Imports", "Exports")
+  ) %>%
+  dplyr::rename(individual = hs_product_code) %>%
+  select(individual, group, value1, value2, value3, value4) %>%
+  #Behold the elimination of gather and the use of pivot_longer! May it remain
+  #the standard for 1000 years.
+  pivot_longer(names_to = "observation", values_to="value", cols = -c(individual,group)) %>%
   transform(
     value = as.numeric(value),
     individual = as.character(individual)
   )
+
+#Create table for plot
+codes <- unique(data$individual)
+table <- HS_list[HS_list$code %in% codes,] %>%
+  dplyr::rename(Code = code, Product = codename)
+
+#Gross solution copied from R Graph Gallery. Link below:
+#https://r-graph-gallery.com/299-circular-stacked-barplot.html
 
 # Set a number of 'empty bar' to add at the end of each group
 empty_bar <- 2
@@ -178,7 +151,7 @@ point2 <- 10000000000
 point3 <- 20000000000
 point4 <- 30000000000
 
-#The plot call below is copied almost exactly from: https://r-graph-gallery.com/299-circular-stacked-barplot.html#:~:text=A%20circular%20barplot%20is%20a,barplot%20with%20R%20and%20ggplot2%20.&text=bar%20section%20Warning-,A%20circular%20barplot%20is%20a%20barplot%20where%20bars%20are%20displayed,circle%20instead%20of%20a%20line.
+#The plot call below is copied almost exactly from RGG
 
 # Make the plot. 
 p <- ggplot(data) +      
@@ -213,7 +186,7 @@ p <- ggplot(data) +
                     color="grey", size=3 , angle=25, fontface="bold", 
                     hjust=1, vjust=-1) +
 
-  #The larger negative number you put for the min the bigger the circle in the middle
+  #The larger negative number you put for the min, the bigger the circle in the middle
   ylim(-10000000000,max(abs(label_data$tot), na.rm=T)+100) +
   
   #Title
@@ -228,6 +201,8 @@ p <- ggplot(data) +
     plot.title = element_text(vjust = -8, hjust = .4, size = 20, face="bold"),
     plot.margin = margin(c(0, 0, 5, 0), unit="cm")
   ) +
+  
+  #Makes the plotting coords circular
   coord_polar() +
   
   # Add labels on top of each bar
@@ -237,7 +212,7 @@ p <- ggplot(data) +
   
   #Add in table for clarity.
   annotate(geom = "table", x = 10, y = 20000000000, label = list(table), 
-           vjust = 3, hjust = 0.33, size = 2.5) 
+           vjust = 3, hjust = 0.33, size = 2.7) 
   
   # Reactivate to have imports and exports as annotations, remove values 3 and 4
   #from above code to eliminate blue and purple. Results in a less confusing plot.
