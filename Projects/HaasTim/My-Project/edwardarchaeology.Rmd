@@ -21,7 +21,7 @@ Data2020 <- read_dta("Data2020.dta")
 HS_list <- read.csv("HS_2Digit_List.csv")
 
 #The holy pipe. Begins with merging 2019 and 2020 import/export data
-data <- merge(Data2019, Data2020,  by=c("partner_code", "hs_product_code")) %>%
+data <- inner_join(Data2019, Data2020,  by=c("partner_code", "hs_product_code")) %>%
   
   #reduce product codes to 2 digits
   mutate(
@@ -50,7 +50,7 @@ data <- merge(Data2019, Data2020,  by=c("partner_code", "hs_product_code")) %>%
   #Years_Combined data frame that don't have a corresponding codename in the 
   #HS_list. This is probably not the right way to perform this operation but it 
   #works and Years_Combined has a product code of 99 in it which idk what it is.
-  merge(., HS_list, by.x="hs_product_code",by.y="code") %>%
+  inner_join(., HS_list, join_by("hs_product_code" == "code")) %>%
   ungroup() %>%
   group_by(hs_product_code) %>%
   summarize(
