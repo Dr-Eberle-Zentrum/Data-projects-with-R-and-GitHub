@@ -20,7 +20,7 @@ Data2019 <- read_dta("Data2019.dta")
 Data2020 <- read_dta("Data2020.dta")
 HS_list <- read.csv("HS_2Digit_List.csv")
 
-#The holy pipe. Begins with mergeing 2019 and 2020 import/export data
+#The holy pipe. Begins with merging 2019 and 2020 import/export data
 data <- merge(Data2019, Data2020,  by=c("partner_code", "hs_product_code")) %>%
   
   #reduce product codes to 2 digits
@@ -44,7 +44,7 @@ data <- merge(Data2019, Data2020,  by=c("partner_code", "hs_product_code")) %>%
   
   #Simple way to delete the ANS country code which isn't actually a country.
   #Verified by @HaasTim
-  na.omit(.) %>%
+  drop_na(.) %>%
   
   #Summarize across product categories and remove any product codes from the
   #Years_Combined data frame that don't have a corresponding codename in the 
@@ -53,18 +53,10 @@ data <- merge(Data2019, Data2020,  by=c("partner_code", "hs_product_code")) %>%
   merge(., HS_list, by.x="hs_product_code",by.y="code") %>%
   ungroup() %>%
   group_by(hs_product_code) %>%
-  summarize(total_import_2019 = sum(import_2019), 
-            total_export_2019 = sum(export_2019),
-            total_import_2020 = sum(import_2020), 
-            total_export_2020 = sum(export_2020)) %>%
-  
-  #Calculate Surplus/Deficit values
-  mutate(
-    Import_Diff = (total_import_2020 
-                   - total_import_2019),
-    Export_Diff = (total_export_2020 
-                   - total_export_2019)
-  ) %>%
+  summarize(
+            Import_Diff = (sum(import_2020) - sum(import_2019)),
+            Export_Diff = (sum(export_2020) - sum(export_2019))
+            ) %>%
   
   #Grab the 5 largest in terms of abs value numbers for import and export
   pivot_longer(c(Import_Diff, Export_Diff)) %>%
@@ -102,9 +94,9 @@ data <- merge(Data2019, Data2020,  by=c("partner_code", "hs_product_code")) %>%
   )
 
 #Create table for plot
-codes <- unique(data$individual)
-table <- HS_list[HS_list$code %in% codes,] %>%
+table <- HS_list[HS_list$code %in% unique(data$individual),] %>%
   dplyr::rename(Code = code, Product = codename)
+
 
 #Gross solution copied from R Graph Gallery. Link below:
 #https://r-graph-gallery.com/299-circular-stacked-barplot.html
