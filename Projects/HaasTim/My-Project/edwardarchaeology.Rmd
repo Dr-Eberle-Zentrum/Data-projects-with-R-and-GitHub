@@ -330,7 +330,7 @@ p2 <- ggplot(data_for_martin) +
                 label=as.character(ifelse(tot!=0,format(round(tot/1000000000, 2), 
                                                         nsmall = 2), "")), 
                 hjust=hjust),
-            color="white", fontface="bold", size=2, 
+            color="whi", fontface="bold", size=2, 
             angle= label_data$angle, inherit.aes = FALSE ) +
   
   #Add in table for clarity.
