@@ -10,7 +10,7 @@ output: md_document
 
 ```{r}
 library(readxl)
-data <- read_excel("~/Data-projects-with-R-and-GitHub2/Projects/NoelStudentAcc/data_smaschkon_2023-02-11_09-11.xlsx", na ="-9")
+data <- read_excel("data_smaschkon_2023-02-11_09-11.xlsx", na ="-9")
 dim(data)
 ```
 
@@ -46,17 +46,23 @@ names(tables) <- variable_names
 print(tables)
 
 ```
+
 (In "TS01_17" there are **two NAs** as the numbers does not add up to 101. However Number of NAs are not displayed directly)
+
+**or** by using this new-learned alternative (hopefully pleasing the R-Gods)
+
+```{r}
+data |>  select("PS03_01", "SC01_14", "TS01_17") |> 
+  map(table) |> print()
+```
 
 ## Task 2 - Building Scales
 
+### 1) Some preparation is needed: Item "SC01_09" must be recoded.
 
-### 1)  Some preparation is needed: Item "SC01_09" must be recoded.
+-   Examine the question behind item "SC01_09" again. What is unique about this question, and why should this item be "recoded"?
+-   Find a way to recode the item in the dataset.
 
-  * Examine the question behind item "SC01_09" again. What is unique
-    about this question, and why should this item be "recoded"?
-  * Find a way to recode the item in the dataset.
-  
 This question should also be asked in "umgepolt". All other questions for SC are asked in a way that a higher number translates to more self-control. However, when it comes to "SC01_09" a higher number refers to less Self Control. Therefore, I would suggest to recode this item that 1 translates to 5, 2 to 4, 3 stays the same, 4 to 2 and 5 to 1.
 
 ```{r}
@@ -64,33 +70,45 @@ data$SC01_09 <- 6- data$SC01_09
 ```
 
 ### 2) **Find a way to build the scales.** Different methods can be used. As mentioned earlier, we want row-wise means over the items that belong to the specific scale. (You can use either `Base R` or
-    `tidyverse`.)
 
-Create the Scale for Sleep Quality    
+```         
+`tidyverse`.)
+```
+
+Create the Scale for Sleep Quality
+
 ```{r}
 data$Sleep_Quality <- data$PS03_01
 ```
 
 Scale for Self-Control
+
 ```{r}
 library(tidyverse)
-SelfControlVariable <- c("SC01_14", "SC01_02", "SC01_03", "SC01_04", "SC01_05",
-    "SC01_06", "SC01_07", "SC01_08", "SC01_09", "SC01_10", "SC01_11",
-    "SC01_12", "SC01_13")
-data$Self_Control <- rowMeans(data[SelfControlVariable])
+#SelfControlVariable <- c("SC01_14", "SC01_02", "SC01_03", "SC01_04", "SC01_05",
+#    "SC01_06", "SC01_07", "SC01_08", "SC01_09", "SC01_10", "SC01_11",
+#    "SC01_12", "SC01_13")
+#data$Self_Control <- rowMeans(data[SelfControlVariable])
 
+##Alternative##
+SelfControlVariable <- data |> select(starts_with("SC01_"))
+data$Self_Control <- rowMeans(SelfControlVariable)
 ```
 
 Scale for Smartphone Usage
+
 ```{r}
-SmartphoneUsageVariable <- c("TS01_01", "TS01_02" , "TS01_03", "TS01_04", "TS01_05", "TS01_06", "TS01_07", "TS01_08", "TS01_09", "TS01_10", "TS01_11", "TS01_12", "TS01_13", "TS01_14", "TS01_15", "TS01_16", "TS01_17", "TS01_18", "TS01_19")
-data$Smartphone_Usage <- rowMeans(data[SmartphoneUsageVariable])
+#SmartphoneUsageVariable <- c("TS01_01", "TS01_02" , "TS01_03", "TS01_04", "TS01_05", "TS01_06", #"TS01_07", "TS01_08", "TS01_09", "TS01_10", "TS01_11", "TS01_12", "TS01_13", "TS01_14", "TS01_15", #"TS01_16", "TS01_17", "TS01_18", "TS01_19")
+#data$Smartphone_Usage <- rowMeans(data[SmartphoneUsageVariable])
+
+##Alternative##
+SmartphoneUsageVariable <- data |> select(starts_with("TS01_"))
+data$Smartphone_Usage <- rowMeans(SmartphoneUsageVariable)
 ```
 
 ## Task 3 - Plot Something Beautiful for Me
 
 Creating the Plot
-
 
 ```{r}
 
@@ -112,5 +130,5 @@ ggplot(data, aes(x = Self_Control, y = Smartphone_Usage, color = factor(PS03_01)
  
 
 ```
-## I still need to work on some details, sry for that
 
+## I still need to work on some details, sry for that
