@@ -7,7 +7,7 @@
 <!-- -->
 
     library(readxl)
-    data <- read_excel("~/Data-projects-with-R-and-GitHub2/Projects/NoelStudentAcc/data_smaschkon_2023-02-11_09-11.xlsx", na ="-9")
+    data <- read_excel("data_smaschkon_2023-02-11_09-11.xlsx", na ="-9")
     dim(data)
 
     ## [1] 101  80
@@ -65,6 +65,40 @@ That the question was not answered. In R, -9 should be represented as NA
 (In “TS01\_17” there are **two NAs** as the numbers does not add up to
 101. However Number of NAs are not displayed directly)
 
+**or** by using this new-learned alternative (hopefully pleasing the
+R-Gods)
+
+    library(tidyverse)
+
+    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+    ## ✔ dplyr     1.1.2     ✔ readr     2.1.4
+    ## ✔ forcats   1.0.0     ✔ stringr   1.5.0
+    ## ✔ ggplot2   3.4.2     ✔ tibble    3.2.1
+    ## ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+    ## ✔ purrr     1.0.1     
+    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ✖ dplyr::filter() masks stats::filter()
+    ## ✖ dplyr::lag()    masks stats::lag()
+    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+
+    data |>  select("PS03_01", "SC01_14", "TS01_17") |> 
+      map(table) |> print()
+
+    ## $PS03_01
+    ## 
+    ##  1  2  3  4 
+    ## 13 61 24  3 
+    ## 
+    ## $SC01_14
+    ## 
+    ##  2  3  4  5 
+    ## 16 51 30  4 
+    ## 
+    ## $TS01_17
+    ## 
+    ##  1  2  3  4  5  6  7 
+    ## 10 20 12 24 21  7  5
+
 ## Task 2 - Building Scales
 
 ### 1) Some preparation is needed: Item “SC01\_09” must be recoded.
@@ -93,27 +127,23 @@ Create the Scale for Sleep Quality
 Scale for Self-Control
 
     library(tidyverse)
+    #SelfControlVariable <- c("SC01_14", "SC01_02", "SC01_03", "SC01_04", "SC01_05",
+    #    "SC01_06", "SC01_07", "SC01_08", "SC01_09", "SC01_10", "SC01_11",
+    #    "SC01_12", "SC01_13")
+    #data$Self_Control <- rowMeans(data[SelfControlVariable])
 
-    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ## ✔ dplyr     1.1.2     ✔ readr     2.1.4
-    ## ✔ forcats   1.0.0     ✔ stringr   1.5.0
-    ## ✔ ggplot2   3.4.2     ✔ tibble    3.2.1
-    ## ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
-    ## ✔ purrr     1.0.1     
-    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ## ✖ dplyr::filter() masks stats::filter()
-    ## ✖ dplyr::lag()    masks stats::lag()
-    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-
-    SelfControlVariable <- c("SC01_14", "SC01_02", "SC01_03", "SC01_04", "SC01_05",
-        "SC01_06", "SC01_07", "SC01_08", "SC01_09", "SC01_10", "SC01_11",
-        "SC01_12", "SC01_13")
-    data$Self_Control <- rowMeans(data[SelfControlVariable])
+    ##Alternative##
+    SelfControlVariable <- data |> select(starts_with("SC01_"))
+    data$Self_Control <- rowMeans(SelfControlVariable)
 
 Scale for Smartphone Usage
 
-    SmartphoneUsageVariable <- c("TS01_01", "TS01_02" , "TS01_03", "TS01_04", "TS01_05", "TS01_06", "TS01_07", "TS01_08", "TS01_09", "TS01_10", "TS01_11", "TS01_12", "TS01_13", "TS01_14", "TS01_15", "TS01_16", "TS01_17", "TS01_18", "TS01_19")
-    data$Smartphone_Usage <- rowMeans(data[SmartphoneUsageVariable])
+    #SmartphoneUsageVariable <- c("TS01_01", "TS01_02" , "TS01_03", "TS01_04", "TS01_05", "TS01_06", #"TS01_07", "TS01_08", "TS01_09", "TS01_10", "TS01_11", "TS01_12", "TS01_13", "TS01_14", "TS01_15", #"TS01_16", "TS01_17", "TS01_18", "TS01_19")
+    #data$Smartphone_Usage <- rowMeans(data[SmartphoneUsageVariable])
+
+    ##Alternative##
+    SmartphoneUsageVariable <- data |> select(starts_with("TS01_"))
+    data$Smartphone_Usage <- rowMeans(SmartphoneUsageVariable)
 
 ## Task 3 - Plot Something Beautiful for Me
 
@@ -141,5 +171,6 @@ Creating the Plot
 
     ## Warning: Removed 2 rows containing missing values (`geom_point()`).
 
-![](HaasTim_files/figure-markdown_strict/unnamed-chunk-7-1.png) \## I
-still need to work on some details, sry for that
+![](HaasTim_files/figure-markdown_strict/unnamed-chunk-8-1.png)
+
+## I still need to work on some details, sry for that

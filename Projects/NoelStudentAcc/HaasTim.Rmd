@@ -52,6 +52,7 @@ print(tables)
 **or** by using this new-learned alternative (hopefully pleasing the R-Gods)
 
 ```{r}
+library(tidyverse)
 data |>  select("PS03_01", "SC01_14", "TS01_17") |> 
   map(table) |> print()
 ```
