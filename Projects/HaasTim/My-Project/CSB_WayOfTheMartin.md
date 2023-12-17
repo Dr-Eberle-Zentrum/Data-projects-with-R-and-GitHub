@@ -1,1 +1,0 @@
-![](CSB_WayOfTheMartin.jpg)
