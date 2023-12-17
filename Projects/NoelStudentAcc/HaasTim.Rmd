@@ -91,6 +91,7 @@ library(tidyverse)
 #    "SC01_12", "SC01_13")
 #data$Self_Control <- rowMeans(data[SelfControlVariable])
 
+
 ##Alternative##
 SelfControlVariable <- data |> select(starts_with("SC01_"))
 data$Self_Control <- rowMeans(SelfControlVariable)
@@ -101,6 +102,7 @@ Scale for Smartphone Usage
 ```{r}
 #SmartphoneUsageVariable <- c("TS01_01", "TS01_02" , "TS01_03", "TS01_04", "TS01_05", "TS01_06", #"TS01_07", "TS01_08", "TS01_09", "TS01_10", "TS01_11", "TS01_12", "TS01_13", "TS01_14", "TS01_15", #"TS01_16", "TS01_17", "TS01_18", "TS01_19")
 #data$Smartphone_Usage <- rowMeans(data[SmartphoneUsageVariable])
+
 
 ##Alternative##
 SmartphoneUsageVariable <- data |> select(starts_with("TS01_"))
