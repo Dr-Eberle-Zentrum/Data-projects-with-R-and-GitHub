@@ -210,4 +210,7 @@ p_ber
 p_fri
  
 ```
-
+## Plot for BERLIN RECYCLING Volleys
+![](JanaKimmich_files/figure-markdown_strict/setup-1.png)
+## Plot for BERLIN RECYCLING Volleys
+![](JanaKimmich_files/figure-markdown_strict/setup-2.png)

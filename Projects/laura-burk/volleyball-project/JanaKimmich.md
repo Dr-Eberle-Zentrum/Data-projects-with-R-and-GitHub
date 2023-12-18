@@ -13,3 +13,9 @@ to read them in with a specific encoding.
 
 As far as I understood the task, several plots for several teams where
 desired:
+
+## Plot for BERLIN RECYCLING Volleys
+
+![](JanaKimmich_files/figure-markdown_strict/setup-1.png) \## Plot for
+BERLIN RECYCLING Volleys
+![](JanaKimmich_files/figure-markdown_strict/setup-2.png)
