@@ -1,9 +1,8 @@
 # Solution for the volleyball project
 
 Unfortunately the circular bar plots do not contain much information,
-since I could not resolve the issue how to know the team of the
-topscores in the tables when they are not contained (and how to group
-them).
+since I could not resolve the issue of assigning the teams to the
+topscorer files (and how to group the players).
 
 ## Code for solving the project
 
