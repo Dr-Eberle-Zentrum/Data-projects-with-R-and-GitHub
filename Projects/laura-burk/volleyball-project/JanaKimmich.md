@@ -2,7 +2,8 @@
 
 Unfortunately the circular bar plots do not contain much information,
 since I could not resolve the issue how to know the team of the
-topscores in the tables when they are not contained.
+topscores in the tables when they are not contained (and how to group
+them).
 
 ## Code for solving the project
 
@@ -12,8 +13,11 @@ The datasets where not displayed properly, therefore it was neccessary
 to read them in with a specific encoding.
 
 There where many values to plot, but in the circular bar plots the
-following can be found: \#### Results \* number of overall played games
-of the team over the entire season
+following can be found:
+
+#### Results
+
+-   number of overall played games of the team over the entire season
 
 #### Stadium
 

@@ -4,7 +4,7 @@ output: md_document
 
 # Solution for the volleyball project
 
-Unfortunately the circular bar plots do not contain much information, since I could not resolve the issue how to know the team of the topscores in the tables when they are not contained.
+Unfortunately the circular bar plots do not contain much information, since I could not resolve the issue how to know the team of the topscores in the tables when they are not contained (and how to group them).
 
 ## Code for solving the project
 
@@ -12,6 +12,7 @@ The code for solving the project can be found [here](https://github.com/Dr-Eberl
 The datasets where not displayed properly, therefore it was neccessary to read them in with a specific encoding.
 
 There where many values to plot, but in the circular bar plots the following can be found:
+
 #### Results
 * number of overall played games of the team over the entire season
 
