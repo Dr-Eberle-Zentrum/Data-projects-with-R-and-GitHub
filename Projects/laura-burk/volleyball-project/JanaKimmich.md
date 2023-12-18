@@ -11,6 +11,18 @@ The code for solving the project can be found
 The datasets where not displayed properly, therefore it was neccessary
 to read them in with a specific encoding.
 
+There where many values to plot, but in the circular bar plots the
+following can be found: \#### Results \* number of overall played games
+of the team over the entire season
+
+#### Stadium
+
+-   number of home games the team played
+-   number of away games the team played
+-   average attendance in the home stadium, the number is divided by
+    100, otherwise it would be too big to display it in the same barplot
+    as the other values
+
 As far as I understood the task, several plots for several teams where
 desired:
 
@@ -18,6 +30,6 @@ desired:
 
 ![](JanaKimmich_files/figure-markdown_strict/setup-1.png)
 
-### Plot for BERLIN RECYCLING Volleys
+### Plot for the VfB Friedrichshafen
 
 ![](JanaKimmich_files/figure-markdown_strict/setup-2.png)
