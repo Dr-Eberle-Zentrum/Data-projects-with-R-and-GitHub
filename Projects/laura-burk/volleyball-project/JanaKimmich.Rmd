@@ -13,7 +13,7 @@ The datasets where not displayed properly, therefore it was neccessary to read t
 
 As far as I understood the task, several plots for several teams where desired:
 
-```{r setup}
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse)
 
