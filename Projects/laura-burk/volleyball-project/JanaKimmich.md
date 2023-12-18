@@ -14,7 +14,7 @@ to read them in with a specific encoding.
 As far as I understood the task, several plots for several teams where
 desired:
 
-    knitr::opts_chunk$set(echo = TRUE)
+    knitr::opts_chunk$set(echo = FALSE)
     library(tidyverse)
 
     ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
@@ -316,8 +316,8 @@ desired:
       #)+
     # This makes the coordinate polar instead of cartesian.
     coord_polar(start = 0)+
-    geom_text(data=stadium_ber, aes(x=name, y=as.numeric(amount)+5, label=amount), color="black", fontface="bold", size=2.5,  inherit.aes = FALSE ) +
-      geom_text(data=stadium_ber, aes(x=name, y=as.numeric(amount)+20, label=name), color="black", fontface="bold", size=2.5,  inherit.aes = FALSE ) +
+    geom_text(data=stadium_fri, aes(x=name, y=as.numeric(amount)+5, label=amount), color="black", fontface="bold", size=2.5,  inherit.aes = FALSE ) +
+      geom_text(data=stadium_fri, aes(x=name, y=as.numeric(amount)+20, label=name), color="black", fontface="bold", size=2.5,  inherit.aes = FALSE ) +
       ggtitle("VfB Friedrichshafen")
 
     p_ber
