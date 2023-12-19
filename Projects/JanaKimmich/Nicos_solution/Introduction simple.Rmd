@@ -10,6 +10,7 @@ output: html_document
 source("install_packages_simple.R")
 library(tidyverse)
 library(emo)
+library(readr)
 knitr::opts_chunk$set(echo = TRUE)
 # rm(list = ls())
 ```
@@ -281,7 +282,7 @@ big_picture <- create_big_picture(finally_all_sorted)
 
 ***
 
-Becouse, the function is giving us:
+Because, the function is giving us:
  
 #### **THE BIG Picture:**
 
@@ -332,7 +333,7 @@ pipe_hammer <- big_picture %>%
   filter(year %in%(2000:2020))%>%
   group_by(year, driverId) %>%
   filter(wins == max(wins))%>%
-  slice(1)%>%#                                   <- with and without something is not right need to get rid of doubles or n
+  distinct(driverId, year, wins,.keep_all=TRUE)%>% #slice(1)%>%#                                   <- with and without something is not right need to get rid of doubles or n
   ungroup()%>%
   group_by(driverId)%>%
   mutate(sum_wins_along = cumsum(wins[order(year)]))%>%
@@ -383,11 +384,13 @@ to get the total win count per driver.
 #### **Let's have a look in the output:**
 
 ***
+
 ```{r,  echo = FALSE}
 pipe_hammer
 ```
+
 ***
-  
+
 **This already looks pretty dope right, but we're not done yet...**
 
     
@@ -488,4 +491,53 @@ final_long_picture
 
 ***
 
+After the first attempts i already recognized, the `final-long_picture`data structure **sucks** for the task.
 
+**Let's** try it with the `pipe_hammer` structure, before we'd tried to *"tidy up"* the data.
+
+Ok i see, for better computation we should bring the fore-surname together in one cell as `full_name`
+
+```{r combine-name , echo=TRUE}
+
+name_combined <- pipe_hammer %>%
+  mutate(full_name = paste(forename, surname, sep = " "))%>%
+  select(-c(forename, surname))
+name_combined
+
+
+```
+
+***
+
+Yes we also could put this in the `pipe_hammer` later, first let's see if we can go on from here more easy.
+
+***
+```{r ggplot, echo=TRUE}
+
+# Reorder full_name based on wins
+
+name_combined$full_name <- reorder(name_combined$full_name, name_combined$wins)
+
+
+plot1 <- ggplot(data = name_combined, aes(x = full_name, fill = constructor)) +
+  geom_bar() +
+  coord_flip()+
+  scale_y_continuous(breaks = seq(min(name_combined$wins), max(name_combined$sum_wins_along), by = 10)) +
+  theme_minimal()+
+  theme(axis.title.y = element_blank())
+
+# Add constructor color
+plot2 <- plot1 + geom_bar(aes(y = wins, color = constructor), stat = "identity")
+
+plot2 <- plot2 + labs(y = "Races won",
+                      title = "Most successful drivers with \nconstructors",
+                      subtitle = "click on bar to open wikipedia page of driver")
+
+# center title and make it bigger
+plot2 <- plot2 + theme(plot.title = element_text(size = 20,
+                                                 hjust = 0.6),
+                       plot.subtitle = element_text(hjust = 0.6))
+
+print(plot2)
+
+```
