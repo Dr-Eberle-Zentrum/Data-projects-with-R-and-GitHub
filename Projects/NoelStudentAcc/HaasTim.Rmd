@@ -181,6 +181,5 @@ geom_polygon(data = hulls_data, aes(x = Self_Control, y = Smartphone_Usage, grou
 **Self-Control**
 1: high SelfControl 4: low SelfControl*
 
-smarthpone unsage 1 und 7
-self control 1-5
-## I still need to work on some details, sry for that
+
+

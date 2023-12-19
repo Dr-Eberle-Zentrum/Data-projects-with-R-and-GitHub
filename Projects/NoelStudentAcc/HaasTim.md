@@ -221,6 +221,3 @@ Creating the Plot
 ![](HaasTim_files/figure-markdown_strict/unnamed-chunk-9-1.png)
 
 **Self-Control** 1: high SelfControl 4: low SelfControl\*
-
-smarthpone unsage 1 und 7 self control 1-5 \## I still need to work on
-some details, sry for that
