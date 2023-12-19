@@ -40,7 +40,7 @@ That the question was not answered. In R, -9 should be represented as NA
 variable_names <- c ("PS03_01", "SC01_14", "TS01_17")
   
 tables <- lapply(variable_names, function(variable) {
-  table(data[[variable]])
+  table(data[[variable]], useNA = "ifany")
 })
 names(tables) <- variable_names
 print(tables)
@@ -54,7 +54,7 @@ print(tables)
 ```{r}
 library(tidyverse)
 data |>  select("PS03_01", "SC01_14", "TS01_17") |> 
-  map(table) |> print()
+  map(table, useNA = "ifany") |> print()
 ```
 
 ## Task 2 - Building Scales
@@ -112,16 +112,48 @@ data$Smartphone_Usage <- rowMeans(SmartphoneUsageVariable)
 ## Task 3 - Plot Something Beautiful for Me
 
 Creating the Plot
+```{r}
+## Just copied this code, there is prob a way shorter alterrnative ##
+
+# Function to calculate convex hull
+calculate_hull <- function(group) {
+  group_data <- subset(data, PS03_01 == group)
+  
+  # Check for finite coordinates
+  finite_indices <- is.finite(group_data$Self_Control) & is.finite(group_data$Smartphone_Usage)
+  
+  # Calculate convex hull only for finite coordinates
+  hull_indices <- chull(group_data$Self_Control[finite_indices], group_data$Smartphone_Usage[finite_indices])
+  
+  # Create a data frame with convex hull coordinates and group information
+  hull_data <- data.frame(
+    Self_Control = group_data$Self_Control[finite_indices][hull_indices],
+    Smartphone_Usage = group_data$Smartphone_Usage[finite_indices][hull_indices],
+    PS03_01 = group
+  )
+  
+  return(hull_data)
+}
+
+# Calculate convex hulls for each group
+hulls_data <- do.call(rbind, lapply(levels(factor(data$PS03_01)), calculate_hull))
+
+
+
+```
 
 ```{r}
 
 color_names <- c("1" = "red", "2" = "blue", "3" = "green", "4" = "yellow")
 color_labels <- c("1" = "Very Good", "2" = "Good", "3" = "Bad", "4" = "Very Bad")
 library(ggplot2)
+
 ggplot(data, aes(x = Self_Control, y = Smartphone_Usage, color = factor(PS03_01))) +
   geom_point() +
-   scale_color_manual(values = color_names, breaks = names(color_names), labels = color_labels) +
- geom_smooth(method = "lm", se = FALSE, aes(group = PS03_01)) +
+geom_polygon(data = hulls_data, aes(x = Self_Control, y = Smartphone_Usage, group = PS03_01, color = PS03_01),
+                fill = NA, alpha = 0.5, size = 0.2) +
+  scale_color_manual(values = color_names, breaks = names(color_names), labels = color_labels) +
+ geom_smooth(method = "lm", se = FALSE, aes(group = PS03_01), size = 1.1) +
   theme_dark()+
   labs(
     title = "Correlation between Self-Control and Smartphone Usage",
@@ -129,9 +161,26 @@ ggplot(data, aes(x = Self_Control, y = Smartphone_Usage, color = factor(PS03_01)
     y = "Smartphone Usage",
     fill = "PS03_01"
   ) +
-  guides(color = guide_legend(title = "Sleep Quality"))
+  guides(color = guide_legend(title = "Sleep Quality")) +
+  
+  scale_x_continuous( 
+    breaks = seq(1, 5, by = 1),  
+    labels = seq(1, 5, by = 1)
+  ) +
+  
+  scale_y_continuous(
+   breaks = c(1,7), 
+   labels = c(1,7),
+   limits = c(0,8)
+  )
+  
  
 
 ```
 
+**Self-Control**
+1: high SelfControl 4: low SelfControl*
+
+smarthpone unsage 1 und 7
+self control 1-5
 ## I still need to work on some details, sry for that

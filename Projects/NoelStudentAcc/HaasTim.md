@@ -42,7 +42,7 @@ That the question was not answered. In R, -9 should be represented as NA
     variable_names <- c ("PS03_01", "SC01_14", "TS01_17")
       
     tables <- lapply(variable_names, function(variable) {
-      table(data[[variable]])
+      table(data[[variable]], useNA = "ifany")
     })
     names(tables) <- variable_names
     print(tables)
@@ -59,8 +59,8 @@ That the question was not answered. In R, -9 should be represented as NA
     ## 
     ## $TS01_17
     ## 
-    ##  1  2  3  4  5  6  7 
-    ## 10 20 12 24 21  7  5
+    ##    1    2    3    4    5    6    7 <NA> 
+    ##   10   20   12   24   21    7    5    2
 
 (In “TS01\_17” there are **two NAs** as the numbers does not add up to
 101. However Number of NAs are not displayed directly)
@@ -82,7 +82,7 @@ R-Gods)
     ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
 
     data |>  select("PS03_01", "SC01_14", "TS01_17") |> 
-      map(table) |> print()
+      map(table, useNA = "ifany") |> print()
 
     ## $PS03_01
     ## 
@@ -96,8 +96,8 @@ R-Gods)
     ## 
     ## $TS01_17
     ## 
-    ##  1  2  3  4  5  6  7 
-    ## 10 20 12 24 21  7  5
+    ##    1    2    3    4    5    6    7 <NA> 
+    ##   10   20   12   24   21    7    5    2
 
 ## Task 2 - Building Scales
 
@@ -151,13 +151,41 @@ Scale for Smartphone Usage
 
 Creating the Plot
 
+    ## Just copied this code, there is prob a way shorter alterrnative ##
+
+    # Function to calculate convex hull
+    calculate_hull <- function(group) {
+      group_data <- subset(data, PS03_01 == group)
+      
+      # Check for finite coordinates
+      finite_indices <- is.finite(group_data$Self_Control) & is.finite(group_data$Smartphone_Usage)
+      
+      # Calculate convex hull only for finite coordinates
+      hull_indices <- chull(group_data$Self_Control[finite_indices], group_data$Smartphone_Usage[finite_indices])
+      
+      # Create a data frame with convex hull coordinates and group information
+      hull_data <- data.frame(
+        Self_Control = group_data$Self_Control[finite_indices][hull_indices],
+        Smartphone_Usage = group_data$Smartphone_Usage[finite_indices][hull_indices],
+        PS03_01 = group
+      )
+      
+      return(hull_data)
+    }
+
+    # Calculate convex hulls for each group
+    hulls_data <- do.call(rbind, lapply(levels(factor(data$PS03_01)), calculate_hull))
+
     color_names <- c("1" = "red", "2" = "blue", "3" = "green", "4" = "yellow")
     color_labels <- c("1" = "Very Good", "2" = "Good", "3" = "Bad", "4" = "Very Bad")
     library(ggplot2)
+
     ggplot(data, aes(x = Self_Control, y = Smartphone_Usage, color = factor(PS03_01))) +
       geom_point() +
-       scale_color_manual(values = color_names, breaks = names(color_names), labels = color_labels) +
-     geom_smooth(method = "lm", se = FALSE, aes(group = PS03_01)) +
+    geom_polygon(data = hulls_data, aes(x = Self_Control, y = Smartphone_Usage, group = PS03_01, color = PS03_01),
+                    fill = NA, alpha = 0.5, size = 0.2) +
+      scale_color_manual(values = color_names, breaks = names(color_names), labels = color_labels) +
+     geom_smooth(method = "lm", se = FALSE, aes(group = PS03_01), size = 1.1) +
       theme_dark()+
       labs(
         title = "Correlation between Self-Control and Smartphone Usage",
@@ -165,7 +193,24 @@ Creating the Plot
         y = "Smartphone Usage",
         fill = "PS03_01"
       ) +
-      guides(color = guide_legend(title = "Sleep Quality"))
+      guides(color = guide_legend(title = "Sleep Quality")) +
+      
+      scale_x_continuous( 
+        breaks = seq(1, 5, by = 1),  
+        labels = seq(1, 5, by = 1)
+      ) +
+      
+      scale_y_continuous(
+       breaks = c(1,7), 
+       labels = c(1,7),
+       limits = c(0,8)
+      )
+
+    ## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+    ## ℹ Please use `linewidth` instead.
+    ## This warning is displayed once every 8 hours.
+    ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+    ## generated.
 
     ## `geom_smooth()` using formula = 'y ~ x'
 
@@ -173,6 +218,9 @@ Creating the Plot
 
     ## Warning: Removed 2 rows containing missing values (`geom_point()`).
 
-![](HaasTim_files/figure-markdown_strict/unnamed-chunk-8-1.png)
+![](HaasTim_files/figure-markdown_strict/unnamed-chunk-9-1.png)
 
-## I still need to work on some details, sry for that
+**Self-Control** 1: high SelfControl 4: low SelfControl\*
+
+smarthpone unsage 1 und 7 self control 1-5 \## I still need to work on
+some details, sry for that
