@@ -215,43 +215,6 @@ data <- data |>
 # i do it for year 2020
 
 data |> filter(TIME_PERIOD == 2020) |> 
-  ggplot(aes(x = income, y = crime_phthab, size = crime_nr, color = as.factor(poverty))) +
-  geom_point(alpha = 0.7) +
-  scale_size_continuous(range = c(3, 15)) + 
-  facet_wrap(~Crimes, scales = "free") +
-  labs(title = "Police-recorded Offence vs. Income vs. At Risk of Poverty Rate",
-       x = "Income of Households (Euro per inhabitant)",
-       y = "Police-recorded Offence (Per hundred thousand inhabitants)",
-       size = "Police-recorded Offence (Number)",
-       color = "At Risk of Poverty Rate") +
-  theme_minimal() +
-  guides(size = "none", color = "none")
-
-data |> filter(TIME_PERIOD == 2020) |> 
-  mutate(poverty_category = case_when(
-    poverty < 12 ~ "Low",
-    poverty >= 12 & poverty < 18 ~ "Medium",
-    poverty >= 18 ~ "High"
-  )) #|> 
-  ggplot(aes(x = income, y = crime_phthab, size = crime_nr, color = as.factor(poverty))) +
-  geom_point(alpha = 0.7) +
-  scale_size_continuous(range = c(3, 15), name = "Police-recorded Offence (Number)") + 
-  scale_color_manual(name = "At Risk of Poverty Rate", values = c("0" = "blue", "1" = "red", "2" = "green")) +
-  facet_wrap(~Crimes, scales = "free") +
-  labs(title = "Police-recorded Offence vs. Income vs. At Risk of Poverty Rate",
-       x = "Income of Households (Euro per inhabitant)",
-       y = "Police-recorded Offence (Per hundred thousand inhabitants)") +
-  theme_minimal() +
-  guides(size = "none", color = "none")
-
-
-psych::describe(data$poverty)
-
-
-
-library(dplyr)
-
-data |> filter(TIME_PERIOD == 2020) |> 
   mutate(poverty_category = case_when(
     poverty < 12 ~ "3 Low",
     poverty >= 12 & poverty < 18 ~ "2 Medium",
@@ -268,12 +231,12 @@ data |> filter(TIME_PERIOD == 2020) |>
   theme_minimal() +
   guides(size = "none", color = guide_legend(title = "Poverty"))
 
-ggsave("Projects/YunjiKang/plotTask2_1.png", 
-       plot = last_plot(),
-       height = 20, 
-       width = 18.5, 
-       units = "cm",
-       bg = "white")
+#ggsave("Projects/YunjiKang/plotTask2_1.png", 
+#       plot = last_plot(),
+#       height = 20, 
+#       width = 18.5, 
+#       units = "cm",
+#       bg = "white")
 
 
 # Bubble Chart with animation 
@@ -291,14 +254,13 @@ animation <- data |>
   scale_size_continuous(range = c(3, 15), name = "Police-recorded Offence (Number)") + 
   scale_color_manual(name = "At Risk of Poverty Rate", values = c("3 Low" = "green", "2 Medium" = "yellow", "1 High" = "red")) +
   facet_wrap(~Crimes, scales = "free", ncol = 2) +
-  labs(title = "Relationship of Police-recorded offence, income of house hold and risk of poverty",
+  theme_bw() +
+  labs(title = "Year: {frame_time}",
        x = "Income of Households (Euro per inhabitant)",
        y = "Police-recorded Offence (Per hundred thousand inhabitants)") +
-  theme_minimal() +
   guides(size = "none", color = guide_legend(title = "Poverty")) +
-  transition_states(TIME_PERIOD, transition_length = 2, state_length = 1) +
-  enter_fade() +
-  exit_fade()
+  transition_time(TIME_PERIOD) +
+  ease_aes("linear")
 
 # GIF speichern
 anim_save("Projects/YunjiKang/plotTask2.gif", animation)
