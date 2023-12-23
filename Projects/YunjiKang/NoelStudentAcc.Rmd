@@ -162,6 +162,7 @@ map2 <- make_point_map()
 After failing at task 1, however, I can present something for task 2, which I am very happy with.
 
 ```{r, include=FALSE, eval=TRUE}
+library(tidyverse)
 
 crimedata2 <- data.table::fread("Crime_data_for_Task2.gz")
 incomedata <- data.table::fread("Income of households.gz")
