@@ -1,0 +1,25 @@
+---
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(rvest)
+library(dplyr)
+library(tidyr)
+
+url <- "https://locations.wafflehouse.com" 
+
+page <- read_html(url)
+store_data <- 
+  page |> 
+  html_element("script#__NEXT_DATA__") |> 
+  html_text() |> 
+  jsonlite::fromJSON() |>
+  purrr::pluck("props", "pageProps", "locations") |>
+  unnest(addressLines) |>
+  unnest(custom) |> 
+  as_tibble()
+```
+
