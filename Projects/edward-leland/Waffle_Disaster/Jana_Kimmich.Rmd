@@ -8,6 +8,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(rvest)
 library(dplyr)
 library(tidyr)
+library(usmap)
 
 url <- "https://locations.wafflehouse.com" 
 
@@ -21,5 +22,21 @@ store_data <-
   unnest(addressLines) |>
   unnest(custom) |> 
   as_tibble()
+
+# plotting all points of the waffle houses in a custom map
+waffle_map <- ggplot(store_data, aes(x = longitude, y = latitude)) +
+  geom_point(size = 1) +
+  theme_minimal()+
+  theme(axis.text = element_blank(),
+  axis.title = element_blank(),
+  panel.grid = element_blank())
+
+# Plotting waffle-map on a US map
+final_map <- plot_usmap(regions = "states", include = store_data$state) +
+  labs(title = "Land of Plenty") + 
+  # change xmin, etc.?
+  annotation_custom(ggplotGrob(waffle_map),xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf)
+
+final_map
 ```
 
