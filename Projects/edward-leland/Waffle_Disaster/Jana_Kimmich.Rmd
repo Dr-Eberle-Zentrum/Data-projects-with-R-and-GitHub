@@ -21,11 +21,34 @@ store_data <-
   purrr::pluck("props", "pageProps", "locations") |>
   unnest(addressLines) |>
   unnest(custom) |> 
-  as_tibble()
+  as_tibble()|>
+  mutate(color="green") # default green
+
+# center of disaster zone, latitude and longitude
+center <- c(36.31316,-82.38821)
+# radius for red zone
+red_radius <- 2
+# radius for yellow zone
+yellow_radius <- 5
+# assign the colors to the stores
+for (i in 1:nrow(store_data)) {
+  if (store_data$latitude[i] < center[1] + yellow_radius &&
+      store_data$latitude[i] > center[1] - yellow_radius
+      && store_data$longitude[i] < center[2] + yellow_radius &&
+      store_data$longitude[i] > center[2] - yellow_radius) {
+    store_data$color[i] = "yellow"
+    if (store_data$latitude[i] < center[1] + red_radius &&
+        store_data$latitude[i] > center[1] - red_radius
+        && store_data$longitude[i] < center[2] + red_radius &&
+        store_data$longitude[i] > center[2] - red_radius) {
+      store_data$color[i] = "red"
+    }
+  }
+}
 
 # plotting all points of the waffle houses in a custom map
 waffle_map <- ggplot(store_data, aes(x = longitude, y = latitude)) +
-  geom_point(size = 1) +
+  geom_point(size = 1,colour=store_data$color) +
   theme_minimal()+
   theme(axis.text = element_blank(),
   axis.title = element_blank(),
@@ -35,7 +58,8 @@ waffle_map <- ggplot(store_data, aes(x = longitude, y = latitude)) +
 final_map <- plot_usmap(regions = "states", include = store_data$state) +
   labs(title = "Land of Plenty") + 
   # change xmin, etc.?
-  annotation_custom(ggplotGrob(waffle_map),xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf)
+ # annotation_custom(ggplotGrob(waffle_map),xmin = min(store_data$latitude), xmax = max(store_data$latitude), ymin = min(store_data$longitude), ymax = max(store_data$longitude))
+  annotation_custom(ggplotGrob(waffle_map))
 
 final_map
 ```
