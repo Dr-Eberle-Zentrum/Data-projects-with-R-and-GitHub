@@ -22,7 +22,7 @@ store_data <-
   unnest(addressLines) |>
   unnest(custom) |> 
   as_tibble()|>
-  mutate(color="green") # default green
+  mutate(Status="green") # default green
 
 # center of disaster zone, latitude and longitude
 center <- c(36.31316,-82.38821)
@@ -36,23 +36,26 @@ for (i in 1:nrow(store_data)) {
       store_data$latitude[i] > center[1] - yellow_radius
       && store_data$longitude[i] < center[2] + yellow_radius &&
       store_data$longitude[i] > center[2] - yellow_radius) {
-    store_data$color[i] = "yellow"
+    store_data$Status[i] = "yellow"
     if (store_data$latitude[i] < center[1] + red_radius &&
         store_data$latitude[i] > center[1] - red_radius
         && store_data$longitude[i] < center[2] + red_radius &&
         store_data$longitude[i] > center[2] - red_radius) {
-      store_data$color[i] = "red"
+      store_data$Status[i] = "red"
     }
   }
 }
 
 # plotting all points of the waffle houses in a custom map
-waffle_map <- ggplot(store_data, aes(x = longitude, y = latitude)) +
-  geom_point(size = 1,colour=store_data$color) +
+waffle_map <- ggplot(store_data, aes(x = longitude, y = latitude,color=Status)) +
+  geom_point(size = 1) +
+  scale_color_manual(values = c("green" ,"red", "yellow")) +
   theme_minimal()+
   theme(axis.text = element_blank(),
   axis.title = element_blank(),
-  panel.grid = element_blank())
+  panel.grid = element_blank(),
+  legend.position = c(0, 0),
+  legend.justification = c(0, 0))
 
 # Plotting waffle-map on a US map
 final_map <- plot_usmap(regions = "states", include = store_data$state) +
