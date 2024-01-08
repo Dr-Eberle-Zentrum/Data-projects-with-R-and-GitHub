@@ -8,6 +8,7 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
 library(tidyverse)
 library(readxl)
+library(ggthemes)
 ```
 
 ```{r read_n_pipe, echo=FALSE}
@@ -44,10 +45,11 @@ p <- ggplot(data, aes(x=x, y=y, color = PS03_01)) +
   scale_color_manual(values = c("#e6194B", "#42d4f4", "#3cb44b", "#911eb4")) +
   scale_x_continuous(breaks=seq(2,4.5,.5),labels=c("Low SC","", "", "", "High SC", "")) +
   scale_y_continuous(breaks=seq(2,7,1),labels=c("Low SU","", "", "", "High SU", "")) +
-  ggtitle("Correlation Between Self Control and Smartphone Usage With Regard to Sleep Quality")+
+  ggtitle("Self Control (SC) vs. Smartphone Usage (SU) \n Regarding Sleep Quality")+
   xlab("Self Control") +
   ylab("Smartphone Usage") +
   labs(color = "Sleep Quality") +
+  theme_excel_new()+
   theme(
     plot.title = element_text(size=12),
     plot.title.position = "plot"
