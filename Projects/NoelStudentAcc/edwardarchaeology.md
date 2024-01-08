@@ -1,5 +1,11 @@
-\##Original Implementation ![](SleepyFull.jpg)
+## Original Implementation
 
-\##Only Lines ![](SleepyLines.jpg)
+![](SleepyFull.jpg)
 
-\##Only Hulls ![](SleepyHulls.jpg)
+## Only Lines
+
+![](SleepyLines.jpg)
+
+## Only Hulls
+
+![](SleepyHulls.jpg)

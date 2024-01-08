@@ -117,7 +117,6 @@ p1 <- ggplot(data, aes(x=x, y=y, color = PS03_01)) +
 ggsave(plot = p1, "SleepyFull.jpg")
 ```
 
-##Original Implementation ![](SleepyFull.jpg)
 
 ```{r only_lines, echo=FALSE}
 #Begin building plot, color = PS gives the groups
@@ -157,8 +156,6 @@ p2 <- ggplot(data, aes(x=x, y=y, color = PS03_01)) +
 #Save
 ggsave(plot = p2, "SleepyLines.jpg")
 ```
-
-##Only Lines ![](SleepyLines.jpg)
 
 ```{r only_hulls, echo=FALSE}
 #Begin building plot, color = PS gives the groups
@@ -208,4 +205,11 @@ p3 <- ggplot(data, aes(x=x, y=y, color = PS03_01)) +
 ggsave(plot = p3, "SleepyHulls.jpg")
 ```
 
-##Only Hulls ![](SleepyHulls.jpg)
+## Original Implementation 
+![](SleepyFull.jpg)
+
+## Only Lines 
+![](SleepyLines.jpg)
+
+## Only Hulls 
+![](SleepyHulls.jpg)
