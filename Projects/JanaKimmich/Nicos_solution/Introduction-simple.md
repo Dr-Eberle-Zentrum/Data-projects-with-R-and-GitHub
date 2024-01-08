@@ -44,7 +44,7 @@ document. Outputs are automatically updated whenever inputs change.
 
 So let us come back to this fantastic
 [**drop\_n\_slice\_folder**](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/Nicos_tryOut_branch/Jana_Formula_One/drop_n_slice_folder)
-📁 and let’s have an closer look how it actuall works and helps to solve
+📂 and let’s have an closer look how it actuall works and helps to solve
 [your **Formula One
 Issue:**](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/JanaKimmich/project-description.md)
 
@@ -664,6 +664,6 @@ if we can go on from here more easy.
                                                      hjust = 0.6),
                            plot.subtitle = element_text(hjust = 0.6))
 
-    print(plot2)
+    plot2
 
 ![](Introduction-simple_files/figure-markdown_strict/ggplot-1.png)
