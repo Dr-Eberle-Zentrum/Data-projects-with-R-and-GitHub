@@ -1,4 +1,4 @@
-\##Original Implementation ![](SleepyTime.jpg)
+\##Original Implementation ![](SleepyFull.jpg)
 
 \##Only Lines ![](SleepyLines.jpg)
 

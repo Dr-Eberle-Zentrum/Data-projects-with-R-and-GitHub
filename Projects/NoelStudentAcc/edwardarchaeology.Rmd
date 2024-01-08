@@ -114,10 +114,10 @@ p1 <- ggplot(data, aes(x=x, y=y, color = PS03_01)) +
   )
 
 #Save
-ggsave(plot = p1, "SleepyTime.jpg")
+ggsave(plot = p1, "SleepyFull.jpg")
 ```
 
-##Original Implementation ![](SleepyTime.jpg)
+##Original Implementation ![](SleepyFull.jpg)
 
 ```{r only_lines, echo=FALSE}
 #Begin building plot, color = PS gives the groups
