@@ -43,8 +43,8 @@ p <- ggplot(data, aes(x=x, y=y, color = PS03_01)) +
   geom_smooth(method=lm, se=FALSE) +
   scale_color_manual(values = c("red", "blue", "green", "purple")) +
   ggtitle("Correlation Between Self Control and Smartphone Usage With Regard to Sleep Quality")+
-  xlab("Self Control") +
-  ylab("Smartphone Usage") +
+  xlab("Self Control (1 is Low)") +
+  ylab("Smartphone Usage (1 is Low)") +
   labs(color = "Sleep Quality") +
   theme(
     plot.title = element_text(size=12),
