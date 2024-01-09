@@ -67,8 +67,6 @@ sop <- data.frame(0)
 
 # Function for codebook1
 
-I am not sure about what Add_overview means (was not clarifed in the description) and why all the values are false. However, the instruction says that I have to include overview on every report, so I will ignore this value for now.
-
 ```{r}
 fcb1 <- function(data){
   cb <- subset(cb_1, TextBaustein == "Introtext")
@@ -232,34 +230,6 @@ fcb7(table[7,])
 ```
 
 ```{r}
-library(dplyr)
-library(knitr)
-library(kableExtra)
-library(reshape)
-
-replace_minus_with_na <- function(x) {
-  ifelse(x == "-", NA, x)}
-  
-sop_list <- function(data){
-
-  sop_list <- list()
-  if(data$Couple_product){
-    ac <- paste(data$Articel,"/",data$Articel_coupl)
-  }
-  else {
-    ac <- data$Articel
-  }
-  a <- list(fcb1(data), fcb2(data), fcb3(data),fcb4(data),fcb5(data),fcb6(data),fcb7(data))
-  for (x in a){
-      if (is.data.frame(x)){
-      sop_list <- append(sop_list, list(x))
-      }
-  }
-
-  return(sop_list)
-}
-
-sop_list(table[1,])
 
 ```
 
@@ -277,31 +247,50 @@ replace_minus_with_na <- function(x) {
   
 sop_list <- function(data){
   if(data$Couple_product){
-    sop_list <- list(paste(data$Articel,"/",data$Articel_coupl))
+    result <- list(paste(data$Articel,"/",data$Articel_coupl))
   }
   else {
-    sop_list <- list(data$Articel)
+    result <- list(data$Articel)
   }
   
   a <- list(fcb1(data), fcb2(data),fcb3(data),fcb4(data),fcb5(data),fcb6(data),fcb7(data))
   for (x in a){
       if (is.data.frame(x)){
         x[]<- lapply(x, replace_minus_with_na)
-        x <- x %>% melt( id.vars = "Section", measure.vars = c("String", "Image")) %>% na.omit()
-        sop_list <- append(sop_list, list(x))
+        x <- x %>% select(Section, String, Image) %>% melt(id="Section") %>% na.omit()
+
+        result <- append(result, list(x))
+        
       }
   }
 
-  return(sop_list)
+  return(result)
 }
+  sop <-sop_list(table[1,])
+```
+
+```{r}
+library(gt)
+library(tidyverse)
+library(glue)
+
+
+  sop <-sop_list(table[1,])
+  ac <- sop[[1]]
+  sop <- sop[-1]
+  gt(sop[[1]]) |>
+    tab_header(title = "S&P 500",
+               subtitle = glue("jj"))
+
+    
 
 ```
+
 
 ### visualization
 
 ```{r}
 library(kableExtra)
-options(knitr.table.format = "html")
 
   
 ```
