@@ -1,0 +1,118 @@
+---
+title: "Tackling_Laura_Project"
+author: "Nicolai Schwarz"
+date: "2024-01-08"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+# get this packages
+library(tidyverse)
+library(dplyr)
+library(emo)
+library(readr)
+knitr::opts_chunk$set(echo = TRUE)
+ rm(list = ls())
+```
+
+Okay let's have a look, first we need to change columns and values from team roster.
+
+Therefor we could recycle the `auto_import_csv`-function from my other Project Solution.
+
+***
+
+```{r folder_content, echo=FALSE}
+folder_path_roster <- "C:\\Users\\Pirate\\Documents\\Data-projects-with-R-and-GitHub\\Projects\\laura-burk\\volleyball-project\\team-rosters"
+
+ files <- list.files(folder_path_roster)
+
+files
+```
+
+***
+
+```{r import, echo=TRUE }
+
+auto_import_csv <- function(file_path){
+  
+  file_list <- list.files(path = file_path, pattern = "\\.csv$", full.names = TRUE)        #-> here we could change the auto import to other data type's 
+  data_frames <- list()
+  
+  for (file in file_list) {
+    df_name <- tools::file_path_sans_ext(basename(file))  # uses filename as dataframe
+    
+    
+    data_frames[[df_name]] <- read.csv2(file, fileEncoding = "cp852")
+  }
+  
+  return(data_frames)
+}
+all_rosters <- auto_import_csv(folder_path_roster)
+str(all_rosters)
+#?row.names
+```
+
+***
+
+Okay god damn it, it took me fucking long time to notice, i just had to use the `read.csv2` function instead.
+
+should we supercharge the process now by using the `package(air)`?
+
+***
+
+
+```{r airup, echo=TRUE, eval=FALSE}
+install.packages("devtools") 
+devtools::install_github("soumyaray/air")
+```
+***
+
+Okay instead of going through the whole API stuff. let's do some minor adjustements by hand.
+
+Let's go for height first:
+
+***
+`#df <- mutate(df, Height = as.numeric(Height)/100)
+  #df$Height <- suppressWarnings(as.numeric(df$Height) / 100)`
+
+```{r adjust height in cm, echo=TRUE}
+all_rosters2 <- lapply(all_rosters, function(df) {
+  df %>%
+    mutate(Height = ifelse(Height == 0, NA,
+                           ifelse(as.numeric(substr(Height, 1, 1)) >= 3, as.numeric(paste0("1", substring(Height, 2))),
+                                  as.numeric(Height))))
+})
+
+
+str(all_rosters2)
+
+```
+
+***
+
+And again did some useless extra work, due to value `999` equals `NA`and in the end its just an doc....
+
+So might be better, first mutate gender, get rid of unnecessary Positions and than finally fix the height into cm.
+
+For the nationality might be beasiest to implement an already existing country code list.
+
+***
+
+```{r adjust gender, echo=TRUE}
+all_rosters3 <- lapply(all_rosters, function(df) {
+ df %>%
+    mutate(Gender = ifelse(str_detect(Gender, "^[fF]|2"), "female", "male"))
+})
+
+
+str(all_rosters3)
+```
+
+***
+
+Okay that was easy, probably should wrap it in a function to use it later on, on the other csv's aswell.
+
+Or should i punch all csv's in a list first ? `r emo::ji("thinking")`
+
+***
+
