@@ -14,6 +14,10 @@ library(readxl)
 
 #For the sexy excel theme
 library(ggthemes)
+
+library(modelr)
+library(broom)
+
 ```
 
 ```{r read_n_pipe, echo=FALSE}
@@ -22,7 +26,7 @@ library(ggthemes)
 data <- read_excel("data_smaschkon_2023-02-11_09-11.xlsx")
 
 #A smaller but still holy pipe
-data <- data %>%
+sleepy <- data %>%
   
   #Grab the cols we care about
   select("PS03_01",starts_with("SC01"), starts_with("TS01")) %>%
@@ -61,14 +65,14 @@ data <- data %>%
   group_by(PS03_01)
 
   #Absolutely no idea how this works but it makes hull geometry appear
-  hull <- data %>%
+  hull <- sleepy %>%
   slice(chull(x,y))
 ```
 
 ```{r plotting, echo=FALSE}
 
 #Begin building plot, color = PS gives the groups
-p1 <- ggplot(data, aes(x=x, y=y, color = PS03_01)) +
+p1 <- ggplot(sleepy, aes(x=x, y=y, color = PS03_01)) +
   
   #Points
   geom_point(size=2, shape = 18) +
@@ -122,7 +126,7 @@ ggsave(plot = p1, "SleepyFull.jpg")
 
 ```{r only_lines, echo=FALSE}
 #Begin building plot, color = PS gives the groups
-p2 <- ggplot(data, aes(x=x, y=y, color = PS03_01)) +
+p2 <- ggplot(sleepy, aes(x=x, y=y, color = PS03_01)) +
   
   #Points
   geom_point(size=2, shape = 18) +
@@ -163,7 +167,7 @@ ggsave(plot = p2, "SleepyLines.jpg")
 
 ```{r only_hulls, echo=FALSE}
 #Begin building plot, color = PS gives the groups
-p3 <- ggplot(data, aes(x=x, y=y, color = PS03_01)) +
+p3 <- ggplot(sleepy, aes(x=x, y=y, color = PS03_01)) +
   
   #Points
   geom_point(size=2, shape = 18) +
@@ -219,3 +223,50 @@ ggsave(plot = p3, "SleepyHulls.jpg")
 
 ## Only Hulls 
 ![](SleepyHulls.jpg)
+
+## Holy Statistics Batman
+
+```{r residual_stats, echo=FALSE}
+model_one <- function(df) {
+  lm(x ~ y, data = df)
+}
+
+sleepy <- sleepy %>% 
+  nest() %>%
+  mutate(model = map(data, model_one))
+
+
+sleepy <- sleepy %>% 
+  mutate(
+    resids = map2(data, model, add_residuals)
+  )
+
+resids <- unnest(sleepy, resids)
+
+ 
+residuals <- ggplot(data = resids, aes(x, resid)) +
+  geom_line(aes(group = PS03_01), alpha = 1 / 3) + 
+  geom_smooth(se = FALSE) +
+  ggtitle("Residuals")
+
+ggsave(plot = residuals, "Residuals.jpg")
+```
+
+```{r r_squared, echo=FALSE}
+glance <- sleepy %>% 
+  mutate(glance = map(model, broom::glance)) %>% 
+  unnest(glance, .drop = TRUE)
+
+glance %>% 
+  arrange(r.squared)
+
+r2 <- ggplot(data = glance, aes(PS03_01, r.squared)) + 
+  geom_jitter(width = 0.5) +
+  ggtitle("R Squared")
+
+ggsave(plot = r2, "R2.jpg")
+```
+
+![](Residuals.jpg)
+
+![](R2.jpg)
