@@ -1,0 +1,77 @@
+---
+output: html_document
+---
+
+# Preparation:
+
+```{r, include=TRUE}
+library(tidyverse)
+
+drivers <- read.csv("archive/drivers.csv", na.strings = "\\N")
+results <- read.csv("archive/results.csv", na.strings = "\\N")
+constructors <- read.csv("archive/constructors.csv", na.strings = "\\N")
+races <- read.csv("archive/races.csv", na.strings = "\\N")
+
+
+#install.packages("plotly")
+
+# drivername, wins, year, nationality, constructor
+
+df <- results |> 
+  left_join(drivers, by = "driverId") |> 
+  left_join(races, by = "raceId") |> 
+  left_join(constructors, by = "constructorId") |> 
+  mutate(name = paste(forename, surname, sep = " ")) |>
+  filter(year >= 2000 & year <= 2020) |> 
+  group_by(name, year) |> 
+  mutate(wins = sum(position == 1, na.rm = T)) |> 
+  ungroup() |> 
+  select("name", "year", "wins", "nationality.x", "url.x", "name.y") |> 
+  distinct(name, year, .keep_all = T) |> 
+  group_by(name) |> 
+  mutate(totalwins = sum(wins, na.rm = T)) |>  
+  ungroup() |> 
+  mutate(order = dense_rank(desc(totalwins))) |> 
+  rename(nationality = nationality.x, url = url.x, constructor = name.y) |> 
+  arrange(order) |> 
+  filter(order <= 9, wins > 0)  
+
+rm(list = setdiff(ls(), "df"))
+```
+
+# Plotting:
+
+```{r, include=TRUE}
+
+library(plotly)
+
+# table(df$constructor)
+# Brawn Ferrari Honda Lotus F1 McLaren Mercedes Red Bull Renault Toro Rosso
+colors <- c(
+  "Brawn" = "#7B1113",   
+  "Ferrari" = "#DC0000", 
+  "Honda" = "#666666",  
+  "Lotus F1" = "#0E55A5", 
+  "McLaren" = "#FF8700", 
+  "Mercedes" = "#00D2BE",
+  "Red Bull" = "#1E41FF",
+  "Renault" = "#FFF500", 
+  "Toro Rosso" = "#469BFF"
+)
+
+hover_text <- with(df, paste(name, ": ", wins, " Wins, Constructor: ", constructor))
+
+fig <- 
+  plot_ly(df, x = ~wins, y = ~name, type = "bar", color = ~constructor, 
+          colors = colors, text = hover_text) |>
+  layout(title = "Most successfull drivers with constructors", 
+         xaxis = list(title = "Races won"),
+         yaxis = list(title = "", categoryorder = "total ascending", 
+                      categoryarray = ~order), 
+         barmode = 'stack')
+
+fig
+
+```
+
+
