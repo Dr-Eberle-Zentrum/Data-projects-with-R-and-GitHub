@@ -48,7 +48,7 @@ auto_import_csv <- function(file_path){
   return(data_frames)
 }
 all_rosters <- auto_import_csv(folder_path_roster)
-str(all_rosters)
+#str(all_rosters)
 #?row.names
 ```
 
@@ -84,7 +84,7 @@ all_rosters2 <- lapply(all_rosters, function(df) {
 })
 
 
-str(all_rosters2)
+#str(all_rosters2)
 
 ```
 
@@ -94,7 +94,7 @@ And again did some useless extra work, due to value `999` equals `NA`and in the 
 
 So might be better, first mutate gender, get rid of unnecessary Positions and than finally fix the height into cm.
 
-For the nationality might be beasiest to implement an already existing country code list.
+**For the nationality might be easiest to implement an already existing country code list.**
 
 ***
 
@@ -105,7 +105,8 @@ all_rosters3 <- lapply(all_rosters, function(df) {
 })
 
 
-str(all_rosters3)
+#str(all_rosters3)
+#all_rosters3
 ```
 
 ***
@@ -115,4 +116,118 @@ Okay that was easy, probably should wrap it in a function to use it later on, on
 Or should i punch all csv's in a list first ? `r emo::ji("thinking")`
 
 ***
+
+Let's find some nice RegEx to fix the position Issues, or lets take a look in wiki first, might we could use something from there.
+
+-> Therefor we take a look what's the unique entry's in the "Position" column's
+
+***
+
+```{r unique_positions, echo=TRUE}
+
+unique_positions <- unique(unlist(lapply(all_rosters3, function(df) df$Position)))
+
+print(unique_positions)
+```
+***
+
+Okay lets make it more recyclable.
+
+***
+
+```{r unique_values, echo=TRUE}
+
+get_unique_values <- function(data, column){
+  unique_values <- unique(unlist(lapply(data, function(df) df[[column]])))
+  return(unique_values)
+}
+get_unique_values(all_rosters3, "Position")
+
+```
+
+***
+
+Okay lets go...
+
+***
+
+```{r adjust position, echo=TRUE}
+all_rosters4 <- lapply(all_rosters, function(df) {
+ df %>%
+    mutate(Position = str_replace_all(Position, "^[zZ].*|^[sS]e.*", "setter"),
+           Position = str_replace(Position, "^[mM].*", "middle blocker"))
+})
+
+
+#all_rosters4
+```
+
+***
+
+Yep this semse to be working, we could go on like that, but anyway there's still a lot of repeating, maybe we could just replace it with a **" adjustment map"**
+
+
+***
+```{r adjust_map position, echo=TRUE}
+
+adjust_map <- c("^[zZ].*|^[sS]e.*" = "setter",
+                "^[mM].*" = "middle blocker",
+                "^[aA]u.*|^[oO]u.*" = "outside hitter",
+                "^[dD].*|^[oO]p.*" = "opposite hitter",
+                "^[uU].*|^[lL].*" = "libero",
+                "^[tT]r.*|^[cC]h.*|.*[hH]ead.*" = "head coach")
+
+all_rosters5 <- lapply(all_rosters, function(df) {
+  df %>%
+    mutate(Position = str_replace_all(Position, adjust_map))
+})
+
+#str(all_rosters5)
+
+#all_rosters5
+```
+
+***
+
+Let's check what we got left, with our `get_unique_values()` function
+
+***
+
+```{r check_whats_left, echo=TRUE}
+get_unique_values(all_rosters5, "Position")
+```
+***
+
+looks pretty nice so far, how can we kick out, all unnecessary positions without calling them single again?
+
+`r emo::ji("thinking")` maybe just use an `ifelse` function before the `str_detect()`, nah this is getting to long and ugly
+
+instead we could just use the `filter`function, but im still not confident it works proper, i should check it.
+Aslong i'll kepp it in an extra chunk.
+
+```{r adjust_map position_kick_rest, echo=TRUE}
+
+all_rosters6 <- lapply(all_rosters, function(df) {
+  df %>%
+    mutate(Position = str_replace_all(Position, adjust_map))%>%
+    filter(Position %in% adjust_map)
+
+})
+
+#str(all_rosters6)
+
+#all_rosters6
+```
+
+***
+Let's have a look again whats left.
+```{r check_whats_left_filterd, echo=TRUE}
+get_unique_values(all_rosters6, "Position")
+```
+
+*** 
+
+seems like it's working, even if im still not sure, how R pulls out the right words (position names) from the whole `adjust_map` instead of looking for the pattern insight 
+&#x1F937;
+
 
