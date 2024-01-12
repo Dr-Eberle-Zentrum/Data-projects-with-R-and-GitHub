@@ -1,12 +1,15 @@
 
 library(tidyverse)
 
+# set working directory to source file location
+library(this.path)
+setwd(this.path::here())
+
 # read the tables directly from the archive.zip
 fileData <- list()
 for ( file in c("drivers","constructors","results","races")) {
   fileData[[file]] <- read_csv( unz("archive.zip",str_c(file,".csv")) )
 }
-
 
 # reduce to winners
 winners <-
@@ -74,7 +77,7 @@ winners |>
   theme(
     # enable new font
     text = element_text(family = "formulaone", colour = "white"),
-    axis.text = element_text(family = "formulaone", colour = "white"),
+    axis.text = element_text(family = "formulaone", colour = "white", size=20),
     # drop y axis label
     axis.title.y = element_blank(),
       plot.background = element_rect(fill = "darkgray"),
