@@ -9,7 +9,7 @@ this is my solution so far, in the following one can see the plot with the simul
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 
 library(rvest)
 library(dplyr)
@@ -29,34 +29,29 @@ store_data <-
   unnest(addressLines) |>
   unnest(custom) |> 
   as_tibble()|>
-  mutate(Status="green") # default green
+  rename( Status = "_status") # rename, because name with underscore not accesible
 
 # center of disaster zone, latitude and longitude
-center <- c(36.31316,-82.38821)
+center <- list( lat = 36.31, long = -82.39 )
 # radius for red zone
 red_radius <- 2
 # radius for yellow zone
 yellow_radius <- 5
-# assign the colors to the stores
-for (i in 1:nrow(store_data)) {
-  if (store_data$latitude[i] < center[1] + yellow_radius &&
-      store_data$latitude[i] > center[1] - yellow_radius
-      && store_data$longitude[i] < center[2] + yellow_radius &&
-      store_data$longitude[i] > center[2] - yellow_radius) {
-    store_data$Status[i] = "yellow"
-    if (store_data$latitude[i] < center[1] + red_radius &&
-        store_data$latitude[i] > center[1] - red_radius
-        && store_data$longitude[i] < center[2] + red_radius &&
-        store_data$longitude[i] > center[2] - red_radius) {
-      store_data$Status[i] = "red"
-    }
-  }
-}
+
 
 # plotting all points of the waffle houses in a custom map
-waffle_map <- ggplot(store_data, aes(x = longitude, y = latitude,color=Status)) +
+waffle_map <- 
+  store_data %>% 
+mutate( Status = 
+  if_else( (abs( latitude - center$lat ) < red_radius) & (abs( longitude - center$long ) < red_radius) ,
+    "C", # in red range
+      if_else( (abs( latitude - center$lat ) < yellow_radius) & (abs( longitude - center$long ) < yellow_radius),
+    "CT",# in yellow range
+    Status) # default: use old value
+)) %>% 
+  ggplot( aes(x = longitude, y = latitude,color=Status)) +
   geom_point(size = 1) +
-  scale_color_manual(values = c("green" ,"red", "yellow")) +
+  scale_color_manual(labels =c("green" , "red","yellow"),values = c("green" , "red","yellow")) +
   theme_minimal()+
   theme(axis.text = element_blank(),
   axis.title = element_blank(),
@@ -74,7 +69,5 @@ final_map <- plot_usmap(regions = "states", include = store_data$state) +
 final_map
 ```
 
-
-![](Jana_Kimmich_files/figure-markdown_strict/setup-1.png)
 
 Unfortunately, I assume that something with the plotting of the waffle house locations went wrong. It seems like they are shifted, but I could not figure out how to adjust it properly.
