@@ -16,6 +16,7 @@ library(dplyr)
 library(tidyr)
 library(usmap)
 library(tidyverse)
+library(sf)
 
 url <- "https://locations.wafflehouse.com" 
 
@@ -29,28 +30,36 @@ store_data <-
   unnest(addressLines) |>
   unnest(custom) |> 
   as_tibble()|>
-  rename( Status = "_status") # rename, because name with underscore not accesible
+  rename( Status = "_status")|>
+  rename(x=longitude,y=latitude) |> # rename, because name with underscore not accesible
+  sf_transform_xy(target_crs = 2163, source_crs=4326)
 
 # center of disaster zone, latitude and longitude
-center <- list( lat = 36.31, long = -82.39 )
+center <- list( lat = -1121903.4, long = 1409023.8)	
 # radius for red zone
-red_radius <- 2
+red_radius <- 100.0
 # radius for yellow zone
-yellow_radius <- 5
-
-
-# plotting all points of the waffle houses in a custom map
-waffle_map <- 
-  store_data %>% 
-mutate( Status = 
-  if_else( (abs( latitude - center$lat ) < red_radius) & (abs( longitude - center$long ) < red_radius) ,
-    "C", # in red range
-      if_else( (abs( latitude - center$lat ) < yellow_radius) & (abs( longitude - center$long ) < yellow_radius),
-    "CT",# in yellow range
-    Status) # default: use old value
-)) %>% 
-  ggplot( aes(x = longitude, y = latitude,color=Status)) +
-  geom_point(size = 1) +
+yellow_radius <- 10000.0
+ 
+#store data for simulated disaster
+store_data_disaster <- store_data %>%
+  mutate(Status =
+           if_else(
+             (abs(y - center$lat) < red_radius) &
+               (abs(x - center$long) < red_radius) ,
+             "C",
+             # in red range
+             if_else((abs(y - center$lat) < yellow_radius) &
+                       (abs(x - center$long) < yellow_radius),
+                     "CT", # in yellow range
+                     Status))) # default: use old value
+           
+  
+# Plotting waffle-map on a US map
+final_map <-
+  plot_usmap(regions = "states", include = store_data$state) +
+  labs(title = "Land of Plenty") + 
+  geom_point(data=store_data_disaster,mapping=aes(x = x, y = y,color=Status), size = 1) +
   scale_color_manual(labels =c("green" , "red","yellow"),values = c("green" , "red","yellow")) +
   theme_minimal()+
   theme(axis.text = element_blank(),
@@ -58,13 +67,6 @@ mutate( Status =
   panel.grid = element_blank(),
   legend.position = c(0, 0),
   legend.justification = c(0, 0))
-
-# Plotting waffle-map on a US map
-final_map <- plot_usmap(regions = "states", include = store_data$state) +
-  labs(title = "Land of Plenty") + 
-  # change xmin, etc.?
- # annotation_custom(ggplotGrob(waffle_map),xmin = min(store_data$latitude), xmax = max(store_data$latitude), ymin = min(store_data$longitude), ymax = max(store_data$longitude))
-  annotation_custom(ggplotGrob(waffle_map))
 
 final_map
 ```
