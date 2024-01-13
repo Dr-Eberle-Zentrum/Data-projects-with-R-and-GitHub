@@ -1,0 +1,127 @@
+---
+title: "Volleyball Solution"
+author: "Nicolai Schwarz"
+date: "2024-01-12"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+# get this packages
+library(tidyverse)
+library(countrycode)
+library(dplyr)
+library(stringr)
+library(emo)
+library(readr)
+knitr::opts_chunk$set(echo = TRUE)
+ rm(list = ls())
+```
+
+OKay let's start with the roster files
+
+***
+
+```{r folder_content, echo=FALSE}
+folder_path_roster <- file.path(getwd(), "team-rosters")
+folder_path_roster
+```
+
+***
+
+To import the `csv-dats` let's recycle the `auto_import_csv`-function from my other Project Solution.
+
+***
+
+```{r import, echo=TRUE }
+
+auto_import_csv <- function(file_path){
+  
+  file_list <- list.files(path = file_path, pattern = "\\.csv$", full.names = TRUE)        #-> here we could change the auto import to other data type's 
+  data_frames <- list()
+  
+  for (file in file_list) {
+    df_name <- tools::file_path_sans_ext(basename(file))  # uses filename as dataframe
+    
+    
+    data_frames[[df_name]] <- read.csv2(file, fileEncoding = "cp852")
+  }
+  
+  return(data_frames)
+}
+all_rosters <- auto_import_csv(folder_path_roster)
+
+str(all_rosters, list.len = 2)
+```
+
+***
+
+Alright, now let's start to clean the data.
+
+To do so, let's have a closer look what's the unique values and find some Regex for.
+
+***
+
+```{r unique_values, echo=TRUE}
+
+get_unique_values <- function(data, column){
+  unique_values <- unique(unlist(lapply(data, function(df) df[[column]])))
+  return(unique_values)
+}
+
+```
+
+***
+
+```{r show_values, echo=TRUE}
+
+get_unique_values(all_rosters, "Gender")
+get_unique_values(all_rosters, "Position")
+get_unique_values(all_rosters, "Nationality")
+
+```
+
+***
+
+Quiet some mistakes to correct, let's create some  `adjust_map's` for the Regex
+
+To use the `countrycode`package proper we also should do some pre mutating for `Nationality`, 
+and due to `Nationality` contains two diffrent languages, we need a function to do it at once.
+
+***
+```{r adjust_maps, echo=TRUE}
+
+adjust_map_position <- c("^[zZ].*|^[sS]e.*" = "setter",
+                "^[mM].*" = "middle blocker",
+                "^[aA]u.*|^[oO]u.*" = "outside hitter",
+                "^[dD].*|^[oO]p.*" = "opposite hitter",
+                "^[uU].*|^[lL].*" = "libero",
+                "^[tT]r.*|^[cC]h.*|.*[hH]ead.*" = "head coach")
+
+adjust_map_country <- c("^[dD].*|^[gG].*"= "Deutschland",
+                        ".*wenia$"= "Slovenia",
+                        ".*lie$"="Australien")
+
+country_code <- function(df, language){
+  df$Nationality <- countrycode(df$Nationality, origin = paste("country.name", language, sep = "."), destination = "ioc", nomatch=NULL)
+  return(df)
+}
+```
+
+***
+
+***
+```{r adjust_data, echo=TRUE}
+all_rosters_clean <- lapply(all_rosters, function(df) {
+ df %>%
+    mutate(Gender = ifelse(str_detect(Gender, "^[fF]|2"), "female", "male"),
+           Position = str_replace_all(Position, adjust_map_position),
+           Nationality = str_replace_all(Nationality, adjust_map_country))%>%
+    filter(Position %in% adjust_map_position)%>%
+    mutate(Height = as.numeric(Height)/100)%>%
+    country_code(language ="de")%>%
+    country_code(language ="en")
+    
+})
+all_rosters_clean
+str(all_rosters_clean)
+```
