@@ -590,6 +590,77 @@ it in an extra chunk.</p>
 <p>seems like it’s working, even if im still not sure, how R pulls out
 the right words (position names) from the whole <code>adjust_map</code>
 instead of looking for the pattern insight 🤷</p>
+<hr />
+<p>Anyway next we need to fix the country code, would love to use a
+predefined country-code-list. Due to its capability to recycle, but
+sounds like im missing the point again. So first take a look what values
+we got. Might be some simple Regex fixes the issues faster.</p>
+<hr />
+<pre class="r"><code>get_unique_values(all_rosters, &quot;Nationality&quot;)</code></pre>
+<pre><code>##  [1] &quot;Deutschland&quot;                    &quot;Frankreich&quot;                    
+##  [3] &quot;Australien&quot;                     &quot;Vereinigte Staaten von Amerika&quot;
+##  [5] &quot;Polen&quot;                          &quot;Brasilien&quot;                     
+##  [7] &quot;Finnland&quot;                       &quot;ger&quot;                           
+##  [9] &quot;Tschechische Republik&quot;          &quot;Spain&quot;                         
+## [11] &quot;Japan&quot;                          &quot;Slowenien&quot;                     
+## [13] &quot;Italien&quot;                        &quot;DE&quot;                            
+## [15] &quot;USA&quot;                            &quot;de&quot;                            
+## [17] &quot;Kanada&quot;                         &quot;GER&quot;                           
+## [19] &quot;Poland&quot;                         &quot;Spanien&quot;                       
+## [21] &quot;Finland&quot;                        &quot;Israel&quot;                        
+## [23] &quot;Canada&quot;                         &quot;Holland&quot;                       
+## [25] &quot;Ger&quot;                            &quot;Chile&quot;                         
+## [27] &quot;Schweden&quot;                       &quot;Tunesien&quot;                      
+## [29] &quot;Ungarn&quot;                         &quot;Bosnien und Herzegowina&quot;       
+## [31] &quot;Rumänien&quot;                       &quot;Serbia&quot;                        
+## [33] &quot;Australie&quot;                      &quot;Bulgarien&quot;                     
+## [35] &quot;Montenegro&quot;                     &quot;Kolumbien&quot;                     
+## [37] &quot;Serbien&quot;                        &quot;Argentinien&quot;                   
+## [39] &quot;Slowenia&quot;                       &quot;Österreich&quot;</code></pre>
+<hr />
+<p>Alright, this looks to me like, we should do a semi automatic way,
+luckily there’s already packages for <code>library(countrycode)</code>
+🤔</p>
+<p>Let’s fix this German issues by hand and with some simple Regex and
+let the package do the rest.</p>
+<hr />
+<pre class="r"><code>all_rosters7 &lt;- lapply(all_rosters6, function(df) {
+ df %&gt;%
+    mutate(Nationality = str_replace_all(Nationality, &quot;^[dD].*|^[gG].*&quot;, &quot;Deutschland&quot;),
+           Nationality = str_replace(Nationality, &quot;.*wenia$&quot;, &quot;Slovenia&quot;),
+            Nationality = str_replace(Nationality, &quot;.*lie$&quot;,&quot;Australien&quot;))
+})</code></pre>
+<hr />
+<pre class="r"><code>#install.packages(&quot;countrycode&quot;)
+
+library(countrycode)</code></pre>
+<pre><code>## Warning: Paket &#39;countrycode&#39; wurde unter R Version 4.3.2 erstellt</code></pre>
+<pre class="r"><code>apply_countrycode_de &lt;- function(df) {
+  df$Nationality &lt;- countrycode(df$Nationality, origin = &quot;country.name.de&quot;, destination = &quot;ioc&quot;, nomatch = NULL)
+  return(df)
+}
+
+all_rosters8 &lt;- lapply(all_rosters7, apply_countrycode_de)
+
+apply_countrycode_en &lt;- function(df) {
+  df$Nationality &lt;- countrycode(df$Nationality, origin = &quot;country.name.en&quot;, destination = &quot;ioc&quot;, nomatch = NULL)
+  return(df)
+}
+
+all_rosters9 &lt;- lapply(all_rosters8, apply_countrycode_en)
+
+#all_rosters9
+#?`countrycode-package`
+#?countrycode</code></pre>
+<hr />
+<p>Let’s check ***</p>
+<pre class="r"><code>get_unique_values(all_rosters9, &quot;Nationality&quot;)</code></pre>
+<pre><code>##  [1] &quot;GER&quot; &quot;FRA&quot; &quot;AUS&quot; &quot;USA&quot; &quot;POL&quot; &quot;BRA&quot; &quot;FIN&quot; &quot;CZE&quot; &quot;ESP&quot; &quot;JPN&quot; &quot;SLO&quot; &quot;CAN&quot;
+## [13] &quot;ISR&quot; &quot;NED&quot; &quot;CHI&quot; &quot;SWE&quot; &quot;TUN&quot; &quot;HUN&quot; &quot;BIH&quot; &quot;ROU&quot; &quot;MNE&quot; &quot;COL&quot; &quot;SRB&quot; &quot;ARG&quot;</code></pre>
+<hr />
+<p>Okay we could shorten this last fucker by using second variable in
+the function and get the origin part in ones.</p>
+<p>And than put all the single parts together</p>
 
 
 

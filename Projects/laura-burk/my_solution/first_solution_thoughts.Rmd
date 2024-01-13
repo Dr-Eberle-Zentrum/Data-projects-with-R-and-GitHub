@@ -9,6 +9,7 @@ output: html_document
 # get this packages
 library(tidyverse)
 library(dplyr)
+library(stringr)
 library(emo)
 library(readr)
 knitr::opts_chunk$set(echo = TRUE)
@@ -230,4 +231,71 @@ get_unique_values(all_rosters6, "Position")
 seems like it's working, even if im still not sure, how R pulls out the right words (position names) from the whole `adjust_map` instead of looking for the pattern insight 
 &#x1F937;
 
+***
 
+Anyway next we need to fix the country code, would love to use a predefined country-code-list. 
+Due to its capability to recycle, but sounds like im missing the point again.
+So first take a look what values we got.
+Might be some simple Regex fixes the issues faster.
+
+***
+```{r check_country, echo=TRUE}
+get_unique_values(all_rosters, "Nationality")
+```
+
+***
+
+Alright, this looks to me like, we should do a semi automatic way, luckily there's already packages for `library(countrycode)`
+`r emo::ji("thinking")`
+
+Let's fix this German issues by hand and with some simple Regex and let the package do the rest.
+
+***
+
+```{r adjust_nation, echo=TRUE}
+
+all_rosters7 <- lapply(all_rosters6, function(df) {
+ df %>%
+    mutate(Nationality = str_replace_all(Nationality, "^[dD].*|^[gG].*", "Deutschland"),
+           Nationality = str_replace(Nationality, ".*wenia$", "Slovenia"),
+            Nationality = str_replace(Nationality, ".*lie$","Australien"))
+})
+```
+
+***
+
+```{r, IOC, echo=TRUE}
+#install.packages("countrycode")
+
+library(countrycode)
+
+apply_countrycode_de <- function(df) {
+  df$Nationality <- countrycode(df$Nationality, origin = "country.name.de", destination = "ioc", nomatch = NULL)
+  return(df)
+}
+
+all_rosters8 <- lapply(all_rosters7, apply_countrycode_de)
+
+apply_countrycode_en <- function(df) {
+  df$Nationality <- countrycode(df$Nationality, origin = "country.name.en", destination = "ioc", nomatch = NULL)
+  return(df)
+}
+
+all_rosters9 <- lapply(all_rosters8, apply_countrycode_en)
+
+#all_rosters9
+#?`countrycode-package`
+#?countrycode
+```
+
+***
+Let's check
+***
+```{r check_final_country, echo=TRUE}
+get_unique_values(all_rosters9, "Nationality")
+```
+
+***
+Okay we could shorten this last fucker by using second variable in the function and get the origin part in ones.
+
+And than put all the single parts together
