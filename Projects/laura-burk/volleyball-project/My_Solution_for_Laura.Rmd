@@ -2,7 +2,7 @@
 title: "Volleyball Solution"
 author: "Nicolai Schwarz"
 date: "2024-01-12"
-output: md_document
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -17,40 +17,64 @@ knitr::opts_chunk$set(echo = TRUE)
  rm(list = ls())
 ```
 
-OKay let's start with the roster files
+***
+
+OKay let's start with the roster files.
 
 ***
 
 ```{r folder_content, echo=FALSE}
 folder_path_roster <- file.path(getwd(), "team-rosters")
-folder_path_roster
+```
+
+***
+
+But we could also start with creating all folder path's in once aswell.
+
+***
+
+```{r all_paths, echo=TRUE}
+folders <- list.files(getwd(), full.names = TRUE) %>%
+  .[!grepl("\\.", .)]
+
+#folders
 ```
 
 ***
 
 To import the `csv-dats` let's recycle the `auto_import_csv`-function from my other Project Solution.
+(Had to modify it a bit so we can use it for all datatyp's more easily)
+-> got no glue why bus this not working for `.tsv`files and read_tsv
+solved it by apply an `suffix`variable
 
 ***
 
-```{r import, echo=TRUE }
+```{r import_function, echo=TRUE }
 
-auto_import_csv <- function(file_path){
+auto_import <- function(file_path, datatyp, suffix = ""){
   
-  file_list <- list.files(path = file_path, pattern = "\\.csv$", full.names = TRUE)        #-> here we could change the auto import to other data type's 
+  file_list <- list.files(path = file_path, pattern = paste("\\.", datatyp, "$", sep = ""), full.names = TRUE)        #-> here we could change the auto import to other data type's  -> put that part in a seperate variable inside the function
   data_frames <- list()
   
   for (file in file_list) {
     df_name <- tools::file_path_sans_ext(basename(file))  # uses filename as dataframe
     
+    read_call <- paste0("read_", datatyp, suffix, sep = "") # need to paste the "2" here to read (german) encodeing <- solved it with suffix
     
-    data_frames[[df_name]] <- read.csv2(file, fileEncoding = "cp852")
+    data_frames[[df_name]] <- do.call(read_call, list(file, locale = locale(encoding = "cp852")))
   }
   
   return(data_frames)
 }
-all_rosters <- auto_import_csv(folder_path_roster)
+```
 
-str(all_rosters, list.len = 2)
+***
+
+```{r import_roster, echo=TRUE}
+
+all_rosters <- auto_import(folders[4], datatyp="csv", "2")
+
+#str(all_rosters, list.len = 2)
 ```
 
 ***
@@ -58,6 +82,8 @@ str(all_rosters, list.len = 2)
 Alright, now let's start to clean the data.
 
 To do so, let's have a closer look what's the unique values and find some Regex for.
+
+Therefor i wrote a `get_unique_values` function to take a closer look at all the unique values.
 
 ***
 
@@ -72,11 +98,15 @@ get_unique_values <- function(data, column){
 
 ***
 
+Now we can easily look into the column's values
+
+***
+
 ```{r show_values, echo=TRUE}
 
-get_unique_values(all_rosters, "Gender")
-get_unique_values(all_rosters, "Position")
-get_unique_values(all_rosters, "Nationality")
+#get_unique_values(all_rosters, "Gender")
+#get_unique_values(all_rosters, "Position")
+#get_unique_values(all_rosters, "Nationality")
 
 ```
 
@@ -84,8 +114,7 @@ get_unique_values(all_rosters, "Nationality")
 
 Quiet some mistakes to correct, let's create some  `adjust_map's` for the Regex
 
-To use the `countrycode`package proper we also should do some pre mutating for `Nationality`, 
-and due to `Nationality` contains two diffrent languages, we need a function to do it at once.
+To use the `countrycode`package proper we also should do some pre mutating for `Nationality`.
 
 ***
 ```{r adjust_maps, echo=TRUE}
@@ -99,29 +128,168 @@ adjust_map_position <- c("^[zZ].*|^[sS]e.*" = "setter",
 
 adjust_map_country <- c("^[dD].*|^[gG].*"= "Deutschland",
                         ".*wenia$"= "Slovenia",
-                        ".*lie$"="Australien")
+                        ".*lie$"="Australien") # could shorten it with ".*ie$" ->".*ia$" (eng. Australia) prob. str_detect than
 
+```
+
+***
+
+Due to `Nationality` contains two different languages, we need a function to do it (at once).
+
+***
+
+```{r two_language, echo=TRUE}
 country_code <- function(df, language){
   df$Nationality <- countrycode(df$Nationality, origin = paste("country.name", language, sep = "."), destination = "ioc", nomatch=NULL)
   return(df)
 }
 ```
 
-***
 
 ***
-```{r adjust_data, echo=TRUE}
+```{r adjust_roster, echo=TRUE}
 all_rosters_clean <- lapply(all_rosters, function(df) {
- df %>%
+  suppressWarnings({
+    df %>%
     mutate(Gender = ifelse(str_detect(Gender, "^[fF]|2"), "female", "male"),
            Position = str_replace_all(Position, adjust_map_position),
            Nationality = str_replace_all(Nationality, adjust_map_country))%>%
     filter(Position %in% adjust_map_position)%>%
     mutate(Height = as.numeric(Height)/100)%>%
     country_code(language ="de")%>%
-    country_code(language ="en")
-    
+    country_code(language ="en")%>%
+    select(-(1:3))%>%
+    rename("Name"="Last Name First Name")
+  })
 })
-all_rosters_clean
-str(all_rosters_clean)
+#str(all_rosters_clean, list.len = 3)
 ```
+
+***
+
+Alright this Part is done, lets go for the `topscorer's`files
+
+For simply import them by the `auto_import` function we first have to mutate the `.txt`into `.tsv`format.
+(Due to the logic of the function)
+
+***
+
+```{r txt_to_tsv, echo=TRUE, eval=FALSE}
+
+txt_files <- list.files(path = folder_path_topscorers, pattern = "\\.txt$", full.names = TRUE)
+
+for (file in txt_files) {
+  tsv_file <- sub("\\.txt$", ".tsv", file)
+  file.copy(file, tsv_file)
+}
+```
+
+#### Remind:
+  **Note: Erease the eval = FALSE part if you first using the code**
+
+*** 
+
+Now we can simply apply the `auto_import`function.
+
+***
+
+```{r import_topscore, echo=TRUE}
+all_topscorer <- auto_import(folders[5], datatyp="tsv")
+#str(all_topscores, list.len = 2)
+```
+
+***
+
+Let's check for misstakes with our previous `get_unique_values`function.
+
+***
+
+```{r check_topscorer, echo=TRUE, eval=FALSE}
+get_unique_values(all_topscorer_clean, "Team")
+get_unique_values(all_topscorer_clean, "Position")
+na_count <- sapply(all_topscorer_clean, function(df) sum(is.na(df$Position)))
+
+na_count
+
+
+```
+***
+
+As we can see there's some `NA`-values, but these shouldn't border us right now.
+
+***
+
+Now let's clean the Position column with our `adjust_map`, adjust column names and mutate the `errors_per_set`-column.
+
+***
+
+```{r adjust_topscorer, echo=TRUE}
+all_topscorer_clean <- lapply(all_topscorer, function(df) {
+    df %>%
+    setNames(gsub(" ", "_", colnames(.)))%>% # instead of rename, replaces all "spaces" with "_",colnames(.)to backreference to df in functions
+    mutate(Position = str_replace_all(Position, adjust_map_position),
+           errors_per_set = (Errors_overall / Sets_played)) 
+})
+all_topscorer_clean[[2]] <- all_topscorer_clean[[2]] %>% # couldn't find out how to do in lapply-fct, due to not all df got "team" column "yet"
+  mutate(Team = gsub("Ř", "ü", Team))
+
+#str(all_topscorer_clean, list.len = 3)
+```
+
+***
+**Note :** *Could probably go for the misstakes in Names by apply the `get_unique_values`function to both, the topscorer & roster list, store them in a list and apply the function again on it.*
+
+**Than we could join, roster and topscorer by Name**
+
+***
+
+Okay let's go for the games now.
+
+***
+
+```{r import_games, echo=TRUE}
+
+all_games <- auto_import(folders[2], datatyp="csv", "2")
+
+#str(all_games, list.len = 2)
+```
+
+***
+
+Let's have alook and clean it.
+
+***
+
+```{r check_games, echo=TRUE, eval=FALSE}
+get_unique_values(all_games_clean, "Geschlecht")
+get_unique_values(all_games_clean, "Mannschaft_1")
+na_count <- sapply(all_games, function(df) sum(is.na(df$Geschlecht)))
+
+na_count
+
+
+```
+
+***
+
+```{r adjust_games, echo=TRUE}
+all_games_clean <- lapply(all_games, function(df) {
+    df %>%
+    setNames(gsub(" ", "_", colnames(.))) %>%
+  mutate(Mannschaft_1 = gsub("Ř", "ü", Mannschaft_1),
+         Mannschaft_2 = gsub("Ř", "ü", Mannschaft_2),
+         Gastgeber = gsub("Ř", "ü", Gastgeber),
+         Austragungsort = gsub("Ř", "ü", Austragungsort),
+         Geschlecht = ifelse(str_detect(Geschlecht, "^[fF]|2"), "female", "male"))
+})
+  
+```
+
+***
+
+Alright,so far, so good!
+
+Next mutating all these values requierd for the barplot.
+
+***
+

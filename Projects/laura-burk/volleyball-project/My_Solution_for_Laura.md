@@ -53,6 +53,9 @@ some Regex for.
       unique_values <- unique(unlist(lapply(data, function(df) df[[column]])))
       return(unique_values)
     }
+
+------------------------------------------------------------------------
+
     get_unique_values(all_rosters, "Gender")
 
     ##  [1] "männlich" "Male"     "male"     "1"        "female"   "Frau"    
@@ -102,7 +105,8 @@ Quiet some mistakes to correct, let’s create some `adjust_map's` for the
 Regex
 
 To use the `countrycode`package proper we also should do some pre
-mutating for `Nationnality`.
+mutating for `Nationality`, and due to `Nationality` contains two
+diffrent languages, we need a function to do it at once.
 
 ------------------------------------------------------------------------
 
@@ -117,6 +121,11 @@ mutating for `Nationnality`.
                             ".*wenia$"= "Slovenia",
                             ".*lie$"="Australien")
 
+    country_code <- function(df, language){
+      df$Nationality <- countrycode(df$Nationality, origin = paste("country.name", language, sep = "."), destination = "ioc", nomatch=NULL)
+      return(df)
+    }
+
 ------------------------------------------------------------------------
 
 ------------------------------------------------------------------------
@@ -127,7 +136,9 @@ mutating for `Nationnality`.
                Position = str_replace_all(Position, adjust_map_position),
                Nationality = str_replace_all(Nationality, adjust_map_country))%>%
         filter(Position %in% adjust_map_position)%>%
-        mutate(Height = as.numeric(Height)/100)
+        mutate(Height = as.numeric(Height)/100)%>%
+        country_code(language ="de")%>%
+        country_code(language ="en")
         
     })
 
@@ -156,23 +167,23 @@ mutating for `Nationnality`.
     ## 14    Tsuiki    Satoshi       Satoshi Tsuiki      Tsuiki, Satoshi   1.74   male
     ## 15  ?talekar       Sa?o        Sa?o ?talekar       ?talekar, Sa?o   2.14   male
     ## 16     Enard     Cédric         Cédric Enard        Enard, Cédric     NA   male
-    ##    Date.of.Birth Jersey.Number                    Nationality        Position
-    ## 1     10.08.1999             8                    Deutschland  middle blocker
-    ## 2     30.11.1995             9                     Frankreich  outside hitter
-    ## 3     30.07.1996             4                     Australien          setter
-    ## 4     03.12.1991            11 Vereinigte Staaten von Amerika  outside hitter
-    ## 5     16.09.1994             1                          Polen          libero
-    ## 6     04.11.1997            18                      Brasilien opposite hitter
-    ## 7     21.06.1993             5                     Australien  middle blocker
-    ## 8     21.06.1994            16 Vereinigte Staaten von Amerika opposite hitter
-    ## 9     11.08.1996             3                       Finnland  outside hitter
-    ## 10    08.07.1994            13                    Deutschland  outside hitter
-    ## 11    05.11.1999            17          Tschechische Republik opposite hitter
-    ## 12    07.05.1997             6                    Deutschland          setter
-    ## 13    27.03.1993            10                          Spain          setter
-    ## 14    16.01.1992             2                          Japan          libero
-    ## 15    03.05.1996            12                      Slowenien  middle blocker
-    ## 16    20.03.1976            NA                     Frankreich      head coach
+    ##    Date.of.Birth Jersey.Number Nationality        Position
+    ## 1     10.08.1999             8         GER  middle blocker
+    ## 2     30.11.1995             9         FRA  outside hitter
+    ## 3     30.07.1996             4         AUS          setter
+    ## 4     03.12.1991            11         USA  outside hitter
+    ## 5     16.09.1994             1         POL          libero
+    ## 6     04.11.1997            18         BRA opposite hitter
+    ## 7     21.06.1993             5         AUS  middle blocker
+    ## 8     21.06.1994            16         USA opposite hitter
+    ## 9     11.08.1996             3         FIN  outside hitter
+    ## 10    08.07.1994            13         GER  outside hitter
+    ## 11    05.11.1999            17         CZE opposite hitter
+    ## 12    07.05.1997             6         GER          setter
+    ## 13    27.03.1993            10         ESP          setter
+    ## 14    16.01.1992             2         JPN          libero
+    ## 15    03.05.1996            12         SLO  middle blocker
+    ## 16    20.03.1976            NA         FRA      head coach
     ## 
     ## $`roster_Energiequelle_Netzhoppers_KW-Bestensee`
     ##      Last.Name     First.Name     First.Name.Last.Name
@@ -205,21 +216,21 @@ mutating for `Nationnality`.
     ## 12          Timmermann, Theo   1.90   male    14.09.1996            11
     ## 13            Westphal, Dirk   2.03   male    31.01.1986             8
     ## 14       Wasilkowski, Tomasz     NA   male    20.07.1983            NA
-    ##                       Nationality        Position
-    ## 1  Vereinigte Staaten von Amerika opposite hitter
-    ## 2                     Deutschland  outside hitter
-    ## 3                     Deutschland          libero
-    ## 4  Vereinigte Staaten von Amerika  middle blocker
-    ## 5                             USA opposite hitter
-    ## 6                     Deutschland          libero
-    ## 7                     Deutschland  middle blocker
-    ## 8                          Kanada          setter
-    ## 9  Vereinigte Staaten von Amerika  middle blocker
-    ## 10                    Deutschland          setter
-    ## 11                    Deutschland  outside hitter
-    ## 12                    Deutschland opposite hitter
-    ## 13                    Deutschland  outside hitter
-    ## 14                         Poland      head coach
+    ##    Nationality        Position
+    ## 1          USA opposite hitter
+    ## 2          GER  outside hitter
+    ## 3          GER          libero
+    ## 4          USA  middle blocker
+    ## 5          USA opposite hitter
+    ## 6          GER          libero
+    ## 7          GER  middle blocker
+    ## 8          CAN          setter
+    ## 9          USA  middle blocker
+    ## 10         GER          setter
+    ## 11         GER  outside hitter
+    ## 12         GER opposite hitter
+    ## 13         GER  outside hitter
+    ## 14         POL      head coach
     ## 
     ## $roster_Helios_GRIZZLYS_Giesen
     ##             Last.Name       First.Name                First.Name.Last.Name
@@ -251,19 +262,19 @@ mutating for `Nationnality`.
     ## 12                        Wagner, Hauke   1.98   male    30.05.1987
     ## 13                        Stein, Itamar   1.99   male    12.02.1983
     ##    Jersey.Number Nationality        Position
-    ## 1             18 Deutschland  middle blocker
-    ## 2              1     Spanien opposite hitter
-    ## 3             11 Deutschland  outside hitter
-    ## 4             12 Deutschland  middle blocker
-    ## 5              4     Spanien  outside hitter
-    ## 6             13     Finland          setter
-    ## 7             15 Deutschland  outside hitter
-    ## 8              9    Finnland          libero
-    ## 9              3      Kanada  outside hitter
-    ## 10            10 Deutschland          setter
-    ## 11             8 Deutschland  middle blocker
-    ## 12             5 Deutschland opposite hitter
-    ## 13            NA      Israel      head coach
+    ## 1             18         GER  middle blocker
+    ## 2              1         ESP opposite hitter
+    ## 3             11         GER  outside hitter
+    ## 4             12         GER  middle blocker
+    ## 5              4         ESP  outside hitter
+    ## 6             13         FIN          setter
+    ## 7             15         GER  outside hitter
+    ## 8              9         FIN          libero
+    ## 9              3         CAN  outside hitter
+    ## 10            10         GER          setter
+    ## 11             8         GER  middle blocker
+    ## 12             5         GER opposite hitter
+    ## 13            NA         ISR      head coach
     ## 
     ## $roster_SVG_Lüneburg
     ##      Last.Name            First.Name             First.Name.Last.Name
@@ -294,20 +305,20 @@ mutating for `Nationnality`.
     ## 11              Worsley, Gage Thomas   1.88   male    21.10.1998             6
     ## 12                   Worsley, Joseph   1.85   male    16.06.1997             1
     ## 13                    Hübner, Stefan   2.00   male    13.06.1975            NA
-    ##                       Nationality        Position
-    ## 1                     Deutschland opposite hitter
-    ## 2  Vereinigte Staaten von Amerika  outside hitter
-    ## 3                          Canada  middle blocker
-    ## 4  Vereinigte Staaten von Amerika  outside hitter
-    ## 5                     Deutschland          setter
-    ## 6                          Kanada  middle blocker
-    ## 7                     Deutschland opposite hitter
-    ## 8                     Deutschland          libero
-    ## 9                          Kanada  middle blocker
-    ## 10                        Holland  outside hitter
-    ## 11 Vereinigte Staaten von Amerika          libero
-    ## 12                            USA          setter
-    ## 13                    Deutschland      head coach
+    ##    Nationality        Position
+    ## 1          GER opposite hitter
+    ## 2          USA  outside hitter
+    ## 3          CAN  middle blocker
+    ## 4          USA  outside hitter
+    ## 5          GER          setter
+    ## 6          CAN  middle blocker
+    ## 7          GER opposite hitter
+    ## 8          GER          libero
+    ## 9          CAN  middle blocker
+    ## 10         NED  outside hitter
+    ## 11         USA          libero
+    ## 12         USA          setter
+    ## 13         GER      head coach
     ## 
     ## $roster_SWD_powervolleys_Düren
     ##            Last.Name    First.Name    First.Name.Last.Name
@@ -341,20 +352,20 @@ mutating for `Nationnality`.
     ## 13              Urban, Melf   2.03   male    28.06.2001             4
     ## 14        van der Ent, Luuc   2.08   male    27.07.1998             5
     ##    Nationality        Position
-    ## 1  Deutschland  outside hitter
-    ## 2  Deutschland  middle blocker
-    ## 3  Deutschland          libero
-    ## 4  Deutschland          libero
-    ## 5  Deutschland  outside hitter
-    ## 6  Deutschland          setter
-    ## 7        Polen  outside hitter
-    ## 8        Chile opposite hitter
-    ## 9  Deutschland opposite hitter
-    ## 10 Deutschland          setter
-    ## 11    Schweden  middle blocker
-    ## 12 Deutschland  outside hitter
-    ## 13 Deutschland  middle blocker
-    ## 14     Holland  middle blocker
+    ## 1          GER  outside hitter
+    ## 2          GER  middle blocker
+    ## 3          GER          libero
+    ## 4          GER          libero
+    ## 5          GER  outside hitter
+    ## 6          GER          setter
+    ## 7          POL  outside hitter
+    ## 8          CHI opposite hitter
+    ## 9          GER opposite hitter
+    ## 10         GER          setter
+    ## 11         SWE  middle blocker
+    ## 12         GER  outside hitter
+    ## 13         GER  middle blocker
+    ## 14         NED  middle blocker
     ## 
     ## $roster_TSV_Haching_München
     ##        Last.Name      First.Name   First.Name.Last.Name    Last.Name.First.Name
@@ -374,40 +385,23 @@ mutating for `Nationnality`.
     ## 14      Paduretu           Mihai         Mihai Paduretu         Paduretu, Mihai
     ## 15        Pochop       Stanislav       Stanislav Pochop       Pochop, Stanislav
     ## 16        Tanase          Bogdan          Bogdan Tanase          Tanase, Bogdan
-    ##    Height Gender Date.of.Birth Jersey.Number             Nationality
-    ## 1    1.90   male    13.09.1994            18                Tunesien
-    ## 2    1.98   male    29.10.2000             4             Deutschland
-    ## 3    1.96   male    24.01.2000            12             Deutschland
-    ## 4    2.02   male    24.10.2005            10             Deutschland
-    ## 5    1.93   male    17.02.2001             3             Deutschland
-    ## 6    1.88   male    23.10.2002             1                  Ungarn
-    ## 7    1.82   male    20.09.1999            17             Deutschland
-    ## 8    1.97   male    22.05.2003            11             Deutschland
-    ## 9    1.95   male    28.05.2003            15             Deutschland
-    ## 10   1.97   male    02.11.2001            13             Deutschland
-    ## 11   2.00   male    02.05.1993             5             Deutschland
-    ## 12   1.80   male    03.05.2008             2             Deutschland
-    ## 13   1.94   male    29.09.1977            NA Bosnien und Herzegowina
-    ## 14   1.92   male    18.01.1967            NA             Deutschland
-    ## 15   2.02   male    19.09.1966            NA   Tschechische Republik
-    ## 16     NA   male    07.07.1981            NA                Rumänien
-    ##           Position
-    ## 1           libero
-    ## 2   middle blocker
-    ## 3   middle blocker
-    ## 4   middle blocker
-    ## 5   outside hitter
-    ## 6           setter
-    ## 7           setter
-    ## 8  opposite hitter
-    ## 9   outside hitter
-    ## 10  middle blocker
-    ## 11 opposite hitter
-    ## 12          libero
-    ## 13      head coach
-    ## 14      head coach
-    ## 15      head coach
-    ## 16      head coach
+    ##    Height Gender Date.of.Birth Jersey.Number Nationality        Position
+    ## 1    1.90   male    13.09.1994            18         TUN          libero
+    ## 2    1.98   male    29.10.2000             4         GER  middle blocker
+    ## 3    1.96   male    24.01.2000            12         GER  middle blocker
+    ## 4    2.02   male    24.10.2005            10         GER  middle blocker
+    ## 5    1.93   male    17.02.2001             3         GER  outside hitter
+    ## 6    1.88   male    23.10.2002             1         HUN          setter
+    ## 7    1.82   male    20.09.1999            17         GER          setter
+    ## 8    1.97   male    22.05.2003            11         GER opposite hitter
+    ## 9    1.95   male    28.05.2003            15         GER  outside hitter
+    ## 10   1.97   male    02.11.2001            13         GER  middle blocker
+    ## 11   2.00   male    02.05.1993             5         GER opposite hitter
+    ## 12   1.80   male    03.05.2008             2         GER          libero
+    ## 13   1.94   male    29.09.1977            NA         BIH      head coach
+    ## 14   1.92   male    18.01.1967            NA         GER      head coach
+    ## 15   2.02   male    19.09.1966            NA         CZE      head coach
+    ## 16     NA   male    07.07.1981            NA         ROU      head coach
     ## 
     ## $roster_VCO_Berlin
     ##     Last.Name   First.Name    First.Name.Last.Name     Last.Name.First.Name
@@ -430,24 +424,24 @@ mutating for `Nationnality`.
     ## 17    Wiesner       Jannes          Jannes Wiesner          Wiesner, Jannes
     ## 18      Ilott  Daniel John       Daniel John Ilott       Ilott, Daniel John
     ##    Height Gender Date.of.Birth Jersey.Number Nationality        Position
-    ## 1    1.98   male    17.09.2003             1 Deutschland          setter
-    ## 2    2.01   male    07.03.2005             2 Deutschland  outside hitter
-    ## 3    1.82   male    02.09.2003            10 Deutschland          libero
-    ## 4    1.96   male    25.06.2004            14 Deutschland opposite hitter
-    ## 5    2.04   male    11.02.2004             5 Deutschland opposite hitter
-    ## 6    1.99   male    20.03.2003             8 Deutschland  outside hitter
-    ## 7    1.99   male    03.06.2003            13 Deutschland  middle blocker
-    ## 8    2.04   male    03.04.2006            14 Deutschland  middle blocker
-    ## 9    2.00   male    25.07.2003             9 Deutschland  middle blocker
-    ## 10   2.00   male    20.07.2003            11 Deutschland opposite hitter
-    ## 11   1.93   male    16.05.2004             4 Deutschland          setter
-    ## 12   2.00   male    15.01.2005             3 Deutschland  middle blocker
-    ## 13   2.07   male    26.01.2004             7 Deutschland  middle blocker
-    ## 14   2.06   male    06.01.2003             6 Deutschland  outside hitter
-    ## 15   1.77   male    28.07.2005            18 Deutschland          libero
-    ## 16   1.95   male    20.06.2003            12 Deutschland          libero
-    ## 17   1.96   male    18.07.2003            17 Deutschland  outside hitter
-    ## 18     NA   male    27.01.1975            NA  Australien      head coach
+    ## 1    1.98   male    17.09.2003             1         GER          setter
+    ## 2    2.01   male    07.03.2005             2         GER  outside hitter
+    ## 3    1.82   male    02.09.2003            10         GER          libero
+    ## 4    1.96   male    25.06.2004            14         GER opposite hitter
+    ## 5    2.04   male    11.02.2004             5         GER opposite hitter
+    ## 6    1.99   male    20.03.2003             8         GER  outside hitter
+    ## 7    1.99   male    03.06.2003            13         GER  middle blocker
+    ## 8    2.04   male    03.04.2006            14         GER  middle blocker
+    ## 9    2.00   male    25.07.2003             9         GER  middle blocker
+    ## 10   2.00   male    20.07.2003            11         GER opposite hitter
+    ## 11   1.93   male    16.05.2004             4         GER          setter
+    ## 12   2.00   male    15.01.2005             3         GER  middle blocker
+    ## 13   2.07   male    26.01.2004             7         GER  middle blocker
+    ## 14   2.06   male    06.01.2003             6         GER  outside hitter
+    ## 15   1.77   male    28.07.2005            18         GER          libero
+    ## 16   1.95   male    20.06.2003            12         GER          libero
+    ## 17   1.96   male    18.07.2003            17         GER  outside hitter
+    ## 18     NA   male    27.01.1975            NA         AUS      head coach
     ## 
     ## $roster_VfB_Friedrichshafen
     ##            Last.Name   First.Name           First.Name.Last.Name
@@ -483,21 +477,21 @@ mutating for `Nationnality`.
     ## 14                     ?tern, ?iga   1.93   male    02.01.1994            14
     ## 15                   Lebedew, Mark   0.00   male    06.05.1967            NA
     ##    Nationality        Position
-    ## 1       Kanada          libero
-    ## 2        Polen          setter
-    ## 3       Kanada  middle blocker
-    ## 4  Deutschland  middle blocker
-    ## 5   Montenegro  outside hitter
-    ## 6  Deutschland          libero
-    ## 7    Kolumbien opposite hitter
-    ## 8      Serbien  middle blocker
-    ## 9       Serbia          libero
-    ## 10 Deutschland  outside hitter
-    ## 11       Polen opposite hitter
-    ## 12 Argentinien  outside hitter
-    ## 13    Slovenia          setter
-    ## 14   Slowenien  outside hitter
-    ## 15  Australien      head coach
+    ## 1          CAN          libero
+    ## 2          POL          setter
+    ## 3          CAN  middle blocker
+    ## 4          GER  middle blocker
+    ## 5          MNE  outside hitter
+    ## 6          GER          libero
+    ## 7          COL opposite hitter
+    ## 8          SRB  middle blocker
+    ## 9          SRB          libero
+    ## 10         GER  outside hitter
+    ## 11         POL opposite hitter
+    ## 12         ARG  outside hitter
+    ## 13         SLO          setter
+    ## 14         SLO  outside hitter
+    ## 15         AUS      head coach
     ## 
     ## $roster_WWK_Volleys_Herrsching
     ##   Last.Name First.Name First.Name.Last.Name Last.Name.First.Name Height Gender
@@ -511,15 +505,15 @@ mutating for `Nationnality`.
     ## 8    Welsch    Laurenz       Laurenz Welsch      Welsch, Laurenz   1.95   male
     ## 9    Ranner     Thomas        Thomas Ranner       Ranner, Thomas   2.03   male
     ##   Date.of.Birth Jersey.Number Nationality        Position
-    ## 1    06.02.2004            13 Deutschland          setter
-    ## 2    05.02.1992             5      Serbia  middle blocker
-    ## 3    17.09.1997            10 Deutschland  middle blocker
-    ## 4    22.04.2004            17 Deutschland          libero
-    ## 5    23.09.1994             1     Serbien  middle blocker
-    ## 6    08.05.1996             8 Deutschland opposite hitter
-    ## 7    08.12.1988             7 Deutschland          libero
-    ## 8    20.06.2003            12 Deutschland  outside hitter
-    ## 9    31.07.1987            NA Deutschland      head coach
+    ## 1    06.02.2004            13         GER          setter
+    ## 2    05.02.1992             5         SRB  middle blocker
+    ## 3    17.09.1997            10         GER  middle blocker
+    ## 4    22.04.2004            17         GER          libero
+    ## 5    23.09.1994             1         SRB  middle blocker
+    ## 6    08.05.1996             8         GER opposite hitter
+    ## 7    08.12.1988             7         GER          libero
+    ## 8    20.06.2003            12         GER  outside hitter
+    ## 9    31.07.1987            NA         GER      head coach
 
     str(all_rosters_clean)
 
@@ -533,7 +527,7 @@ mutating for `Nationnality`.
     ##   ..$ Gender              : chr [1:16] "male" "male" "male" "male" ...
     ##   ..$ Date.of.Birth       : chr [1:16] "10.08.1999" "30.11.1995" "30.07.1996" "03.12.1991" ...
     ##   ..$ Jersey.Number       : int [1:16] 8 9 4 11 1 18 5 16 3 13 ...
-    ##   ..$ Nationality         : chr [1:16] "Deutschland" "Frankreich" "Australien" "Vereinigte Staaten von Amerika" ...
+    ##   ..$ Nationality         : chr [1:16] "GER" "FRA" "AUS" "USA" ...
     ##   ..$ Position            : chr [1:16] "middle blocker" "outside hitter" "setter" "outside hitter" ...
     ##  $ roster_Energiequelle_Netzhoppers_KW-Bestensee:'data.frame':   14 obs. of  10 variables:
     ##   ..$ Last.Name           : chr [1:14] "Barsemian" "Baumann" "Berger" "Chamberlain" ...
@@ -544,7 +538,7 @@ mutating for `Nationnality`.
     ##   ..$ Gender              : chr [1:14] "male" "male" "male" "male" ...
     ##   ..$ Date.of.Birth       : chr [1:14] "13.09.1997" "07.03.2005" "27.08.2002" "24.02.1997" ...
     ##   ..$ Jersey.Number       : int [1:14] 2 17 16 5 12 15 4 1 14 3 ...
-    ##   ..$ Nationality         : chr [1:14] "Vereinigte Staaten von Amerika" "Deutschland" "Deutschland" "Vereinigte Staaten von Amerika" ...
+    ##   ..$ Nationality         : chr [1:14] "USA" "GER" "GER" "USA" ...
     ##   ..$ Position            : chr [1:14] "opposite hitter" "outside hitter" "libero" "middle blocker" ...
     ##  $ roster_Helios_GRIZZLYS_Giesen                :'data.frame':   13 obs. of  10 variables:
     ##   ..$ Last.Name           : chr [1:13] "Baxpöhler" "Colito" "Engelmann" "Günthör" ...
@@ -555,7 +549,7 @@ mutating for `Nationnality`.
     ##   ..$ Gender              : chr [1:13] "male" "male" "male" "male" ...
     ##   ..$ Date.of.Birth       : chr [1:13] "13.08.1993" "23.01.1997" "01.02.2002" "21.09.1995" ...
     ##   ..$ Jersey.Number       : int [1:13] 18 1 11 12 4 13 15 9 3 10 ...
-    ##   ..$ Nationality         : chr [1:13] "Deutschland" "Spanien" "Deutschland" "Deutschland" ...
+    ##   ..$ Nationality         : chr [1:13] "GER" "ESP" "GER" "GER" ...
     ##   ..$ Position            : chr [1:13] "middle blocker" "opposite hitter" "outside hitter" "middle blocker" ...
     ##  $ roster_SVG_Lüneburg                          :'data.frame':   13 obs. of  10 variables:
     ##   ..$ Last.Name           : chr [1:13] "B?hme" "Cowell" "Eshenko" "Ewert" ...
@@ -566,7 +560,7 @@ mutating for `Nationnality`.
     ##   ..$ Gender              : chr [1:13] "male" "male" "male" "male" ...
     ##   ..$ Date.of.Birth       : chr [1:13] "02.08.1997" "04.03.1997" "16.10.1997" "18.03.1997" ...
     ##   ..$ Jersey.Number       : int [1:13] 10 17 2 4 9 11 12 8 16 5 ...
-    ##   ..$ Nationality         : chr [1:13] "Deutschland" "Vereinigte Staaten von Amerika" "Canada" "Vereinigte Staaten von Amerika" ...
+    ##   ..$ Nationality         : chr [1:13] "GER" "USA" "CAN" "USA" ...
     ##   ..$ Position            : chr [1:13] "opposite hitter" "outside hitter" "middle blocker" "outside hitter" ...
     ##  $ roster_SWD_powervolleys_Düren                :'data.frame':   14 obs. of  10 variables:
     ##   ..$ Last.Name           : chr [1:14] "Andrae" "Andrei" "Batanov" "Bernsmann" ...
@@ -577,7 +571,7 @@ mutating for `Nationnality`.
     ##   ..$ Gender              : chr [1:14] "male" "male" "male" "male" ...
     ##   ..$ Date.of.Birth       : chr [1:14] "14.05.1981" "06.08.1985" "25.04.2000" "14.07.2004" ...
     ##   ..$ Jersey.Number       : int [1:14] 8 11 1 16 10 12 9 13 7 17 ...
-    ##   ..$ Nationality         : chr [1:14] "Deutschland" "Deutschland" "Deutschland" "Deutschland" ...
+    ##   ..$ Nationality         : chr [1:14] "GER" "GER" "GER" "GER" ...
     ##   ..$ Position            : chr [1:14] "outside hitter" "middle blocker" "libero" "libero" ...
     ##  $ roster_TSV_Haching_München                   :'data.frame':   16 obs. of  10 variables:
     ##   ..$ Last.Name           : chr [1:16] "Chefai" "Gehringer" "Gumenjuk" "Günther" ...
@@ -588,7 +582,7 @@ mutating for `Nationnality`.
     ##   ..$ Gender              : chr [1:16] "male" "male" "male" "male" ...
     ##   ..$ Date.of.Birth       : chr [1:16] "13.09.1994" "29.10.2000" "24.01.2000" "24.10.2005" ...
     ##   ..$ Jersey.Number       : int [1:16] 18 4 12 10 3 1 17 11 15 13 ...
-    ##   ..$ Nationality         : chr [1:16] "Tunesien" "Deutschland" "Deutschland" "Deutschland" ...
+    ##   ..$ Nationality         : chr [1:16] "TUN" "GER" "GER" "GER" ...
     ##   ..$ Position            : chr [1:16] "libero" "middle blocker" "middle blocker" "middle blocker" ...
     ##  $ roster_VCO_Berlin                            :'data.frame':   18 obs. of  10 variables:
     ##   ..$ Last.Name           : chr [1:18] "Amedegnato" "Baumann" "Eckardt" "Hemmer" ...
@@ -599,7 +593,7 @@ mutating for `Nationnality`.
     ##   ..$ Gender              : chr [1:18] "male" "male" "male" "male" ...
     ##   ..$ Date.of.Birth       : chr [1:18] "17.09.2003" "07.03.2005" "02.09.2003" "25.06.2004" ...
     ##   ..$ Jersey.Number       : int [1:18] 1 2 10 14 5 8 13 14 9 11 ...
-    ##   ..$ Nationality         : chr [1:18] "Deutschland" "Deutschland" "Deutschland" "Deutschland" ...
+    ##   ..$ Nationality         : chr [1:18] "GER" "GER" "GER" "GER" ...
     ##   ..$ Position            : chr [1:18] "setter" "outside hitter" "libero" "opposite hitter" ...
     ##  $ roster_VfB_Friedrichshafen                   :'data.frame':   15 obs. of  10 variables:
     ##   ..$ Last.Name           : chr [1:15] "Bann" "Biernat" "Brown" "Böhme" ...
@@ -610,7 +604,7 @@ mutating for `Nationnality`.
     ##   ..$ Gender              : chr [1:15] "male" "male" "male" "male" ...
     ##   ..$ Date.of.Birth       : chr [1:15] "26.02.1988" "19.05.1992" "24.08.1990" "25.08.1985" ...
     ##   ..$ Jersey.Number       : int [1:15] 8 5 18 11 13 16 17 1 10 4 ...
-    ##   ..$ Nationality         : chr [1:15] "Kanada" "Polen" "Kanada" "Deutschland" ...
+    ##   ..$ Nationality         : chr [1:15] "CAN" "POL" "CAN" "GER" ...
     ##   ..$ Position            : chr [1:15] "libero" "setter" "middle blocker" "middle blocker" ...
     ##  $ roster_WWK_Volleys_Herrsching                :'data.frame':   9 obs. of  10 variables:
     ##   ..$ Last.Name           : chr [1:9] "Brandt" "Dustinac" "Engemann" "Graven" ...
@@ -621,5 +615,5 @@ mutating for `Nationnality`.
     ##   ..$ Gender              : chr [1:9] "male" "male" "male" "male" ...
     ##   ..$ Date.of.Birth       : chr [1:9] "06.02.2004" "05.02.1992" "17.09.1997" "22.04.2004" ...
     ##   ..$ Jersey.Number       : int [1:9] 13 5 10 17 1 8 7 12 NA
-    ##   ..$ Nationality         : chr [1:9] "Deutschland" "Serbia" "Deutschland" "Deutschland" ...
+    ##   ..$ Nationality         : chr [1:9] "GER" "SRB" "GER" "GER" ...
     ##   ..$ Position            : chr [1:9] "setter" "middle blocker" "middle blocker" "libero" ...
