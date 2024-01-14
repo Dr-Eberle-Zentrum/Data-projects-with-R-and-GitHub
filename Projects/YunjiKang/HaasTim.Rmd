@@ -56,12 +56,11 @@ Ger <- map_data("world") |>
 lets only look at data from 2008
 
 ```{r}
-Crime_data_2.1 <- subset(Crime_data_2, TIME_PERIOD == "2008",
-                         c("freq", "unit", "iccs", "geo", "TIME_PERIOD", "OBS_VALUE"))
-Household_Income2 <-subset(Household_Income, TIME_PERIOD == "2008",
-                         c("freq", "unit", "direct", "na_item", "geo", "TIME_PERIOD", "OBS_VALUE"))
-Poverty_rate2 <- subset(Poverty_rate, TIME_PERIOD == "2008",
-                         c("freq", "unit", "geo", "TIME_PERIOD", "OBS_VALUE"))
+Crime_data_2.1 <- filter(Crime_data_2, TIME_PERIOD == "2008")
+
+Household_Income2 <-filter(Household_Income, TIME_PERIOD == "2008")
+
+Poverty_rate2 <- filter(Poverty_rate, TIME_PERIOD == "2008")
 ```
 
 merge the datasets together by countries
