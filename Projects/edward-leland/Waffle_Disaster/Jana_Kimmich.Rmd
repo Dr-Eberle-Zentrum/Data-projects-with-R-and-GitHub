@@ -37,9 +37,9 @@ store_data <-
 # center of disaster zone, latitude and longitude
 center <- list( lat = -1121903.4, long = 1409023.8)	
 # radius for red zone
-red_radius <- 100.0
+red_radius <- 200000.0
 # radius for yellow zone
-yellow_radius <- 10000.0
+yellow_radius <- 500000.0
  
 #store data for simulated disaster
 store_data_disaster <- store_data %>%
