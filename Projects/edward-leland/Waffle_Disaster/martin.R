@@ -26,13 +26,66 @@ store_data <-
   ######################
   # correct naming
   rename(status=`_status`) |>
+  # set status
+  mutate( status = factor(store_data$status)) |>
   # copy coordinate data
   mutate(x=longitude,y=latitude) |>
   # transform coordinate data for usmap package usage
   sf_transform_xy(target_crs = 2163, source_crs=4326)
 
+# simulated path of the storm over time
+stormResolution <- 20
+storm <- tibble(
+  time = 1:stormResolution,
+  x = rev(seq_range(c(max(store_data$x), min(store_data$x)), stormResolution)),
+  y = seq_range(c(min(store_data$y),max(store_data$y)/100), stormResolution),
+  size = rev(seq_range(c(500000,0), stormResolution))
+)
+
+#######################################################
+# update status information for storm front
+library(raster)
+
+addHeavoc <- function( x,y,status, storm_data ) {
+  centerFraction <- 0.5
+  s <- storm_data
+
+  euclidean <- function(x1,y1,x2,y2) { tibble(x1,y1,x2,y2) |> rowwise()|> mutate(d = sqrt(sum((x1-x2)^2, (y1-y2)^2))) |> pull(d) }
+  shopDistance <- euclidean(x,y, storm_data$x,storm_data$y)
+
+  if_else(status != "C"
+          & shopDistance < storm_data$size,
+          # & between(x, s$x-s$size, s$x+s$size)
+          # & between(y, s$y-s$size, s$y+s$size),
+                   if_else(
+                     shopDistance < (storm_data$size*centerFraction),
+                     # between(x, s$x-(s$size*centerFraction), s$x+(s$size*centerFraction))
+                     #        & between(y, s$y-(s$size*centerFraction), s$y+(s$size*centerFraction)),
+                      "C",
+                      "CT"
+                   ),
+                   status) |>
+    factor(levels= c("A","CT","C"))
+}
+
+# compute path of disaster
+heavoc <- store_data
+for( i in storm$time) {
+  heavoc <- mutate(heavoc, status = addHeavoc(x,y,status,
+                                              filter(storm,time == i) # storm data for given time point
+                                              ))
+}
+
 # plot it
+library("ggforce") # geom_circle()
 plot_usmap() +
-  geom_point(data= store_data,
+  geom_line(data=slice(storm,c(1,n())), aes(x,y),
+            arrow = arrow(length=unit(0.30,"cm"), ends="first", type = "closed"),
+            size=2,
+            col="red", alpha=0.5)+
+  geom_circle(data = storm, aes(x0 = x, y0 = y, r = size), col="lightgray") +
+  geom_point(data= heavoc ,
              mapping=aes(x,y,col=status),
-             size=2)
+             size=1.2) +
+  scale_color_manual(values = c("limegreen","yellow","red"))
+
