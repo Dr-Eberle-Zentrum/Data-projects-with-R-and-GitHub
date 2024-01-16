@@ -2,7 +2,7 @@
 title: "Volleyball Solution"
 author: "Nicolai Schwarz"
 date: "2024-01-12"
-output: html_document
+output: md_document
 ---
 
 ```{r setup, include=FALSE}
@@ -262,7 +262,6 @@ Let's have alook and clean it.
 
 ```{r check_games, echo=TRUE, eval=FALSE}
 get_unique_values(all_games_clean, "Geschlecht")
-get_unique_values(all_games_clean, "Mannschaft_1")
 na_count <- sapply(all_games, function(df) sum(is.na(df$Geschlecht)))
 
 na_count
@@ -283,13 +282,157 @@ all_games_clean <- lapply(all_games, function(df) {
          Geschlecht = ifelse(str_detect(Geschlecht, "^[fF]|2"), "female", "male"))
 })
   
+all_games_clean
 ```
 
 ***
 
 Alright,so far, so good!
 
-Next mutating all these values requierd for the barplot.
+Next mutating all these values requiered for the barplot.
+
+Let's get a list of all Teams first
+***
+```{r all_games_teams,echo=TRUE}
+all_games_teams <- get_unique_values(all_games_clean, "Mannschaft_1")
+all_games_teams
+```
+***
+
+now let's check how often each of them played at home and away
 
 ***
 
+```{r home_games,echo=TRUE}
+num_home_games <-lapply(all_games_teams, function(team){
+  lapply(all_games_clean, function(df){
+    df%>%
+    filter(Mannschaft_1 == team)%>%
+    nrow()
+  })
+})
+
+num_away_games <-lapply(all_games_teams, function(team){
+  lapply(all_games_clean, function(df){
+    df%>%
+    filter(Mannschaft_2 == team)%>%
+    nrow()
+  })
+})
+
+num_total_games <-lapply(all_games_teams, function(team){
+  lapply(all_games_clean, function(df){
+    df%>%
+    filter(Mannschaft_1 == team|Mannschaft_2 == team)%>%
+    nrow()
+  })
+})
+
+```
+
+
+
+***
+
+This already looks like, as we can put it together.
+
+***
+
+```{r try}
+count_team_games <- function(team, df) {
+  home_games <- df %>%
+    filter(Mannschaft_1 == team) %>%
+    nrow()
+  
+  away_games <- df %>%
+    filter(Mannschaft_2 == team) %>%
+    nrow()
+  
+  total_games <- df %>%
+    filter(Mannschaft_1 == team | Mannschaft_2 == team) %>%
+    nrow()
+  
+  return(c(Home = home_games, Away = away_games, Total = total_games))
+}
+
+num_games_in_once <- lapply(all_games_teams, function(team) {
+  lapply(all_games_clean, count_team_games, team = team)
+})
+num_games_in_once
+```
+
+***
+
+Next go fpr win and losses
+
+***
+
+```{r try victory, echo=TRUE}
+num_victory <-lapply(all_games_teams, function(team){
+  lapply(all_games_clean, function(df){
+    df%>%
+    filter((Mannschaft_1 == team & Satzpunkte_1 == 3) | (Mannschaft_2 == team & Satzpunkte_2 == 3))%>%
+    nrow()
+  })
+})
+
+num_losses <-lapply(all_games_teams, function(team){
+  lapply(all_games_clean, function(df){
+    df%>%
+    filter((Mannschaft_1 == team & Satzpunkte_1 != 3) | (Mannschaft_2 == team & Satzpunkte_2 != 3))%>%
+    nrow()
+  })
+})
+num_losses
+```
+
+***
+For all the average stuff im not sure if it aint  more easy to combine all games into one df to get total counts more easy for each team.
+
+Anyway we can count total of sets now ans than let's see.
+
+***
+
+```{r total_sets_played_per_game, echo=TRUE}
+
+num_sets_per_game_played <-lapply(all_games_teams, function(team){
+  lapply(all_games_clean, function(df){
+    df%>%
+    filter(Mannschaft_1 == team|Mannschaft_2 == team)%>%
+    summarise(
+      Sum_Satzpunkte = sum(Satzpunkte_1 + Satzpunkte_2),
+      Avg_Satzpunkte = mean(Satzpunkte_1 + Satzpunkte_2)) # actually could put the whole sum function in the mean function
+  })
+})
+
+```
+***
+
+**Note:** * This is the total and average number of setsplayed per game* **not** average sets to win, wait a minute.....
+
+than it should be **right?**
+
+Next Average points per set
+
+***
+**Dunno here why its working with backticks but aint with normal ""**
+
+```{r avg_points_per_game, echo=TRUE}
+
+avg_points_per_set<- lapply(all_games_teams, function(team) {
+  lapply(all_games_clean, function(df) {
+    df %>%
+      filter(Mannschaft_1 == team | Mannschaft_2 == team) %>%
+      summarise(
+        Avg_Ballpunkte_first_set = mean(ifelse(Mannschaft_1 == team, `Satz_1_-_Ballpunkte_1`, `Satz_1_-_Ballpunkte_2`)),
+        Avg_Ballpunkte_sec_set = mean(ifelse(Mannschaft_1 == team, `Satz_2_-_Ballpunkte_1`, `Satz_2_-_Ballpunkte_2`)),
+        Avg_Ballpunkte_third_set = mean(ifelse(Mannschaft_1 == team, `Satz_3_-_Ballpunkte_1`, `Satz_3_-_Ballpunkte_2`)),
+        Avg_Ballpunkte_fourth_set = mean(ifelse(Mannschaft_1 == team, `Satz_4_-_Ballpunkte_1`, `Satz_4_-_Ballpunkte_2`)),
+        Avg_Ballpunkte_fifth_set = mean(ifelse(Mannschaft_1 == team, `Satz_5_-_Ballpunkte_1`, `Satz_5_-_Ballpunkte_2`))
+        
+      )
+  })
+})
+
+avg_points_per_set
+```
