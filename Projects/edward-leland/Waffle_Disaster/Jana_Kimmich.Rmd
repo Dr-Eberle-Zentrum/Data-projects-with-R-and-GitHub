@@ -5,11 +5,13 @@ output: md_document
 
 Hey Edward, 
 
-this is my solution so far, in the following one can see the plot with the simulated disaster zone:
+this is my solution for the waffle-disaster project.
+
+First, I'm reading in the data and transforming it, thank you for providing some of the code.
 
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,warning=FALSE,message = FALSE)
 
 library(rvest)
 library(dplyr)
@@ -18,9 +20,15 @@ library(usmap)
 library(tidyverse)
 library(sf)
 
+```
+
+
+```{r echo=TRUE, include=TRUE}
+
 url <- "https://locations.wafflehouse.com" 
 
 page <- read_html(url)
+
 store_data <- 
   page |> 
   html_element("script#__NEXT_DATA__") |> 
@@ -31,10 +39,15 @@ store_data <-
   unnest(custom) |> 
   as_tibble()|>
   rename( Status = "_status")|>
-  rename(x=longitude,y=latitude) |> # rename, because name with underscore not accesible
+  rename(x=longitude,y=latitude) |> 
   sf_transform_xy(target_crs = 2163, source_crs=4326)
 
-# center of disaster zone, latitude and longitude
+```
+
+For simulating a disaster zone, I picked a location, stored the radii for the red and the yellow zone. Then I computed which of the waffle houses are in which zone:
+```{r echo=TRUE, include=TRUE}
+
+# center of disaster zone
 center <- list( lat = -1121903.4, long = 1409023.8)	
 # radius for red zone
 red_radius <- 200000.0
@@ -53,9 +66,13 @@ store_data_disaster <- store_data %>%
                        (abs(x - center$long) < yellow_radius),
                      "CT", # in yellow range
                      Status))) # default: use old value
-           
+         
+```
+
+And finally the plot with the simulated disaster zone:
   
-# Plotting waffle-map on a US map
+```{r echo=TRUE, include=TRUE}
+
 final_map <-
   plot_usmap(regions = "states", include = store_data$state) +
   labs(title = "Land of Plenty") + 
@@ -71,5 +88,3 @@ final_map <-
 final_map
 ```
 
-
-Unfortunately, I assume that something with the plotting of the waffle house locations went wrong. It seems like they are shifted, but I could not figure out how to adjust it properly.
