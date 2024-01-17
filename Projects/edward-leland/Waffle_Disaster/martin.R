@@ -1,6 +1,7 @@
 
 
 library(tidyverse)
+library(modelr) # seq_range()
 
 # set working directory to source file location
 library(this.path)
@@ -27,7 +28,7 @@ store_data <-
   # correct naming
   rename(status=`_status`) |>
   # set status
-  mutate( status = factor(store_data$status)) |>
+  mutate( status = factor(status)) |>
   # copy coordinate data
   mutate(x=longitude,y=latitude) |>
   # transform coordinate data for usmap package usage
@@ -81,7 +82,7 @@ library("ggforce") # geom_circle()
 plot_usmap() +
   geom_line(data=slice(storm,c(1,n())), aes(x,y),
             arrow = arrow(length=unit(0.30,"cm"), ends="first", type = "closed"),
-            size=2,
+            linewidth=2,
             col="red", alpha=0.5)+
   geom_circle(data = storm, aes(x0 = x, y0 = y, r = size), col="lightgray") +
   geom_point(data= heavoc ,
