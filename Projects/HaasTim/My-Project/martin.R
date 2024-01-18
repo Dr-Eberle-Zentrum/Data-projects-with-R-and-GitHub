@@ -60,11 +60,11 @@ plotData |>
   geom_text(aes(label=str_c("# ",`2-digit_code`), y=abs(value)+8*10^9)) +
   geom_text(aes(label= round(value/10^9, digits = 1), col=change), y=-2*10^10) +
   guides(color=FALSE) +
-  coord_polar(clip = 'off')+
   ylim(-10^11,4.2* 10^10) +
   xlim(-0.2,12)+
   geom_text(x=3, y=-5*10^10, label="EXPORT", angle=90)+
   geom_text(x=9, y=-5*10^10, label="IMPORT", angle=270)+
+  coord_polar(clip = 'off')+
   annotate(geom = "table",
          x = 6.2,
          y = 4*10^10,
