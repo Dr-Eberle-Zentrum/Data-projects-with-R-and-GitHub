@@ -2,12 +2,35 @@
 output: md_document
 ---
 
-## Data
+# Tim's take on Yunji's project
 
-# First, load the datasets
+Installs pacman ("packagemanager") if needed
 
 ```{r}
-library(readr)
+if (!require("pacman")) install.packages("pacman")
+```
+
+Use pacman to load add-on packages as desired
+
+```{r}
+pacman::p_load(pacman,
+               readr,
+               maps,
+               ggplot2,
+               dplyr,
+               viridis,
+               eurostat,
+               ggrepel,
+               tidyverse)
+```
+
+## Data
+
+#### First, load the datasets
+
+```{r}
+
+
 Poverty_rate <- read_csv("At-risk-of-poverty rate.gz", show_col_types = FALSE, 
                          col_select = c("freq", "unit", "geo", "TIME_PERIOD", "OBS_VALUE"))
 
@@ -23,20 +46,34 @@ Crime_data_2 <- read_csv("Crime_data_for_Task2.gz", show_col_types = FALSE,
 
 ## Task 1
 
-Only keep the data for 2019
-
 ```{r}
-library(dplyr)
+
+#Only keep the data for 2019
+
 Crime_data_1.2 <- filter(Crime_data_1, TIME_PERIOD == "2019" )
 
 ```
 
-Plotting
+#### Plotting
 
-```{r}
-library(maps)
-library(viridis)
-library(ggplot2)
+still under construction 🤔
+
+```{r eval=FALSE, include=FALSE}
+
+# load spacial data of whole europe
+
+df60 <- get_eurostat_geospatial(output_class = "df", resolution = 60)
+
+df60 %>%
+  # reduce to germany
+  filter(str_starts(NUTS_ID,"DE")) |> 
+  # plot shapes for each NUTS level (LEVL_CODE)
+  ggplot(aes(x=long,y=lat,group=group)) +
+  geom_polygon(fill=NA,color="black") + 
+  facet_wrap(~LEVL_CODE)
+```
+
+```{r eval=FALSE, include=FALSE}
 
 Ger <- map_data("world") |>  
   filter(region =="Germany")
@@ -53,9 +90,10 @@ Ger <- map_data("world") |>
 
 ## Task2
 
-lets only look at data from 2008
+```{r include=FALSE}
 
-```{r}
+#lets only look at data from 2008
+
 Crime_data_2.1 <- filter(Crime_data_2, TIME_PERIOD == "2008")
 
 Household_Income2 <-filter(Household_Income, TIME_PERIOD == "2008")
@@ -63,9 +101,10 @@ Household_Income2 <-filter(Household_Income, TIME_PERIOD == "2008")
 Poverty_rate2 <- filter(Poverty_rate, TIME_PERIOD == "2008")
 ```
 
-merge the datasets together by countries
+```{r include=FALSE}
 
-```{r}
+#merge the datasets together by countries
+
 Household_Income2 <-
   Household_Income2 |> 
   rename(Household_Income_EUR_HAB = OBS_VALUE) |> 
@@ -83,13 +122,9 @@ Crime <- Crime_data_2.1 |>
 
 ```
 
-Splitting the unit variable by NR and P_HTHAB.
-Creating a new data set with the observed values from NR and P_HTHAB in the same row,
-so we can use for y the P_HTHAB observed values and for the size the NR observed value.
-(before I created this new data set, I tried using a ifelse function for "y" and the "size" in the aes function, but it wasn't working.
-So, there is prob a more elegant way to do it :)
+Splitting the unit variable by NR and P_HTHAB. Creating a new data set with the observed values from NR and P_HTHAB in the same row, so we can use for y the P_HTHAB observed values and for the size the NR observed value. (before I created this new data set, I tried using a ifelse function for "y" and the "size" in the aes function, but it wasn't working. So, there is prob a more elegant way to do it :)
 
-```{r}
+```{r include=FALSE}
 
 Crime_NR <- subset(Crime, unit == "NR", select = -unit) |> 
   rename(OBS_VALUE_NR = OBS_VALUE)
@@ -98,6 +133,13 @@ Crime_P_HTHAB <- subset(Crime, unit == "P_HTHAB", select = -unit) |>
 
 Crime_merged <- merge(Crime_NR, Crime_P_HTHAB, by = c("geo", "freq", "iccs", "TIME_PERIOD", 
                                                       "Household_Income_EUR_HAB", "Poverty_rate_PC"))
+```
+
+#### The Plot
+
+I only did it for 2008
+
+```{r}
 
 ggplot(Crime_merged, 
        aes(x = Household_Income_EUR_HAB, 
@@ -105,10 +147,10 @@ ggplot(Crime_merged,
            size = OBS_VALUE_NR, 
            color = Poverty_rate_PC)) +
   geom_point(alpha = 0.7) +
-  geom_text(aes(label = geo), vjust = 1.5, size = 2, color = "black") +
+  geom_text_repel(aes(label = geo), vjust = 1.5, size = 2, color = "black") +
   scale_size_continuous(range = c(3, 10)) +
   scale_color_viridis_c() +
-  facet_wrap(~iccs, scales = "free_y", ncol = 3, 
+  facet_wrap(~iccs, scales = "free", ncol = 4, 
              labeller = labeller(iccs = c(ICCS0101 = "Intentional Homicide", ICCS02011 = "Assault",
                                           ICCS0401 = "Robbery", ICCS0501 = "Burglary", 
                                           ICCS05012 = "Burglary of private residential premises",
@@ -120,8 +162,9 @@ ggplot(Crime_merged,
        color = "At Risk of Poverty Rate") +
   theme_minimal() +
   theme(legend.position = "bottom", 
-        strip.text = element_text(size = 7.5, margin = margin(0, 0, 5, 0)),
-        text = element_text(size = 7))
+        strip.text = element_text(size = 6.3, margin = margin(0, 0, 5, 0)),
         #axis.text.x = element_text(angle = 45, hjust = 1))
+        text = element_text(size = 7))
+       
  
 ```
