@@ -4,8 +4,8 @@ Hey Edward,
 
 this is my solution for the waffle-disaster project.
 
-First, I’m reading in the data and transforming it, thank you for
-providing some of the code.
+First, I’m reading the data and transforming it, thank you for providing
+some of the code.
 
     url <- "https://locations.wafflehouse.com" 
 
@@ -22,7 +22,7 @@ providing some of the code.
       as_tibble()|>
       rename( Status = "_status")|>
       rename(x=longitude,y=latitude) |> 
-      sf_transform_xy(target_crs = 2163, source_crs=4326)
+      sf_transform_xy(target_crs = 2163, source_crs=4326) #transforming coordinates for us-map
 
 For simulating a disaster zone, I picked a location, stored the radii
 for the red and the yellow zone. Then I computed which of the waffle
@@ -35,14 +35,13 @@ houses are in which zone:
     # radius for yellow zone
     yellow_radius <- 500000.0
      
-    #store data for simulated disaster
+    # store data for simulated disaster
     store_data_disaster <- store_data %>%
       mutate(Status =
                if_else(
                  (abs(y - center$lat) < red_radius) &
                    (abs(x - center$long) < red_radius) ,
-                 "C",
-                 # in red range
+                 "C",# in red range
                  if_else((abs(y - center$lat) < yellow_radius) &
                            (abs(x - center$long) < yellow_radius),
                          "CT", # in yellow range
