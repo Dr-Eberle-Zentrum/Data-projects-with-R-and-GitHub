@@ -34,7 +34,7 @@ codebooks <-
       .default = NA
     ) |>
       factor(levels=c("Arbeitsschritt","Ablauf","Hilfsmittel"), ordered =T)
-  )
+    )
 
 ############  FOR EACH ID in tables  #########################
 
@@ -57,6 +57,7 @@ getHtmlForTable <- function( subtable ) {
                 # TODO logo
                 "<h1>Standard Operating Procedure: Manufacturing", "\n",
                 "Article: ", tabData$Articel, if_else(is.na(tabData$Articel_coupl),"", str_c("/", tabData$Articel_coupl)),
+                "<img src='Datasets/images/logo.png' width='100px' style='float:right'> ",
                 "</h1>", "\n",
                 "<hr>", "\n",
 
@@ -79,11 +80,15 @@ getHtmlForTable <- function( subtable ) {
                codebooks |>
                  # filter( Step == 1) |>
                  group_by(Step,Section) |>
-                 distinct(String) |>
+                 distinct(String,Image) |>
                  # collapse each cell of a step
+                 mutate(html = str_c( if_else(is.na(String),"",String),
+                                      if_else(is.na(Image),"",
+                                              str_c("<br> <img src='Datasets/images/", Image, "' width='50px'> "))
+                                      )) |>
                  summarize(
                    html_td = str_c("<td><ul><li>",
-                                   na.omit(String) |> str_c( collapse = "\n<li>"),
+                                   na.omit(html) |> str_c( collapse = "\n<li>"),
                                    "</ul></td>")
                  ) |>
                  # collapse all three cells into a row of a step
