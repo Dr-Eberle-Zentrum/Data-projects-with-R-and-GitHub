@@ -43,98 +43,9 @@ working for `.tsv`files and read\_tsv solved it by apply an
 
 ------------------------------------------------------------------------
 
-    all_rosters <- auto_import(folders[4], datatyp="csv", "2")
-
-    ## ℹ Using "','" as decimal and "'.'" as grouping mark. Use `read_delim()` for more control.
-
-    ## Rows: 22 Columns: 10
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ";"
-    ## chr (9): Last Name, First Name, First Name Last Name, Last Name First Name, ...
-    ## dbl (1): Jersey Number
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-    ## ℹ Using "','" as decimal and "'.'" as grouping mark. Use `read_delim()` for more control.
-    ## 
-    ## Rows: 20 Columns: 10
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ";"
-    ## chr (8): Last Name, First Name, First Name Last Name, Last Name First Name, ...
-    ## dbl (2): Height, Jersey Number
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-    ## ℹ Using "','" as decimal and "'.'" as grouping mark. Use `read_delim()` for more control.
-    ## 
-    ## Rows: 22 Columns: 10
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ";"
-    ## chr (9): Last Name, First Name, First Name Last Name, Last Name First Name, ...
-    ## dbl (1): Jersey Number
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-    ## ℹ Using "','" as decimal and "'.'" as grouping mark. Use `read_delim()` for more control.
-    ## 
-    ## Rows: 25 Columns: 10
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ";"
-    ## chr (9): Last Name, First Name, First Name Last Name, Last Name First Name, ...
-    ## dbl (1): Jersey Number
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-    ## ℹ Using "','" as decimal and "'.'" as grouping mark. Use `read_delim()` for more control.
-    ## 
-    ## Rows: 23 Columns: 10
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ";"
-    ## chr (9): Last Name, First Name, First Name Last Name, Last Name First Name, ...
-    ## dbl (1): Jersey Number
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-    ## ℹ Using "','" as decimal and "'.'" as grouping mark. Use `read_delim()` for more control.
-    ## 
-    ## Rows: 28 Columns: 10
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ";"
-    ## chr (9): Last Name, First Name, First Name Last Name, Last Name First Name, ...
-    ## dbl (1): Jersey Number
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-    ## ℹ Using "','" as decimal and "'.'" as grouping mark. Use `read_delim()` for more control.
-    ## 
-    ## Rows: 38 Columns: 10
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ";"
-    ## chr (9): Last Name, First Name, First Name Last Name, Last Name First Name, ...
-    ## dbl (1): Jersey Number
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-    ## ℹ Using "','" as decimal and "'.'" as grouping mark. Use `read_delim()` for more control.
-    ## 
-    ## Rows: 25 Columns: 10
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ";"
-    ## chr (9): Last Name, First Name, First Name Last Name, Last Name First Name, ...
-    ## dbl (1): Jersey Number
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-    ## ℹ Using "','" as decimal and "'.'" as grouping mark. Use `read_delim()` for more control.
-    ## 
-    ## Rows: 21 Columns: 10
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ";"
-    ## chr (9): Last Name, First Name, First Name Last Name, Last Name First Name, ...
-    ## dbl (1): Jersey Number
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+    suppressMessages({
+      all_rosters <- auto_import(folders[4], datatyp="csv", "2")
+    })
 
     #str(all_rosters, list.len = 2)
 
@@ -214,7 +125,17 @@ function to do it (at once).
         rename("Name"="Last Name First Name")
       })
     })
+
+    all_rosters_clean2 <- all_rosters_clean%>%
+       bind_rows(.id = "Team")%>%
+      mutate(Team = gsub("^roster_", "", Team))
+      
+    #all_rosters_clean2
     #str(all_rosters_clean, list.len = 3)
+
+*Note: Probably could done it already in the import part (bind all
+rosters into one table), but wasn’t sure if i wont need it separated
+later*
 
 ------------------------------------------------------------------------
 
@@ -287,12 +208,6 @@ Let’s check for misstakes with our previous `get_unique_values`function.
 
 ------------------------------------------------------------------------
 
-    get_unique_values(all_topscorer_clean, "Team")
-    get_unique_values(all_topscorer_clean, "Position")
-    na_count <- sapply(all_topscorer_clean, function(df) sum(is.na(df$Position)))
-
-    na_count
-
 ------------------------------------------------------------------------
 
 As we can see there’s some `NA`-values, but these shouldn’t border us
@@ -314,6 +229,29 @@ names and mutate the `errors_per_set`-column.
     all_topscorer_clean[[2]] <- all_topscorer_clean[[2]] %>% # couldn't find out how to do in lapply-fct, due to not all df got "team" column "yet"
       mutate(Team = gsub("Ř", "ü", Team))
 
+    all_topscorer_clean2 <- all_topscorer_clean %>%
+      bind_rows()%>%
+      select(-c("Team", "Country", "Position"))%>% # otherwise we would had an "many to many" issues in the join-function
+      mutate(Points_per_Set = as.numeric(gsub(",", ".",Points_per_Set)))
+    all_topscorer_clean2
+
+    ## # A tibble: 260 × 9
+    ##     Rank Name           Points_overall Errors_overall Points_per_Set Sets_played
+    ##    <dbl> <chr>                   <dbl>          <dbl>          <dbl>       <dbl>
+    ##  1    34 Amedegnato, D…              6             11            0.5          11
+    ##  2    31 Barsemian, Ra…              9             13            1             9
+    ##  3    21 Baumann, Felix             39             39            3            13
+    ##  4    15 Baxpöhler, No…             35             32            1.8          20
+    ##  5    10 Borris, Maciej             67             51            2.8          24
+    ##  6    21 Chamberlain, …             10             10            1.1           9
+    ##  7     7 Colito, Augus…             62             44            3.9          16
+    ##  8     1 Deweese, Randy            126             59            5            25
+    ##  9    25 Engelmann, Li…              4              5            0.4          10
+    ## 10    16 Engemann, Nor…              2              0            1             2
+    ## # ℹ 250 more rows
+    ## # ℹ 3 more variables: Games_played <dbl>, `Top-Scorer` <dbl>,
+    ## #   errors_per_set <dbl>
+
     #str(all_topscorer_clean, list.len = 3)
 
 ------------------------------------------------------------------------
@@ -330,193 +268,30 @@ Okay let’s go for the games now.
 
 ------------------------------------------------------------------------
 
-    all_games <- auto_import(folders[2], datatyp="csv", "2")
-
-    ## ℹ Using "','" as decimal and "'.'" as grouping mark. Use `read_delim()` for more control.
-
-    ## New names:
-    ## Rows: 19 Columns: 39
-    ## ── Column specification
-    ## ──────────────────────────────────────────────────────── Delimiter: ";" chr
-    ## (18): Datum, Spielgruppe, Mannschaft 1, Mannschaft 2, Gastgeber, Ergebn... dbl
-    ## (19): Spieldauer, Zuschauerzahl, Satzpunkte 1, Satzpunkte 2, Satz 1 - B... time
-    ## (2): Uhrzeit, Satzpunkte
-    ## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
-    ## Specify the column types or set `show_col_types = FALSE` to quiet this message.
-    ## ℹ Using "','" as decimal and "'.'" as grouping mark. Use `read_delim()` for
-    ## more control.
-    ## New names:
-    ## Rows: 72 Columns: 39
-    ## ── Column specification
-    ## ──────────────────────────────────────────────────────── Delimiter: ";" chr
-    ## (18): Datum, ST, Mannschaft 1, Mannschaft 2, Gastgeber, Austragungsort/... dbl
-    ## (19): Spieldauer, Zuschauerzahl, Satzpunkte 1, Satzpunkte 2, Satz 1 - B... time
-    ## (2): Uhrzeit, Satzpunkte
-    ## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
-    ## Specify the column types or set `show_col_types = FALSE` to quiet this message.
-    ## ℹ Using "','" as decimal and "'.'" as grouping mark. Use `read_delim()` for
-    ## more control.
-    ## New names:
-    ## Rows: 12 Columns: 39
-    ## ── Column specification
-    ## ──────────────────────────────────────────────────────── Delimiter: ";" chr
-    ## (17): Datum, ST, Mannschaft 1, Mannschaft 2, Gastgeber, Austragungsort/... dbl
-    ## (16): Spieldauer, Zuschauerzahl, Satzpunkte 1, Satzpunkte 2, Satz 1 - B... lgl
-    ## (4): Satz 5 - Ballpunkte 1, :...37, Satz 5 - Ballpunkte 2, Satz 5 - Sa... time
-    ## (2): Uhrzeit, Satzpunkte
-    ## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
-    ## Specify the column types or set `show_col_types = FALSE` to quiet this message.
-    ## ℹ Using "','" as decimal and "'.'" as grouping mark. Use `read_delim()` for
-    ## more control.
-    ## New names:
-    ## Rows: 16 Columns: 39
-    ## ── Column specification
-    ## ──────────────────────────────────────────────────────── Delimiter: ";" chr
-    ## (18): Datum, ST, Mannschaft 1, Mannschaft 2, Gastgeber, Austragungsort/... dbl
-    ## (19): Spieldauer, Zuschauerzahl, Satzpunkte 1, Satzpunkte 2, Satz 1 - B... time
-    ## (2): Uhrzeit, Satzpunkte
-    ## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
-    ## Specify the column types or set `show_col_types = FALSE` to quiet this message.
-    ## • `Ergebnis` -> `Ergebnis...7`
-    ## • `Ergebnis` -> `Ergebnis...9`
-    ## • `:` -> `:...18`
-    ## • `:` -> `:...21`
-    ## • `:` -> `:...25`
-    ## • `:` -> `:...29`
-    ## • `:` -> `:...33`
-    ## • `:` -> `:...37`
+    suppressMessages({
+      all_games <- auto_import(folders[2], datatyp="csv", "2")
+    })
 
     #str(all_games, list.len = 2)
 
 ------------------------------------------------------------------------
 
-Let’s have alook and clean it.
-
-------------------------------------------------------------------------
-
-    get_unique_values(all_games_clean, "Geschlecht")
-    na_count <- sapply(all_games, function(df) sum(is.na(df$Geschlecht)))
-
-    na_count
+Let’s have alook with our `get_unique_values` function and clean it.
 
 ------------------------------------------------------------------------
 
     all_games_clean <- lapply(all_games, function(df) {
         df %>%
-        setNames(gsub(" ", "_", colnames(.))) %>%
-      mutate(Mannschaft_1 = gsub("Ř", "ü", Mannschaft_1),
-             Mannschaft_2 = gsub("Ř", "ü", Mannschaft_2),
+        setNames(gsub(" ", "", gsub("-", "_", colnames(.)))) %>%
+      mutate(Mannschaft1 = gsub("Ř", "ü", Mannschaft1),
+             Mannschaft2 = gsub("Ř", "ü", Mannschaft2),
              Gastgeber = gsub("Ř", "ü", Gastgeber),
              Austragungsort = gsub("Ř", "ü", Austragungsort),
              Geschlecht = ifelse(str_detect(Geschlecht, "^[fF]|2"), "female", "male"))
-    })
+    })%>%
+      bind_rows()
       
-    all_games_clean
-
-    ## $Spielplan_1._Bundesliga_Männer_Playoff
-    ## # A tibble: 19 × 39
-    ##    Datum    Uhrzeit Spielgruppe Mannschaft_1 Mannschaft_2 Gastgeber Ergebnis...7
-    ##    <chr>    <time>  <chr>       <chr>        <chr>        <chr>     <chr>       
-    ##  1 25.03.2… 17:30   Viertelfin… SVG Lüneburg Energiequel… SVG Lüne… 3:1 / 96:75 
-    ##  2 25.03.2… 20:00   Viertelfin… BERLIN RECY… TSV Haching… BERLIN R… 3:0 / 75:45 
-    ##  3 26.03.2… 15:00   Viertelfin… SWD powervo… WWK Volleys… SWD powe… 3:1 / 98:84 
-    ##  4 26.03.2… 17:30   Viertelfin… VfB Friedri… Helios GRIZ… VfB Frie… 2:3 / 100:1…
-    ##  5 01.04.2… 17:30   Viertelfin… Helios GRIZ… VfB Friedri… Helios G… 1:3 / 91:98 
-    ##  6 02.04.2… 15:00   Viertelfin… Energiequel… SVG Lüneburg Energieq… 1:3 / 92:98 
-    ##  7 02.04.2… 17:30   Viertelfin… TSV Haching… BERLIN RECY… TSV Hach… 0:3 / 51:75 
-    ##  8 04.04.2… 20:00   Viertelfin… WWK Volleys… SWD powervo… WWK Voll… 0:3 / 66:79 
-    ##  9 08.04.2… 20:00   Viertelfin… VfB Friedri… Helios GRIZ… VfB Frie… 3:2 / 110:99
-    ## 10 12.04.2… 19:00   Halbfinale… SVG Lüneburg VfB Friedri… SVG Lüne… 2:3 / 103:1…
-    ## 11 12.04.2… 19:45   Halbfinale… BERLIN RECY… SWD powervo… BERLIN R… 3:1 / 91:87 
-    ## 12 15.04.2… 19:30   Halbfinale… SWD powervo… BERLIN RECY… SWD powe… 1:3 / 87:94 
-    ## 13 16.04.2… 17:30   Halbfinale… VfB Friedri… SVG Lüneburg VfB Frie… 3:0 / 75:68 
-    ## 14 19.04.2… 19:00   Halbfinale… SVG Lüneburg VfB Friedri… SVG Lüne… 3:0 / 75:65 
-    ## 15 19.04.2… 19:45   Halbfinale… BERLIN RECY… SWD powervo… BERLIN R… 3:1 / 91:79 
-    ## 16 23.04.2… 17:30   Halbfinale… VfB Friedri… SVG Lüneburg VfB Frie… 3:1 / 97:84 
-    ## 17 01.05.2… 18:00   Finale Pla… BERLIN RECY… VfB Friedri… BERLIN R… 3:1 / 103:92
-    ## 18 04.05.2… 20:00   Finale Pla… VfB Friedri… BERLIN RECY… VfB Frie… 0:3 / 45:75 
-    ## 19 06.05.2… 20:00   Finale Pla… BERLIN RECY… VfB Friedri… BERLIN R… 3:1 / 93:86 
-    ## # ℹ 32 more variables: Austragungsort <chr>, Ergebnis...9 <chr>, Saison <chr>,
-    ## #   Spielrunde <chr>, Geschlecht <chr>, Satzpunkte <time>, Ballpunkte <chr>,
-    ## #   Spieldauer <dbl>, Zuschauerzahl <dbl>, Satzpunkte_1 <dbl>, `:...18` <chr>,
-    ## #   Satzpunkte_2 <dbl>, `Satz_1_-_Ballpunkte_1` <dbl>, `:...21` <chr>,
-    ## #   `Satz_1_-_Ballpunkte_2` <dbl>, `Satz_1_-_Satzdauer` <dbl>,
-    ## #   `Satz_2_-_Ballpunkte_1` <dbl>, `:...25` <chr>,
-    ## #   `Satz_2_-_Ballpunkte_2` <dbl>, `Satz_2_-_Satzdauer` <dbl>, …
-    ## 
-    ## $Spielplan_1._Bundesliga_Männer_regular_season
-    ## # A tibble: 72 × 39
-    ##    Datum      Uhrzeit ST         Mannschaft_1             Mannschaft_2 Gastgeber
-    ##    <chr>      <time>  <chr>      <chr>                    <chr>        <chr>    
-    ##  1 08.10.2022 17:30   Spieltag 1 Energiequelle Netzhoppe… Helios GRIZ… Energieq…
-    ##  2 08.10.2022 20:00   Spieltag 1 WWK Volleys Herrsching   SWD powervo… WWK Voll…
-    ##  3 09.10.2022 16:00   Spieltag 1 TSV Haching München      BERLIN RECY… TSV Hach…
-    ##  4 09.10.2022 17:30   Spieltag 1 SVG Lüneburg             VCO Berlin   SVG Lüne…
-    ##  5 15.10.2022 17:30   Spieltag 2 Helios GRIZZLYS Giesen   TSV Haching… Helios G…
-    ##  6 15.10.2022 20:00   Spieltag 2 SWD powervolleys Düren   Energiequel… SWD powe…
-    ##  7 16.10.2022 13:00   Spieltag 2 VCO Berlin               WWK Volleys… VCO Berl…
-    ##  8 16.10.2022 16:00   Spieltag 2 BERLIN RECYCLING Volleys VfB Friedri… BERLIN R…
-    ##  9 19.10.2022 19:00   Spieltag 3 TSV Haching München      VfB Friedri… TSV Hach…
-    ## 10 19.10.2022 19:30   Spieltag 3 Helios GRIZZLYS Giesen   SWD powervo… Helios G…
-    ## # ℹ 62 more rows
-    ## # ℹ 33 more variables: `Austragungsort/Ergebnis` <chr>, Austragungsort <chr>,
-    ## #   Ergebnis <chr>, Saison <chr>, Spielrunde <chr>, Geschlecht <chr>,
-    ## #   Satzpunkte <time>, Ballpunkte <chr>, Spieldauer <dbl>, Zuschauerzahl <dbl>,
-    ## #   Satzpunkte_1 <dbl>, `:...18` <chr>, Satzpunkte_2 <dbl>,
-    ## #   `Satz_1_-_Ballpunkte_1` <dbl>, `:...21` <chr>,
-    ## #   `Satz_1_-_Ballpunkte_2` <dbl>, `Satz_1_-_Satzdauer` <dbl>, …
-    ## 
-    ## $`Spielplan_1._Bundesliga_Männer_Zwischenrunde_1-4`
-    ## # A tibble: 12 × 39
-    ##    Datum      Uhrzeit ST         Mannschaft_1             Mannschaft_2 Gastgeber
-    ##    <chr>      <time>  <chr>      <chr>                    <chr>        <chr>    
-    ##  1 04.02.2023 20:00   Spieltag 1 BERLIN RECYCLING Volleys SWD powervo… BERLIN R…
-    ##  2 05.02.2023 15:00   Spieltag 1 SVG Lüneburg             VfB Friedri… SVG Lüne…
-    ##  3 11.02.2023 20:00   Spieltag 2 SVG Lüneburg             BERLIN RECY… SVG Lüne…
-    ##  4 12.02.2023 17:30   Spieltag 2 VfB Friedrichshafen      SWD powervo… VfB Frie…
-    ##  5 18.02.2023 15:00   Spieltag 3 SWD powervolleys Düren   SVG Lüneburg SWD powe…
-    ##  6 19.02.2023 17:30   Spieltag 3 BERLIN RECYCLING Volleys VfB Friedri… BERLIN R…
-    ##  7 03.03.2023 19:30   Spieltag 4 SWD powervolleys Düren   BERLIN RECY… SWD powe…
-    ##  8 04.03.2023 20:00   Spieltag 4 VfB Friedrichshafen      SVG Lüneburg VfB Frie…
-    ##  9 12.03.2023 15:00   Spieltag 5 BERLIN RECYCLING Volleys SVG Lüneburg BERLIN R…
-    ## 10 12.03.2023 17:30   Spieltag 5 SWD powervolleys Düren   VfB Friedri… SWD powe…
-    ## 11 18.03.2023 20:00   Spieltag 6 SVG Lüneburg             SWD powervo… SVG Lüne…
-    ## 12 19.03.2023 17:30   Spieltag 6 VfB Friedrichshafen      BERLIN RECY… VfB Frie…
-    ## # ℹ 33 more variables: `Austragungsort/Ergebnis` <chr>, Austragungsort <chr>,
-    ## #   Ergebnis <chr>, Saison <chr>, Spielrunde <chr>, Geschlecht <chr>,
-    ## #   Satzpunkte <time>, Ballpunkte <chr>, Spieldauer <dbl>, Zuschauerzahl <dbl>,
-    ## #   Satzpunkte_1 <dbl>, `:...18` <chr>, Satzpunkte_2 <dbl>,
-    ## #   `Satz_1_-_Ballpunkte_1` <dbl>, `:...21` <chr>,
-    ## #   `Satz_1_-_Ballpunkte_2` <dbl>, `Satz_1_-_Satzdauer` <dbl>,
-    ## #   `Satz_2_-_Ballpunkte_1` <dbl>, `:...25` <chr>, …
-    ## 
-    ## $`Spielplan_1._Bundesliga_Männer_Zwischenrunde_5-9`
-    ## # A tibble: 16 × 39
-    ##    Datum      Uhrzeit ST         Mannschaft_1             Mannschaft_2 Gastgeber
-    ##    <chr>      <time>  <chr>      <chr>                    <chr>        <chr>    
-    ##  1 03.02.2023 20:00   Spieltag 1 WWK Volleys Herrsching   TSV Haching… WWK Voll…
-    ##  2 04.02.2023 17:30   Spieltag 1 Energiequelle Netzhoppe… Helios GRIZ… Energieq…
-    ##  3 05.02.2023 17:30   Spieltag 1 VCO Berlin               Helios GRIZ… VCO Berl…
-    ##  4 12.02.2023 15:00   Spieltag 2 TSV Haching München      Helios GRIZ… TSV Hach…
-    ##  5 18.02.2023 17:30   Spieltag 3 Energiequelle Netzhoppe… TSV Haching… Energieq…
-    ##  6 18.02.2023 20:00   Spieltag 3 Helios GRIZZLYS Giesen   WWK Volleys… Helios G…
-    ##  7 19.02.2023 14:00   Spieltag 3 VCO Berlin               TSV Haching… VCO Berl…
-    ##  8 22.02.2023 20:00   Spieltag 2 WWK Volleys Herrsching   Energiequel… WWK Voll…
-    ##  9 04.03.2023 17:30   Spieltag 4 Helios GRIZZLYS Giesen   Energiequel… Helios G…
-    ## 10 05.03.2023 17:00   Spieltag 4 TSV Haching München      WWK Volleys… TSV Hach…
-    ## 11 11.03.2023 17:30   Spieltag 5 Energiequelle Netzhoppe… WWK Volleys… Energieq…
-    ## 12 11.03.2023 20:00   Spieltag 5 Helios GRIZZLYS Giesen   TSV Haching… Helios G…
-    ## 13 13.03.2023 18:30   Spieltag 5 VCO Berlin               WWK Volleys… VCO Berl…
-    ## 14 15.03.2023 18:30   Spieltag 6 VCO Berlin               Energiequel… VCO Berl…
-    ## 15 15.03.2023 20:00   Spieltag 6 WWK Volleys Herrsching   Helios GRIZ… WWK Voll…
-    ## 16 19.03.2023 15:00   Spieltag 6 TSV Haching München      Energiequel… TSV Hach…
-    ## # ℹ 33 more variables: `Austragungsort/Ergebnis` <chr>, Austragungsort <chr>,
-    ## #   Ergebnis <chr>, Saison <chr>, Spielrunde <chr>, Geschlecht <chr>,
-    ## #   Satzpunkte <time>, Ballpunkte <chr>, Spieldauer <dbl>, Zuschauerzahl <dbl>,
-    ## #   Satzpunkte_1 <dbl>, `:...18` <chr>, Satzpunkte_2 <dbl>,
-    ## #   `Satz_1_-_Ballpunkte_1` <dbl>, `:...21` <chr>,
-    ## #   `Satz_1_-_Ballpunkte_2` <dbl>, `Satz_1_-_Satzdauer` <dbl>,
-    ## #   `Satz_2_-_Ballpunkte_1` <dbl>, `:...25` <chr>, …
+    #all_games_clean
 
 ------------------------------------------------------------------------
 
@@ -526,735 +301,209 @@ Next mutating all these values requiered for the barplot.
 
 Let’s get a list of all Teams first \*\*\*
 
-    all_games_teams <- get_unique_values(all_games_clean, "Mannschaft_1")
-    all_games_teams
-
-    ## [1] "SVG Lüneburg"                          
-    ## [2] "BERLIN RECYCLING Volleys"              
-    ## [3] "SWD powervolleys Düren"                
-    ## [4] "VfB Friedrichshafen"                   
-    ## [5] "Helios GRIZZLYS Giesen"                
-    ## [6] "Energiequelle Netzhoppers KW-Bestensee"
-    ## [7] "TSV Haching München"                   
-    ## [8] "WWK Volleys Herrsching"                
-    ## [9] "VCO Berlin"
+    all_games_teams <- unique(all_games_clean$Mannschaft1)
+    #all_games_teams
 
 ------------------------------------------------------------------------
 
-now let’s check how often each of them played at home and away
+now let’s mutate some variable for the graph, lets’s start with variable
+requested in `results`, ex. count how often each of them played at
+home/away and their wins/losses…
 
 ------------------------------------------------------------------------
 
-    num_home_games <-lapply(all_games_teams, function(team){
-      lapply(all_games_clean, function(df){
-        df%>%
-        filter(Mannschaft_1 == team)%>%
-        nrow()
-      })
-    })
-
-    num_away_games <-lapply(all_games_teams, function(team){
-      lapply(all_games_clean, function(df){
-        df%>%
-        filter(Mannschaft_2 == team)%>%
-        nrow()
-      })
-    })
-
-    num_total_games <-lapply(all_games_teams, function(team){
-      lapply(all_games_clean, function(df){
-        df%>%
-        filter(Mannschaft_1 == team|Mannschaft_2 == team)%>%
-        nrow()
-      })
-    })
-
-------------------------------------------------------------------------
-
-This already looks like, as we can put it together.
-
-------------------------------------------------------------------------
-
-    count_team_games <- function(team, df) {
+    mutate_team_games_var1 <- function(team, df) {
       home_games <- df %>%
-        filter(Mannschaft_1 == team) %>%
+        filter(Mannschaft1 == team) %>%
         nrow()
       
       away_games <- df %>%
-        filter(Mannschaft_2 == team) %>%
+        filter(Mannschaft2 == team) %>%
         nrow()
       
       total_games <- df %>%
-        filter(Mannschaft_1 == team | Mannschaft_2 == team) %>%
+        filter(Mannschaft1 == team | Mannschaft2 == team) %>%
         nrow()
       
-      return(c(Home = home_games, Away = away_games, Total = total_games))
+      num_victory <- df%>%
+        filter((Mannschaft1 == team & Satzpunkte1 == 3) | (Mannschaft2 == team & Satzpunkte2 == 3))%>%
+        nrow()
+      
+      num_losses <-  df%>%
+        filter((Mannschaft1 == team & Satzpunkte1 != 3) | (Mannschaft2 == team & Satzpunkte2 != 3))%>%
+        nrow()
+      
+      sets_per_wingame <- df %>%
+        filter(Mannschaft1 == team | Mannschaft2 == team) %>%
+        summarise(
+          Sum_Satzpunkte = round(sum(Satzpunkte1 + Satzpunkte2), 2), # not sure if we need that one
+          Avg_Satzpunkte = round(mean(Satzpunkte1 + Satzpunkte2), 2))
+      
+      avg_point_per_set <- df %>%   # why is it only working with backticks? -> cous i had an special letter in "-" gsub'ed it out, could remove backticks now
+      filter(Mannschaft1 == team | Mannschaft2 == team) %>%
+        summarise(
+          Avg_Ballpunkte_first_set = round(mean(ifelse(Mannschaft1 == team, `Satz1_Ballpunkte1`, `Satz1_Ballpunkte2`)), 2),
+          Avg_Ballpunkte_sec_set = round(mean(ifelse(Mannschaft1 == team, `Satz2_Ballpunkte1`, `Satz2_Ballpunkte2`)), 2),
+          Avg_Ballpunkte_third_set = round(mean(ifelse(Mannschaft1 == team, `Satz3_Ballpunkte1`, `Satz3_Ballpunkte2`)), 2),
+          Avg_Ballpunkte_fourth_set = round(mean(ifelse(Mannschaft1 == team, `Satz4_Ballpunkte1`, `Satz4_Ballpunkte2`), na.rm=TRUE), 2),
+          Avg_Ballpunkte_fifth_set = round(mean(ifelse(Mannschaft1 == team, `Satz5_Ballpunkte1`, `Satz5_Ballpunkte2`), na.rm=TRUE), 2))
+      
+      
+      max_ballpoint_ever <- max(ifelse(df$Mannschaft1 == team, df$Satz1_Ballpunkte1, df$Satz1_Ballpunkte2))
+      
+      min_ballpoint_ever <- min(ifelse(df$Mannschaft1 == team, df$Satz1_Ballpunkte1, df$Satz1_Ballpunkte2))
+        
+    # don't know how to proper look for the max-value of all satzX, or condition (|), pmax(), max (..1,..2,..) don'T work
+    # could do an max and min for each set and do an max again on it but....
+      
+     
+      
+      avg_ballpoint_home <- df %>%
+      filter(Mannschaft1 == team) %>%
+      mutate(Ballpunkte = str_extract(Ballpunkte, "\\d+")) %>%
+      summarise(avg_ballpoint_home = round(mean(as.numeric(Ballpunkte)),2))
+      
+      avg_ballpoint_away <- df %>%
+      filter(Mannschaft2 == team) %>%
+      mutate(Ballpunkte = str_extract(Ballpunkte, "(?<=:)(\\d+)")) %>%
+      summarise(avg_ballpoint_away = round(mean(as.numeric(Ballpunkte)),2))
+      
+      avg_attendance_home <- df %>%
+      filter(Mannschaft1 == team) %>%
+      summarise(avg_attendance_home = round(mean(as.numeric(Zuschauerzahl))))
+      
+      return(c(Team = team, Home = home_games, Away = away_games, Total = total_games,
+               Victories = num_victory, Losses = num_losses,
+               avg_sets = sets_per_wingame, avg_point_per_set = avg_point_per_set,
+               max_point = max_ballpoint_ever, min_point = min_ballpoint_ever,
+               avg_ballpoint_home, avg_ballpoint_away, avg_attendance_home))
     }
 
-    num_games_in_once <- lapply(all_games_teams, function(team) {
-      lapply(all_games_clean, count_team_games, team = team)
-    })
-    num_games_in_once
+    result_variable_all_team_games <- t(mapply(mutate_team_games_var1, team = all_games_teams, df = rep(list(all_games_clean), length(all_games_teams)))) #t() transponiert output Struktur ( für alle teams,home,etc. in einer Spalte)
 
-    ## [[1]]
-    ## [[1]]$Spielplan_1._Bundesliga_Männer_Playoff
-    ##  Home  Away Total 
-    ##     3     3     6 
-    ## 
-    ## [[1]]$Spielplan_1._Bundesliga_Männer_regular_season
-    ##  Home  Away Total 
-    ##     8     8    16 
-    ## 
-    ## [[1]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_1-4`
-    ##  Home  Away Total 
-    ##     3     3     6 
-    ## 
-    ## [[1]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_5-9`
-    ##  Home  Away Total 
-    ##     0     0     0 
-    ## 
-    ## 
-    ## [[2]]
-    ## [[2]]$Spielplan_1._Bundesliga_Männer_Playoff
-    ##  Home  Away Total 
-    ##     5     3     8 
-    ## 
-    ## [[2]]$Spielplan_1._Bundesliga_Männer_regular_season
-    ##  Home  Away Total 
-    ##     8     8    16 
-    ## 
-    ## [[2]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_1-4`
-    ##  Home  Away Total 
-    ##     3     3     6 
-    ## 
-    ## [[2]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_5-9`
-    ##  Home  Away Total 
-    ##     0     0     0 
-    ## 
-    ## 
-    ## [[3]]
-    ## [[3]]$Spielplan_1._Bundesliga_Männer_Playoff
-    ##  Home  Away Total 
-    ##     2     3     5 
-    ## 
-    ## [[3]]$Spielplan_1._Bundesliga_Männer_regular_season
-    ##  Home  Away Total 
-    ##     8     8    16 
-    ## 
-    ## [[3]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_1-4`
-    ##  Home  Away Total 
-    ##     3     3     6 
-    ## 
-    ## [[3]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_5-9`
-    ##  Home  Away Total 
-    ##     0     0     0 
-    ## 
-    ## 
-    ## [[4]]
-    ## [[4]]$Spielplan_1._Bundesliga_Männer_Playoff
-    ##  Home  Away Total 
-    ##     5     5    10 
-    ## 
-    ## [[4]]$Spielplan_1._Bundesliga_Männer_regular_season
-    ##  Home  Away Total 
-    ##     8     8    16 
-    ## 
-    ## [[4]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_1-4`
-    ##  Home  Away Total 
-    ##     3     3     6 
-    ## 
-    ## [[4]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_5-9`
-    ##  Home  Away Total 
-    ##     0     0     0 
-    ## 
-    ## 
-    ## [[5]]
-    ## [[5]]$Spielplan_1._Bundesliga_Männer_Playoff
-    ##  Home  Away Total 
-    ##     1     2     3 
-    ## 
-    ## [[5]]$Spielplan_1._Bundesliga_Männer_regular_season
-    ##  Home  Away Total 
-    ##     8     8    16 
-    ## 
-    ## [[5]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_1-4`
-    ##  Home  Away Total 
-    ##     0     0     0 
-    ## 
-    ## [[5]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_5-9`
-    ##  Home  Away Total 
-    ##     3     4     7 
-    ## 
-    ## 
-    ## [[6]]
-    ## [[6]]$Spielplan_1._Bundesliga_Männer_Playoff
-    ##  Home  Away Total 
-    ##     1     1     2 
-    ## 
-    ## [[6]]$Spielplan_1._Bundesliga_Männer_regular_season
-    ##  Home  Away Total 
-    ##     8     8    16 
-    ## 
-    ## [[6]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_1-4`
-    ##  Home  Away Total 
-    ##     0     0     0 
-    ## 
-    ## [[6]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_5-9`
-    ##  Home  Away Total 
-    ##     3     4     7 
-    ## 
-    ## 
-    ## [[7]]
-    ## [[7]]$Spielplan_1._Bundesliga_Männer_Playoff
-    ##  Home  Away Total 
-    ##     1     1     2 
-    ## 
-    ## [[7]]$Spielplan_1._Bundesliga_Männer_regular_season
-    ##  Home  Away Total 
-    ##     8     8    16 
-    ## 
-    ## [[7]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_1-4`
-    ##  Home  Away Total 
-    ##     0     0     0 
-    ## 
-    ## [[7]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_5-9`
-    ##  Home  Away Total 
-    ##     3     4     7 
-    ## 
-    ## 
-    ## [[8]]
-    ## [[8]]$Spielplan_1._Bundesliga_Männer_Playoff
-    ##  Home  Away Total 
-    ##     1     1     2 
-    ## 
-    ## [[8]]$Spielplan_1._Bundesliga_Männer_regular_season
-    ##  Home  Away Total 
-    ##     8     8    16 
-    ## 
-    ## [[8]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_1-4`
-    ##  Home  Away Total 
-    ##     0     0     0 
-    ## 
-    ## [[8]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_5-9`
-    ##  Home  Away Total 
-    ##     3     4     7 
-    ## 
-    ## 
-    ## [[9]]
-    ## [[9]]$Spielplan_1._Bundesliga_Männer_Playoff
-    ##  Home  Away Total 
-    ##     0     0     0 
-    ## 
-    ## [[9]]$Spielplan_1._Bundesliga_Männer_regular_season
-    ##  Home  Away Total 
-    ##     8     8    16 
-    ## 
-    ## [[9]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_1-4`
-    ##  Home  Away Total 
-    ##     0     0     0 
-    ## 
-    ## [[9]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_5-9`
-    ##  Home  Away Total 
-    ##     4     0     4
+    #result_variable_all_team_games
 
 ------------------------------------------------------------------------
 
-Next go fpr win and losses
+**Finally got the Result and Stadium stuff ready, lets go for the
+next.**
 
 ------------------------------------------------------------------------
 
-    num_victory <-lapply(all_games_teams, function(team){
-      lapply(all_games_clean, function(df){
-        df%>%
-        filter((Mannschaft_1 == team & Satzpunkte_1 == 3) | (Mannschaft_2 == team & Satzpunkte_2 == 3))%>%
-        nrow()
-      })
-    })
-
-    num_losses <-lapply(all_games_teams, function(team){
-      lapply(all_games_clean, function(df){
-        df%>%
-        filter((Mannschaft_1 == team & Satzpunkte_1 != 3) | (Mannschaft_2 == team & Satzpunkte_2 != 3))%>%
-        nrow()
-      })
-    })
-    num_losses
-
-    ## [[1]]
-    ## [[1]]$Spielplan_1._Bundesliga_Männer_Playoff
-    ## [1] 3
-    ## 
-    ## [[1]]$Spielplan_1._Bundesliga_Männer_regular_season
-    ## [1] 5
-    ## 
-    ## [[1]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_1-4`
-    ## [1] 3
-    ## 
-    ## [[1]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_5-9`
-    ## [1] 0
-    ## 
-    ## 
-    ## [[2]]
-    ## [[2]]$Spielplan_1._Bundesliga_Männer_Playoff
-    ## [1] 0
-    ## 
-    ## [[2]]$Spielplan_1._Bundesliga_Männer_regular_season
-    ## [1] 2
-    ## 
-    ## [[2]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_1-4`
-    ## [1] 2
-    ## 
-    ## [[2]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_5-9`
-    ## [1] 0
-    ## 
-    ## 
-    ## [[3]]
-    ## [[3]]$Spielplan_1._Bundesliga_Männer_Playoff
-    ## [1] 3
-    ## 
-    ## [[3]]$Spielplan_1._Bundesliga_Männer_regular_season
-    ## [1] 6
-    ## 
-    ## [[3]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_1-4`
-    ## [1] 3
-    ## 
-    ## [[3]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_5-9`
-    ## [1] 0
-    ## 
-    ## 
-    ## [[4]]
-    ## [[4]]$Spielplan_1._Bundesliga_Männer_Playoff
-    ## [1] 5
-    ## 
-    ## [[4]]$Spielplan_1._Bundesliga_Männer_regular_season
-    ## [1] 2
-    ## 
-    ## [[4]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_1-4`
-    ## [1] 4
-    ## 
-    ## [[4]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_5-9`
-    ## [1] 0
-    ## 
-    ## 
-    ## [[5]]
-    ## [[5]]$Spielplan_1._Bundesliga_Männer_Playoff
-    ## [1] 2
-    ## 
-    ## [[5]]$Spielplan_1._Bundesliga_Männer_regular_season
-    ## [1] 7
-    ## 
-    ## [[5]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_1-4`
-    ## [1] 0
-    ## 
-    ## [[5]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_5-9`
-    ## [1] 2
-    ## 
-    ## 
-    ## [[6]]
-    ## [[6]]$Spielplan_1._Bundesliga_Männer_Playoff
-    ## [1] 2
-    ## 
-    ## [[6]]$Spielplan_1._Bundesliga_Männer_regular_season
-    ## [1] 13
-    ## 
-    ## [[6]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_1-4`
-    ## [1] 0
-    ## 
-    ## [[6]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_5-9`
-    ## [1] 3
-    ## 
-    ## 
-    ## [[7]]
-    ## [[7]]$Spielplan_1._Bundesliga_Männer_Playoff
-    ## [1] 2
-    ## 
-    ## [[7]]$Spielplan_1._Bundesliga_Männer_regular_season
-    ## [1] 13
-    ## 
-    ## [[7]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_1-4`
-    ## [1] 0
-    ## 
-    ## [[7]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_5-9`
-    ## [1] 6
-    ## 
-    ## 
-    ## [[8]]
-    ## [[8]]$Spielplan_1._Bundesliga_Männer_Playoff
-    ## [1] 2
-    ## 
-    ## [[8]]$Spielplan_1._Bundesliga_Männer_regular_season
-    ## [1] 8
-    ## 
-    ## [[8]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_1-4`
-    ## [1] 0
-    ## 
-    ## [[8]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_5-9`
-    ## [1] 1
-    ## 
-    ## 
-    ## [[9]]
-    ## [[9]]$Spielplan_1._Bundesliga_Männer_Playoff
-    ## [1] 0
-    ## 
-    ## [[9]]$Spielplan_1._Bundesliga_Männer_regular_season
-    ## [1] 16
-    ## 
-    ## [[9]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_1-4`
-    ## [1] 0
-    ## 
-    ## [[9]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_5-9`
-    ## [1] 4
+Already got an idea, could go over the positions with a function.
+Therefore lets get the unique positions in a list first.
 
 ------------------------------------------------------------------------
 
-For all the average stuff im not sure if it aint more easy to combine
-all games into one df to get total counts more easy for each team.
+    all_positions <- get_unique_values(all_rosters_clean, "Position")[-6] # removes the head coach
 
-Anyway we can count total of sets now ans than let’s see.
+    #all_positions
+
+Probably won’t need it.
+
+Need to join topscorer and roster to get all the team names into the
+topscorer file, there is already a column called `points_per_set` so if
+i get it done i just need to `group_by(Position)` and
+`Summarize(mean(Positon))`with lapply? over all teams.
+
+    joined_topscore_roster <- right_join(all_topscorer_clean2,all_rosters_clean2, "Name")
+
+    ## Warning in right_join(all_topscorer_clean2, all_rosters_clean2, "Name"): Detected an unexpected many-to-many relationship between `x` and `y`.
+    ## ℹ Row 3 of `x` matches multiple rows in `y`.
+    ## ℹ Row 115 of `y` matches multiple rows in `x`.
+    ## ℹ If a many-to-many relationship is expected, set `relationship =
+    ##   "many-to-many"` to silence this warning.
+
+    joined_topscore_roster
+
+    ## # A tibble: 259 × 16
+    ##     Rank Name           Points_overall Errors_overall Points_per_Set Sets_played
+    ##    <dbl> <chr>                   <dbl>          <dbl>          <dbl>       <dbl>
+    ##  1    34 Amedegnato, D…              6             11            0.5          11
+    ##  2    31 Barsemian, Ra…              9             13            1             9
+    ##  3    21 Baumann, Felix             39             39            3            13
+    ##  4    21 Baumann, Felix             39             39            3            13
+    ##  5    15 Baxpöhler, No…             35             32            1.8          20
+    ##  6    21 Chamberlain, …             10             10            1.1           9
+    ##  7     7 Colito, Augus…             62             44            3.9          16
+    ##  8     1 Deweese, Randy            126             59            5            25
+    ##  9    25 Engelmann, Li…              4              5            0.4          10
+    ## 10    16 Engemann, Nor…              2              0            1             2
+    ## # ℹ 249 more rows
+    ## # ℹ 10 more variables: Games_played <dbl>, `Top-Scorer` <dbl>,
+    ## #   errors_per_set <dbl>, Team <chr>, Height <dbl>, Gender <chr>,
+    ## #   `Date of Birth` <chr>, `Jersey Number` <dbl>, Nationality <chr>,
+    ## #   Position <chr>
 
 ------------------------------------------------------------------------
 
-    num_sets_per_game_played <-lapply(all_games_teams, function(team){
-      lapply(all_games_clean, function(df){
-        df%>%
-        filter(Mannschaft_1 == team|Mannschaft_2 == team)%>%
-        summarise(
-          Sum_Satzpunkte = sum(Satzpunkte_1 + Satzpunkte_2),
-          Avg_Satzpunkte = mean(Satzpunkte_1 + Satzpunkte_2)) # actually could put the whole sum function in the mean function
-      })
-    })
+For a finally fix, as mentioned before, we should fix the mistakes in
+names first by using our `get_unique_values` function
+
+Anyway let’s go for mutating the rest of requested variables
 
 ------------------------------------------------------------------------
 
-**Note:** \* This is the total and average number of setsplayed per
-game\* **not** average sets to win, wait a minute…..
+    attack_var <- joined_topscore_roster%>%
+      group_by(Team, Position)%>%
+      summarise(avg_point_per_position = round(mean(Points_per_Set, na.rm = TRUE), 1))%>%
+      ungroup()#%>%
 
-than it should be **right?**
+    ## `summarise()` has grouped output by 'Team'. You can override using the
+    ## `.groups` argument.
 
-Next Average points per set
+      #filter(!is.na(avg_point_per_position))
+
+    #attack_var
+    topscore_var <- joined_topscore_roster%>%
+      group_by(Team, Position)%>%
+      summarise(avg_toppoints_per_position = round(mean(Points_overall, na.rm = TRUE), 1))%>%
+      ungroup()#%>%
+
+    ## `summarise()` has grouped output by 'Team'. You can override using the
+    ## `.groups` argument.
+
+      #filter(!is.na(avg_point_per_position))
+    #topscore_var
+
+    error_var <- joined_topscore_roster %>%
+      group_by(Team, Position) %>%
+        filter(!is.na(errors_per_set))%>%
+      summarise(max_errors = max(errors_per_set)) %>%
+      ungroup()
+
+    ## `summarise()` has grouped output by 'Team'. You can override using the
+    ## `.groups` argument.
+
+    #error_var
+
+    calculate_avg_var <- function(data, value_column) {
+      result <- data %>%
+        group_by(Team, Position) %>%
+        summarise(avg_value = round(mean({{value_column}}, na.rm = TRUE), 1)) %>%
+        ungroup() %>%
+        filter(!is.na(avg_value))
+      
+      return(result)
+    }
+
+    attack_var2 <- calculate_avg_var(joined_topscore_roster, Points_per_Set)
+
+    ## `summarise()` has grouped output by 'Team'. You can override using the
+    ## `.groups` argument.
+
+    #attack_var2
+    topscore_var2 <- calculate_avg_var(joined_topscore_roster, Points_overall)
+
+    ## `summarise()` has grouped output by 'Team'. You can override using the
+    ## `.groups` argument.
+
+    #topscore_var2
 
 ------------------------------------------------------------------------
 
-**Dunno here why its working with backticks but aint with normal ““**
+Now we got all requested `Attacking` & `Topscorer` & `Errors`variables.
 
-    avg_points_per_set<- lapply(all_games_teams, function(team) {
-      lapply(all_games_clean, function(df) {
-        df %>%
-          filter(Mannschaft_1 == team | Mannschaft_2 == team) %>%
-          summarise(
-            Avg_Ballpunkte_first_set = mean(ifelse(Mannschaft_1 == team, `Satz_1_-_Ballpunkte_1`, `Satz_1_-_Ballpunkte_2`)),
-            Avg_Ballpunkte_sec_set = mean(ifelse(Mannschaft_1 == team, `Satz_2_-_Ballpunkte_1`, `Satz_2_-_Ballpunkte_2`)),
-            Avg_Ballpunkte_third_set = mean(ifelse(Mannschaft_1 == team, `Satz_3_-_Ballpunkte_1`, `Satz_3_-_Ballpunkte_2`)),
-            Avg_Ballpunkte_fourth_set = mean(ifelse(Mannschaft_1 == team, `Satz_4_-_Ballpunkte_1`, `Satz_4_-_Ballpunkte_2`)),
-            Avg_Ballpunkte_fifth_set = mean(ifelse(Mannschaft_1 == team, `Satz_5_-_Ballpunkte_1`, `Satz_5_-_Ballpunkte_2`))
-            
-          )
-      })
-    })
+Let’s go for the Graph now.
 
-    avg_points_per_set
-
-    ## [[1]]
-    ## [[1]]$Spielplan_1._Bundesliga_Männer_Playoff
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                     22.8                   23.7                       22
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## [[1]]$Spielplan_1._Bundesliga_Männer_regular_season
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                     23.8                   24.6                     22.4
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## [[1]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_1-4`
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                     23.3                   21.8                     24.7
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## [[1]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_5-9`
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                      NaN                    NaN                      NaN
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## 
-    ## [[2]]
-    ## [[2]]$Spielplan_1._Bundesliga_Männer_Playoff
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                     23.9                     25                     22.4
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## [[2]]$Spielplan_1._Bundesliga_Männer_regular_season
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                     25.2                   24.4                     24.6
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## [[2]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_1-4`
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                     23.3                   26.8                     23.5
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## [[2]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_5-9`
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                      NaN                    NaN                      NaN
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## 
-    ## [[3]]
-    ## [[3]]$Spielplan_1._Bundesliga_Männer_Playoff
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                       23                     22                     24.6
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## [[3]]$Spielplan_1._Bundesliga_Männer_regular_season
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                       24                   22.4                     23.1
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## [[3]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_1-4`
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                     21.8                   24.7                     22.7
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## [[3]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_5-9`
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                      NaN                    NaN                      NaN
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## 
-    ## [[4]]
-    ## [[4]]$Spielplan_1._Bundesliga_Männer_Playoff
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                     22.7                   20.3                     23.9
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## [[4]]$Spielplan_1._Bundesliga_Männer_regular_season
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                     24.5                   25.6                     23.8
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## [[4]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_1-4`
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                     23.7                     27                     22.5
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## [[4]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_5-9`
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                      NaN                    NaN                      NaN
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## 
-    ## [[5]]
-    ## [[5]]$Spielplan_1._Bundesliga_Männer_Playoff
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                     25.7                   24.3                     18.7
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## [[5]]$Spielplan_1._Bundesliga_Männer_regular_season
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                     23.4                   22.6                       24
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## [[5]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_1-4`
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                      NaN                    NaN                      NaN
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## [[5]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_5-9`
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                     25.1                   25.6                     26.3
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## 
-    ## [[6]]
-    ## [[6]]$Spielplan_1._Bundesliga_Männer_Playoff
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                     16.5                   19.5                       23
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## [[6]]$Spielplan_1._Bundesliga_Männer_regular_season
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                     21.2                   21.1                       22
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## [[6]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_1-4`
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                      NaN                    NaN                      NaN
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## [[6]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_5-9`
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                     24.1                   23.4                     21.7
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## 
-    ## [[7]]
-    ## [[7]]$Spielplan_1._Bundesliga_Männer_Playoff
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                       17                   19.5                     11.5
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## [[7]]$Spielplan_1._Bundesliga_Männer_regular_season
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                     19.8                   19.1                     19.6
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## [[7]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_1-4`
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                      NaN                    NaN                      NaN
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## [[7]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_5-9`
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                     20.3                   18.3                     21.9
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## 
-    ## [[8]]
-    ## [[8]]$Spielplan_1._Bundesliga_Männer_Playoff
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                     21.5                     22                       21
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## [[8]]$Spielplan_1._Bundesliga_Männer_regular_season
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                     22.7                   22.8                     22.4
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## [[8]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_1-4`
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                      NaN                    NaN                      NaN
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## [[8]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_5-9`
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                       23                   23.7                     26.4
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## 
-    ## [[9]]
-    ## [[9]]$Spielplan_1._Bundesliga_Männer_Playoff
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                      NaN                    NaN                      NaN
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## [[9]]$Spielplan_1._Bundesliga_Männer_regular_season
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                     16.9                   18.8                     18.6
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## [[9]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_1-4`
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                      NaN                    NaN                      NaN
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
-    ## 
-    ## [[9]]$`Spielplan_1._Bundesliga_Männer_Zwischenrunde_5-9`
-    ## # A tibble: 1 × 5
-    ##   Avg_Ballpunkte_first_set Avg_Ballpunkte_sec_set Avg_Ballpunkte_third_set
-    ##                      <dbl>                  <dbl>                    <dbl>
-    ## 1                       21                   17.5                     19.8
-    ## # ℹ 2 more variables: Avg_Ballpunkte_fourth_set <dbl>,
-    ## #   Avg_Ballpunkte_fifth_set <dbl>
+------------------------------------------------------------------------

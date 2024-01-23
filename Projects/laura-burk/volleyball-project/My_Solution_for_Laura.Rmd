@@ -2,7 +2,7 @@
 title: "Volleyball Solution"
 author: "Nicolai Schwarz"
 date: "2024-01-12"
-output: md_document
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -38,7 +38,7 @@ But we could also start with creating all folder path's in once aswell.
 folders <- list.files(getwd(), full.names = TRUE) %>%
   .[!grepl("\\.", .)]
 
-folders
+#folders
 ```
 
 ***
@@ -165,11 +165,11 @@ all_rosters_clean <- lapply(all_rosters, function(df) {
   })
 })
 
-all_roosters_clean2 <- all_rosters_clean%>%
+all_rosters_clean2 <- all_rosters_clean%>%
    bind_rows(.id = "Team")%>%
   mutate(Team = gsub("^roster_", "", Team))
   
-all_roosters_clean2
+#all_rosters_clean2
 #str(all_rosters_clean, list.len = 3)
 ```
 
@@ -244,7 +244,9 @@ all_topscorer_clean[[2]] <- all_topscorer_clean[[2]] %>% # couldn't find out how
   mutate(Team = gsub("Ř", "ü", Team))
 
 all_topscorer_clean2 <- all_topscorer_clean %>%
-  bind_rows()
+  bind_rows()%>%
+  select(-c("Team", "Country", "Position"))%>% # otherwise we would had an "many to many" issues in the join-function
+  mutate(Points_per_Set = as.numeric(gsub(",", ".",Points_per_Set)))
 all_topscorer_clean2
 #str(all_topscorer_clean, list.len = 3)
 ```
@@ -286,7 +288,7 @@ all_games_clean <- lapply(all_games, function(df) {
 })%>%
   bind_rows()
   
-all_games_clean
+#all_games_clean
 ```
 
 
@@ -358,16 +360,16 @@ mutate_team_games_var1 <- function(team, df) {
   avg_ballpoint_home <- df %>%
   filter(Mannschaft1 == team) %>%
   mutate(Ballpunkte = str_extract(Ballpunkte, "\\d+")) %>%
-  summarise(avg_ballpoint_home = mean(as.numeric(Ballpunkte)))
+  summarise(avg_ballpoint_home = round(mean(as.numeric(Ballpunkte)),2))
   
   avg_ballpoint_away <- df %>%
   filter(Mannschaft2 == team) %>%
   mutate(Ballpunkte = str_extract(Ballpunkte, "(?<=:)(\\d+)")) %>%
-  summarise(avg_ballpoint_away = mean(as.numeric(Ballpunkte)))
+  summarise(avg_ballpoint_away = round(mean(as.numeric(Ballpunkte)),2))
   
   avg_attendance_home <- df %>%
   filter(Mannschaft1 == team) %>%
-  summarise(avg_attendance_home = mean(as.numeric(Zuschauerzahl)))
+  summarise(avg_attendance_home = round(mean(as.numeric(Zuschauerzahl))))
   
   return(c(Team = team, Home = home_games, Away = away_games, Total = total_games,
            Victories = num_victory, Losses = num_losses,
@@ -383,12 +385,12 @@ result_variable_all_team_games <- t(mapply(mutate_team_games_var1, team = all_ga
 ```
 ***
 
-**Finally got the Result stuff ready, lets go for the next.**
+**Finally got the Result and Stadium stuff ready, lets go for the next.**
 
 ****
 
 Already got an idea, could go over the positions with a function.
-Therefore lets get the unique psitions in a list first.
+Therefore lets get the unique positions in a list first.
 
 ***
 
@@ -396,32 +398,73 @@ Therefore lets get the unique psitions in a list first.
 
 all_positions <- get_unique_values(all_rosters_clean, "Position")[-6] # removes the head coach
 
-all_positions
+#all_positions
 ```
 Probably won't need it.
 
 Need to join topscorer and roster to get all the team names into the topscorer file, there is already a column called `points_per_set` so if i get it done i just need to `group_by(Position)` and `Summarize(mean(Positon))`with lapply? over all teams.
-```{r try}
+
+```{r join_roster_topscore, echo=TRUE}
+joined_topscore_roster <- right_join(all_topscorer_clean2,all_rosters_clean2, "Name")
+joined_topscore_roster
+```
+
+*** 
+
+For a finally fix, as mentioned before, we should fix the  mistakes in names first by using our `get_unique_values` function
+
+Anyway let's go for mutating the rest of requested variables
+
+***
+
+```{r mutate_atck_topscore_var, echo=TRUE}
+attack_var <- joined_topscore_roster%>%
+  group_by(Team, Position)%>%
+  summarise(avg_point_per_position = round(mean(Points_per_Set, na.rm = TRUE), 1))%>%
+  ungroup()#%>%
+  #filter(!is.na(avg_point_per_position))
+
+#attack_var
+topscore_var <- joined_topscore_roster%>%
+  group_by(Team, Position)%>%
+  summarise(avg_toppoints_per_position = round(mean(Points_overall, na.rm = TRUE), 1))%>%
+  ungroup()#%>%
+  #filter(!is.na(avg_point_per_position))
+#topscore_var
+
+error_var <- joined_topscore_roster %>%
+  group_by(Team, Position) %>%
+    filter(!is.na(errors_per_set))%>%
+  summarise(max_errors = max(errors_per_set)) %>%
+  ungroup()
 
 
-mutate_team_games_var2 <- function(team, df) {
-  avg_point_per_position <- df %>%
-    filter(Mannschaft1 == team | Mannschaft2 == team) %>%
-    group_by(Position) %>%
-    summarise(
-      Avg_Ballpunkte_first_set = round(mean(ifelse(Mannschaft1 == team, Satz1_Ballpunkte1, Satz1_Ballpunkte2)), 2)
-    )
-  return(avg_point_per_position)
+#error_var
+```
+
+```{r combined, echo=TRUE}
+calculate_avg_var <- function(data, value_column) {
+  result <- data %>%
+    group_by(Team, Position) %>%
+    summarise(avg_value = round(mean({{value_column}}, na.rm = TRUE), 1)) %>%
+    ungroup() %>%
+    filter(!is.na(avg_value))
+  
+  return(result)
 }
 
-attacke_variable_all_team_positions <- mapply(mutate_team_games_var2, team = all_games_teams, df = rep(list(all_topscorer_clean), length(all_games_teams)), SIMPLIFY = FALSE)
-
-
-attacke_variable_all_team_positions
+attack_var2 <- calculate_avg_var(joined_topscore_roster, Points_per_Set)
+#attack_var2
+topscore_var2 <- calculate_avg_var(joined_topscore_roster, Points_overall)
+#topscore_var2
 ```
 
 
 ***
 
-Rest of attacking values i can get from `all_games_clean`
-with a `ifelse` over the Position of column `Ballpunkte`
+Now we got all requested `Attacking` & `Topscorer` & `Errors`variables.
+
+Let's go for the Graph now.
+
+***
+

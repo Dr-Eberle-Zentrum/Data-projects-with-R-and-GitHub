@@ -391,97 +391,11 @@ and read_tsv solved it by apply an <code>suffix</code>variable</p>
   return(data_frames)
 }</code></pre>
 <hr />
-<pre class="r"><code>all_rosters &lt;- auto_import(folders[4], datatyp=&quot;csv&quot;, &quot;2&quot;)</code></pre>
-<pre><code>## ℹ Using &quot;&#39;,&#39;&quot; as decimal and &quot;&#39;.&#39;&quot; as grouping mark. Use `read_delim()` for more control.</code></pre>
-<pre><code>## Rows: 22 Columns: 10
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;;&quot;
-## chr (9): Last Name, First Name, First Name Last Name, Last Name First Name, ...
-## dbl (1): Jersey Number
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-## ℹ Using &quot;&#39;,&#39;&quot; as decimal and &quot;&#39;.&#39;&quot; as grouping mark. Use `read_delim()` for more control.
-## 
-## Rows: 20 Columns: 10
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;;&quot;
-## chr (8): Last Name, First Name, First Name Last Name, Last Name First Name, ...
-## dbl (2): Height, Jersey Number
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-## ℹ Using &quot;&#39;,&#39;&quot; as decimal and &quot;&#39;.&#39;&quot; as grouping mark. Use `read_delim()` for more control.
-## 
-## Rows: 22 Columns: 10
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;;&quot;
-## chr (9): Last Name, First Name, First Name Last Name, Last Name First Name, ...
-## dbl (1): Jersey Number
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-## ℹ Using &quot;&#39;,&#39;&quot; as decimal and &quot;&#39;.&#39;&quot; as grouping mark. Use `read_delim()` for more control.
-## 
-## Rows: 25 Columns: 10
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;;&quot;
-## chr (9): Last Name, First Name, First Name Last Name, Last Name First Name, ...
-## dbl (1): Jersey Number
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-## ℹ Using &quot;&#39;,&#39;&quot; as decimal and &quot;&#39;.&#39;&quot; as grouping mark. Use `read_delim()` for more control.
-## 
-## Rows: 23 Columns: 10
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;;&quot;
-## chr (9): Last Name, First Name, First Name Last Name, Last Name First Name, ...
-## dbl (1): Jersey Number
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-## ℹ Using &quot;&#39;,&#39;&quot; as decimal and &quot;&#39;.&#39;&quot; as grouping mark. Use `read_delim()` for more control.
-## 
-## Rows: 28 Columns: 10
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;;&quot;
-## chr (9): Last Name, First Name, First Name Last Name, Last Name First Name, ...
-## dbl (1): Jersey Number
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-## ℹ Using &quot;&#39;,&#39;&quot; as decimal and &quot;&#39;.&#39;&quot; as grouping mark. Use `read_delim()` for more control.
-## 
-## Rows: 38 Columns: 10
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;;&quot;
-## chr (9): Last Name, First Name, First Name Last Name, Last Name First Name, ...
-## dbl (1): Jersey Number
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-## ℹ Using &quot;&#39;,&#39;&quot; as decimal and &quot;&#39;.&#39;&quot; as grouping mark. Use `read_delim()` for more control.
-## 
-## Rows: 25 Columns: 10
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;;&quot;
-## chr (9): Last Name, First Name, First Name Last Name, Last Name First Name, ...
-## dbl (1): Jersey Number
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-## ℹ Using &quot;&#39;,&#39;&quot; as decimal and &quot;&#39;.&#39;&quot; as grouping mark. Use `read_delim()` for more control.
-## 
-## Rows: 21 Columns: 10
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;;&quot;
-## chr (9): Last Name, First Name, First Name Last Name, Last Name First Name, ...
-## dbl (1): Jersey Number
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<pre class="r"><code>#str(all_rosters, list.len = 2)</code></pre>
+<pre class="r"><code>suppressMessages({
+  all_rosters &lt;- auto_import(folders[4], datatyp=&quot;csv&quot;, &quot;2&quot;)
+})
+
+#str(all_rosters, list.len = 2)</code></pre>
 <hr />
 <p>Alright, now let’s start to clean the data.</p>
 <p>To do so, let’s have a closer look what’s the unique values and find
@@ -538,7 +452,16 @@ need a function to do it (at once).</p>
     rename(&quot;Name&quot;=&quot;Last Name First Name&quot;)
   })
 })
+
+all_rosters_clean2 &lt;- all_rosters_clean%&gt;%
+   bind_rows(.id = &quot;Team&quot;)%&gt;%
+  mutate(Team = gsub(&quot;^roster_&quot;, &quot;&quot;, Team))
+  
+#all_rosters_clean2
 #str(all_rosters_clean, list.len = 3)</code></pre>
+<p><em>Note: Probably could done it already in the import part (bind all
+rosters into one table), but wasn’t sure if i wont need it separated
+later</em></p>
 <hr />
 <p>Alright this Part is done, lets go for the
 <code>topscorer&#39;s</code>files</p>
@@ -599,11 +522,6 @@ code</strong></p>
 <p>Let’s check for misstakes with our previous
 <code>get_unique_values</code>function.</p>
 <hr />
-<pre class="r"><code>get_unique_values(all_topscorer_clean, &quot;Team&quot;)
-get_unique_values(all_topscorer_clean, &quot;Position&quot;)
-na_count &lt;- sapply(all_topscorer_clean, function(df) sum(is.na(df$Position)))
-
-na_count</code></pre>
 <hr />
 <p>As we can see there’s some <code>NA</code>-values, but these
 shouldn’t border us right now.</p>
@@ -621,7 +539,28 @@ adjust column names and mutate the
 all_topscorer_clean[[2]] &lt;- all_topscorer_clean[[2]] %&gt;% # couldn&#39;t find out how to do in lapply-fct, due to not all df got &quot;team&quot; column &quot;yet&quot;
   mutate(Team = gsub(&quot;Ř&quot;, &quot;ü&quot;, Team))
 
-#str(all_topscorer_clean, list.len = 3)</code></pre>
+all_topscorer_clean2 &lt;- all_topscorer_clean %&gt;%
+  bind_rows()%&gt;%
+  select(-c(&quot;Team&quot;, &quot;Country&quot;, &quot;Position&quot;))%&gt;% # otherwise we would had an &quot;many to many&quot; issues in the join-function
+  mutate(Points_per_Set = as.numeric(gsub(&quot;,&quot;, &quot;.&quot;,Points_per_Set)))
+all_topscorer_clean2</code></pre>
+<pre><code>## # A tibble: 260 × 9
+##     Rank Name           Points_overall Errors_overall Points_per_Set Sets_played
+##    &lt;dbl&gt; &lt;chr&gt;                   &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;       &lt;dbl&gt;
+##  1    34 Amedegnato, D…              6             11            0.5          11
+##  2    31 Barsemian, Ra…              9             13            1             9
+##  3    21 Baumann, Felix             39             39            3            13
+##  4    15 Baxpöhler, No…             35             32            1.8          20
+##  5    10 Borris, Maciej             67             51            2.8          24
+##  6    21 Chamberlain, …             10             10            1.1           9
+##  7     7 Colito, Augus…             62             44            3.9          16
+##  8     1 Deweese, Randy            126             59            5            25
+##  9    25 Engelmann, Li…              4              5            0.4          10
+## 10    16 Engemann, Nor…              2              0            1             2
+## # ℹ 250 more rows
+## # ℹ 3 more variables: Games_played &lt;dbl&gt;, `Top-Scorer` &lt;dbl&gt;,
+## #   errors_per_set &lt;dbl&gt;</code></pre>
+<pre class="r"><code>#str(all_topscorer_clean, list.len = 3)</code></pre>
 <hr />
 <p><strong>Note :</strong> <em>Could probably go for the misstakes in
 Names by apply the <code>get_unique_values</code>function to both, the
@@ -631,81 +570,202 @@ again on it.</em></p>
 <hr />
 <p>Okay let’s go for the games now.</p>
 <hr />
-<pre class="r"><code>all_games &lt;- auto_import(folders[2], datatyp=&quot;csv&quot;, &quot;2&quot;)</code></pre>
-<pre><code>## ℹ Using &quot;&#39;,&#39;&quot; as decimal and &quot;&#39;.&#39;&quot; as grouping mark. Use `read_delim()` for more control.</code></pre>
-<pre><code>## New names:
-## Rows: 19 Columns: 39
-## ── Column specification
-## ──────────────────────────────────────────────────────── Delimiter: &quot;;&quot; chr
-## (18): Datum, Spielgruppe, Mannschaft 1, Mannschaft 2, Gastgeber, Ergebn... dbl
-## (19): Spieldauer, Zuschauerzahl, Satzpunkte 1, Satzpunkte 2, Satz 1 - B... time
-## (2): Uhrzeit, Satzpunkte
-## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
-## Specify the column types or set `show_col_types = FALSE` to quiet this message.
-## ℹ Using &quot;&#39;,&#39;&quot; as decimal and &quot;&#39;.&#39;&quot; as grouping mark. Use `read_delim()` for
-## more control.
-## New names:
-## Rows: 72 Columns: 39
-## ── Column specification
-## ──────────────────────────────────────────────────────── Delimiter: &quot;;&quot; chr
-## (18): Datum, ST, Mannschaft 1, Mannschaft 2, Gastgeber, Austragungsort/... dbl
-## (19): Spieldauer, Zuschauerzahl, Satzpunkte 1, Satzpunkte 2, Satz 1 - B... time
-## (2): Uhrzeit, Satzpunkte
-## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
-## Specify the column types or set `show_col_types = FALSE` to quiet this message.
-## ℹ Using &quot;&#39;,&#39;&quot; as decimal and &quot;&#39;.&#39;&quot; as grouping mark. Use `read_delim()` for
-## more control.
-## New names:
-## Rows: 12 Columns: 39
-## ── Column specification
-## ──────────────────────────────────────────────────────── Delimiter: &quot;;&quot; chr
-## (17): Datum, ST, Mannschaft 1, Mannschaft 2, Gastgeber, Austragungsort/... dbl
-## (16): Spieldauer, Zuschauerzahl, Satzpunkte 1, Satzpunkte 2, Satz 1 - B... lgl
-## (4): Satz 5 - Ballpunkte 1, :...37, Satz 5 - Ballpunkte 2, Satz 5 - Sa... time
-## (2): Uhrzeit, Satzpunkte
-## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
-## Specify the column types or set `show_col_types = FALSE` to quiet this message.
-## ℹ Using &quot;&#39;,&#39;&quot; as decimal and &quot;&#39;.&#39;&quot; as grouping mark. Use `read_delim()` for
-## more control.
-## New names:
-## Rows: 16 Columns: 39
-## ── Column specification
-## ──────────────────────────────────────────────────────── Delimiter: &quot;;&quot; chr
-## (18): Datum, ST, Mannschaft 1, Mannschaft 2, Gastgeber, Austragungsort/... dbl
-## (19): Spieldauer, Zuschauerzahl, Satzpunkte 1, Satzpunkte 2, Satz 1 - B... time
-## (2): Uhrzeit, Satzpunkte
-## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
-## Specify the column types or set `show_col_types = FALSE` to quiet this message.
-## • `Ergebnis` -&gt; `Ergebnis...7`
-## • `Ergebnis` -&gt; `Ergebnis...9`
-## • `:` -&gt; `:...18`
-## • `:` -&gt; `:...21`
-## • `:` -&gt; `:...25`
-## • `:` -&gt; `:...29`
-## • `:` -&gt; `:...33`
-## • `:` -&gt; `:...37`</code></pre>
-<pre class="r"><code>#str(all_games, list.len = 2)</code></pre>
-<hr />
-<p>Let’s have alook and clean it.</p>
-<hr />
-<pre class="r"><code>get_unique_values(all_games_clean, &quot;Geschlecht&quot;)
-get_unique_values(all_games_clean, &quot;Mannschaft_1&quot;)
-na_count &lt;- sapply(all_games, function(df) sum(is.na(df$Geschlecht)))
+<pre class="r"><code>suppressMessages({
+  all_games &lt;- auto_import(folders[2], datatyp=&quot;csv&quot;, &quot;2&quot;)
+})
 
-na_count</code></pre>
+#str(all_games, list.len = 2)</code></pre>
+<hr />
+<p>Let’s have alook with our <code>get_unique_values</code> function and
+clean it.</p>
 <hr />
 <pre class="r"><code>all_games_clean &lt;- lapply(all_games, function(df) {
     df %&gt;%
-    setNames(gsub(&quot; &quot;, &quot;_&quot;, colnames(.))) %&gt;%
-  mutate(Mannschaft_1 = gsub(&quot;Ř&quot;, &quot;ü&quot;, Mannschaft_1),
-         Mannschaft_2 = gsub(&quot;Ř&quot;, &quot;ü&quot;, Mannschaft_2),
+    setNames(gsub(&quot; &quot;, &quot;&quot;, gsub(&quot;-&quot;, &quot;_&quot;, colnames(.)))) %&gt;%
+  mutate(Mannschaft1 = gsub(&quot;Ř&quot;, &quot;ü&quot;, Mannschaft1),
+         Mannschaft2 = gsub(&quot;Ř&quot;, &quot;ü&quot;, Mannschaft2),
          Gastgeber = gsub(&quot;Ř&quot;, &quot;ü&quot;, Gastgeber),
          Austragungsort = gsub(&quot;Ř&quot;, &quot;ü&quot;, Austragungsort),
          Geschlecht = ifelse(str_detect(Geschlecht, &quot;^[fF]|2&quot;), &quot;female&quot;, &quot;male&quot;))
-})</code></pre>
+})%&gt;%
+  bind_rows()
+  
+#all_games_clean</code></pre>
 <hr />
 <p>Alright,so far, so good!</p>
-<p>Next mutating all these values requierd for the barplot.</p>
+<p>Next mutating all these values requiered for the barplot.</p>
+<p>Let’s get a list of all Teams first ***</p>
+<pre class="r"><code>all_games_teams &lt;- unique(all_games_clean$Mannschaft1)
+#all_games_teams</code></pre>
+<hr />
+<p>now let’s mutate some variable for the graph, lets’s start with
+variable requested in <code>results</code>, ex. count how often each of
+them played at home/away and their wins/losses…</p>
+<hr />
+<pre class="r"><code>mutate_team_games_var1 &lt;- function(team, df) {
+  home_games &lt;- df %&gt;%
+    filter(Mannschaft1 == team) %&gt;%
+    nrow()
+  
+  away_games &lt;- df %&gt;%
+    filter(Mannschaft2 == team) %&gt;%
+    nrow()
+  
+  total_games &lt;- df %&gt;%
+    filter(Mannschaft1 == team | Mannschaft2 == team) %&gt;%
+    nrow()
+  
+  num_victory &lt;- df%&gt;%
+    filter((Mannschaft1 == team &amp; Satzpunkte1 == 3) | (Mannschaft2 == team &amp; Satzpunkte2 == 3))%&gt;%
+    nrow()
+  
+  num_losses &lt;-  df%&gt;%
+    filter((Mannschaft1 == team &amp; Satzpunkte1 != 3) | (Mannschaft2 == team &amp; Satzpunkte2 != 3))%&gt;%
+    nrow()
+  
+  sets_per_wingame &lt;- df %&gt;%
+    filter(Mannschaft1 == team | Mannschaft2 == team) %&gt;%
+    summarise(
+      Sum_Satzpunkte = round(sum(Satzpunkte1 + Satzpunkte2), 2), # not sure if we need that one
+      Avg_Satzpunkte = round(mean(Satzpunkte1 + Satzpunkte2), 2))
+  
+  avg_point_per_set &lt;- df %&gt;%   # why is it only working with backticks? -&gt; cous i had an special letter in &quot;-&quot; gsub&#39;ed it out, could remove backticks now
+  filter(Mannschaft1 == team | Mannschaft2 == team) %&gt;%
+    summarise(
+      Avg_Ballpunkte_first_set = round(mean(ifelse(Mannschaft1 == team, `Satz1_Ballpunkte1`, `Satz1_Ballpunkte2`)), 2),
+      Avg_Ballpunkte_sec_set = round(mean(ifelse(Mannschaft1 == team, `Satz2_Ballpunkte1`, `Satz2_Ballpunkte2`)), 2),
+      Avg_Ballpunkte_third_set = round(mean(ifelse(Mannschaft1 == team, `Satz3_Ballpunkte1`, `Satz3_Ballpunkte2`)), 2),
+      Avg_Ballpunkte_fourth_set = round(mean(ifelse(Mannschaft1 == team, `Satz4_Ballpunkte1`, `Satz4_Ballpunkte2`), na.rm=TRUE), 2),
+      Avg_Ballpunkte_fifth_set = round(mean(ifelse(Mannschaft1 == team, `Satz5_Ballpunkte1`, `Satz5_Ballpunkte2`), na.rm=TRUE), 2))
+  
+  
+  max_ballpoint_ever &lt;- max(ifelse(df$Mannschaft1 == team, df$Satz1_Ballpunkte1, df$Satz1_Ballpunkte2))
+  
+  min_ballpoint_ever &lt;- min(ifelse(df$Mannschaft1 == team, df$Satz1_Ballpunkte1, df$Satz1_Ballpunkte2))
+    
+# don&#39;t know how to proper look for the max-value of all satzX, or condition (|), pmax(), max (..1,..2,..) don&#39;T work
+# could do an max and min for each set and do an max again on it but....
+  
+ 
+  
+  avg_ballpoint_home &lt;- df %&gt;%
+  filter(Mannschaft1 == team) %&gt;%
+  mutate(Ballpunkte = str_extract(Ballpunkte, &quot;\\d+&quot;)) %&gt;%
+  summarise(avg_ballpoint_home = round(mean(as.numeric(Ballpunkte)),2))
+  
+  avg_ballpoint_away &lt;- df %&gt;%
+  filter(Mannschaft2 == team) %&gt;%
+  mutate(Ballpunkte = str_extract(Ballpunkte, &quot;(?&lt;=:)(\\d+)&quot;)) %&gt;%
+  summarise(avg_ballpoint_away = round(mean(as.numeric(Ballpunkte)),2))
+  
+  avg_attendance_home &lt;- df %&gt;%
+  filter(Mannschaft1 == team) %&gt;%
+  summarise(avg_attendance_home = round(mean(as.numeric(Zuschauerzahl))))
+  
+  return(c(Team = team, Home = home_games, Away = away_games, Total = total_games,
+           Victories = num_victory, Losses = num_losses,
+           avg_sets = sets_per_wingame, avg_point_per_set = avg_point_per_set,
+           max_point = max_ballpoint_ever, min_point = min_ballpoint_ever,
+           avg_ballpoint_home, avg_ballpoint_away, avg_attendance_home))
+}
+
+result_variable_all_team_games &lt;- t(mapply(mutate_team_games_var1, team = all_games_teams, df = rep(list(all_games_clean), length(all_games_teams)))) #t() transponiert output Struktur ( für alle teams,home,etc. in einer Spalte)
+
+#result_variable_all_team_games</code></pre>
+<hr />
+<p><strong>Finally got the Result and Stadium stuff ready, lets go for
+the next.</strong></p>
+<hr />
+<p>Already got an idea, could go over the positions with a function.
+Therefore lets get the unique positions in a list first.</p>
+<hr />
+<pre class="r"><code>all_positions &lt;- get_unique_values(all_rosters_clean, &quot;Position&quot;)[-6] # removes the head coach
+
+#all_positions</code></pre>
+<p>Probably won’t need it.</p>
+<p>Need to join topscorer and roster to get all the team names into the
+topscorer file, there is already a column called
+<code>points_per_set</code> so if i get it done i just need to
+<code>group_by(Position)</code> and
+<code>Summarize(mean(Positon))</code>with lapply? over all teams.</p>
+<pre class="r"><code>joined_topscore_roster &lt;- right_join(all_topscorer_clean2,all_rosters_clean2, &quot;Name&quot;)</code></pre>
+<pre><code>## Warning in right_join(all_topscorer_clean2, all_rosters_clean2, &quot;Name&quot;): Detected an unexpected many-to-many relationship between `x` and `y`.
+## ℹ Row 3 of `x` matches multiple rows in `y`.
+## ℹ Row 115 of `y` matches multiple rows in `x`.
+## ℹ If a many-to-many relationship is expected, set `relationship =
+##   &quot;many-to-many&quot;` to silence this warning.</code></pre>
+<pre class="r"><code>joined_topscore_roster</code></pre>
+<pre><code>## # A tibble: 259 × 16
+##     Rank Name           Points_overall Errors_overall Points_per_Set Sets_played
+##    &lt;dbl&gt; &lt;chr&gt;                   &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;       &lt;dbl&gt;
+##  1    34 Amedegnato, D…              6             11            0.5          11
+##  2    31 Barsemian, Ra…              9             13            1             9
+##  3    21 Baumann, Felix             39             39            3            13
+##  4    21 Baumann, Felix             39             39            3            13
+##  5    15 Baxpöhler, No…             35             32            1.8          20
+##  6    21 Chamberlain, …             10             10            1.1           9
+##  7     7 Colito, Augus…             62             44            3.9          16
+##  8     1 Deweese, Randy            126             59            5            25
+##  9    25 Engelmann, Li…              4              5            0.4          10
+## 10    16 Engemann, Nor…              2              0            1             2
+## # ℹ 249 more rows
+## # ℹ 10 more variables: Games_played &lt;dbl&gt;, `Top-Scorer` &lt;dbl&gt;,
+## #   errors_per_set &lt;dbl&gt;, Team &lt;chr&gt;, Height &lt;dbl&gt;, Gender &lt;chr&gt;,
+## #   `Date of Birth` &lt;chr&gt;, `Jersey Number` &lt;dbl&gt;, Nationality &lt;chr&gt;,
+## #   Position &lt;chr&gt;</code></pre>
+<hr />
+<p>For a finally fix, as mentioned before, we should fix the mistakes in
+names first by using our <code>get_unique_values</code> function</p>
+<p>Anyway let’s go for mutating the rest of requested variables</p>
+<hr />
+<pre class="r"><code>attack_var &lt;- joined_topscore_roster%&gt;%
+  group_by(Team, Position)%&gt;%
+  summarise(avg_point_per_position = round(mean(Points_per_Set, na.rm = TRUE), 1))%&gt;%
+  ungroup()#%&gt;%</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;Team&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre class="r"><code>  #filter(!is.na(avg_point_per_position))
+
+#attack_var
+topscore_var &lt;- joined_topscore_roster%&gt;%
+  group_by(Team, Position)%&gt;%
+  summarise(avg_toppoints_per_position = round(mean(Points_overall, na.rm = TRUE), 1))%&gt;%
+  ungroup()#%&gt;%</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;Team&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre class="r"><code>  #filter(!is.na(avg_point_per_position))
+#topscore_var
+
+error_var &lt;- joined_topscore_roster %&gt;%
+  group_by(Team, Position) %&gt;%
+    filter(!is.na(errors_per_set))%&gt;%
+  summarise(max_errors = max(errors_per_set)) %&gt;%
+  ungroup()</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;Team&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre class="r"><code>#error_var</code></pre>
+<pre class="r"><code>calculate_avg_var &lt;- function(data, value_column) {
+  result &lt;- data %&gt;%
+    group_by(Team, Position) %&gt;%
+    summarise(avg_value = round(mean({{value_column}}, na.rm = TRUE), 1)) %&gt;%
+    ungroup() %&gt;%
+    filter(!is.na(avg_value))
+  
+  return(result)
+}
+
+attack_var2 &lt;- calculate_avg_var(joined_topscore_roster, Points_per_Set)</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;Team&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre class="r"><code>#attack_var2
+topscore_var2 &lt;- calculate_avg_var(joined_topscore_roster, Points_overall)</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;Team&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre class="r"><code>#topscore_var2</code></pre>
+<hr />
+<p>Now we got all requested <code>Attacking</code> &amp;
+<code>Topscorer</code> &amp; <code>Errors</code>variables.</p>
+<p>Let’s go for the Graph now.</p>
 <hr />
 </div>
 
