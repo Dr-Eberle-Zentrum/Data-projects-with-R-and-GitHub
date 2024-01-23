@@ -1,6 +1,6 @@
 ---
 title: "Yuuunji"
-output: md_document
+output: html_document
 ---
 
 ### Importing Datasets
@@ -10,11 +10,11 @@ output: md_document
 library(tidyr)
 library(dplyr)
 library(readr)
-results <- read_csv("tabelles_of_intrest/results.csv")
-races<- read_csv("tabelles_of_intrest/races.csv")
-drivers<- read_csv("tabelles_of_intrest/drivers.csv")
-driver_standings<- read_csv("tabelles_of_intrest/driver_standings.csv")
-constructors<- read_csv("tabelles_of_intrest/constructors.csv")
+results <- read_csv(unz("archive.zip", "results.csv"))
+races<- read_csv(unz("archive.zip", "races.csv"))
+drivers<- read_csv(unz("archive.zip", "drivers.csv"))
+driver_standings<- read_csv(unz("archive.zip","driver_standings.csv"))
+constructors<- read_csv(unz("archive.zip", "constructors.csv"))
 ```
 
 ### Finding Top 10 racers from 2000 - 2020 in result.csv
@@ -58,19 +58,31 @@ win3 <- full_join(win3,con_names, by = "constructorId")
 ### Visualisation
 
 ```{r} 
-
 library(plotly)
 
 library(ggplot2)
+colnames(win3) <- c("driver_Id","year","constructor_ID","Wins","forename","surname","nationality","Constructor")
 
+win3['Name'] <- paste(win3$forename,win3$surname)
+fig <- plot_ly(win3, x = ~Wins, y = ~Name, type =
+'bar', orientation = 'h', name = ~Constructor, color=~Constructor, text =~paste("Nationality",nationality,"\nYear:",year,"\nConstructor:",Constructor), hovertemplate = paste( "Name:
+%{y}<br>",  "Wins:%{x}<br>","%{text}","<extra></extra>" ))
 
-fig <- plot_ly(win3, x = ~total, y = ~surname, type =
-'bar',orientation = 'h', name = ~name, color=~name, text =
-~nationality, xother = ~forename, hovertemplate = paste( "Name:
-%{xother} %{y}<br>", "Nationality: %{text}<br>", "Year: %{}<br>", "Wins:
-%{x}<br>", "Constructor: %{color}<br>", "<extra></extra>" ))
+fig <- fig %>% layout(yaxis = list(title = 'Count'), barmode ='stack')
 
-fig <- fig %>% layout(yaxis = list(title = 'Count'), barmode =
-'stack')
 fig
+
 ```
+
+### New Attempt Visualisation
+```{r} 
+
+
+p <- ggplot(win3, aes(x=Wins, y=Name,fill=Constructor,text =paste("Nationality:", nationality,"\nYear:", year)))+
+  geom_bar(stat="identity")+
+  ggtitle("Most successfull drivers with constructors",subtitle = "click on bar to open wikipedia page of driver")
+
+ggplotly(p)
+
+```
+
