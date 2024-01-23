@@ -9,9 +9,10 @@ output: md_document
 # get this packages
 library(tidyverse)
 library(countrycode)
+library(emo)
+library(purrr)
 library(dplyr)
 library(stringr)
-library(emo)
 library(readr)
 knitr::opts_chunk$set(echo = TRUE)
  rm(list = ls())
@@ -23,7 +24,7 @@ OKay let's start with the roster files.
 
 ***
 
-```{r folder_content, echo=FALSE}
+```{r folder_content, echo=FALSE, eval=FALSE}
 folder_path_roster <- file.path(getwd(), "team-rosters")
 ```
 
@@ -37,7 +38,7 @@ But we could also start with creating all folder path's in once aswell.
 folders <- list.files(getwd(), full.names = TRUE) %>%
   .[!grepl("\\.", .)]
 
-#folders
+folders
 ```
 
 ***
@@ -71,8 +72,9 @@ auto_import <- function(file_path, datatyp, suffix = ""){
 ***
 
 ```{r import_roster, echo=TRUE}
-
-all_rosters <- auto_import(folders[4], datatyp="csv", "2")
+suppressMessages({
+  all_rosters <- auto_import(folders[4], datatyp="csv", "2")
+})
 
 #str(all_rosters, list.len = 2)
 ```
@@ -162,8 +164,16 @@ all_rosters_clean <- lapply(all_rosters, function(df) {
     rename("Name"="Last Name First Name")
   })
 })
+
+all_roosters_clean2 <- all_rosters_clean%>%
+   bind_rows(.id = "Team")%>%
+  mutate(Team = gsub("^roster_", "", Team))
+  
+all_roosters_clean2
 #str(all_rosters_clean, list.len = 3)
 ```
+
+*Note: Probably could done it already in the import part (bind all rosters into one table), but wasn't sure if i wont need it separated later*
 
 ***
 
@@ -204,7 +214,7 @@ Let's check for misstakes with our previous `get_unique_values`function.
 
 ***
 
-```{r check_topscorer, echo=TRUE, eval=FALSE}
+```{r check_topscorer, echo=FALSE, eval=FALSE}
 get_unique_values(all_topscorer_clean, "Team")
 get_unique_values(all_topscorer_clean, "Position")
 na_count <- sapply(all_topscorer_clean, function(df) sum(is.na(df$Position)))
@@ -233,6 +243,9 @@ all_topscorer_clean <- lapply(all_topscorer, function(df) {
 all_topscorer_clean[[2]] <- all_topscorer_clean[[2]] %>% # couldn't find out how to do in lapply-fct, due to not all df got "team" column "yet"
   mutate(Team = gsub("Ř", "ü", Team))
 
+all_topscorer_clean2 <- all_topscorer_clean %>%
+  bind_rows()
+all_topscorer_clean2
 #str(all_topscorer_clean, list.len = 3)
 ```
 
@@ -248,42 +261,34 @@ Okay let's go for the games now.
 ***
 
 ```{r import_games, echo=TRUE}
-
-all_games <- auto_import(folders[2], datatyp="csv", "2")
+suppressMessages({
+  all_games <- auto_import(folders[2], datatyp="csv", "2")
+})
 
 #str(all_games, list.len = 2)
 ```
 
 ***
 
-Let's have alook and clean it.
-
-***
-
-```{r check_games, echo=TRUE, eval=FALSE}
-get_unique_values(all_games_clean, "Geschlecht")
-na_count <- sapply(all_games, function(df) sum(is.na(df$Geschlecht)))
-
-na_count
-
-
-```
+Let's have alook with our `get_unique_values` function and clean it.
 
 ***
 
 ```{r adjust_games, echo=TRUE}
 all_games_clean <- lapply(all_games, function(df) {
     df %>%
-    setNames(gsub(" ", "_", colnames(.))) %>%
-  mutate(Mannschaft_1 = gsub("Ř", "ü", Mannschaft_1),
-         Mannschaft_2 = gsub("Ř", "ü", Mannschaft_2),
+    setNames(gsub(" ", "", gsub("-", "_", colnames(.)))) %>%
+  mutate(Mannschaft1 = gsub("Ř", "ü", Mannschaft1),
+         Mannschaft2 = gsub("Ř", "ü", Mannschaft2),
          Gastgeber = gsub("Ř", "ü", Gastgeber),
          Austragungsort = gsub("Ř", "ü", Austragungsort),
          Geschlecht = ifelse(str_detect(Geschlecht, "^[fF]|2"), "female", "male"))
-})
+})%>%
+  bind_rows()
   
 all_games_clean
 ```
+
 
 ***
 
@@ -294,145 +299,129 @@ Next mutating all these values requiered for the barplot.
 Let's get a list of all Teams first
 ***
 ```{r all_games_teams,echo=TRUE}
-all_games_teams <- get_unique_values(all_games_clean, "Mannschaft_1")
-all_games_teams
+all_games_teams <- unique(all_games_clean$Mannschaft1)
+#all_games_teams
 ```
 ***
 
-now let's check how often each of them played at home and away
+now let's mutate some variable for the graph, lets's start with variable requested in `results`, ex. count how often each of them played at home/away and their wins/losses...
 
 ***
+```{r mutate_result_stadium_variable, echo=TRUE}
 
-```{r home_games,echo=TRUE}
-num_home_games <-lapply(all_games_teams, function(team){
-  lapply(all_games_clean, function(df){
-    df%>%
-    filter(Mannschaft_1 == team)%>%
-    nrow()
-  })
-})
-
-num_away_games <-lapply(all_games_teams, function(team){
-  lapply(all_games_clean, function(df){
-    df%>%
-    filter(Mannschaft_2 == team)%>%
-    nrow()
-  })
-})
-
-num_total_games <-lapply(all_games_teams, function(team){
-  lapply(all_games_clean, function(df){
-    df%>%
-    filter(Mannschaft_1 == team|Mannschaft_2 == team)%>%
-    nrow()
-  })
-})
-
-```
-
-
-
-***
-
-This already looks like, as we can put it together.
-
-***
-
-```{r try}
-count_team_games <- function(team, df) {
+mutate_team_games_var1 <- function(team, df) {
   home_games <- df %>%
-    filter(Mannschaft_1 == team) %>%
+    filter(Mannschaft1 == team) %>%
     nrow()
   
   away_games <- df %>%
-    filter(Mannschaft_2 == team) %>%
+    filter(Mannschaft2 == team) %>%
     nrow()
   
   total_games <- df %>%
-    filter(Mannschaft_1 == team | Mannschaft_2 == team) %>%
+    filter(Mannschaft1 == team | Mannschaft2 == team) %>%
     nrow()
   
-  return(c(Home = home_games, Away = away_games, Total = total_games))
+  num_victory <- df%>%
+    filter((Mannschaft1 == team & Satzpunkte1 == 3) | (Mannschaft2 == team & Satzpunkte2 == 3))%>%
+    nrow()
+  
+  num_losses <-  df%>%
+    filter((Mannschaft1 == team & Satzpunkte1 != 3) | (Mannschaft2 == team & Satzpunkte2 != 3))%>%
+    nrow()
+  
+  sets_per_wingame <- df %>%
+    filter(Mannschaft1 == team | Mannschaft2 == team) %>%
+    summarise(
+      Sum_Satzpunkte = round(sum(Satzpunkte1 + Satzpunkte2), 2), # not sure if we need that one
+      Avg_Satzpunkte = round(mean(Satzpunkte1 + Satzpunkte2), 2))
+  
+  avg_point_per_set <- df %>%   # why is it only working with backticks? -> cous i had an special letter in "-" gsub'ed it out, could remove backticks now
+  filter(Mannschaft1 == team | Mannschaft2 == team) %>%
+    summarise(
+      Avg_Ballpunkte_first_set = round(mean(ifelse(Mannschaft1 == team, `Satz1_Ballpunkte1`, `Satz1_Ballpunkte2`)), 2),
+      Avg_Ballpunkte_sec_set = round(mean(ifelse(Mannschaft1 == team, `Satz2_Ballpunkte1`, `Satz2_Ballpunkte2`)), 2),
+      Avg_Ballpunkte_third_set = round(mean(ifelse(Mannschaft1 == team, `Satz3_Ballpunkte1`, `Satz3_Ballpunkte2`)), 2),
+      Avg_Ballpunkte_fourth_set = round(mean(ifelse(Mannschaft1 == team, `Satz4_Ballpunkte1`, `Satz4_Ballpunkte2`), na.rm=TRUE), 2),
+      Avg_Ballpunkte_fifth_set = round(mean(ifelse(Mannschaft1 == team, `Satz5_Ballpunkte1`, `Satz5_Ballpunkte2`), na.rm=TRUE), 2))
+  
+  
+  max_ballpoint_ever <- max(ifelse(df$Mannschaft1 == team, df$Satz1_Ballpunkte1, df$Satz1_Ballpunkte2))
+  
+  min_ballpoint_ever <- min(ifelse(df$Mannschaft1 == team, df$Satz1_Ballpunkte1, df$Satz1_Ballpunkte2))
+    
+# don't know how to proper look for the max-value of all satzX, or condition (|), pmax(), max (..1,..2,..) don'T work
+# could do an max and min for each set and do an max again on it but....
+  
+ 
+  
+  avg_ballpoint_home <- df %>%
+  filter(Mannschaft1 == team) %>%
+  mutate(Ballpunkte = str_extract(Ballpunkte, "\\d+")) %>%
+  summarise(avg_ballpoint_home = mean(as.numeric(Ballpunkte)))
+  
+  avg_ballpoint_away <- df %>%
+  filter(Mannschaft2 == team) %>%
+  mutate(Ballpunkte = str_extract(Ballpunkte, "(?<=:)(\\d+)")) %>%
+  summarise(avg_ballpoint_away = mean(as.numeric(Ballpunkte)))
+  
+  avg_attendance_home <- df %>%
+  filter(Mannschaft1 == team) %>%
+  summarise(avg_attendance_home = mean(as.numeric(Zuschauerzahl)))
+  
+  return(c(Team = team, Home = home_games, Away = away_games, Total = total_games,
+           Victories = num_victory, Losses = num_losses,
+           avg_sets = sets_per_wingame, avg_point_per_set = avg_point_per_set,
+           max_point = max_ballpoint_ever, min_point = min_ballpoint_ever,
+           avg_ballpoint_home, avg_ballpoint_away, avg_attendance_home))
 }
 
-num_games_in_once <- lapply(all_games_teams, function(team) {
-  lapply(all_games_clean, count_team_games, team = team)
-})
-num_games_in_once
+result_variable_all_team_games <- t(mapply(mutate_team_games_var1, team = all_games_teams, df = rep(list(all_games_clean), length(all_games_teams)))) #t() transponiert output Struktur ( für alle teams,home,etc. in einer Spalte)
+
+#result_variable_all_team_games
+
 ```
+***
+
+**Finally got the Result stuff ready, lets go for the next.**
+
+****
+
+Already got an idea, could go over the positions with a function.
+Therefore lets get the unique psitions in a list first.
 
 ***
 
-Next go fpr win and losses
+```{r all_positions, echo=TRUE}
 
-***
+all_positions <- get_unique_values(all_rosters_clean, "Position")[-6] # removes the head coach
 
-```{r try victory, echo=TRUE}
-num_victory <-lapply(all_games_teams, function(team){
-  lapply(all_games_clean, function(df){
-    df%>%
-    filter((Mannschaft_1 == team & Satzpunkte_1 == 3) | (Mannschaft_2 == team & Satzpunkte_2 == 3))%>%
-    nrow()
-  })
-})
-
-num_losses <-lapply(all_games_teams, function(team){
-  lapply(all_games_clean, function(df){
-    df%>%
-    filter((Mannschaft_1 == team & Satzpunkte_1 != 3) | (Mannschaft_2 == team & Satzpunkte_2 != 3))%>%
-    nrow()
-  })
-})
-num_losses
+all_positions
 ```
+Probably won't need it.
 
-***
-For all the average stuff im not sure if it aint  more easy to combine all games into one df to get total counts more easy for each team.
+Need to join topscorer and roster to get all the team names into the topscorer file, there is already a column called `points_per_set` so if i get it done i just need to `group_by(Position)` and `Summarize(mean(Positon))`with lapply? over all teams.
+```{r try}
 
-Anyway we can count total of sets now ans than let's see.
 
-***
-
-```{r total_sets_played_per_game, echo=TRUE}
-
-num_sets_per_game_played <-lapply(all_games_teams, function(team){
-  lapply(all_games_clean, function(df){
-    df%>%
-    filter(Mannschaft_1 == team|Mannschaft_2 == team)%>%
+mutate_team_games_var2 <- function(team, df) {
+  avg_point_per_position <- df %>%
+    filter(Mannschaft1 == team | Mannschaft2 == team) %>%
+    group_by(Position) %>%
     summarise(
-      Sum_Satzpunkte = sum(Satzpunkte_1 + Satzpunkte_2),
-      Avg_Satzpunkte = mean(Satzpunkte_1 + Satzpunkte_2)) # actually could put the whole sum function in the mean function
-  })
-})
+      Avg_Ballpunkte_first_set = round(mean(ifelse(Mannschaft1 == team, Satz1_Ballpunkte1, Satz1_Ballpunkte2)), 2)
+    )
+  return(avg_point_per_position)
+}
 
+attacke_variable_all_team_positions <- mapply(mutate_team_games_var2, team = all_games_teams, df = rep(list(all_topscorer_clean), length(all_games_teams)), SIMPLIFY = FALSE)
+
+
+attacke_variable_all_team_positions
 ```
+
+
 ***
 
-**Note:** * This is the total and average number of setsplayed per game* **not** average sets to win, wait a minute.....
-
-than it should be **right?**
-
-Next Average points per set
-
-***
-**Dunno here why its working with backticks but aint with normal ""**
-
-```{r avg_points_per_game, echo=TRUE}
-
-avg_points_per_set<- lapply(all_games_teams, function(team) {
-  lapply(all_games_clean, function(df) {
-    df %>%
-      filter(Mannschaft_1 == team | Mannschaft_2 == team) %>%
-      summarise(
-        Avg_Ballpunkte_first_set = mean(ifelse(Mannschaft_1 == team, `Satz_1_-_Ballpunkte_1`, `Satz_1_-_Ballpunkte_2`)),
-        Avg_Ballpunkte_sec_set = mean(ifelse(Mannschaft_1 == team, `Satz_2_-_Ballpunkte_1`, `Satz_2_-_Ballpunkte_2`)),
-        Avg_Ballpunkte_third_set = mean(ifelse(Mannschaft_1 == team, `Satz_3_-_Ballpunkte_1`, `Satz_3_-_Ballpunkte_2`)),
-        Avg_Ballpunkte_fourth_set = mean(ifelse(Mannschaft_1 == team, `Satz_4_-_Ballpunkte_1`, `Satz_4_-_Ballpunkte_2`)),
-        Avg_Ballpunkte_fifth_set = mean(ifelse(Mannschaft_1 == team, `Satz_5_-_Ballpunkte_1`, `Satz_5_-_Ballpunkte_2`))
-        
-      )
-  })
-})
-
-avg_points_per_set
-```
+Rest of attacking values i can get from `all_games_clean`
+with a `ifelse` over the Position of column `Ballpunkte`
