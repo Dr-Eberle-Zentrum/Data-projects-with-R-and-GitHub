@@ -24,6 +24,14 @@ some of the code.
       rename(x=longitude,y=latitude) |> 
       sf_transform_xy(target_crs = 2163, source_crs=4326) #transforming coordinates for us-map
 
+# Simulating a disaster zone
+
+Waffle Houses use following status evaluation:
+
+-   Green: Open as normal
+-   Yellow: Limited Operation/Opening Hours
+-   Red: Closed
+
 For simulating a disaster zone, I picked a location, stored the radii
 for the red and the yellow zone. Then I computed which of the waffle
 houses are in which zone:

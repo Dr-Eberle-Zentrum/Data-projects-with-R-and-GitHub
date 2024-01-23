@@ -44,6 +44,14 @@ store_data <-
 
 ```
 
+# Simulating a disaster zone
+
+Waffle Houses use following status evaluation:
+
+- Green: Open as normal
+- Yellow: Limited Operation/Opening Hours
+- Red: Closed
+
 For simulating a disaster zone, I picked a location, stored the radii for the red and the yellow zone. Then I computed which of the waffle houses are in which zone:
 ```{r echo=TRUE, include=TRUE}
 
