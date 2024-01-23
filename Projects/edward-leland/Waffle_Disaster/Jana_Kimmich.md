@@ -24,9 +24,9 @@ some of the code.
       rename(x=longitude,y=latitude) |> 
       sf_transform_xy(target_crs = 2163, source_crs=4326) #transforming coordinates for us-map
 
-# Simulating a disaster zone
+## Simulating a disaster zone
 
-Waffle Houses use following status evaluation:
+Waffle Houses use the following status evaluation:
 
 -   Green: Open as normal
 -   Yellow: Limited Operation/Opening Hours
