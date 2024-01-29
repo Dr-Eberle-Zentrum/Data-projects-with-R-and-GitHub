@@ -32,7 +32,7 @@ Here I have carried out many steps at once to prepare the data for plotting:
 - Merging the datasets
 - Creating the new variable "name" by for and surname
 - Creating variables to count the wins per year and number of total wins
-- Filtering for years
+- Filtering for years and only the ten best drivers
 - Renaming variables
 
 ```{r, include=TRUE}
@@ -58,7 +58,7 @@ df <- results |>
 rm(list = setdiff(ls(), "df"))
 ```
 
-## Plotting:
+### A few steps before plotting
 
 Since Jana wanted me to use colors that match the Constructor, I defined the colors here:
 
@@ -84,9 +84,9 @@ There should also be the possibility to get additional information about the dri
 hover_text <- with(df, paste(name, ":<br>", wins, " Wins<br>Constructor: ", constructor, "<br>Year :", year))
 ```
 
-Note: "&lt;br&gt;" is a HTML-tag equivalent to the "\n" that we use in R. 
+Note: "&lt;br&gt;" is a HTML-tag equivalent to the "\\n" that we use in R. 
 
----
+## Plotting
 
 On Jana's advice, I used the `plotly` package:
 
