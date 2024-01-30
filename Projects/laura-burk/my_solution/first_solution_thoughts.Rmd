@@ -602,3 +602,14 @@ avg_points_per_set<- lapply(all_games_teams, function(team) {
 
 avg_points_per_set
 ```
+
+```{r try}
+ try_home1 <- map_int(all_games_teams, ~all_games_clean %>%
+                      filter(Mannschaft1 == .x) %>%
+                      nrow())
+try_home_df1 <- data.frame(Team = all_games_teams, Anzahl_Heimspiele = try_home1)
+try_home_df1
+
+# oder
+#hier folgt dann mutate_result_stadium_variable chunk
+```

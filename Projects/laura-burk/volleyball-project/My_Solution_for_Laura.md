@@ -1,39 +1,40 @@
-------------------------------------------------------------------------
-
-OKay let’s start with the roster files.
+# My Solution for the Volleyball Issue
 
 ------------------------------------------------------------------------
 
+## Import the data Part:
+
 ------------------------------------------------------------------------
 
-But we could also start with creating all folder path’s in once aswell.
+Cous I’m damn lazy, even to write the import path twice, i first created
+a function to search for the files in the working direction and return
+the paths’s of the folder’s.
 
 ------------------------------------------------------------------------
 
     folders <- list.files(getwd(), full.names = TRUE) %>%
       .[!grepl("\\.", .)]
 
-    #folders
-
 ------------------------------------------------------------------------
 
-To import the `csv-dats` let’s recycle the `auto_import_csv`-function
-from my other Project Solution. (Had to modify it a bit so we can use it
-for all datatyp’s more easily) -&gt; got no glue why bus this not
-working for `.tsv`files and read\_tsv solved it by apply an
-`suffix`variable
+To import all the files i recycled my `auto_import_csv`-function from
+the last Project.
 
 ------------------------------------------------------------------------
 
     auto_import <- function(file_path, datatyp, suffix = ""){
       
-      file_list <- list.files(path = file_path, pattern = paste("\\.", datatyp, "$", sep = ""), full.names = TRUE)        #-> here we could change the auto import to other data type's  -> put that part in a seperate variable inside the function
+      file_list <- list.files(path = file_path, pattern = paste("\\.", datatyp, "$", sep = ""), full.names = TRUE) 
+      
+      #-> here we could change the auto import to other data type's  -> put that part in a seperate variable inside the function
+      
       data_frames <- list()
       
       for (file in file_list) {
         df_name <- tools::file_path_sans_ext(basename(file))  # uses filename as dataframe
         
-        read_call <- paste0("read_", datatyp, suffix, sep = "") # need to paste the "2" here to read (german) encodeing <- solved it with suffix
+        read_call <- paste0("read_", datatyp, suffix, sep = "")
+        # need to paste the "2" here to read (german) encodeing <- solved it with suffix
         
         data_frames[[df_name]] <- do.call(read_call, list(file, locale = locale(encoding = "cp852")))
       }
@@ -43,49 +44,28 @@ working for `.tsv`files and read\_tsv solved it by apply an
 
 ------------------------------------------------------------------------
 
+Now we can simply import all the dat’S from a folder into a list by
+calling the path from the `folder`-path list and requiered datatyp.
+
     suppressMessages({
       all_rosters <- auto_import(folders[4], datatyp="csv", "2")
     })
 
-    #str(all_rosters, list.len = 2)
+------------------------------------------------------------------------
 
 ------------------------------------------------------------------------
 
-Alright, now let’s start to clean the data.
-
-To do so, let’s have a closer look what’s the unique values and find
-some Regex for.
-
-Therefor i wrote a `get_unique_values` function to take a closer look at
-all the unique values.
+## Adjust the data Part:
 
 ------------------------------------------------------------------------
 
-    get_unique_values <- function(data, column){
-      unique_values <- unique(unlist(lapply(data, function(df) df[[column]])))
-      return(unique_values)
-    }
+In the data there been quiet some mistakes to correct.
+
+Therefor I created some **adjust\_map’s** with Regular Expressions.
 
 ------------------------------------------------------------------------
 
-Now we can easily look into the column’s values
-
-------------------------------------------------------------------------
-
-    #get_unique_values(all_rosters, "Gender")
-    #get_unique_values(all_rosters, "Position")
-    #get_unique_values(all_rosters, "Nationality")
-
-------------------------------------------------------------------------
-
-Quiet some mistakes to correct, let’s create some `adjust_map's` for the
-Regex
-
-To use the `countrycode`package proper we also should do some pre
-mutating for `Nationality`.
-
-------------------------------------------------------------------------
-
+    {
     adjust_map_position <- c("^[zZ].*|^[sS]e.*" = "setter",
                     "^[mM].*" = "middle blocker",
                     "^[aA]u.*|^[oO]u.*" = "outside hitter",
@@ -93,14 +73,34 @@ mutating for `Nationality`.
                     "^[uU].*|^[lL].*" = "libero",
                     "^[tT]r.*|^[cC]h.*|.*[hH]ead.*" = "head coach")
 
-    adjust_map_country <- c("^[dD].*|^[gG].*"= "Deutschland",
-                            ".*wenia$"= "Slovenia",
-                            ".*lie$"="Australien") # could shorten it with ".*ie$" ->".*ia$" (eng. Australia) prob. str_detect than
+    adjust_map_country <- c("^[dD].*|^[gG].*" = "Deutschland",
+                            "wenia$" = "venia",
+                            "lie$" = "lia")
+
+    # could shorten it with ".*ie$" ->".*ia$" (eng. Australia) prob. str_detect than...
+    # -> just delete the ".*" in front and its solved
+
+    adjust_map_name <- c("B\\÷|B\\?" = "Bö",
+                       "Bj\\?|Bj\\÷" = "Bjö",
+                       "R\\?|R\\÷" = "Rö",
+                       "Úe$" = "ée",
+                       "ßn$" = "án",
+                       "ńf$" = "äf",
+                       "┴n" = "Án",
+                       "'.*'" = "",
+                       "^\\?" = "Š",
+                       "\\?o" = "šo",
+                       "\\?iga" = " Žiga",
+                       "Djifa$" = "Djifa Julien",
+                       ", Francisco$" = ", Francisco Javier",
+                       ", Miguel$" = ", Miguel Angel")
+    }
 
 ------------------------------------------------------------------------
 
-Due to `Nationality` contains two different languages, we need a
-function to do it (at once).
+The `Nationality` columns contains two different languages, but the
+`countrycode`-package can only handle one at the time, so there’s a
+function to shorten the call.
 
 ------------------------------------------------------------------------
 
@@ -111,38 +111,38 @@ function to do it (at once).
 
 ------------------------------------------------------------------------
 
+Now let’s apply all the predefined stuff on the data.
+
+    {
     all_rosters_clean <- lapply(all_rosters, function(df) {
       suppressWarnings({
         df %>%
-        mutate(Gender = ifelse(str_detect(Gender, "^[fF]|2"), "female", "male"),
-               Position = str_replace_all(Position, adjust_map_position),
-               Nationality = str_replace_all(Nationality, adjust_map_country))%>%
-        filter(Position %in% adjust_map_position)%>%
-        mutate(Height = as.numeric(Height)/100)%>%
-        country_code(language ="de")%>%
-        country_code(language ="en")%>%
-        select(-(1:3))%>%
-        rename("Name"="Last Name First Name")
+          rename("Name"="Last Name First Name")%>%
+          mutate(Gender = ifelse(str_detect(Gender, "^[fF]|2"), "female", "male"),
+                 Position = str_replace_all(Position, adjust_map_position),
+                 Nationality = str_replace_all(Nationality, adjust_map_country),
+                 Name = str_replace_all(Name, adjust_map_name))%>%
+          filter(Position %in% adjust_map_position)%>%
+          mutate(Height = as.numeric(Height)/100)%>%
+          country_code(language ="de")%>%
+          country_code(language ="en")%>%
+          select(-(1:3))
+        })
       })
-    })
 
     all_rosters_clean2 <- all_rosters_clean%>%
        bind_rows(.id = "Team")%>%
       mutate(Team = gsub("^roster_", "", Team))
-      
-    #all_rosters_clean2
-    #str(all_rosters_clean, list.len = 3)
+    }
 
-*Note: Probably could done it already in the import part (bind all
-rosters into one table), but wasn’t sure if i wont need it separated
-later*
+*Note: I used a second variable to apply the* `bind_row()` *-function,
+becouse i wasn’t sure at that time, if i need the data later in a
+seperated order*
 
 ------------------------------------------------------------------------
 
-Alright this Part is done, lets go for the `topscorer's`files
-
-For simply import them by the `auto_import` function we first have to
-mutate the `.txt`into `.tsv`format. (Due to the logic of the function)
+To import and clean the `topscorer`files with the import function, i
+first had to mutate the `.txt`into `.tsv`format.
 
 ------------------------------------------------------------------------
 
@@ -153,132 +153,46 @@ mutate the `.txt`into `.tsv`format. (Due to the logic of the function)
       file.copy(file, tsv_file)
     }
 
-#### Remind:
-
-**Note: Erease the eval = FALSE part if you first using the code**
-
-------------------------------------------------------------------------
-
-Now we can simply apply the `auto_import`function.
-
-------------------------------------------------------------------------
-
-    all_topscorer <- auto_import(folders[5], datatyp="tsv")
-
-    ## Rows: 50 Columns: 9
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: "\t"
-    ## chr (3): Name, Position, Points per Set
-    ## dbl (6): Rank, Points overall, Errors overall, Sets played, Games played, To...
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-    ## Rows: 40 Columns: 11
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: "\t"
-    ## chr (4): Name, Position, Team, Points per Set
-    ## dbl (6): Rank, Points overall, Errors overall, Sets played, Games played, To...
-    ## lgl (1): Country
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-    ## Rows: 70 Columns: 11
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: "\t"
-    ## chr (4): Name, Position, Team, Points per Set
-    ## dbl (6): Rank, Points overall, Errors overall, Sets played, Games played, To...
-    ## lgl (1): Country
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-    ## Rows: 100 Columns: 9
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: "\t"
-    ## chr (3): Name, Position, Points per Set
-    ## dbl (6): Rank, Points overall, Errors overall, Sets played, Games played, To...
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-
-    #str(all_topscores, list.len = 2)
-
-------------------------------------------------------------------------
-
-Let’s check for misstakes with our previous `get_unique_values`function.
-
-------------------------------------------------------------------------
-
-------------------------------------------------------------------------
-
-As we can see there’s some `NA`-values, but these shouldn’t border us
-right now.
-
-------------------------------------------------------------------------
-
-Now let’s clean the Position column with our `adjust_map`, adjust column
-names and mutate the `errors_per_set`-column.
-
-------------------------------------------------------------------------
-
-    all_topscorer_clean <- lapply(all_topscorer, function(df) {
-        df %>%
-        setNames(gsub(" ", "_", colnames(.)))%>% # instead of rename, replaces all "spaces" with "_",colnames(.)to backreference to df in functions
-        mutate(Position = str_replace_all(Position, adjust_map_position),
-               errors_per_set = (Errors_overall / Sets_played)) 
-    })
-    all_topscorer_clean[[2]] <- all_topscorer_clean[[2]] %>% # couldn't find out how to do in lapply-fct, due to not all df got "team" column "yet"
-      mutate(Team = gsub("Ř", "ü", Team))
-
-    all_topscorer_clean2 <- all_topscorer_clean %>%
-      bind_rows()%>%
-      select(-c("Team", "Country", "Position"))%>% # otherwise we would had an "many to many" issues in the join-function
-      mutate(Points_per_Set = as.numeric(gsub(",", ".",Points_per_Set)))
-    all_topscorer_clean2
-
-    ## # A tibble: 260 × 9
-    ##     Rank Name           Points_overall Errors_overall Points_per_Set Sets_played
-    ##    <dbl> <chr>                   <dbl>          <dbl>          <dbl>       <dbl>
-    ##  1    34 Amedegnato, D…              6             11            0.5          11
-    ##  2    31 Barsemian, Ra…              9             13            1             9
-    ##  3    21 Baumann, Felix             39             39            3            13
-    ##  4    15 Baxpöhler, No…             35             32            1.8          20
-    ##  5    10 Borris, Maciej             67             51            2.8          24
-    ##  6    21 Chamberlain, …             10             10            1.1           9
-    ##  7     7 Colito, Augus…             62             44            3.9          16
-    ##  8     1 Deweese, Randy            126             59            5            25
-    ##  9    25 Engelmann, Li…              4              5            0.4          10
-    ## 10    16 Engemann, Nor…              2              0            1             2
-    ## # ℹ 250 more rows
-    ## # ℹ 3 more variables: Games_played <dbl>, `Top-Scorer` <dbl>,
-    ## #   errors_per_set <dbl>
-
-    #str(all_topscorer_clean, list.len = 3)
-
-------------------------------------------------------------------------
-
-**Note :** *Could probably go for the misstakes in Names by apply the
-`get_unique_values`function to both, the topscorer & roster list, store
-them in a list and apply the function again on it.*
-
-**Than we could join, roster and topscorer by Name**
-
-------------------------------------------------------------------------
-
-Okay let’s go for the games now.
+*Note: Erese the eval = FALSE part if you first using the code*
 
 ------------------------------------------------------------------------
 
     suppressMessages({
-      all_games <- auto_import(folders[2], datatyp="csv", "2")
+      all_topscorer <- auto_import(folders[5], datatyp="tsv")
     })
 
-    #str(all_games, list.len = 2)
+Now clean the data with the`adjust_map`, and mutate the
+`errors_per_set`-column.
 
 ------------------------------------------------------------------------
 
-Let’s have alook with our `get_unique_values` function and clean it.
+    {
+    all_topscorer_clean <- lapply(all_topscorer, function(df) {
+        df %>%
+        setNames(gsub(" ", "_", colnames(.)))%>%
+        # instead of rename, replaces all "spaces" with "_",colnames(.)to backreference to df in functions
+        mutate(Position = str_replace_all(Position, adjust_map_position),
+               Name = str_replace_all(Name, adjust_map_name),
+               errors_per_set = (Errors_overall / Sets_played)) 
+    })
+    all_topscorer_clean[[2]] <- all_topscorer_clean[[2]] %>%
+      # couldn't find out how to do in lapply-fct, due to not all df got "team" column "yet"
+      mutate(Team = gsub("Ř", "ü", Team))
+
+    all_topscorer_clean2 <- all_topscorer_clean %>%
+      bind_rows()%>%
+      select(-c("Team", "Country", "Position"))%>% 
+      # otherwise we would had an "many to many" issues in the join-function
+      mutate(Points_per_Set = as.numeric(gsub(",", ".",Points_per_Set)))
+    }
 
 ------------------------------------------------------------------------
+
+Same for the `games`files
+
+    suppressMessages({
+      all_games <- auto_import(folders[2], datatyp="csv", "2")
+    })
 
     all_games_clean <- lapply(all_games, function(df) {
         df %>%
@@ -290,36 +204,23 @@ Let’s have alook with our `get_unique_values` function and clean it.
              Geschlecht = ifelse(str_detect(Geschlecht, "^[fF]|2"), "female", "male"))
     })%>%
       bind_rows()
+
+------------------------------------------------------------------------
+
+## Mutating the variables Part:
+
+------------------------------------------------------------------------
+
+To mutate all the requiered values in the graph for all the teams at
+once, i created a list of **all teams**
+
+    all_teams <- unique(all_games_clean$Mannschaft1)
+
+------------------------------------------------------------------------
+
+    mutate_team_var1 <- function(team, df) {
       
-    #all_games_clean
-
-------------------------------------------------------------------------
-
-Alright,so far, so good!
-
-Next mutating all these values requiered for the barplot.
-
-Let’s get a list of all Teams first \*\*\*
-
-    all_games_teams <- unique(all_games_clean$Mannschaft1)
-    #all_games_teams
-
-------------------------------------------------------------------------
-
-now let’s mutate some variable for the graph, lets’s start with variable
-requested in `results`, ex. count how often each of them played at
-home/away and their wins/losses…
-
-------------------------------------------------------------------------
-
-    mutate_team_games_var1 <- function(team, df) {
-      home_games <- df %>%
-        filter(Mannschaft1 == team) %>%
-        nrow()
-      
-      away_games <- df %>%
-        filter(Mannschaft2 == team) %>%
-        nrow()
+      # Result Variables:
       
       total_games <- df %>%
         filter(Mannschaft1 == team | Mannschaft2 == team) %>%
@@ -336,27 +237,41 @@ home/away and their wins/losses…
       sets_per_wingame <- df %>%
         filter(Mannschaft1 == team | Mannschaft2 == team) %>%
         summarise(
-          Sum_Satzpunkte = round(sum(Satzpunkte1 + Satzpunkte2), 2), # not sure if we need that one
-          Avg_Satzpunkte = round(mean(Satzpunkte1 + Satzpunkte2), 2))
+          #Sum_Satzpunkte = round(sum(Satzpunkte1 + Satzpunkte2), 2), # not sure if we need that one
+          "Avg_Satzpunkte" = round(mean(Satzpunkte1 + Satzpunkte2), 2))
       
-      avg_point_per_set <- df %>%   # why is it only working with backticks? -> cous i had an special letter in "-" gsub'ed it out, could remove backticks now
+      avg_point_per_set <- df %>%  
+        
+        # why is it only working with backticks? -> cous i had an special letter in "-" gsub'ed it out, could remove backticks now
       filter(Mannschaft1 == team | Mannschaft2 == team) %>%
         summarise(
-          Avg_Ballpunkte_first_set = round(mean(ifelse(Mannschaft1 == team, `Satz1_Ballpunkte1`, `Satz1_Ballpunkte2`)), 2),
-          Avg_Ballpunkte_sec_set = round(mean(ifelse(Mannschaft1 == team, `Satz2_Ballpunkte1`, `Satz2_Ballpunkte2`)), 2),
-          Avg_Ballpunkte_third_set = round(mean(ifelse(Mannschaft1 == team, `Satz3_Ballpunkte1`, `Satz3_Ballpunkte2`)), 2),
-          Avg_Ballpunkte_fourth_set = round(mean(ifelse(Mannschaft1 == team, `Satz4_Ballpunkte1`, `Satz4_Ballpunkte2`), na.rm=TRUE), 2),
-          Avg_Ballpunkte_fifth_set = round(mean(ifelse(Mannschaft1 == team, `Satz5_Ballpunkte1`, `Satz5_Ballpunkte2`), na.rm=TRUE), 2))
+          "Avg_Ballpunkte_first_set" = round(mean(ifelse(Mannschaft1 == team, `Satz1_Ballpunkte1`, `Satz1_Ballpunkte2`)), 2),
+          #Avg_Ballpunkte_sec_set = round(mean(ifelse(Mannschaft1 == team, `Satz2_Ballpunkte1`, `Satz2_Ballpunkte2`)), 2),
+          #Avg_Ballpunkte_third_set = round(mean(ifelse(Mannschaft1 == team, `Satz3_Ballpunkte1`, `Satz3_Ballpunkte2`)), 2),
+          #Avg_Ballpunkte_fourth_set = round(mean(ifelse(Mannschaft1 == team, `Satz4_Ballpunkte1`, `Satz4_Ballpunkte2`), na.rm=TRUE), 2),
+          #Avg_Ballpunkte_fifth_set = round(mean(ifelse(Mannschaft1 == team, `Satz5_Ballpunkte1`, `Satz5_Ballpunkte2`), na.rm=TRUE), 2))
+        ) # remove if take all
       
       
       max_ballpoint_ever <- max(ifelse(df$Mannschaft1 == team, df$Satz1_Ballpunkte1, df$Satz1_Ballpunkte2))
       
       min_ballpoint_ever <- min(ifelse(df$Mannschaft1 == team, df$Satz1_Ballpunkte1, df$Satz1_Ballpunkte2))
         
-    # don't know how to proper look for the max-value of all satzX, or condition (|), pmax(), max (..1,..2,..) don'T work
+    # don't know how to proper look for the max-value of all satz X, or condition (|), pmax(), max (..1,..2,..) don'T work
     # could do an max and min for each set and do an max again on it but....
       
-     
+      
+      
+      # Stadium Variables:
+      
+      home_games <- df %>%
+        filter(Mannschaft1 == team) %>%
+        nrow()
+      
+      away_games <- df %>%
+        filter(Mannschaft2 == team) %>%
+        nrow()
+      
       
       avg_ballpoint_home <- df %>%
       filter(Mannschaft1 == team) %>%
@@ -374,109 +289,52 @@ home/away and their wins/losses…
       
       return(c(Team = team, Home = home_games, Away = away_games, Total = total_games,
                Victories = num_victory, Losses = num_losses,
-               avg_sets = sets_per_wingame, avg_point_per_set = avg_point_per_set,
+               avg_sets = sets_per_wingame$Avg_Satzpunkte, avg_point_per_1set = avg_point_per_set$Avg_Ballpunkte_first_set,
                max_point = max_ballpoint_ever, min_point = min_ballpoint_ever,
                avg_ballpoint_home, avg_ballpoint_away, avg_attendance_home))
     }
 
-    result_variable_all_team_games <- t(mapply(mutate_team_games_var1, team = all_games_teams, df = rep(list(all_games_clean), length(all_games_teams)))) #t() transponiert output Struktur ( für alle teams,home,etc. in einer Spalte)
+    {
+    all_var1_list <- t(mapply(mutate_team_var1, team = all_teams, df = rep(list(all_games_clean), length(all_teams))))
+    #t() transponiert output Struktur ( für alle teams,home,etc. in einer Spalte)
+    all_var1 <- as_tibble(all_var1_list) %>%
+      mutate(Team = as.character(Team),
+             across(-Team, as.numeric))
+    all_var1 <- all_var1 %>%
+      mutate(Team = as.factor(Team),
+             Team = gsub(" ", "_", Team))
+    }
+    all_var1
 
-    #result_variable_all_team_games
-
-------------------------------------------------------------------------
-
-**Finally got the Result and Stadium stuff ready, lets go for the
-next.**
-
-------------------------------------------------------------------------
-
-Already got an idea, could go over the positions with a function.
-Therefore lets get the unique positions in a list first.
-
-------------------------------------------------------------------------
-
-    all_positions <- get_unique_values(all_rosters_clean, "Position")[-6] # removes the head coach
-
-    #all_positions
-
-Probably won’t need it.
-
-Need to join topscorer and roster to get all the team names into the
-topscorer file, there is already a column called `points_per_set` so if
-i get it done i just need to `group_by(Position)` and
-`Summarize(mean(Positon))`with lapply? over all teams.
-
-    joined_topscore_roster <- right_join(all_topscorer_clean2,all_rosters_clean2, "Name")
-
-    ## Warning in right_join(all_topscorer_clean2, all_rosters_clean2, "Name"): Detected an unexpected many-to-many relationship between `x` and `y`.
-    ## ℹ Row 3 of `x` matches multiple rows in `y`.
-    ## ℹ Row 115 of `y` matches multiple rows in `x`.
-    ## ℹ If a many-to-many relationship is expected, set `relationship =
-    ##   "many-to-many"` to silence this warning.
-
-    joined_topscore_roster
-
-    ## # A tibble: 259 × 16
-    ##     Rank Name           Points_overall Errors_overall Points_per_Set Sets_played
-    ##    <dbl> <chr>                   <dbl>          <dbl>          <dbl>       <dbl>
-    ##  1    34 Amedegnato, D…              6             11            0.5          11
-    ##  2    31 Barsemian, Ra…              9             13            1             9
-    ##  3    21 Baumann, Felix             39             39            3            13
-    ##  4    21 Baumann, Felix             39             39            3            13
-    ##  5    15 Baxpöhler, No…             35             32            1.8          20
-    ##  6    21 Chamberlain, …             10             10            1.1           9
-    ##  7     7 Colito, Augus…             62             44            3.9          16
-    ##  8     1 Deweese, Randy            126             59            5            25
-    ##  9    25 Engelmann, Li…              4              5            0.4          10
-    ## 10    16 Engemann, Nor…              2              0            1             2
-    ## # ℹ 249 more rows
-    ## # ℹ 10 more variables: Games_played <dbl>, `Top-Scorer` <dbl>,
-    ## #   errors_per_set <dbl>, Team <chr>, Height <dbl>, Gender <chr>,
-    ## #   `Date of Birth` <chr>, `Jersey Number` <dbl>, Nationality <chr>,
-    ## #   Position <chr>
+    ## # A tibble: 9 × 13
+    ##   Team   Home  Away Total Victories Losses avg_sets avg_point_per_1set max_point
+    ##   <chr> <dbl> <dbl> <dbl>     <dbl>  <dbl>    <dbl>              <dbl>     <dbl>
+    ## 1 SVG_…    14    14    28        17     11     3.75               23.5        33
+    ## 2 BERL…    16    14    30        26      4     3.5                24.5        31
+    ## 3 SWD_…    13    14    27        15     12     3.81               23.3        33
+    ## 4 VfB_…    16    16    32        21     11     3.84               23.8        33
+    ## 5 Heli…    12    14    26        15     11     3.73               24.1        33
+    ## 6 Ener…    12    13    25         7     18     3.76               21.7        33
+    ## 7 TSV_…    12    13    25         4     21     3.36               19.7        33
+    ## 8 WWK_…    12    13    25        14     11     3.64               22.7        33
+    ## 9 VCO_…    12     8    20         0     20     3.1                17.7        33
+    ## # ℹ 4 more variables: min_point <dbl>, avg_ballpoint_home <dbl>,
+    ## #   avg_ballpoint_away <dbl>, avg_attendance_home <dbl>
 
 ------------------------------------------------------------------------
 
-For a finally fix, as mentioned before, we should fix the mistakes in
-names first by using our `get_unique_values` function
+For further variable mutating, i need to join the `topscore`file with
+the `roster` file first.
 
-Anyway let’s go for mutating the rest of requested variables
+    suppressWarnings({
+      joined_topscore_roster <- right_join(all_topscorer_clean2,all_rosters_clean2, "Name")
+    })
 
 ------------------------------------------------------------------------
 
-    attack_var <- joined_topscore_roster%>%
-      group_by(Team, Position)%>%
-      summarise(avg_point_per_position = round(mean(Points_per_Set, na.rm = TRUE), 1))%>%
-      ungroup()#%>%
-
-    ## `summarise()` has grouped output by 'Team'. You can override using the
-    ## `.groups` argument.
-
-      #filter(!is.na(avg_point_per_position))
-
-    #attack_var
-    topscore_var <- joined_topscore_roster%>%
-      group_by(Team, Position)%>%
-      summarise(avg_toppoints_per_position = round(mean(Points_overall, na.rm = TRUE), 1))%>%
-      ungroup()#%>%
-
-    ## `summarise()` has grouped output by 'Team'. You can override using the
-    ## `.groups` argument.
-
-      #filter(!is.na(avg_point_per_position))
-    #topscore_var
-
-    error_var <- joined_topscore_roster %>%
-      group_by(Team, Position) %>%
-        filter(!is.na(errors_per_set))%>%
-      summarise(max_errors = max(errors_per_set)) %>%
-      ungroup()
-
-    ## `summarise()` has grouped output by 'Team'. You can override using the
-    ## `.groups` argument.
-
-    #error_var
-
+    suppressMessages({
+      
+      # Attacking & Topscorer Variables:
     calculate_avg_var <- function(data, value_column) {
       result <- data %>%
         group_by(Team, Position) %>%
@@ -487,23 +345,108 @@ Anyway let’s go for mutating the rest of requested variables
       return(result)
     }
 
-    attack_var2 <- calculate_avg_var(joined_topscore_roster, Points_per_Set)
+    attack_var2 <- calculate_avg_var(joined_topscore_roster, Points_per_Set)%>%
+      rename("avg_point_per_set" = avg_value)
+    topscore_var2 <- calculate_avg_var(joined_topscore_roster, Points_overall)%>%
+      rename("avg_topscore" = avg_value)
 
-    ## `summarise()` has grouped output by 'Team'. You can override using the
-    ## `.groups` argument.
+    error_var <- joined_topscore_roster %>%
+      group_by(Team, Position) %>%
+        filter(!is.na(errors_per_set))%>%
+      summarise(max_errors = round(max(errors_per_set),2)) %>%
+      ungroup()
 
-    #attack_var2
-    topscore_var2 <- calculate_avg_var(joined_topscore_roster, Points_overall)
+    all_var2 <- attack_var2%>%
+      mutate("avg_topscore" = topscore_var2$avg_topscore,
+             "max_errors" = error_var$max_errors,
+             "Team" = as_factor(Team),
+             "Position" = as_factor(Position))
 
-    ## `summarise()` has grouped output by 'Team'. You can override using the
-    ## `.groups` argument.
+    merged_var <- all_var1 %>%
+      inner_join(all_var2, by = c("Team" = "Team"))
+    })
 
-    #topscore_var2
+**Finally we got all requested variables in one table**
 
 ------------------------------------------------------------------------
 
-Now we got all requested `Attacking` & `Topscorer` & `Errors`variables.
-
-Let’s go for the Graph now.
+## Plotting the Graph Part:
 
 ------------------------------------------------------------------------
+
+First get them into a long-format:
+
+    tidy_var <- pivot_longer(merged_var, cols = -c(Team, Position), names_to = "Kennzahl", values_to = "Wert")%>%
+      mutate("Kennzahl" = as.factor(Kennzahl))
+    tidy_var
+
+    ## # A tibble: 585 × 4
+    ##    Team         Position Kennzahl            Wert
+    ##    <chr>        <fct>    <fct>              <dbl>
+    ##  1 SVG_Lüneburg libero   Home               14   
+    ##  2 SVG_Lüneburg libero   Away               14   
+    ##  3 SVG_Lüneburg libero   Total              28   
+    ##  4 SVG_Lüneburg libero   Victories          17   
+    ##  5 SVG_Lüneburg libero   Losses             11   
+    ##  6 SVG_Lüneburg libero   avg_sets            3.75
+    ##  7 SVG_Lüneburg libero   avg_point_per_1set 23.5 
+    ##  8 SVG_Lüneburg libero   max_point          33   
+    ##  9 SVG_Lüneburg libero   min_point          12   
+    ## 10 SVG_Lüneburg libero   avg_ballpoint_home 91.6 
+    ## # ℹ 575 more rows
+
+    tidy_var %>%
+      ggplot(aes(x = Kennzahl, y = Wert, fill = Kennzahl)) +
+      geom_bar(stat = "identity") +
+      ylim(-50, 75) +
+      theme_minimal() +
+      theme(axis.text = element_blank(),
+            axis.title = element_blank(),
+            panel.grid = element_blank()
+            , text = element_text(color = "grey") #  in the png background is dark
+            ) +
+      coord_polar(start = 0) +
+      facet_wrap(~ Team) +
+      ggtitle("Team wise Ploted")
+
+    ## Warning: Removed 104 rows containing missing values (`position_stack()`).
+
+    ## Warning: Removed 97 rows containing missing values (`geom_bar()`).
+
+![](My_Solution_for_Laura_files/figure-markdown_strict/plot_all-1.png)
+
+    ggsave("All_team_plot.png", plot = last_plot(), width = 20, height = 20, units = "cm")
+
+    ## Warning: Removed 104 rows containing missing values (`position_stack()`).
+    ## Removed 97 rows containing missing values (`geom_bar()`).
+
+![](All_team_plot.png)
+
+So far working proper, of course there still lot of adjustments to do.
+The avg & max point/error per *Position* still not working.
+
+But i think its okay for now.
+
+------------------------------------------------------------------------
+
+    tidy_team <- tidy_var %>%
+      filter(Team == "BERLIN_RECYCLING_Volleys")
+
+    plot_try2 <- ggplot(tidy_team, aes(x = Kennzahl, y = Wert, fill = Kennzahl)) +
+      geom_bar(stat = "identity") +
+      ylim(-50, 75) +
+      theme_minimal() +
+      theme(axis.text = element_blank(),
+            axis.title = element_blank(),
+            panel.grid = element_blank()) +
+      coord_polar(start = 0) +
+      ggtitle("BERLIN RECYCLING Volleys")
+
+
+    print(plot_try2)
+
+    ## Warning: Removed 13 rows containing missing values (`position_stack()`).
+
+    ## Warning: Removed 9 rows containing missing values (`geom_bar()`).
+
+![](My_Solution_for_Laura_files/figure-markdown_strict/only_plot_one-1.png)
