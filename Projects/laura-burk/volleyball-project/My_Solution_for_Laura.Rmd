@@ -384,7 +384,6 @@ all_var1 <- all_var1 %>%
   mutate(Team = as.factor(Team),
          Team = gsub(" ", "_", Team))
 }
-all_var1
 
 ```
 
@@ -481,7 +480,6 @@ First get them into a long-format:
 
 tidy_var <- pivot_longer(merged_var, cols = -c(Team, Position), names_to = "Kennzahl", values_to = "Wert")%>%
   mutate("Kennzahl" = as.factor(Kennzahl))
-tidy_var
 
 ```
 
