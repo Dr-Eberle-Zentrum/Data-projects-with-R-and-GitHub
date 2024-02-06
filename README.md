@@ -109,6 +109,7 @@ Current project:
 
 - Jana (JanaKimmich) - [formula one project](Projects/JanaKimmich/project-description.md)
 - Laura (laura-burk) - [volleyball project](Projects/laura-burk/volleyball-project/project-description-volleyball.md)
+  - solution [by Jana](Projects/laura-burk/volleyball-project/JanaKimmich.md)
 - Edward (edwardarchaeology) - [Waffle Disaster](Projects/edward-leland/Waffle_Disaster/Project_Description.md)
 - Tim (HaasTim) - [Bilateral Trade](Projects/HaasTim/My-Project/project-description.md)
   - solution [by Edward](Projects/HaasTim/My-Project/edwardarchaeology.md)
