@@ -31,7 +31,7 @@ My first thoughts been its just some selecting/deselecting and joining and go on
 
 Honestly i even tried to cheat and prepared the `.csv`s already with **OpenRefine** `r emo::ji("grin")` [Download Link](https://github.com/OpenRefine/OpenRefine/releases/download/3.7.6/openrefine-win-with-java-3.7.6.zip)
 
-But by accident i imported the wrong `.csv` dats and already after trying to im port the second `csv` from your provided  [archive.zip](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/JanaKimmich/archive.zip) folder, i came to this wunderful idea of creating this [**drop_n_slice_folder**](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/Nicos_tryOut_branch/Jana_Formula_One/drop_n_slice_folder) for you ! `r emo::ji("grin")`
+But by accident i imported the wrong `.csv` dats and already after trying to import the second `.csv` from your provided  [archive.zip](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/JanaKimmich/archive.zip) folder, i came to this wunderful idea of creating this [**drop_n_slice_folder**](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/Nicos_tryOut_branch/Jana_Formula_One/drop_n_slice_folder) for you ! `r emo::ji("grin")`
 
 
 I  wasn't actuall sure if you wanna extend this project anytime to the other `.csv` dats aswell, but i should work with some minor adjustments.
@@ -100,7 +100,7 @@ So you can see, we identified all `.csv`'s with the tables of interest,
   
 The rest of the .csv's is in the **commit_out folder**.
   They could easily added, if data inside is of intrest,
-  and is related/connected in anyway with the `result.csv` (current by contain(column ID).)
+  and is related/connected in anyway within the `result.csv` (current by contain(column ID).)
 
 ***
 
@@ -236,7 +236,7 @@ And sort out the "names" in races and "nationality" in constructors
 If we take a closer look at the structur of:
 
 
-**finally_all_sortedt:**
+**finally_all_sorted:**
 
 ```{r str_finally_all_sorted, echo=FALSE}
 
