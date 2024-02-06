@@ -120,7 +120,7 @@ Current project:
 - Yunji (Yuuunji) - [Crimes in EU countries](Projects/YunjiKang/project-description.md)
   - solution [by Noel](Projects/YunjiKang/NoelStudentAcc.md), [by Tim](Projects/YunjiKang/HaasTim.md), [by Martin](Projects/YunjiKang/martin.md)
 - Nicolai (blubbi90) - [Standard Operating Procedure](Projects/blubbi90/StandardOperatingProcedureLayout/project_description_v0.1.md)
-
+  - solution [by Martin (html)](https://raw.githack.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/Projects/blubbi90/StandardOperatingProcedureLayout/martin.html)/[(R)](Projects/blubbi90/StandardOperatingProcedureLayout/martin.R)
 
 
 #### Goals
