@@ -117,7 +117,7 @@ Current project:
 - Noel (NoelStudentAcc) - [Self-control, sleep quality and smartphone usage](Projects/NoelStudentAcc/project-description.md)
   - solution [by Tim](Projects/NoelStudentAcc/HaasTim.md), [by Edward](Projects/NoelStudentAcc/edwardarchaeology.md)
 - Yunji (Yuuunji) - [Crimes in EU countries](Projects/YunjiKang/project-description.md)
-  - solution [by Noel](Projects/YunjiKang/NoelStudentAcc.md)
+  - solution [by Noel](Projects/YunjiKang/NoelStudentAcc.md), [by Tim](Projects/YunjiKang/HaasTim.md)
 - Nicolai (blubbi90) - [Standard Operating Procedure](Projects/blubbi90/StandardOperatingProcedureLayout/project_description_v0.1.md)
 
 
