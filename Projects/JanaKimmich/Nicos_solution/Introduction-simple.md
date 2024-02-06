@@ -44,7 +44,7 @@ document. Outputs are automatically updated whenever inputs change.
 
 So let us come back to this fantastic
 [**drop\_n\_slice\_folder**](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/Nicos_tryOut_branch/Jana_Formula_One/drop_n_slice_folder)
-📂 and let’s have an closer look how it actuall works and helps to solve
+📁 and let’s have an closer look how it actuall works and helps to solve
 [your **Formula One
 Issue:**](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/JanaKimmich/project-description.md)
 
@@ -87,7 +87,7 @@ that.
 But first:
 
     #drop_path <- file.path(getwd(), "Solution/drop_n_slice")
-    drop_path <- "C:\\Users\\Pirate\\Documents\\Data-projects-with-R-and-GitHub\\Projects\\JanaKimmich\\Nicos_solution\\Solution\\drop_n_slice"
+    drop_path <- "Solution\\drop_n_slice"
 
 ------------------------------------------------------------------------
 
@@ -207,7 +207,7 @@ Now let’s finish the job:
         
         # might be better to store searching patter outside of the function 4 better edit control
         
-        select_columns_of_intrest <- select(on_each_tibble, matches("^(result|race|driver|constructor)Id$"), contains("name"), matches("nationality"), matches("wins"), matches("year")) # matches("points"), matches("^positionOrder$"), matches("rank"
+        select_columns_of_intrest <- dplyr::select(on_each_tibble, matches("^(result|race|driver|constructor)Id$"), contains("name"), matches("nationality"), matches("wins"), matches("year")) # matches("points"), matches("^positionOrder$"), matches("rank"
         return(select_columns_of_intrest)
         })
       return(tibble_list_intrest_col)
@@ -285,10 +285,10 @@ And sort out the unnecessary:
 
     {
     slice_it$races <- slice_it$races %>% # should work with map anyhow aswell
-      select(-name)
+      dplyr::select(-name)
 
     slice_it$constructors <- slice_it$constructors %>%
-      select(-nationality)
+      dplyr::select(-nationality)
 
     finally_all_sorted <- slice_it
     }
@@ -434,7 +434,7 @@ And put it all in a pipe so called:
       arrange(desc(sum_wins_along))%>%
       ungroup()%>%
       filter(driverId %in% head(unique(driverId[order(sum_wins_along, decreasing = TRUE)]), 10)) %>%
-      select(year, forename, surname, nationality, wins, sum_wins_along, name )%>%  #            -> to arrange 
+      dplyr::select(year, forename, surname, nationality, wins, sum_wins_along, name )%>%  #            -> to arrange 
       
                                 #columns of table in better way, won't be needed if not showing, could be just:  
       
@@ -615,7 +615,7 @@ together in one cell as `full_name`
 
     name_combined <- pipe_hammer %>%
       mutate(full_name = paste(forename, surname, sep = " "))%>%
-      select(-c(forename, surname))
+      dplyr::select(-c(forename, surname))
     name_combined
 
     ## # A tibble: 118 × 6

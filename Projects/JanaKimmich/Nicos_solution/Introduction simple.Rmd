@@ -2,12 +2,12 @@
 title: "Fomula One Solution simple"
 author: "Nicolai Schwarz"
 date: "2023-12-18"
-output: html_document
+output: md_document
 ---
 ```{r setup, include=FALSE}
 # get this packages
 
-source("install_packages_simple.R")
+# source("install_packages_simple.R")
 library(tidyverse)
 library(emo)
 library(readr)
@@ -55,7 +55,7 @@ So let us come back to this fantastic [**drop_n_slice_folder**](https://github.c
 
 ***
 ```{r folder_content, echo=FALSE}
-folder_path <- "C:\\Users\\Pirate\\Documents\\Data-projects-with-R-and-GitHub\\Projects\\JanaKimmich\\Nicos_solution\\Solution\\drop_n_slice"
+folder_path <- "Solution\\drop_n_slice"
 
  files <- list.files(folder_path)
 
@@ -88,7 +88,7 @@ Therefor I wrote you an function ( `auto_import_csv` ), which do exactly that.
 But first:
 ```{r wd, echo=TRUE}
 #drop_path <- file.path(getwd(), "Solution/drop_n_slice")
-drop_path <- "C:\\Users\\Pirate\\Documents\\Data-projects-with-R-and-GitHub\\Projects\\JanaKimmich\\Nicos_solution\\Solution\\drop_n_slice"
+drop_path <- "Solution\\drop_n_slice"
 
 ```
 
@@ -155,7 +155,7 @@ big_slicer <- function(on_tibble_list){
     
     # might be better to store searching patter outside of the function 4 better edit control
     
-    select_columns_of_intrest <- select(on_each_tibble, matches("^(result|race|driver|constructor)Id$"), contains("name"), matches("nationality"), matches("wins"), matches("year")) # matches("points"), matches("^positionOrder$"), matches("rank"
+    select_columns_of_intrest <- dplyr::select(on_each_tibble, matches("^(result|race|driver|constructor)Id$"), contains("name"), matches("nationality"), matches("wins"), matches("year")) # matches("points"), matches("^positionOrder$"), matches("rank"
     return(select_columns_of_intrest)
     })
   return(tibble_list_intrest_col)
@@ -215,10 +215,10 @@ And sort out the unnecessary:
 ```{r final_cut, echo=TRUE}
 {
 slice_it$races <- slice_it$races %>% # should work with map anyhow aswell
-  select(-name)
+  dplyr::select(-name)
 
 slice_it$constructors <- slice_it$constructors %>%
-  select(-nationality)
+  dplyr::select(-nationality)
 
 finally_all_sorted <- slice_it
 }
@@ -340,7 +340,7 @@ pipe_hammer <- big_picture %>%
   arrange(desc(sum_wins_along))%>%
   ungroup()%>%
   filter(driverId %in% head(unique(driverId[order(sum_wins_along, decreasing = TRUE)]), 10)) %>%
-  select(year, forename, surname, nationality, wins, sum_wins_along, name )%>%  #            -> to arrange 
+  dplyr::select(year, forename, surname, nationality, wins, sum_wins_along, name )%>%  #            -> to arrange 
   
                             #columns of table in better way, won't be needed if not showing, could be just:  
   
@@ -501,7 +501,7 @@ Ok i see, for better computation we should bring the fore-surname together in on
 
 name_combined <- pipe_hammer %>%
   mutate(full_name = paste(forename, surname, sep = " "))%>%
-  select(-c(forename, surname))
+  dplyr::select(-c(forename, surname))
 name_combined
 
 
