@@ -114,7 +114,7 @@ Current project:
 - Edward (edwardarchaeology) - [Waffle Disaster](Projects/edward-leland/Waffle_Disaster/Project_Description.md)
   - solution [by Jana](Projects/edward-leland/Waffle_Disaster/Jana_Kimmich.md), [by Martin](Projects/edward-leland/Waffle_Disaster/martin.md)
 - Tim (HaasTim) - [Bilateral Trade](Projects/HaasTim/My-Project/project-description.md)
-  - solution [by Edward](Projects/HaasTim/My-Project/edwardarchaeology.md)
+  - solution [by Edward](Projects/HaasTim/My-Project/edwardarchaeology.md), [by Martin](Projects/HaasTim/My-Project/martin.md)
 - Noel (NoelStudentAcc) - [Self-control, sleep quality and smartphone usage](Projects/NoelStudentAcc/project-description.md)
   - solution [by Tim](Projects/NoelStudentAcc/HaasTim.md), [by Edward](Projects/NoelStudentAcc/edwardarchaeology.md)
 - Yunji (Yuuunji) - [Crimes in EU countries](Projects/YunjiKang/project-description.md)

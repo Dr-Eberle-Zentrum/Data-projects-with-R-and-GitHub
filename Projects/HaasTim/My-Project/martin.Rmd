@@ -1,9 +1,16 @@
+---
+  title: "Martin's Attempt"
+  author: "Martin Raden"
+  output: md_document
+---
+
+```{r all.in.one, message=FALSE, warning=FALSE}
+
+library(tidyverse)
 
 # set working directory to source file location
 library(this.path)
 setwd(this.path::here())
-
-library(tidyverse)
 
 # read data
 library(haven)
@@ -76,3 +83,4 @@ plotData |>
          hjust=0.5,
          vjust=1,
          size=3)
+```
