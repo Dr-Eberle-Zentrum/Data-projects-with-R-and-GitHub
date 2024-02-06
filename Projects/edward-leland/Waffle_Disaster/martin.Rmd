@@ -1,6 +1,17 @@
+---
+  title: "Martin's Attempt"
+  author: "Martin Raden"
+  output: md_document
+---
 
+```{r all.in.one, message=FALSE, warning=FALSE}
 
 library(tidyverse)
+
+# set working directory to source file location
+library(this.path)
+setwd(this.path::here())
+
 library(modelr) # seq_range()
 
 # set working directory to source file location
@@ -89,4 +100,4 @@ plot_usmap() +
              mapping=aes(x,y,col=status),
              size=1.2) +
   scale_color_manual(values = c("limegreen","yellow","red"))
-
+```
