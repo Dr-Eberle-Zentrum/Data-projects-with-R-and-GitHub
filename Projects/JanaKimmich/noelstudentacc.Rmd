@@ -1,0 +1,101 @@
+---
+output: html_document
+---
+
+# Formula One Project
+
+## Preparation:
+
+```{r, include=FALSE}
+library(tidyverse)
+library(plotly)
+```
+
+### Import data
+
+Something I have learned anew:
+
+```{r, include=TRUE, message=FALSE, warning=FALSE}
+drivers <- read_csv(unz("archive.zip", "drivers.csv"), na ="\\N")
+results <- read_csv(unz("archive.zip", "results.csv"), na ="\\N")
+constructors <- read_csv(unz("archive.zip", "constructors.csv"), na ="\\N")
+races <- read_csv(unz("archive.zip", "races.csv"), na ="\\N")
+```
+
+- Open the zip folder and import the respective data set
+- Save "\\N" as "NA"
+
+### Merging and finalizing the data
+
+Here I have carried out many steps at once to prepare the data for plotting:
+
+- Merging the datasets
+- Creating the new variable "name" by for and surname
+- Creating variables to count the wins per year and number of total wins
+- Filtering for years and only the ten best drivers
+- Renaming variables
+
+```{r, include=TRUE}
+df <- results |> 
+  left_join(drivers, by = "driverId") |> 
+  left_join(races, by = "raceId") |> 
+  left_join(constructors, by = "constructorId") |> 
+  mutate(name = paste(forename, surname, sep = " ")) |>
+  filter(year >= 2000 & year <= 2020) |> 
+  group_by(name, year) |> 
+  mutate(wins = sum(position == 1, na.rm = T)) |> 
+  ungroup() |> 
+  select("name", "year", "wins", "nationality.x", "url.x", "name.y") |> 
+  distinct(name, year, .keep_all = T) |> 
+  group_by(name) |> 
+  mutate(totalwins = sum(wins, na.rm = T)) |>  
+  ungroup() |> 
+  mutate(order = dense_rank(desc(totalwins))) |> 
+  rename(nationality = nationality.x, url = url.x, constructor = name.y) |> 
+  arrange(order) |> 
+  filter(order <= 9, wins > 0)  
+
+rm(list = setdiff(ls(), "df"))
+```
+
+### A few steps before plotting
+
+Since Jana wanted me to use colors that match the Constructor, I defined the colors here:
+
+```{r, include=TRUE}
+
+colors <- c(
+  "Brawn" = "#7B1113",   
+  "Ferrari" = "#DC0000", 
+  "Honda" = "#666666",  
+  "Lotus F1" = "#0E55A5", 
+  "McLaren" = "#FF8700", 
+  "Mercedes" = "#00D2BE",
+  "Red Bull" = "#1E41FF",
+  "Renault" = "#FFF500", 
+  "Toro Rosso" = "#469BFF"
+)
+
+```
+
+There should also be the possibility to get additional information about the drivers when hovering over the bar. I defined the text here:
+
+```{r, include=TRUE}
+hover_text <- with(df, paste(name, ":<br>", wins, " Wins<br>Constructor: ", constructor, "<br>Year :", year))
+```
+
+Note: "&lt;br&gt;" is a HTML-tag equivalent to the "\\n" that we use in R. 
+
+## Plotting
+
+On Jana's advice, I used the `plotly` package:
+
+```{r, include=TRUE}
+plot_ly(df, x = ~wins, y = ~name, type = "bar", color = ~constructor, 
+        colors = colors, text = ~hover_text, hoverinfo = "text") |> 
+  layout(title = "Most successful drivers with constructors", 
+         xaxis = list(title = "Races won"),
+         yaxis = list(title = "", categoryorder = "total ascending", 
+                      categoryarray = ~order), 
+         barmode = 'stack')
+```
