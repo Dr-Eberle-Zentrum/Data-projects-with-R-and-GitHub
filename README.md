@@ -110,7 +110,7 @@ Current project:
 - Jana (JanaKimmich) - [formula one project](Projects/JanaKimmich/project-description.md)
   - solution [by Noel (html)](https://raw.githack.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/Projects/JanaKimmich/noelstudentacc.html)/[(Rmd)](Projects/JanaKimmich/noelstudentacc.Rmd), [by Nico](Projects/JanaKimmich/Nicos_solution/Introduction-simple.md), [by Martin](Projects/JanaKimmich/martin.md)
 - Laura (laura-burk) - [volleyball project](Projects/laura-burk/volleyball-project/project-description-volleyball.md)
-  - solution [by Jana](Projects/laura-burk/volleyball-project/JanaKimmich.md)
+  - solution [by Jana](Projects/laura-burk/volleyball-project/JanaKimmich.md), [by Martin](Projects/laura-burk/martin.md)
 - Edward (edwardarchaeology) - [Waffle Disaster](Projects/edward-leland/Waffle_Disaster/Project_Description.md)
   - solution [by Jana](Projects/edward-leland/Waffle_Disaster/Jana_Kimmich.md)
 - Tim (HaasTim) - [Bilateral Trade](Projects/HaasTim/My-Project/project-description.md)

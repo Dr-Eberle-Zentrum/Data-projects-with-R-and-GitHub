@@ -1,5 +1,16 @@
+---
+  title: "Martin's Attempt"
+  author: "Martin Raden"
+  output: md_document
+---
+
+```{r all.in.one, message=FALSE, warning=FALSE}
 
 library(tidyverse)
+
+# set working directory to source file location
+library(this.path)
+setwd(this.path::here())
 
 # read list of country codes
 countryCodes <- read_tsv("https://gist.github.com/malteos/658b98ea89b8f7584ae1/raw/8b2f1be51600fc379e247cbbaa4d5bdbc83ff9d5/german-iso-3166.csv",
@@ -160,4 +171,4 @@ bind_rows(dat) |>
   inset_element(p=readPNG("volleyball-project/team-logos/vfb_friedrichshafen_logo_kreis.png", native=TRUE),
               left=0.5, right=0.75, bottom=0.4, top=0.6)
 
-
+```
