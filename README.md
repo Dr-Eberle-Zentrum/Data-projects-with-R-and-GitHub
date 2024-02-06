@@ -109,10 +109,15 @@ Current project:
 
 - Jana (JanaKimmich) - [formula one project](Projects/JanaKimmich/project-description.md)
 - Laura (laura-burk) - [volleyball project](Projects/laura-burk/volleyball-project/project-description-volleyball.md)
+  - solution [by Jana](Projects/laura-burk/volleyball-project/JanaKimmich.md)
 - Edward (edwardarchaeology) - [Waffle Disaster](Projects/edward-leland/Waffle_Disaster/Project_Description.md)
+  - solution [by Jana](Projects/edward-leland/Waffle_Disaster/Jana_Kimmich.md)
 - Tim (HaasTim) - [Bilateral Trade](Projects/HaasTim/My-Project/project-description.md)
+  - solution [by Edward](Projects/HaasTim/My-Project/edwardarchaeology.md)
 - Noel (NoelStudentAcc) - [Self-control, sleep quality and smartphone usage](Projects/NoelStudentAcc/project-description.md)
+  - solution [by Tim](Projects/NoelStudentAcc/HaasTim.md), [by Edward](Projects/NoelStudentAcc/edwardarchaeology.md)
 - Yunji (Yuuunji) - [Crimes in EU countries](Projects/YunjiKang/project-description.md)
+  - solution [by Noel](Projects/YunjiKang/NoelStudentAcc.md), [by Tim](Projects/YunjiKang/HaasTim.md)
 - Nicolai (blubbi90) - [Standard Operating Procedure](Projects/blubbi90/StandardOperatingProcedureLayout/project_description_v0.1.md)
 
 
