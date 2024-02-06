@@ -111,6 +111,7 @@ Current project:
 - Laura (laura-burk) - [volleyball project](Projects/laura-burk/volleyball-project/project-description-volleyball.md)
   - solution [by Jana](Projects/laura-burk/volleyball-project/JanaKimmich.md)
 - Edward (edwardarchaeology) - [Waffle Disaster](Projects/edward-leland/Waffle_Disaster/Project_Description.md)
+  - solution [by Jana](Projects/edward-leland/Waffle_Disaster/Jana_Kimmich.md)
 - Tim (HaasTim) - [Bilateral Trade](Projects/HaasTim/My-Project/project-description.md)
   - solution [by Edward](Projects/HaasTim/My-Project/edwardarchaeology.md)
 - Noel (NoelStudentAcc) - [Self-control, sleep quality and smartphone usage](Projects/NoelStudentAcc/project-description.md)
