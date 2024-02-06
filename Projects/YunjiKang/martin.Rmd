@@ -1,3 +1,12 @@
+---
+  title: "Martin's Attempt"
+  author: "Martin Raden"
+  output: md_document
+---
+
+```{r all.in.one, message=FALSE, warning=FALSE}
+
+library(tidyverse)
 
 # set working directory to source file location
 library(this.path)
@@ -83,7 +92,9 @@ income <- read_csv("Income of households.gz")
 
 library(gganimate)
 library(ggrepel)
-crimes2 |>
+
+animatedPlot <- 
+  crimes2 |>
   left_join( income, by=c( "geo", "TIME_PERIOD")) |>
   rename(income = OBS_VALUE) |>
   left_join( poverty,  by=c( "geo", "TIME_PERIOD")) |>
@@ -118,3 +129,7 @@ crimes2 |>
   # transition_states(as.integer(year)) +
   ease_aes('linear')
 
+anim_save("martin.gif", animatedPlot)
+
+```
+![martin.gif](martin.gif)
