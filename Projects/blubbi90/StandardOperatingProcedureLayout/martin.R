@@ -70,6 +70,8 @@ getHtmlForTable <- function( subtable ) {
                 "</ul>"
   )
 
+  # TODO: merge subtable und codebook information
+
   # generate table
   htmlOut <- c(htmlOut,
                "\n",
