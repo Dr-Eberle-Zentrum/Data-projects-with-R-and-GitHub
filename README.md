@@ -112,7 +112,6 @@ Current project:
 - ...
 
 
-
 #### Goals
 
 At the end of Phase 1 you will have a better understanding of
@@ -323,3 +322,27 @@ Finally, it is not only about content but presentation matters. Thus, you will h
     -   (shortly) explain and interpret what you show
     -   provide used formulas etc. to compute statistics/values/...
 -   ...
+
+# Common Issues
+
+## Rendering HTML files stored on GitHub
+
+If your solutions generates HTML output files, you cannot directly view/render them on GitHub, since the page is made to work on source files not rendered output.
+
+### If your HTML file does not use JavaScript:
+
+In case your HTML file works without JavaScript (just static text and image output), you can use [https://htmlpreview.github.io/](https://htmlpreview.github.io/)
+
+- open the file on github.com in your browser
+- click on the `Raw` button in the upper right corner
+- copy the URL of the now shown file
+- either paste the URL to the linked page from above
+  - or just prefix it with `http://htmlpreview.github.io/?`
+
+Note: `htmlpreview` is only working for HTML pages *without JavaScript* content!
+ 
+### If your HTML file is based on JavaScript:
+
+In case your HTML file is making use of JavaScript, you can use [https://raw.githack.com/](https://raw.githack.com/)
+
+The procedure is the same as above but the final URL is slightly different, see website.
