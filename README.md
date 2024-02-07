@@ -25,6 +25,8 @@ All tutorials are summarized within the
     -   [Phase 1 - Posting your initial solution](#phase-1---posting-your-initial-solution)
     -   [Phase 2 - Reviewing and finalizing](#phase-2---reviewing-and-finalizing)
 -   [Beautifying your project](#beautifying-your-project)
+-   [Common Issues](#common-issues)
+    -   [Rendering HTML files stored on GitHub](#rendering-html-files-stored-on-github)
 
 ------------------------------------------------------------------------
 
