@@ -1,0 +1,103 @@
+---
+  title: "Martin's Attempt"
+  author: "Martin Raden"
+  output: md_document
+---
+
+```{r all.in.one, message=FALSE, warning=FALSE}
+
+library(tidyverse)
+
+# set working directory to source file location
+library(this.path)
+setwd(this.path::here())
+
+library(modelr) # seq_range()
+
+# set working directory to source file location
+library(this.path)
+setwd(this.path::here())
+
+# coordinate system and plotting
+library(usmap)
+library(sf)
+
+# read waffle house data from web
+library(rvest)
+store_data <-
+  read_html("https://locations.wafflehouse.com" ) |>
+  html_element("script#__NEXT_DATA__") |>
+  html_text() |>
+  jsonlite::fromJSON() |>
+  purrr::pluck("props", "pageProps", "locations") |>
+  unnest(addressLines) |>
+  unnest(custom) |>
+  as_tibble() |>
+  ######################
+  # preprocessing
+  ######################
+  # correct naming
+  rename(status=`_status`) |>
+  # set status
+  mutate( status = factor(status)) |>
+  # copy coordinate data
+  mutate(x=longitude,y=latitude) |>
+  # transform coordinate data for usmap package usage
+  sf_transform_xy(target_crs = 2163, source_crs=4326)
+
+# simulated path of the storm over time
+stormResolution <- 20
+storm <- tibble(
+  time = 1:stormResolution,
+  x = rev(seq_range(c(max(store_data$x), min(store_data$x)), stormResolution)),
+  y = seq_range(c(min(store_data$y),max(store_data$y)/100), stormResolution),
+  size = rev(seq_range(c(500000,0), stormResolution))
+)
+
+#######################################################
+# update status information for storm front
+library(raster)
+
+addHeavoc <- function( x,y,status, storm_data ) {
+  centerFraction <- 0.5
+  s <- storm_data
+
+  euclidean <- function(x1,y1,x2,y2) { tibble(x1,y1,x2,y2) |> rowwise()|> mutate(d = sqrt(sum((x1-x2)^2, (y1-y2)^2))) |> pull(d) }
+  shopDistance <- euclidean(x,y, storm_data$x,storm_data$y)
+
+  if_else(status != "C"
+          & shopDistance < storm_data$size,
+          # & between(x, s$x-s$size, s$x+s$size)
+          # & between(y, s$y-s$size, s$y+s$size),
+                   if_else(
+                     shopDistance < (storm_data$size*centerFraction),
+                     # between(x, s$x-(s$size*centerFraction), s$x+(s$size*centerFraction))
+                     #        & between(y, s$y-(s$size*centerFraction), s$y+(s$size*centerFraction)),
+                      "C",
+                      "CT"
+                   ),
+                   status) |>
+    factor(levels= c("A","CT","C"))
+}
+
+# compute path of disaster
+heavoc <- store_data
+for( i in storm$time) {
+  heavoc <- mutate(heavoc, status = addHeavoc(x,y,status,
+                                              filter(storm,time == i) # storm data for given time point
+                                              ))
+}
+
+# plot it
+library("ggforce") # geom_circle()
+plot_usmap() +
+  geom_line(data=slice(storm,c(1,n())), aes(x,y),
+            arrow = arrow(length=unit(0.30,"cm"), ends="first", type = "closed"),
+            linewidth=2,
+            col="red", alpha=0.5)+
+  geom_circle(data = storm, aes(x0 = x, y0 = y, r = size), col="lightgray") +
+  geom_point(data= heavoc ,
+             mapping=aes(x,y,col=status),
+             size=1.2) +
+  scale_color_manual(values = c("limegreen","yellow","red"))
+```

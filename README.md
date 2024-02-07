@@ -108,13 +108,19 @@ Example:
 Current project:
 
 - Jana (JanaKimmich) - [formula one project](Projects/JanaKimmich/project-description.md)
+  - solution [by Noel (html)](https://raw.githack.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/Projects/JanaKimmich/noelstudentacc.html)/[(Rmd)](Projects/JanaKimmich/noelstudentacc.Rmd), [by Nico](Projects/JanaKimmich/Nicos_solution/Introduction-simple.md), [by Martin](Projects/JanaKimmich/martin.md)
 - Laura (laura-burk) - [volleyball project](Projects/laura-burk/volleyball-project/project-description-volleyball.md)
+  - solution [by Jana](Projects/laura-burk/volleyball-project/JanaKimmich.md), [by Martin](Projects/laura-burk/martin.md)
 - Edward (edwardarchaeology) - [Waffle Disaster](Projects/edward-leland/Waffle_Disaster/Project_Description.md)
+  - solution [by Jana](Projects/edward-leland/Waffle_Disaster/Jana_Kimmich.md), [by Martin](Projects/edward-leland/Waffle_Disaster/martin.md)
 - Tim (HaasTim) - [Bilateral Trade](Projects/HaasTim/My-Project/project-description.md)
+  - solution [by Edward](Projects/HaasTim/My-Project/edwardarchaeology.md), [by Martin](Projects/HaasTim/My-Project/martin.md)
 - Noel (NoelStudentAcc) - [Self-control, sleep quality and smartphone usage](Projects/NoelStudentAcc/project-description.md)
+  - solution [by Tim](Projects/NoelStudentAcc/HaasTim.md), [by Edward](Projects/NoelStudentAcc/edwardarchaeology.md)
 - Yunji (Yuuunji) - [Crimes in EU countries](Projects/YunjiKang/project-description.md)
+  - solution [by Noel](Projects/YunjiKang/NoelStudentAcc.md), [by Tim](Projects/YunjiKang/HaasTim.md), [by Martin](Projects/YunjiKang/martin.md)
 - Nicolai (blubbi90) - [Standard Operating Procedure](Projects/blubbi90/StandardOperatingProcedureLayout/project_description_v0.1.md)
-
+  - solution [by Martin (html)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/main/Projects/blubbi90/StandardOperatingProcedureLayout/martin.html)/[(R)](Projects/blubbi90/StandardOperatingProcedureLayout/martin.R)
 
 
 #### Goals
@@ -333,3 +339,27 @@ Finally, it is not only about content but presentation matters. Thus, you will h
     -   (shortly) explain and interpret what you show
     -   provide used formulas etc. to compute statistics/values/...
 -   ...
+
+# Common Issues
+
+## Rendering HTML files stored on GitHub
+
+If your solutions generates HTML output files, you cannot directly view/render them on GitHub, since the page is made to work on source files not rendered output.
+
+### If your HTML file does not use JavaScript:
+
+In case your HTML file works without JavaScript (just static text and image output), you can use [https://htmlpreview.github.io/](https://htmlpreview.github.io/)
+
+- open the file on github.com in your browser
+- click on the `Raw` button in the upper right corner
+- copy the URL of the now shown file
+- either paste the URL to the linked page from above
+  - or just prefix it with `http://htmlpreview.github.io/?`
+
+Note: `htmlpreview` is only working for HTML pages *without JavaScript* content!
+ 
+### If your HTML file is based on JavaScript:
+
+In case your HTML file is making use of JavaScript, you can use [https://raw.githack.com/](https://raw.githack.com/)
+
+The procedure is the same as above but the final URL is slightly different, see website.
