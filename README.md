@@ -107,20 +107,10 @@ Example:
 
 Current project:
 
-- Jana (JanaKimmich) - [formula one project](Projects/JanaKimmich/project-description.md)
-  - solution [by Noel (html)](https://raw.githack.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/Projects/JanaKimmich/noelstudentacc.html)/[(Rmd)](Projects/JanaKimmich/noelstudentacc.Rmd), [by Nico](Projects/JanaKimmich/Nicos_solution/Introduction-simple.md), [by Martin](Projects/JanaKimmich/martin.md)
-- Laura (laura-burk) - [volleyball project](Projects/laura-burk/volleyball-project/project-description-volleyball.md)
-  - solution [by Jana](Projects/laura-burk/volleyball-project/JanaKimmich.md), [by Martin](Projects/laura-burk/martin.md)
-- Edward (edwardarchaeology) - [Waffle Disaster](Projects/edward-leland/Waffle_Disaster/Project_Description.md)
-  - solution [by Jana](Projects/edward-leland/Waffle_Disaster/Jana_Kimmich.md), [by Martin](Projects/edward-leland/Waffle_Disaster/martin.md)
-- Tim (HaasTim) - [Bilateral Trade](Projects/HaasTim/My-Project/project-description.md)
-  - solution [by Edward](Projects/HaasTim/My-Project/edwardarchaeology.md), [by Martin](Projects/HaasTim/My-Project/martin.md)
-- Noel (NoelStudentAcc) - [Self-control, sleep quality and smartphone usage](Projects/NoelStudentAcc/project-description.md)
-  - solution [by Tim](Projects/NoelStudentAcc/HaasTim.md), [by Edward](Projects/NoelStudentAcc/edwardarchaeology.md)
-- Yunji (Yuuunji) - [Crimes in EU countries](Projects/YunjiKang/project-description.md)
-  - solution [by Noel](Projects/YunjiKang/NoelStudentAcc.md), [by Tim](Projects/YunjiKang/HaasTim.md), [by Martin](Projects/YunjiKang/martin.md)
-- Nicolai (blubbi90) - [Standard Operating Procedure](Projects/blubbi90/StandardOperatingProcedureLayout/project_description_v0.1.md)
-  - solution [by Martin (html)](https://raw.githack.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/Projects/blubbi90/StandardOperatingProcedureLayout/martin.html)/[(R)](Projects/blubbi90/StandardOperatingProcedureLayout/martin.R)
+- ...
+- ...
+- ...
+- ...
 
 
 #### Goals
@@ -144,13 +134,7 @@ To ensure the drafted projects are understandable and doable, we will do a peer 
 
 For each project draft, we will assign two reviewers at random. The *reviewer assignments* are as follows:
 
-- *Jana* will review projects of: Laura + Edward
-- *Laura* will review projects of: Edward + Tim
-- *Edward* will review projects of: Tim + Noel
-- *Tim* will review projects of: Noel + Yunji
-- *Noel* will review projects of: Yunji + Nicolai
-- *Yunji* will review projects of: Nicolai + Jana 
-- *Nicolai* will review projects of: Jana + Laura
+- **YOU** will review projects of: *the two persons listed below your name in the list of available projects* (see above or use link below)
 
 See [project list](#available-projects) for respective GitHub user names for contact.
 
