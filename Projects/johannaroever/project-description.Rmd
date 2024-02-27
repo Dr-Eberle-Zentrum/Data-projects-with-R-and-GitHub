@@ -1,0 +1,46 @@
+---
+title: "Visualisation for grave stelae from Cyprus during the Roman Empire"
+author: "J. R."
+date: "`r Sys.Date()`"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Topic
+During the Roman Empire grave stelae across the empire show similarities but can differ depending on the exact area they were used in. This can be the case because of local traditions and influences from other regions.
+
+Here the focus should be on the stelae from Cyprus which were categorized and dated by the archaeologist Pogiatzi.The provided [CSV](StelaeCyprus.csv) was assembled by me(J. Röver) from the data described in Pogiatzi's book:
+
+E. Pogiatzi, Die Grabreliefs auf Zypern von der archaischen bis zur römischen Zeit, Peleus 23 (Diss. Albert-Ludwigs-Universität Freiburg 2002, Möhnesee-Wamel 2003)
+
+In some cases the data can be uncertain or incomplete because stelae were found and/or excavated without modern archaeological methods.
+(For the actual interpretation it's also important to be aware that usually not 100% of the artifacts are known and excavated.)
+
+#Goal
+The project should be the creation of plots to show how some of the stelaes' attributes might correlate with each other.
+The first few of 124 observations are these:
+
+```{r, echo = FALSE}
+
+data <- read.csv("StelaeCyprus.csv", sep=';', header = TRUE)
+head(data)
+
+```
+
+## Intermediates
+These could include information like this which could then be shown as plot instead:
+![Stele types per region](steleTypeRegion.png)
+
+Attributes to plot together to see potential correlations, so mostly it's about how often certain attribute values occur together:
+
+* _epoch - type_: How long is each type used? Are there overlaps?
+* _epoch - type - material_: Are there any changes in the material that go along with the epoch and type?
+* _epoch - type - painted(true/false)_: Are stelae only painted in certain epochs or depending on their type?
+* _epoch - location_ (only if found in situ, location accuracy might have to be discussed): Which locations are stelae found at in the different epochs?
+* _epoch - locationType_ (only if found in situ, data might not be inconclusive because of many unknown): Were certain types of location used more during certain epochs?
+
+
