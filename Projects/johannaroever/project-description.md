@@ -48,7 +48,7 @@ of 124 observations are these:
 ## Intermediates
 
 These could include information like this which could then be shown as
-plot instead: ![Stele types per region](steleTypeRegion.png)
+plot instead: ![Stele types per region](steleTypeRegion.PNG)
 
 Attributes to plot together to see potential correlations, so mostly
 it’s about how often certain attribute values occur together:
