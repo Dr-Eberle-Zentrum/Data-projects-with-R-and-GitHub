@@ -44,5 +44,5 @@ The data contains information about soil. Soil samples where taken from soil pro
 ### 2. Visualisation
   - I would like to aggregate the columns Ca, Mg, K, Na and Kationen by profile number and visualize them with a grouped or stacked barplot like this https://r-graph-gallery.com/48-grouped-barplot-with-ggplot2_files/figure-html/thecode4-1.png
   - then I would like to have 3 piecharts of the "Ah" horizons of the profiles 82, 111 and 134 next to each other where I can see the portion of S (Sand), U (silt) and T (clay). See below:
-  ![Sketch of piechart](/Projects/timow98/sketch_1.jpg){ width=50% }
+  ![Sketch of piechart](/Projects/timow98/sketch_1.jpg)
   - I would like to know where the profiles are - maybe they can be visualized on a simple map using the coordinates of the respective columns?
