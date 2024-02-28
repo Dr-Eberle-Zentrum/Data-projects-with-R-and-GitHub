@@ -1,4 +1,6 @@
-# Project description
+# Coloured Glass Beads in the Early Middle Ages
+
+## Project description
 
 In the early Middle Ages, coloured glass beads were a very common type
 of female ornament.
@@ -21,7 +23,7 @@ Schleitheim, Switzerland (from Heck 2000).*
 
 ------------------------------------------------------------------------
 
-# Data sets
+## Data sets
 
 The archaeologists who excavated the site gave me two excel files
 containing information about the all finds associated with
@@ -29,7 +31,7 @@ glassmaking.
 The main `Inventory` table is… let’s say quite hard to navigate without
 modifications.
 
-## Table 1: Inventory
+### Table 1: Inventory
 
 The first excel table is the inventory of the archaeological finds
 associated with glassmaking.  
@@ -112,7 +114,7 @@ Here is an extract of the `Inventory` table:
     -   `Miscellaneous` is self-explanatory: these are objects that do
         not belong to any of the above-mentioned categories.
 
-## Table 2: Glass beads
+### Table 2: Glass beads
 
 The second excel table records the characteristics of each glass bead,
 including their colour.  
@@ -158,9 +160,9 @@ Here is an extract of the table:
 
 ------------------------------------------------------------------------
 
-# Objectives: Modification of the data tables
+## Objectives: Modification of the data tables
 
-## Table 1
+### Table 1
 
 Table 1 (`Inventory`) should be modified:
 
@@ -182,7 +184,7 @@ Table 1 (`Inventory`) should be modified:
     !! One problem here: not all the beads in the Beads table are in the
     Inventory, and vice versa.
 
-## Table 2
+### Table 2
 
 Table 2 (`Beads`) should also be modified:
 
@@ -194,7 +196,7 @@ Table 2 (`Beads`) should also be modified:
     beads, this column needs to be separated into 2: `Colour` and
     `Decor` (probably using the `separate()` function).
 
-## New table: Rods
+### New table: Rods
 
 In the new table `Rods` extracted from the `Inventory` table recording
 the characteristics of the rods, the names for the columns can be
@@ -205,9 +207,9 @@ the information from the `Inventory` table.
 
 ------------------------------------------------------------------------
 
-# Visualisation
+## Visualisation
 
-## Colour distribution
+### Colour distribution
 
 From the `Inventory` table, an histogram of the `Colour` distribution
 for the `Rod`s, `Bead`s, and `OGW`s can be created. One histogram per
@@ -217,7 +219,7 @@ Here is an example of how it should look like:
 <img src="HistogramExample.png" id="id" class="class"
 style="width:50.0%;height:50.0%" />
 
-## Distribution vs. Volume
+### Distribution vs. Volume
 
 It is interesting to know how many beads and rods there is per colours,
 but I already observed with the pictures taken from the samples that

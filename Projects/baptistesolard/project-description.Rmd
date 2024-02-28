@@ -4,11 +4,14 @@ output: md_document
 author: "Baptiste Solard"
 ---
 
+
 ```{r setup, include = F}
 library(tidyverse)
 ```
 
-# Project description
+# Coloured Glass Beads in the Early Middle Ages
+
+## Project description
 
 In the early Middle Ages, coloured glass beads were a very common type of female ornament.  
 
@@ -22,7 +25,7 @@ Up until today, many of these glass beads were found in female grave of the earl
 
 ---
 
-# Data sets
+## Data sets
 
 The archaeologists who excavated the site gave me two excel files containing information about the all finds associated with glassmaking.  
 The main `Inventory` table is... let's say quite hard to navigate without modifications.
@@ -35,7 +38,7 @@ Beads <- read_delim("GlassBeads.csv",
                         col_names = T, delim = ";")
 ```
 
-## Table 1: Inventory
+### Table 1: Inventory
 
 The first excel table is the inventory of the archaeological finds associated with glassmaking.  
 Here is an extract of the `Inventory` table:
@@ -75,7 +78,7 @@ Inventory[1:6, ]
 
   * `Miscellaneous` is self-explanatory: these are objects that do not belong to any of the above-mentioned categories.
 
-## Table 2: Glass beads
+### Table 2: Glass beads
 
 The second excel table records the characteristics of each glass bead, including their colour.  
 Here is an extract of the table:
@@ -102,9 +105,9 @@ Beads[1:6, ]
 
 ---
 
-# Objectives: Modification of the data tables
+## Objectives: Modification of the data tables
 
-## Table 1
+### Table 1
 
 Table 1 (`Inventory`) should be modified:
 
@@ -119,7 +122,7 @@ To be honest, I am not yet quite sure how to do that in a non-painful way.
 !! One problem here: not all the beads in the Beads table are in the Inventory, and vice versa.
   
   
-## Table 2
+### Table 2
 
 Table 2 (`Beads`) should also be modified:
 
@@ -127,7 +130,7 @@ Table 2 (`Beads`) should also be modified:
 
 2. Since `Colour` also gives additional colours for the polychrome beads, this column needs to be separated into 2: `Colour` and `Decor` (probably using the `separate()` function).
 
-## New table: Rods
+### New table: Rods
 
 In the new table `Rods` extracted from the `Inventory` table recording the characteristics of the rods, the names for the columns can be changed to remove `Rod_` in them since this is not needed anymore.
 
@@ -136,9 +139,9 @@ The colours of the rods could also be added to this table by extracting the info
 
 ---
 
-# Visualisation
+## Visualisation
 
-## Colour distribution
+### Colour distribution
 
 From the `Inventory` table, an histogram of the `Colour` distribution for the `Rod`s, `Bead`s, and `OGW`s can be created. One histogram per object type, and one combining all types.  
 
@@ -146,7 +149,7 @@ Here is an example of how it should look like:
 ![](HistogramExample.png){#id .class width=50% height=50%}
 
 
-## Distribution vs. Volume
+### Distribution vs. Volume
 
 It is interesting to know how many beads and rods there is per colours, but I already observed with the pictures taken from the samples that yellow beads for instance tend to be smaller than the red ones, although there are more yellow beads than red.  
 Therefore, it would also be interesting to plot an histogram of the volume represented by each colour for the `Beads` and `Rods` since we have the information for most of them. Obviously, not all beads and rods have the same shape, so it is hard to calculate their volume, but we can make a rough approximation, considering them as cylinders.  
