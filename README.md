@@ -111,6 +111,7 @@ Current project:
 
 - Johanna (johannaroever) - [Visualisation for grave stelae from Cyprus during the Roman Empire](Projects/johannaroever/project-description.md)
 - Timo (timow98) - [Soil data Visualization](Projects/timow98/project-description.md)
+- Marek (mqrek) - [Stock Performance Analysis of NVIDIA Corporation: Time Series Insights](Projects/mqrek/project-description.md)
 - ...
 - ...
 
