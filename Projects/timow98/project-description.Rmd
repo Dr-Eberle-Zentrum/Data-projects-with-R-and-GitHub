@@ -1,5 +1,5 @@
 ---
-title: "SoilData-project-description"
+title: "project-description"
 author: "Timo Walcher"
 date: "`r Sys.Date()`"
 output: md_document
