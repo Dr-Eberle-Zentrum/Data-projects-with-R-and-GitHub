@@ -34,14 +34,14 @@ The data contains information about soil. Soil samples where taken from soil pro
 - `Bodenart`: soil type according to Kartieranleitung 5 (sand, silt, clay)
 
 ## What to do
-# 1. The data needs some cleanup
+### 1. The data needs some cleanup
   - the column KAKpot2 is not needed
   - the header displays numbers which do not make much sense. Also, there is a second header with the units of the data. Both is not needed. Instead, the header should display the column names without the numbers but with the unit integrated such like this: Tiefe_[cm] 
   - there is a typo in the column "Expozition". It should actually be "Exposition"
   - 99999 and 99999,99 are the NA values, but R does not know this, so all these values need to be set to NA
   - two columns need to be calculated: base_saturation_[%] by dividing "Kationen" by "KAKpot" and SOM_[%] by multiplying Corg with 1,72
   
-# 2. Visualisation
+### 2. Visualisation
   - I would like to aggregate the columns Ca, Mg, K, Na and Kationen by profile number and visualize them with a grouped or stacked barplot like this https://r-graph-gallery.com/48-grouped-barplot-with-ggplot2_files/figure-html/thecode4-1.png
   - then I would like to have 3 piecharts of the "Ah" horizons of the profiles 82, 111 and 134 next to each other where I can see the portion of S (Sand), U (silt) and T (clay) (see sketch 1)
   - I would like to know where the profiles are - maybe they can be visualized on a simple map using the coordinates of the respective columns?
