@@ -1,0 +1,21 @@
+---
+title: "project-description"
+author: "Elise Bücklein"
+date: "`r Sys.Date()`"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## General Topic of the Task
+
+## The Dataset
+* what is it
+* origin
+* important information on what is what
+
+## Data Manipulation Goals
+
+## Data Visualization Goals
