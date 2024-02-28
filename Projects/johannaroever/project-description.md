@@ -83,11 +83,12 @@ interpretation.
 ## Intermediates
 
 In some cases the attribute values need to be made more consistent
-within the range they should reflect. To include the location in plots
-it might be enough to use the name of the ancient site, especially for
-cases in which the grave relief was only found near the site or similar.
-Similar the range of materials might be condensed to the values of local
-limestone, (local?) hard limestone and imported marble.
+within the range they should reflect. The range of values for *material*
+might be condensed to the values of local limestone, (local?) hard
+limestone and imported marble. To include *location* in plots it might
+be enough to use the name of the ancient site excluding more specific
+details, especially for cases in which the grave relief was found near
+the site without recording the specific place or similar.
 
 It might be useful to prepare information like this before creating the
 actual plot:
@@ -99,7 +100,7 @@ actual plot:
 
 ## Visualisation
 
--   When depicting the types inclusion of a legend for the description
+-   When depicting the *type* inclusion of a legend for the description
     of the types
 
 [1] in situ: at the place it was originally used in ancient time
