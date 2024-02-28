@@ -60,7 +60,8 @@ well, which means there is some cleaning to do.
     <https://r-graph-gallery.com/48-grouped-barplot-with-ggplot2_files/figure-html/thecode4-1.png>
 -   then I would like to have 3 piecharts of the “Ah” horizons of the
     profiles 82, 111 and 134 next to each other where I can see the
-    portion of S (Sand), U (silt) and T (clay) (see sketch 1)
+    portion of S (Sand), U (silt) and T (clay) (see sketch 1) ![Sketch
+    of piechart](/sketch_1.jpg)
 -   I would like to know where the profiles are - maybe they can be
     visualized on a simple map using the coordinates of the respective
     columns?
