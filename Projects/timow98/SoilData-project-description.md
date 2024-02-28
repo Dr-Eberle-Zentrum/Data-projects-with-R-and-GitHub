@@ -3,8 +3,9 @@
 The data contains information about soil. Soil samples where taken from
 soil profiles somewhere in the Naturpark Schönbuch and analysed in a
 laboratory. Each soil profile consists of several horizons and samples
-where taken from every horizon. The data table comes as .csv file but
-was not managed well, which means there is some cleaning to do.
+where taken from every horizon, so the rows represent the horizonts of
+all the profiles. The data table comes as .csv file but was not managed
+well, which means there is some cleaning to do.
 
 ## Columns explained
 
