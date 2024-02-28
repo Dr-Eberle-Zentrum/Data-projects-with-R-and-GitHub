@@ -9,12 +9,10 @@ output: md_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
 # Visualisation for grave stelae from Cyprus during the Roman Empire
 
 During the Roman Empire grave reliefs across the empire show similarities but can differ depending on the exact area they were used in. This can be the case because of local traditions and influences from other regions.  
-Here the focus should be on the stelae from Cyprus which were categorized and dated by the archaeologist Pogiatzi.The provided [CSV](StelaeCyprus.csv) was assembled by me (J. Roever) from the data described in Pogiatzi's book:
-
+Here the focus should be on the stelae from Cyprus which were categorized and dated by the archaeologist Pogiatzi.The provided [CSV](StelaeCyprus.csv) was assembled by me (J. Roever) from the data described in Pogiatzi's book:  
 _E. Pogiatzi, Die Grabreliefs auf Zypern von der archaischen bis zur roemischen Zeit, Peleus 23 (Diss. Albert-Ludwigs-Universitaet Freiburg 2002, Moehnesee-Wamel 2003)_
 
 The analysed  attributes are:
@@ -29,12 +27,11 @@ The analysed  attributes are:
 * `paintedSurface`: description of painted areas
 * `material`: the material the stele is made of
 
-In some cases the data can be uncertain or incomplete because grave reliefs as well as other artifacts were found and/or excavated without modern archaeological methods.
-(For further interpretation it is also important to be aware that usually not 100% of the artifacts are known and excavated.)
+In some cases the data can be uncertain or incomplete because grave reliefs as well as other artifacts were found and/or excavated without modern archaeological methods. (For further interpretation it is also important to be aware that usually not 100% of the artifacts are known and excavated.)
 
 # Goal
 
-The project should be the creation of plots to show how some of the attributes of the stelae might correlate with each other.
+The project should be the creation of plots (or just one of the plots) to show how some of the attributes of the stelae might correlate with each other.
 The first few of 124 observations are these:
 
 ```{r, echo = FALSE}

@@ -7,8 +7,7 @@ other regions.
 Here the focus should be on the stelae from Cyprus which were
 categorized and dated by the archaeologist Pogiatzi.The provided
 [CSV](StelaeCyprus.csv) was assembled by me (J. Roever) from the data
-described in Pogiatzi’s book:
-
+described in Pogiatzi’s book:  
 *E. Pogiatzi, Die Grabreliefs auf Zypern von der archaischen bis zur
 roemischen Zeit, Peleus 23 (Diss. Albert-Ludwigs-Universitaet Freiburg
 2002, Moehnesee-Wamel 2003)*
@@ -35,9 +34,9 @@ and excavated.)
 
 # Goal
 
-The project should be the creation of plots to show how some of the
-attributes of the stelae might correlate with each other. The first few
-of 124 observations are these:
+The project should be the creation of plots (or just one of the plots)
+to show how some of the attributes of the stelae might correlate with
+each other. The first few of 124 observations are these:
 
     ##   catNo         epoch type
     ## 1     1 cypro-archaic   1a
