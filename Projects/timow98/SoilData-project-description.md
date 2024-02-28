@@ -35,7 +35,7 @@ was not managed well, which means there is some cleaning to do.
 
 ## What to do
 
-# 1. The data needs some cleanup
+### 1. The data needs some cleanup
 
 -   the column KAKpot2 is not needed
 -   the header displays numbers which do not make much sense. Also,
@@ -51,7 +51,7 @@ was not managed well, which means there is some cleaning to do.
     dividing “Kationen” by “KAKpot” and SOM\_\[%\] by multiplying Corg
     with 1,72
 
-# 2. Visualisation
+### 2. Visualisation
 
 -   I would like to aggregate the columns Ca, Mg, K, Na and Kationen by
     profile number and visualize them with a grouped or stacked barplot
