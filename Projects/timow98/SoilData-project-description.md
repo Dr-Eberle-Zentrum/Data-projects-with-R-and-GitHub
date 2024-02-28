@@ -9,7 +9,7 @@ was not managed well, which means there is some cleaning to do.
 ## Columns explained
 
 -   “Labornummer Tübingen”: individual sample number
--   “Profil\_2”: number of profile
+-   `Profil_2`: number of profile
 -   “Horizont\_43”: number of horizon (per profile)
 -   “Tiefe\_44”: accumulated depth of the horizons
 -   “Horizontbezeichnung\_45”: type of horizon
