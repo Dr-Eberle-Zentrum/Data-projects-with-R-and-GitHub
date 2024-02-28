@@ -1,3 +1,10 @@
+---
+title: "Stock Performance Analysis of NVIDIA Corporation: Time Series Insights"
+author: "M. Ulm"
+date: "`r Sys.Date()`"
+output: md_document
+---
+
 # Project Descriptions
 
 ## Plot 1: NVIDIA Stock Analysis
@@ -7,6 +14,10 @@ In this project, we aim to analyze the stock performance of NVIDIA Corporation (
 
 ### Data Set
 We obtained the stock data from Yahoo Finance (https://finance.yahoo.com/quote/NVDA/history). This dataset contains historical stock information, including the date and closing price.
+
+# Read the CSV file and display the head of the data
+data <- read.csv("NVDA.csv", header=TRUE)
+head(data)
 
 ### Data Manipulation Goals
 1. Convert the 'Date' column to a proper date format.
@@ -33,6 +44,10 @@ This project focuses on analyzing the average weekly performance of NVIDIA.
 
 ### Data Set
 We utilized the same dataset from Yahoo Finance (https://finance.yahoo.com/quote/NVDA/history), containing historical stock information.
+
+# Read the CSV file and display the head of the data
+data <- read.csv("NVDA.csv", header=TRUE)
+head(data)
 
 ### Data Manipulation Goals
 1. Convert the 'Date' column to a proper date format.
