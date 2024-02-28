@@ -18,6 +18,17 @@ Our data manipulation goals include:
 1. Converting the 'Date' column to a proper date format to facilitate time-based analysis.
 2. Calculating monthly closing values from the dataset to identify trends and patterns in the stock performance over time.
 
+## Notes on Data Quality
+
+Before proceeding with the analysis, it's important to address some data quality issues:
+
+- **Missing Values (NA)**: Some entries in the dataset contain missing values (NA). These missing values need to be handled appropriately before conducting any analysis to ensure the accuracy of the results.
+
+- **Data Order**: Due to certain data processing steps or data acquisition methods, the order of entries in the dataset might be mixed up. It's essential to review and potentially reorganize the data to ensure consistency and coherence before initiating any analysis.
+
+Addressing these issues is crucial for obtaining reliable insights from the dataset.
+
+
 ### Visualization Goals
 Our goal is to create visualizations illustrating the monthly stock performance of NVIDIA. We aim to produce two plots:
 1. A plot with a logarithmic scale to highlight percentage changes over time.
