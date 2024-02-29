@@ -11,13 +11,16 @@ In this project, we'll analyze housing prices and remote work. With the recent s
 
 The dataset used in this analysis is from the Harvard Dataverse and contains information on housing prices and several other relevant variables across different countries. The variables included in the dataset are as follows:
 
-- **Percentage of Workforce Working Remotely**
-- **Average Urban Housing Price Index**
-- **Urban Population Growth Rate (%)**
-- **Rural Population Growth Rate (%)**
-- **Public Transport Ridership Change (%)**
-- **Internet Infrastructure Investment (Million USD)**
-- **Environmental Impact Score (1-100)**
+-   **Percentage of Workforce Working Remotely**
+-   **Average Urban Housing Price Index**
+-   **Urban Population Growth Rate (%)**
+-   **Rural Population Growth Rate (%)**
+-   **Public Transport Ridership Change (%)**
+-   **Internet Infrastructure Investment (Million USD)**
+-   **Environmental Impact Score (1-100)**
+
+data <- read.csv("Housing prices.csv", sep=';', header = TRUE)
+head(data)
 
 ## Data Manipulation Goals
 
@@ -26,3 +29,5 @@ The primary goal of data manipulation in this project is to prepare the dataset 
 ## Visualization Goals
 
 The main visualization goal is to create a scatterplot that illustrates the relationship between housing prices and the percentage of the workforce working remotely in different countries. This visualization will help us understand if there is any discernible correlation between remote work trends and urban housing market dynamics.
+
+![Remote Work on Housing Prices](Scatterplot.jpg)
