@@ -20,9 +20,6 @@ dataset are as follows:
 -   **Internet Infrastructure Investment (Million USD)**
 -   **Environmental Impact Score (1-100)**
 
-data &lt;- read.csv(“Housing prices.csv”, sep=‘;’, header = TRUE)
-head(data)
-
 ## Data Manipulation Goals
 
 The primary goal of data manipulation in this project is to prepare the
@@ -37,6 +34,8 @@ the relationship between housing prices and the percentage of the
 workforce working remotely in different countries. This visualization
 will help us understand if there is any discernible correlation between
 remote work trends and urban housing market dynamics.
+
+(the following images is for illustration only)
 
 <figure>
 <img src="Scatterplot.jpg" alt="Remote Work on Housing Prices" />
