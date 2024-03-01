@@ -117,7 +117,6 @@ Current project:
 - Dennis (Deeznis) - [Remote Work on Urban Housing Prices](Projects/Deeznis/project-description.md)
 - Baptiste (baptistesolard) - [Coloured Glass Beads in the Early Middle Ages](Projects/baptistesolard/project-description.md)
 - David (Davidprntz) -[Bigmart a Marketing Analysis](Projects/DavidPrntz/project-description-dp.md)
-=======
 
 #### Goals
 
