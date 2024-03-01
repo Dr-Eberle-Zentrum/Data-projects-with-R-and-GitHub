@@ -67,7 +67,8 @@ To answer this question I want to create a bar chart that shows the
 absolute number of all sales by item category. In addition, I want to
 show the relative share as a number above each bar.
 
-Example to illustrate()
+*Example to illustrate* ![This is an
+example](/Users/dave/Downloads/Example.png)
 
 **2. Does this effect differ according to location, size, type of
 supermarket?**
