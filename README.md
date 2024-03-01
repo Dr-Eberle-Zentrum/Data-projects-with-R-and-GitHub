@@ -113,7 +113,7 @@ Current project:
 - Timo (timow98) - [Soil data Visualization](Projects/timow98/project-description.md)
 - Marek (mqrek) - [Stock Performance Analysis of NVIDIA Corporation: Time Series Insights](Projects/mqrek/project-description.md)
 - Despina (desp-ch) - [Enrollment in primary, lower secondary and upper secondary education levels](Projects/desp-ch/project-description_1.md)
-- Maurice (mauriceschmetzer) - [US Immigrant Visas Issued](Projects/mauriceschmetzer/project-descirption.md)
+- Maurice (mauriceschmetzer) - [US Immigrant Visas Issued](Projects/mauriceschmetzer/project-description.md)
 - ...
 
 
