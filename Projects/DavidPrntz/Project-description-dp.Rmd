@@ -13,16 +13,16 @@ Grocery stores house thousands of products that you can find in many different l
 
 ## Current Data
 The Dataset has the following attributes: 
-Item_Weight	is the weight of the product in kilograms. (Numeric)
-Item_Fat_Content is	the fat content of the product. (Categorical)
-Item_Visibility	is the visibility of the product in store or online. (Numeric)
-Item_Type is the type of product, such as limited offers or no offer. (Categorical)
-Item_MRP is	the maximum retail price of the product. (Numeric)
-Outlet_Establishment_Year	is the year the outlet was established. (Numeric)
-Outlet_Size is the size of the outlet, either retail or supermarket. (Categorical)
-Outlet_Location_Type is	the type of location of the outlet, such as urban or rural area. (Categorical) 
-Outlet_Type is	the type of outlet, such as sales departmental store or supermarket. (Categorical)
-Item_Outlet_Sales	is the sales of the product in the outlet. (Numeric)
+- **Item_Weight**	is the weight of the product in kilograms. (Numeric)
+- **Item_Fat_Content** is	the fat content of the product. (Categorical)
+- **Item_Visibility**	is the visibility of the product in store or online. (Numeric)
+- **Item_Type** is the type of product, such as limited offers or no offer. (Categorical)
+- **Item_MRP** is	the maximum retail price of the product. (Numeric)
+- **Outlet_Establishment_Year**	is the year the outlet was established. (Numeric)
+- **Outlet_Size** is the size of the outlet, either retail or supermarket. (Categorical)
+- **Outlet_Location_Type** is	the type of location of the outlet, such as urban or rural area. (Categorical) 
+- **Outlet_Type** is	the type of outlet, such as sales departmental store or supermarket. (Categorical)
+- **Item_Outlet_Sales**	is the sales of the product in the outlet. (Numeric)
 
 ## Goal
 My aim is to evaluate the effects of the variables on purchasing behavior. 
@@ -34,6 +34,8 @@ After the Data Cleaning I would like to answer the following questions by creati
 1. Which products are sold the most?
 
 To answer this question I want to create a bar chart that shows the absolute number of all sales by item category. In addition, I want to show the relative share as a number above each bar.
+
+Example to illustrate()
 
 2. Does this effect differ according to location, size, type of supermarket?
 
