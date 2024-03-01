@@ -115,7 +115,7 @@ Current project:
 - Despina (desp-ch) - [Enrollment in primary, lower secondary and upper secondary education levels](Projects/desp-ch/project-description_1.md)
 - Maurice (mauriceschmetzer) - [US Immigrant Visas Issued](Projects/mauriceschmetzer/project-description.md)
 - Dennis (Deeznis) - [Remote Work on Urban Housing Prices](Projects/Deeznis/project-description.md)
-- ...
+- Baptiste (baptistesolard) - [Coloured Glass Beads in the Early Middle Ages](Projects/baptistesolard/project-description.md)
 
 
 #### Goals
