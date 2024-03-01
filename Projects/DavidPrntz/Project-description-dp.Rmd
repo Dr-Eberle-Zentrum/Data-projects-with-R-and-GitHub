@@ -13,8 +13,8 @@ Grocery stores house thousands of products that you can find in many different l
 
 ## Current Data
 The Dataset has the following attributes: <p>
-- `**Item_Weight**`	is the weight of the product in kilograms. *(Numeric)* <p>
-- **Item_Fat_Content** is	the fat content of the product. *(Categorical)* <p>
+- **`Item_Weight`**	is the weight of the product in kilograms. *(Numeric)* <p>
+- `**Item_Fat_Content**` is	the fat content of the product. *(Categorical)* <p>
 - **Item_Visibility**	is the visibility of the product in store or online. *(Numeric)* <p>
 - **Item_Type** is the type of product, such as limited offers or no offer. *(Categorical)* <p>
 - **Item_MRP** is	the maximum retail price of the product. *(Numeric)* <p>

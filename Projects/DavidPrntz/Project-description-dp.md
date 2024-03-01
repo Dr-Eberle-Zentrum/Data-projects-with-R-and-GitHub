@@ -17,10 +17,10 @@ different stores. The dataset can be downloaded on kaggle
 The Dataset has the following attributes:
 <p>
 
--   `**Item_Weight**` is the weight of the product in kilograms.
+-   **`Item_Weight`** is the weight of the product in kilograms.
     *(Numeric)*
     <p>
--   **Item\_Fat\_Content** is the fat content of the product.
+-   `**Item_Fat_Content**` is the fat content of the product.
     *(Categorical)*
     <p>
 -   **Item\_Visibility** is the visibility of the product in store or
