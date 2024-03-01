@@ -1,10 +1,3 @@
----
-title: "Stock Performance Analysis of NVIDIA Corporation: Time Series Insights"
-author: "M. Ulm"
-date: "`r Sys.Date()`"
-output: md_document
----
-
 # Project Descriptions
 
 ## Plot 1: NVIDIA Stock Analysis
