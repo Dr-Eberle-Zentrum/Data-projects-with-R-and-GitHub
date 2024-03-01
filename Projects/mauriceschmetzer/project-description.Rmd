@@ -51,4 +51,4 @@ The following picture shows how the final table should look like. Again, I used 
 
 Once the data is tidy, I would like to be able to visualize how many visas were issued by country & visa category over time. For that purpose, I would like to somehow define a specific country that I am interested in (Maybe in a dashboard or simply a variable that I can change) and generate a graph. This could look something like this:
 
-![Goal Tidy Data Format](German_Historic_Immigrant_Visa.png)
+![Goal Tidy Data Format](German_Historic_Immigrant_Visa_Graph.png)
