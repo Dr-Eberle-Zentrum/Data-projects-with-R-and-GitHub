@@ -36,7 +36,7 @@ After the Data Cleaning I would like to answer the following questions by **crea
 To answer this question I want to create a bar chart that shows the absolute number of all sales by item category. In addition, I want to show the relative share as a number above each bar.
 
 *Example to illustrate* <p>
-![This is an example](Example.png)
+![](Example.png)
  
 
 

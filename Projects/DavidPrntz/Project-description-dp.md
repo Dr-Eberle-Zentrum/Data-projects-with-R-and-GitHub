@@ -68,10 +68,7 @@ show the relative share as a number above each bar.
 *Example to illustrate*
 <p>
 
-<figure>
-<img src="Example.png" alt="This is an example" />
-<figcaption aria-hidden="true">This is an example</figcaption>
-</figure>
+![](Example.png)
 
 **2. Does this effect differ according to location, size, type of
 supermarket?**
