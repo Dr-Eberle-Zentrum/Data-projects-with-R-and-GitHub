@@ -13,7 +13,7 @@ Grocery stores house thousands of products that you can find in many different l
 
 ## Current Data
 The Dataset has the following attributes: <p>
-- **Item_Weight**	is the weight of the product in kilograms. *(Numeric)* <p>
+- `**Item_Weight**`	is the weight of the product in kilograms. *(Numeric)* <p>
 - **Item_Fat_Content** is	the fat content of the product. *(Categorical)* <p>
 - **Item_Visibility**	is the visibility of the product in store or online. *(Numeric)* <p>
 - **Item_Type** is the type of product, such as limited offers or no offer. *(Categorical)* <p>
@@ -37,6 +37,7 @@ To answer this question I want to create a bar chart that shows the absolute num
 
 *Example to illustrate* <p>
 ![This is an example](Example.png)
+ 
 
 
 **2. Does this effect differ according to location, size, type of supermarket?**
