@@ -17,34 +17,32 @@ different stores. The dataset can be downloaded on kaggle
 The Dataset has the following attributes:
 <p>
 
--   **`Item_Weight`** is the weight of the product in kilograms.
-    *(Numeric)*
+-   `Item_Weight` is the weight of the product in kilograms. *(Numeric)*
     <p>
--   `**Item_Fat_Content**` is the fat content of the product.
+-   `Item_Fat_Content` is the fat content of the product.
     *(Categorical)*
     <p>
--   **Item\_Visibility** is the visibility of the product in store or
+-   `Item_Visibility` is the visibility of the product in store or
     online. *(Numeric)*
     <p>
--   **Item\_Type** is the type of product, such as limited offers or no
+-   `Item_Type` is the type of product, such as limited offers or no
     offer. *(Categorical)*
     <p>
--   **Item\_MRP** is the maximum retail price of the product.
+-   `Item_MRP` is the maximum retail price of the product. *(Numeric)*
+    <p>
+-   `Outlet_Establishment_Year` is the year the outlet was established.
     *(Numeric)*
     <p>
--   **Outlet\_Establishment\_Year** is the year the outlet was
-    established. *(Numeric)*
-    <p>
--   **Outlet\_Size** is the size of the outlet, either retail or
+-   `Outlet_Size` is the size of the outlet, either retail or
     supermarket. *(Categorical)*
     <p>
--   **Outlet\_Location\_Type** is the type of location of the outlet,
-    such as urban or rural area. *(Categorical)*
+-   `Outlet_Location_Type` is the type of location of the outlet, such
+    as urban or rural area. *(Categorical)*
     <p>
--   **Outlet\_Type** is the type of outlet, such as sales departmental
+-   `Outlet_Type` is the type of outlet, such as sales departmental
     store or supermarket. *(Categorical)*
     <p>
--   **Item\_Outlet\_Sales** is the sales of the product in the outlet.
+-   `Item_Outlet_Sales` is the sales of the product in the outlet.
     *(Numeric)*
     <p>
 
