@@ -10,9 +10,10 @@ birth and visa category.
 ## Current Data
 
 At the end of each year, the US Department of State publishes a report
-that lists the amount of visas issued by country of birth for each visa
-category. Unfortunately, the data is provided as a pdf file. The
-information about each fiscal year is published in a seperate pdf file.
+that lists the amount of immigrant visas issued by country of birth for
+each visa category. Unfortunately, the data is provided as a pdf file.
+The information about each fiscal year is published in a seperate pdf
+file.
 
 You can find the original information from the US Department of State
 here:
