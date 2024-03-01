@@ -5,7 +5,7 @@ date: "`2024-02-29"
 output: md_document
 ---
 
-# Marketing Analysis of Bigmart sales
+# Marketing analysis of Bigmart sales
 
 ## Project Description
 Big Mart is Grocery Super Market Brand.

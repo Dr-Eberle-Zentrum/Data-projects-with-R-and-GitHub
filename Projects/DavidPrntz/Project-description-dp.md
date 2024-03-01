@@ -1,4 +1,4 @@
-# Marketing Analysis of Bigmart sales
+# Marketing analysis of Bigmart sales
 
 ## Project Description
 
