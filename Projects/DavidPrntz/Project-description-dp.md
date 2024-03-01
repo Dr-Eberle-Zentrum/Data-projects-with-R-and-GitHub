@@ -71,7 +71,9 @@ show the relative share as a number above each bar.
 <p>
 
 <figure>
-<img src="Projects/DavidPrntz/Example.png" alt="This is an example" />
+<img
+src="Data-projects-with-R-and-GitHub/Projects/DavidPrntz/Example.png"
+alt="This is an example" />
 <figcaption aria-hidden="true">This is an example</figcaption>
 </figure>
 
