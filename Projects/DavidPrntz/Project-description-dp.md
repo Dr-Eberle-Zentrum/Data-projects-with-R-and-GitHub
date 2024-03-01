@@ -14,7 +14,7 @@ different stores. The dataset can be downloaded on kaggle
 
 ## Current Data
 
-The Dataset has the following attributes: tem\_Weight is the weight of
+The Dataset has the following attributes: Item\_Weight is the weight of
 the product in kilograms. (Numeric) Item\_Fat\_Content is the fat
 content of the product. (Categorical) Item\_Visibility is the visibility
 of the product in store or online. (Numeric) Item\_Type is the type of

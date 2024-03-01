@@ -13,7 +13,7 @@ Grocery stores house thousands of products that you can find in many different l
 
 ## Current Data
 The Dataset has the following attributes: 
-tem_Weight	is the weight of the product in kilograms. (Numeric)
+Item_Weight	is the weight of the product in kilograms. (Numeric)
 Item_Fat_Content is	the fat content of the product. (Categorical)
 Item_Visibility	is the visibility of the product in store or online. (Numeric)
 Item_Type is the type of product, such as limited offers or no offer. (Categorical)
