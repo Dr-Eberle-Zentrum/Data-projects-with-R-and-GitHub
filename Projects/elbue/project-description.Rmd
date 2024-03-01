@@ -1,10 +1,14 @@
 ---
 title: "project-description"
 <<<<<<< HEAD
+<<<<<<< HEAD
 author: "Elise Bücklein"
 =======
 author: "Timo Walcher"
 >>>>>>> c6e94d2611f1e15a65b8b453c97df65bfde6f8c8
+=======
+author: "Elise Buecklein"
+>>>>>>> b9f7157a5a4127f980f3ec2d5c358a70a5a9a72a
 date: "`r Sys.Date()`"
 output: md_document
 ---
@@ -12,18 +16,31 @@ output: md_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+<<<<<<< HEAD
 
 <<<<<<< HEAD
+=======
+>>>>>>> b9f7157a5a4127f980f3ec2d5c358a70a5a9a72a
 ## General Topic of the Task
+Subjects that filled out a personality questionnaire. 
 
 ## The Dataset
 * what is it
+Dataset contains the scores for the simple items and the calculated scales belonging to the questionnaire
 * origin
+Data was collected for a Swedish study I am now working on
 * important information on what is what
+SSP01-SSP91 are the simple item scores, R is for reversed item score
+SSPSTA-SSPET are the scores for the 13 scales
+SSPTSTA-SSPTET are the t-transformed scores for the 13 scales
 
 ## Data Manipulation Goals
+I would like to have a dataset with only persons that do not have any missing data.
+3 factor scores should be calculated (with the t-scored scales).
+Unnecessary variables should be removed
 
 ## Data Visualization Goals
+<<<<<<< HEAD
 =======
 ## About the Data
 The data contains information about soil. Soil samples where taken from soil profiles somewhere in the Naturpark Schönbuch and analysed in a laboratory. Each soil profile consists of several horizons and samples where taken from every horizon, so the rows represent the horizonts of all the profiles. The data table comes as .csv file but was not managed well, which means there is some cleaning to do.
@@ -63,3 +80,6 @@ The data contains information about soil. Soil samples where taken from soil pro
   ![Sketch of piechart](/Projects/timow98/sketch_1.jpg)
   - I would like to know where the profiles are - maybe they can be visualized on a simple map using the coordinates of the respective columns?
 >>>>>>> c6e94d2611f1e15a65b8b453c97df65bfde6f8c8
+=======
+I would like a violin plot with a mean for all 13 scales plus the three factors.
+>>>>>>> b9f7157a5a4127f980f3ec2d5c358a70a5a9a72a
