@@ -112,7 +112,7 @@ Current project:
 - Johanna (johannaroever) - [Visualisation for grave stelae from Cyprus during the Roman Empire](Projects/johannaroever/project-description.md)
 - Timo (timow98) - [Soil data Visualization](Projects/timow98/project-description.md)
 - Marek (mqrek) - [Stock Performance Analysis of NVIDIA Corporation: Time Series Insights](Projects/mqrek/project-description.md)
-- Despina (desp-ch) - [Enrollment in primary, lower secondary and upper secondary education levels](Projects/desp-ch/project-description_1.md)
+- Despoina (desp-ch) - [Enrollment in primary, lower secondary and upper secondary education levels](Projects/desp-ch/project-description_1.md)
 - Maurice (mauriceschmetzer) - [US Immigrant Visas Issued](Projects/mauriceschmetzer/project-description.md)
 - Dennis (Deeznis) - [Remote Work on Urban Housing Prices](Projects/Deeznis/project-description.md)
 - Baptiste (baptistesolard) - [Coloured Glass Beads in the Early Middle Ages](Projects/baptistesolard/project-description.md)
