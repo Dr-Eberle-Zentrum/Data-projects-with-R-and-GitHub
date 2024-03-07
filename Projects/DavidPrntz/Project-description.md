@@ -85,3 +85,8 @@ type of supermarket category. I want to create these plots to explore
 how the share of each item category differs within the attribute
 categories. For example, “do baking goods have a similar share in all
 locations?”.
+
+*Example to illustrate*
+<p>
+
+![](Sales_by_Location.png)
