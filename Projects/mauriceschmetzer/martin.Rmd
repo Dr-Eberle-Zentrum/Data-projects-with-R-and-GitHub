@@ -1,0 +1,50 @@
+
+
+```{r}
+library(tidyverse)
+
+# install.packages("tabulizer") # requires rjava
+# library(tabulizer) # table extraction from PDFs
+# tabulizer::extract_tables(file = "https://travel.state.gov/content/dam/visas/Statistics/AnnualReports/FY2023AnnualReport/FY2023_AR_TableV.pdf", pages = 1)
+
+library(pdftools) # text extraction from PDFs
+
+dataPerYear <- list()
+
+# https://travel.state.gov/content/dam/visas/Statistics/AnnualReports/FY2021AnnualReport/FY21_TableIII.pdf
+# https://travel.state.gov/content/dam/visas/Statistics/AnnualReports/FY2022AnnualReport/FY22_TableIII.pdf
+# https://travel.state.gov/content/dam/visas/Statistics/AnnualReports/FY2023AnnualReport/FY2023_AR_TableIII.pdf
+
+for ( year in 2022:2023) {
+
+dataPerYear[[str_c("y",year)]] <-
+  # parse to table
+  pdftools::pdf_text(str_c("https://travel.state.gov/content/dam/visas/Statistics/AnnualReports/FY",year,"AnnualReport/FY",ifelse(year==2023,"2023_AR",as.character(year-2000)),"_TableIII.pdf")) |> 
+  # join all pages
+  str_c(collapse = "\n") |>
+  # decompose into text lines
+  str_split("\n") |> 
+  unlist() |> 
+  # extract data lines
+  str_subset(pattern = "^\\w.+(\\s+[,\\d]+){6}$") |> 
+  as_tibble_col( column_name = "row") |> 
+  # preserve state names without whitespaces
+  mutate(row = str_replace_all(row, "([a-zA-Z])[\\s.,-]+([a-zA-Z])", "\\1_\\2")) |> 
+  # split into columns
+  separate(row, 
+           into = c("state", "Immediate.Relatives", "Special.Immigrants","Family.Preference","Employment.Preference", "Diversity.Immigrants", "Total"), 
+           sep = "\\s+") |> 
+  # drop summarizing "total" counts
+  filter(!str_detect(state, "Total"))
+
+}
+
+# combine data
+visas <-
+  # merge data tables
+  dataPerYear |> 
+  bind_rows(.id = "year") |> 
+  # cooerce data to numeric
+  mutate(across(-state, parse_number)) 
+
+```
