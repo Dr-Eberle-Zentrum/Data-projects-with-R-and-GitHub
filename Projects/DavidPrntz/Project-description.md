@@ -10,41 +10,41 @@ on. The BigMart dataset provides 14204 observations and 12
 variables.These variables include weight, fat content, visibility, item
 type, location, and more. It also includes over 1,500 products across 10
 different stores. The dataset can be downloaded on kaggle
-<https://www.kaggle.com/datasets/thedevastator/bigmart-product-sales-factors>
+[https://www.kaggle.com/datasets/thedevastator/bigmart-product-sales-factors](https://www.kaggle.com/datasets/thedevastator/bigmart-product-sales-factors)
 
 ## Current Data
 
 The Dataset has the following attributes:
-<p>
+
 
 -   `Item_Weight` is the weight of the product in kilograms. *(Numeric)*
-    <p>
+    
 -   `Item_Fat_Content` is the fat content of the product.
     *(Categorical)*
-    <p>
+    
 -   `Item_Visibility` is the visibility of the product in store or
     online. *(Numeric)*
-    <p>
+    
 -   `Item_Type` is the type of product, such as limited offers or no
     offer. *(Categorical)*
-    <p>
+    
 -   `Item_MRP` is the maximum retail price of the product. *(Numeric)*
-    <p>
+    
 -   `Outlet_Establishment_Year` is the year the outlet was established.
     *(Numeric)*
-    <p>
+    
 -   `Outlet_Size` is the size of the outlet, either retail or
     supermarket. *(Categorical)*
-    <p>
+    
 -   `Outlet_Location_Type` is the type of location of the outlet, such
     as urban or rural area. *(Categorical)*
-    <p>
+    
 -   `Outlet_Type` is the type of outlet, such as sales departmental
     store or supermarket. *(Categorical)*
-    <p>
+    
 -   `Item_Outlet_Sales` is the sales of the product in the outlet.
     *(Numeric)*
-    <p>
+    
 
 ## Goal
 
@@ -66,7 +66,7 @@ absolute number of all sales by item category. In addition, I want to
 show the relative share as a number above each bar.
 
 *Example to illustrate*
-<p>
+
 
 ![](Example.png)
 
@@ -87,7 +87,7 @@ categories. For example, “do baking goods have a similar share in all
 locations?”.
 
 *Example to illustrate*
-<p>
+
 
 ![](Sales_by_Location.png)
 
