@@ -12,17 +12,6 @@ As you can see, a profile can be differed into several horizons
 (O,A,B,C) as mentioned above. Here is a preview of the first few lines
 of the dataset:
 
-    SoilData <- read_delim("Projects/timow98/SoilData.csv", delim = ";", 
-    escape_double = FALSE, trim_ws = TRUE)
-
-    ## Rows: 154 Columns: 31
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ";"
-    ## chr (31): Labornummer Tübingen, Profil_2, Horizont_43, Tiefe_44, Horizontbez...
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-
 <table style="width:100%;">
 <caption>Preview of the data table</caption>
 <colgroup>
@@ -496,14 +485,20 @@ line as it messes up the data type of the columns.
 
 ### 2. Visualisation
 
--   I would like to aggregate (summarize) the columns Ca, Mg, K, Na and
+1.  I would like to aggregate (summarize) the columns Ca, Mg, K, Na and
     Kationen by profile number and visualize them with a stacked barplot
-    like this ![Stacked
+    like this (example): ![Stacked
     barplot](https://r-graph-gallery.com/48-grouped-barplot-with-ggplot2_files/figure-html/thecode4-1.png)
--   then I would like to have 3 piecharts of the “Ah” horizons of the
+2.  then I would like to have 3 piecharts of the “Ah” horizons of the
     profiles 82, 111 and 134 next to each other where I can see the
     portion of S (Sand), U (silt) and T (clay). See below: ![Sketch of
     piechart](sketch_1.jpg)
--   I would like to know where the profiles are - maybe they can be
-    visualized on a simple map using the coordinates of the respective
-    columns?
+3.  I would like to know where the profiles are. There are columns with
+    coordinates which can be used to map the profiles. There are several
+    packages for this, for example openstreetmap, mapview, ggplot2 and
+    sf.
+    [<span style="color:blue">This</span>](https://stackoverflow.com/questions/66827313/plotting-utm-coordinates)
+    might be a good point to start. Depending on your way to do it you
+    might need additional information: Coordinate Reference System: UTM
+    Zone 32 N WGS 84 EPSG: 25832 proj4string: “+proj=utm +zone=32
+    +datum=WGS84 +units=m +no\_defs”

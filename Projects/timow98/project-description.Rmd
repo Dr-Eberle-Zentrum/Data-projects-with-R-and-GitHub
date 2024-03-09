@@ -20,7 +20,7 @@ The data table comes as .csv file but was not managed well, which means there is
 This is what a soil profile looks like
 ![soil profile](soilprofile.jpg)
 As you can see, a profile can be differed into several horizons (O,A,B,C) as mentioned above. Here is a preview of the first few lines of the dataset: 
-```{r}
+```{r, include=F}
 SoilData <- read_delim("Projects/timow98/SoilData.csv", delim = ";", 
 escape_double = FALSE, trim_ws = TRUE)
 ```
@@ -67,7 +67,10 @@ Soil consists of the grain sizes Sand (S), Silt (U) and Clay (T). The three frac
   - two columns need to be calculated: base_saturation_[%] by dividing "Kationen" by "KAKpot" and SOM_[%] by multiplying Corg with 1,72
   
 ### 2. Visualisation
-  - I would like to aggregate (summarize) the columns Ca, Mg, K, Na and Kationen by profile number and visualize them with a stacked barplot like this ![Stacked barplot](https://r-graph-gallery.com/48-grouped-barplot-with-ggplot2_files/figure-html/thecode4-1.png)
-  - then I would like to have 3 piecharts of the "Ah" horizons of the profiles 82, 111 and 134 next to each other where I can see the portion of S (Sand), U (silt) and T (clay). See below:
+1. I would like to aggregate (summarize) the columns Ca, Mg, K, Na and Kationen by profile number and visualize them with a stacked barplot like this (example): ![Stacked barplot](https://r-graph-gallery.com/48-grouped-barplot-with-ggplot2_files/figure-html/thecode4-1.png)
+2. then I would like to have 3 piecharts of the "Ah" horizons of the profiles 82, 111 and 134 next to each other where I can see the portion of S (Sand), U (silt) and T (clay). See below:
   ![Sketch of piechart](sketch_1.jpg)
-  - I would like to know where the profiles are - maybe they can be visualized on a simple map using the coordinates of the respective columns?
+3. I would like to know where the profiles are. There are columns with coordinates which can be used to map the profiles. There are several packages for this, for example openstreetmap, mapview, ggplot2 and sf. [<span style="color:blue">This</span>](https://stackoverflow.com/questions/66827313/plotting-utm-coordinates) might be a good point to start. Depending on your way to do it you might need additional information:
+Coordinate Reference System: UTM Zone 32 N WGS 84
+EPSG: 25832
+proj4string: "+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs"
