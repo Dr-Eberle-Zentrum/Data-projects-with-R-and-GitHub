@@ -500,6 +500,6 @@ line as it messes up the data type of the columns.
     sf.
     [<span style="color:blue">This</span>](https://stackoverflow.com/questions/66827313/plotting-utm-coordinates)
     might be a good point to start. Depending on your way to do it you
-    might need additional information: Coordinate Reference System: UTM
-    Zone 32 N WGS 84 EPSG: 25832 proj4string: “+proj=utm +zone=32
-    +datum=WGS84 +units=m +no\_defs”
+    might need additional information:  
+    Coordinate Reference System: UTM Zone 32 N WGS 84 EPSG: 25832
+    proj4string: “+proj=utm +zone=32 +datum=WGS84 +units=m +no\_defs”
