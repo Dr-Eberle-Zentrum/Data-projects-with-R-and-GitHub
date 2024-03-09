@@ -1,11 +1,12 @@
 ## About the Data
 
-The data contains information about soil. Soil samples where taken from
-soil profiles somewhere in the Naturpark Schönbuch and analysed in a
-laboratory. Each soil profile consists of several horizons (see below)
-and samples where taken from every horizon, so the rows represent the
-horizons of all the profiles. The data table comes as .csv file but was
-not managed well, which means there is some cleaning to do.
+The dataset ([SoilData.csv](SoilData.csv)) contains information about
+soil. Soil samples where taken from soil profiles somewhere in the
+Naturpark Schönbuch and analysed in a laboratory. Each soil profile
+consists of several horizons (see below) and samples where taken from
+every horizon, so the rows represent the horizons of all the profiles.
+The data table comes as .csv file but was not managed well, which means
+there is some cleaning to do.
 
 This is what a soil profile looks like ![soil profile](soilprofile.jpg)
 As you can see, a profile can be differed into several horizons
