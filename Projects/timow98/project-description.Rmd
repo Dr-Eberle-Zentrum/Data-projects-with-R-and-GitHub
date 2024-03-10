@@ -31,32 +31,33 @@ knitr::kable(
 )
 ```
 
-The first line contains the column names. The second line contains the units. But we can only have one header and we do not want the second line as it messes up the data type of the columns.
-
-
+The first line contains the column names. The second line contains the units ([] means that is does not have a unit). But we can only have one header and we do not want the second line as it messes up the data type of the columns.
+  
+  
 ## Columns explained
 - `Labornummer Tübingen`: individual sample number
 - `Profil_2`: number of the profile
 - `Horizont_43`: number of horizon (per profile)
 example: as you see in the preview above, the profile number two was divided into 6 horizons and there was a sample taken from each of these horizons. This means, that if I want to compare profile, I will need to calculate the data from all its horizons
-- `Tiefe_44`: accumulated depth of the horizons
+- `Tiefe_44`: accumulated depth of the horizons in cm
 - `Horizontbezeichnung_45`: type of horizon (each main horizon as shown above can be divided into subhorizonts like Ah and Al for example)
 - `East_84`: Coordinates "Easting" in meters (UTM coordinates)
 - `North_85`: Coordinates "Northing" in meters (UTM coordinates)
-- `Neigung_16`: slope
-- `Expozition_17`: direction (N, NE, ...)
-- `Corg`: percentage of organic carbon
-- `CaCO3`: percentage of carbonate
-- `Ca`, `Mg`, `K`, `Na`: calcium, magnesium, potassium and sodium
-- `Kationen`: cations
-- `KAKpot`, `KAKpot2`: potential cation exchange capacity - same data but KAKpot2 has the decimal point at the wrong location
-- `gS`, `mS`, `fS`, `S`: coarse, middle and fine fraction of sand - added together to Sand (S)
-- `gU`, `mU`, `fU`, `U`: coarse, middle and fine fraction of silt - added together to silt (U)
-- `gT`, `mT+fT`, `T`: coarse and middle + fine fraction of clay - added together to clay (T)
-- `S+U+T`: all portions of grain sizes together (theoretically 100%)
+- `Neigung_16`: slope in %
+- `Expozition_17`: direction (North, Northeast, ...)
+- `Corg`: percentage of organic carbon in %
+- `CaCO3`: percentage of carbonate in %
+- `Ca`, `Mg`, `K`, `Na`: calcium, magnesium, potassium and sodium in mmol/kg
+- `Kationen`: cations in mmol/kg
+- `KAKpot`, `KAKpot2`: potential cation exchange capacity - same data but the first is in mmol/kg and the second one is in cmol/kg
+- `gS`, `mS`, `fS`, `S`: coarse, middle and fine fraction of sand in % - added together to Sand (S)
+- `gU`, `mU`, `fU`, `U`: coarse, middle and fine fraction of silt in % - added together to silt (U)
+- `gT`, `mT+fT`, `T`: coarse and middle + fine fraction of clay in % - added together to clay (T)
+- `S+U+T`: all portions of grain sizes together in % (theoretically 100%)
 - `Bodenart`: soil type according to Kartieranleitung 5 (sand, silt, clay)  
 Soil consists of the grain sizes Sand (S), Silt (U) and Clay (T). The three fractions can be divided into subcategories (coarse (g), middle (m), fine (f)). Knowing the proportions can tell us a lot about the soil. For example the fertility, water capacity and infiltration rate. Theoretically it adds up to 100% (column S+U+T) but in reality there might be some loss or it might even be more than 100% which is due to the laboratory method.
-
+  
+  
 ## What to do
 ### 1. The data needs some cleanup
 1.1 the column KAKpot2 is not needed
@@ -70,9 +71,11 @@ Soil consists of the grain sizes Sand (S), Silt (U) and Clay (T). The three frac
 ### 2. Visualisation
 **2.1 Stacked Barplot**  
 I would like to aggregate (summarize) the columns Ca, Mg, K, Na and Kationen by profile number and visualize them for profiles 55, 71, 102 and 109 with a stacked barplot like this (example): ![Stacked barplot](https://r-graph-gallery.com/48-grouped-barplot-with-ggplot2_files/figure-html/thecode4-1.png)
+  
 **2.2 Piechart of grain sizes**  
 Then I would like to have 3 piecharts of the "Ah" horizons of the profiles 82, 111 and 134 next to each other where I can see the portion of S (Sand), U (silt) and T (clay). See below:
   ![Sketch of piechart](sketch_1.jpg)
+  
 **2.3 Map of profile location**  
 I would like to know where the profiles are. There are columns with coordinates which can be used to map the profiles. There are several packages for this, for example [<span style="color:blue">openstreetmap</span>](https://ajsmit.github.io/Intro_R_Official/mapping-google.html), mapview, ggplot2 and sf. [<span style="color:blue">This</span>](https://stackoverflow.com/questions/66827313/plotting-utm-coordinates) might be a good point to start. Depending on your way to do it you might need additional information:  
 Coordinate Reference System: UTM Zone 32 N WGS 84  
