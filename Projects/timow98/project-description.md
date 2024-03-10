@@ -485,7 +485,10 @@ line will interfere with the datatype in R, that’s why I want to delete
 this line and instead integrate the unit into the header such like this:
 Tiefe\_\[cm\]. For this dataset you will need to work with backticks. If
 you are not familiar with them, you can read about them
-[<span style="color:blue">here</span>](https://jhudatascience.org/intro_to_r/resources/quotes_vs_backticks.html).  
+[<span style="color:blue">here</span>](https://jhudatascience.org/intro_to_r/resources/quotes_vs_backticks.html).
+Also, the function scan() could be useful (depending on your aproach)
+because it enables you to read for example specific data rows directly
+from the source file.  
 **1.4 there is a typo in the column “Expozition”**. It should actually
 be “Exposition”  
 **1.5 99999 and 99999,99 are the NA values**, but R does not know this,
