@@ -506,7 +506,7 @@ write a query that counts and prints the number of values (for example
 **2.1 Stacked Barplot**  
 I would like to have a stacked barplot that shows the values for Ca, Mg
 and Kationen of the **last** horizon of the profiles 55, 71, 102 and
-109. So for every deepest horizon of these profiles one stacked barplot,
+109 - for every deepest horizon of these profiles one stacked barplot,
 so it looks like this (example): ![Stacked
 barplot](https://r-graph-gallery.com/48-grouped-barplot-with-ggplot2_files/figure-html/thecode4-1.png)
 
