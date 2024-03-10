@@ -1,20 +1,23 @@
 ## About the Data
 
 The dataset ([SoilData.csv](SoilData.csv)) contains information about
-soil. Soil samples where taken from soil profiles somewhere in the
-Naturpark Schönbuch and analysed in a laboratory. Each soil profile
+soil. The data table was not managed well and is incomplete, which means
+there is some cleaning to do. But first we need to understand what this
+is all about: Soil samples where taken from soil profiles somewhere in
+the Naturpark Schönbuch and analysed in a laboratory. Each soil profile
 consists of several horizons (see below) and samples where taken from
 every horizon, so the rows represent the horizons of all the profiles.
-The data table comes as .csv file but was not managed well, which means
-there is some cleaning to do.
 
-This is what a soil profile looks like ![soil profile](soilprofile.jpg)
+This is what a soil profile looks like  
+![soil profile](soilprofile.jpg)  
 As you can see, a profile can be differed into several horizons
-(O,A,B,C) as mentioned above. Here is a preview of the first few lines
-of the dataset:
+(O,A,B,C) as mentioned above. There might even be subdivisions of these
+horizons. Every row of the data table contains information about a
+horizon, but from all the soil profiles. Here is a preview of the first
+few lines of the dataset:
 
 <table style="width:100%;">
-<caption>Preview of the data table</caption>
+<caption>Table: SoilData.csv</caption>
 <colgroup>
 <col style="width: 7%" />
 <col style="width: 3%" />
@@ -417,7 +420,7 @@ of the dataset:
 </tbody>
 </table>
 
-Preview of the data table
+Table: SoilData.csv
 
 The first line contains the column names. The second line contains the
 units. But we can only have one header and we do not want the second
@@ -454,10 +457,11 @@ line as it messes up the data type of the columns.
     added together to clay (T)
 -   `S+U+T`: all portions of grain sizes together (theoretically 100%)
 -   `Bodenart`: soil type according to Kartieranleitung 5 (sand, silt,
-    clay) Soil consists of the grain sizes Sand (S), Silt (U) and Clay
-    (T). The three fractions can be divided into subcategories (coarse
-    (g), middle (m), fine (f)). Knowing the proportions can tell us a
-    lot about the soil. For example the fertility, water capacity and
+    clay)  
+    Soil consists of the grain sizes Sand (S), Silt (U) and Clay (T).
+    The three fractions can be divided into subcategories (coarse (g),
+    middle (m), fine (f)). Knowing the proportions can tell us a lot
+    about the soil. For example the fertility, water capacity and
     infiltration rate. Theoretically it adds up to 100% (column S+U+T)
     but in reality there might be some loss or it might even be more
     than 100% which is due to the laboratory method.
@@ -466,39 +470,45 @@ line as it messes up the data type of the columns.
 
 ### 1. The data needs some cleanup
 
--   the column KAKpot2 is not needed
--   the header displays numbers which do not make much sense. I would
-    like to get rid of them by using rename\_with() in combination with
-    regular expressions.
--   Also, there is a second header with the respective units. Leaving
-    this line will interfere with the datatype in R, that’s why I want
-    to delete this line and instead integrate the unit into the header
-    such like this: Tiefe\_\[cm\]
--   there is a typo in the column “Expozition”. It should actually be
-    “Exposition”
--   99999 and 99999,99 are the NA values, but R does not know this, so
-    all these values need to be set to NA. It should be noted that some
-    of these NA values might be actual numbers, but some might also be
-    of datatype character.
--   two columns need to be calculated: base\_saturation\_\[%\] by
-    dividing “Kationen” by “KAKpot” and SOM\_\[%\] by multiplying Corg
-    with 1,72
+1.1 the column KAKpot2 is not needed 1.2 the header displays numbers
+which do not make much sense. I would like to get rid of them by using
+rename\_with() in combination with regular expressions. 1.3 Also, there
+is a second header with the respective units. Leaving this line will
+interfere with the datatype in R, that’s why I want to delete this line
+and instead integrate the unit into the header such like this:
+Tiefe\_\[cm\]. For this dataset you will need to work with backticks. If
+you are not familiar with them, you can read about them
+[<span style="color:blue">here</span>](https://jhudatascience.org/intro_to_r/resources/quotes_vs_backticks.html).
+1.4 there is a typo in the column “Expozition”. It should actually be
+“Exposition” 1.5 99999 and 99999,99 are the NA values, but R does not
+know this, so all these values need to be set to NA. It should be noted
+that some of these NA values might be actual numbers, but some might
+also be of datatype character. 1.6 two columns need to be calculated:
+base\_saturation\_\[%\] by dividing “Kationen” by “KAKpot” and
+SOM\_\[%\] by multiplying Corg with 1,72  
+1.7 Column S+U+T is not always 100%. I would like to see how often I got
+more, less and exactly 100%. Write a new column and put in “more”,
+“less” and “exactly” depending on the value in the column S+U+T. Then,
+write a query that counts and prints the number of values (for example
+“10x less than 100%, 3x exactly 100% and 24x more than 100%”)
 
 ### 2. Visualisation
 
-**1. Stacked Barplot**  
+**2.1 Stacked Barplot**  
 I would like to aggregate (summarize) the columns Ca, Mg, K, Na and
-Kationen by profile number and visualize them with a stacked barplot
-like this (example): ![Stacked
+Kationen by profile number and visualize them for profiles 55, 71, 102
+and 109 with a stacked barplot like this (example): ![Stacked
 barplot](https://r-graph-gallery.com/48-grouped-barplot-with-ggplot2_files/figure-html/thecode4-1.png)
-**2. Piechart of grain sizes**  
+**2.2 Piechart of grain sizes**  
 Then I would like to have 3 piecharts of the “Ah” horizons of the
 profiles 82, 111 and 134 next to each other where I can see the portion
 of S (Sand), U (silt) and T (clay). See below: ![Sketch of
-piechart](sketch_1.jpg) **3. Map of profile location**  
+piechart](sketch_1.jpg) **2.3 Map of profile location**  
 I would like to know where the profiles are. There are columns with
 coordinates which can be used to map the profiles. There are several
-packages for this, for example openstreetmap, mapview, ggplot2 and sf.
+packages for this, for example
+[<span style="color:blue">openstreetmap</span>](https://ajsmit.github.io/Intro_R_Official/mapping-google.html),
+mapview, ggplot2 and sf.
 [<span style="color:blue">This</span>](https://stackoverflow.com/questions/66827313/plotting-utm-coordinates)
 might be a good point to start. Depending on your way to do it you might
 need additional information:  
