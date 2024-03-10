@@ -4,17 +4,20 @@ The dataset ([SoilData.csv](SoilData.csv)) contains information about
 soil. The data table was not managed well and is incomplete, which means
 there is some cleaning to do. But first we need to understand what this
 is all about: Soil samples where taken from soil profiles somewhere in
-the Naturpark Schönbuch and analysed in a laboratory. Each soil profile
-consists of several horizons (see below) and samples where taken from
-every horizon, so the rows represent the horizons of all the profiles.
+the Naturpark Schönbuch and analysed in a laboratory. Soil profiles can
+be seen when you dig a hole in the ground. Each soil profile consists of
+several horizons (see below) and samples where taken from every horizon,
+so the rows in the data table represent the horizons of all the
+profiles.
 
 This is what a soil profile looks like  
 ![soil profile](soilprofile.jpg)  
-As you can see, a profile can be differed into several horizons
-(O,A,B,C) as mentioned above. There might even be subdivisions of these
-horizons. Every row of the data table contains information about a
-horizon, but from all the soil profiles. Here is a preview of the first
-few lines of the dataset:
+As you can see, a profile can often be visually divided into several
+horizons (O,A,B,C) as mentioned above. There might even be subdivisions
+of these horizons. Of course it is not only the colour but also for
+example the chemical composition that is different for each horizon. All
+these things are written down in the data table. Here is a preview of
+the first few lines of the dataset:
 
 <table style="width:100%;">
 <caption>Table: SoilData.csv</caption>
