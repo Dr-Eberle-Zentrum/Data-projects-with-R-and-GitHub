@@ -473,24 +473,27 @@ type of the columns.
 
 ### 1. The data needs some cleanup
 
-1.1 the column KAKpot2 is not needed 1.2 the header displays numbers
-which do not make much sense. I would like to get rid of them by using
-rename\_with() in combination with regular expressions. 1.3 Also, there
-is a second header with the respective units. Leaving this line will
-interfere with the datatype in R, that’s why I want to delete this line
-and instead integrate the unit into the header such like this:
+**1.1 the column KAKpot2** is not needed  
+**1.2 the header** displays numbers which do not make much sense. I
+would like to get rid of them by using rename\_with() in combination
+with regular expressions.  
+**1.3 there is a second header** with the respective units. Leaving this
+line will interfere with the datatype in R, that’s why I want to delete
+this line and instead integrate the unit into the header such like this:
 Tiefe\_\[cm\]. For this dataset you will need to work with backticks. If
 you are not familiar with them, you can read about them
-[<span style="color:blue">here</span>](https://jhudatascience.org/intro_to_r/resources/quotes_vs_backticks.html).
-1.4 there is a typo in the column “Expozition”. It should actually be
-“Exposition” 1.5 99999 and 99999,99 are the NA values, but R does not
-know this, so all these values need to be set to NA. It should be noted
-that some of these NA values might be actual numbers, but some might
-also be of datatype character. 1.6 two columns need to be calculated:
-base\_saturation\_\[%\] by dividing “Kationen” by “KAKpot” and
-SOM\_\[%\] by multiplying Corg with 1,72  
-1.7 Column S+U+T is not always 100%. I would like to see how often I got
-more, less and exactly 100%. Write a new column and put in “more”,
+[<span style="color:blue">here</span>](https://jhudatascience.org/intro_to_r/resources/quotes_vs_backticks.html).  
+**1.4 there is a typo in the column “Expozition”**. It should actually
+be “Exposition”  
+**1.5 99999 and 99999,99 are the NA values**, but R does not know this,
+so all these values need to be set to NA. It should be noted that some
+of these NA values might be actual numbers, but some might also be of
+datatype character.  
+**1.6 two columns need to be calculated**: base\_saturation\_\[%\] by
+dividing “Kationen” by “KAKpot” and SOM\_\[%\] by multiplying Corg with
+1,72  
+**1.7 Column S+U+T is not always 100%**. I would like to see how often I
+got more, less and exactly 100%. Write a new column and put in “more”,
 “less” and “exactly” depending on the value in the column S+U+T. Then,
 write a query that counts and prints the number of values (for example
 “10x less than 100%, 3x exactly 100% and 24x more than 100%”)
