@@ -1,0 +1,31 @@
+
+
+```{r}
+library(tidyverse)
+data <- read_delim("Housing prices.csv", delim=";")
+
+# rows with missing values
+data %>% 
+  filter(!complete.cases(.)) 
+names(data)
+# draw a scatter plot
+ggplot(data, aes(x=`Percentage of Workforce Working Remotely`, 
+                 y=`Average Urban Housing Price Index`,
+                 col=Country)) + 
+  geom_point() 
+
+data |>
+  pivot_longer(cols = c(`Percentage of Workforce Working Remotely`, `Average Urban Housing Price Index`), 
+               names_to = "Variable", 
+               values_to = "Value") |>
+  group_by(Variable) |>
+  mutate(Scale = scale(Value)) |>
+  ungroup() |> 
+ggplot(aes(x=Year, 
+                 y=Scale,
+                 col=Variable)) + 
+  geom_point() +
+  geom_smooth(method="loess") +
+  facet_wrap(~Country)
+
+```
