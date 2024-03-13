@@ -8,7 +8,8 @@ the Naturpark Schönbuch and analysed in a laboratory. Soil profiles can
 be seen when you dig a hole in the ground. Each soil profile consists of
 several horizons (see below) and samples where taken from every horizon,
 so the rows in the data table represent the horizons of all the
-profiles.
+profiles. The horizons are sorted by depth, so the first line in the
+table of each profile is also the upper most horizon of this profile.
 
 This is what a soil profile looks like  
 ![soil profile](soilprofile.jpg)  
@@ -509,8 +510,9 @@ write a query that counts and prints the number of values (for example
 **2.1 Stacked Barplot**  
 I would like to have a stacked barplot that shows the values for Ca, Mg
 and Kationen of the **last** horizon of the profiles 55, 71, 102 and
-109 - for every deepest horizon of these profiles one stacked barplot,
-so it looks like this (example): ![Stacked
+109 - for every last horizon of these profiles in the data table one
+stacked barplot. Here is an example for such an barplot. I would also
+like to have the same colors as in the example plot (viridis): ![Stacked
 barplot](https://r-graph-gallery.com/48-grouped-barplot-with-ggplot2_files/figure-html/thecode4-1.png)
 
 **2.2 Piechart of grain sizes**  
@@ -521,8 +523,10 @@ piechart](sketch_1.jpg)
 
 **2.3 Map of profile location**  
 I would like to know where the profiles are. There are columns with
-coordinates which can be used to map the profiles. There are several
-packages for this, for example
+coordinates which can be used to map the profiles. Keep in mind that you
+will first need to aggregate by profile number! Otherwise you would have
+all points multiple times. There are several packages for this, for
+example
 [<span style="color:blue">openstreetmap</span>](https://ajsmit.github.io/Intro_R_Official/mapping-google.html),
 mapview, ggplot2 and sf.
 [<span style="color:blue">This</span>](https://stackoverflow.com/questions/66827313/plotting-utm-coordinates)
