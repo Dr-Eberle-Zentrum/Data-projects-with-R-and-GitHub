@@ -4,17 +4,23 @@ Subjects filled out a personality questionnaire, called the Swedish
 Universities Scales of Personality (SSP). It is originally in Swedish
 and was filled out by Swedish subjects.
 
-The SSP includes 91 items that make up 13 personality scales: - somatic
-trait anxiety (SSPSTA) - psychic trait anxiety (SSPPTA) - stress
-susceptibility (SSPSS) - lack of assertiveness (SSPLA) - impulsiveness
-(SSPI) - adventure seeking (SSPAS) - detachment (SSPD) - social
-desirability (SSPSD) - embitterment (SSPE) - trait irritability
-(SSPTI) - mistrust (SSPM) - verbal trait aggression (SSPVTA) - physical
-trait aggression (SSPPHTA)
+The SSP includes 91 items that make up 13 personality scales:
+
+-   somatic trait anxiety (SSPSTA)
+-   psychic trait anxiety (SSPPTA)
+-   stress susceptibility (SSPSS)
+-   lack of assertiveness (SSPLA)
+-   impulsiveness (SSPI)
+-   adventure seeking (SSPAS)
+-   detachment (SSPD)
+-   social desirability (SSPSD)
+-   embitterment (SSPE)
+-   trait irritability (SSPTI)
+-   mistrust (SSPM)
+-   verbal trait aggression (SSPVTA)
+-   physical trait aggression (SSPPHTA)
 
 ## The Dataset
-
--   what does it contain?
 
 The dataset ([SSP\_20231030\_EB.xlsx](SSP_20231030_EB.xlsx)) contains
 the scores for the 91 items as well as the 13 calculated scales. The
@@ -1580,7 +1586,7 @@ Here is a preview of the first few lines of the dataset:
 
 Table: SSP data
 
-## the columns
+## The Columns
 
 -   `Subject` is the subject number. Only those starting with
     “ASMR021\_” will be needed for the analysis.
