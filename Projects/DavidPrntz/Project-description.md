@@ -81,7 +81,9 @@ Using location type as an example, I would then have a plot showing
 total sales for location type (tier 1, tier 2 & tier 3) split by item
 category. I would like to create these plots to show the influence of
 location, size and type of supermarket on sales. For example, “Does a
-store with a Tier 1 location sell more items?”. *Example to illustrate*
+store with a Tier 1 location sell more items?”.
+<p>
+*Example to illustrate*
 <p>
 
 ![](Sales_by_Location.png)
