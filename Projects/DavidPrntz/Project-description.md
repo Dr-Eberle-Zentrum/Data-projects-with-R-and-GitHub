@@ -9,8 +9,7 @@ variables to see what products need to be promoted or offered discounts
 on. The BigMart dataset provides 14204 observations and 12
 variables.These variables include weight, fat content, visibility, item
 type, location, and more. It also includes over 1,500 products across 10
-different stores.The [dataset](Projects/DavidPrntz/data.csv) can be
-downloaded on kaggle
+different stores.The [dataset](data.csv) can be downloaded on kaggle
 <https://www.kaggle.com/datasets/thedevastator/bigmart-product-sales-factors>
 
 ## Current Data
