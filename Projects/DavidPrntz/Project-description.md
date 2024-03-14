@@ -9,7 +9,7 @@ variables to see what products need to be promoted or offered discounts
 on. The BigMart dataset provides 14204 observations and 12
 variables.These variables include weight, fat content, visibility, item
 type, location, and more. It also includes over 1,500 products across 10
-different stores.The [dataset](data.csv) can be downloaded on kaggle
+different stores. The [dataset](data.csv) can be downloaded on kaggle
 <https://www.kaggle.com/datasets/thedevastator/bigmart-product-sales-factors>
 
 ## Current Data
@@ -63,9 +63,9 @@ by **creating charts with ggplot**:
 
 **1. Which products are sold the most?**
 
-To answer this question I want to create a bar chart that shows the
-absolute number of all sales by item category. In addition, I want to
-show the relative share as a number above each bar.
+To answer this question I want to create a bar chart that shows the sum
+of all sales by item category. In addition, I want to show the relative
+share as a number above each bar.
 
 *Example to illustrate*
 <p>
@@ -78,17 +78,10 @@ supermarket?**
 To figure this out, I would like to create the same plot from 1.
 Separated by the attribute’s location, size and type of supermarket.
 Using location type as an example, I would then have a plot showing
-total sales for location type tier 1, tier 2 & tier 3 split by item
+total sales for location type (tier 1, tier 2 & tier 3) split by item
 category. I would like to create these plots to show the influence of
-location, size and type of supermarket on sales. Additionally, I would
-like to create a plot for each of the same attributes showing the
-relative share of sales by item category within each location, size and
-type of supermarket category. I want to create these plots to explore
-how the share of each item category differs within the attribute
-categories. For example, “do baking goods have a similar share in all
-locations?”.
-
-*Example to illustrate*
+location, size and type of supermarket on sales. For example, “Does a
+store with a Tier 1 location sell more items?”. *Example to illustrate*
 <p>
 
 ![](Sales_by_Location.png)
