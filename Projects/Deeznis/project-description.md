@@ -20,6 +20,12 @@ dataset are as follows:
 -   **Internet Infrastructure Investment (Million USD)**
 -   **Environmental Impact Score (1-100)**
 
+Here is an extract of the ([Housing prices.csv](Housing%20prices.csv))
+data:
+
+knitr::kable(Housing prices\[1:5, \], caption = “Housing prices
+dataset”)
+
 ## Data Manipulation Goals
 
 The primary goal of data manipulation in this project is to prepare the

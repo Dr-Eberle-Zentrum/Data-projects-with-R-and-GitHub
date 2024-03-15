@@ -19,6 +19,12 @@ The dataset used in this analysis is from the Harvard Dataverse and contains inf
 -   **Internet Infrastructure Investment (Million USD)**
 -   **Environmental Impact Score (1-100)**
 
+Here is an extract of the ([Housing prices.csv](Housing prices.csv)) data:
+
+
+knitr::kable(Housing prices[1:5, ],  caption = "Housing prices dataset")
+
+
 
 ## Data Manipulation Goals
 
