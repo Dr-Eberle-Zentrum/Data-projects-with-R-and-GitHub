@@ -128,8 +128,80 @@ handling missing values, and ensuring that the dataset is in a suitable
 format for visualization and analysis.
 
 There is one missing datapoint for “Public Transport Ridership Change%”
-for Germany inthe year 2023: knitr::kable(Housing\_prices\[22:24, \],
-caption = “Missing data table”)
+for Germany inthe year 2023:
+
+<table>
+<caption>Missing data table</caption>
+<colgroup>
+<col style="width: 1%" />
+<col style="width: 2%" />
+<col style="width: 7%" />
+<col style="width: 13%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 12%" />
+<col style="width: 16%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Year</th>
+<th style="text-align: left;">Country</th>
+<th style="text-align: left;">Country Abbreviation</th>
+<th style="text-align: right;">Percentage of Workforce Working
+Remotely</th>
+<th style="text-align: right;">Average Urban Housing Price Index</th>
+<th style="text-align: right;">Urban Population Growth Rate (%)</th>
+<th style="text-align: right;">Rural Population Growth Rate (%)</th>
+<th style="text-align: right;">Public Transport Ridership Change
+(%)</th>
+<th style="text-align: right;">Internet Infrastructure Investment
+(Million USD)</th>
+<th style="text-align: right;">Environmental Impact Score (1-100)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">2017</td>
+<td style="text-align: left;">China</td>
+<td style="text-align: left;">CN</td>
+<td style="text-align: right;">20.671496</td>
+<td style="text-align: right;">98.46751</td>
+<td style="text-align: right;">2.9612129</td>
+<td style="text-align: right;">1.9949547</td>
+<td style="text-align: right;">-10.63692</td>
+<td style="text-align: right;">704.2000</td>
+<td style="text-align: right;">42.11061</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2023</td>
+<td style="text-align: left;">Germany</td>
+<td style="text-align: left;">DE</td>
+<td style="text-align: right;">8.757532</td>
+<td style="text-align: right;">178.29228</td>
+<td style="text-align: right;">1.7741289</td>
+<td style="text-align: right;">0.9906452</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">481.6282</td>
+<td style="text-align: right;">40.76622</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2020</td>
+<td style="text-align: left;">Germany</td>
+<td style="text-align: left;">DE</td>
+<td style="text-align: right;">49.370048</td>
+<td style="text-align: right;">162.60829</td>
+<td style="text-align: right;">-0.0058897</td>
+<td style="text-align: right;">0.6040913</td>
+<td style="text-align: right;">-28.12592</td>
+<td style="text-align: right;">900.5788</td>
+<td style="text-align: right;">77.16579</td>
+</tr>
+</tbody>
+</table>
+
+Missing data table
 
 There is also one missing row: The data for China in 2006 is not
 included.

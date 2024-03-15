@@ -39,7 +39,11 @@ knitr::kable(Housing_prices[1:5, ],  caption = "Housing prices dataset")
 The primary goal of data manipulation in this project is to prepare the dataset for analysis. This involves sorting the data, identifying and handling missing values, and ensuring that the dataset is in a suitable format for visualization and analysis.
 
 There is one missing datapoint for "Public Transport Ridership Change%" for Germany inthe year 2023:
+
+```{r, echo=F}
 knitr::kable(Housing_prices[22:24, ],  caption = "Missing data table")
+```
+
 
 There is also one missing row: The data for China in 2006 is not included.
 
