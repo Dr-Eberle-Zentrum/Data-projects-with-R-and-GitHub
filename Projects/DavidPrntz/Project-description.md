@@ -57,6 +57,10 @@ First of all I need to **clean the data**. There are many missing values
 that needed to be converted to NA values. A decision must also be made
 on what to do with the N/A values in the corresponding categories. I
 have decided to drop all observations with N/A if they become relevant.
+To *prepare the data for the visualizations* we need to add a new
+variable revenue. For the price, I would estimate that the real selling
+price is about 70% of the maximum price. So the formular for revenue =
+Item\_MRP*0.7*Item\_Outlet\_Sales
 
 After the Data Cleaning I would like to answer the following questions
 by **creating charts with ggplot**:
@@ -75,20 +79,20 @@ according to average item visibility ?!
 
 ![](Example.png)
 
-**2. Does this effect differ according to location, size, type of
-supermarket?**
+**2. Does this effect differ according to location and size?**
 
 To figure this out, I would like to create the same plot from 1.
 Separated by the attribute’s location and size. To really see the effect
 of the attributes, it is important to divide the total sum of sales by
 the number of stores. Using location type as an example, I would then
-have a plot showing total sales/number of stores for location type (tier
-1, tier 2 & tier 3) split by item category. I would like to create these
-plots to show the influence of location and size on sales. For example,
-“Does a Tier 1 location increases sales?”. I also want to create the
-same plots with revenue/number of stores on the y-axis. In comparison to
-the example plot, I would add slanted x-labels, no color code legend and
-the color the bars according to average item visibility.
+have a plot showing total\_sales/number\_of\_stores for location type
+(tier 1, tier 2 & tier 3) split by item category. I would like to create
+these plots to show the influence of location and size on sales. For
+example, “Does a Tier 1 location increases sales?”. I also want to
+create the same plots with total\_revenue/number\_of\_stores on the
+y-axis. In comparison to the example plot, I would add slanted x-labels,
+no color code legend and the color the bars according to average item
+visibility.
 <p>
 *Example to illustrate*
 <p>
