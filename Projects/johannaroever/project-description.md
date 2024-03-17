@@ -12,6 +12,16 @@ described in Pogiatzi’s book:
 roemischen Zeit, Peleus 23 (Diss. Albert-Ludwigs-Universitaet Freiburg
 2002, Moehnesee-Wamel 2003)*
 
+This is one example of the reliefs, from the julian-claudian era:
+<figure>
+<img src="exampleStele.PNG" alt="Example stele, Pogiatzi 2002 Cat.No.44" width=30%/>
+<figcaption aria-hidden="true">
+Example stele, julian-claudian era, Pogiatzi 2002 Cat.-No. 44
+</figcaption>
+</figure>
+
+# Data
+
 The analysed attributes are:
 
 -   `catNo`: number given to the stele in Pogiatzi’s catalogue
@@ -26,84 +36,219 @@ The analysed attributes are:
 -   `paintedSurface`: description of painted areas
 -   `material`: the material the stele is made of
 
+The chronological order for `epoch` is: *cypro-archaic, cypro-classical,
+hellenistic, julian-claudian, early\_imperial, flavian, antonine*
+
 In some cases the data can be uncertain or incomplete because grave
 reliefs as well as other artifacts were found and/or excavated without
 modern archaeological methods. (For further interpretation it is also
 important to be aware that usually not 100% of the artifacts are known
 and excavated.)
 
-# Goal
+The data describes the stelae by attributes which might correlate with
+each other. The first few of 124 observations are shown here:
 
-The project should be the creation of plots (or just one of the plots)
-to show how some of the attributes of the stelae might correlate with
-each other. The first few of 124 observations are these:
+<table style="width:100%;">
+<colgroup>
+<col style="width: 3%" />
+<col style="width: 8%" />
+<col style="width: 3%" />
+<col style="width: 38%" />
+<col style="width: 7%" />
+<col style="width: 5%" />
+<col style="width: 8%" />
+<col style="width: 9%" />
+<col style="width: 13%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">catNo</th>
+<th style="text-align: left;">epoch</th>
+<th style="text-align: left;">type</th>
+<th style="text-align: left;">typeDesc</th>
+<th style="text-align: right;">typeCertain</th>
+<th style="text-align: left;">location</th>
+<th style="text-align: left;">locationType</th>
+<th style="text-align: left;">paintedSurface</th>
+<th style="text-align: left;">material</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">cypro-archaic</td>
+<td style="text-align: left;">1a</td>
+<td style="text-align: left;">Grave stelae with guard animals, with two
+antithetical lions</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Amathus</td>
+<td style="text-align: left;">grave</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">local white limestone</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">cypro-archaic</td>
+<td style="text-align: left;">1a</td>
+<td style="text-align: left;">Grave stelae with guard animals, with two
+antithetical lions</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">unknown</td>
+<td style="text-align: left;">unknown</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">local white limestone</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">cypro-archaic</td>
+<td style="text-align: left;">1a</td>
+<td style="text-align: left;">Grave stelae with guard animals, with two
+antithetical lions</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">unknown</td>
+<td style="text-align: left;">unknown</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">local white limestone</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">cypro-archaic</td>
+<td style="text-align: left;">1a</td>
+<td style="text-align: left;">Grave stelae with guard animals, with two
+antithetical lions</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Amathus</td>
+<td style="text-align: left;">not specified</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">local white limestone</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">cypro-archaic</td>
+<td style="text-align: left;">1a</td>
+<td style="text-align: left;">Grave stelae with guard animals, with two
+antithetical lions</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Athienou</td>
+<td style="text-align: left;">not specified</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">local white limestone</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: left;">cypro-archaic</td>
+<td style="text-align: left;">1a</td>
+<td style="text-align: left;">Grave stelae with guard animals, with two
+antithetical lions</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Golgoi</td>
+<td style="text-align: left;">not specified</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">local white limestone</td>
+</tr>
+</tbody>
+</table>
 
-    ##   catNo         epoch type
-    ## 1     1 cypro-archaic   1a
-    ## 2     2 cypro-archaic   1a
-    ## 3     3 cypro-archaic   1a
-    ## 4     4 cypro-archaic   1a
-    ## 5     5 cypro-archaic   1a
-    ## 6     6 cypro-archaic   1a
-    ##                                                       typeDesc typeCertain
-    ## 1 Grave stelae with guard animals, with two antithetical lions           1
-    ## 2 Grave stelae with guard animals, with two antithetical lions           1
-    ## 3 Grave stelae with guard animals, with two antithetical lions           1
-    ## 4 Grave stelae with guard animals, with two antithetical lions           1
-    ## 5 Grave stelae with guard animals, with two antithetical lions           1
-    ## 6 Grave stelae with guard animals, with two antithetical lions           1
-    ##   location  locationType paintedSurface              material
-    ## 1  Amathus         grave                local white limestone
-    ## 2  unknown       unknown                local white limestone
-    ## 3  unknown       unknown                local white limestone
-    ## 4  Amathus not specified                local white limestone
-    ## 5 Athienou not specified                local white limestone
-    ## 6   Golgoi not specified                local white limestone
+# Goals
 
-Attributes to plot together to see potential correlations, usually with
-how often certain attribute values occur together:
+## Data Modification
 
--   `epoch - type`: How long is each type used? Are there overlaps?
--   `epoch - type - material`: Are there any changes in the material
-    that go along with the epoch and type?
--   `epoch - type - painted(true/false)`: Are stelae only painted in
-    certain epochs or depending on their type?
--   (`epoch - location` (only if found in situ[1], location accuracy
-    might have to be discussed): Which locations are stelae found at in
-    the different epochs?)
--   (`epoch - locationType` (only if found in situ, data might not be
-    inconclusive because of many unknown): Were certain types of
-    location used more during certain epochs?)
-
-The last two can be excluded for the time being. Because of the
-incomplete data the results might not be coherent enough for
-interpretation.
-
-## Intermediates
-
-In some cases the attribute values need to be made more consistent
-within the range they should reflect. The range of values for `material`
-might be condensed to the values of
-`local limestone, (local?) hard limestone and imported marble`. To
-include `location` in plots it might be enough to use the name of the
-ancient site excluding more specific details, especially for cases in
-which the grave relief was found near the site without recording the
-specific place or similar.
-
-It might be useful to prepare information like this before creating the
-actual plot:
-
-<figure>
-<img src="steleTypeRegion.PNG" alt="Stele types per region" />
-<figcaption aria-hidden="true">Stele types per region</figcaption>
-</figure>
+1.  All values of *unknown* and *undefined* are to be replaced with `NA`
+    for easier handling in R. The values of *not specified* should be
+    kept.
+2.  In `epoch` the value *antoninisch* should be replaced by *antonine*
+    for using a consistent language.
+3.  In the column `type`some values still include a “?” which should be
+    deleted, since the information it was meant to convey is written in
+    `typeCertain`.
+4.  For the stelae with the `catNo` = *98* and *99* the value of `type`
+    has to be changed to *6*.
+5.  The values in `typeCertain` are to be replaced for easier handling
+    in R: *0* to *FALSE*, *1* to *TRUE*.
+6.  The column `location` has to be reviewed for only containing the
+    values of the general regions, while more specific information can
+    be deleted:
+    -   *Amathus, Golgoi, Idalion, Kition, Marion/Paphos, Salamis,
+        Soloi, Tamassos*
+    -   All *unknown* in this column can be converted to *Cyprus*.
+    -   All values which include “(?)” can be converted to *Cyprus*.
+    -   If the current value already includes one of the region names,
+        shorten it to only that. This appies to values which include
+        “near”, “bei”
+    -   The value of the observation of `catNo`=*12* which says
+        “probably Idalion” should be changed to *Cyprus*.
+    -   Other:
+        -   region of Limassol –&gt; Amathus
+        -   Limassol –&gt; Amathus
+        -   Mathikoloni –&gt; Amathus  
+        -   Athienou –&gt; Golgoi
+        -   Melousha –&gt; Golgoi
+        -   Pergamon –&gt; Golgoi  
+        -   Alambra (Larnaca) –&gt; Kition
+        -   Pano Arodes –&gt; Marion
+        -   Polis –&gt; Marion  
+        -   Kotschines (neighbourhood of Lysi) –&gt; Salamis
+        -   north of Lysi, district Famagusta –&gt; Salamis  
+        -   Ambelia, near Morphou –&gt; Soloi  
+        -   Pera (Asproji) –&gt; Tamassos
+7.  For easier handling of `material`the values should just be reduced
+    to either *limestone* or *marble*.
 
 ## Visualisation
 
--   When depicting the `type` inclusion of a legend for the description
-    of the types
--   On the axes the order to show `epoch` chronological
--   On the axes the order to show `type` should be following the stages
-    of development (= numeric/alphabetical, starting with `1a`)
+To get a better view of the data for answering certain questions, some
+of the attributes should be shown in tables as well as in plots using
+`ggplot2`.
 
-[1] in situ: at the place it was originally used in ancient time
+### 1. Stacked bar plot epoch - type
+
+To answer the question which types (including the sub-types) are used
+per epoch:  
+1. Create a table to show the amounts of each type per epoch. 2. Create
+a stacked bar plot to show the correlation `epoch - type`:
+
+-   `epoch` is the variable on the x-axis
+-   For the order to show `epoch` in follow the chronological order
+    given in the [data description](#Data).
+-   The amounts of each `type` should be shown with the number added to
+    each part of the stack.
+-   The order to show `type` in should be following the stages in
+    alphanumeric order.
+-   Add a legend to display the `typeDescription` on the side of the
+    diagram.
+
+When only the general type is given  
+The stelae without defined values in `type` should still be counted and
+shown as “undefined” for each epoch. The column `typeCertain` can be
+ignored for this. If the type is marked as uncertain count it for the
+type given in `type`.
+
+This should be done similar to the following example table and diagram
+showing the stele types per region:
+<figure>
+<img src="steleTypeRegion.PNG" alt="Table: Stele types per region" width=50%/>
+<figcaption aria-hidden="true">
+Example table: Stele types per region
+</figcaption>
+</figure>
+<figure>
+<img src="exampleDiagram.PNG" alt="Diagram: Stele types per region" width=50%/>
+<figcaption aria-hidden="true">
+Example diagram: Stele types per region
+</figcaption>
+</figure>
+
+### 2. Scatterplot epoch - type - material
+
+The goal of this is to visualise if and when there are there any changes
+in the material that go along with the epoch and type:
+
+Create a scatterplot to show the correlations between
+`epoch - type - material`.
+
+-   `epoch` on the x-axis, for the order to show `epoch` in follow the
+    chronological order given in the [data description](#Data).
+-   `type` on the y-axis
+-   Use the marker `color` to display the material and include the
+    legend for this.
+-   Optional: Add a correlation line.

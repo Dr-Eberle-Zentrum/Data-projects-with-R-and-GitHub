@@ -15,6 +15,14 @@ During the Roman Empire grave reliefs across the empire show similarities but ca
 Here the focus should be on the stelae from Cyprus which were categorized and dated by the archaeologist Pogiatzi.The provided [CSV](StelaeCyprus.csv) was assembled by me (J. Roever) from the data described in Pogiatzi's book:  
 _E. Pogiatzi, Die Grabreliefs auf Zypern von der archaischen bis zur roemischen Zeit, Peleus 23 (Diss. Albert-Ludwigs-Universitaet Freiburg 2002, Moehnesee-Wamel 2003)_
 
+This is one example of the reliefs, from the julian-claudian era:
+<figure>
+<img src="exampleStele.PNG" alt="Example stele, Pogiatzi 2002 Cat.No.44" width=30%/>
+<figcaption aria-hidden="true">Example stele, julian-claudian era, Pogiatzi 2002 Cat.-No. 44</figcaption>
+</figure>
+
+# Data
+
 The analysed  attributes are:
 
 * `catNo`: number given to the stele in Pogiatzi's catalogue
@@ -27,42 +35,92 @@ The analysed  attributes are:
 * `paintedSurface`: description of painted areas
 * `material`: the material the stele is made of
 
+The chronological order for `epoch` is:
+_cypro-archaic, cypro-classical, hellenistic, julian-claudian, early_imperial, flavian, antonine_
+
 In some cases the data can be uncertain or incomplete because grave reliefs as well as other artifacts were found and/or excavated without modern archaeological methods. (For further interpretation it is also important to be aware that usually not 100% of the artifacts are known and excavated.)
 
-# Goal
 
-The project should be the creation of plots (or just one of the plots) to show how some of the attributes of the stelae might correlate with each other.
-The first few of 124 observations are these:
+The data describes the stelae by attributes which might correlate with
+each other. The first few of 124 observations are shown here:
 
 ```{r, echo = FALSE}
-
+library(knitr)
 data <- read.csv("StelaeCyprus.csv", sep=';', header = TRUE)
-head(data)
+kable(data[1:6, ])
 
 ```
 
-Attributes to plot together to see potential correlations, usually with how often certain attribute values occur together:
+# Goals
+## Data Modification
 
-* `epoch - type`: How long is each type used? Are there overlaps?
-* `epoch - type - material`: Are there any changes in the material that go along with the epoch and type?
-* `epoch - type - painted(true/false)`: Are stelae only painted in certain epochs or depending on their type?
-* (`epoch - location` (only if found in situ^[in situ: at the place it was originally used in ancient time], location accuracy might have to be discussed): Which locations are stelae found at in the different epochs?)
-* (`epoch - locationType` (only if found in situ, data might not be inconclusive because of many unknown): Were certain types of location used more during certain epochs?)
-
-The last two can be excluded for the time being. Because of the incomplete data the results might not be coherent enough for interpretation.
-
-## Intermediates
-
-In some cases the attribute values need to be made more consistent within the range they should reflect. 
-The range of values for `material` might be condensed to the values of `local limestone, (local?) hard limestone and imported marble`.  To include `location` in plots it might be enough to use the name of the ancient site excluding more specific details, especially for cases in which the grave relief was found near the site without recording the specific place or similar.
-
-It might be useful to prepare information like this before creating the actual plot:
-
-![Stele types per region](steleTypeRegion.PNG)
+1. All values of _unknown_ and _undefined_ are to be replaced with `NA` for easier handling in R. The values of _not specified_ should be kept.
+2. In `epoch` the value _antoninisch_ should be replaced by _antonine_ for using a consistent language.
+3. In the column `type`some values still include a "?" which should be deleted, since the information it was meant to convey is written in `typeCertain`.
+4. For the stelae with the `catNo` =  _98_ and _99_ the value of `type` has to be changed to _6_.
+5. The values in `typeCertain` are to be replaced for easier handling in R: _0_ to _FALSE_, _1_ to _TRUE_.
+6. The column `location` has to be reviewed for only containing the values of the general regions, while more specific information can be deleted: 
+    * _Amathus, Golgoi, Idalion, Kition, Marion/Paphos, Salamis, Soloi, Tamassos_
+    * All _unknown_ in this column can be converted to _Cyprus_.
+    * All values which include "(?)" can be converted to _Cyprus_.
+    * If the current value already includes one of the region names, shorten it to only that. This appies to values which include  "near", "bei"
+    * The value of the observation of `catNo`=_12_ which says "probably Idalion" should be changed to _Cyprus_.
+    * Other:
+        * region of Limassol --> Amathus
+        * Limassol --> Amathus
+        * Mathikoloni --> Amathus  
+        * Athienou --> Golgoi
+        * Melousha --> Golgoi
+        * Pergamon --> Golgoi  
+        * Alambra (Larnaca) --> Kition
+        * Pano Arodes --> Marion
+        * Polis --> Marion  
+        * Kotschines (neighbourhood of Lysi) --> Salamis
+        * north of Lysi, district Famagusta --> Salamis    
+        * Ambelia, near Morphou --> Soloi  
+        * Pera (Asproji) --> Tamassos
+7. For easier handling of `material`the values should just be reduced to either _limestone_ or _marble_.
 
 ## Visualisation
 
-* When depicting the `type` inclusion of a legend for the description of the types
-* On the axes the order to show `epoch` chronological
-* On the axes the order to show `type` should be following the stages of development (= numeric/alphabetical, starting with `1a`)
+To get a better view of the data for answering certain questions, some of the attributes should be shown in tables as well as in plots using `ggplot2`.
+
+### 1. Stacked bar plot epoch - type
+
+
+To answer the question which types (including the sub-types) are used per epoch:  
+1. Create a table to show the amounts of each type per epoch.
+2. Create a stacked bar plot to show the correlation `epoch - type`:
+
+* `epoch` is the variable on the x-axis
+* For the order to show `epoch` in follow the chronological order given in the [data description](#Data).
+* The amounts of each `type` should be shown with the number added to each part of the stack.
+* The order to show `type` in should be following the stages in alphanumeric order.
+* Add a legend to display the `typeDescription` on the side of the diagram.
+
+When only the general type is given     
+The stelae without defined values in `type` should still be counted and shown as "undefined" for each epoch.
+The column `typeCertain` can be ignored for this. If the type is marked as uncertain count it for the type given in `type`.
+
+This should be done similar to the following example table and diagram showing the stele types per region:
+<figure>
+<img src="steleTypeRegion.PNG" alt="Table: Stele types per region" width=50%/>
+<figcaption aria-hidden="true">Example table: Stele types per region</figcaption>
+</figure>
+
+<figure>
+<img src="exampleDiagram.PNG" alt="Diagram: Stele types per region" width=50%/>
+<figcaption aria-hidden="true">Example diagram: Stele types per region</figcaption>
+</figure>
+
+### 2. Scatterplot epoch - type - material
+
+The goal of this is to visualise if and when there are there any changes in the material that go along with the epoch and type:
+
+Create a scatterplot to show the correlations between `epoch - type - material`.
+
+* `epoch` on the x-axis, for the order to show `epoch` in follow the chronological order given in the [data description](#Data).
+* `type` on the y-axis
+* Use the marker `color` to display the material and include the legend for this.
+* Optional: Add a correlation line.
 
