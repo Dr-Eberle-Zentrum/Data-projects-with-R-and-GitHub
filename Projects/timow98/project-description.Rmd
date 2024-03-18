@@ -77,7 +77,7 @@ Then I would like to have 3 piecharts of the "Ah" horizons of the profiles 82, 1
   ![Sketch of piechart](sketch_1.jpg)
   
 **2.3 Map of profile location**  
-I would like to know where the profiles are. There are columns with coordinates which can be used to map the profiles. Keep in mind that you will first need to aggregate by profile number! Otherwise you would have all points multiple times. There are several packages for this, for example [<span style="color:blue">openstreetmap</span>](https://ajsmit.github.io/Intro_R_Official/mapping-google.html), mapview, ggplot2 and sf. [<span style="color:blue">This</span>](https://stackoverflow.com/questions/66827313/plotting-utm-coordinates) might be a good point to start. Depending on your way to do it you might need additional information:  
+I would like to know where the profiles are. There are columns with coordinates which can be used to map the profiles. Keep in mind that you will first need to aggregate by profile number! Otherwise you would have all points multiple times. There are several packages for this, for example mapview, sf and ggplot2. [<span style="color:blue">This</span>](https://stackoverflow.com/questions/66827313/plotting-utm-coordinates) might be a good point to start - in this case you will need to use mapview and sf. Depending on your way to do it you might need additional information:  
 Coordinate Reference System: UTM Zone 32 N WGS 84  
 EPSG: 25832  
 proj4string: "+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs"  
