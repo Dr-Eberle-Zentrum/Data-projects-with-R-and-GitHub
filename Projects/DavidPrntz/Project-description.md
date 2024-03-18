@@ -60,7 +60,7 @@ have decided to drop all observations with N/A if they become relevant.
 To *prepare the data for the visualizations* we need to add a new
 variable revenue. For the price, I would estimate that the real selling
 price is about 70% of the maximum price. So the formular for revenue =
-Item\_MRP*0.7*Item\_Outlet\_Sales
+Item\_MRP x 0.7 x Item\_Outlet\_Sales
 
 After the Data Cleaning I would like to answer the following questions
 by **creating charts with ggplot**:
