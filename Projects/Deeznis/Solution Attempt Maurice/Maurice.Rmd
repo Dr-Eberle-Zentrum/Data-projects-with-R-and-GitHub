@@ -9,22 +9,79 @@ output: md_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+```{r}
+rm(list = ls()) #Clears the workspace to avoid any conflicts when first running the code
+options(scipen=999) #Disable scientific notation
 
-```{r cars}
-summary(cars)
+##################################### Importing Packages #####################################
+
+if (!require(magrittr)) install.packages(magrittr)
+if (!require(dplyr)) install.packages(dplyr)
+if (!require(ggplot2)) install.packages(ggplot)
+if (!require(tidyr)) install.packages(tidyr)
+
+library(magrittr) #Used for piping
+library(dplyr) #Used for adding new column  
+library(ggplot2) #Used for visualizations
+library(tidyr) #Pivot data
+
+##################################### Setting Working Directory #####################################
+
+#I get the data directly from the GitHub site
+url_to_csv <- "https://dr-eberle-zentrum.github.io/Data-projects-with-R-and-GitHub/Projects/Deeznis/Housing_prices.csv"
+
+#I use ; as seperator.
+housing_prices <- read.csv(url_to_csv, sep =";")
+
+##################################### Data Manipulation Goals #####################################
+
+#I first replace the . in the names of the columns with a _
+#This makes it easier to read
+colnames(housing_prices) <- gsub("\\.", "_", colnames(housing_prices))
+
+#I remove any excess _ at the end of the column names.
+remove_excess_ <- function(data) {
+  names(data) <- gsub("_+$", "", names(data))
+  return(data)
+}
+
+housing_prices <- remove_excess_(housing_prices)
+
+#I change the values of the below columns so that:
+
+# - Percentage Columns are shown as Decimal
+# - Infrastructure Investment values are actually in million. 
+
+housing_prices <- housing_prices %>%
+  mutate(Percentage_of_Workforce_Working_Remotely = Percentage_of_Workforce_Working_Remotely / 100) %>%
+  mutate(Urban_Population_Growth_Rate = Urban_Population_Growth_Rate / 100) %>%
+  mutate(Rural_Population_Growth_Rate = Rural_Population_Growth_Rate / 100) %>%
+  mutate(Public_Transport_Ridership_Change = Public_Transport_Ridership_Change / 100) %>%
+  mutate(Internet_Infrastructure_Investment__Million_USD = Internet_Infrastructure_Investment__Million_USD * 1000000)
+
+#I reorder the data by Country and Year in preparation of calculating the home price growth
+housing_prices <- housing_prices %>%
+  arrange(Country, Year)
+
+#I calculate the home price growth as the current index divided by the lagged index - 1 for each country.
+#I do this by grouping the operation by the Country column.
+housing_prices <- housing_prices %>% 
+  group_by(Country) %>% 
+  mutate(Home_Price_Growth = (Average_Urban_Housing_Price_Index / lag(Average_Urban_Housing_Price_Index)) - 1) %>%
+  mutate(Remote_Workforce_Growth = (Percentage_of_Workforce_Working_Remotely / lag(Percentage_of_Workforce_Working_Remotely)) - 1)
+
+head(housing_prices)
 ```
 
-## Including Plots
+```{r}
+housing_Prices_long <- pivot_longer(housing_prices, 
+                                    cols = c(Home_Price_Growth, Remote_Workforce_Growth), 
+                                    names_to = "Variable",
+                                    values_to = "Value")
 
-You can also embed plots, for example:
+housing_Prices_long <- housing_Prices_long[, c("Year", "Country", "Variable", "Value")]
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+head(housing_Prices_long)
 ```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
