@@ -132,6 +132,8 @@ Looks like the relative proportion of `Sum_Sales` and `Sum_Revenue` are pretty m
 
 ### Total sales by outlet size
 
+For the next 4 facet plots, I took the liberty to display the facets on the same row, so the comparison of the y-axis is easier to make. I also kept the labels on the x-axis turned to 90° and not slanted, otherwise they are too cramped to be displayed properly.
+
 ```{r sales_type_size, out.width = "100%"}
 #' These 3 lines generate the breaks and labs that will be used on the y axis
 max.y.axis <- ceiling( max(Dataset_V2a$Sum_Sales) / 1e6) * 1e6
@@ -142,7 +144,7 @@ ggplot(data = Dataset_V2a, aes(x = Item_Type, y = Sum_Sales, fill = Avg_Visibili
   geom_col() +
   facet_wrap(~ Outlet_Size, nrow = 1) +
   labs(x = "Item type", y = "Sum of sales") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
   coord_cartesian(ylim = c(0, max.y.axis)) +
   scale_y_continuous(breaks = y.breaks,
                      labels = y.labs) +
@@ -164,7 +166,7 @@ ggplot(data = Dataset_V2b, aes(x = Item_Type, y = Sum_Sales, fill = Avg_Visibili
   geom_col() +
   facet_wrap(~ Outlet_Location_Type, nrow = 1) +
   labs(x = "Item type", y = "Sum of sales") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
   coord_cartesian(ylim = c(0, max.y.axis)) +
   scale_y_continuous(breaks = y.breaks,
                      labels = y.labs) +
@@ -180,7 +182,7 @@ ggplot(data = Dataset_V2a, aes(x = Item_Type, y = Sum_Revenue / 1e6, fill = Avg_
   geom_col() +
   facet_wrap(~ Outlet_Size, nrow = 1) +
   labs(x = "Item type", y = "Total revenue (in M$)") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
   scale_fill_gradient2(low = "forestgreen", mid = "gold", high = "tomato", midpoint = mean(Dataset_V1$Avg_Visibility))
 ```
 
@@ -193,7 +195,7 @@ ggplot(data = Dataset_V2b, aes(x = Item_Type, y = Sum_Revenue / 1e6, fill = Avg_
   geom_col() +
   facet_wrap(~ Outlet_Location_Type, nrow = 1) +
   labs(x = "Item type", y = "Total revenue (in M$)") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
   scale_fill_gradient2(low = "forestgreen", mid = "gold", high = "tomato", midpoint = mean(Dataset_V1$Avg_Visibility))
 ```
 

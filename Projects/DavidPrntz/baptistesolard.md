@@ -1111,6 +1111,11 @@ pretty much the same between `Item_Type`.
 
 ### Total sales by outlet size
 
+For the next 4 facet plots, I took the liberty to display the facets on
+the same row, so the comparison of the y-axis is easier to make. I also
+kept the labels on the x-axis turned to 90° and not slanted, otherwise
+they are too cramped to be displayed properly.
+
 <img src="baptistesolard_files/figure-markdown_strict/sales_type_size-1.png" width="100%" />
 
 There are more sales in medium-sized outlets.  
