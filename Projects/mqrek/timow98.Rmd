@@ -7,24 +7,94 @@ output: md_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+options(repos = c(CRAN = "https://cloud.r-project.org"))
+if (!requireNamespace("pacman", quietly = TRUE)) {
+  install.packages("pacman")} 
+library(pacman)
+p_load(tidyverse, cowplot)
 ```
 
-## R Markdown
+## Data Manipulation Goals
+*Converting the ‘Date’ column to a proper date format to facilitate time-based analysis. 
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+Read the CSV file and display the head of the data. We can format the date column when importing the file.
+```{r}
+NVDA <- read_csv("NVDA_messedUp_final.csv", 
+    col_types = cols(Date = col_date(format = "%Y-%m-%d"))) # Date format
+head(NVDA)
+```
+*Calculating monthly closing values from the dataset to identify trends and patterns in the stock performance over time.
+Here we can use dplyr to get a new dataframe with mean closing values per month.
+```{r}
+NVDA_monthly <- NVDA %>%
+  mutate(month = format(Date, "%Y-%m")) %>%
+  group_by(month) %>%
+  summarise(mean_close = mean(Close, na.rm = TRUE))
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+NVDA_weekly <- NVDA %>%
+  mutate(week = format(Date, "%Y-%W")) %>%
+  group_by(week) %>%
+  summarise(mean_close = mean(Close, na.rm = TRUE))
 
-```{r cars}
-summary(cars)
+print(NVDA_monthly)
+print(NVDA_weekly)
 ```
 
-## Including Plots
+## Visualisation
+The closing values are now used to produce two charts
+*A plot with a logarithmic scale to highlight percentage changes over time.
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+First of all, the new dataframe with the column month is of type character. I need to change it back to the date format.
+```{r}
+NVDA_monthly$month <- as.Date(paste0(NVDA_monthly$month, "-01"))
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+When using logarithmic scales, NA values would create an error message, so first of all we need to do something about that. It would be possible to add just a tiny constant to all the NA values or just delete them.
+```{r}
+NVDA_monthly <- NVDA_monthly %>%
+  filter(mean_close > 0)
+```
+Adding a small constant would look like this:
+NVDA_monthly$mean_close_p <- NVDA_monthly$mean_close + 1e-6
+But it would not be useful because there is only one NA value which is basically the recent month.
+
+Now we can plot it.
+```{r}
+# This is for the labels on the x-axis
+break_years <- as.Date(c("2000-01-01", "2010-01-01", "2020-01-01"))
+
+p1 <- ggplot(NVDA_monthly, aes(x = month, y = mean_close)) +
+  geom_line(group = 1, color = "blue", size = 1) +
+  scale_y_log10(breaks = c(1, 10, 100, 1000))+
+  scale_x_date(breaks = break_years, labels = format(break_years, "%Y"), date_labels = "%Y") +
+  labs(
+    x = "Date",
+    y = "Monthly values (log)",
+    title = "NVIDIA STOCK CHART - Logarithmic scale") +
+  theme(panel.grid = element_line(colour = "lightgrey"),
+        panel.background = element_rect(fill = "white"))
+  
+```
+
+*A plot with a linear scale to provide a clear representation of absolute stock values.
+```{r}
+# This is for the labels on the x-axis
+break_years <- as.Date(c("2000-01-01", "2010-01-01", "2020-01-01"))
+
+p2 <- ggplot(NVDA_monthly, aes(x = month, y = mean_close)) +
+  geom_line(group = 1, color = "black", size = 1) +
+  scale_y_continuous(breaks = c(0,200,400,600,800), limits = c(0,800))+
+  scale_x_date(breaks = break_years, labels = format(break_years, "%Y"), date_labels = "%Y") +
+  labs(
+    x = "Date",
+    y = "Monthly values",
+    title = "NVIDIA STOCK CHART - Linear scale") +
+  theme(panel.grid = element_line(colour = "lightgrey"),
+        panel.background = element_rect(fill = "white"))
+```
+Now both plots next to each other
+```{r plot_grid_output, fig.width=10, fig.height=5}
+plot_grid(p1, p2, ncol = 2)
+```
+
