@@ -122,7 +122,8 @@ geom\_histogram(color = “black”, stat = “count”) +
 scale\_fill\_manual(values = custom\_palette) + labs(title = “Colour
 Distribution for All Object Types”, x = “Colour”, y = “Frequency”)
 
-![All Types](/Solution%20by%20Dennis/All_objects_hist.png)
-![Rods](/Solution%20by%20Dennis/hist_rods.png)
-![Beads](/Solution%20by%20Dennis/hist_beads.png)
-![OGW](/Solution%20by%20Dennis/hist_ogw.png)
+![All
+Types](/Data-projects-with-R-and-GitHub/Projects/baptistesolard/SolutionByDennis/All_objects_hist.png)
+![Rods](/Data-projects-with-R-and-GitHub/Projects/baptistesolard/SolutionByDennis/hist_rods.png)
+![Beads](/Data-projects-with-R-and-GitHub/Projects/baptistesolard/SolutionByDennis/hist_beads.png)
+![OGW](/Data-projects-with-R-and-GitHub/Projects/baptistesolard/SolutionByDennis//hist_ogw.png)
