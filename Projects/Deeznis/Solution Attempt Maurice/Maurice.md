@@ -178,3 +178,9 @@
     ## generated.
 
 ![](Maurice_files/figure-markdown_strict/unnamed-chunk-1-1.png)
+
+Still To-Do:
+
+-   First Scatterplot
+-   Check y-axis of second plot
+-   Add explanation & z-values

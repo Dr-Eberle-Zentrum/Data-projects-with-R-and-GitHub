@@ -127,3 +127,10 @@ housing_Prices_long %>%
   scale_x_continuous(breaks = unique(housing_Prices_long$Year)) +  #Shows each year on the x-axis. 
   geom_vline(xintercept = 2019, linetype="dashed", color="red", size=1) # Highlighting the year of the Covid-19 pandemic.
 ```
+
+
+Still To-Do:
+
+- First Scatterplot
+- Check y-axis of second plot
+- Add explanation & z-values
