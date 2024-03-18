@@ -123,7 +123,7 @@ scale\_fill\_manual(values = custom\_palette) + labs(title = “Colour
 Distribution for All Object Types”, x = “Colour”, y = “Frequency”)
 
 ![All
-Types](Projects/baptistesolard/SolutionByDennis/All_objects_hist.png)
+Types](/Projects/baptistesolard/SolutionByDennis/All_objects_hist.png)
 ![Rods](/Projects/baptistesolard/SolutionByDennis/hist_rods.png)
 ![Beads](/Projects/baptistesolard/SolutionByDennis/hist_beads.png)
 ![OGW](/Projects/baptistesolard/SolutionByDennis//hist_ogw.png)
