@@ -25,23 +25,56 @@ NVDA <- read_csv("NVDA_messedUp_final.csv",
 head(NVDA)
 ```
 *Calculating monthly closing values from the dataset to identify trends and patterns in the stock performance over time.
-Here we can use dplyr to get a new dataframe with mean closing values per month.
+Here we can use dplyr to get a new dataframe with mean closing values per month, per week and per year.
 ```{r}
+# Create mean values per month, week and year
 NVDA_monthly <- NVDA %>%
   mutate(month = format(Date, "%Y-%m")) %>%
   group_by(month) %>%
   summarise(mean_close = mean(Close, na.rm = TRUE))
 
 NVDA_weekly <- NVDA %>%
-  mutate(week = format(Date, "%Y-%W")) %>%
+  mutate(week = format(Date, "%Y-%W"),
+         weeknumber = format(Date, "%W")) %>%
   group_by(week) %>%
-  summarise(mean_close = mean(Close, na.rm = TRUE))
+  summarise(mean_close = mean(Close, na.rm = TRUE),
+            weeknumber = first(weeknumber))
+
+NVDA_yearly <- NVDA %>%
+  mutate(year = format(Date, "%Y")) %>%
+  group_by(year) %>%
+  summarise(mean_close_year = mean(Close, na.rm = TRUE))
 
 print(NVDA_monthly)
 print(NVDA_weekly)
+print(NVDA_yearly)
 ```
 
-## Visualisation
+```{r}
+# Also transform into Data format in weekly
+NVDA_weekly <- NVDA_weekly %>%
+  mutate(week = as.Date(paste0(week,"-01"), format = "%Y-%W-%d"))
+# which gives back wrong week numbers
+
+# Also add a column in NVDA_weekly with year
+NVDA_weekly <- NVDA_weekly %>%
+  mutate(year = lubridate::year(week))
+
+# Merge both dataframes based on year column
+NVDA_merged <- merge(NVDA_weekly, NVDA_yearly, by = "year", all.x = TRUE, suffixes = c("_weekly", "_yearly"))
+
+# make new column "percentage" showing the deviation of a week to the yearly average
+NVDA_merged <- NVDA_merged %>%
+  mutate(deviation = mean_close - mean_close_year,
+         percentage = (deviation / mean_close_year) * 100)
+
+print(NVDA_weekly)
+print(NVDA_yearly)
+print(NVDA_merged)
+
+```
+
+## Visualisation Plot 1
 The closing values are now used to produce two charts
 *A plot with a logarithmic scale to highlight percentage changes over time.
 
@@ -65,8 +98,9 @@ Now we can plot it.
 break_years <- as.Date(c("2000-01-01", "2010-01-01", "2020-01-01"))
 
 p1 <- ggplot(NVDA_monthly, aes(x = month, y = mean_close)) +
-  geom_line(group = 1, color = "blue", size = 1) +
-  scale_y_log10(breaks = c(1, 10, 100, 1000))+
+  geom_line(group = 1, color = "blue", linewidth = 1) +
+  scale_y_log10(breaks = c(1, 10, 100, 1000), 
+                label = \(tickposition) scales::comma(tickposition))+
   scale_x_date(breaks = break_years, labels = format(break_years, "%Y"), date_labels = "%Y") +
   labs(
     x = "Date",
@@ -83,7 +117,7 @@ p1 <- ggplot(NVDA_monthly, aes(x = month, y = mean_close)) +
 break_years <- as.Date(c("2000-01-01", "2010-01-01", "2020-01-01"))
 
 p2 <- ggplot(NVDA_monthly, aes(x = month, y = mean_close)) +
-  geom_line(group = 1, color = "black", size = 1) +
+  geom_line(group = 1, color = "black", linewidth = 1) +
   scale_y_continuous(breaks = c(0,200,400,600,800), limits = c(0,800))+
   scale_x_date(breaks = break_years, labels = format(break_years, "%Y"), date_labels = "%Y") +
   labs(
@@ -96,5 +130,10 @@ p2 <- ggplot(NVDA_monthly, aes(x = month, y = mean_close)) +
 Now both plots next to each other
 ```{r plot_grid_output, fig.width=10, fig.height=5}
 plot_grid(p1, p2, ncol = 2)
+```
+
+## Visualisation Plot 2
+```{r}
+
 ```
 
