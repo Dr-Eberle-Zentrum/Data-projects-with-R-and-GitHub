@@ -10,16 +10,19 @@ output: md_document
 # library loading and data import
 library(tidyverse)
 library(knitr)
-knitr::opts_chunk$set(echo = F)
+knitr::opts_chunk$set(echo = F, warning = F, message = F)
 Dataset <- read_csv("data.csv")
 ```
 
-# Data wrangling
+# Marketing analysis of Bigmart sales - Solution by Baptiste
 
-1. The original `Dataset` needs some small changes:  
-  - Creation of `Item_Revenue`
-  - Removing the rows with `NA` in `Outlet_Size`
-  - I decided to keep the rows having `NA` in `Item_Weight` since we will not use this variable, so it will not cause any problems
+## Data wrangling
+
+### The original `Dataset` needs some small changes:
+
+- Creation of `Item_Revenue`
+- Removing the rows with `NA` in `Outlet_Size`
+- I decided to keep the rows having `NA` in `Item_Weight` since we will not use this variable, so it will not cause any problems
 ```{r Dataset_wrangling}
 Dataset <- Dataset |>
   mutate(Item_Revenue = Item_MRP * 0.7 * Item_Outlet_Sales) |>
@@ -28,11 +31,12 @@ Dataset <- Dataset |>
 kable(Dataset[1:10, ])
 ```
 
-2. New dataset for visualisation 1  
+### New dataset for visualisation 1
+
 To simplify data handling before the visualisation of Sales or Revenue vs. Item type, I suggest to create a intermdiate data table `Dataset_V1`, which summarise:
-  - the sum of all `Item_Outlet_Sales` of each `Item_Type` into `Sum_Sales`
-  - the sum of all `Item_Revenue` of each `Item_Type` into `Sum_Sales`
-  - the average `Item_visibility` of each `Item_Type` into `Avg_Visibility`
+- the sum of all `Item_Outlet_Sales` of each `Item_Type` into `Sum_Sales`
+- the sum of all `Item_Revenue` of each `Item_Type` into `Sum_Sales`
+- the average `Item_visibility` of each `Item_Type` into `Avg_Visibility`  
 Additionally, we can already add the proportions taken by each `Item_Type` for those new variations, which will be usefull for labelling the bars in the barplots.
 ```{r Prop_function}
 #' There are 3 steps to create the Prop_Sales and Prop_Revenue columns, 
@@ -57,10 +61,11 @@ Dataset_V1 <- Dataset |>
 kable(Dataset_V1)
 ```
 
-3. New dataset for visualisation 2  
+### New dataset for visualisation 2
+
 For the objectives of visualisation 2, we will need to create two subset of the orinigal `Dataset`:
-  - `Dataset_V2a` that summarise the sales and revenue of the items by `Outlet_Type`
-  - `Dataset_V2b` that summarise the sales and revenue of the items by `Outlet_Size`
+- `Dataset_V2a` that summarise the sales and revenue of the items by `Outlet_Type`
+ - `Dataset_V2b` that summarise the sales and revenue of the items by `Outlet_Size`
 
 Here we have `Dataset_V2a`:
 ```{r Dataset_V2a}
@@ -74,7 +79,7 @@ kable(Dataset_V2a)
 ```
 
 And here we have `Dataset_V2b`:
-```{r Dataset_V2b, include = F}
+```{r Dataset_V2b}
 Dataset_V2b <- Dataset |>
   group_by(Item_Type, Outlet_Location_Type) |>
   summarise(Sum_Sales = sum(Item_Outlet_Sales), 
@@ -86,10 +91,11 @@ kable(Dataset_V2b)
 
 ---
 
-# Visualisation goals
+## Visualisation goals
 
-## Sales vs. Item type
-```{r sales_type}
+### Sales vs. Item type
+
+```{r sales_type, out.width = "100%"}
 #' These 3 lines generate the breaks and labs that will be used on the y axis
 max.y.axis <- ceiling( max(Dataset_V1$Sum_Sales) / 1e6) * 1e6
 y.breaks <- seq(0,max.y.axis, length.out = (max.y.axis / 1e6) + 1)
@@ -110,12 +116,13 @@ Turns out that there are not much difference in `Avg_Visibility` between the dif
 An explanation could be that the `Item_Visibility` is calculated for each indiviual item within its own category (= `Item_Type`), i.e., already homogenised.
 
 
-## Sales vs. Item type
+### Sales vs. Item type
+
 I took the liberty of putting the scale of `Sum_Revenue` in million dollars.  
-```{r revenue_type}
+```{r revenue_type, out.width = "100%"}
 ggplot(data = Dataset_V1, aes(x = Item_Type, y = Sum_Revenue / 1e6, fill = Avg_Visibility)) +
   geom_col() +
-  labs(x = "Item type", y = "Sum of Revenue (in M$)") +
+  labs(x = "Item type", y = "Total revenue (in M$)") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   geom_text(aes(label = Prop_Revenue), size = 3, vjust = -0.5, hjust = 0.5) +
   scale_fill_gradient2(low = "forestgreen", mid = "gold", high = "tomato", midpoint = mean(Dataset_V1$Avg_Visibility))
@@ -123,8 +130,9 @@ ggplot(data = Dataset_V1, aes(x = Item_Type, y = Sum_Revenue / 1e6, fill = Avg_V
 
 Looks like the relative proportion of `Sum_Sales` and `Sum_Revenue` are pretty much the same between `Item_Type`.
 
-## Total sales by outlet size
-```{r sales_type_size}
+### Total sales by outlet size
+
+```{r sales_type_size, out.width = "100%"}
 #' These 3 lines generate the breaks and labs that will be used on the y axis
 max.y.axis <- ceiling( max(Dataset_V2a$Sum_Sales) / 1e6) * 1e6
 y.breaks <- seq(0,max.y.axis, length.out = (max.y.axis / 1e6) * 2 + 1)
@@ -144,8 +152,9 @@ ggplot(data = Dataset_V2a, aes(x = Item_Type, y = Sum_Sales, fill = Avg_Visibili
 There are more sales in medium-sized outlets.  
 Here it seems that the `Avg_Visibility` changes according to `Outlet_Size`. The small-sized outlets have the best average visibility of their products.
 
-## Total sales by location type
-```{r sales_type_location}
+### Total sales by location type
+
+```{r sales_type_location, out.width = "100%"}
 #' These 3 lines generate the breaks and labs that will be used on the y axis
 max.y.axis <- ceiling( max(Dataset_V2b$Sum_Sales) / 1e6) * 1e6
 y.breaks <- seq(0,max.y.axis, length.out = (max.y.axis / 1e6) * 2 + 1)
@@ -164,25 +173,26 @@ ggplot(data = Dataset_V2b, aes(x = Item_Type, y = Sum_Sales, fill = Avg_Visibili
 
 Interestingly, there are more sales in Tier 3 outlets, although the highest visibility is seen in Tier 1 outlets.
 
-## Total revenue by outlet size
-```{r revenue_type_size}
+### Total revenue by outlet size
+
+```{r revenue_type_size, out.width = "100%"}
 ggplot(data = Dataset_V2a, aes(x = Item_Type, y = Sum_Revenue / 1e6, fill = Avg_Visibility)) +
   geom_col() +
   facet_wrap(~ Outlet_Size, nrow = 1) +
-  labs(x = "Item type", y = "Sum of Revenue (in M$)") +
+  labs(x = "Item type", y = "Total revenue (in M$)") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   scale_fill_gradient2(low = "forestgreen", mid = "gold", high = "tomato", midpoint = mean(Dataset_V1$Avg_Visibility))
 ```
 
 Similarly to what we observed in the total number of sales, the sum of revenue is higher in medium-sized outlets.
 
-## Total revenue by outlet location type
+### Total revenue by outlet location type
 
-```{r revenue_type_location}
+```{r revenue_type_location, out.width = "100%"}
 ggplot(data = Dataset_V2b, aes(x = Item_Type, y = Sum_Revenue / 1e6, fill = Avg_Visibility)) +
   geom_col() +
   facet_wrap(~ Outlet_Location_Type, nrow = 1) +
-  labs(x = "Item type", y = "Sum of Revenue (in M$)") +
+  labs(x = "Item type", y = "Total revenue (in M$)") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   scale_fill_gradient2(low = "forestgreen", mid = "gold", high = "tomato", midpoint = mean(Dataset_V1$Avg_Visibility))
 ```
