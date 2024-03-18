@@ -1,0 +1,108 @@
+---
+title: "Project solution for Johanna's project"
+author: "E. Buecklein"
+date: "`r Sys.Date()`"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("~/Documents/UNI/PhD/2_IRTG/workshop R and git/Data-projects-with-R-and-GitHub/Projects/johannaroever")
+library(tidyverse)
+library(naniar)
+```
+
+# Read in and clean data
+```{r}
+data <- read.csv("StelaeCyprus.csv", sep = ";", header = TRUE)
+```
+
+## Data modification
+1. All values of _unknown_ and _undefined_ are to be replaced with `NA` for easier handling in R. The values of _not specified_ should be kept.
+```{r}
+data %<>%
+  mutate_all(~ifelse(. == "unknown", NA, .)) %>%
+  mutate_all(~ifelse(. == "undefined", NA, .))
+```
+
+2. In `epoch` the value _antoninisch_ should be replaced by _antonine_ for using a consistent language.
+```{r}
+data %<>%
+  mutate(epoch = str_replace(epoch, "antoninisch", "antonine"))
+```
+
+3. In the column `type`some values still include a "?" which should be deleted, since the information it was meant to convey is written in `typeCertain`.
+```{r}
+data %<>%
+  mutate(type = str_replace_all(type, "\\?", ""))
+
+```
+
+4. For the stelae with the `catNo` =  _98_ and _99_ the value of `type` has to be changed to _6_.
+```{r}
+data %<>%
+  mutate(type = if_else(catNo == 98 | catNo == 99, "6", type))
+```
+
+
+5. The values in `typeCertain` are to be replaced for easier handling in R: _0_ to _FALSE_, _1_ to _TRUE_.
+```{r}
+data %<>%
+  mutate(typeCertain = if_else(typeCertain == 0, "FALSE", "TRUE"))
+```
+
+6. The column `location` has to be reviewed for only containing the values of the general regions, while more specific information can be deleted: 
+    * _Amathus, Golgoi, Idalion, Kition, Marion/Paphos, Salamis, Soloi, Tamassos_
+    * (1) All _unknown_ in this column can be converted to _Cyprus_. - CHECK
+    * (2) All values which include "(?)" can be converted to _Cyprus_. - CHECK
+    * (5) If the current value already includes one of the region names, shorten it to only that. This applies to values which include  "near", "bei"
+    * (3) The value of the observation of `catNo`=_12_ which says "probably Idalion" should be changed to _Cyprus_.
+    * (4) Other:
+        * region of Limassol --> Amathus
+        * Limassol --> Amathus
+        * Mathikoloni --> Amathus  
+        * Athienou --> Golgoi
+        * Melousha --> Golgoi
+        * Pergamon --> Golgoi  
+        * Alambra (Larnaca) --> Kition
+        * Pano Arodes --> Marion
+        * Polis --> Marion  
+        * Kotschines (neighbourhood of Lysi) --> Salamis
+        * north of Lysi, district Famagusta --> Salamis    
+        * Ambelia, near Morphou --> Soloi  
+        * Pera (Asproji) --> Tamassos
+```{r}
+data %<>%
+  mutate(location = if_else(location == "unknown", "Cyprus", location)) %>% # (1)
+  mutate(location = if_else(str_detect(location, "\\?"), "Cyprus", location)) %>% # (2)
+  mutate(location = if_else(location == "probably Idalion", "Cyprus", location)) %>% # (3)
+  mutate(location = if_else(location == "region of Limassol" | location == "Limassol" | location == "Mathikoloni", "Amathus", location)) %>% # (4 ff.)
+  mutate(location = if_else(location == "Athienou" | location == "Melousha" | location == "Pergamon", "Golgoi", location)) %>%
+  mutate(location == if_else(location == "Alambra (Larnaca)", "Kition", location)) %>%
+  mutate(location == if_else(location == "Pano Arodes" | location == "Polis", "Marion", location)) %>%
+  mutate(location == if_else(location == "Kotschines (neighbourhood of Lysi)" | location == "north of Lysi, district Famagusta", "Salamis", location)) %>%
+  mutate(location == if_else(location == "Ambelia, near Morphou", "Soloi", location)) %>%
+  mutate(location == if_else(location == "Pera (Asproji", "Tamassos", location))
+
+data %<>%
+  mutate(location = if_else(str_detect(location, "Golgoi"), "Golgoi", location)) %>%
+  mutate(location = if_else(str_detect(location, "Tamassos"), "Tamassos", location)) %>%
+  mutate(location = if_else(str_detect(location, "Marion"), "Marion", location)) %>%
+  mutate(location = if_else(str_detect(location, "Amathus"), "Amathus", location)) %>%
+  mutate(location = if_else(str_detect(location, "Idalion"), "Idalion", location)) %>%
+  mutate(location = if_else(str_detect(location, "Salamis"), "Salamis", location)) %>%
+  mutate(location = if_else(str_detect(location, "Salamiu"), "Salamis", location)) %>%
+```
+
+even after this, there are some regions that are single, or I am not sure where to put them - is this correct? Or do they belong to another region?
+        
+7. For easier handling of `material`the values should just be reduced to either _limestone_ or _marble_.
+```{r}
+data %<>%
+  mutate(material = if_else(str_detect(material, "limestone"), "limestone", material)) %>%
+  mutate(material = if_else(str_detect(material, "marble"), "marble", material))
+```
+
+Unfortunately I could not get to the visualization since the data cleaning took me some time.
+
+I will get to it tomorrow!
