@@ -203,9 +203,10 @@ of the attributes should be shown in tables as well as in plots using
 ### 1. Stacked bar plot epoch - type
 
 To answer the question which types (including the sub-types) are used
-per epoch:  
-1. Create a table to show the amounts of each type per epoch. 2. Create
-a stacked bar plot to show the correlation `epoch - type`:
+per epoch:
+
+1.  Create a table to show the amounts of each type per epoch.
+2.  Create a stacked bar plot to show the correlation `epoch - type`:
 
 -   `epoch` is the variable on the x-axis
 -   For the order to show `epoch` in follow the chronological order
@@ -238,13 +239,31 @@ Example diagram: Stele types per region
 </figcaption>
 </figure>
 
-### 2. Scatterplot epoch - type - material
+### 2. Stacked bar plot type - material
+
+Similar to above, to answer the question which materials are used in the
+different types:
+
+1.  Create a table to show the amounts of each material per type.
+2.  Create a stacked bar plot to show the correlation `type - material`:
+
+-   `type` is the variable on the x-axis
+-   The amounts of each `material` should be shown with the number added
+    to each part of the stack.
+-   The order to show `type` in should be following the stages in
+    alphanumeric order.
+-   Add a legend to display the `typeDescription` on the side of the
+    diagram.
+
+### 3. Optional: Scatterplot epoch - type - material
 
 The goal of this is to visualise if and when there are there any changes
 in the material that go along with the epoch and type:
 
-Create a scatterplot to show the correlations between
-`epoch - type - material`.
+Create a <s>scatterplot</s> to show the correlations between
+`epoch - type - material`. A scatterplot might only work for this with
+some tweaks, e.g. using jittering. Maybe another type of plot would be
+more useful, feel free to make suggestions.
 
 -   `epoch` on the x-axis, for the order to show `epoch` in follow the
     chronological order given in the [data description](#Data).
