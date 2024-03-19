@@ -11,21 +11,18 @@ library(tidyverse)
 library(naniar)
 library(ggplot2)
 library(magrittr)
+library(viridis) # for colors
 ```
 
 # Read in and clean data
 ```{r}
-data <- read.csv("Projects/johannaroever/StelaeCyprus.csv", sep = ";", header = TRUE)
+data <- read.csv("Projects/johannaroever/StelaeCyprus.csv", 
+                 sep = ";", 
+                 header = TRUE,
+                 na = c("unknown", "undefined"))
 ```
 
 ## Data modification
-1. All values of _unknown_ and _undefined_ are to be replaced with `NA` for easier handling in R. The values of _not specified_ should be kept.
-```{r}
-data %<>%
-  mutate_all(~ifelse(. == "unknown", NA, .)) %>%
-  mutate_all(~ifelse(. == "undefined", NA, .))
-```
-
 2. In `epoch` the value _antoninisch_ should be replaced by _antonine_ for using a consistent language.
 ```{r}
 data %<>%
@@ -49,7 +46,7 @@ data %<>%
 5. The values in `typeCertain` are to be replaced for easier handling in R: _0_ to _FALSE_, _1_ to _TRUE_.
 ```{r}
 data %<>%
-  mutate(typeCertain = if_else(typeCertain == 0, "FALSE", "TRUE"))
+  mutate(typeCertain = (typeCertain == 0))
 ```
 
 6. The column `location` has to be reviewed for only containing the values of the general regions, while more specific information can be deleted: 
@@ -85,19 +82,20 @@ data %<>%
   mutate(location == if_else(location == "Ambelia, near Morphou", "Soloi", location)) %>%
   mutate(location == if_else(location == "Pera (Asproji", "Tamassos", location))
 
-data %<>%
-  mutate(location = if_else(str_detect(location, "Golgoi"), "Golgoi", location)) %>%
-  mutate(location = if_else(str_detect(location, "Tamassos"), "Tamassos", location)) %>%
-  mutate(location = if_else(str_detect(location, "Marion"), "Marion", location)) %>%
-  mutate(location = if_else(str_detect(location, "Amathus"), "Amathus", location)) %>%
-  mutate(location = if_else(str_detect(location, "Idalion"), "Idalion", location)) %>%
-  mutate(location = if_else(str_detect(location, "Salamis"), "Salamis", location)) %>%
-  mutate(location = if_else(str_detect(location, "Salamiu"), "Salamis", location))
+data %<>% # (5 ff.)
+  mutate(location = case_when(str_detect(location, "Golgoi") ~ "Golgoi",
+                              str_detect(location, "Tamassos") ~ "Tamassos",
+                              str_detect(location, "Marion") ~ "Marion",
+                              str_detect(location, "Amathus") ~ "Amathus",
+                              str_detect(location, "Idalion") ~ "Idalion",
+                              str_detect(location, "Salamis") ~ "Salamis",
+                              str_detect(location, "Salamiu") ~ "Salamis")
+         )
 ```
 
 even after this, there are some regions that are single, or I am not sure where to put them - is this correct? Or do they belong to another region?
         
-7. For easier handling of `material`the values should just be reduced to either _limestone_ or _marble_.
+7. For easier handling of `material` the values should just be reduced to either _limestone_ or _marble_.
 ```{r}
 data %<>%
   mutate(material = if_else(str_detect(material, "limestone"), "limestone", material)) %>%
@@ -115,40 +113,39 @@ data$epoch <- factor(data$epoch, ordered = TRUE,
                                    "julian-claudian", "early_imperial", "flavian",
                                    "antonine"))
 data$type <- factor(data$type)
-table(data$epoch, data$type)
-```
+data$epoch <- factor(data$epoch)
+levels(data$epoch)[6] <- "hellenistic-roman"
 
-- still to do: make this a nice table
+knitr::kable(table(data$type, data$epoch))
+```
 
 ### Stacked bar plot to show the correlation `epoch - type`:
 
-How can you show a correlation with a bar plot?
+- How can you show a correlation with a bar plot?
 
 ```{r}
-data$typeDesc <- factor(data$typeDesc)
-data$type <- factor(data$type, labels = c(
-  "Grave stelae with guard animals, with two antithetical lions",
-  "Grave stelae with guard animals, crowned by two sphinxes",
-  "Wide symposium niche with high relief, Fragment",
-  "Symposium niche crowned by lion",
-  "Double niche with symposium scene",
-  "Wide symposium niche with high relief",
-  "Niche stele",
-  "Frameless, crowned with plant ornamentation",
-  "Frameless, narrow, mostly crowned with anthemion",
-  "Naiskos stele",
-  "pseudo-naiskos stele",
-  "Cippus",
-  "undefined"
-  ))
+typeData <- 
+  distinct(data, type,typeDesc) %>% 
+  replace_na(list(type = "NA", typeDesc = "unknown")) %>%
+  arrange(type)
+
+data %<>% 
+  mutate( type = factor(type, levels = typeData$type, labels = typeData$typeDesc))
+
+# make a color palette to be used
+my_colors <- viridis_pal()(13)
+my_colors[1] <- "#750786FF"
+my_colors[2] <- "#6D378CFF"
 
 ggplot(data, aes(x = epoch, fill = type)) +
   geom_bar() +
   labs(title = "Stacked Barplot",
        x = "epoch",
        fill = "type") +
-  geom_text(stat = "count", aes(label = after_stat(count)), position = position_stack(vjust = 0.5)) +
-  theme_minimal()
+  geom_text(stat = "count", aes(label = after_stat(count)), position = position_stack(vjust = 0.6), size = 2) +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_fill_manual(values = my_colors)
 ```
 
 ## 2. Stacked barplot type - material
@@ -156,7 +153,7 @@ ggplot(data, aes(x = epoch, fill = type)) +
 ### Table to show amounts of each material per type
 
 ```{r}
-table(data$type, data$material)
+knitr::kable(table(data$type, data$material))
 ```
 
 ### Stacked bar plot to show the correlation type - material
@@ -164,12 +161,14 @@ table(data$type, data$material)
 Also here: how can you see a correlation with a barplot?
 
 ```{r}
-ggplot(data, aes(x = material, fill = type)) +
+ggplot(data, aes(x = type, fill = material)) +
   geom_bar() +
   labs(title = "Stacked Barplot",
-       x = "material",
-       fill = "type") +
-  geom_text(stat = "count", aes(label = after_stat(count)), position = position_stack(vjust = 0.5)) +
-  theme_minimal()
+       x = "type",
+       fill = "material") +
+  geom_text(stat = "count", aes(label = after_stat(count)), position = position_stack(vjust = 0.6), size = 2) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
+- do you really want the type on the x-axis? It looks a bit weird... would look nicer if material was on the x axis I think!
