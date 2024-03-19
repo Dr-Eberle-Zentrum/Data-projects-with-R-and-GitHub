@@ -34,63 +34,78 @@ of every week, month and year.
 
     NVDA_weekly <- NVDA %>%
       mutate(Date_YM = format(Date, "%Y-%W"),
-             calendarweek = format(Date, "%W")) %>%
+             calendarweek = format(Date, "%W"),
+             Date = format(Date, "%Y-%m-%d")) %>%
       group_by(Date_YM) %>%
       summarise(weekly_close = last(Close),
-                calendarweek = first(calendarweek))
+                calendarweek = first(calendarweek),
+                Date = last(Date),
+                weekly_open = first(Open))
 
-    NVDA_yearly <- NVDA %>%
-      mutate(year = format(Date, "%Y")) %>%
-      group_by(year) %>%
-      summarise(yearly_close = last(Close))
+    # This part is right now unnecessary (explained below)
+    # NVDA_yearly <- NVDA %>%
+    #   mutate(year = format(Date, "%Y")) %>%
+    #   group_by(year) %>%
+    #   summarise(yearly_close = last(Close))
 
 Now we have 3 new Dataframes.  
-For the second Plot we need to extend the weekly dataframe.
+For the second Plot we need to extend the weekly dataframe. Right now,
+the left\_join()-part is not neccessary, because I only needed this for
+the calculation of the performance, but I changed the calculation. I
+will keep it as comment until we’re sure how to calculate the
+performance
 
     # Transform Date_YM column into datatype date 
-    NVDA_weekly <- NVDA_weekly %>%
-      mutate(Date_YMD = as.Date(paste0(Date_YM,"-01"), format = "%Y-%W-%d"),
-             Date_YM = NULL)
-    # which somehow gives back wrong week numbers
+     NVDA_weekly <- NVDA_weekly %>%
+       mutate(Date_YMD = as.Date(paste0(Date_YM,"-01"), format = "%Y-%W-%d"),
+              Date_YM = NULL)
+    # which somehow returns wrong week numbers
 
     # Also add a column in NVDA_weekly with year so that we can join the yearly dataframe
     NVDA_weekly <- NVDA_weekly %>%
-      mutate(year = lubridate::year(Date_YMD))
+       mutate(year = lubridate::year(Date_YMD))
 
-    # Merge both dataframes based on year column
-    #NVDA_merged <- merge(NVDA_weekly, NVDA_yearly, by = "year", all.x = TRUE, suffixes = c("_weekly", "_yearly"))
+    # # Left join NVDA_weekly with NVDA_yearly
+    # NVDA_yearly$year <- as.double(NVDA_yearly$year)
+    # NVDA_merged <- left_join(NVDA_weekly, NVDA_yearly, by = "year")
 
-    # Left join NVDA_weekly with NVDA_yearly
-    NVDA_yearly$year <- as.double(NVDA_yearly$year) 
-    NVDA_merged <- left_join(NVDA_weekly, NVDA_yearly, by = "year")
+    # I did not do a join, so I will just write weekly into merged
+    NVDA_merged <- NVDA_weekly
 
-    # make new column "percentage" showing the deviation of a week to the yearly average
+    # change datatypes (important for plot 2)
+    NVDA_merged$Date <- as.Date(NVDA_merged$Date)
+    NVDA_merged$calendarweek <- as.numeric(NVDA_merged$calendarweek)
+
+Calculation of the performance (I have no Idea how). I asked ChatGPT how
+to calculate Stock Performance and implemented it accordingly.
+
     NVDA_merged <- NVDA_merged %>%
-      mutate(deviation = weekly_close - yearly_close,
-             percentage = (deviation / yearly_close) * 100)
+      mutate(
+             percentage = ((weekly_close - weekly_open)/weekly_open)) %>%  
+      drop_na()
 
-## Visualisation Plot 1
+## Visualisation: Plot 1
 
-The closing values are now used to produce two charts \*A plot with a
+The closing values are now used to produce two charts 1. A plot with a
 logarithmic scale to highlight percentage changes over time.
 
 First of all, the new dataframe with the column month is of type
-character. I need to change it back to the date format.
+character. We need to change it back to the date format.
 
     NVDA_monthly$Date_YM <- as.Date(paste0(NVDA_monthly$Date_YM, "-01"))
 
 When using logarithmic scales, NA values would create an error message,
 so first of all we need to do something about that. It would be possible
-to add just a tiny constant to all the NA values or just delete them.
+to add just a tiny constant to all the NA values or just drop them.
+Adding a small constant would look like this:  
+NVDA\_monthly*m**e**a**n*<sub>*c*</sub>*l**o**s**e*<sub>*p*</sub> &lt;  − *N**V**D**A*<sub>*m*</sub>*o**n**t**h**l**y*monthly\_close +
+1e-6  
+But it would not be useful because there is only one NA value which is
+basically the recent month.
 
     NVDA_monthly <- NVDA_monthly %>% drop_na()
 
-Adding a small constant would look like this:
-NVDA\_monthly*m**e**a**n*<sub>*c*</sub>*l**o**s**e*<sub>*p*</sub> &lt;  − *N**V**D**A*<sub>*m*</sub>*o**n**t**h**l**y*monthly\_close +
-1e-6 But it would not be useful because there is only one NA value which
-is basically the recent month.
-
-Now we can plot it.
+Now we can plot it. Here is a plot with a logarithmic scale.
 
     # This is for the labels on the x-axis
     break_years <- as.Date(c("2000-01-01", "2010-01-01", "2020-01-01"))
@@ -107,8 +122,10 @@ Now we can plot it.
       theme(panel.grid = element_line(colour = "lightgrey"),
             panel.background = element_rect(fill = "white"))
 
-\*A plot with a linear scale to provide a clear representation of
-absolute stock values.
+1.  A plot with a linear scale to provide a clear representation of
+    absolute stock values.
+
+<!-- -->
 
     # This is for the labels on the x-axis
     break_years <- as.Date(c("2000-01-01", "2010-01-01", "2020-01-01"))
@@ -130,4 +147,16 @@ Now both plots next to each other
 
 ![](timow98_files/figure-markdown_strict/plot_grid_output-1.png)
 
-## Visualisation Plot 2
+## Visualisation: Plot 2
+
+    ggplot(NVDA_merged, aes(calendarweek, percentage, color = factor(year)))+
+      geom_line(aes(group = year))+
+      scale_x_continuous(breaks = c(0, 20, 40), labels = c(0,20,40))+
+      guides(color = guide_legend(title = "Years"))+
+      theme_minimal()+
+      labs(
+        x = "Week",
+        y = "Average performance (%)",
+        title = "Average weekly performance per year of Nvidia")
+
+![](timow98_files/figure-markdown_strict/unnamed-chunk-9-1.png)
