@@ -16,61 +16,60 @@ p_load(tidyverse, cowplot)
 ```
 
 ## Data Manipulation Goals
-*Converting the ‘Date’ column to a proper date format to facilitate time-based analysis. 
-
+1. Converting the ‘Date’ column to a proper date format to facilitate time-based analysis. 
+  
 Read the CSV file and display the head of the data. We can format the date column when importing the file.
 ```{r}
 NVDA <- read_csv("NVDA_messedUp_final.csv", 
     col_types = cols(Date = col_date(format = "%Y-%m-%d"))) # Date format
 head(NVDA)
 ```
-*Calculating monthly closing values from the dataset to identify trends and patterns in the stock performance over time.
-Here we can use dplyr to get a new dataframe with mean closing values per month, per week and per year.
+2. Calculating weekly, monthly and yearly closing values from the dataset to identify trends and patterns in the stock performance over time.
+
+Here we can use dplyr to get a new dataframe with the last Close value of every week, month and year.
 ```{r}
-# Create mean values per month, week and year
 NVDA_monthly <- NVDA %>%
-  mutate(month = format(Date, "%Y-%m")) %>%
-  group_by(month) %>%
-  summarise(mean_close = mean(Close, na.rm = TRUE))
+  mutate(Date_YM = format(Date, "%Y-%m")) %>%
+  group_by(Date_YM) %>%
+  summarise(monthly_close = last(Close))
 
 NVDA_weekly <- NVDA %>%
-  mutate(week = format(Date, "%Y-%W"),
-         weeknumber = format(Date, "%W")) %>%
-  group_by(week) %>%
-  summarise(mean_close = mean(Close, na.rm = TRUE),
-            weeknumber = first(weeknumber))
+  mutate(Date_YM = format(Date, "%Y-%W"),
+         calendarweek = format(Date, "%W")) %>%
+  group_by(Date_YM) %>%
+  summarise(weekly_close = last(Close),
+            calendarweek = first(calendarweek))
 
 NVDA_yearly <- NVDA %>%
   mutate(year = format(Date, "%Y")) %>%
   group_by(year) %>%
-  summarise(mean_close_year = mean(Close, na.rm = TRUE))
+  summarise(yearly_close = last(Close))
 
-print(NVDA_monthly)
-print(NVDA_weekly)
-print(NVDA_yearly)
 ```
-
+Now we have 3 new Dataframes.  
+For the second Plot we need to extend the weekly dataframe.
 ```{r}
-# Also transform into Data format in weekly
+# Transform Date_YM column into datatype date 
 NVDA_weekly <- NVDA_weekly %>%
-  mutate(week = as.Date(paste0(week,"-01"), format = "%Y-%W-%d"))
-# which gives back wrong week numbers
+  mutate(Date_YMD = as.Date(paste0(Date_YM,"-01"), format = "%Y-%W-%d"),
+         Date_YM = NULL)
+# which somehow gives back wrong week numbers
 
-# Also add a column in NVDA_weekly with year
+# Also add a column in NVDA_weekly with year so that we can join the yearly dataframe
 NVDA_weekly <- NVDA_weekly %>%
-  mutate(year = lubridate::year(week))
+  mutate(year = lubridate::year(Date_YMD))
 
 # Merge both dataframes based on year column
-NVDA_merged <- merge(NVDA_weekly, NVDA_yearly, by = "year", all.x = TRUE, suffixes = c("_weekly", "_yearly"))
+#NVDA_merged <- merge(NVDA_weekly, NVDA_yearly, by = "year", all.x = TRUE, suffixes = c("_weekly", "_yearly"))
+
+# Left join NVDA_weekly with NVDA_yearly
+NVDA_yearly$year <- as.double(NVDA_yearly$year) 
+NVDA_merged <- left_join(NVDA_weekly, NVDA_yearly, by = "year")
 
 # make new column "percentage" showing the deviation of a week to the yearly average
 NVDA_merged <- NVDA_merged %>%
-  mutate(deviation = mean_close - mean_close_year,
-         percentage = (deviation / mean_close_year) * 100)
-
-print(NVDA_weekly)
-print(NVDA_yearly)
-print(NVDA_merged)
+  mutate(deviation = weekly_close - yearly_close,
+         percentage = (deviation / yearly_close) * 100)
 
 ```
 
@@ -80,16 +79,15 @@ The closing values are now used to produce two charts
 
 First of all, the new dataframe with the column month is of type character. I need to change it back to the date format.
 ```{r}
-NVDA_monthly$month <- as.Date(paste0(NVDA_monthly$month, "-01"))
+NVDA_monthly$Date_YM <- as.Date(paste0(NVDA_monthly$Date_YM, "-01"))
 ```
 
 When using logarithmic scales, NA values would create an error message, so first of all we need to do something about that. It would be possible to add just a tiny constant to all the NA values or just delete them.
 ```{r}
-NVDA_monthly <- NVDA_monthly %>%
-  filter(mean_close > 0)
+NVDA_monthly <- NVDA_monthly %>% drop_na()
 ```
 Adding a small constant would look like this:
-NVDA_monthly$mean_close_p <- NVDA_monthly$mean_close + 1e-6
+NVDA_monthly$mean_close_p <- NVDA_monthly$monthly_close + 1e-6
 But it would not be useful because there is only one NA value which is basically the recent month.
 
 Now we can plot it.
@@ -97,14 +95,14 @@ Now we can plot it.
 # This is for the labels on the x-axis
 break_years <- as.Date(c("2000-01-01", "2010-01-01", "2020-01-01"))
 
-p1 <- ggplot(NVDA_monthly, aes(x = month, y = mean_close)) +
+p1 <- ggplot(NVDA_monthly, aes(x = Date_YM, y = monthly_close)) +
   geom_line(group = 1, color = "blue", linewidth = 1) +
   scale_y_log10(breaks = c(1, 10, 100, 1000), 
                 label = \(tickposition) scales::comma(tickposition))+
   scale_x_date(breaks = break_years, labels = format(break_years, "%Y"), date_labels = "%Y") +
   labs(
     x = "Date",
-    y = "Monthly values (log)",
+    y = "Monthly values",
     title = "NVIDIA STOCK CHART - Logarithmic scale") +
   theme(panel.grid = element_line(colour = "lightgrey"),
         panel.background = element_rect(fill = "white"))
@@ -116,7 +114,7 @@ p1 <- ggplot(NVDA_monthly, aes(x = month, y = mean_close)) +
 # This is for the labels on the x-axis
 break_years <- as.Date(c("2000-01-01", "2010-01-01", "2020-01-01"))
 
-p2 <- ggplot(NVDA_monthly, aes(x = month, y = mean_close)) +
+p2 <- ggplot(NVDA_monthly, aes(x = Date_YM, y = monthly_close)) +
   geom_line(group = 1, color = "black", linewidth = 1) +
   scale_y_continuous(breaks = c(0,200,400,600,800), limits = c(0,800))+
   scale_x_date(breaks = break_years, labels = format(break_years, "%Y"), date_labels = "%Y") +
