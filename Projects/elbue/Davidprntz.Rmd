@@ -16,7 +16,9 @@ survey_clean <- survey %>%
   filter(grepl("^ASMR021_", Subject)) %>% # Filter rows that start with "ASMR021_"
   mutate(Subject = as.integer(gsub("ASMR021_", "", Subject))) %>%  # Extract just the number part
   select(-Sex) %>%  # Remove the Sex column
-  drop_na()  # Remove rows with any missing data
+  drop_na() %>% # Remove rows with any missing data
+ mutate(SSPDT_R = 100-SSPDT) %>%
+ mutate(SSPSDT_R = 100-SSPSDT)
 ```
 
 ```{r}
@@ -33,8 +35,8 @@ survey_avg <- survey_clean %>%
 
 survey_clean <- survey_clean %>% 
   mutate(Neuroticism_related_traits = rowMeans(select(., SSPSTAT, SSPPSTAT, SSPSST,SSPLAT,SSPET,SSPMT), na.rm = TRUE)) %>%
-  mutate(Aggressiveness = rowMeans(select(., SSPTIT, SSPVTAT, SSPPHTAT,SSPSDT), na.rm = TRUE)) %>% #SSPSDT is normal not reversed, could not find the reversed value in the dataset and there is no explanation how to calculate it
-  mutate(Extraversion = rowMeans(select(., SSPIT, SSPAST, SSPDT), na.rm = TRUE))  #SSPDT is normal not reversed, could not find the reversed value in the dataset and there is no explanation how to calculate it
+  mutate(Aggressiveness = rowMeans(select(., SSPTIT, SSPVTAT, SSPPHTAT,SSPSDT_R), na.rm = TRUE)) %>% 
+  mutate(Extraversion = rowMeans(select(., SSPIT, SSPAST, SSPDT_R), na.rm = TRUE))  
 ```
 
 
