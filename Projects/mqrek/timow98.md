@@ -55,15 +55,10 @@ the calculation of the performance, but I changed the calculation. I
 will keep it as comment until we’re sure how to calculate the
 performance
 
-    # Transform Date_YM column into datatype date 
-     NVDA_weekly <- NVDA_weekly %>%
-       mutate(Date_YMD = as.Date(paste0(Date_YM,"-01"), format = "%Y-%W-%d"),
-              Date_YM = NULL)
-    # which somehow returns wrong week numbers
-
     # Also add a column in NVDA_weekly with year so that we can join the yearly dataframe
     NVDA_weekly <- NVDA_weekly %>%
-       mutate(year = lubridate::year(Date_YMD))
+       mutate(year = lubridate::year(Date),
+              Date_YM = NULL) #needed it for grouping, but now unnecessary
 
     # # Left join NVDA_weekly with NVDA_yearly
     # NVDA_yearly$year <- as.double(NVDA_yearly$year)
