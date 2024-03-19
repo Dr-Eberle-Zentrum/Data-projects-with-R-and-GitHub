@@ -1,0 +1,87 @@
+---
+title: "project-solution by johannaroever"
+author: "Johanna Röver"
+date: "`r Sys.Date()`"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+#install.packages("tidyverse")
+library(tidyverse)
+```
+
+# Solution for Soil Data Project
+
+```{r, include=F}
+soilData <- read_delim("SoilData.csv", delim = ";", 
+escape_double = FALSE, trim_ws = TRUE)
+```
+
+## 1. Data cleanup
+
+**1.1 the column KAKpot2** is not needed  
+
+```{r, echo=TRUE}
+  soilData <- subset(soilData, select=-c(`KAKpot 2`))
+```
+
+**1.2 the header** displays numbers which do not make much sense. I would like to get rid of them by using rename_with() in combination with regular expressions. 
+```{r, echo=TRUE}
+# works, but does not use rename_with()
+  colnames(soilData) <- gsub("_\\d*", "", colnames(soilData))
+
+# unfinished try with rename_with()
+#   colnames(SoilData) <- dplyr::rename_with(colnames(SoilData), .fn = gsub('_\\d*', '', colnames(SoilData)))
+```
+
+**1.3 there is a second header** with the respective units. Leaving this line will interfere with the datatype in R, that's why I want to delete this line and instead integrate the unit into the header such like this: Tiefe\_\[cm\]. For this dataset you will need to work with backticks. If you are not familiar with them, you can read about them [<span style="color:blue">here</span>](https://jhudatascience.org/intro_to_r/resources/quotes_vs_backticks.html). Also, the function scan() could be useful (depending on your aproach) because it enables you to read for example specific data rows directly from the source file.  
+
+```{r, echo=TRUE}
+# add units to header 
+ colnames(soilData)   <- paste(colnames(soilData), soilData[1,], sep = "_")
+# clean header columns without units of unnecessary characters
+ colnames(soilData) <- gsub("_\\[\\]", "", colnames(soilData))
+# delete first row
+ soilData <- soilData[-c(1),]
+```
+
+**1.4 there is a typo in the column "Expozition"**. It should actually be "Exposition"
+```{r, echo=TRUE}
+names(soilData)[names(soilData) == "Expozition"] <- "Exposition"
+```
+
+**1.5 99999 and 99999,99 are the NA values**, but R does not know this, so all these values need to be set to NA. It should be noted that some of these NA values might be actual numbers, but some might also be of datatype character.  
+
+```{r, echo=TRUE}
+# uncertain if this ignores cases depending on the data type but the result looks like it worked
+soilData[soilData=="99999" | soilData=="99999,99" ] <- NA
+```
+
+**1.6 two columns need to be calculated**: base_saturation_\[\%\] by dividing "Kationen" by "KAKpot" and SOM_\[\%\] by multiplying Corg with 1,72  
+
+```{r, echo=TRUE}
+# convert numbers to use "." instead of ","
+soilData <- as.data.frame(sapply(soilData,gsub,pattern=",",replacement="."))
+soilData <- mutate(soilData, `base_saturation_[%]` = as.numeric(soilData$`Kationen_[mmol/kg]`)/as.numeric(soilData$`KAKpot_[mmol/kg]`))
+soilData <- mutate(soilData, `SOM_[%]` = as.numeric(`Corg_[%]`)*1.72)
+```
+
+**1.7 Column S+U+T is not always 100%**. I would like to see how often I got more, less and exactly 100%. Write a new column and put in "more", "less" and "exactly" depending on the value in the column S+U+T. Then, write a query that counts and prints the number of values (for example "10x less than 100%, 3x exactly 100% and 24x more than 100%") 
+
+```{r, echo=TRUE}
+
+```
+
+## Dataset after Cleanup
+```{r, echo=FALSE}
+knitr::kable(
+  soilData[1:10, ], 
+  caption = "Table: SoilData.csv"
+)
+```
+
+# 2. Visualisation
+## 2.1 Stacked Barplot
+
+
