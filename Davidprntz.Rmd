@@ -89,7 +89,7 @@ rank <- c("Neuroticism_related_traits", "SSPSTAT", "SSPPSTAT", "SSPSST","SSPLAT"
 survey_clean_long$personality_traits <- factor(survey_clean_long$personality_traits, levels = rank)
 ```
 
-```{r, echo=FALSE, fig.width=20, fig.height=8}
+```{r, echo=FALSE, fig.width=20, fig.height=10}
 violin_plot <- ggplot(survey_clean_long, aes(x=personality_traits, y=Value, fill = personality_traits)) + 
   geom_violin()+ 
   scale_fill_manual(values = colors) +
@@ -97,6 +97,7 @@ violin_plot <- ggplot(survey_clean_long, aes(x=personality_traits, y=Value, fill
     axis.title.y = element_text(size = 20),   
     axis.text.y = element_text(size = 18),  legend.position = "none")
 violin_plot
+ggsave("violin_plot.png", width = 20, height = 10, units = "in") 
 ```
 
 
