@@ -10,7 +10,7 @@ output: md_document
 # library loading and data import
 library(tidyverse)
 library(knitr)
-knitr::opts_chunk$set(echo = F, warning = F, message = F)
+knitr::opts_chunk$set(warning = F, message = F)
 Dataset <- read_csv("data.csv")
 ```
 
@@ -116,7 +116,7 @@ Turns out that there are not much difference in `Avg_Visibility` between the dif
 An explanation could be that the `Item_Visibility` is calculated for each indiviual item within its own category (= `Item_Type`), i.e., already homogenised.
 
 
-### Sales vs. Item type
+### Revenue vs. Item type
 
 I took the liberty of putting the scale of `Sum_Revenue` in million dollars.  
 ```{r revenue_type, out.width = "100%"}

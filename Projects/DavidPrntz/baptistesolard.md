@@ -9,6 +9,14 @@
 -   I decided to keep the rows having `NA` in `Item_Weight` since we
     will not use this variable, so it will not cause any problems
 
+<!-- -->
+
+    Dataset <- Dataset |>
+      mutate(Item_Revenue = Item_MRP * 0.7 * Item_Outlet_Sales) |>
+      filter(!is.na(Outlet_Size))
+
+    kable(Dataset[1:10, ])
+
 <table>
 <colgroup>
 <col style="width: 7%" />
@@ -208,7 +216,26 @@ Additionally, we can already add the proportions taken by each
 `Item_Type` for those new variations, which will be usefull for
 labelling the bars in the barplots.
 
+    #' There are 3 steps to create the Prop_Sales and Prop_Revenue columns, 
+    #' so I decided to make a function for that to make it simpler to handle;
+    "prop" <- function(x) {
+      vec <- x * 100 / sum(x)  # calculates the % value
+      vec <- sprintf("%.2f", round(vec, 3))  # rounds the values but keeps the 0 when needed (return a str)
+      vec <- str_c(vec, "%")  # adds the % sign
+      return(vec)
+    }
+
 Here is the new `Dataset_V1` table:
+
+    Dataset_V1 <- Dataset |>
+      group_by(Item_Type) |>
+      summarise(Sum_Sales = sum(Item_Outlet_Sales), 
+                Sum_Revenue = sum(Item_Revenue),
+                Avg_Visibility = mean(Item_Visibility)) |>
+      mutate(Prop_Sales = prop(Sum_Sales),
+             Prop_Revenue = prop(Sum_Revenue))
+
+    kable(Dataset_V1)
 
 <table>
 <colgroup>
@@ -369,6 +396,14 @@ revenue of the items by `Outlet_Type` - `Dataset_V2b` that summarise the
 sales and revenue of the items by `Outlet_Size`
 
 Here we have `Dataset_V2a`:
+
+    Dataset_V2a <- Dataset |>
+      group_by(Item_Type, Outlet_Size) |>
+      summarise(Sum_Sales = sum(Item_Outlet_Sales), 
+                Sum_Revenue = sum(Item_Revenue),
+                Avg_Visibility = mean(Item_Visibility))
+
+    kable(Dataset_V2a)
 
 <table>
 <colgroup>
@@ -728,6 +763,14 @@ Here we have `Dataset_V2a`:
 </table>
 
 And here we have `Dataset_V2b`:
+
+    Dataset_V2b <- Dataset |>
+      group_by(Item_Type, Outlet_Location_Type) |>
+      summarise(Sum_Sales = sum(Item_Outlet_Sales), 
+                Sum_Revenue = sum(Item_Revenue),
+                Avg_Visibility = mean(Item_Visibility))
+
+    kable(Dataset_V2b)
 
 <table style="width:100%;">
 <colgroup>
@@ -1092,6 +1135,21 @@ And here we have `Dataset_V2b`:
 
 ### Sales vs. Item type
 
+    #' These 3 lines generate the breaks and labs that will be used on the y axis
+    max.y.axis <- ceiling( max(Dataset_V1$Sum_Sales) / 1e6) * 1e6
+    y.breaks <- seq(0,max.y.axis, length.out = (max.y.axis / 1e6) + 1)
+    y.labs <- str_replace(format(y.breaks, scientific = F), "(\\d{1})(\\d{3})(\\d{3})", "\\1,\\2,\\3")
+
+    ggplot(data = Dataset_V1, aes(x = Item_Type, y = Sum_Sales, fill = Avg_Visibility)) +
+      geom_col() +
+      labs(x = "Item type", y = "Sum of sales") +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+      coord_cartesian(ylim = c(0, max.y.axis)) +
+      scale_y_continuous(breaks = y.breaks,
+                         labels = y.labs) +
+      geom_text(aes(label = Prop_Sales), size = 3, vjust = -0.5, hjust = 0.5) +
+      scale_fill_gradient2(low = "forestgreen", mid = "gold", high = "tomato", midpoint = mean(Dataset_V1$Avg_Visibility))
+
 <img src="baptistesolard_files/figure-markdown_strict/sales_type-1.png" width="100%" />
 
 Turns out that there are not much difference in `Avg_Visibility` between
@@ -1100,10 +1158,18 @@ An explanation could be that the `Item_Visibility` is calculated for
 each indiviual item within its own category (= `Item_Type`), i.e.,
 already homogenised.
 
-### Sales vs. Item type
+### Revenue vs. Item type
 
 I took the liberty of putting the scale of `Sum_Revenue` in million
-dollars.  
+dollars.
+
+    ggplot(data = Dataset_V1, aes(x = Item_Type, y = Sum_Revenue / 1e6, fill = Avg_Visibility)) +
+      geom_col() +
+      labs(x = "Item type", y = "Total revenue (in M$)") +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+      geom_text(aes(label = Prop_Revenue), size = 3, vjust = -0.5, hjust = 0.5) +
+      scale_fill_gradient2(low = "forestgreen", mid = "gold", high = "tomato", midpoint = mean(Dataset_V1$Avg_Visibility))
+
 <img src="baptistesolard_files/figure-markdown_strict/revenue_type-1.png" width="100%" />
 
 Looks like the relative proportion of `Sum_Sales` and `Sum_Revenue` are
@@ -1116,6 +1182,21 @@ the same row, so the comparison of the y-axis is easier to make. I also
 kept the labels on the x-axis turned to 90° and not slanted, otherwise
 they are too cramped to be displayed properly.
 
+    #' These 3 lines generate the breaks and labs that will be used on the y axis
+    max.y.axis <- ceiling( max(Dataset_V2a$Sum_Sales) / 1e6) * 1e6
+    y.breaks <- seq(0,max.y.axis, length.out = (max.y.axis / 1e6) * 2 + 1)
+    y.labs <- str_replace(format(y.breaks, scientific = F), "(\\d{1})(\\d{3})(\\d{3})", "\\1,\\2,\\3")
+
+    ggplot(data = Dataset_V2a, aes(x = Item_Type, y = Sum_Sales, fill = Avg_Visibility)) +
+      geom_col() +
+      facet_wrap(~ Outlet_Size, nrow = 1) +
+      labs(x = "Item type", y = "Sum of sales") +
+      theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
+      coord_cartesian(ylim = c(0, max.y.axis)) +
+      scale_y_continuous(breaks = y.breaks,
+                         labels = y.labs) +
+      scale_fill_gradient2(low = "forestgreen", mid = "gold", high = "tomato", midpoint = mean(Dataset_V2a$Avg_Visibility))
+
 <img src="baptistesolard_files/figure-markdown_strict/sales_type_size-1.png" width="100%" />
 
 There are more sales in medium-sized outlets.  
@@ -1125,6 +1206,21 @@ of their products.
 
 ### Total sales by location type
 
+    #' These 3 lines generate the breaks and labs that will be used on the y axis
+    max.y.axis <- ceiling( max(Dataset_V2b$Sum_Sales) / 1e6) * 1e6
+    y.breaks <- seq(0,max.y.axis, length.out = (max.y.axis / 1e6) * 2 + 1)
+    y.labs <- str_replace(format(y.breaks, scientific = F), "(\\d{1})(\\d{3})(\\d{3})", "\\1,\\2,\\3")
+
+    ggplot(data = Dataset_V2b, aes(x = Item_Type, y = Sum_Sales, fill = Avg_Visibility)) +
+      geom_col() +
+      facet_wrap(~ Outlet_Location_Type, nrow = 1) +
+      labs(x = "Item type", y = "Sum of sales") +
+      theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
+      coord_cartesian(ylim = c(0, max.y.axis)) +
+      scale_y_continuous(breaks = y.breaks,
+                         labels = y.labs) +
+      scale_fill_gradient2(low = "forestgreen", mid = "gold", high = "tomato", midpoint = mean(Dataset_V2a$Avg_Visibility))
+
 <img src="baptistesolard_files/figure-markdown_strict/sales_type_location-1.png" width="100%" />
 
 Interestingly, there are more sales in Tier 3 outlets, although the
@@ -1132,12 +1228,26 @@ highest visibility is seen in Tier 1 outlets.
 
 ### Total revenue by outlet size
 
+    ggplot(data = Dataset_V2a, aes(x = Item_Type, y = Sum_Revenue / 1e6, fill = Avg_Visibility)) +
+      geom_col() +
+      facet_wrap(~ Outlet_Size, nrow = 1) +
+      labs(x = "Item type", y = "Total revenue (in M$)") +
+      theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
+      scale_fill_gradient2(low = "forestgreen", mid = "gold", high = "tomato", midpoint = mean(Dataset_V1$Avg_Visibility))
+
 <img src="baptistesolard_files/figure-markdown_strict/revenue_type_size-1.png" width="100%" />
 
 Similarly to what we observed in the total number of sales, the sum of
 revenue is higher in medium-sized outlets.
 
 ### Total revenue by outlet location type
+
+    ggplot(data = Dataset_V2b, aes(x = Item_Type, y = Sum_Revenue / 1e6, fill = Avg_Visibility)) +
+      geom_col() +
+      facet_wrap(~ Outlet_Location_Type, nrow = 1) +
+      labs(x = "Item type", y = "Total revenue (in M$)") +
+      theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
+      scale_fill_gradient2(low = "forestgreen", mid = "gold", high = "tomato", midpoint = mean(Dataset_V1$Avg_Visibility))
 
 <img src="baptistesolard_files/figure-markdown_strict/revenue_type_location-1.png" width="100%" />
 
