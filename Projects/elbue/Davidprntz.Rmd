@@ -16,7 +16,7 @@ survey_clean <- survey %>%
   filter(grepl("^ASMR021_", Subject)) %>% # Filter rows that start with "ASMR021_"
   mutate(Subject = as.integer(gsub("ASMR021_", "", Subject))) %>%  # Extract just the number part
   select(-Sex) %>%  # Remove the Sex column
-  na.omit()  # Remove rows with any missing data
+  drop_na()  # Remove rows with any missing data
 ```
 
 ```{r}
@@ -25,17 +25,6 @@ library(dplyr)
 survey_avg <- survey_clean %>%
   select(Subject, starts_with("ssp")) 
  Average <- colMeans(survey_avg)
- 
- library(dplyr)
-
-# Calculation of average values and creation of a new DataFrameaverage_df <- data.frame(
-  Name = names(survey_avg)
-  Average = colMeans(survey_avg, na.rm = TRUE)
-
-
-
-# Output of the new DataFrame with column names and average valuesprint(average_df)
-
 ```
 
 
@@ -99,6 +88,8 @@ violin_plot <- ggplot(survey_clean_long, aes(x=personality_traits, y=Value, fill
 violin_plot 
 violin_plot_jitter <- violin_plot + geom_jitter(color = '#5B6467')
 violin_plot_jitter
+violin_plot_boxplot<- violin_plot + geom_boxplot(width=0.1, colour="darkgrey", fill="lightgrey")
+violin_plot_boxplot
 ```
 
 

@@ -18,23 +18,13 @@
       filter(grepl("^ASMR021_", Subject)) %>% # Filter rows that start with "ASMR021_"
       mutate(Subject = as.integer(gsub("ASMR021_", "", Subject))) %>%  # Extract just the number part
       select(-Sex) %>%  # Remove the Sex column
-      na.omit()  # Remove rows with any missing data
+      drop_na()  # Remove rows with any missing data
 
     library(dplyr)
 
     survey_avg <- survey_clean %>%
       select(Subject, starts_with("ssp")) 
      Average <- colMeans(survey_avg)
-     
-     library(dplyr)
-
-    # Calculation of average values and creation of a new DataFrameaverage_df <- data.frame(
-      Name = names(survey_avg)
-      Average = colMeans(survey_avg, na.rm = TRUE)
-
-
-
-    # Output of the new DataFrame with column names and average valuesprint(average_df)
 
     #Calculating 3 personality factor scores 
 
@@ -79,4 +69,4 @@
                           "Extraversion", "SSPIT", "SSPAST", "SSPDT")
     survey_clean_long$personality_traits <- factor(survey_clean_long$personality_traits, levels = rank)
 
-![](Davidprntz_files/figure-markdown_strict/unnamed-chunk-7-1.png)![](Davidprntz_files/figure-markdown_strict/unnamed-chunk-7-2.png)
+![](Davidprntz_files/figure-markdown_strict/unnamed-chunk-7-1.png)![](Davidprntz_files/figure-markdown_strict/unnamed-chunk-7-2.png)![](Davidprntz_files/figure-markdown_strict/unnamed-chunk-7-3.png)
