@@ -96,8 +96,9 @@ violin_plot <- ggplot(survey_clean_long, aes(x=personality_traits, y=Value, fill
   theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 18), axis.title.x = element_text(size = 20),             
     axis.title.y = element_text(size = 20),   
     axis.text.y = element_text(size = 18),  legend.position = "none")
-violin_plot
-ggsave("violin_plot.png", width = 20, height = 10, units = "in") 
+violin_plot 
+violin_plot_jitter <- violin_plot + geom_jitter(color = '#5B6467')
+violin_plot_jitter
 ```
 
 
