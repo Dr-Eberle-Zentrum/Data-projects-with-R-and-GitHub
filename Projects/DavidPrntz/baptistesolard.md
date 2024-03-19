@@ -208,13 +208,16 @@
 
 To simplify data handling before the visualisation of Sales or Revenue
 vs. Item type, I suggest to create a intermdiate data table
-`Dataset_V1`, which summarise: - the sum of all `Item_Outlet_Sales` of
-each `Item_Type` into `Sum_Sales` - the sum of all `Item_Revenue` of
-each `Item_Type` into `Sum_Revenue` - the average `Item_visibility` of
-each `Item_Type` into `Avg_Visibility`  
+`Dataset_V1`, which summarise:  
+- the sum of all `Item_Outlet_Sales` of each `Item_Type` into
+`Sum_Sales`  
+- the sum of all `Item_Revenue` of each `Item_Type` into `Sum_Revenue`  
+- the average `Item_visibility` of each `Item_Type` into
+`Avg_Visibility`  
 - the proportion of `Sum_Sales` represented by each `Item_Type` into
-`Prop_Sales` - the proportion of `Sum_Revenue` represented by each
-`Item_Type` into `Prop_Revenue`
+`Prop_Sales`  
+- the proportion of `Sum_Revenue` represented by each `Item_Type` into
+`Prop_Revenue`
 
 Here is an extract of the new `Dataset_V1` table:
 
@@ -294,9 +297,11 @@ Here is an extract of the new `Dataset_V1` table:
 ### New dataset for visualisation 2
 
 For the objectives of visualisation 2, we will need to create two subset
-of the orinigal `Dataset`: - `Dataset_V2a` that summarise the sales and
-revenue of the items by `Outlet_Type` - `Dataset_V2b` that summarise the
-sales and revenue of the items by `Outlet_Size`
+of the orinigal `Dataset`:  
+- `Dataset_V2a` that summarise the sales and revenue of the items by
+`Outlet_Type`  
+- `Dataset_V2b` that summarise the sales and revenue of the items by
+`Outlet_Size`
 
 Here we have `Dataset_V2a`:
 
