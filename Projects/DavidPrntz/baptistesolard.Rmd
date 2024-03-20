@@ -117,11 +117,11 @@ ggobj1 <-
   geom_text(aes(label = Prop_Sales_lab), size = 3, vjust = -0.5, hjust = 0.5) +
   scale_fill_gradient2(low = "tomato", mid = "lightyellow", high = "forestgreen", midpoint = mean(Dataset_V1$Avg_Visibility))
 
-ggsave("baptistesolard_plots/Plot_Sale vs Type.png", plot = ggobj1, 
+ggsave("Plot_Sale vs Type_BS.png", plot = ggobj1, 
        width = 300, height = 200, units = "mm", dpi = 600)
 ```
 
-![Plot Sales vs Type]("baptistesolard_plots/Plot_Sale vs Type.png"){#id .class width=100%}
+![Plot Sales vs Type]("Plot_Sale vs Type_BS.png"){#id .class width=100%}
 
 Turns out that there are not much difference in `Avg_Visibility` between the different `Item_Type`.  
 An explanation could be that the `Item_Visibility` is calculated for each indiviual item within its own category (= `Item_Type`), i.e., already homogenised.
@@ -146,11 +146,11 @@ ggobj2 <-
   geom_text(aes(label = Prop_Revenue_lab), size = 3, vjust = -0.5, hjust = 0.5) +
   scale_fill_gradient2(low = "tomato", mid = "lightyellow", high = "forestgreen", midpoint = mean(Dataset_V1$Avg_Visibility))
 
-ggsave("baptistesolard_plots/Plot_Revenue vs Type.png", plot = ggobj2, 
+ggsave("Plot_Revenue vs Type_BS.png", plot = ggobj2, 
        width = 300, height = 200, units = "mm", dpi = 600)
 ```
 
-![Plot Revenue vs Type]("baptistesolard_plots/Plot_Revenue vs Type.png"){#id .class width=100%}
+![Plot Revenue vs Type]("Plot_Revenue vs Type_BS.png"){#id .class width=100%}
 
 Looks like the relative proportion of `Sum_Sales` and `Sum_Revenue` are pretty much the same between `Item_Type`.
 
@@ -169,11 +169,11 @@ ggobj3 <-
   scale_y_continuous(labels = scales::comma) +
   scale_fill_gradient2(low = "tomato", mid = "lightyellow", high = "forestgreen", midpoint = mean(Dataset_V1$Avg_Visibility))
 
-ggsave("baptistesolard_plots/Plot_Sales vs Type by Size.png", plot = ggobj3, 
+ggsave("Plot_Sales vs Type by Size_BS.png", plot = ggobj3, 
        width = 300, height = 200, units = "mm", dpi = 600)
 ```
 
-![Plot Sales vs Type by Size]("baptistesolard_plots/Plot_Sales vs Type by Size.png"){#id .class width=100%}
+![Plot Sales vs Type by Size]("Plot_Sales vs Type by Size_BS.png"){#id .class width=100%}
 
 There are more sales in medium-sized outlets.  
 Here it seems that the `Avg_Visibility` changes according to `Outlet_Size`. The small-sized outlets have the best average visibility of their products.
@@ -191,11 +191,11 @@ ggobj4 <-
   scale_y_continuous(labels = scales::comma) +
   scale_fill_gradient2(low = "tomato", mid = "lightyellow", high = "forestgreen", midpoint = mean(Dataset_V1$Avg_Visibility))
 
-ggsave("baptistesolard_plots/Plot_Sales vs Type by Location.png", plot = ggobj4, 
+ggsave("Plot_Sales vs Type by Location_BS.png", plot = ggobj4, 
        width = 300, height = 200, units = "mm", dpi = 600)
 ```
 
-![Sales vs Type by Location]("baptistesolard_plots/Plot_Sales vs Type by Location.png"){#id .class width=100%}
+![Sales vs Type by Location]("Plot_Sales vs Type by Location_BS.png"){#id .class width=100%}
 
 Interestingly, there are more sales in Tier 3 outlets, although the highest visibility is seen in Tier 1 outlets.
 
@@ -211,11 +211,11 @@ ggobj5 <-
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
   scale_fill_gradient2(low = "tomato", mid = "lightyellow", high = "forestgreen", midpoint = mean(Dataset_V1$Avg_Visibility))
 
-ggsave("baptistesolard_plots/Plot_Revenue vs Type by Size.png", plot = ggobj5, 
+ggsave("Plot_Revenue vs Type by Size_BS.png", plot = ggobj5, 
        width = 300, height = 200, units = "mm", dpi = 600)
 ```
 
-![Plot Revenue vs Type by Size]("baptistesolard_plots/Plot_Revenue vs Type by Size.png"){#id .class width=100%}
+![Plot Revenue vs Type by Size]("Plot_Revenue vs Type by Size_BS.png"){#id .class width=100%}
 
 Similarly to what we observed in the total number of sales, the sum of revenue is higher in medium-sized outlets.
 
@@ -231,11 +231,11 @@ ggobj6 <-
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
   scale_fill_gradient2(low = "tomato", mid = "lightyellow", high = "forestgreen", midpoint = mean(Dataset_V1$Avg_Visibility))
 
-ggsave("baptistesolard_plots/Plot_Revenue vs Type by Location.png", plot = ggobj6, 
+ggsave("Plot_Revenue vs Type by Location_BS.png", plot = ggobj6, 
        width = 300, height = 200, units = "mm", dpi = 600)
 ```
 
-![Plot Revenue vs Type by Location]("baptistesolard_plots/Plot_Revenue vs Type by Location.png"){#id .class width=100%}
+![Plot Revenue vs Type by Location]("Plot_Revenue vs Type by Location_BS.png"){#id .class width=100%}
 
 Again, we have a similar results than for the total number of sales: the revenues are generally higher in Tier 3 outlets.
 

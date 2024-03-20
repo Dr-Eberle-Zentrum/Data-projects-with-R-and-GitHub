@@ -450,12 +450,12 @@ And here we have an extract of the new `Dataset_V2b`:
       geom_text(aes(label = Prop_Sales_lab), size = 3, vjust = -0.5, hjust = 0.5) +
       scale_fill_gradient2(low = "tomato", mid = "lightyellow", high = "forestgreen", midpoint = mean(Dataset_V1$Avg_Visibility))
 
-    ggsave("baptistesolard_plots/Plot_Sale vs Type.png", plot = ggobj1, 
+    ggsave("Plot_Sale vs Type_BS.png", plot = ggobj1, 
            width = 300, height = 200, units = "mm", dpi = 600)
 
 <figure id="id">
-<img src="%22baptistesolard_plots/Plot_Sale%20vs%20Type.png%22"
-class="class" style="width:100.0%" alt="Plot Sales vs Type" />
+<img src="%22Plot_Sale%20vs%20Type_BS.png%22" class="class"
+style="width:100.0%" alt="Plot Sales vs Type" />
 <figcaption aria-hidden="true">Plot Sales vs Type</figcaption>
 </figure>
 
@@ -485,12 +485,12 @@ dollars.
       geom_text(aes(label = Prop_Revenue_lab), size = 3, vjust = -0.5, hjust = 0.5) +
       scale_fill_gradient2(low = "tomato", mid = "lightyellow", high = "forestgreen", midpoint = mean(Dataset_V1$Avg_Visibility))
 
-    ggsave("baptistesolard_plots/Plot_Revenue vs Type.png", plot = ggobj2, 
+    ggsave("Plot_Revenue vs Type_BS.png", plot = ggobj2, 
            width = 300, height = 200, units = "mm", dpi = 600)
 
 <figure id="id">
-<img src="%22baptistesolard_plots/Plot_Revenue%20vs%20Type.png%22"
-class="class" style="width:100.0%" alt="Plot Revenue vs Type" />
+<img src="%22Plot_Revenue%20vs%20Type_BS.png%22" class="class"
+style="width:100.0%" alt="Plot Revenue vs Type" />
 <figcaption aria-hidden="true">Plot Revenue vs Type</figcaption>
 </figure>
 
@@ -514,13 +514,12 @@ they are too cramped to be displayed properly.
       scale_y_continuous(labels = scales::comma) +
       scale_fill_gradient2(low = "tomato", mid = "lightyellow", high = "forestgreen", midpoint = mean(Dataset_V1$Avg_Visibility))
 
-    ggsave("baptistesolard_plots/Plot_Sales vs Type by Size.png", plot = ggobj3, 
+    ggsave("Plot_Sales vs Type by Size_BS.png", plot = ggobj3, 
            width = 300, height = 200, units = "mm", dpi = 600)
 
 <figure id="id">
-<img
-src="%22baptistesolard_plots/Plot_Sales%20vs%20Type%20by%20Size.png%22"
-class="class" style="width:100.0%" alt="Plot Sales vs Type by Size" />
+<img src="%22Plot_Sales%20vs%20Type%20by%20Size_BS.png%22" class="class"
+style="width:100.0%" alt="Plot Sales vs Type by Size" />
 <figcaption aria-hidden="true">Plot Sales vs Type by Size</figcaption>
 </figure>
 
@@ -541,12 +540,11 @@ of their products.
       scale_y_continuous(labels = scales::comma) +
       scale_fill_gradient2(low = "tomato", mid = "lightyellow", high = "forestgreen", midpoint = mean(Dataset_V1$Avg_Visibility))
 
-    ggsave("baptistesolard_plots/Plot_Sales vs Type by Location.png", plot = ggobj4, 
+    ggsave("Plot_Sales vs Type by Location_BS.png", plot = ggobj4, 
            width = 300, height = 200, units = "mm", dpi = 600)
 
 <figure id="id">
-<img
-src="%22baptistesolard_plots/Plot_Sales%20vs%20Type%20by%20Location.png%22"
+<img src="%22Plot_Sales%20vs%20Type%20by%20Location_BS.png%22"
 class="class" style="width:100.0%" alt="Sales vs Type by Location" />
 <figcaption aria-hidden="true">Sales vs Type by Location</figcaption>
 </figure>
@@ -565,12 +563,11 @@ highest visibility is seen in Tier 1 outlets.
       theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
       scale_fill_gradient2(low = "tomato", mid = "lightyellow", high = "forestgreen", midpoint = mean(Dataset_V1$Avg_Visibility))
 
-    ggsave("baptistesolard_plots/Plot_Revenue vs Type by Size.png", plot = ggobj5, 
+    ggsave("Plot_Revenue vs Type by Size_BS.png", plot = ggobj5, 
            width = 300, height = 200, units = "mm", dpi = 600)
 
 <figure id="id">
-<img
-src="%22baptistesolard_plots/Plot_Revenue%20vs%20Type%20by%20Size.png%22"
+<img src="%22Plot_Revenue%20vs%20Type%20by%20Size_BS.png%22"
 class="class" style="width:100.0%" alt="Plot Revenue vs Type by Size" />
 <figcaption aria-hidden="true">Plot Revenue vs Type by Size</figcaption>
 </figure>
@@ -589,12 +586,11 @@ revenue is higher in medium-sized outlets.
       theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
       scale_fill_gradient2(low = "tomato", mid = "lightyellow", high = "forestgreen", midpoint = mean(Dataset_V1$Avg_Visibility))
 
-    ggsave("baptistesolard_plots/Plot_Revenue vs Type by Location.png", plot = ggobj6, 
+    ggsave("Plot_Revenue vs Type by Location_BS.png", plot = ggobj6, 
            width = 300, height = 200, units = "mm", dpi = 600)
 
 <figure id="id">
-<img
-src="%22baptistesolard_plots/Plot_Revenue%20vs%20Type%20by%20Location.png%22"
+<img src="%22Plot_Revenue%20vs%20Type%20by%20Location_BS.png%22"
 class="class" style="width:100.0%"
 alt="Plot Revenue vs Type by Location" />
 <figcaption aria-hidden="true">Plot Revenue vs Type by
