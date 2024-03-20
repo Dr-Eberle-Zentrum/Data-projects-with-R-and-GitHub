@@ -440,7 +440,8 @@ And here we have an extract of the new `Dataset_V2b`:
       sprintf(fmt = "%.2f") |>
       str_c("%")
 
-    ggplot(data = Dataset_V1, aes(x = Item_Type, y = Sum_Sales, fill = Avg_Visibility)) +
+    ggobj1 <-
+      ggplot(data = Dataset_V1, aes(x = Item_Type, y = Sum_Sales, fill = Avg_Visibility)) +
       geom_col() +
       labs(x = "Item type", y = "Total sales",
            fill = "Average\nvisibility") +
@@ -449,7 +450,14 @@ And here we have an extract of the new `Dataset_V2b`:
       geom_text(aes(label = Prop_Sales_lab), size = 3, vjust = -0.5, hjust = 0.5) +
       scale_fill_gradient2(low = "tomato", mid = "lightyellow", high = "forestgreen", midpoint = mean(Dataset_V1$Avg_Visibility))
 
-<img src="baptistesolard_files/figure-markdown_strict/sales_type-1.png" width="100%" />
+    ggsave("baptistesolard_plots/Plot_Sale vs Type.png", plot = ggobj1, 
+           width = 300, height = 200, units = "mm", dpi = 600)
+
+<figure id="id">
+<img src="%22baptistesolard_plots/Plot_Sale%20vs%20Type.png%22"
+class="class" style="width:100.0%" alt="Plot Sales vs Type" />
+<figcaption aria-hidden="true">Plot Sales vs Type</figcaption>
+</figure>
 
 Turns out that there are not much difference in `Avg_Visibility` between
 the different `Item_Type`.  
@@ -468,7 +476,8 @@ dollars.
       sprintf(fmt = "%.2f") |>
       str_c("%")
 
-    ggplot(data = Dataset_V1, aes(x = Item_Type, y = Sum_Revenue / 1e6, fill = Avg_Visibility)) +
+    ggobj2 <-
+      ggplot(data = Dataset_V1, aes(x = Item_Type, y = Sum_Revenue / 1e6, fill = Avg_Visibility)) +
       geom_col() +
       labs(x = "Item type", y = "Total revenue (in M$)",
                   fill = "Average\nvisibility") +
@@ -476,7 +485,14 @@ dollars.
       geom_text(aes(label = Prop_Revenue_lab), size = 3, vjust = -0.5, hjust = 0.5) +
       scale_fill_gradient2(low = "tomato", mid = "lightyellow", high = "forestgreen", midpoint = mean(Dataset_V1$Avg_Visibility))
 
-<img src="baptistesolard_files/figure-markdown_strict/revenue_type-1.png" width="100%" />
+    ggsave("baptistesolard_plots/Plot_Revenue vs Type.png", plot = ggobj2, 
+           width = 300, height = 200, units = "mm", dpi = 600)
+
+<figure id="id">
+<img src="%22baptistesolard_plots/Plot_Revenue%20vs%20Type.png%22"
+class="class" style="width:100.0%" alt="Plot Revenue vs Type" />
+<figcaption aria-hidden="true">Plot Revenue vs Type</figcaption>
+</figure>
 
 Looks like the relative proportion of `Sum_Sales` and `Sum_Revenue` are
 pretty much the same between `Item_Type`.
@@ -488,7 +504,8 @@ the same row, so the comparison of the y-axis is easier to make. I also
 kept the labels on the x-axis turned to 90° and not slanted, otherwise
 they are too cramped to be displayed properly.
 
-    ggplot(data = Dataset_V2a, aes(x = Item_Type, y = Sum_Sales, fill = Avg_Visibility)) +
+    ggobj3 <-
+      ggplot(data = Dataset_V2a, aes(x = Item_Type, y = Sum_Sales, fill = Avg_Visibility)) +
       geom_col() +
       facet_wrap(~ factor(Outlet_Size, levels = c("Small", "Medium", "High")), nrow = 1) +
       labs(x = "Item type", y = "Total sales",
@@ -497,7 +514,15 @@ they are too cramped to be displayed properly.
       scale_y_continuous(labels = scales::comma) +
       scale_fill_gradient2(low = "tomato", mid = "lightyellow", high = "forestgreen", midpoint = mean(Dataset_V1$Avg_Visibility))
 
-<img src="baptistesolard_files/figure-markdown_strict/sales_type_size-1.png" width="100%" />
+    ggsave("baptistesolard_plots/Plot_Sales vs Type by Size.png", plot = ggobj3, 
+           width = 300, height = 200, units = "mm", dpi = 600)
+
+<figure id="id">
+<img
+src="%22baptistesolard_plots/Plot_Sales%20vs%20Type%20by%20Size.png%22"
+class="class" style="width:100.0%" alt="Plot Sales vs Type by Size" />
+<figcaption aria-hidden="true">Plot Sales vs Type by Size</figcaption>
+</figure>
 
 There are more sales in medium-sized outlets.  
 Here it seems that the `Avg_Visibility` changes according to
@@ -506,7 +531,8 @@ of their products.
 
 ### Total sales by location type
 
-    ggplot(data = Dataset_V2b, aes(x = Item_Type, y = Sum_Sales, fill = Avg_Visibility)) +
+    ggobj4 <-
+      ggplot(data = Dataset_V2b, aes(x = Item_Type, y = Sum_Sales, fill = Avg_Visibility)) +
       geom_col() +
       facet_wrap(~ Outlet_Location_Type, nrow = 1) +
       labs(x = "Item type", y = "Total sales",
@@ -515,14 +541,23 @@ of their products.
       scale_y_continuous(labels = scales::comma) +
       scale_fill_gradient2(low = "tomato", mid = "lightyellow", high = "forestgreen", midpoint = mean(Dataset_V1$Avg_Visibility))
 
-<img src="baptistesolard_files/figure-markdown_strict/sales_type_location-1.png" width="100%" />
+    ggsave("baptistesolard_plots/Plot_Sales vs Type by Location.png", plot = ggobj4, 
+           width = 300, height = 200, units = "mm", dpi = 600)
+
+<figure id="id">
+<img
+src="%22baptistesolard_plots/Plot_Sales%20vs%20Type%20by%20Location.png%22"
+class="class" style="width:100.0%" alt="Sales vs Type by Location" />
+<figcaption aria-hidden="true">Sales vs Type by Location</figcaption>
+</figure>
 
 Interestingly, there are more sales in Tier 3 outlets, although the
 highest visibility is seen in Tier 1 outlets.
 
 ### Total revenue by outlet size
 
-    ggplot(data = Dataset_V2a, aes(x = Item_Type, y = Sum_Revenue / 1e6, fill = Avg_Visibility)) +
+    ggobj5 <-
+      ggplot(data = Dataset_V2a, aes(x = Item_Type, y = Sum_Revenue / 1e6, fill = Avg_Visibility)) +
       geom_col() +
       facet_wrap(~ factor(Outlet_Size, levels = c("Small", "Medium", "High")), nrow = 1) +
       labs(x = "Item type", y = "Total revenue (in M$)",
@@ -530,14 +565,23 @@ highest visibility is seen in Tier 1 outlets.
       theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
       scale_fill_gradient2(low = "tomato", mid = "lightyellow", high = "forestgreen", midpoint = mean(Dataset_V1$Avg_Visibility))
 
-<img src="baptistesolard_files/figure-markdown_strict/revenue_type_size-1.png" width="100%" />
+    ggsave("baptistesolard_plots/Plot_Revenue vs Type by Size.png", plot = ggobj5, 
+           width = 300, height = 200, units = "mm", dpi = 600)
+
+<figure id="id">
+<img
+src="%22baptistesolard_plots/Plot_Revenue%20vs%20Type%20by%20Size.png%22"
+class="class" style="width:100.0%" alt="Plot Revenue vs Type by Size" />
+<figcaption aria-hidden="true">Plot Revenue vs Type by Size</figcaption>
+</figure>
 
 Similarly to what we observed in the total number of sales, the sum of
 revenue is higher in medium-sized outlets.
 
 ### Total revenue by outlet location type
 
-    ggplot(data = Dataset_V2b, aes(x = Item_Type, y = Sum_Revenue / 1e6, fill = Avg_Visibility)) +
+    ggobj6 <-
+      ggplot(data = Dataset_V2b, aes(x = Item_Type, y = Sum_Revenue / 1e6, fill = Avg_Visibility)) +
       geom_col() +
       facet_wrap(~ Outlet_Location_Type, nrow = 1) +
       labs(x = "Item type", y = "Total revenue (in M$)",
@@ -545,7 +589,17 @@ revenue is higher in medium-sized outlets.
       theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
       scale_fill_gradient2(low = "tomato", mid = "lightyellow", high = "forestgreen", midpoint = mean(Dataset_V1$Avg_Visibility))
 
-<img src="baptistesolard_files/figure-markdown_strict/revenue_type_location-1.png" width="100%" />
+    ggsave("baptistesolard_plots/Plot_Revenue vs Type by Location.png", plot = ggobj6, 
+           width = 300, height = 200, units = "mm", dpi = 600)
+
+<figure id="id">
+<img
+src="%22baptistesolard_plots/Plot_Revenue%20vs%20Type%20by%20Location.png%22"
+class="class" style="width:100.0%"
+alt="Plot Revenue vs Type by Location" />
+<figcaption aria-hidden="true">Plot Revenue vs Type by
+Location</figcaption>
+</figure>
 
 Again, we have a similar results than for the total number of sales: the
 revenues are generally higher in Tier 3 outlets.
