@@ -107,16 +107,20 @@ Example:
 
 - Martin (martin-raden) - [Example project](Projects/martin-raden/project-description.md)
 
-Current project:
+Current projects:
 
 - Johanna (johannaroever) - [Visualisation for grave stelae from Cyprus during the Roman Empire](Projects/johannaroever/project-description.md)
 - Timo (timow98) - [Soil data Visualization](Projects/timow98/project-description.md)
-- Marek (mqrek) - [Stock Performance Analysis of NVIDIA Corporation: Time Series Insights](Projects/mqrek/project-description.md)
 - Maurice (mauriceschmetzer) - [US Immigrant Visas Issued](Projects/mauriceschmetzer/project-description.md)
 - Dennis (Deeznis) - [The Economic Impact of Remote Work on Urban Housing Markets](Projects/Deeznis/project-description.md)
 - Baptiste (baptistesolard) - [Coloured Glass Beads in the Early Middle Ages](Projects/baptistesolard/project-description.md)
 - David (Davidprntz) - [Bigmart a Marketing Analysis](Projects/DavidPrntz/Project-description.md)
 - Elise (elbue) - [Questionaire evaluation](Projects/elbue/project-description.md)
+
+Dropped projects:
+
+- Marek (mqrek) - [Stock Performance Analysis of NVIDIA Corporation: Time Series Insights](Projects/mqrek/project-description.md)
+
 
 
 #### Goals
