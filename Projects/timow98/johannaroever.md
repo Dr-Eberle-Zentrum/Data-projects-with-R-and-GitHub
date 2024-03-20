@@ -1,5 +1,17 @@
 # Solution for Soil Data Project
 
+    # TODO: Currently produces a warning, but works
+    soilData <- read_delim("SoilData.csv", delim = ";", 
+    escape_double = FALSE,  trim_ws = TRUE)
+
+    ## Rows: 154 Columns: 31
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ";"
+    ## chr (31): Labornummer Tübingen, Profil_2, Horizont_43, Tiefe_44, Horizontbez...
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
 ## 1. Data cleanup
 
 **1.1 the column KAKpot2** is not needed
@@ -13,8 +25,8 @@ with regular expressions.
     # works, but does not use rename_with()
       colnames(soilData) <- gsub("_\\d*", "", colnames(soilData))
 
-    # unfinished try with rename_with()
-    #   colnames(SoilData) <- dplyr::rename_with(colnames(SoilData), .fn = gsub('_\\d*', '', colnames(SoilData)))
+    # TODO: unfinished try with rename_with()
+    #   colnames(soilData) <- dplyr::rename_with(colnames(soilData), .fn = str_replace_all, '_\\d*', '', colnames(soilData))
 
 **1.3 there is a second header** with the respective units. Leaving this
 line will interfere with the datatype in R, that’s why I want to delete
@@ -28,10 +40,18 @@ Also, the function scan() could be useful (depending on your aproach)
 because it enables you to read for example specific data rows directly
 from the source file.
 
-    # add units to header 
+     # add units to header 
      colnames(soilData)   <- paste(colnames(soilData), soilData[1,], sep = "_")
-    # clean header columns without units of unnecessary characters
-     colnames(soilData) <- gsub("_\\[\\]", "", colnames(soilData))
+
+     # clean header columns without units of unnecessary characters
+     colnames(soilData) <- gsub(("_\\[\\]"), "", colnames(soilData))
+     
+     # Replace whitespace in between header parts for "_"
+     colnames(soilData) <- str_replace_all(colnames(soilData), '([:alpha:]+)(\\s)([:upper:][:lower:]+)', '\\1_\\3')
+     
+     # clean header columns of unnecessary whitespaces
+     colnames(soilData) <- gsub(("\\s"), "", colnames(soilData))
+
     # delete first row
      soilData <- soilData[-c(1),]
 
@@ -55,9 +75,10 @@ by dividing “Kationen” by “KAKpot” and SOM\_
 by multiplying Corg with 1,72
 
     # convert numbers to use "." instead of ","
-    soilData <- as.data.frame(sapply(soilData,gsub,pattern=",",replacement="."))
-    soilData <- mutate(soilData, `base_saturation_[%]` = as.numeric(soilData$`Kationen_[mmol/kg]`)/as.numeric(soilData$`KAKpot_[mmol/kg]`))
-    soilData <- mutate(soilData, `SOM_[%]` = as.numeric(`Corg_[%]`)*1.72)
+    soilData <- as.data.frame(sapply(soilData, gsub,pattern=",", replacement="."))
+    soilData <- soilData %>%
+      mutate(`base_saturation_[%]` = round(as.numeric(`Kationen_[mmol/kg]`)/as.numeric(`KAKpot_[mmol/kg]`), digits=2)) %>%
+      mutate(`SOM_[%]` = round(as.numeric(`Corg_[%]`)*1.72, digits=2))
 
 **1.7 Column S+U+T is not always 100%**. I would like to see how often I
 got more, less and exactly 100%. Write a new column and put in “more”,
@@ -77,7 +98,7 @@ write a query that counts and prints the number of values (for example
 <col style="width: 5%" />
 <col style="width: 2%" />
 <col style="width: 2%" />
-<col style="width: 4%" />
+<col style="width: 3%" />
 <col style="width: 3%" />
 <col style="width: 2%" />
 <col style="width: 2%" />
@@ -105,14 +126,14 @@ write a query that counts and prints the number of values (for example
 </colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;">Labornummer Tübingen</th>
+<th style="text-align: left;">Labornummer_Tübingen</th>
 <th style="text-align: left;">Profil</th>
 <th style="text-align: left;">Horizont</th>
 <th style="text-align: left;">Tiefe_[cm]</th>
 <th style="text-align: left;">Horizontbezeichnung</th>
 <th style="text-align: left;">East</th>
 <th style="text-align: left;">North</th>
-<th style="text-align: left;">Neigung_[ % ]</th>
+<th style="text-align: left;">Neigung_[%]</th>
 <th style="text-align: left;">Exposition</th>
 <th style="text-align: left;">Corg_[%]</th>
 <th style="text-align: left;">CaCO3_[%]</th>
@@ -171,8 +192,8 @@ write a query that counts and prints the number of values (for example
 <td style="text-align: left;">7.30</td>
 <td style="text-align: left;">99.80</td>
 <td style="text-align: left;">Sl2</td>
-<td style="text-align: right;">0.2296797</td>
-<td style="text-align: right;">6.8628</td>
+<td style="text-align: right;">0.23</td>
+<td style="text-align: right;">6.86</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">50301</td>
@@ -205,8 +226,8 @@ write a query that counts and prints the number of values (for example
 <td style="text-align: left;">7.50</td>
 <td style="text-align: left;">99.90</td>
 <td style="text-align: left;">St2</td>
-<td style="text-align: right;">0.0150875</td>
-<td style="text-align: right;">0.2236</td>
+<td style="text-align: right;">0.02</td>
+<td style="text-align: right;">0.22</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">50302</td>
@@ -239,8 +260,8 @@ write a query that counts and prints the number of values (for example
 <td style="text-align: left;">10.00</td>
 <td style="text-align: left;">99.82</td>
 <td style="text-align: left;">Sl3</td>
-<td style="text-align: right;">0.0101709</td>
-<td style="text-align: right;">1.2040</td>
+<td style="text-align: right;">0.01</td>
+<td style="text-align: right;">1.20</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">50303</td>
@@ -273,8 +294,8 @@ write a query that counts and prints the number of values (for example
 <td style="text-align: left;">39.30</td>
 <td style="text-align: left;">99.90</td>
 <td style="text-align: left;">Ts3</td>
-<td style="text-align: right;">0.7031446</td>
-<td style="text-align: right;">0.2408</td>
+<td style="text-align: right;">0.70</td>
+<td style="text-align: right;">0.24</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">50304</td>
@@ -307,8 +328,8 @@ write a query that counts and prints the number of values (for example
 <td style="text-align: left;">46.00</td>
 <td style="text-align: left;">99.96</td>
 <td style="text-align: left;">Tl</td>
-<td style="text-align: right;">0.9293010</td>
-<td style="text-align: right;">0.2064</td>
+<td style="text-align: right;">0.93</td>
+<td style="text-align: right;">0.21</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">50305</td>
@@ -341,8 +362,8 @@ write a query that counts and prints the number of values (for example
 <td style="text-align: left;">47.60</td>
 <td style="text-align: left;">99.30</td>
 <td style="text-align: left;">Tu2</td>
-<td style="text-align: right;">0.9996384</td>
-<td style="text-align: right;">0.0688</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.07</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">50315</td>
@@ -375,8 +396,8 @@ write a query that counts and prints the number of values (for example
 <td style="text-align: left;">19.80</td>
 <td style="text-align: left;">100.20</td>
 <td style="text-align: left;">Ls4</td>
-<td style="text-align: right;">0.0834756</td>
-<td style="text-align: right;">8.0668</td>
+<td style="text-align: right;">0.08</td>
+<td style="text-align: right;">8.07</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">50316</td>
@@ -409,8 +430,8 @@ write a query that counts and prints the number of values (for example
 <td style="text-align: left;">24.20</td>
 <td style="text-align: left;">100.20</td>
 <td style="text-align: left;">Ls4</td>
-<td style="text-align: right;">0.1116645</td>
-<td style="text-align: right;">1.5652</td>
+<td style="text-align: right;">0.11</td>
+<td style="text-align: right;">1.57</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">50317</td>
@@ -443,8 +464,8 @@ write a query that counts and prints the number of values (for example
 <td style="text-align: left;">57.20</td>
 <td style="text-align: left;">99.83</td>
 <td style="text-align: left;">Ts2</td>
-<td style="text-align: right;">0.7471967</td>
-<td style="text-align: right;">0.7568</td>
+<td style="text-align: right;">0.75</td>
+<td style="text-align: right;">0.76</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">50318</td>
@@ -477,8 +498,8 @@ write a query that counts and prints the number of values (for example
 <td style="text-align: left;">35.50</td>
 <td style="text-align: left;">99.86</td>
 <td style="text-align: left;">Lts</td>
-<td style="text-align: right;">1.0058053</td>
-<td style="text-align: right;">0.3268</td>
+<td style="text-align: right;">1.01</td>
+<td style="text-align: right;">0.33</td>
 </tr>
 </tbody>
 </table>
@@ -487,4 +508,104 @@ Table: SoilData.csv
 
 # 2. Visualisation
 
-## 2.1 Stacked Barplot
+**2.1 Stacked Barplot**
+
+I would like to have a stacked barplot that shows the values for Ca, Mg
+and Kationen of the **last** horizon of the profiles 55, 71, 102 and
+109 - for every last horizon of these profiles in the data table one
+stacked barplot. Here is an example for such an barplot. I would also
+like to have the same colors as in the example plot (viridis): ![Stacked
+barplot](https://r-graph-gallery.com/48-grouped-barplot-with-ggplot2_files/figure-html/thecode4-1.png)
+
+\*\*Die Farbskala ist noch nicht ganz passend.
+
+    data <- soilData |> 
+      filter(Profil == 55 | Profil == 71 | Profil == 102 | Profil == 109) |> 
+      group_by(Profil) |> 
+      filter(Horizont == max(Horizont)) |> 
+      select( Profil, Horizont, Horizontbezeichnung, `Ca_[mmol/kg]`, `Mg_[mmol/kg]`, `Kationen_[mmol/kg]`)
+
+    # change data to numeric values
+    data$`Ca_[mmol/kg]` <- as.numeric(data$`Ca_[mmol/kg]`)
+    data$`Mg_[mmol/kg]` <- as.numeric(data$`Mg_[mmol/kg]`)
+    data$`Kationen_[mmol/kg]` <- as.numeric(data$`Kationen_[mmol/kg]`)
+
+    df <- data.frame(Profil = data$Profil,
+                              Horizont = data$Horizont,
+                              Horizontbezeichnung = data$Horizontbezeichnung, 
+                              y = c(data$`Ca_[mmol/kg]`, data$`Mg_[mmol/kg]`, data$`Kationen_[mmol/kg]`),
+                              group = c(rep("Ca_[mmol/kg]", nrow(data)),
+                                        rep("Mg_[mmol/kg]", nrow(data)),
+                                        rep("Kationen_[mmol/kg]", nrow(data))))
+
+    ggplot( df, aes(x=Profil, y= y, fill=group)) + 
+      geom_bar(position = "stack", stat = "identity") +
+    #  scale_colour_continuous(type=scale_fill_viridis_b()) +
+      scale_color_viridis_c()+
+      ggtitle("last horizon of the profiles 55, 71, 102 and 109") +
+      labs(fill="") +
+      theme_minimal() +
+      xlab("")
+
+![](johannaroever_files/figure-markdown_strict/unnamed-chunk-10-1.png)
+
+**2.2 Piechart of grain sizes**  
+Then I would like to have 3 piecharts of the “Ah” horizons of the
+profiles 82, 111 and 134 next to each other where I can see the portion
+of S (Sand), U (silt) and T (clay). See below: ![Sketch of
+piechart](sketch_1.jpg)
+
+**Die Ausgabe mehrerer Plots nebeneinander funktioniert noch nicht**
+
+    toDraw <- c(82, 111, 134)
+
+    piechart <- function(profil){
+      data <- soilData |> 
+      filter(Profil == profil) |> 
+      filter(Horizontbezeichnung == 'Ah') 
+    newData <-  data |> 
+      select( Profil, Horizont, Horizontbezeichnung, `S_[%]`, `U_[%]`, `T_[%]`)
+    # switches rows <-> columns  with added rows for plot usage
+    df <- data.frame(Profil = newData$Profil,
+                              Horizont = newData$Horizont,
+                              y = c(newData$`S_[%]`, newData$`U_[%]`, newData$`T_[%]`),
+                              group = c(rep("S_[%]", nrow(newData)),
+                                        rep("U_[%]", nrow(newData)),
+                                        rep("T_[%]", nrow(newData))))
+
+    # evtl auch machbar mit Paket reshape2?
+    # melted_df <- melt(newData, na.rm = FALSE, value.name = "Value", id = c(newData$`S_[%]`, newData$`U_[%]`, newData$`T_[%]`))
+
+    # Compute the position of labels
+    # df <- df %>% 
+    #   arrange(desc(group)) %>%
+    #   mutate(prop = value / sum(data$y) *100) %>%
+    #   mutate(ypos = cumsum(prop)- 0.5*prop )
+
+    ggplot(df, aes(x="", y = c(group),  fill=group)) +
+      geom_bar(stat="identity", width=1) +
+      coord_polar("y", start=0) +
+    #  geom_text(aes(y = ypos, label = group), color = "white", size=6) +
+    #  scale_fill_brewer(palette="Set1")
+      theme_void() +
+      labs(fill="") #+
+      # TODO: Untertitel, funktioniert nicht
+      #xlabs(subtitle = Profil) +
+
+
+    }
+
+    # zum Test einzelne Plots
+    piechart(82)
+
+![](johannaroever_files/figure-markdown_strict/unnamed-chunk-11-1.png)
+
+    piechart(111)
+
+![](johannaroever_files/figure-markdown_strict/unnamed-chunk-11-2.png)
+
+    # für Ausgabe nebeneinan
+    # par(mfrow = c(1, 3))
+    # for(p in toDraw){
+    #   piechart(p)
+    # }

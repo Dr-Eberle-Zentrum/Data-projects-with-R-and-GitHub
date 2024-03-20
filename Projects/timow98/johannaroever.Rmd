@@ -13,9 +13,11 @@ library(tidyverse)
 
 # Solution for Soil Data Project
 
-```{r, include=F}
+```{r, include=T}
+# TODO: Currently produces a warning, but works
 soilData <- read_delim("SoilData.csv", delim = ";", 
-escape_double = FALSE, trim_ws = TRUE)
+escape_double = FALSE,  trim_ws = TRUE)
+
 ```
 
 ## 1. Data cleanup
@@ -31,17 +33,25 @@ escape_double = FALSE, trim_ws = TRUE)
 # works, but does not use rename_with()
   colnames(soilData) <- gsub("_\\d*", "", colnames(soilData))
 
-# unfinished try with rename_with()
-#   colnames(SoilData) <- dplyr::rename_with(colnames(SoilData), .fn = gsub('_\\d*', '', colnames(SoilData)))
+# TODO: unfinished try with rename_with()
+#   colnames(soilData) <- dplyr::rename_with(colnames(soilData), .fn = str_replace_all, '_\\d*', '', colnames(soilData))
 ```
 
 **1.3 there is a second header** with the respective units. Leaving this line will interfere with the datatype in R, that's why I want to delete this line and instead integrate the unit into the header such like this: Tiefe\_\[cm\]. For this dataset you will need to work with backticks. If you are not familiar with them, you can read about them [<span style="color:blue">here</span>](https://jhudatascience.org/intro_to_r/resources/quotes_vs_backticks.html). Also, the function scan() could be useful (depending on your aproach) because it enables you to read for example specific data rows directly from the source file.  
 
 ```{r, echo=TRUE}
-# add units to header 
+ # add units to header 
  colnames(soilData)   <- paste(colnames(soilData), soilData[1,], sep = "_")
-# clean header columns without units of unnecessary characters
- colnames(soilData) <- gsub("_\\[\\]", "", colnames(soilData))
+
+ # clean header columns without units of unnecessary characters
+ colnames(soilData) <- gsub(("_\\[\\]"), "", colnames(soilData))
+ 
+ # Replace whitespace in between header parts for "_"
+ colnames(soilData) <- str_replace_all(colnames(soilData), '([:alpha:]+)(\\s)([:upper:][:lower:]+)', '\\1_\\3')
+ 
+ # clean header columns of unnecessary whitespaces
+ colnames(soilData) <- gsub(("\\s"), "", colnames(soilData))
+
 # delete first row
  soilData <- soilData[-c(1),]
 ```
@@ -62,9 +72,10 @@ soilData[soilData=="99999" | soilData=="99999,99" ] <- NA
 
 ```{r, echo=TRUE}
 # convert numbers to use "." instead of ","
-soilData <- as.data.frame(sapply(soilData,gsub,pattern=",",replacement="."))
-soilData <- mutate(soilData, `base_saturation_[%]` = as.numeric(soilData$`Kationen_[mmol/kg]`)/as.numeric(soilData$`KAKpot_[mmol/kg]`))
-soilData <- mutate(soilData, `SOM_[%]` = as.numeric(`Corg_[%]`)*1.72)
+soilData <- as.data.frame(sapply(soilData, gsub,pattern=",", replacement="."))
+soilData <- soilData %>%
+  mutate(`base_saturation_[%]` = round(as.numeric(`Kationen_[mmol/kg]`)/as.numeric(`KAKpot_[mmol/kg]`), digits=2)) %>%
+  mutate(`SOM_[%]` = round(as.numeric(`Corg_[%]`)*1.72, digits=2))
 ```
 
 **1.7 Column S+U+T is not always 100%**. I would like to see how often I got more, less and exactly 100%. Write a new column and put in "more", "less" and "exactly" depending on the value in the column S+U+T. Then, write a query that counts and prints the number of values (for example "10x less than 100%, 3x exactly 100% and 24x more than 100%") 
@@ -82,6 +93,95 @@ knitr::kable(
 ```
 
 # 2. Visualisation
-## 2.1 Stacked Barplot
+**2.1 Stacked Barplot**  
+
+I would like to have a stacked barplot that shows the values for Ca, Mg and Kationen of the **last** horizon of the profiles 55, 71, 102 and 109 - for every last horizon of these profiles in the data table one stacked barplot. Here is an example for such an barplot. I would also like to have the same colors as in the example plot (viridis): ![Stacked barplot](https://r-graph-gallery.com/48-grouped-barplot-with-ggplot2_files/figure-html/thecode4-1.png)
+
+**Die Farbskala ist noch nicht ganz passend.
+
+```{r, echo=T}
+data <- soilData |> 
+  filter(Profil == 55 | Profil == 71 | Profil == 102 | Profil == 109) |> 
+  group_by(Profil) |> 
+  filter(Horizont == max(Horizont)) |> 
+  select( Profil, Horizont, Horizontbezeichnung, `Ca_[mmol/kg]`, `Mg_[mmol/kg]`, `Kationen_[mmol/kg]`)
+
+# change data to numeric values
+data$`Ca_[mmol/kg]` <- as.numeric(data$`Ca_[mmol/kg]`)
+data$`Mg_[mmol/kg]` <- as.numeric(data$`Mg_[mmol/kg]`)
+data$`Kationen_[mmol/kg]` <- as.numeric(data$`Kationen_[mmol/kg]`)
+
+df <- data.frame(Profil = data$Profil,
+                          Horizont = data$Horizont,
+                          Horizontbezeichnung = data$Horizontbezeichnung, 
+                          y = c(data$`Ca_[mmol/kg]`, data$`Mg_[mmol/kg]`, data$`Kationen_[mmol/kg]`),
+                          group = c(rep("Ca_[mmol/kg]", nrow(data)),
+                                    rep("Mg_[mmol/kg]", nrow(data)),
+                                    rep("Kationen_[mmol/kg]", nrow(data))))
+
+ggplot( df, aes(x=Profil, y= y, fill=group)) + 
+  geom_bar(position = "stack", stat = "identity") +
+#  scale_colour_continuous(type=scale_fill_viridis_b()) +
+  scale_color_viridis_c()+
+  ggtitle("last horizon of the profiles 55, 71, 102 and 109") +
+  labs(fill="") +
+  theme_minimal() +
+  xlab("")
+  
+```
 
 
+**2.2 Piechart of grain sizes**  
+Then I would like to have 3 piecharts of the "Ah" horizons of the profiles 82, 111 and 134 next to each other where I can see the portion of S (Sand), U (silt) and T (clay). See below:
+  ![Sketch of piechart](sketch_1.jpg)
+  
+  **Die Ausgabe mehrerer Plots nebeneinander funktioniert noch nicht**
+```{r, echo=T}
+toDraw <- c(82, 111, 134)
+
+piechart <- function(profil){
+  data <- soilData |> 
+  filter(Profil == profil) |> 
+  filter(Horizontbezeichnung == 'Ah') 
+newData <-  data |> 
+  select( Profil, Horizont, Horizontbezeichnung, `S_[%]`, `U_[%]`, `T_[%]`)
+# switches rows <-> columns  with added rows for plot usage
+df <- data.frame(Profil = newData$Profil,
+                          Horizont = newData$Horizont,
+                          y = c(newData$`S_[%]`, newData$`U_[%]`, newData$`T_[%]`),
+                          group = c(rep("S_[%]", nrow(newData)),
+                                    rep("U_[%]", nrow(newData)),
+                                    rep("T_[%]", nrow(newData))))
+
+# evtl auch machbar mit Paket reshape2?
+# melted_df <- melt(newData, na.rm = FALSE, value.name = "Value", id = c(newData$`S_[%]`, newData$`U_[%]`, newData$`T_[%]`))
+
+# Compute the position of labels
+# df <- df %>% 
+#   arrange(desc(group)) %>%
+#   mutate(prop = value / sum(data$y) *100) %>%
+#   mutate(ypos = cumsum(prop)- 0.5*prop )
+
+ggplot(df, aes(x="", y = c(group),  fill=group)) +
+  geom_bar(stat="identity", width=1) +
+  coord_polar("y", start=0) +
+#  geom_text(aes(y = ypos, label = group), color = "white", size=6) +
+#  scale_fill_brewer(palette="Set1")
+  theme_void() +
+  labs(fill="") #+
+  # TODO: Untertitel, funktioniert nicht
+  #xlabs(subtitle = Profil) +
+
+
+}
+
+# zum Test einzelne Plots
+piechart(82)
+piechart(111)
+
+# für Ausgabe nebeneinan
+# par(mfrow = c(1, 3))
+# for(p in toDraw){
+#   piechart(p)
+# }
+```
