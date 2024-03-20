@@ -1,4 +1,5 @@
-    # Setup and Libraries
+# Setup and Libraries
+
     library(tidyverse) 
 
     ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
@@ -29,30 +30,31 @@
 
     setwd("~/STUDIUM/Programming/R2 Data projects/Data-projects-with-R-and-GitHub/Projects/DavidPrntz")
 
-    ### import dataset
+    # import dataset
     import("data.csv", setclass = "tibble") -> BMdata 
 
-    # Data Cleaning
-    ### replace all empty values with na values
+# Data Cleaning
+
+    # replace all empty values with na values
     BMdata[BMdata == ""] <- NA
 
-    ### create new column "revenue"
+    # create new column "revenue"
     BMdata$revenue <- BMdata$Item_MRP * 0.7 * BMdata$Item_Outlet_Sales
 
-    # Data Visualization
+# Data Visualization
 
-    ## Sales Plot
+## Sales Plot
 
-    ### First sum the sales by item category
+    # First sum the sales by item category
     sales_by_category <- aggregate(Item_Outlet_Sales ~ Item_Type, data = BMdata, FUN = sum)
 
-    ### Calculate the total sum of sales for the relative share
+    # Calculate the total sum of sales for the relative share
     total_sales <- sum(sales_by_category$Item_Outlet_Sales)
 
-    ### Relative Share
+    # Relative Share
     sales_by_category$relative_share <- sales_by_category$Item_Outlet_Sales / total_sales
 
-    ### Sales bar plot with share%
+    # Sales bar plot with share%
     sales_bar_plot <- ggplot(sales_by_category, aes(x = Item_Type, y = Item_Outlet_Sales, fill = Item_Type)) +
       geom_bar(stat = "identity") +
       geom_text(aes(label = paste0(round(relative_share * 100, 2), "%")),
@@ -69,16 +71,16 @@
 
     print(sales_bar_plot)
 
-![](Deeznis_files/figure-markdown_strict/visualization-1.png)
+![](Deeznis_files/figure-markdown_strict/Sales%20Plot-1.png)
 
-    ## Revenue plot
+## Revenue plot
 
-    ### Compute average item visibility by item category
+    # Compute average item visibility by item category
     BMdata <- BMdata %>%
       group_by(Item_Type) %>%
       mutate(avg_visibility = mean(Item_Visibility))
 
-    ### revenue bar chart with color scale by avg visibility
+    # revenue bar chart with color scale by avg visibility
     rev_bar_plot <- ggplot(BMdata, aes(x = Item_Type, y = revenue, fill = avg_visibility)) +
       geom_bar(stat = "identity") +
       labs(title = "Total Revenue by Item Category",
@@ -94,9 +96,8 @@
 
     print(rev_bar_plot)
 
-![](Deeznis_files/figure-markdown_strict/visualization-2.png)
+![](Deeznis_files/figure-markdown_strict/Revenue%20Plot-1.png)
 
     ### Zweiter teil kommt noch
-
     ![Sales Plot](/Projects/DavidPrntz/SolutionsByDennis/Sales_Plot.png)
     ![Revenue Plot](/Projects/DavidPrntz/SolutionsByDennis/RPlot.png)
