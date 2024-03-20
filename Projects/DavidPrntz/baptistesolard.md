@@ -454,7 +454,7 @@ And here we have an extract of the new `Dataset_V2b`:
            width = 300, height = 200, units = "mm", dpi = 600)
 
 <figure id="id">
-<img src="%22Plots_baptistesolard/1_Sales_Type.png%22" class="class"
+<img src="Plots_baptistesolard/1_Sales_Type.png" class="class"
 style="width:100.0%" alt="Plot Sales vs Type" />
 <figcaption aria-hidden="true">Plot Sales vs Type</figcaption>
 </figure>
@@ -489,7 +489,7 @@ dollars.
            width = 300, height = 200, units = "mm", dpi = 600)
 
 <figure id="id">
-<img src="%22Plots_baptistesolard/2_Revenue_Type.png%22" class="class"
+<img src="Plots_baptistesolard/2_Revenue_Type.png" class="class"
 style="width:100.0%" alt="Plot Revenue vs Type" />
 <figcaption aria-hidden="true">Plot Revenue vs Type</figcaption>
 </figure>
@@ -518,8 +518,8 @@ they are too cramped to be displayed properly.
            width = 300, height = 200, units = "mm", dpi = 600)
 
 <figure id="id">
-<img src="%22Plots_baptistesolard/3_Sales_Type_Size.png%22"
-class="class" style="width:100.0%" alt="Plot Sales vs Type by Size" />
+<img src="Plots_baptistesolard/3_Sales_Type_Size.png" class="class"
+style="width:100.0%" alt="Plot Sales vs Type by Size" />
 <figcaption aria-hidden="true">Plot Sales vs Type by Size</figcaption>
 </figure>
 
@@ -544,8 +544,8 @@ of their products.
            width = 300, height = 200, units = "mm", dpi = 600)
 
 <figure id="id">
-<img src="%22Plots_baptistesolard/4_Sales_Type_Location.png%22"
-class="class" style="width:100.0%" alt="Sales vs Type by Location" />
+<img src="Plots_baptistesolard/4_Sales_Type_Location.png" class="class"
+style="width:100.0%" alt="Sales vs Type by Location" />
 <figcaption aria-hidden="true">Sales vs Type by Location</figcaption>
 </figure>
 
@@ -567,8 +567,8 @@ highest visibility is seen in Tier 1 outlets.
            width = 300, height = 200, units = "mm", dpi = 600)
 
 <figure id="id">
-<img src="%22Plots_baptistesolard/5_Revenue_Type_Size.png%22"
-class="class" style="width:100.0%" alt="Plot Revenue vs Type by Size" />
+<img src="Plots_baptistesolard/5_Revenue_Type_Size.png" class="class"
+style="width:100.0%" alt="Plot Revenue vs Type by Size" />
 <figcaption aria-hidden="true">Plot Revenue vs Type by Size</figcaption>
 </figure>
 
@@ -590,7 +590,7 @@ revenue is higher in medium-sized outlets.
            width = 300, height = 200, units = "mm", dpi = 600)
 
 <figure id="id">
-<img src="%22Plots_baptistesolard/6_Revenue_Type_Location.png%22"
+<img src="Plots_baptistesolard/6_Revenue_Type_Location.png"
 class="class" style="width:100.0%"
 alt="Plot Revenue vs Type by Location" />
 <figcaption aria-hidden="true">Plot Revenue vs Type by
