@@ -1,88 +1,53 @@
 # Read in and clean data
 
-    data <- read.csv("Projects/johannaroever/StelaeCyprus.csv", sep = ";", header = TRUE)
+    data <- read.csv("Projects/johannaroever/StelaeCyprus.csv", 
+                     sep = ";", 
+                     header = TRUE,
+                     na = c("unknown", "undefined"))
 
 ## Data modification
 
-1.  All values of *unknown* and *undefined* are to be replaced with `NA`
-    for easier handling in R. The values of *not specified* should be
-    kept.
-
-<!-- -->
-
-    data %<>%
-      mutate_all(~ifelse(. == "unknown", NA, .)) %>%
-      mutate_all(~ifelse(. == "undefined", NA, .))
-
-1.  In `epoch` the value *antoninisch* should be replaced by *antonine*
-    for using a consistent language.
-
-<!-- -->
+### 2. In `epoch` the value *antoninisch* should be replaced by *antonine* for using a consistent language.
 
     data %<>%
       mutate(epoch = str_replace(epoch, "antoninisch", "antonine"))
 
-1.  In the column `type`some values still include a “?” which should be
-    deleted, since the information it was meant to convey is written in
-    `typeCertain`.
-
-<!-- -->
+### 3. In the column `type`some values still include a “?” which should be deleted, since the information it was meant to convey is written in `typeCertain`.
 
     data %<>%
       mutate(type = str_replace_all(type, "\\?", ""))
 
-1.  For the stelae with the `catNo` = *98* and *99* the value of `type`
-    has to be changed to *6*.
-
-<!-- -->
+### 4. For the stelae with the `catNo` = *98* and *99* the value of `type` has to be changed to *6*.
 
     data %<>%
       mutate(type = if_else(catNo == 98 | catNo == 99, "6", type))
 
-1.  The values in `typeCertain` are to be replaced for easier handling
-    in R: *0* to *FALSE*, *1* to *TRUE*.
-
-<!-- -->
+### 5. The values in `typeCertain` are to be replaced for easier handling in R: *0* to *FALSE*, *1* to *TRUE*.
 
     data %<>%
-      mutate(typeCertain = if_else(typeCertain == 0, "FALSE", "TRUE"))
+      mutate(typeCertain = (typeCertain == 0))
 
-1.  The column `location` has to be reviewed for only containing the
-    values of the general regions, while more specific information can
-    be deleted:
-    -   *Amathus, Golgoi, Idalion, Kition, Marion/Paphos, Salamis,
-        Soloi, Tamassos*
+### 6. The column `location` has to be reviewed for only containing the values of the general regions, while more specific information can be deleted:
 
-    -   1.  All *unknown* in this column can be converted to *Cyprus*. -
-            CHECK
-
-    -   1.  All values which include “(?)” can be converted to
-            *Cyprus*. - CHECK
-
-    -   1.  If the current value already includes one of the region
-            names, shorten it to only that. This applies to values which
-            include “near”, “bei”
-
-    -   1.  The value of the observation of `catNo`=*12* which says
-            “probably Idalion” should be changed to *Cyprus*.
-
-    -   1.  Other:
-
-        -   region of Limassol –&gt; Amathus
-        -   Limassol –&gt; Amathus
-        -   Mathikoloni –&gt; Amathus  
-        -   Athienou –&gt; Golgoi
-        -   Melousha –&gt; Golgoi
-        -   Pergamon –&gt; Golgoi  
-        -   Alambra (Larnaca) –&gt; Kition
-        -   Pano Arodes –&gt; Marion
-        -   Polis –&gt; Marion  
-        -   Kotschines (neighbourhood of Lysi) –&gt; Salamis
-        -   north of Lysi, district Famagusta –&gt; Salamis  
-        -   Ambelia, near Morphou –&gt; Soloi  
-        -   Pera (Asproji) –&gt; Tamassos
-
-<!-- -->
+    * _Amathus, Golgoi, Idalion, Kition, Marion/Paphos, Salamis, Soloi, Tamassos_
+    * (1) All _unknown_ in this column can be converted to _Cyprus_. - CHECK
+    * (2) All values which include "(?)" can be converted to _Cyprus_. - CHECK
+    * (5) If the current value already includes one of the region names, shorten it to only that. This applies to values which include  "near", "bei"
+    * (3) The value of the observation of `catNo`=_12_ which says "probably Idalion" should be changed to _Cyprus_.
+    * (4) Other:
+        * region of Limassol --> Amathus
+        * Limassol --> Amathus
+        * Mathikoloni --> Amathus  
+        * Athienou --> Golgoi
+        * Melousha --> Golgoi
+        * Pergamon --> Golgoi  
+        * Alambra (Larnaca) --> Kition
+        * Pano Arodes --> Marion
+        * Polis --> Marion  
+        * Kotschines (neighbourhood of Lysi) --> Salamis
+        * north of Lysi, district Famagusta --> Salamis    
+        * Ambelia, near Morphou --> Soloi  
+        * Pera (Asproji) --> Tamassos
 
     data %<>%
       mutate(location = if_else(location == "unknown", "Cyprus", location)) %>% # (1)
@@ -96,23 +61,21 @@
       mutate(location == if_else(location == "Ambelia, near Morphou", "Soloi", location)) %>%
       mutate(location == if_else(location == "Pera (Asproji", "Tamassos", location))
 
-    data %<>%
-      mutate(location = if_else(str_detect(location, "Golgoi"), "Golgoi", location)) %>%
-      mutate(location = if_else(str_detect(location, "Tamassos"), "Tamassos", location)) %>%
-      mutate(location = if_else(str_detect(location, "Marion"), "Marion", location)) %>%
-      mutate(location = if_else(str_detect(location, "Amathus"), "Amathus", location)) %>%
-      mutate(location = if_else(str_detect(location, "Idalion"), "Idalion", location)) %>%
-      mutate(location = if_else(str_detect(location, "Salamis"), "Salamis", location)) %>%
-      mutate(location = if_else(str_detect(location, "Salamiu"), "Salamis", location))
+    data %<>% # (5 ff.)
+      mutate(location = case_when(str_detect(location, "Golgoi") ~ "Golgoi",
+                                  str_detect(location, "Tamassos") ~ "Tamassos",
+                                  str_detect(location, "Marion") ~ "Marion",
+                                  str_detect(location, "Amathus") ~ "Amathus",
+                                  str_detect(location, "Idalion") ~ "Idalion",
+                                  str_detect(location, "Salamis") ~ "Salamis",
+                                  str_detect(location, "Salamiu") ~ "Salamis")
+             )
 
 even after this, there are some regions that are single, or I am not
 sure where to put them - is this correct? Or do they belong to another
 region?
 
-1.  For easier handling of `material`the values should just be reduced
-    to either *limestone* or *marble*.
-
-<!-- -->
+### 7. For easier handling of `material` the values should just be reduced to either *limestone* or *marble*.
 
     data %<>%
       mutate(material = if_else(str_detect(material, "limestone"), "limestone", material)) %>%
@@ -129,83 +92,291 @@ region?
                                        "julian-claudian", "early_imperial", "flavian",
                                        "antonine"))
     data$type <- factor(data$type)
-    table(data$epoch, data$type)
+    data$epoch <- factor(data$epoch)
+    levels(data$epoch)[6] <- "hellenistic-roman"
 
-    ##                  
-    ##                   1a 1b  2 2a 2b 2c  3 4a 4b 5a 5b  6 not defined
-    ##   cypro-archaic   12  2  0  0  0  0  1  0  0  0  0  0           1
-    ##   cypro-classical  0  2  2 12  3  0 13  5  4  6  2  0           7
-    ##   hellenistic      0  0  4  0  6  1  0  1  1  2  1  0           8
-    ##   julian-claudian  0  0  2  0  0  6  0  0  0  0  0  0           5
-    ##   early_imperial   0  0  0  0  0  0  0  0  0  0  0  0           0
-    ##   flavian          0  0  0  0  0  0  0  0  0  0  0  0           0
-    ##   antonine         0  0  0  0  0  0  0  0  0  0  2  3           0
+    knitr::kable(table(data$type, data$epoch))
 
--   still to do: make this a nice table
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 14%" />
+<col style="width: 16%" />
+<col style="width: 12%" />
+<col style="width: 16%" />
+<col style="width: 9%" />
+<col style="width: 18%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">cypro-archaic</th>
+<th style="text-align: right;">cypro-classical</th>
+<th style="text-align: right;">hellenistic</th>
+<th style="text-align: right;">julian-claudian</th>
+<th style="text-align: right;">antonine</th>
+<th style="text-align: right;">hellenistic-roman</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1a</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1b</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2a</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2b</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2c</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">3</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4a</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">4b</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">5a</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5b</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">not defined</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
 
 ### Stacked bar plot to show the correlation `epoch - type`:
 
-How can you show a correlation with a bar plot?
+-   How can you show a correlation with a bar plot?
 
-    data$typeDesc <- factor(data$typeDesc)
-    data$type <- factor(data$type, labels = c(
-      "Grave stelae with guard animals, with two antithetical lions",
-      "Grave stelae with guard animals, crowned by two sphinxes",
-      "Wide symposium niche with high relief, Fragment",
-      "Symposium niche crowned by lion",
-      "Double niche with symposium scene",
-      "Wide symposium niche with high relief",
-      "Niche stele",
-      "Frameless, crowned with plant ornamentation",
-      "Frameless, narrow, mostly crowned with anthemion",
-      "Naiskos stele",
-      "pseudo-naiskos stele",
-      "Cippus",
-      "undefined"
-      ))
+<!-- -->
+
+    typeData <- 
+      distinct(data, type,typeDesc) %>% 
+      replace_na(list(type = "NA", typeDesc = "unknown")) %>%
+      arrange(type)
+
+    data %<>% 
+      mutate( type = factor(type, levels = typeData$type, labels = typeData$typeDesc))
+
+    # make a color palette to be used
+    my_colors <- viridis_pal()(13)
+    my_colors[1] <- "#750786FF"
+    my_colors[2] <- "#6D378CFF"
 
     ggplot(data, aes(x = epoch, fill = type)) +
       geom_bar() +
       labs(title = "Stacked Barplot",
            x = "epoch",
            fill = "type") +
-      geom_text(stat = "count", aes(label = after_stat(count)), position = position_stack(vjust = 0.5)) +
-      theme_minimal()
+      geom_text(stat = "count", aes(label = after_stat(count)), position = position_stack(vjust = 0.6), size = 2) +
+      theme_minimal() + 
+      theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+      scale_fill_manual(values = my_colors)
 
-![](EliseGithubJohanna_files/figure-markdown_strict/unnamed-chunk-10-1.png)
+![](EliseGithubJohanna_files/figure-markdown_strict/unnamed-chunk-9-1.png)
 
 ## 2. Stacked barplot type - material
 
 ### Table to show amounts of each material per type
 
-    table(data$type, data$material)
+    knitr::kable(table(data$type, data$material))
 
-    ##                                                               
-    ##                                                                limestone marble
-    ##   Grave stelae with guard animals, with two antithetical lions        12      0
-    ##   Grave stelae with guard animals, crowned by two sphinxes             4      0
-    ##   Wide symposium niche with high relief, Fragment                      8      0
-    ##   Symposium niche crowned by lion                                     12      0
-    ##   Double niche with symposium scene                                    9      0
-    ##   Wide symposium niche with high relief                                7      0
-    ##   Niche stele                                                         17      0
-    ##   Frameless, crowned with plant ornamentation                          6      0
-    ##   Frameless, narrow, mostly crowned with anthemion                     1      4
-    ##   Naiskos stele                                                        6      2
-    ##   pseudo-naiskos stele                                                 7      1
-    ##   Cippus                                                               3      0
-    ##   undefined                                                           24      1
+<table>
+<colgroup>
+<col style="width: 78%" />
+<col style="width: 12%" />
+<col style="width: 8%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">limestone</th>
+<th style="text-align: right;">marble</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Grave stelae with guard animals, with two
+antithetical lions</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Grave stelae with guard animals, crowned
+by two sphinxes</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Wide symposium niche with high relief,
+Fragment</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Symposium niche crowned by lion</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Double niche with symposium scene</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Wide symposium niche with high relief</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Niche stele</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Frameless, crowned with plant
+ornamentation</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Frameless, narrow, mostly crowned with
+anthemion</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Naiskos stele</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pseudo-naiskos stele</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Cippus</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">not defined</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">1</td>
+</tr>
+</tbody>
+</table>
 
 ### Stacked bar plot to show the correlation type - material
 
 Also here: how can you see a correlation with a barplot?
 
-    ggplot(data, aes(x = material, fill = type)) +
+    ggplot(data, aes(x = type, fill = material)) +
       geom_bar() +
       labs(title = "Stacked Barplot",
-           x = "material",
-           fill = "type") +
-      geom_text(stat = "count", aes(label = after_stat(count)), position = position_stack(vjust = 0.5)) +
-      theme_minimal()
+           x = "type",
+           fill = "material") +
+      geom_text(stat = "count", aes(label = after_stat(count)), position = position_stack(vjust = 0.6), size = 2) +
+      theme_minimal() +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-![](EliseGithubJohanna_files/figure-markdown_strict/unnamed-chunk-12-1.png)
+![](EliseGithubJohanna_files/figure-markdown_strict/unnamed-chunk-11-1.png)
+
+-   do you really want the type on the x-axis? It looks a bit weird…
+    would look nicer if material was on the x axis I think!

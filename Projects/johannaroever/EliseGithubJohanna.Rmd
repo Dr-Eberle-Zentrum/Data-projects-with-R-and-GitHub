@@ -23,39 +23,40 @@ data <- read.csv("Projects/johannaroever/StelaeCyprus.csv",
 ```
 
 ## Data modification
-2. In `epoch` the value _antoninisch_ should be replaced by _antonine_ for using a consistent language.
+
+#### 2. In `epoch` the value _antoninisch_ should be replaced by _antonine_ for using a consistent language.
 ```{r}
 data %<>%
   mutate(epoch = str_replace(epoch, "antoninisch", "antonine"))
 ```
 
-3. In the column `type`some values still include a "?" which should be deleted, since the information it was meant to convey is written in `typeCertain`.
+#### 3. In the column `type`some values still include a "?" which should be deleted, since the information it was meant to convey is written in `typeCertain`.
 ```{r}
 data %<>%
   mutate(type = str_replace_all(type, "\\?", ""))
 
 ```
 
-4. For the stelae with the `catNo` =  _98_ and _99_ the value of `type` has to be changed to _6_.
+#### 4. For the stelae with the `catNo` =  _98_ and _99_ the value of `type` has to be changed to _6_.
 ```{r}
 data %<>%
   mutate(type = if_else(catNo == 98 | catNo == 99, "6", type))
 ```
 
 
-5. The values in `typeCertain` are to be replaced for easier handling in R: _0_ to _FALSE_, _1_ to _TRUE_.
+#### 5. The values in `typeCertain` are to be replaced for easier handling in R: _0_ to _FALSE_, _1_ to _TRUE_.
 ```{r}
 data %<>%
   mutate(typeCertain = (typeCertain == 0))
 ```
 
-6. The column `location` has to be reviewed for only containing the values of the general regions, while more specific information can be deleted: 
+#### 6. The column `location` has to be reviewed for only containing the values of the general regions, while more specific information can be deleted: 
     * _Amathus, Golgoi, Idalion, Kition, Marion/Paphos, Salamis, Soloi, Tamassos_
-    * (1) All _unknown_ in this column can be converted to _Cyprus_. - CHECK
-    * (2) All values which include "(?)" can be converted to _Cyprus_. - CHECK
-    * (5) If the current value already includes one of the region names, shorten it to only that. This applies to values which include  "near", "bei"
-    * (3) The value of the observation of `catNo`=_12_ which says "probably Idalion" should be changed to _Cyprus_.
-    * (4) Other:
+    * All _unknown_ in this column can be converted to _Cyprus_. (1) 
+    * All values which include "(?)" can be converted to _Cyprus_. (2) 
+    * If the current value already includes one of the region names, shorten it to only that. This applies to values which include  "near", "bei" (5) 
+    * The value of the observation of `catNo`=_12_ which says "probably Idalion" should be changed to _Cyprus_. (3) 
+    * Other: (4) 
         * region of Limassol --> Amathus
         * Limassol --> Amathus
         * Mathikoloni --> Amathus  
@@ -74,13 +75,18 @@ data %<>%
   mutate(location = if_else(location == "unknown", "Cyprus", location)) %>% # (1)
   mutate(location = if_else(str_detect(location, "\\?"), "Cyprus", location)) %>% # (2)
   mutate(location = if_else(location == "probably Idalion", "Cyprus", location)) %>% # (3)
-  mutate(location = if_else(location == "region of Limassol" | location == "Limassol" | location == "Mathikoloni", "Amathus", location)) %>% # (4 ff.)
-  mutate(location = if_else(location == "Athienou" | location == "Melousha" | location == "Pergamon", "Golgoi", location)) %>%
-  mutate(location == if_else(location == "Alambra (Larnaca)", "Kition", location)) %>%
-  mutate(location == if_else(location == "Pano Arodes" | location == "Polis", "Marion", location)) %>%
-  mutate(location == if_else(location == "Kotschines (neighbourhood of Lysi)" | location == "north of Lysi, district Famagusta", "Salamis", location)) %>%
-  mutate(location == if_else(location == "Ambelia, near Morphou", "Soloi", location)) %>%
-  mutate(location == if_else(location == "Pera (Asproji", "Tamassos", location))
+  mutate(location = case_when(
+    location %in% c("region of Limassol", "Limassol", "Mathikoloni") ~ "Amathus", TRUE ~ location)) %>% # (4 ff.)
+  mutate(location = case_when(
+    location %in% c("Athienou", "Melousha", "Pergamon") ~ "Golgoi", TRUE ~ location)) %>%
+  mutate(location = if_else(location == "Alambra (Larnaca)", "Kition", location)) %>%
+  mutate(location = case_when(
+    location %in% c("Pano Arodes", "Polis") ~ "Marion", TRUE ~ location)) %>%
+  mutate(location = case_when(
+    location %in% c("Kotschines (neighbourhood of Lysi)", "north of Lysi, district Famagusta") ~ "Salamis", TRUE ~ location)) %>%
+  mutate(location = if_else(location == "Ambelia, near Morphou", "Soloi", location)) %>%
+  mutate(location = if_else(location == "Pera (Asproji)", "Tamassos", location)) %>%
+  mutate(location = if_else(location == "Salamiu, NE of Kouklia (Alt Paphos)", "Marion", location))
 
 data %<>% # (5 ff.)
   mutate(location = case_when(str_detect(location, "Golgoi") ~ "Golgoi",
@@ -89,13 +95,12 @@ data %<>% # (5 ff.)
                               str_detect(location, "Amathus") ~ "Amathus",
                               str_detect(location, "Idalion") ~ "Idalion",
                               str_detect(location, "Salamis") ~ "Salamis",
-                              str_detect(location, "Salamiu") ~ "Salamis")
+                              str_detect(location, "Soloi") ~ "Salamis",
+                              .default = location)
          )
 ```
 
-even after this, there are some regions that are single, or I am not sure where to put them - is this correct? Or do they belong to another region?
-        
-7. For easier handling of `material` the values should just be reduced to either _limestone_ or _marble_.
+#### 7. For easier handling of `material` the values should just be reduced to either _limestone_ or _marble_.
 ```{r}
 data %<>%
   mutate(material = if_else(str_detect(material, "limestone"), "limestone", material)) %>%
@@ -108,22 +113,16 @@ data %<>%
 
 ### Table to show amount of type per epoch
 ```{r}
+savedata <- data # to be removed
+data <- savedata
+
 data$epoch <- factor(data$epoch, ordered = TRUE, 
                         levels = c("cypro-archaic", "cypro-classical", "hellenistic",
-                                   "julian-claudian", "early_imperial", "flavian",
-                                   "antonine"))
-data$type <- factor(data$type)
-data$epoch <- factor(data$epoch)
-levels(data$epoch)[6] <- "hellenistic-roman"
+                                   "hellenistic-roman", "julian-claudian", 
+                                   "early imperial", "antonine"))
 
-knitr::kable(table(data$type, data$epoch))
-```
+data$type <- fct_relevel(data$type, c("6", "5b", "5a", "4b", "4a", "3", "2c", "2b", "2a", "2", "1b", "1a", "not defined"))
 
-### Stacked bar plot to show the correlation `epoch - type`:
-
-- How can you show a correlation with a bar plot?
-
-```{r}
 typeData <- 
   distinct(data, type,typeDesc) %>% 
   replace_na(list(type = "NA", typeDesc = "unknown")) %>%
@@ -132,6 +131,12 @@ typeData <-
 data %<>% 
   mutate( type = factor(type, levels = typeData$type, labels = typeData$typeDesc))
 
+knitr::kable(table(data$type, data$epoch))
+```
+
+### Stacked bar plot to show the correlation `epoch - type`:
+
+```{r}
 # make a color palette to be used
 my_colors <- viridis_pal()(13)
 my_colors[1] <- "#750786FF"
@@ -168,7 +173,6 @@ ggplot(data, aes(x = type, fill = material)) +
        fill = "material") +
   geom_text(stat = "count", aes(label = after_stat(count)), position = position_stack(vjust = 0.6), size = 2) +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_x_discrete(labels = c("6", "5b", "5a", "4b", "4a", "3", "2c", "2b", "2a", "2", "1b", "1a", "not defined"))
 ```
-
-- do you really want the type on the x-axis? It looks a bit weird... would look nicer if material was on the x axis I think!
