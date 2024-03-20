@@ -31,12 +31,13 @@
     #Calculating 3 personality factor scores 
 
     survey_clean <- survey_clean %>% 
-      mutate(Neuroticism_related_traits = rowMeans(select(., SSPSTAT, SSPPSTAT, SSPSST,SSPLAT,SSPET,SSPMT), na.rm = TRUE)) %>%
+      mutate('Neuroticism related traits' = rowMeans(select(., SSPSTAT, SSPPSTAT, SSPSST,SSPLAT,SSPET,SSPMT), na.rm = TRUE)) %>%
       mutate(Aggressiveness = rowMeans(select(., SSPTIT, SSPVTAT, SSPPHTAT,SSPSDT_R), na.rm = TRUE)) %>% 
       mutate(Extraversion = rowMeans(select(., SSPIT, SSPAST, SSPDT_R), na.rm = TRUE))  
 
     #Data Visualization Goals violin plots
-    survey_clean_PT <- survey_clean %>% select(-c(1:113))
+    survey_clean_PT <- survey_clean %>% select(-c(1:113)) 
+    survey_clean_PT <- survey_clean_PT[, -c(14, 15)]
     survey_clean_long <- survey_clean_PT %>% 
       pivot_longer(
         cols = everything(), 
@@ -45,12 +46,12 @@
       )
 
     # Create a vector with the desired order of personality traits
-    rank <- c("Neuroticism_related_traits", "SSPSTAT", "SSPPSTAT", "SSPSST","SSPLAT","SSPET","SSPMT", 
+    rank <- c('Neuroticism related traits', "SSPSTAT", "SSPPSTAT", "SSPSST","SSPLAT","SSPET","SSPMT", 
                           "Aggressiveness", "SSPTIT", "SSPVTAT", "SSPPHTAT","SSPSDT", 
                           "Extraversion", "SSPIT", "SSPAST", "SSPDT")
     survey_clean_long$personality_traits <- factor(survey_clean_long$personality_traits, levels = rank)
 
-    colors <- c("Neuroticism_related_traits" = "skyblue3", 
+    colors <- c('Neuroticism related_traits' = "skyblue3", 
                 "SSPSTAT" = "skyblue1", 
                 "SSPPSTAT" = "skyblue1", 
                 "SSPSST" = "skyblue1",
@@ -66,7 +67,7 @@
                    "SSPIT" = "springgreen3", 
                    "SSPAST" = "springgreen3", 
                    "SSPDT" = "springgreen3")
-    rank <- c("Neuroticism_related_traits", "SSPSTAT", "SSPPSTAT", "SSPSST","SSPLAT","SSPET","SSPMT", 
+    rank <- c('Neuroticism related traits', "SSPSTAT", "SSPPSTAT", "SSPSST","SSPLAT","SSPET","SSPMT", 
                           "Aggressiveness", "SSPTIT", "SSPVTAT", "SSPPHTAT","SSPSDT", 
                           "Extraversion", "SSPIT", "SSPAST", "SSPDT")
     survey_clean_long$personality_traits <- factor(survey_clean_long$personality_traits, levels = rank)

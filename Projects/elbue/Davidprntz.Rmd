@@ -34,7 +34,7 @@ survey_avg <- survey_clean %>%
 #Calculating 3 personality factor scores 
 
 survey_clean <- survey_clean %>% 
-  mutate(Neuroticism_related_traits = rowMeans(select(., SSPSTAT, SSPPSTAT, SSPSST,SSPLAT,SSPET,SSPMT), na.rm = TRUE)) %>%
+  mutate('Neuroticism related traits' = rowMeans(select(., SSPSTAT, SSPPSTAT, SSPSST,SSPLAT,SSPET,SSPMT), na.rm = TRUE)) %>%
   mutate(Aggressiveness = rowMeans(select(., SSPTIT, SSPVTAT, SSPPHTAT,SSPSDT_R), na.rm = TRUE)) %>% 
   mutate(Extraversion = rowMeans(select(., SSPIT, SSPAST, SSPDT_R), na.rm = TRUE))  
 ```
@@ -42,7 +42,8 @@ survey_clean <- survey_clean %>%
 
 ```{r}
 #Data Visualization Goals violin plots
-survey_clean_PT <- survey_clean %>% select(-c(1:113))
+survey_clean_PT <- survey_clean %>% select(-c(1:113)) 
+survey_clean_PT <- survey_clean_PT[, -c(14, 15)]
 survey_clean_long <- survey_clean_PT %>% 
   pivot_longer(
     cols = everything(), 
@@ -51,14 +52,14 @@ survey_clean_long <- survey_clean_PT %>%
   )
 
 # Create a vector with the desired order of personality traits
-rank <- c("Neuroticism_related_traits", "SSPSTAT", "SSPPSTAT", "SSPSST","SSPLAT","SSPET","SSPMT", 
+rank <- c('Neuroticism related traits', "SSPSTAT", "SSPPSTAT", "SSPSST","SSPLAT","SSPET","SSPMT", 
                       "Aggressiveness", "SSPTIT", "SSPVTAT", "SSPPHTAT","SSPSDT", 
                       "Extraversion", "SSPIT", "SSPAST", "SSPDT")
 survey_clean_long$personality_traits <- factor(survey_clean_long$personality_traits, levels = rank)
 ```
 
 ```{r}
-colors <- c("Neuroticism_related_traits" = "skyblue3", 
+colors <- c('Neuroticism related_traits' = "skyblue3", 
             "SSPSTAT" = "skyblue1", 
             "SSPPSTAT" = "skyblue1", 
             "SSPSST" = "skyblue1",
@@ -74,7 +75,7 @@ colors <- c("Neuroticism_related_traits" = "skyblue3",
                "SSPIT" = "springgreen3", 
                "SSPAST" = "springgreen3", 
                "SSPDT" = "springgreen3")
-rank <- c("Neuroticism_related_traits", "SSPSTAT", "SSPPSTAT", "SSPSST","SSPLAT","SSPET","SSPMT", 
+rank <- c('Neuroticism related traits', "SSPSTAT", "SSPPSTAT", "SSPSST","SSPLAT","SSPET","SSPMT", 
                       "Aggressiveness", "SSPTIT", "SSPVTAT", "SSPPHTAT","SSPSDT", 
                       "Extraversion", "SSPIT", "SSPAST", "SSPDT")
 survey_clean_long$personality_traits <- factor(survey_clean_long$personality_traits, levels = rank)
@@ -84,14 +85,17 @@ survey_clean_long$personality_traits <- factor(survey_clean_long$personality_tra
 violin_plot <- ggplot(survey_clean_long, aes(x=personality_traits, y=Value, fill = personality_traits)) + 
   geom_violin()+ 
   scale_fill_manual(values = colors) +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 18), axis.title.x = element_text(size = 20),             
+  theme(axis.text.x = element_text(angle = 70, hjust = 1, size = 18), axis.title.x = element_text(size = 20),             
     axis.title.y = element_text(size = 20),   
-    axis.text.y = element_text(size = 18),  legend.position = "none")
-violin_plot 
+    axis.text.y = element_text(size = 18),  legend.position = "none") +
+  labs(x = "Personality Traits", y = "Values")
+
 violin_plot_jitter <- violin_plot + geom_jitter(color = '#5B6467')
 violin_plot_jitter
 violin_plot_boxplot<- violin_plot + geom_boxplot(width=0.1, colour="darkgrey", fill="lightgrey")
 violin_plot_boxplot
+violin_plot_jitter_boxplot <- violin_plot_boxplot+ geom_jitter(color = '#5B6467')
+violin_plot_jitter_boxplot
 ```
 
 
