@@ -34,25 +34,34 @@ The values in `typeCertain` are to be replaced for easier handling in R:
     data %<>%
       mutate(typeCertain = (typeCertain == 0))
 
-The column `location` has to be reviewed for only containing the values
-of the general regions, while more specific information can be deleted:
-\* *Amathus, Golgoi, Idalion, Kition, Marion/Paphos, Salamis, Soloi,
-Tamassos* \* All *unknown* in this column can be converted to *Cyprus*.
-(1) \* All values which include “(?)” can be converted to *Cyprus*. (2)
-\* If the current value already includes one of the region names,
-shorten it to only that. This applies to values which include “near”,
-“bei” (5) \* The value of the observation of `catNo`=*12* which says
-“probably Idalion” should be changed to *Cyprus*. (3) \* Other: (4) \*
-region of Limassol –&gt; Amathus \* Limassol –&gt; Amathus \*
-Mathikoloni –&gt; Amathus  
-\* Athienou –&gt; Golgoi \* Melousha –&gt; Golgoi \* Pergamon –&gt;
-Golgoi  
-\* Alambra (Larnaca) –&gt; Kition \* Pano Arodes –&gt; Marion \* Polis
-–&gt; Marion  
-\* Kotschines (neighbourhood of Lysi) –&gt; Salamis \* north of Lysi,
-district Famagusta –&gt; Salamis  
-\* Ambelia, near Morphou –&gt; Soloi  
-\* Pera (Asproji) –&gt; Tamassos
+1.  The column `location` has to be reviewed for only containing the
+    values of the general regions, while more specific information can
+    be deleted:
+    -   Amathus, Golgoi, Idalion, Kition, Marion/Paphos, Salamis, Soloi,
+        Tamassos\_
+    -   All *unknown* in this column can be converted to *Cyprus*. (1)
+    -   All values which include “(?)” can be converted to *Cyprus*. (2)
+    -   If the current value already includes one of the region names,
+        shorten it to only that. This applies to values which include
+        “near”, “bei” (5)
+    -   The value of the observation of `catNo`=*12* which says
+        “probably Idalion” should be changed to *Cyprus*. (3)
+    -   Other: (4)
+        -   region of Limassol –&gt; Amathus
+        -   Limassol –&gt; Amathus
+        -   Mathikoloni –&gt; Amathus  
+        -   Athienou –&gt; Golgoi
+        -   Melousha –&gt; Golgoi
+        -   Pergamon –&gt; Golgoi  
+        -   Alambra (Larnaca) –&gt; Kition
+        -   Pano Arodes –&gt; Marion
+        -   Polis –&gt; Marion  
+        -   Kotschines (neighbourhood of Lysi) –&gt; Salamis
+        -   north of Lysi, district Famagusta –&gt; Salamis  
+        -   Ambelia, near Morphou –&gt; Soloi  
+        -   Pera (Asproji) –&gt; Tamassos
+
+<!-- -->
 
     data %<>%
       mutate(location = if_else(location == "unknown", "Cyprus", location)) %>% # (1)
@@ -390,8 +399,6 @@ antithetical lions</td>
 </table>
 
 ### Stacked bar plot to show the correlation type - material
-
-Also here: how can you see a correlation with a barplot?
 
     ggplot(data, aes(x = type, fill = material)) +
       geom_bar() +

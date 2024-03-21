@@ -51,8 +51,8 @@ data %<>%
   mutate(typeCertain = (typeCertain == 0))
 ```
 
-The column `location` has to be reviewed for only containing the values of the general regions, while more specific information can be deleted: 
-    * _Amathus, Golgoi, Idalion, Kition, Marion/Paphos, Salamis, Soloi, Tamassos_
+1. The column `location` has to be reviewed for only containing the values of the general regions, while more specific information can be deleted:  
+    * Amathus, Golgoi, Idalion, Kition, Marion/Paphos, Salamis, Soloi, Tamassos_
     * All _unknown_ in this column can be converted to _Cyprus_. (1) 
     * All values which include "(?)" can be converted to _Cyprus_. (2) 
     * If the current value already includes one of the region names, shorten it to only that. This applies to values which include  "near", "bei" (5) 
@@ -163,8 +163,6 @@ knitr::kable(table(data$type, data$material))
 ```
 
 ### Stacked bar plot to show the correlation type - material
-
-Also here: how can you see a correlation with a barplot?
 
 ```{r}
 ggplot(data, aes(x = type, fill = material)) +
