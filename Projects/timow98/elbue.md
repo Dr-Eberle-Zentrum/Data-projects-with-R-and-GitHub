@@ -17,11 +17,12 @@
 
 ### Clean-Up
 
-**1.1 the column KAKpot2** is not needed  
-**1.2 the header** displays numbers which do not make much sense. I
-would like to get rid of them by using rename\_with() in combination
-with regular expressions. **1.4 there is a typo in the column
-“Expozition”**. It should actually be “Exposition”
+1.1 the column KAKpot2 is not needed  
+1.2 the header displays numbers which do not make much sense. I would
+like to get rid of them by using rename\_with() in combination with
+regular expressions.  
+1.3 there is a typo in the column “Expozition”. It should actually be
+“Exposition”
 
     # Remove the random numbers in the variable names
     names(df) <- str_replace(names(df), "_.*", "") # 1.2
@@ -32,7 +33,7 @@ with regular expressions. **1.4 there is a typo in the column
     # Change back the two column names that were supposed to have "+" instead of "."
     names(df)[c(28, 30)] <- str_replace_all(names(df)[c(28, 30)], "\\.", "+")
 
-\*\*1.3 integrate the unit into the header
+1.4 integrate the unit into the header
 
     # Make a vector out of the string that holds the units
     units <- unlist(strsplit(units, ";"))
@@ -51,7 +52,7 @@ with regular expressions. **1.4 there is a typo in the column
     # Remove variable "KAKpot 2
     df$"KAKpot.2_[cmol/kg]" <- NULL # 1.1
 
-**1.6 two columns need to be calculated**: base\_saturation\_\[%\] by
+1.6 two columns need to be calculated: base\_saturation\_\[%\] by
 dividing “Kationen” by “KAKpot” and SOM\_\[%\] by multiplying Corg with
 1,72
 
@@ -59,11 +60,9 @@ dividing “Kationen” by “KAKpot” and SOM\_\[%\] by multiplying Corg with
       mutate("base_saturation_[%]" = !!sym("Kationen_[mmol/kg]")/!!sym("KAKpot_[mmol/kg]"),
              "SOM_[%]" = 1.72 * !!sym("Corg_[%]"))
 
-**1.7 Column S+U+T is not always 100%**. I would like to see how often I
-got more, less and exactly 100%. Write a new column and put in “more”,
-“less” and “exactly” depending on the value in the column S+U+T. Then,
-write a query that counts and prints the number of values (for example
-“10x less than 100%, 3x exactly 100% and 24x more than 100%”)
+1.7 Column S+U+T is not always 100%. Write a new column and put in
+“more”, “less” and “exactly” depending on the value in the column S+U+T.
+Then, write a query that counts and prints the number of values.
 
     df %<>%
       mutate(S_U_T = (!!sym("S_[%]") + !!sym("U_[%]") + !!sym("T_[%]") )) %>%
@@ -101,10 +100,12 @@ same colors as in the example plot (viridis)
       labs(y = "mmol/kg") +
       theme_minimal()
 
-![](elbue_files/figure-markdown_strict/unnamed-chunk-6-1.png) \###
-Piechart of grain sizes 3 piecharts of the “Ah” horizons of the profiles
-82, 111 and 134 next to each other where I can see the portion of S
-(Sand), U (silt) and T
+![](elbue_files/figure-markdown_strict/unnamed-chunk-6-1.png)
+
+### Piechart of grain sizes
+
+3 piecharts of the “Ah” horizons of the profiles 82, 111 and 134 next to
+each other where I can see the portion of S (Sand), U (silt) and T
 
     # make a dataset that includes only the desired values
     df_pie <- df %>%
