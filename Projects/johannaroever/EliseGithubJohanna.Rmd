@@ -24,33 +24,33 @@ data <- read.csv("Projects/johannaroever/StelaeCyprus.csv",
 
 ## Data modification
 
-#### 2. In `epoch` the value _antoninisch_ should be replaced by _antonine_ for using a consistent language.
+2. In `epoch` the value _antoninisch_ should be replaced by _antonine_ for using a consistent language.    
 ```{r}
 data %<>%
   mutate(epoch = str_replace(epoch, "antoninisch", "antonine"))
 ```
 
-#### 3. In the column `type`some values still include a "?" which should be deleted, since the information it was meant to convey is written in `typeCertain`.
+3. In the column `type`some values still include a "?" which should be deleted, since the information it was meant to convey is written in `typeCertain`.   
 ```{r}
 data %<>%
   mutate(type = str_replace_all(type, "\\?", ""))
 
 ```
 
-#### 4. For the stelae with the `catNo` =  _98_ and _99_ the value of `type` has to be changed to _6_.
+4. For the stelae with the `catNo` =  _98_ and _99_ the value of `type` has to be changed to _6_.   
 ```{r}
 data %<>%
   mutate(type = if_else(catNo == 98 | catNo == 99, "6", type))
 ```
 
 
-#### 5. The values in `typeCertain` are to be replaced for easier handling in R: _0_ to _FALSE_, _1_ to _TRUE_.
+5. The values in `typeCertain` are to be replaced for easier handling in R: _0_ to _FALSE_, _1_ to _TRUE_.   
 ```{r}
 data %<>%
   mutate(typeCertain = (typeCertain == 0))
 ```
 
-#### 6. The column `location` has to be reviewed for only containing the values of the general regions, while more specific information can be deleted: 
+6. The column `location` has to be reviewed for only containing the values of the general regions, while more specific information can be deleted: 
     * _Amathus, Golgoi, Idalion, Kition, Marion/Paphos, Salamis, Soloi, Tamassos_
     * All _unknown_ in this column can be converted to _Cyprus_. (1) 
     * All values which include "(?)" can be converted to _Cyprus_. (2) 
@@ -100,7 +100,7 @@ data %<>% # (5 ff.)
          )
 ```
 
-#### 7. For easier handling of `material` the values should just be reduced to either _limestone_ or _marble_.
+7. For easier handling of `material` the values should just be reduced to either     _limestone_ or _marble_.
 ```{r}
 data %<>%
   mutate(material = if_else(str_detect(material, "limestone"), "limestone", material)) %>%
