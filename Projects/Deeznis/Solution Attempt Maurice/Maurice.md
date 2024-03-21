@@ -74,7 +74,7 @@
       mutate(Urban_Population_Growth_Rate = Urban_Population_Growth_Rate / 100) %>%
       mutate(Rural_Population_Growth_Rate = Rural_Population_Growth_Rate / 100) %>%
       mutate(Public_Transport_Ridership_Change = Public_Transport_Ridership_Change / 100) %>%
-      mutate(Internet_Infrastructure_Investment__Million_USD = Internet_Infrastructure_Investment__Million_USD * 1000000)
+      mutate(Internet_Infrastructure_Investment__Million_USD = Internet_Infrastructure_Investment__Million_USD * 10^6)
 
     #I reorder the data by Country and Year in preparation of calculating the home price growth
     housing_prices <- housing_prices %>%
@@ -113,15 +113,14 @@
     ## #   Remote_Workforce_Growth <dbl>
 
     #Now I transpose the data to make it easier to use for the visualization goals.
-    housing_Prices_long <- pivot_longer(housing_prices, 
+    housing_Prices_rel_long <- pivot_longer(housing_prices, 
                                         cols = c(Home_Price_Growth, Remote_Workforce_Growth), 
                                         names_to = "Variable",
                                         values_to = "Value")
 
     #I only keep the relevant columns & drop missing values
-    housing_Prices_long <- na.omit(housing_Prices_long[, c("Year", "Country", "Variable", "Value")])
-
-    head(housing_Prices_long)
+    housing_Prices_rel_long <- na.omit(housing_Prices_rel_long[, c("Year", "Country", "Variable", "Value")])
+    head(housing_Prices_rel_long)
 
     ## # A tibble: 6 × 4
     ## # Groups:   Country [1]
@@ -134,26 +133,67 @@
     ## 5  2010 China   Home_Price_Growth       -0.0522
     ## 6  2010 China   Remote_Workforce_Growth -0.236
 
+    #Now I subset the data to be used for the scatterplot.
+    subsetted_data <- housing_prices %>% 
+      filter(Year %in% c(2014, 2016, 2018, 2020, 2022)) %>% 
+      group_by(Country) %>% 
+      mutate(Home_Price_Growth = (Average_Urban_Housing_Price_Index / lag(Average_Urban_Housing_Price_Index)) - 1) %>% 
+      mutate(Period = paste(lag(Year, 1), " - ", Year))
+
+    subsetted_data <- na.omit(subsetted_data[, c("Year", "Country", "Period", "Percentage_of_Workforce_Working_Remotely", "Home_Price_Growth")])
+    head(subsetted_data)
+
+    ## # A tibble: 6 × 5
+    ## # Groups:   Country [2]
+    ##    Year Country Period        Percentage_of_Workforce_Workin…¹ Home_Price_Growth
+    ##   <int> <chr>   <chr>                                    <dbl>             <dbl>
+    ## 1  2016 China   2014  -  2016                            0.457            0.282 
+    ## 2  2018 China   2016  -  2018                            0.281            0.0879
+    ## 3  2020 China   2018  -  2020                            0.228           -0.399 
+    ## 4  2022 China   2020  -  2022                            0.438            0.415 
+    ## 5  2016 Germany 2014  -  2016                            0.218           -0.227 
+    ## 6  2018 Germany 2016  -  2018                            0.416            0.804 
+    ## # ℹ abbreviated name: ¹​Percentage_of_Workforce_Working_Remotely
+
     ##################################### Visualization Goals #####################################
 
-    ##################################### (1) Scatterplot #####################################
+    ##################################### (1) Scatter plot #####################################
 
-    #Work in progress
+    subsetted_data %>% 
+      ggplot(aes(x=Percentage_of_Workforce_Working_Remotely, y=Home_Price_Growth, color=Period)) +
+      geom_point() +
+      geom_line() +
+      theme_minimal() +
+      
+      labs(
+        title = "Housing Prices and Remote Work",
+        x = "Remote Worker Share at End of Period",
+        y = "Home Price Growth",
+      ) +
+      
+      scale_y_continuous(labels = scales::percent_format(scale = 100)) + #Formats the values on the y-axis as percentage.
+      scale_x_continuous(labels = scales::percent_format(scale = 100)) +
+      
+      theme(
+        legend.position = "bottom", #Prepositions the legend at the bottom
+      )
 
-    ##################################### (2) Comparison of Remote Work & Home Pricing #####################################
+![](Maurice_files/figure-markdown_strict/unnamed-chunk-1-1.png)
+
+    ##################################### (2) Comparison of Remote Work & Home Pricing (Growth Data) #####################################
 
     # Still working on the scale on y-axis. -> Check Values! 
 
-    housing_Prices_long %>%
+    housing_Prices_rel_long %>%
       ggplot(aes(x = Year, y = Value, color=Variable)) + #Color = Variables distinguishes between the two variables that are plotted
       
-      geom_point() + #Creates scatterplot
-      geom_line() + #Adds lines between single dots of the scatterlot
+      geom_point() + #Creates scatter plot
+      geom_line() + #Adds lines between single dots of the scatter lot
       
       theme_minimal() + #Minimal theme looks good!
       
       labs(
-        title = "Comparison of Remote Work & Home Pricing",
+        title = "Comparison of Remote Work & Home Pricing Growth",
         subtitle = "Red Verticale Line indicates beginning of Covid-19 pandemic",
         x = "Year",
         y = "Growth",
@@ -162,13 +202,13 @@
       facet_wrap(~Country, ncol = 1) + #Split the graph into 3 graphs by country but formats the plot as 1 column & 3 rows.
       
       theme(
-        legend.position = "bottom", #Repositons the legend at the bottom
+        legend.position = "bottom", #Prepositions the legend at the bottom
         #panel.grid.major = element_blank(), #Removes the grid from the background
         #panel.grid.minor = element_blank(), #Removes the grid from the background
       ) + 
       
-      scale_y_continuous(labels = scales::percent_format(scale = 1)) + #Formats the values on the y-axis as percentage.
-      scale_x_continuous(breaks = unique(housing_Prices_long$Year)) +  #Shows each year on the x-axis. 
+      scale_y_continuous(labels = scales::percent_format(scale = 100)) + #Formats the values on the y-axis as percentage.
+      scale_x_continuous(breaks = unique(housing_Prices_rel_long$Year)) +  #Shows each year on the x-axis. 
       geom_vline(xintercept = 2019, linetype="dashed", color="red", size=1) # Highlighting the year of the Covid-19 pandemic.
 
     ## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
@@ -177,10 +217,47 @@
     ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
     ## generated.
 
-![](Maurice_files/figure-markdown_strict/unnamed-chunk-1-1.png)
+![](Maurice_files/figure-markdown_strict/unnamed-chunk-1-2.png)
 
-Still To-Do:
+    ##################################### (2) Comparison of Remote Work & Home Pricing (Absolute Data) #####################################
 
--   First Scatterplot
--   Check y-axis of second plot
--   Add explanation & z-values
+    #Second axis scaling source: https://finchstudio.io/blog/ggplot-dual-y-axes/
+
+    scale <- 0.005
+
+    housing_prices %>%
+      ggplot(aes(x = Year)) + #Color = Variables distinguishes between the two variables that are plotted
+      
+      geom_point(aes(y = Average_Urban_Housing_Price_Index), color = "orange") +
+      geom_line(aes(y = Average_Urban_Housing_Price_Index), color = "orange") + 
+      
+      #Here I add the values that are shown on the second axis and divide by the scaling factor. 
+      geom_point(aes(y=Percentage_of_Workforce_Working_Remotely/scale), color="blue") + #Creates scatter plot
+      geom_line(aes(y=Percentage_of_Workforce_Working_Remotely/scale), color="blue") + #Adds lines between single dots of the scatter lot
+      
+      theme_minimal() + #Minimal theme looks good!
+      
+      labs(
+        title = "Comparison of Remote Work & Home Pricing Levels",
+        subtitle = "Red Verticale Line indicates beginning of Covid-19 pandemic",
+        x = "Year",
+        y = "Growth",
+      ) +
+      
+      facet_wrap(~Country, ncol = 1) + #Split the graph into 3 graphs by country but formats the plot as 1 column & 3 rows.
+      
+      theme(
+        legend.position = "bottom", #Prepositions the legend at the bottom
+      ) +
+      
+      scale_x_continuous(breaks = unique(housing_prices$Year)) +  #Shows each year on the x-axis. 
+      
+      #I add a second axis 
+      scale_y_continuous(
+        name = "Housing Index",
+        sec.axis = sec_axis(~.*scale, name="Percentage Workforce Working Remotely")
+      ) +
+      
+      geom_vline(xintercept = 2019, linetype="dashed", color="red", size=1)
+
+![](Maurice_files/figure-markdown_strict/unnamed-chunk-1-3.png)
