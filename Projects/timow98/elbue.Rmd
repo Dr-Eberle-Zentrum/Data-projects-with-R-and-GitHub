@@ -2,7 +2,7 @@
 title: "solution for timo's project"
 author: "Elise Bücklein"
 date: "`r Sys.Date()`"
-output: html_document
+output: md_document
 ---
 
 ```{r setup, include=FALSE}
