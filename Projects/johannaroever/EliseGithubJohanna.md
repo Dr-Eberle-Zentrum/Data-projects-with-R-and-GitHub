@@ -1,5 +1,7 @@
 ## Read in and clean data
 
+set `NA` values
+
     data <- read.csv("Projects/johannaroever/StelaeCyprus.csv", 
                      sep = ";", 
                      header = TRUE,
@@ -7,67 +9,50 @@
 
 ## Data modification
 
-1.  In `epoch` the value *antoninisch* should be replaced by *antonine*
-    for using a consistent language.
-
-<!-- -->
+In `epoch` the value *antoninisch* should be replaced by *antonine* for
+using a consistent language.
 
     data %<>%
       mutate(epoch = str_replace(epoch, "antoninisch", "antonine"))
 
-1.  In the column `type`some values still include a “?” which should be
-    deleted, since the information it was meant to convey is written in
-    `typeCertain`.
-
-<!-- -->
+In the column `type`some values still include a “?” which should be
+deleted, since the information it was meant to convey is written in
+`typeCertain`.
 
     data %<>%
       mutate(type = str_replace_all(type, "\\?", ""))
 
-1.  For the stelae with the `catNo` = *98* and *99* the value of `type`
-    has to be changed to *6*.
-
-<!-- -->
+For the stelae with the `catNo` = *98* and *99* the value of `type` has
+to be changed to *6*.
 
     data %<>%
       mutate(type = if_else(catNo == 98 | catNo == 99, "6", type))
 
-1.  The values in `typeCertain` are to be replaced for easier handling
-    in R: *0* to *FALSE*, *1* to *TRUE*.
-
-<!-- -->
+The values in `typeCertain` are to be replaced for easier handling in R:
+*0* to *FALSE*, *1* to *TRUE*.
 
     data %<>%
       mutate(typeCertain = (typeCertain == 0))
 
-1.  The column `location` has to be reviewed for only containing the
-    values of the general regions, while more specific information can
-    be deleted:
-    -   *Amathus, Golgoi, Idalion, Kition, Marion/Paphos, Salamis,
-        Soloi, Tamassos*
-    -   All *unknown* in this column can be converted to *Cyprus*. (1)
-    -   All values which include “(?)” can be converted to *Cyprus*. (2)
-    -   If the current value already includes one of the region names,
-        shorten it to only that. This applies to values which include
-        “near”, “bei” (5)
-    -   The value of the observation of `catNo`=*12* which says
-        “probably Idalion” should be changed to *Cyprus*. (3)
-    -   Other: (4)
-        -   region of Limassol –&gt; Amathus
-        -   Limassol –&gt; Amathus
-        -   Mathikoloni –&gt; Amathus  
-        -   Athienou –&gt; Golgoi
-        -   Melousha –&gt; Golgoi
-        -   Pergamon –&gt; Golgoi  
-        -   Alambra (Larnaca) –&gt; Kition
-        -   Pano Arodes –&gt; Marion
-        -   Polis –&gt; Marion  
-        -   Kotschines (neighbourhood of Lysi) –&gt; Salamis
-        -   north of Lysi, district Famagusta –&gt; Salamis  
-        -   Ambelia, near Morphou –&gt; Soloi  
-        -   Pera (Asproji) –&gt; Tamassos
-
-<!-- -->
+The column `location` has to be reviewed for only containing the values
+of the general regions, while more specific information can be deleted:
+\* *Amathus, Golgoi, Idalion, Kition, Marion/Paphos, Salamis, Soloi,
+Tamassos* \* All *unknown* in this column can be converted to *Cyprus*.
+(1) \* All values which include “(?)” can be converted to *Cyprus*. (2)
+\* If the current value already includes one of the region names,
+shorten it to only that. This applies to values which include “near”,
+“bei” (5) \* The value of the observation of `catNo`=*12* which says
+“probably Idalion” should be changed to *Cyprus*. (3) \* Other: (4) \*
+region of Limassol –&gt; Amathus \* Limassol –&gt; Amathus \*
+Mathikoloni –&gt; Amathus  
+\* Athienou –&gt; Golgoi \* Melousha –&gt; Golgoi \* Pergamon –&gt;
+Golgoi  
+\* Alambra (Larnaca) –&gt; Kition \* Pano Arodes –&gt; Marion \* Polis
+–&gt; Marion  
+\* Kotschines (neighbourhood of Lysi) –&gt; Salamis \* north of Lysi,
+district Famagusta –&gt; Salamis  
+\* Ambelia, near Morphou –&gt; Soloi  
+\* Pera (Asproji) –&gt; Tamassos
 
     data %<>%
       mutate(location = if_else(location == "unknown", "Cyprus", location)) %>% # (1)
@@ -97,10 +82,8 @@
                                   .default = location)
              )
 
-1.  For easier handling of `material` the values should just be reduced
-    to either *limestone* or *marble*.
-
-<!-- -->
+For easier handling of `material` the values should just be reduced to
+either *limestone* or *marble*.
 
     data %<>%
       mutate(material = if_else(str_detect(material, "limestone"), "limestone", material)) %>%
