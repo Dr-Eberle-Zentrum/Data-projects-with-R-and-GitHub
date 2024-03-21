@@ -72,4 +72,59 @@ read_all_sheets <- function(files) {
 read_all_sheets(xlsx_list)
 ```
 Not really sure if that is what I would need to go on, but I still learnt a lot :D
-Next we could try to iterate over the dataframes to get specific columns. Instead of storing the data in separate dfs, I could probably also make a list.
+Next we could try to iterate over the dataframes to get specific columns. Instead of storing the data in separate dfs, I could probably also make a list.  
+
+
+Here I tried to import one dataset as a test - very inefficient code so far but works as I intended
+```{r}
+# The column names for the imported dataset
+# sometimes there is an additional name - not yet sure what to do with that
+columnnames <- c("Foreign State",
+               "Immediate Relatives",
+               "Special Immigrants",
+               "Family Preference",
+               "Employment Preference",
+               #"Schedule A Worker",
+               "Diversity Immigrants",
+               "Total")
+
+# function to cut the dataframe and insert the column names
+cut_dataframe <- function(df) {
+  # find row where column names are
+  row_index <- grep("^*Foreign", df[[1]])
+  
+  # delete rows based on how many 
+  if (length(row_index) == 0) {
+    df <- df %>%
+        rename_with(~columnnames)
+    return(df)
+  }else if(ncol(df)==8){
+      df[8] <- NULL
+      df <- df[(row_index[1]+1):nrow(df), ]
+      df <- df %>%
+        rename_with(~columnnames)
+      return(df)
+  }else if(ncol(df)==9){
+      df[1:2] <- NULL
+      df <- df[(row_index[1]+1):nrow(df), ]
+      df <- df %>%
+        rename_with(~columnnames)
+      return(df)
+  }else{
+      df <- df[(row_index[1]+1):nrow(df), ]
+      df <- df %>%
+        rename_with(~columnnames)
+      return(df)
+  }
+}
+
+# unfinished
+df0_3 <- cut_dataframe(df0_3)
+```
+```{r}
+knitr::kable(
+  df0_3[1:10, ], 
+  caption = "Table: df0_3"
+)
+```
+
