@@ -1,0 +1,41 @@
+---
+title: "Untitled"
+author: "David Prießnitz"
+date: "`r Sys.Date()`"
+output: md_document
+---
+
+```{r}
+library(tidyverse)
+setwd("/Users/dave/Downloads")
+df <- read.csv("StelaeCyprus.csv", 
+                 sep = ";", 
+                 header = TRUE,
+                 na = c("unknown", "undefined"))
+```
+
+```{r}
+df <- df %>%
+  mutate(across(c(location, type, epoch, material), ~na_if(.x, "unknown")),
+         epoch = ifelse(epoch == "antoninisch", "antonine", epoch),
+         type = gsub("\\?", "", type),
+         typeCertain = ifelse(typeCertain == 1, TRUE, FALSE),
+         material = case_when(grepl("limestone", material) ~ "limestone",
+                              grepl("marble", material) ~ "marble",
+                              TRUE ~ NA_character_),
+         type = if_else(catNo == 98 | catNo == 99, "6", type))
+```
+
+
+```{r}
+
+location_map <- setNames(
+  c(rep("Cyprus", 2), "Amathus", "Amathus", "Amathus", "Golgoi", "Golgoi", "Golgoi", "Kition", "Marion", "Marion", "Salamis", "Salamis", "Soloi", "Tamassos"),
+  c("unknown", "(?)", "region of Limassol", "Limassol", "Mathikoloni", "Athienou", "Melousha", "Pergamon", "Alambra (Larnaca)", "Pano Arodes", "Polis", "Kotschines (neighbourhood of Lysi)", "north of Lysi, district Famagusta", "Ambelia, near Morphou", "Pera (Asproji)")
+)
+
+df <- df %>%
+  mutate(location = recode(location, !!!location_map))
+
+```
+
