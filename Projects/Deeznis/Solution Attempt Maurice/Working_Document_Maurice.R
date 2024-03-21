@@ -45,7 +45,7 @@ housing_prices <- housing_prices %>%
   mutate(Urban_Population_Growth_Rate = Urban_Population_Growth_Rate / 100) %>%
   mutate(Rural_Population_Growth_Rate = Rural_Population_Growth_Rate / 100) %>%
   mutate(Public_Transport_Ridership_Change = Public_Transport_Ridership_Change / 100) %>%
-  mutate(Internet_Infrastructure_Investment__Million_USD = Internet_Infrastructure_Investment__Million_USD * 1000000)
+  mutate(Internet_Infrastructure_Investment__Million_USD = Internet_Infrastructure_Investment__Million_USD * 10^6)
 
 #I reorder the data by Country and Year in preparation of calculating the home price growth
 housing_prices <- housing_prices %>%
