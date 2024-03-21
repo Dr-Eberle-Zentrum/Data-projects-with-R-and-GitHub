@@ -13,7 +13,7 @@
 
     # Read the modified lines into a data frame
     df <- read.delim2(temp_file, sep = ";", 
-                      na = c("99", "99999,99", 99, 99999))
+                      na = c("99", "99999,99", 99999))
 
 ### Clean-Up
 
@@ -28,6 +28,9 @@ with regular expressions. **1.4 there is a typo in the column
 
     # Correct spelling mistake 
     names(df)[9] <- "Exposition" # 1.4
+
+    # Change back the two column names that were supposed to have "+" instead of "."
+    names(df)[c(28, 30)] <- str_replace_all(names(df)[c(28, 30)], "\\.", "+")
 
 \*\*1.3 integrate the unit into the header
 
@@ -83,7 +86,7 @@ same colors as in the example plot (viridis)
       group_by(Profil) %>%
       filter(Horizont == max(Horizont)) %>% # only keep the last horizon of each profile
       ungroup %>%
-      select(c(2, 12, 13, 16)) # only keep Ca, Mg and Kationen variables
+      select(c("Profil", "Ca_[mmol/kg]", "Mg_[mmol/kg]", "Kationen_[mmol/kg]")) # only keep Ca, Mg and Kationen variables
 
     # shape the dataset into long format
     df_barplot <- pivot_longer(df_barplot, cols = -Profil, names_to = "variable", values_to = "value") %>%
@@ -94,7 +97,8 @@ same colors as in the example plot (viridis)
     # y axis should be the three kinds of variables, but stacked 
     ggplot(df_barplot, aes(x = Profil, y = value, fill = variable)) +
       geom_bar(stat = "identity", position = "stack") + 
-      scale_fill_viridis_d() + # color should come from viridis
+      scale_fill_viridis_d(labels = c("Ca", "Kationen", "Mg")) + # color should come from viridis
+      labs(y = "mmol/kg") +
       theme_minimal()
 
 ![](elbue_files/figure-markdown_strict/unnamed-chunk-6-1.png) \###
@@ -105,8 +109,8 @@ Piechart of grain sizes 3 piecharts of the “Ah” horizons of the profiles
     # make a dataset that includes only the desired values
     df_pie <- df %>%
       filter(Profil %in% c(82, 111, 134)) %>% # only these profiles are relevant
-      filter(Horizontbezeichnung == "Ah" | Horizontbezeichnung == "Ah ") %>% # only keep the horizons with "Ah" (and also "Ah " - thanks for nothing! ;))
-      select(c(2, 21, 25, 28))
+      filter(grepl("^Ah\\s*$", Horizontbezeichnung)) %>% # only keep the horizons with "Ah" (and also "Ah " - thanks for nothing! ;))
+      select(c("Profil", "S_[%]", "U_[%]", "T_[%]"))
 
     # melt to long format
     df_pie_long <- pivot_longer(df_pie, -Profil, names_to = "variable", values_to = "value")
@@ -116,13 +120,17 @@ Piechart of grain sizes 3 piecharts of the “Ah” horizons of the profiles
       df_subset <- filter(df_pie_long, Profil == profile)
       ggplot(df_subset, aes(x = "", y = value, fill = variable)) +
         geom_bar(stat = "identity", width = 1) +
+        geom_text(aes(label = paste0(round(value), "%")), position = position_stack(vjust = 0.5)) + 
         coord_polar("y") +
         labs(caption = paste("Profil", profile)) +
+        scale_fill_discrete(labels = c("Sand", "Silt", "Clay")) +  # Change legend labels
         theme_void() +
         theme(plot.caption = element_text(hjust=0.5, size=rel(1.2)))
     })
 
     # arrange next to each other
-    grid.arrange(grobs = plots, ncol = 3, top = textGrob("Comparison of grain size composition in Ah horizons"))
+    grid.arrange(grobs = plots, ncol = 3,
+                 top = textGrob("Comparison of grain size composition in Ah horizons")
+    )
 
 ![](elbue_files/figure-markdown_strict/unnamed-chunk-7-1.png)

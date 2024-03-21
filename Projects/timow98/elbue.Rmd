@@ -8,7 +8,7 @@ output: md_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyr)
-install.packages("magrittr")
+#install.packages("magrittr")
 library(magrittr)
 library(reshape2)
 library(ggplot2)
