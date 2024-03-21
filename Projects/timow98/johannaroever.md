@@ -1,32 +1,22 @@
 # Solution for Soil Data Project
 
-    # TODO: Currently produces a warning, but works
-    soilData <- read_delim("SoilData.csv", delim = ";", 
+    # get data from .csv
+    soilData <- read_delim("SoilData.csv", delim = ";", col_types = list(.default = col_character()),
     escape_double = FALSE,  trim_ws = TRUE)
-
-    ## Rows: 154 Columns: 31
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ";"
-    ## chr (31): Labornummer Tübingen, Profil_2, Horizont_43, Tiefe_44, Horizontbez...
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
 ## 1. Data cleanup
 
 **1.1 the column KAKpot2** is not needed
 
+    # delete column KAKpot2
       soilData <- subset(soilData, select=-c(`KAKpot 2`))
 
 **1.2 the header** displays numbers which do not make much sense. I
 would like to get rid of them by using rename\_with() in combination
 with regular expressions.
 
-    # works, but does not use rename_with()
-      colnames(soilData) <- gsub("_\\d*", "", colnames(soilData))
-
-    # TODO: unfinished try with rename_with()
-    #   colnames(soilData) <- dplyr::rename_with(colnames(soilData), .fn = str_replace_all, '_\\d*', '', colnames(soilData))
+    # delete numbers at end of column names
+    soilData <- rename_with(soilData , .fn=str_replace, pattern = "_\\d*", replacement='')
 
 **1.3 there is a second header** with the respective units. Leaving this
 line will interfere with the datatype in R, that’s why I want to delete
@@ -85,6 +75,8 @@ got more, less and exactly 100%. Write a new column and put in “more”,
 “less” and “exactly” depending on the value in the column S+U+T. Then,
 write a query that counts and prints the number of values (for example
 “10x less than 100%, 3x exactly 100% and 24x more than 100%”)
+
+    #TODO
 
 ## Dataset after Cleanup
 
@@ -514,10 +506,7 @@ I would like to have a stacked barplot that shows the values for Ca, Mg
 and Kationen of the **last** horizon of the profiles 55, 71, 102 and
 109 - for every last horizon of these profiles in the data table one
 stacked barplot. Here is an example for such an barplot. I would also
-like to have the same colors as in the example plot (viridis): ![Stacked
-barplot](https://r-graph-gallery.com/48-grouped-barplot-with-ggplot2_files/figure-html/thecode4-1.png)
-
-\*\*Die Farbskala ist noch nicht ganz passend.
+like to have the same colors as in the example plot (viridis).
 
     data <- soilData |> 
       filter(Profil == 55 | Profil == 71 | Profil == 102 | Profil == 109) |> 
@@ -530,30 +519,26 @@ barplot](https://r-graph-gallery.com/48-grouped-barplot-with-ggplot2_files/figur
     data$`Mg_[mmol/kg]` <- as.numeric(data$`Mg_[mmol/kg]`)
     data$`Kationen_[mmol/kg]` <- as.numeric(data$`Kationen_[mmol/kg]`)
 
-    df <- data.frame(Profil = data$Profil,
-                              Horizont = data$Horizont,
-                              Horizontbezeichnung = data$Horizontbezeichnung, 
-                              y = c(data$`Ca_[mmol/kg]`, data$`Mg_[mmol/kg]`, data$`Kationen_[mmol/kg]`),
-                              group = c(rep("Ca_[mmol/kg]", nrow(data)),
-                                        rep("Mg_[mmol/kg]", nrow(data)),
-                                        rep("Kationen_[mmol/kg]", nrow(data))))
+    # create long table for plotting
+    dataPlot <- pivot_longer(data, cols = c(`Ca_[mmol/kg]`, `Mg_[mmol/kg]`, `Kationen_[mmol/kg]`), names_to = "group", values_to = "value")
 
-    ggplot( df, aes(x=Profil, y= y, fill=group)) + 
+    ggplot( dataPlot, aes(x=Profil, y= value, fill=group)) + 
       geom_bar(position = "stack", stat = "identity") +
     #  scale_colour_continuous(type=scale_fill_viridis_b()) +
-      scale_color_viridis_c()+
-      ggtitle("last horizon of the profiles 55, 71, 102 and 109") +
-      labs(fill="") +
+      # TODO: color scale is not used in plot
+      scale_color_viridis_d(option="viridis", aesthetics = "fill", labels=c("CA", "Mg", "Kationen"))+
+      ggtitle("Last horizon of the profiles 55, 71, 102 and 109") +
       theme_minimal() +
-      xlab("")
+      labs(fill = "") +
+      ylab("mmol/kg") +
+      xlab("Profilnummer")
 
 ![](johannaroever_files/figure-markdown_strict/unnamed-chunk-10-1.png)
 
 **2.2 Piechart of grain sizes**  
 Then I would like to have 3 piecharts of the “Ah” horizons of the
 profiles 82, 111 and 134 next to each other where I can see the portion
-of S (Sand), U (silt) and T (clay). See below: ![Sketch of
-piechart](sketch_1.jpg)
+of S (Sand), U (silt) and T (clay).
 
 **Die Ausgabe mehrerer Plots nebeneinander funktioniert noch nicht**
 
@@ -562,40 +547,37 @@ piechart](sketch_1.jpg)
     piechart <- function(profil){
       data <- soilData |> 
       filter(Profil == profil) |> 
-      filter(Horizontbezeichnung == 'Ah') 
-    newData <-  data |> 
+      filter( str_detect("Ah", Horizontbezeichnung) )
+      # select only relevant columns
+      data <-  data |> 
       select( Profil, Horizont, Horizontbezeichnung, `S_[%]`, `U_[%]`, `T_[%]`)
-    # switches rows <-> columns  with added rows for plot usage
-    df <- data.frame(Profil = newData$Profil,
-                              Horizont = newData$Horizont,
-                              y = c(newData$`S_[%]`, newData$`U_[%]`, newData$`T_[%]`),
-                              group = c(rep("S_[%]", nrow(newData)),
-                                        rep("U_[%]", nrow(newData)),
-                                        rep("T_[%]", nrow(newData))))
 
-    # evtl auch machbar mit Paket reshape2?
-    # melted_df <- melt(newData, na.rm = FALSE, value.name = "Value", id = c(newData$`S_[%]`, newData$`U_[%]`, newData$`T_[%]`))
+      # create long table for plotting
+      dataPlot <- pivot_longer(data, cols = c(`S_[%]`, `U_[%]`, `T_[%]`), names_to = "group", values_to = "value")
 
-    # Compute the position of labels
-    # df <- df %>% 
-    #   arrange(desc(group)) %>%
-    #   mutate(prop = value / sum(data$y) *100) %>%
-    #   mutate(ypos = cumsum(prop)- 0.5*prop )
+     # Compute the position of labels
+      dataPlot <- dataPlot  |>  
+       arrange(desc(group)) |> 
+       mutate(prop = as.numeric(value) / sum(as.numeric(value)) *100) |> 
+       mutate(ypos = cumsum(prop)- 0.5*prop )
 
-    ggplot(df, aes(x="", y = c(group),  fill=group)) +
-      geom_bar(stat="identity", width=1) +
-      coord_polar("y", start=0) +
-    #  geom_text(aes(y = ypos, label = group), color = "white", size=6) +
-    #  scale_fill_brewer(palette="Set1")
-      theme_void() +
-      labs(fill="") #+
-      # TODO: Untertitel, funktioniert nicht
-      #xlabs(subtitle = Profil) +
-
-
+      return (
+        ggplot(dataPlot, aes(x="", y = c(group),  fill=group)) +
+        geom_bar(stat="identity", width=1) +
+        coord_polar("y", start=0) +
+        #geom_text(aes(y = ypos, label = group), color = "white", size=6) +
+        scale_color_viridis_d(option="viridis", aesthetics = "fill",
+                              labels=c("sand", "silt", "clay")) +
+        theme_void() +
+        theme(plot.caption = element_text(hjust = 0.5, face = "bold")  ) +
+        labs(fill="", 
+             caption = str_c("Profil ", profil))
+      )
     }
 
-    # zum Test einzelne Plots
+
+    # TODO: Ausgabe nebeneinander
+     par(mfrow = c(1, 2))
     piechart(82)
 
 ![](johannaroever_files/figure-markdown_strict/unnamed-chunk-11-1.png)
@@ -604,8 +586,6 @@ piechart](sketch_1.jpg)
 
 ![](johannaroever_files/figure-markdown_strict/unnamed-chunk-11-2.png)
 
-    # für Ausgabe nebeneinan
-    # par(mfrow = c(1, 3))
-    # for(p in toDraw){
-    #   piechart(p)
-    # }
+     for(p in toDraw){
+       piechart(p)
+     }
