@@ -12,7 +12,7 @@
     ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
 
     library(readxl)
-    survey <- read_excel('/Users/dave/Downloads/Elise.xlsx')
+    survey <- read_excel("SSP_20231030_EB.xlsx")
 
     survey_clean <- survey %>% 
       filter(grepl("^ASMR021_", Subject)) %>% # Filter rows that start with "ASMR021_"
@@ -51,7 +51,7 @@
                           "Extraversion", "SSPIT", "SSPAST", "SSPDT")
     survey_clean_long$personality_traits <- factor(survey_clean_long$personality_traits, levels = rank)
 
-    colors <- c('Neuroticism related_traits' = "skyblue3", 
+    colors <- c('Neuroticism related traits' = "skyblue3", 
                 "SSPSTAT" = "skyblue1", 
                 "SSPPSTAT" = "skyblue1", 
                 "SSPSST" = "skyblue1",
@@ -72,4 +72,4 @@
                           "Extraversion", "SSPIT", "SSPAST", "SSPDT")
     survey_clean_long$personality_traits <- factor(survey_clean_long$personality_traits, levels = rank)
 
-![](Davidprntz_files/figure-markdown_strict/unnamed-chunk-7-1.png)![](Davidprntz_files/figure-markdown_strict/unnamed-chunk-7-2.png)![](Davidprntz_files/figure-markdown_strict/unnamed-chunk-7-3.png)
+![](Davidprntz_files/figure-markdown_strict/unnamed-chunk-7-1.png)

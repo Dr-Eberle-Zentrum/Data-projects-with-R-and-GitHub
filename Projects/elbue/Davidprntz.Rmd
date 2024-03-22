@@ -8,7 +8,7 @@ output: md_document
 ```{r}
 library(tidyverse)
 library(readxl)
-survey <- read_excel('/Users/dave/Downloads/Elise.xlsx')
+survey <- read_excel("SSP_20231030_EB.xlsx")
 ```
 
 ```{r}
@@ -59,7 +59,7 @@ survey_clean_long$personality_traits <- factor(survey_clean_long$personality_tra
 ```
 
 ```{r}
-colors <- c('Neuroticism related_traits' = "skyblue3", 
+colors <- c('Neuroticism related traits' = "skyblue3", 
             "SSPSTAT" = "skyblue1", 
             "SSPPSTAT" = "skyblue1", 
             "SSPSST" = "skyblue1",
@@ -88,14 +88,10 @@ violin_plot <- ggplot(survey_clean_long, aes(x=personality_traits, y=Value, fill
   theme(axis.text.x = element_text(angle = 70, hjust = 1, size = 18), axis.title.x = element_text(size = 20),             
     axis.title.y = element_text(size = 20),   
     axis.text.y = element_text(size = 18),  legend.position = "none") +
-  labs(x = "Personality Traits", y = "Values")
-
-violin_plot_jitter <- violin_plot + geom_jitter(color = '#5B6467')
-violin_plot_jitter
-violin_plot_boxplot<- violin_plot + geom_boxplot(width=0.1, colour="darkgrey", fill="lightgrey")
-violin_plot_boxplot
-violin_plot_jitter_boxplot <- violin_plot_boxplot+ geom_jitter(color = '#5B6467')
-violin_plot_jitter_boxplot
+  labs(x = "Personality Traits", y = "Values") +
+  geom_jitter(color = '#5B6467') +
+  geom_boxplot(width=0.2, colour="white", fill="grey", alpha=0.4)
+violin_plot
 ```
 
 
