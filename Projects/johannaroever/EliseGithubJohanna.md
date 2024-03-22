@@ -95,8 +95,7 @@ For easier handling of `material` the values should just be reduced to
 either *limestone* or *marble*.
 
     data %<>%
-      mutate(material = if_else(str_detect(material, "limestone"), "limestone", material)) %>%
-      mutate(material = if_else(str_detect(material, "marble"), "marble", material))
+      mutate(material = str_extract(material, "limestone|marble"))
 
 # Visualization
 
