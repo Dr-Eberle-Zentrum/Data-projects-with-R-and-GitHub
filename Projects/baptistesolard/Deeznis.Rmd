@@ -9,7 +9,7 @@ output: md_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
+``` {r libs}
 library(tidyverse)
 library(ggplot2)
 library(rio)
@@ -22,9 +22,10 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 ## Import datasets
 import('Inventory_Glassworkshop.csv', setclass = 'tibble') -> inventory
 import('GlassBeads.csv', setclass = 'tibble') -> GlassBeads
+```
 
 # Table 1 Modification
-```{}
+```{r 1}
 ## 1. Add a column SampleID after Number
 inventory <- inventory %>%
   mutate(SampleID = paste(Context, Number, sep = ".")) %>%
@@ -49,7 +50,7 @@ inventory2 <- inventory2 %>%
 ```
 
 # Table 2 Modification (Beads)
-```{}
+```{r 2}
 ## 1. Add a column SampleID after Number
 GlassBeads <- GlassBeads %>%
   mutate(SampleID = paste(Context, Number, sep = ".")) %>%
@@ -90,7 +91,7 @@ merged_BI <- full_join(inventory2_filtered, merged_BI)
 ```
 
 # Rod Table Modification
-```{}
+```{r 3}
 Rods <- Rods %>%
   rename_with(~sub("Rod_", "", .), starts_with("Rod_"))
 Rods <- Rods%>%
@@ -109,7 +110,7 @@ Rods <- Rods%>%
 ```
 
 # Data Visualisation
-```{}
+```{r 4}
 ## Fix typos in Colour column
 merged_BI <- merged_BI %>%
   mutate(Colour = ifelse(Colour == "bluee", "blue", Colour),

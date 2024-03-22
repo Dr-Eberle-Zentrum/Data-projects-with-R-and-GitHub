@@ -1,13 +1,29 @@
-library(tidyverse) library(ggplot2) library(rio) library(here)
+    library(tidyverse)
 
-# Set the working directory
+    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+    ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
+    ## ✔ forcats   1.0.0     ✔ stringr   1.5.1
+    ## ✔ ggplot2   3.5.0     ✔ tibble    3.2.1
+    ## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+    ## ✔ purrr     1.0.2     
+    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ✖ dplyr::filter() masks stats::filter()
+    ## ✖ dplyr::lag()    masks stats::lag()
+    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
 
-setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+    library(ggplot2)
+    library(rio)
+    library(here)
 
-## Import datasets
+    ## here() starts at C:/Users/denni/OneDrive/Dokumente/STUDIUM/Programming/R2 Data projects/Data-projects-with-R-and-GitHub
 
-import(‘Inventory\_Glassworkshop.csv’, setclass = ‘tibble’) -&gt;
-inventory import(‘GlassBeads.csv’, setclass = ‘tibble’) -&gt; GlassBeads
+    # Set the working directory
+    setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+
+
+    ## Import datasets
+    import('Inventory_Glassworkshop.csv', setclass = 'tibble') -> inventory
+    import('GlassBeads.csv', setclass = 'tibble') -> GlassBeads
 
 # Table 1 Modification
 
@@ -45,6 +61,9 @@ inventory import(‘GlassBeads.csv’, setclass = ‘tibble’) -&gt; GlassBeads
       separate(col = "Colour", into = c("Colour", "Decor"), sep = ", ") %>%
       mutate(Decor = tolower(gsub("decor ", "", Decor)))
 
+    ## Warning: Expected 2 pieces. Missing pieces filled with `NA` in 90 rows [1, 2, 3, 4, 6,
+    ## 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, ...].
+
     ## 3. Convert yes/no columns to boolean
     GlassBeads <- GlassBeads %>%
       mutate(
@@ -66,12 +85,22 @@ inventory import(‘GlassBeads.csv’, setclass = ‘tibble’) -&gt; GlassBeads
       mutate(Type = "Bead")
     merged_BI <- full_join(Beads_select, inventory2)
 
+    ## Joining with `by = join_by(SampleID, Colour, Type)`
+
     ## 2.4. Join with previous dataframe
     inventory2_filtered <- inventory2 %>%
       filter(Type == "Bead") %>%
       select(SampleID, Colour)
 
     merged_BI <- full_join(inventory2_filtered, merged_BI)
+
+    ## Joining with `by = join_by(SampleID, Colour)`
+
+    ## Warning in full_join(inventory2_filtered, merged_BI): Detected an unexpected many-to-many relationship between `x` and `y`.
+    ## ℹ Row 25 of `x` matches multiple rows in `y`.
+    ## ℹ Row 269 of `y` matches multiple rows in `x`.
+    ## ℹ If a many-to-many relationship is expected, set `relationship =
+    ##   "many-to-many"` to silence this warning.
 
 # Rod Table Modification
 
@@ -126,11 +155,15 @@ inventory import(‘GlassBeads.csv’, setclass = ‘tibble’) -&gt; GlassBeads
       facet_wrap(~ Type, ncol = 1) +  # Facet by object type
       theme_minimal()
 
+    ## Warning in geom_histogram(color = "black", stat = "count"): Ignoring unknown
+    ## parameters: `binwidth`, `bins`, and `pad`
+
     ggsave("SolutionByDennis/hist_by_type.png", plot = hist_by_type, 
            width = 300, height = 200, units = "mm", dpi = 600, bg = "white")
            
     print(hist_by_type)
 
+![](Deeznis_files/figure-markdown_strict/4-1.png)
 
     # combined, not differentiaed by type
 
@@ -141,7 +174,12 @@ inventory import(‘GlassBeads.csv’, setclass = ‘tibble’) -&gt; GlassBeads
       facet_wrap(~., ncol = 1) +  # Remove Type variable from facet_wrap
       theme_minimal()
 
+    ## Warning in geom_histogram(color = "black", stat = "count"): Ignoring unknown
+    ## parameters: `binwidth`, `bins`, and `pad`
+
     ggsave("SolutionByDennis/hist_combined.png", plot = hist_combined, 
            width = 300, height = 200, units = "mm", dpi = 600, bg = "white")
 
     print(hist_combined)
+
+![](Deeznis_files/figure-markdown_strict/4-2.png)
