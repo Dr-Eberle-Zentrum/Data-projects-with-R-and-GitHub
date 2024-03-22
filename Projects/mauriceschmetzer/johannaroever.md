@@ -19,78 +19,86 @@ Query. Take a look at the function `pdf_text()` from the package
 `pdftools`. If you cannot make it happen, then use the Excel files.
 However, the priority is to be able to get the data from the pdf files!
 
-    colnamesSet <- c("state", "immediateRel", "specialImm", "famPref", "employPref", "divImm", "total")
+    colnamesSet <- c("Country", "Immediate Relatives", "Special Immigrants", "Family Preference", "Employment Preference", "Diversity Immigrants", "total")
 
-    # list taken from https://travel.state.gov/content/travel/en/us-visas/visa-information-resources/fees/visa-issuing-posts.html
-    # modified in Excel and Notepad++ to get strings
+    # list taken from xslx files, modified in Excel and Notepad++ to get strings
     # (would be better to somehow use rworldmap::countrySynonyms or similar to check if a string is a country name)
-    # INCOMPLETE, does not list every entry listed in the documents
-    # some INCORRECT/CHANGED e.g. "United Kingdom" is "Great Britain and North Ireland" in the files
-    listCountries <- tolower(c("Afghanistan","Albania","Algeria","Angola","Argentina","Armenia","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bermuda","Bolivia","Bosnia And Herzegovina","Botswana","Brazil","Brunei","Bulgaria","Burkina Faso","Burma","Burundi","Cabo Verde","Cambodia","Cameroon","Canada","Central African Republic","Chad","Chile","China","Colombia","Congo, Democratic Republic Of The","Congo, Republic Of The","Costa Rica","Cote D'ivoire","Croatia","Cuba","Cyprus","Czech Republic","Denmark","Djibouti","Dominican Republic","Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea","Estonia","Ethiopia","Fiji","Finland","France","Gabon","Gambia, The","Georgia","Germany","Ghana","Greece","Guatemala","Guinea","Guyana","Haiti","Honduras","Hong Kong","Hungary","Iceland","India","Indonesia","Iraq","Ireland","Israel","Italy","Jamaica","Japan","Jordan","Kazakhstan","Kenya","Korea, South","Kosovo","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Lithuania","Luxembourg","Macedonia","Madagascar","Malawi","Malaysia","Mali","Malta","Marshall Islands","Mauritania","Mauritius","Mexico","Micronesia","Moldova","Mongolia","Montenegro","Morocco","Mozambique","Namibia","Nepal","Netherlands","New Zealand","Nicaragua","Niger","Nigeria","Norway","Oman","Pakistan","Palau","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Qatar","Romania","Russia","Rwanda","Samoa","Saudi Arabia","Senegal","Serbia","Sierra Leone","Singapore","Slovakia","Slovenia","South Africa","South Sudan","Spain","Sri Lanka","Sudan","Suriname","Swaziland","Sweden","Switzerland","Syria","Taipei, Taiwan (TAI/TAI)","Tajikistan","Tanzania","Thailand","Timor-Leste","Togo","Trinidad And Tobago","Tunisia","Turkey","Turkmenistan","Uganda","Ukraine","United Arab Emirates","United Kingdom","Uruguay","USUN","Uzbekistan","Venezuela","Vietnam","Yemen","Zambia","Zimbabwe"))
+    listCountries <- factor(tolower(c("Algeria","Angola","Benin","Botswana","Burkina Faso","Burundi","Cameroon","Cape Verde","Central African Republic","Chad","Comoros","Congo, Republic of the","Congo, Democratic Republic of the","Cote d’Ivoire","Djibouti","Egypt","Equatorial Guinea","Eritrea","Ethiopia","Gabon","Gambia","Ghana","Guinea","Guinea-Bissau","Kenya","Lesotho","Liberia","Libya","Madagascar","Malawi","Mali","Mauritania","Mauritius","Morocco","Mozambique","Namibia","Niger","Nigeria","Rwanda","Sao Tome and Principe","Senegal","Seychelles","Sierra Leone","Somalia","South Africa","Sudan","Swaziland","Tanzania","Togo","Tunisia","Uganda","Zambia","Zimbabwe","Afghanistan","Bahrain","Bangladesh","Bhutan","Brunei","Burma","Cambodia","China−mainland born","−Taiwan born","Hong Kong Special","Administrative Region","India","Indonesia","Iran","Iraq","Israel","Japan","Jordan","Korea, North","Korea, South","Kuwait","Laos","Lebanon","Malaysia","Maldives","Mongolia","Nepal","Oman","Pakistan","Philippines","Qatar","Saudi Arabia","Singapore","Sri Lanka","Syria","Thailand","United Arab Emirates","Vietnam","Yemen","Albania","Andorra","Armenia","Austria","Azerbaijan","Belarus","Belgium","Bosnia and Herzegovina","Bulgaria","Croatia","Cyprus","Czech Republic","Denmark","Greenland","Estonia","Finland","France","French Guiana","French Polynesia","French Southern and Antarctic","Lands","Guadeloupe","Martinique","New Caledonia","Reunion","St. Pierre and Miquelon","Wallis and Futuna","Georgia","Germany","Great Britain and Northern Ireland","Anguilla","Bermuda","British Virgin Islands","Cayman Islands","Falkland Islands","Gibraltar","Montserrat","Pitcairn","St. Helena","Turks and Caicos Islands","Northern Ireland (DV only)","Greece","Hungary","Iceland","Ireland","Italy","Kazakhstan","Kyrgyzstan","Latvia","Liechtenstein","Lithuania","Luxembourg","Macedonia, The Former Yugoslav","Republic of","Malta","Moldova","Monaco","Netherlands","Aruba","Netherlands Antilles","Norway","Poland","Portugal","Macau","Romania","Russia","San Marino","Serbia-Montenegro","Slovakia","Slovenia","Spain","Western Sahara","Sweden","Switzerland","Tajikistan","Turkey","Turkmenistan","Ukraine","Uzbekistan","Vatican City","Antigua and Barbuda","Bahamas","Barbados","Belize","Canada","Costa Rica","Cuba","Dominica","Dominican Republic","El Salvador","Grenada","Guatemala","Haiti","Honduras","Jamaica","Mexico","Nicaragua","Panama","Saint Kitts and Nevis","Saint Lucia","Saint Vincent and the Grenadines","Trinidad and Tobago","Australia","Christmas Island","Cocos Islands","Fiji","Kiribati","Marshall Islands","Micronesia, Federated States of","Nauru","New Zealand","Cook Islands","Niue","Palau","Papua New Guinea","Samoa","Solomon Islands","Tonga","Tuvalu","Vanuatu","Argentina","Bolivia","Brazil","Chile","Colombia","Ecuador","Guyana","Paraguay","Peru","Suriname","Uruguay","Venezuela"
+    )))
 
+    # link to pdf file
     pdfFile <- "https://travel.state.gov/content/dam/visas/Statistics/FY2000%20table%20III.pdf"
-    #pdfFileGen <- "https://travel.state.gov/content/dam/visas/Statistics/FY20" +"\d\d"+ "%20table%20III.pdf"
 
-    # convertPdf
     # loading the data as text from one pdf file
     pdfText <- pdf_text(pdfFile)
-    allData <- data.frame()
+    # allData <- data.frame()
 
-    # for(i in 1:length(pdfText)){
-      # currently worked on page
-    i <- 3
-      data <- str_split(pdfText[i], "\n")
-      # take first element which equals the actual text
-      data <- data[[1]] |> 
-        # delete empty rows
-        trimws()
-    #####################################
-      # TODO: delete rows at end of file after string containing "Grand Totals"
-      #data <- data[-(str_detect("Grand Totals", data):data[length(data)])]
-    #####################################
+    #############################
+    #' Extract data from one page of a PDF file that has been extracted with pdf_text()
+    #' 
+    #' @param curpage The number of the current page to extract
+    #' @returns dataframe with cleaned data from page with columns from colnamesSet
+    getData <- function(curPage){
       
-      # Idea: compare start of row with all values in ...countrySynonyms. return when true
-      # (only textrows with country are needed, others not)
-      # 1. get beginning strings of each row
-      # 2. compare them to ...countrySynonyms
-      # 3. use the indexes for reducing data to relevant rows
-      # 
-      # tmpIndex <- grep(pattern = "[:alpha:]+\\w{2, }", data)
-      # 
-      # TODELETE: this block is not needed since data can irectly be checked against listCountries
-      # extract start of lines an compare
-        # strList <- str_extract(pattern = "[:alpha:]+\\w{2,}", data)
-        # strList <- strList[!is.na(strList)]
-        # dataIndex <- list(rows = )
-        # 
-        # # Delete all non-country lines from strList 
-        # for(i in 1:length(strList)){
-        #   print(c(i, strList[i]))
-        #   if(!all(str_detect(listCountries, strList[i]))){
-        #     strList <- strList[-i]
-        #   }
-        # }
-        # 
-      # old/manual reducement to relevant rows
-      # data <- data[ grep(strList[1], data) : grep(strList[length(strList)], data) ] 
+        data <- str_split(pdfText[curPage], "\n")
+        # take first element which equals the actual text
+        data <- data[[1]] |> 
+          # delete empty rows
+          trimws()
+
+        # delete rows at end of file after string containing "Grand Totals"
+        if(any(str_detect(data, pattern = ".*Grand Totals"))){
+          data <- data[1:(grep(pattern = ".*Grand Totals", data))-1]
+        }
+        
+        # compare start of row with all values in listCountries (maybe possible with countrySynonyms?)
+        # keep rows from data when the start of the row equals one of the entries in listCountries)
+        data <- data[tolower(str_extract(pattern = "[:alpha:]+\\w{2,}", data)) %in% listCountries]
       
-      # keep rows from data when the start of the row equals one of the entries in listCountries)
-      data <- data[tolower(str_extract(pattern = "[:alpha:]+\\w{2,}", data)) %in% listCountries]
+        # turn into df with fixed number of columns, by dividing along the whitespaces between values
+        data <- data.frame(str_split_fixed(data, " {2,}", length(colnamesSet)))
+        colnames(data) <- colnamesSet
+        data$Continent <- countrycode(sourcevar = data[, "Country"], origin = "country.name", destination = "continent")
+        
+        return(data)
+    }
+    #############################
 
-      # turn into df with fixed number of columns, by dividing along the whitespaces between values
-      data <- data.frame(str_split_fixed(data, " {2,}", 7))
-      colnames(data) <- colnamesSet
-      data$continent <- countrycode(sourcevar = data[, "state"], origin = "country.name", destination = "continent")
 
-    head(data)
+    #############################
+     # getData(1)
+     # getData(2)
+     # getData(3)
+     # getData(4)
+     # getData(5)
+     # getData(6)
+     # getData(6)
+        
+      listData <- vector(mode = "list", length = length(pdfText))
+    fileData <- 1:length(pdfText) |>   map(function(var) getData(var)) |> 
+        bind_rows()
 
-    ##      state immediateRel specialImm famPref employPref divImm    total continent
-    ## 1    Syria          674          5     850         75     18    1,622      Asia
-    ## 2 Thailand          993         21     514         88     65    1,681      Asia
-    ## 3  Vietnam        6,938          2   9,776         49      0 17,813 1      Asia
-    ## 4    Yemen        1,376          1     409         25     28    1,839      Asia
-    ## 5  Albania          331          0     247         22  3,398    3,998    Europe
-    ## 6  Armenia          151          0      22         13    290      476      Asia
+    ## Warning: Some values were not matched unambiguously: Lands
+
+    # add column Fiscal_Year
+    fileData$Fiscal_Year <- str_extract(str_extract(pdfText[1], pattern = ".*Fiscal Year \\d{4}"), "\\d{4}")
+
+    head(fileData)
+
+    ##    Country Immediate Relatives Special Immigrants Family Preference
+    ## 1  Algeria                  67                  1                10
+    ## 2   Angola                  15                  0                27
+    ## 3    Benin                   7                  0                 5
+    ## 4 Botswana                   4                  0                 0
+    ## 5  Burundi                   2                  0                 0
+    ## 6 Cameroon                 120                  0                12
+    ##   Employment Preference Diversity Immigrants total Continent Fiscal_Year
+    ## 1                    12                  469   559    Africa        2000
+    ## 2                     1                    1    44    Africa        2000
+    ## 3                     1                   22    35    Africa        2000
+    ## 4                     0                    5     9    Africa        2000
+    ## 5                     0                    0     2    Africa        2000
+    ## 6                    14                  321   467    Africa        2000
 
 ## Tidy Data Format Goal
 
@@ -118,12 +126,28 @@ format (The color of the values in both screenshots is pink but comes
 across as if they have different colors so don’t be confused).
 
 There should only be one single table in long format that has all the
-information of every year for each country.
+information of every year for each country. ![Goal Tidy Data
+Format](Goal_Tidy_Data_Format.png)
 
-<figure>
-<img src="Goal_Tidy_Data_Format.png" alt="Goal Tidy Data Format" />
-<figcaption aria-hidden="true">Goal Tidy Data Format</figcaption>
-</figure>
+    # add column Fiscal_Year in code chunk before for future structure with function to extract from more than one file
+    # fileData$Fiscal_Year <- str_extract(str_extract(pdfText[1], pattern = ".*Fiscal Year \\d{4}"), "\\d{4}")
+
+    # pivot to long table
+    # TODO exclude column "total" cause not necessary
+    data <- pivot_longer(fileData, 
+                         cols = c("Immediate Relatives", "Special Immigrants", "Family Preference", "Employment Preference", "Diversity Immigrants"), 
+                         names_to = "Visa_Type", values_to = "Issued")
+    head(data)
+
+    ## # A tibble: 6 × 6
+    ##   Country total Continent Fiscal_Year Visa_Type             Issued
+    ##   <chr>   <chr> <chr>     <chr>       <chr>                 <chr> 
+    ## 1 Algeria 559   Africa    2000        Immediate Relatives   67    
+    ## 2 Algeria 559   Africa    2000        Special Immigrants    1     
+    ## 3 Algeria 559   Africa    2000        Family Preference     10    
+    ## 4 Algeria 559   Africa    2000        Employment Preference 12    
+    ## 5 Algeria 559   Africa    2000        Diversity Immigrants  469   
+    ## 6 Angola  44    Africa    2000        Immediate Relatives   15
 
 ## Goal Data Visualization
 
@@ -140,3 +164,58 @@ Please create the above graph for the following countries:
 -   China
 -   Mexico
 -   India
+
+**TODO** \* **Diagrams are not calculating right on y-axis** \*
+**Currently only one year shown**
+
+    data[data$Country == "Germany",] |> 
+    ggplot( aes(x = Fiscal_Year, y = Issued, fill = Visa_Type)) + 
+      geom_bar(position = "stack", stat = "identity") +
+      scale_color_viridis_d(option="viridis", aesthetics = "fill", 
+                            labels= c("Immediate Relatives", "Special Immigrants", "Family Preference", "Employment Preference", "Diversity Immigrants")) +
+      ggtitle("Germanic Historic Immigrant Visa") +
+      theme_linedraw() +
+      labs(fill = "") +
+      ylab("") +
+      xlab("")
+
+![](johannaroever_files/figure-markdown_strict/unnamed-chunk-4-1.png)
+
+    data[data$Country == "China",] |> 
+    ggplot( aes(x = Fiscal_Year, y = Issued, fill = Visa_Type)) + 
+      geom_bar(position = "stack", stat = "identity") +
+      scale_color_viridis_d(option="viridis", aesthetics = "fill", 
+                            labels= c("Immediate Relatives", "Special Immigrants", "Family Preference", "Employment Preference", "Diversity Immigrants")) +
+      ggtitle("Chinese Historic Immigrant Visa") +
+      theme_linedraw() +
+      labs(fill = "") +
+      ylab("") +
+      xlab("")
+
+![](johannaroever_files/figure-markdown_strict/unnamed-chunk-5-1.png)
+
+    data[data$Country == "Mexico",] |> 
+    ggplot( aes(x = Fiscal_Year, y = Issued, fill = Visa_Type)) + 
+      geom_bar(position = "stack", stat = "identity") +
+      scale_color_viridis_d(option="viridis", aesthetics = "fill", 
+                            labels= c("Immediate Relatives", "Special Immigrants", "Family Preference", "Employment Preference", "Diversity Immigrants")) +
+      ggtitle("Mexican Historic Immigrant Visa") +
+      theme_linedraw() +
+      labs(fill = "") +
+      ylab("") +
+      xlab("")
+
+![](johannaroever_files/figure-markdown_strict/unnamed-chunk-6-1.png)
+
+    data[data$Country == "India",] |> 
+    ggplot( aes(x = Fiscal_Year, y = Issued, fill = Visa_Type)) + 
+      geom_bar(position = "stack", stat = "identity") +
+      scale_color_viridis_d(option="viridis", aesthetics = "fill", 
+                            labels= c("Immediate Relatives", "Special Immigrants", "Family Preference", "Employment Preference", "Diversity Immigrants")) +
+      ggtitle("Indian Historic Immigrant Visa") +
+      theme_linedraw() +
+      labs(fill = "") +
+      ylab("") +
+      xlab("")
+
+![](johannaroever_files/figure-markdown_strict/unnamed-chunk-7-1.png)
