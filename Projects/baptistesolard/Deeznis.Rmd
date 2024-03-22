@@ -13,15 +13,18 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(ggplot2)
 library(rio)
+library(here)
 
-## Set working directory
-setwd("~/STUDIUM/Programming/R2 Data projects/Data-projects-with-R-and-GitHub/Projects/baptistesolard")
+# Set the working directory
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+
 
 ## Import datasets
 import('Inventory_Glassworkshop.csv', setclass = 'tibble') -> inventory
 import('GlassBeads.csv', setclass = 'tibble') -> GlassBeads
 
 # Table 1 Modification
+```{}
 ## 1. Add a column SampleID after Number
 inventory <- inventory %>%
   mutate(SampleID = paste(Context, Number, sep = ".")) %>%
@@ -31,35 +34,31 @@ inventory <- inventory %>%
 Rods <- inventory[, c(6, 20:23)]
 inventory <- inventory[, -c(20:23)]
 
-## 3. Transpose the table and extract color information
+## 3. Transform the table "inventory" into a long format, where each row represents a unique combination of "Type" and "Presence" columns, and a new column "Color" is created based on the "Type" column if the "Presence" value is 1 and the "Type" contains an underscore
 inventory2 <- inventory %>%
   pivot_longer(cols = HollowGlass:Miscellaneous, names_to = "Type", values_to = "Presence") %>%
   mutate(Colour = if_else(Presence == 1 & grepl("_", Type), sub(".*_", "", Type), NA_character_)) %>%
-  filter(!is.na(Presence)) %>%
+  drop_na(Presence) %>%
   select(-Presence)
 
 ## Extract base object type
 inventory2 <- inventory2 %>%
   mutate(Type = sub("_.*", "", Type)) %>%
-  mutate(Colour = if_else(Colour %in% c("HollowGlass", "FlatGlass", "Splitter", "GlassChunk", "Droplet", 
-                                        "Slag", "Tessera", "Bead", "RV", "OvenPiece", "Miscellaneous"),
+  mutate(Colour = if_else(Colour %in% c("HollowGlass", "FlatGlass", "Splitter", "GlassChunk", "Droplet", "Slag", "Tessera", "Bead", "RV", "OvenPiece", "Miscellaneous"),
                           NA_character_, Colour))
-
-## 4. Join with Beads dataset
-Beads_select <- select(GlassBeads, SampleID, Colour) 
-Beads_select <- Beads_select %>%
-  mutate(Type = "Bead")
-merged_BI <- full_join(Beads_select, inventory2)
+```
 
 # Table 2 Modification (Beads)
+```{}
 ## 1. Add a column SampleID after Number
 GlassBeads <- GlassBeads %>%
   mutate(SampleID = paste(Context, Number, sep = ".")) %>%
   relocate(SampleID, .after = "Number")
 
 ## 2. Separate colour and decor
-GlassBeads <- separate(GlassBeads, col = "Colour", into = c("Colour", "Decor"), sep = ", ")
-GlassBeads$Decor <- gsub("decor ", "", GlassBeads$Decor, ignore.case = TRUE)
+GlassBeads <- GlassBeads %>%
+  separate(col = "Colour", into = c("Colour", "Decor"), sep = ", ") %>%
+  mutate(Decor = tolower(gsub("decor ", "", Decor)))
 
 ## 3. Convert yes/no columns to boolean
 GlassBeads <- GlassBeads %>%
@@ -76,14 +75,22 @@ GlassBeads <- GlassBeads %>%
     )
   )           
 
-## 4. Join with previous dataframe
+
+## 1.4. Join with Beads dataset (Do the other steps below first)
+Beads_select <- select(GlassBeads, SampleID, Colour) %>% 
+  mutate(Type = "Bead")
+merged_BI <- full_join(Beads_select, inventory2)
+
+## 2.4. Join with previous dataframe
 inventory2_filtered <- inventory2 %>%
   filter(Type == "Bead") %>%
   select(SampleID, Colour)
 
 merged_BI <- full_join(inventory2_filtered, merged_BI)
+```
 
 # Rod Table Modification
+```{}
 Rods <- Rods %>%
   rename_with(~sub("Rod_", "", .), starts_with("Rod_"))
 Rods <- Rods%>%
@@ -99,49 +106,63 @@ Rods <- Rods%>%
       TRUE ~ NA
     )
   )  
+```
 
 # Data Visualisation
+```{}
 ## Fix typos in Colour column
 merged_BI <- merged_BI %>%
-  mutate(Colour = ifelse(Colour == "bluee", "blue", Colour))
-merged_BI <- merged_BI %>%
-  mutate(Colour = ifelse(Colour == "Dm", NA, Colour))
+  mutate(Colour = ifelse(Colour == "bluee", "blue", Colour),
+         Colour = ifelse(Colour == "Dm", NA, Colour))
 
-## Define custom color palette based on unique values in the "Colour" column
+# Define custom color palette based on unique values in the "Colour" column
 custom_palette <- unique(merged_BI$Colour)
 
-## Filter dataframes and remove NA values in "Colour" column
-rods_data <- merged_BI %>% filter(Type == "Rod" & !is.na(Colour))
-beads_data <- merged_BI %>% filter(Type == "Bead" & !is.na(Colour))
-ogws_data <- merged_BI %>% filter(Type == "OGW" & !is.na(Colour))
-all_data <- merged_BI %>% filter(!is.na(Colour))
 
-## Create histograms for each object type
-hist_rods <- ggplot(rods_data, aes(x = Colour, fill = Colour)) +
+# Filter data and convert Colour to factor with custom palette order
+all_data <- merged_BI %>%
+  filter(!is.na(Colour)) %>%
+  mutate(Colour = factor(Colour, levels = custom_palette))
+
+
+# Get unique values in the Colour column
+unique_colours <- unique(all_data$Colour)
+
+# Ensure that the order of unique values matches the order of colours in custom_palette
+colour_palette <- custom_palette[match(unique_colours, custom_palette)]
+
+# Convert Colour to factor with custom palette order
+all_data <- all_data %>%
+  mutate(Colour = factor(Colour, levels = colour_palette))
+
+# Create histogram
+hist_by_type <- ggplot(all_data, aes(x = Colour, fill = Colour)) +
   geom_histogram(color = "black", stat = "count") +
-  scale_fill_manual(values = custom_palette) +
-  labs(title = "Colour Distribution for Rods", x = "Colour", y = "Frequency")
+  scale_fill_manual(values = colour_palette) +
+  labs(title = "Colour Distribution for All Object Types", x = "Colour", y = "Frequency") +
+  facet_wrap(~ Type, ncol = 1) +  # Facet by object type
+  theme_minimal()
 
-hist_beads <- ggplot(beads_data, aes(x = Colour, fill = Colour)) +
-  geom_histogram(color = "black", stat = "count") +
-  scale_fill_manual(values = custom_palette) +
-  labs(title = "Colour Distribution for Beads", x = "Colour", y = "Frequency")
+ggsave("SolutionByDennis/hist_by_type.png", plot = hist_by_type, 
+       width = 300, height = 200, units = "mm", dpi = 600, bg = "white")
+       
+print(hist_by_type)
 
-hist_ogws <- ggplot(ogws_data, aes(x = Colour, fill = Colour)) +
-  geom_histogram(color = "black", stat = "count") +
-  scale_fill_manual(values = custom_palette) +
-  labs(title = "Colour Distribution for OGWs", x = "Colour", y = "Frequency")
 
-## Combine histograms for all types
+# combined, not differentiaed by type
+
 hist_combined <- ggplot(all_data, aes(x = Colour, fill = Colour)) +
   geom_histogram(color = "black", stat = "count") +
-  scale_fill_manual(values = custom_palette) +
-  labs(title = "Colour Distribution for All Object Types", x = "Colour", y = "Frequency")
-  
-![All Types](/Projects/baptistesolard/SolutionByDennis/All_objects_hist.png)
-![Rods](/Projects/baptistesolard/SolutionByDennis/hist_rods.png)
-![Beads](/Projects/baptistesolard/SolutionByDennis/hist_beads.png)
-![OGW](/Projects/baptistesolard/SolutionByDennis//hist_ogw.png)
+  scale_fill_manual(values = colour_palette) +
+  labs(title = "Colour Distribution for All Object Types", x = "Colour", y = "Frequency") +
+  facet_wrap(~., ncol = 1) +  # Remove Type variable from facet_wrap
+  theme_minimal()
+
+ggsave("SolutionByDennis/hist_combined.png", plot = hist_combined, 
+       width = 300, height = 200, units = "mm", dpi = 600, bg = "white")
+
+print(hist_combined)
+```
 
 
 
