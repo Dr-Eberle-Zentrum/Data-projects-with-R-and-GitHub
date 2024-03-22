@@ -1558,9 +1558,6 @@ First, I will clean the data by removing the targeted rows:
 
 ## Calculation of the 3 personality factor scores
 
-    factor.scores.calculation <-
-      function(list)
-
     SSP_clean <- 
       SSP_clean |>
       mutate(SSPSDT.I = 100 - SSPSDT,  # inversed value of social desirability
@@ -1573,21 +1570,26 @@ First, I will clean the data by removing the targeted rows:
 
     kable(SSP_clean[1:5, 114:length(SSP_clean)])
 
-<table style="width:100%;">
+<table>
 <colgroup>
-<col style="width: 7%" />
-<col style="width: 7%" />
-<col style="width: 7%" />
-<col style="width: 7%" />
-<col style="width: 7%" />
-<col style="width: 7%" />
-<col style="width: 7%" />
-<col style="width: 7%" />
-<col style="width: 7%" />
-<col style="width: 7%" />
-<col style="width: 7%" />
-<col style="width: 7%" />
-<col style="width: 7%" />
+<col style="width: 5%" />
+<col style="width: 5%" />
+<col style="width: 5%" />
+<col style="width: 5%" />
+<col style="width: 5%" />
+<col style="width: 5%" />
+<col style="width: 5%" />
+<col style="width: 5%" />
+<col style="width: 5%" />
+<col style="width: 5%" />
+<col style="width: 5%" />
+<col style="width: 5%" />
+<col style="width: 5%" />
+<col style="width: 5%" />
+<col style="width: 5%" />
+<col style="width: 5%" />
+<col style="width: 5%" />
+<col style="width: 5%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -1604,6 +1606,11 @@ First, I will clean the data by removing the targeted rows:
 <th style="text-align: right;">SSPMT</th>
 <th style="text-align: right;">SSPVTAT</th>
 <th style="text-align: right;">SSPPHTAT</th>
+<th style="text-align: right;">SSPSDT.I</th>
+<th style="text-align: right;">SSPDT.I</th>
+<th style="text-align: right;">Neuro</th>
+<th style="text-align: right;">Aggr</th>
+<th style="text-align: right;">Extr</th>
 </tr>
 </thead>
 <tbody>
@@ -1621,6 +1628,11 @@ First, I will clean the data by removing the targeted rows:
 <td style="text-align: right;">37.84367</td>
 <td style="text-align: right;">58.57143</td>
 <td style="text-align: right;">34.38596</td>
+<td style="text-align: right;">50.55749</td>
+<td style="text-align: right;">63.02521</td>
+<td style="text-align: right;">47.23162</td>
+<td style="text-align: right;">54.69486</td>
+<td style="text-align: right;">68.55537</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">43.73272</td>
@@ -1636,6 +1648,11 @@ First, I will clean the data by removing the targeted rows:
 <td style="text-align: right;">35.14825</td>
 <td style="text-align: right;">53.37662</td>
 <td style="text-align: right;">34.38596</td>
+<td style="text-align: right;">40.10453</td>
+<td style="text-align: right;">68.62745</td>
+<td style="text-align: right;">42.86164</td>
+<td style="text-align: right;">43.50778</td>
+<td style="text-align: right;">59.40423</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">55.25346</td>
@@ -1651,6 +1668,11 @@ First, I will clean the data by removing the targeted rows:
 <td style="text-align: right;">48.62534</td>
 <td style="text-align: right;">55.97403</td>
 <td style="text-align: right;">49.42356</td>
+<td style="text-align: right;">54.04181</td>
+<td style="text-align: right;">60.22409</td>
+<td style="text-align: right;">57.25266</td>
+<td style="text-align: right;">54.04636</td>
+<td style="text-align: right;">48.77492</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">55.25346</td>
@@ -1666,6 +1688,11 @@ First, I will clean the data by removing the targeted rows:
 <td style="text-align: right;">51.32075</td>
 <td style="text-align: right;">48.18182</td>
 <td style="text-align: right;">41.90476</td>
+<td style="text-align: right;">57.52613</td>
+<td style="text-align: right;">65.82633</td>
+<td style="text-align: right;">51.65734</td>
+<td style="text-align: right;">50.42831</td>
+<td style="text-align: right;">52.65108</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">62.16590</td>
@@ -1681,6 +1708,11 @@ First, I will clean the data by removing the targeted rows:
 <td style="text-align: right;">48.62534</td>
 <td style="text-align: right;">55.97403</td>
 <td style="text-align: right;">56.94236</td>
+<td style="text-align: right;">57.52613</td>
+<td style="text-align: right;">63.02521</td>
+<td style="text-align: right;">58.90833</td>
+<td style="text-align: right;">59.44264</td>
+<td style="text-align: right;">55.52808</td>
 </tr>
 </tbody>
 </table>
@@ -1698,31 +1730,25 @@ First, I will clean the data by removing the targeted rows:
         To do this, I will keep only the relevant data and the `Subject`
         number before pivoting the table.  
         At the end, I check the levels present in the `Factors_Traits`
-        factor to see if I have indeed all 16 wanted columns:
+        factor to see if I indeed have all 16 wanted columns:
 
 <!-- -->
 
-    #' this will store all the columns we want to remove:
-    #' all the columns starting with SSP
-    #' not matching all columns ending with "T" (the t-transformed scores) nor with ".I" (the inverted scores I calculated)
-    col_to_remove <- 
-      names(SSP_clean) |>
-      str_match("^SSP.*(?<!\\.I|T)$") |>
-      as_tibble() |>
-      drop_na() |>
-      pull(1)
-
+    #' We need to remove from SSP_clean all columns starting with SSP but not ending
+    #' with T or IT (the ones we want to keep). We need to explicitly remove
+    #' SSPSDT and SSPDT manually because they were used to calculated the inverted traits
     SSP_plot <- 
       SSP_clean |>
-      select(-col_to_remove,
-             -SSPSDT, -SSPDT) |> # We also want to remove the traits that were inverted for the factor score calculations
+      select(-( starts_with("SSP") & !( ends_with("T") | ends_with(".I") ) ),
+             -SSPSDT, -SSPDT) |>
       pivot_longer(cols = -Subject, names_to = "Factors_Traits", values_to = "Scores") |> 
       mutate(Factors_Traits = as_factor(Factors_Traits))
 
     SSP_plot$Factors_Traits |> levels()
 
     ##  [1] "SSPSTAT"  "SSPPSTAT" "SSPSST"   "SSPLAT"   "SSPIT"    "SSPAST"  
-    ##  [7] "SSPET"    "SSPTIT"   "SSPMT"    "SSPVTAT"  "SSPPHTAT"
+    ##  [7] "SSPET"    "SSPTIT"   "SSPMT"    "SSPVTAT"  "SSPPHTAT" "SSPSDT.I"
+    ## [13] "SSPDT.I"  "Neuro"    "Aggr"     "Extr"
 
 -   Secondly, I need to set the order of the variables for the x-axis.  
     I will also prepare the labels of the x-axis.
@@ -1733,17 +1759,17 @@ First, I will clean the data by removing the targeted rows:
                  "Aggr", "SSPTIT", "SSPVTAT", "SSPPHTAT", "SSPSDT.I",
                  "Extr", "SSPIT", "SSPAST", "SSPDT.I")
 
-    # The order of the levels in SSP_plot$Factors_Traits can be changed now:
-    SSP_plot$Factors_Traits <- 
-      SSP_plot$Factors_Traits |> 
-      factor(x_order)
-
 
     x_labels <- c("Neuroticism", "Somatic trait anxiety", "Psychic trait anxiety", 
                   "Stress susceptibility", "Lack of assertiveness", "Embitterment", "Mistrust",
                   "Aggressiveness", "Trait irritability", "Verbal trait aggression", 
                   "Physical trait aggression", "Inversed social desirability",
                   "Extraversion", "Impulsiveness", "Adventure seeking", "Inversed detachment")
+
+    # The order of the levels and their labels in SSP_plot$Factors_Traits can be changed now:
+    SSP_plot$Factors_Traits <- 
+      SSP_plot$Factors_Traits |> 
+      factor(levels = x_order, labels = x_labels)
 
 -   I also want to create a vector that will store the colours for each
     personality factor or trait. The colours will be plain for the
@@ -1781,7 +1807,7 @@ First, I will clean the data by removing the targeted rows:
     #' The vector col_palette finally gets created
     col_palette <- 
       c() |>
-    create.palette(x_order, colours)
+      create.palette(x_labels, colours)
 
 ### 2. Making the plot
 
@@ -1794,7 +1820,6 @@ First, I will clean the data by removing the targeted rows:
             legend.position = "none",
             axis.title = element_text(face = "bold"),
             plot.title = element_text(hjust = 0.5, face = "bold")) +
-      scale_x_discrete(labels = x_labels) +
       scale_fill_manual(values = col_palette) +
       labs(x = "Personality factors and associated subscales",
            title = str_c("Results of the personality questionaire (n = ", n_distinct(SSP_plot$Subject), ")"))

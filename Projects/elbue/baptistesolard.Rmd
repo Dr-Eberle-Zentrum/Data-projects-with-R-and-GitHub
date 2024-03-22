@@ -33,9 +33,6 @@ kable(SSP_clean[1:10, ])
 ## Calculation of the 3 personality factor scores
 
 ```{r personality_factor_calulation}
-factor.scores.calculation <-
-  function(list)
-
 SSP_clean <- 
   SSP_clean |>
   mutate(SSPSDT.I = 100 - SSPSDT,  # inversed value of social desirability
@@ -58,22 +55,15 @@ kable(SSP_clean[1:5, 114:length(SSP_clean)])
   - One column with all the personality factors and traits: `Factors_Traits`  
   - One column with all data points to be plotted: `Scores`  
 To do this, I will keep only the relevant data and the `Subject` number before pivoting the table.  
-At the end, I check the levels present in the `Factors_Traits` factor to see if I have indeed all 16 wanted columns:  
+At the end, I check the levels present in the `Factors_Traits` factor to see if I indeed have all 16 wanted columns:  
 ```{r data_prep}
-#' this will store all the columns we want to remove:
-#' all the columns starting with SSP
-#' not matching all columns ending with "T" (the t-transformed scores) nor with ".I" (the inverted scores I calculated)
-col_to_remove <- 
-  names(SSP_clean) |>
-  str_match("^SSP.*(?<!\\.I|T)$") |>
-  as_tibble() |>
-  drop_na() |>
-  pull(1)
-
+#' We need to remove from SSP_clean all columns starting with SSP but not ending
+#' with T or IT (the ones we want to keep). We need to explicitly remove
+#' SSPSDT and SSPDT manually because they were used to calculated the inverted traits
 SSP_plot <- 
   SSP_clean |>
-  select(-col_to_remove,
-         -SSPSDT, -SSPDT) |> # We also want to remove the traits that were inverted for the factor score calculations
+  select(-( starts_with("SSP") & !( ends_with("T") | ends_with(".I") ) ),
+         -SSPSDT, -SSPDT) |>
   pivot_longer(cols = -Subject, names_to = "Factors_Traits", values_to = "Scores") |> 
   mutate(Factors_Traits = as_factor(Factors_Traits))
 
@@ -87,17 +77,17 @@ x_order <- c("Neuro", "SSPSTAT", "SSPPSTAT", "SSPSST", "SSPLAT", "SSPET", "SSPMT
              "Aggr", "SSPTIT", "SSPVTAT", "SSPPHTAT", "SSPSDT.I",
              "Extr", "SSPIT", "SSPAST", "SSPDT.I")
 
-# The order of the levels in SSP_plot$Factors_Traits can be changed now:
-SSP_plot$Factors_Traits <- 
-  SSP_plot$Factors_Traits |> 
-  factor(x_order)
-
 
 x_labels <- c("Neuroticism", "Somatic trait anxiety", "Psychic trait anxiety", 
               "Stress susceptibility", "Lack of assertiveness", "Embitterment", "Mistrust",
               "Aggressiveness", "Trait irritability", "Verbal trait aggression", 
               "Physical trait aggression", "Inversed social desirability",
               "Extraversion", "Impulsiveness", "Adventure seeking", "Inversed detachment")
+
+# The order of the levels and their labels in SSP_plot$Factors_Traits can be changed now:
+SSP_plot$Factors_Traits <- 
+  SSP_plot$Factors_Traits |> 
+  factor(levels = x_order, labels = x_labels)
 ```
 
 - I also want to create a vector that will store the colours for each personality factor or trait. The colours will be plain for the personality factors, and will be lightened down for each of the associated traits using `alpha()`.  
@@ -131,7 +121,7 @@ create.palette <-
 #' The vector col_palette finally gets created
 col_palette <- 
   c() |>
-create.palette(x_order, colours)
+  create.palette(x_labels, colours)
 ```
 
 ### 2. Making the plot
@@ -146,7 +136,6 @@ ggobj <-
         legend.position = "none",
         axis.title = element_text(face = "bold"),
         plot.title = element_text(hjust = 0.5, face = "bold")) +
-  scale_x_discrete(labels = x_labels) +
   scale_fill_manual(values = col_palette) +
   labs(x = "Personality factors and associated subscales",
        title = str_c("Results of the personality questionaire (n = ", n_distinct(SSP_plot$Subject), ")"))
