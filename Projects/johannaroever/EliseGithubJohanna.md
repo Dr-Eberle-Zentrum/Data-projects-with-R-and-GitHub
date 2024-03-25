@@ -103,13 +103,9 @@ either *limestone* or *marble*.
 
 ### Table to show amount of type per epoch
 
-    savedata <- data # to be removed
-    data <- savedata
-
     data$epoch <- factor(data$epoch, ordered = TRUE, 
                             levels = c("cypro-archaic", "cypro-classical", "hellenistic",
-                                       "hellenistic-roman", "julian-claudian", 
-                                       "early imperial", "antonine"))
+                                       "julian-claudian", "early imperial", "antonine"))
 
     data$type <- fct_relevel(data$type, c("6", "5b", "5a", "4b", "4a", "3", "2c", "2b", "2a", "2", "1b", "1a", "not defined"))
 
@@ -123,16 +119,15 @@ either *limestone* or *marble*.
 
     knitr::kable(table(data$type, data$epoch))
 
-<table style="width:100%;">
+<table>
 <colgroup>
-<col style="width: 37%" />
-<col style="width: 8%" />
+<col style="width: 42%" />
 <col style="width: 9%" />
-<col style="width: 7%" />
 <col style="width: 11%" />
-<col style="width: 9%" />
-<col style="width: 9%" />
-<col style="width: 5%" />
+<col style="width: 8%" />
+<col style="width: 11%" />
+<col style="width: 10%" />
+<col style="width: 6%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -140,7 +135,6 @@ either *limestone* or *marble*.
 <th style="text-align: right;">cypro-archaic</th>
 <th style="text-align: right;">cypro-classical</th>
 <th style="text-align: right;">hellenistic</th>
-<th style="text-align: right;">hellenistic-roman</th>
 <th style="text-align: right;">julian-claudian</th>
 <th style="text-align: right;">early imperial</th>
 <th style="text-align: right;">antonine</th>
@@ -154,7 +148,6 @@ either *limestone* or *marble*.
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
 <td style="text-align: right;">3</td>
 </tr>
 <tr class="even">
@@ -162,7 +155,6 @@ either *limestone* or *marble*.
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">2</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">2</td>
 <td style="text-align: right;">2</td>
@@ -172,7 +164,6 @@ either *limestone* or *marble*.
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">6</td>
 <td style="text-align: right;">2</td>
-<td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -186,7 +177,6 @@ anthemion</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Frameless, crowned with plant
@@ -197,13 +187,11 @@ ornamentation</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Niche stele</td>
 <td style="text-align: right;">1</td>
 <td style="text-align: right;">13</td>
-<td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">3</td>
@@ -214,7 +202,6 @@ ornamentation</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
 <td style="text-align: right;">6</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -227,13 +214,11 @@ ornamentation</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Symposium niche crowned by lion</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">12</td>
-<td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -245,7 +230,6 @@ Fragment</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">2</td>
 <td style="text-align: right;">4</td>
-<td style="text-align: right;">0</td>
 <td style="text-align: right;">2</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -255,7 +239,6 @@ Fragment</td>
 by two sphinxes</td>
 <td style="text-align: right;">2</td>
 <td style="text-align: right;">2</td>
-<td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -270,14 +253,12 @@ antithetical lions</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">not defined</td>
 <td style="text-align: right;">1</td>
 <td style="text-align: right;">7</td>
 <td style="text-align: right;">8</td>
-<td style="text-align: right;">0</td>
 <td style="text-align: right;">5</td>
 <td style="text-align: right;">4</td>
 <td style="text-align: right;">0</td>
