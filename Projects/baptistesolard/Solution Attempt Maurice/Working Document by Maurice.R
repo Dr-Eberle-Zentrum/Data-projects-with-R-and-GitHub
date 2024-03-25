@@ -185,6 +185,26 @@ inventory <- inventory %>%
 #I add all the objects I want to create a histogram for to a vector
 typesOfObjects <- c("Rod", "Bead", "OGW")
 
+plotColorHistogram <- function(typeOfObject) {
+  subsetted_temp_data <- inventory
+  
+  if  (typeOfObject == "ALL") {
+    subsetted_temp_data <- inventory %>% 
+      filter(!is.na(Color))
+  } else {
+    subsetted_temp_data <- inventory %>% filter(Type == typeOfObject)
+  }
+  
+  histogramGraph <- subsetted_temp_data %>%  ggplot(aes(x = Color, fill = Color)) +
+    geom_bar(color = "black") + 
+    theme_minimal() + #I like this theme!
+    labs(title = paste("Color Distribution of", typeOfObject), x = "Color", y = "Count")
+  
+  return(histogramGraph)
+}
+
+
+
 #I loop through all objects in my vector above
 for(typeOfObject in typesOfObjects) {
   subsetted_temp_data <- inventory %>% filter(Type == typeOfObject)

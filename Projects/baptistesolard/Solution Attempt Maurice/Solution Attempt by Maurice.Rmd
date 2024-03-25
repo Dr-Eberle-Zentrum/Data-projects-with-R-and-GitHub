@@ -30,46 +30,56 @@ glass_beads_csv_url <- "https://dr-eberle-zentrum.github.io/Data-projects-with-R
 
 inventory_original <- read.csv(inventory_csv_url, sep=";")
 glass_beads_original <- read.csv(glass_beads_csv_url, sep=";")
+```
 
-##################################### Objectives: Modification of the data tables #####################################
-##################################### (1) Inventory Table Modifications - Steps 1 - 2 #####################################
+# Objectives: Modification of the data tables
+## (1) Inventory Table Modifications - Steps 1 - 2
 
+```{r}
 #'I add a new column called SampleID as unique identifier for each observation
 inventory_original <- inventory_original %>% 
   mutate(SampleID = paste0(Context, ".", Number))
+```
 
-#'Issues with Data
-#'
-#'Later during the data transformation process, I realized that your inventory dataframe contains duplicate values.
-#'A similar issue came up when merging the data between the glass_beads table and the inventory below (See code below).
-#'
-#'Here I provide you with the SampleIDs that are duplicates in the data. 
-#'You should investigate your data source regarding the reason for the duplicates and how to prevent this from happening in the future. 
 
+###Issues with Data
+
+Later during the data transformation process, I realized that your inventory dataframe contains duplicate values.
+A similar issue came up when merging the data between the glass_beads table and the inventory below (See code below).
+
+Here I provide you with the SampleIDs that are duplicates in the data. 
+You should investigate your data source regarding the reason for the duplicates and how to prevent this from happening in the future. 
+
+```{r}
 inventory_duplicates <- inventory_original[duplicated(inventory_original$SampleID) | duplicated(inventory_original$SampleID, fromLast = TRUE), ]
 print(unique(inventory_duplicates$SampleID))
+```
 
-#'I will delete those duplicate values from the inventory for which there is no conflicting information provided.
-#'Some of the observations provide conflicting data tho which will be addressed later down below. 
-#'For that reason only 3 of the 5 duplicate SampleIDs will be omitted at this point. 
+I will delete those duplicate values from the inventory for which there is no conflicting information provided.
+Some of the observations provide conflicting data tho which will be addressed later down below. 
+For that reason only 3 of the 5 duplicate SampleIDs will be omitted at this point. 
+
+I create a new table called rods that contains these columns of the inventory_original table:
+
+- SampleID
+- Rod_Molten
+- Rod_Plychrome (Typo in original data!)
+- Rod_Length
+- Rod_Dm
+
+```{r}
 inventory_original <- unique(inventory_original)
 
-#'I create a new table called rods that contains these columns of the inventory_original table:
-#'
-#' - SampleID
-#' - Rod_Molten
-#' - Rod_Plychrome (Typo in original data!)
-#' - Rod_Length
-#' - Rod_Dm
 rods_original <- inventory_original[, c("SampleID", "Rod_Molten", "Rod_Plychrome", "Rod_Length", "Rod_Dm")]
 
 #'I removed the Rod_ columns that I added to the rods table from the inventory_original table. SampleID, I keep. 
 inventory_original <- select(inventory_original, -c("Rod_Molten", "Rod_Plychrome", "Rod_Length", "Rod_Dm"))
+```
 
-##################################### (2) Inventory Table Modifications - Step 3 #####################################
+## (2) Inventory Table Modifications - Step 3
 
 ### Transposing Inventory Table
-
+```{r}
 inventory_edited <- inventory_original %>% pivot_longer(HollowGlass:Miscellaneous, #Transposing all columns between HollowGlass:Miscellaneous
                                             names_to="Type", #New column name of names is called Type
                                             values_to="Indicator") %>% #New column name of values is called Indicator because it indicates if an object is something
@@ -79,9 +89,11 @@ inventory_edited <- inventory_original %>% pivot_longer(HollowGlass:Miscellaneou
 
 #Printing the new table
 head(inventory_edited)
+```
 
 ### Transposing Rods Table
 
+```{r}
 rods <- rods_original %>% pivot_longer(Rod_Molten:Rod_Plychrome, #Transposing all columns between Rod_Molten:Rod_Plychrome
                                              names_to="Characteristic", #New column name of names is called Characteristic
                                              values_to="Indicator") %>% #New column name of values is called Indicator because it indicates if an object is something
@@ -94,8 +106,11 @@ rods <- rods_original %>% pivot_longer(Rod_Molten:Rod_Plychrome, #Transposing al
 #Printing new table
 head(rods)
 
-##################################### (3) Glass Beads Table Modifications - Steps 1 - 3 #####################################
+```
 
+## (3) Glass Beads Table Modifications - Steps 1 - 3 
+
+```{r}
 glass_beads_edited <- glass_beads_original %>% 
   mutate(SampleID = paste0(Context, ".", Number)) %>% #Creating the SampleID column
   rename(Color = Colour) %>%  #Changing the name of the column Color to US English [I like it better :) ]
@@ -107,18 +122,21 @@ glass_beads_edited <- glass_beads_original %>%
 #Printing new table
 head(glass_beads_edited)
 
-##################################### (4) Inventory Table Modifications - Step 4 #####################################
+```
 
-#'Issues with Data
-#'
-#'The Inventory & Glass Beads tables contain conflicting data.
-#'I found two SampleIDs that are contained in both tables but are assigned to different object types.
-#'
-#' - SampleID: 2897.203 = RV in Inventory Table but also contained in Beads Table
-#' - SampleID: 3159.203 = HollowGlass in Inventory Table but also contained in Beads Table
-#' 
-#' This issue is addressed below
-#'
+## (4) Inventory Table Modifications - Step 4
+
+###Issues with Data
+
+The Inventory & Glass Beads tables contain conflicting data.
+I found two SampleIDs that are contained in both tables but are assigned to different object types.
+
+- SampleID: 2897.203 = RV in Inventory Table but also contained in Beads Table
+- SampleID: 3159.203 = HollowGlass in Inventory Table but also contained in Beads Table
+
+This issue is addressed below:
+
+```{r}
 
 #'I create a new dataframe used for merging 
 glass_beads_merge <- glass_beads_edited %>% 
@@ -135,13 +153,15 @@ bead_duplicates <- inventory %>%
   filter(Type.x == "Bead" | Type.y == "Bead") %>% 
   filter(Type.x != Type.y) %>% 
   print()
+```
 
-#'For the purpose of this project, I will for now override the Type information coming from the inventory table.
-#'Assuming that the beads table was most likely handled with more care, I assume the two objects to actually be beads.
-#'For that reason, I will disregard the information provided by the inventory table.
-#'
-#'However, you should definitely address this issue when you continue to work with this data!
+For the purpose of this project, I will for now override the Type information coming from the inventory table.
+Assuming that the beads table was most likely handled with more care, I assume the two objects to actually be beads.
+For that reason, I will disregard the information provided by the inventory table.
 
+However, you should definitely address this issue when you continue to work with this data!
+
+```{r}
 inventory <- inventory %>% 
   rename(Type = Type.x) %>% #I rename the Type.x Column from the inventory table
   mutate(Type = ifelse(!is.na(Type.y) & Type != "Bead", Type.y, Type)) %>%  #I override the object information that conflicts with the beads table
@@ -152,8 +172,11 @@ inventory <- inventory %>%
 
 head(inventory)
 
-##################################### (5) Glass Beads Table Modifications - Steps 4 #####################################
+```
 
+## (5) Glass Beads Table Modifications - Steps 4
+
+```{r}
 #'I create a new table that contains only the releant rows that need to be appended
 glass_beads_append <- inventory %>% 
   filter(Type=="Bead") %>% 
@@ -169,22 +192,22 @@ glass_beads_edited <- glass_beads_edited %>%
 #There are probably nicer solutions but thats as good as it gets for now. 
 glass_beads <- full_join(glass_beads_edited, glass_beads_append, by = c("SampleID", "Obj", "Field", "POS", "Context", "Number", "Phase", "Type", "Color"))
 
+```
 
-#'
-#'There are now 3 final tables of the original data
-#'
-#' 1. inventory
-#' 2. rods
-#' 3. glass_beads
-#' 
-#' Please take a closer look at these tables to understand the duplicates issues:
-#' 
-#' 1. bead_duplicates
-#' 2. inventory_duplicates
-#' 
+There are now 3 final tables of the original data
 
-##################################### (6) Visualization #####################################
+1. inventory
+2. rods
+3. glass_beads
 
+Please take a closer look at these tables to understand the duplicates issues:
+
+1. bead_duplicates
+2. inventory_duplicates
+
+## (6) Visualization
+
+```{r, echo=T}
 #As you can see, some colors are written incorreclty
 print(unique(inventory$Color))
 
@@ -197,26 +220,33 @@ inventory <- inventory %>%
 #I add all the objects I want to create a histogram for to a vector
 typesOfObjects <- c("Rod", "Bead", "OGW")
 
-#I loop through all objects in my vector above
-for(typeOfObject in typesOfObjects) {
-  subsetted_temp_data <- inventory %>% filter(Type == typeOfObject)
+plotColorHistogram <- function(typeOfObject) {
+  subsetted_temp_data <- inventory
   
-  #I create the histogram
+  if  (typeOfObject == "ALL") {
+    subsetted_temp_data <- inventory %>% 
+      filter(!is.na(Color))
+  } else {
+    subsetted_temp_data <- inventory %>% filter(Type == typeOfObject)
+  }
+  
   histogramGraph <- subsetted_temp_data %>%  ggplot(aes(x = Color, fill = Color)) +
     geom_bar(color = "black") + 
     theme_minimal() + #I like this theme!
     labs(title = paste("Color Distribution of", typeOfObject), x = "Color", y = "Count")
+  
+  return(histogramGraph)
 }
 
-#NA Color Values take up the majority of observations.
-#I only want to visualize non missing values for the overall dataset
-inventory_all <- inventory %>% 
-  filter(!is.na(Color))
-
-#Finally I print the whole color distribution
-total_inventory_plot <- inventory_all %>% 
-  ggplot(aes(x = Color, fill = Color)) +
-  geom_bar(color = "black") + 
-  theme_minimal() +
-  labs(title = paste("Total Color Distribtion"), x = "Color", y = "Count")
+ggsave("Plots/Rod_Histogram.png", plot = plotColorHistogram("Rod"))
+ggsave("Plots/Bead_Histogram.png", plot = plotColorHistogram("Bead"))
+ggsave("Plots/OGW_Histogram.png", plot = plotColorHistogram("OGW"))
+ggsave("Plots/ALL_Histogram.png", plot = plotColorHistogram("ALL"))
 ```
+
+![Rod_Histogram](Plots/Rod_Histogram.png)
+![Bead_Histogram](Plots/Bead_Histogram.png)
+![oGW_Histogram](Plots/OGW_Histogram.png)
+
+![ALL_Histogram](Plots/ALL_Histogram.png)
+
