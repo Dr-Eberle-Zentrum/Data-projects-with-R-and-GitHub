@@ -50,7 +50,7 @@
     #I use ; as seperator.
     housing_prices <- read.csv(url_to_csv, sep =";")
 
-    ##################################### Data Manipulation Goals #####################################
+# Data Manipulation Goals
 
     #I first replace the . in the names of the columns with a _
     #This makes it easier to read
@@ -155,9 +155,9 @@
     ## 6  2018 Germany 2016  -  2018                            0.416            0.804 
     ## # ℹ abbreviated name: ¹​Percentage_of_Workforce_Working_Remotely
 
-    ##################################### Visualization Goals #####################################
+# Visualization Goals
 
-    ##################################### (1) Scatter plot #####################################
+## (1) Scatter Plot
 
     subsetted_data %>% 
       ggplot(aes(x=Percentage_of_Workforce_Working_Remotely, y=Home_Price_Growth, color=Period)) +
@@ -178,9 +178,9 @@
         legend.position = "bottom", #Prepositions the legend at the bottom
       )
 
-![](Maurice_files/figure-markdown_strict/unnamed-chunk-1-1.png)
+![](Maurice_files/figure-markdown_strict/unnamed-chunk-3-1.png)
 
-    ##################################### (2) Comparison of Remote Work & Home Pricing (Growth Data) #####################################
+## (2) Comparison of Remote Work & Home Pricing (Growth Data)
 
     # Still working on the scale on y-axis. -> Check Values! 
 
@@ -217,9 +217,9 @@
     ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
     ## generated.
 
-![](Maurice_files/figure-markdown_strict/unnamed-chunk-1-2.png)
+![](Maurice_files/figure-markdown_strict/unnamed-chunk-4-1.png)
 
-    ##################################### (2) Comparison of Remote Work & Home Pricing (Absolute Data) #####################################
+## (2) Comparison of Remote Work & Home Pricing (Absolute Data)
 
     #Second axis scaling source: https://finchstudio.io/blog/ggplot-dual-y-axes/
 
@@ -260,4 +260,4 @@
       
       geom_vline(xintercept = 2019, linetype="dashed", color="red", size=1)
 
-![](Maurice_files/figure-markdown_strict/unnamed-chunk-1-3.png)
+![](Maurice_files/figure-markdown_strict/unnamed-chunk-5-1.png)

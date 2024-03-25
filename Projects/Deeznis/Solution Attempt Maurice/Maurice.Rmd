@@ -34,9 +34,11 @@ url_to_csv <- "https://dr-eberle-zentrum.github.io/Data-projects-with-R-and-GitH
 
 #I use ; as seperator.
 housing_prices <- read.csv(url_to_csv, sep =";")
+```
 
-##################################### Data Manipulation Goals #####################################
+# Data Manipulation Goals
 
+```{r}
 #I first replace the . in the names of the columns with a _
 #This makes it easier to read
 colnames(housing_prices) <- gsub("\\.", "_", colnames(housing_prices))
@@ -99,11 +101,13 @@ subsetted_data <- housing_prices %>%
 
 subsetted_data <- na.omit(subsetted_data[, c("Year", "Country", "Period", "Percentage_of_Workforce_Working_Remotely", "Home_Price_Growth")])
 head(subsetted_data)
+```
 
-##################################### Visualization Goals #####################################
+# Visualization Goals 
 
-##################################### (1) Scatter plot #####################################
+## (1) Scatter Plot
 
+```{r}
 subsetted_data %>% 
   ggplot(aes(x=Percentage_of_Workforce_Working_Remotely, y=Home_Price_Growth, color=Period)) +
   geom_point() +
@@ -122,9 +126,11 @@ subsetted_data %>%
   theme(
     legend.position = "bottom", #Prepositions the legend at the bottom
   )
+```
 
-##################################### (2) Comparison of Remote Work & Home Pricing (Growth Data) #####################################
+## (2) Comparison of Remote Work & Home Pricing (Growth Data)
 
+```{r}
 # Still working on the scale on y-axis. -> Check Values! 
 
 housing_Prices_rel_long %>%
@@ -153,9 +159,11 @@ housing_Prices_rel_long %>%
   scale_y_continuous(labels = scales::percent_format(scale = 100)) + #Formats the values on the y-axis as percentage.
   scale_x_continuous(breaks = unique(housing_Prices_rel_long$Year)) +  #Shows each year on the x-axis. 
   geom_vline(xintercept = 2019, linetype="dashed", color="red", size=1) # Highlighting the year of the Covid-19 pandemic.
+```
 
-##################################### (2) Comparison of Remote Work & Home Pricing (Absolute Data) #####################################
+## (2) Comparison of Remote Work & Home Pricing (Absolute Data)
 
+```{r}
 #Second axis scaling source: https://finchstudio.io/blog/ggplot-dual-y-axes/
 
 scale <- 0.005
@@ -194,6 +202,4 @@ housing_prices %>%
   ) +
   
   geom_vline(xintercept = 2019, linetype="dashed", color="red", size=1)
-
-
 ```
