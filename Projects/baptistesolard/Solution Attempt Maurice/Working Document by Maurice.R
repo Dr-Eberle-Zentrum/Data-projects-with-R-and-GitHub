@@ -197,37 +197,15 @@ plotColorHistogram <- function(typeOfObject) {
   
   histogramGraph <- subsetted_temp_data %>%  ggplot(aes(x = Color, fill = Color)) +
     geom_bar(color = "black") + 
-    theme_minimal() + #I like this theme!
+    scale_fill_identity() +
     labs(title = paste("Color Distribution of", typeOfObject), x = "Color", y = "Count")
   
   return(histogramGraph)
 }
 
+plotColorHistogram("Rod")
 
-
-#I loop through all objects in my vector above
-for(typeOfObject in typesOfObjects) {
-  subsetted_temp_data <- inventory %>% filter(Type == typeOfObject)
-  
-  #I create the histogram
-  histogramGraph <- subsetted_temp_data %>%  ggplot(aes(x = Color, fill = Color)) +
-    geom_bar(color = "black") + 
-    theme_minimal() + #I like this theme!
-    labs(title = paste("Color Distribution of", typeOfObject), x = "Color", y = "Count")
-  
-  print(histogramGraph)
-}
-
-#NA Color Values take up the majority of observations.
-#I only want to visualize non missing values for the overall dataset
-inventory_all <- inventory %>% 
-  filter(!is.na(Color))
-
-#Finally I print the whole color distribution
-total_inventory_plot <- inventory_all %>% 
-  ggplot(aes(x = Color, fill = Color)) +
-  geom_bar(color = "black") + 
-  theme_minimal() +
-  labs(title = paste("Total Color Distribtion"), x = "Color", y = "Count")
-
-total_inventory_plot
+ggsave("Plots/Rod_Histogram.png", plot = plotColorHistogram("Rod"))
+ggsave("Plots/Bead_Histogram.png", plot = plotColorHistogram("Bead"))
+ggsave("Plots/OGW_Histogram.png", plot = plotColorHistogram("OGW"))
+ggsave("Plots/ALL_Histogram.png", plot = plotColorHistogram("ALL"))

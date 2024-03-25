@@ -216,10 +216,6 @@ inventory <- inventory %>%
   mutate(Color = ifelse(Color == "greeen", "green", Color),
          Color = ifelse(Color == "bluee", "blue", Color)) 
 
-
-#I add all the objects I want to create a histogram for to a vector
-typesOfObjects <- c("Rod", "Bead", "OGW")
-
 plotColorHistogram <- function(typeOfObject) {
   subsetted_temp_data <- inventory
   
@@ -232,7 +228,7 @@ plotColorHistogram <- function(typeOfObject) {
   
   histogramGraph <- subsetted_temp_data %>%  ggplot(aes(x = Color, fill = Color)) +
     geom_bar(color = "black") + 
-    theme_minimal() + #I like this theme!
+    scale_fill_identity() +
     labs(title = paste("Color Distribution of", typeOfObject), x = "Color", y = "Count")
   
   return(histogramGraph)
