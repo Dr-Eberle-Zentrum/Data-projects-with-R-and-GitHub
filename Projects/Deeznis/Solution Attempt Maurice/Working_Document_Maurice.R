@@ -132,8 +132,8 @@ housing_Prices_rel_long %>%
   
   theme(
     legend.position = "bottom", #Prepositions the legend at the bottom
-    #panel.grid.major = element_blank(), #Removes the grid from the background
-    #panel.grid.minor = element_blank(), #Removes the grid from the background
+    panel.grid.major = element_blank(), #Removes the grid from the background
+    panel.grid.minor = element_blank(), #Removes the grid from the background
   ) + 
   
   scale_y_continuous(labels = scales::percent_format(scale = 100)) + #Formats the values on the y-axis as percentage.
