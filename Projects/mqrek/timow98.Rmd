@@ -1,0 +1,158 @@
+---
+title: "timow98"
+author: "Timo Walcher"
+date: "`r Sys.Date()`"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+options(repos = c(CRAN = "https://cloud.r-project.org"))
+if (!requireNamespace("pacman", quietly = TRUE)) {
+  install.packages("pacman")} 
+library(pacman)
+p_load(tidyverse, cowplot, patchwork)
+```
+
+## Data Manipulation Goals
+1. Converting the ‘Date’ column to a proper date format to facilitate time-based analysis. 
+  
+Read the CSV file and display the head of the data. We can format the date column when importing the file.
+```{r}
+NVDA <- read_csv("NVDA_messedUp_final.csv", 
+    col_types = cols(Date = col_date(format = "%Y-%m-%d"))) # Date format
+
+knitr::kable(
+  NVDA[1:10, ], 
+  caption = "Table: NVDA.csv")
+```
+2. Calculating weekly and monthly closing values from the dataset to identify trends and patterns in the stock performance over time.
+
+Here we can use dplyr to get two new dataframes with the last Close value of every week and month.
+```{r}
+NVDA_monthly <- NVDA %>%
+  mutate(Date_YM = format(Date, "%Y-%m")) %>%
+  # this will group by month
+  group_by(Date_YM) %>%
+  summarise(monthly_close = last(Close))
+
+NVDA_weekly <- NVDA %>%
+  mutate(Date_YM = format(Date, "%Y-%W"),
+         calendarweek = format(Date, "%W"),
+         Date = format(Date, "%Y-%m-%d")) %>%
+  # this will group by week
+  group_by(Date_YM) %>%
+  summarise(weekly_close = last(Close),
+            calendarweek = first(calendarweek),
+            Date = last(Date),
+            weekly_open = first(Open))
+```
+Now we have 2 new Dataframes.  
+For the second Plot we need to extend the weekly dataframe.
+```{r}
+NVDA_weekly <- NVDA_weekly %>%
+   # add column for year (important for plot 1)
+   mutate(year = lubridate::year(Date),
+          Date_YM = NULL,
+          # change datatypes (important for plot 2)
+          Date = as.Date(Date),
+          calendarweek = as.numeric(calendarweek))
+```
+
+Calculation of the performance (I have no Idea how). I asked ChatGPT how to calculate Stock Performance and implemented it accordingly.
+```{r}
+NVDA_weekly <- NVDA_weekly %>%
+  # calculate performance in %
+  mutate(percentage = ((weekly_close - weekly_open)/weekly_open)) %>%  
+  drop_na()
+
+knitr::kable(
+  NVDA_weekly[1:10, ], 
+  caption = "Table: NVDA_weekly")
+```
+
+## Visualisation: Plot 1
+We use the closing values of NVDA_monthly to produce two plots:  
+1. A plot with a logarithmic scale to highlight percentage changes over time.
+
+First of all, the new dataframe with the column month is of type character. We need to change it back to the date format.
+```{r}
+NVDA_monthly$Date_YM <- as.Date(paste0(NVDA_monthly$Date_YM, "-01"))
+```
+
+When using logarithmic scales, NA values would create an error message, so we need to do something about that. It would be possible to add just a tiny constant to all the NA values or just drop them. Adding a small constant would look like this:  
+NVDA_monthly$mean_close_p <- NVDA_monthly$monthly_close + 1e-6  
+But it would not be useful because there is only one NA value which is basically the recent month and even if it was not NA it would mess up the plot.
+```{r}
+NVDA_monthly <- NVDA_monthly %>% drop_na()
+```
+
+Here is a plot with a logarithmic scale.
+```{r}
+# This is for the labels on the x-axis
+break_years <- as.Date(c("2000-01-01", "2010-01-01", "2020-01-01"))
+
+p1 <- ggplot(NVDA_monthly, aes(x = Date_YM, y = monthly_close)) +
+  geom_line(group = 1, color = "lightblue", linewidth = 1) +
+  scale_y_log10(breaks = c(1, 10, 100, 1000), 
+                label = \(tickposition) scales::comma(tickposition))+
+  scale_x_date(breaks = break_years, 
+               labels = format(break_years, "%Y"), 
+               date_labels = "%Y") +
+  labs(
+    x = "Date",
+    y = "Monthly values",
+    title = "Logarithmic scale") +
+    theme(axis.line = element_line(color = "black"),
+        panel.background = element_blank(),
+        panel.grid.minor = element_line(color = "lightgrey"),
+        plot.title = element_text(hjust = 0.5))
+```
+
+2. A plot with a linear scale to provide a clear representation of absolute stock values.
+```{r}
+p2 <- ggplot(NVDA_monthly, aes(x = Date_YM, y = monthly_close)) +
+  geom_line(group = 1, color = "lightblue", linewidth = 1) +
+  scale_y_continuous(breaks = c(0,200,400,600,800), limits = c(0,800))+
+  scale_x_date(breaks = break_years, 
+               labels = format(break_years, "%Y"), 
+               date_labels = "%Y") +
+  labs(
+    x = "Date",
+    y = "Monthly values",
+    title = "Linear scale") +
+  theme(axis.line = element_line(color = "black"),
+        panel.background = element_blank(),
+        panel.grid.minor = element_line(color = "lightgrey"),
+        plot.title = element_text(hjust = 0.5))
+```
+Now both plots next to each other
+```{r plot1, fig.width=10, fig.height=5}
+p1 + p2 + plot_annotation(title = 'NVIDIA Stock Chart', 
+                          caption = 'Author: Timo Walcher',
+                          theme = theme(plot.title = element_text(size = 16, 
+                                                                  hjust = 0.5,
+                                                                  face = "bold")))
+```
+
+## Visualisation: Plot 2
+```{r}
+p3 <- ggplot(NVDA_weekly, aes(calendarweek, percentage, color = factor(year)))+
+  geom_line(aes(group = year))+
+  scale_x_continuous(breaks = c(0, 20, 40), labels = c(0,20,40))+
+  guides(color = guide_legend(title = "Years"))+
+  labs(
+    x = "Calendarweek",
+    y = "Average performance (%)",
+    title = "Average weekly performance per year of NVIDIA",
+    caption = "Author: Timo Walcher")+
+  theme(axis.line = element_line(color = "black"),
+        panel.background = element_blank(),
+        panel.grid.minor = element_line(color = "lightgrey"),
+        plot.title = element_text(hjust = 0.5, face = "bold"))
+
+```
+```{r plot2, fig.width=10, fig.height=5}
+p3
+```
