@@ -122,7 +122,7 @@ Current projects:
 - David (Davidprntz) - [Bigmart a Marketing Analysis](Projects/DavidPrntz/Project-description.md)
   - solution [by Baptiste](Projects/DavidPrntz/baptistesolard.md), [by Dennis](Projects/DavidPrntz/Deeznis.md), [by Martin](Projects/DavidPrntz/martin.md)
 - Elise (elbue) - [Questionaire evaluation](Projects/elbue/project-description.md)
-  - solution [by David](Projects/elbue/Davidprntz.md), [by Baptiste](Projects/elbue/baptistesolard.md), [by Martin](Projects/elbue/martin.md)
+  - solution [by David](Projects/elbue/Davidprntz.md), [by Baptiste](Projects/elbue/baptistesolard.md)
 
 Dropped projects:
 
