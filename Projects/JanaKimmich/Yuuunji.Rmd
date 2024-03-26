@@ -1,0 +1,88 @@
+---
+title: "Yuuunji"
+output: html_document
+---
+
+### Importing Datasets
+
+```{r cars}
+
+library(tidyr)
+library(dplyr)
+library(readr)
+results <- read_csv(unz("archive.zip", "results.csv"))
+races<- read_csv(unz("archive.zip", "races.csv"))
+drivers<- read_csv(unz("archive.zip", "drivers.csv"))
+driver_standings<- read_csv(unz("archive.zip","driver_standings.csv"))
+constructors<- read_csv(unz("archive.zip", "constructors.csv"))
+```
+
+### Finding Top 10 racers from 2000 - 2020 in result.csv
+
+```{r pressure, echo=FALSE}
+
+races <- races %>% select(year, raceId)
+result <-results %>% select(raceId, constructorId, driverId)
+
+win1 <- driver_standings %>%
+  select(raceId,driverId,wins) %>%
+  left_join(., races, by = "raceId") %>%
+  left_join(., result, by = c("raceId", "driverId")) %>%
+  group_by(driverId, year, constructorId) %>%
+  filter(year <2021 & year > 1999 & !is.na(constructorId)) %>%
+  summarise(total=max(wins))
+
+win2 <- win1 %>%
+  group_by(driverId) %>%
+  summarise(total=sum(total)) %>%
+  arrange(desc(total)) %>%
+  top_n(10,total)
+
+win3 <- win1%>% filter(driverId %in% win2$driverId & total >0)
+
+```
+
+
+### Finding names corresponding to ID
+
+```{r}
+top_drivers <- drivers %>% filter(driverId %in% win3$driverId) %>%
+  select(driverId,forename,surname,nationality) 
+
+con_names<- constructors %>% filter( constructorId %in% win3$constructorId) %>% select(constructorId,name)
+
+win3 <- full_join(win3,top_drivers, by = "driverId")
+win3 <- full_join(win3,con_names, by = "constructorId")
+```
+
+### Visualisation
+
+```{r} 
+library(plotly)
+
+library(ggplot2)
+colnames(win3) <- c("driver_Id","year","constructor_ID","Wins","forename","surname","nationality","Constructor")
+
+win3['Name'] <- paste(win3$forename,win3$surname)
+fig <- plot_ly(win3, x = ~Wins, y = ~Name, type =
+'bar', orientation = 'h', name = ~Constructor, color=~Constructor, text =~paste("Nationality",nationality,"\nYear:",year,"\nConstructor:",Constructor), hovertemplate = paste( "Name:
+%{y}<br>",  "Wins:%{x}<br>","%{text}","<extra></extra>" ))
+
+fig <- fig %>% layout(yaxis = list(title = 'Count'), barmode ='stack')
+
+fig
+
+```
+
+### New Attempt Visualisation
+```{r} 
+
+
+p <- ggplot(win3, aes(x=Wins, y=Name,fill=Constructor,text =paste("Nationality:", nationality,"\nYear:", year)))+
+  geom_bar(stat="identity")+
+  ggtitle("Most successfull drivers with constructors",subtitle = "click on bar to open wikipedia page of driver")
+
+ggplotly(p)
+
+```
+
