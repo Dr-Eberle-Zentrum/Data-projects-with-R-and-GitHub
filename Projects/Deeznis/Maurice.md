@@ -5,35 +5,35 @@
 
     if (!require(magrittr)) install.packages(magrittr)
 
-    ## Loading required package: magrittr
+    ## Lade nötiges Paket: magrittr
 
     if (!require(dplyr)) install.packages(dplyr)
 
-    ## Loading required package: dplyr
+    ## Lade nötiges Paket: dplyr
 
     ## 
-    ## Attaching package: 'dplyr'
+    ## Attache Paket: 'dplyr'
 
-    ## The following objects are masked from 'package:stats':
+    ## Die folgenden Objekte sind maskiert von 'package:stats':
     ## 
     ##     filter, lag
 
-    ## The following objects are masked from 'package:base':
+    ## Die folgenden Objekte sind maskiert von 'package:base':
     ## 
     ##     intersect, setdiff, setequal, union
 
     if (!require(ggplot2)) install.packages(ggplot)
 
-    ## Loading required package: ggplot2
+    ## Lade nötiges Paket: ggplot2
 
     if (!require(tidyr)) install.packages(tidyr)
 
-    ## Loading required package: tidyr
+    ## Lade nötiges Paket: tidyr
 
     ## 
-    ## Attaching package: 'tidyr'
+    ## Attache Paket: 'tidyr'
 
-    ## The following object is masked from 'package:magrittr':
+    ## Das folgende Objekt ist maskiert 'package:magrittr':
     ## 
     ##     extract
 
