@@ -112,6 +112,7 @@ Current projects:
 - Johanna (johannaroever) - [Visualisation for grave stelae from Cyprus during the Roman Empire](Projects/johannaroever/project-description.md)
   - solution [by Elise](Projects/johannaroever/EliseGithubJohanna.md)
 - Timo (timow98) - [Soil data Visualization](Projects/timow98/project-description.md)
+  - solution [by Johanna](Projects/timow98/johannaroever.md)
 - Maurice (mauriceschmetzer) - [US Immigrant Visas Issued](Projects/mauriceschmetzer/project-description.md)
 - Dennis (Deeznis) - [The Economic Impact of Remote Work on Urban Housing Markets](Projects/Deeznis/project-description.md)
 - Baptiste (baptistesolard) - [Coloured Glass Beads in the Early Middle Ages](Projects/baptistesolard/project-description.md)
