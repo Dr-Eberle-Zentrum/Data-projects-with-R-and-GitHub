@@ -118,7 +118,7 @@ Current projects:
 - Dennis (Deeznis) - [The Economic Impact of Remote Work on Urban Housing Markets](Projects/Deeznis/project-description.md)
   - solution [by Maurice](Projects/Deeznis/Maurice.md)
 - Baptiste (baptistesolard) - [Coloured Glass Beads in the Early Middle Ages](Projects/baptistesolard/project-description.md)
-  - solution [by Dennis](Projects/baptistesolard/Deeznis.md)
+  - solution [by Dennis](Projects/baptistesolard/Deeznis.md), [by Maurice](Projects/baptistesolard/Maurice.md)
 - David (Davidprntz) - [Bigmart a Marketing Analysis](Projects/DavidPrntz/Project-description.md)
   - solution [by Baptiste](Projects/DavidPrntz/baptistesolard.md), [by Dennis](Projects/DavidPrntz/Deeznis.md)
 - Elise (elbue) - [Questionaire evaluation](Projects/elbue/project-description.md)
