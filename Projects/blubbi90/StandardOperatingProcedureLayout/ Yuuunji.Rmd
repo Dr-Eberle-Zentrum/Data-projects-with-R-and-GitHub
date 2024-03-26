@@ -1,0 +1,296 @@
+---
+title: "Untitled"
+author: "Yunji Kang"
+date: "2023-12-12"
+output: md_document
+---
+
+### Reading the files
+
+```{r}
+library(readr)
+table_2 <- read_csv("D://Data-projects-with-R-and-GitHub/Projects/blubbi90/StandardOperatingProcedureLayout/Datasets/tables/table_2.csv")
+table_1 <- read_csv("D://Data-projects-with-R-and-GitHub/Projects/blubbi90/StandardOperatingProcedureLayout/Datasets/tables/table_1.csv")
+table_3 <- read_csv("D://Data-projects-with-R-and-GitHub/Projects/blubbi90/StandardOperatingProcedureLayout/Datasets/tables/table_3.csv")
+table <- cbind(table_1, table_2, table_3)
+```
+
+```{r}
+library(openxlsx)
+url_1<-"D://Data-projects-with-R-and-GitHub/Projects/blubbi90/StandardOperatingProcedureLayout/Datasets/codebooks/1. Overview.xlsx"
+url_2<-"D://Data-projects-with-R-and-GitHub/Projects/blubbi90/StandardOperatingProcedureLayout/Datasets/codebooks/2. Anguss.xlsx"
+url_3<-"D://Data-projects-with-R-and-GitHub/Projects/blubbi90/StandardOperatingProcedureLayout/Datasets/codebooks/3. Bearbeiten.xlsx"
+url_4<-"D://Data-projects-with-R-and-GitHub/Projects/blubbi90/StandardOperatingProcedureLayout/Datasets/codebooks/4. MV.xlsx"
+url_5<-"D://Data-projects-with-R-and-GitHub/Projects/blubbi90/StandardOperatingProcedureLayout/Datasets/codebooks/5. Gewinde.xlsx"
+url_6<-"D://Data-projects-with-R-and-GitHub/Projects/blubbi90/StandardOperatingProcedureLayout/Datasets/codebooks/6. Prüfen.xlsx"
+url_7<-"D://Data-projects-with-R-and-GitHub/Projects/blubbi90/StandardOperatingProcedureLayout/Datasets/codebooks/7. Verpacken.xlsx"
+```
+
+```{r}
+cb_1 <- read.xlsx(url_1)
+cb_2 <- read.xlsx(url_2)
+cb_3 <- read.xlsx(url_3)
+cb_4 <- read.xlsx(url_4)
+cb_5 <- read.xlsx(url_5)
+cb_6 <- read.xlsx(url_6)
+cb_7 <- read.xlsx(url_7)
+```
+
+### Library
+
+```{r}
+library(jsonlite)
+```
+
+### Data Modification
+
+```{r}
+change_column_name <- function(data_frame, old_col_name, new_col_name) {
+  if (old_col_name %in% colnames(data_frame)) {
+    colnames(data_frame)[colnames(data_frame) == old_col_name] <- new_col_name
+    
+  return(data_frame)} else {return(data_frame)
+  }
+}
+cb_1 <- change_column_name(cb_1 ,"Section:","Section")
+cb_2 <- change_column_name(cb_2 ,"Table_ID.[Anguss_tool]","Table_ID")
+cb_3 <- change_column_name(cb_3 ,"Table.ID.[Bearbeiten]","Table_ID")
+cb_4 <- change_column_name(cb_4 ,"Table.ID.[if_MV].hier.Boolean","Table_ID")
+cb_5 <- change_column_name(cb_5 ,"Table.ID.[tool_gewinde]","Table_ID")
+cb_6 <- change_column_name(cb_6 ,"Table.ID.[Prüfen_woot]","Table_ID")
+cb_7 <- change_column_name(cb_6 ,"Table.ID","Table_ID")
+```
+
+```{r}
+sop <- data.frame(0)
+```
+
+# Function for codebook1
+
+```{r}
+fcb1 <- function(data){
+  cb <- subset(cb_1, TextBaustein == "Introtext")
+  cb$Image[cb$Image=="[Image_overview]"] <- data$Image_overview
+  if(data$Stempel){
+    cb <-rbind(cb,cb_1[2,])
+    }
+  else{
+    cb <-rbind(cb,cb_1[3,])
+    }
+  if(data$Handschuhe){
+    cb_Hand <- subset(cb_1, TextBaustein == "InfoAddVar2")
+    cb <- rbind(cb, cb_Hand)
+    }
+  if(data$if_Gewinde){
+    cb_G <- subset(cb_1, TextBaustein == "InfoAddVar1")
+    cb <- rbind(cb, cb_G)
+  }
+
+  return(cb)}
+
+fcb1(table[6,])
+```
+
+# Function for codebook2
+
+I am not sure what exactly if_Anguss note means. I just excluded the string that contains agnuss note, when if_Anguss is false.
+
+```{r}
+fcb2 <- function(data){
+  cb <- NULL
+  if(data$if_Anguss){
+    Tool<- strsplit(data$Anguss_tool, "; ")[[1]]
+    cb <- subset(cb_2,Table_ID%in%Tool)
+    if(data$if_Anguss_note=="true"){
+      cb$String <-sub("\\[Anguss_note\\]",data$Anguss_note, cb$String)
+    }
+    else{
+      cb <- subset(cb, !grepl("\\[Anguss_note\\]",String))
+      
+    }
+
+    image <- subset(cb_2, cb_2$Image=="[Image_anguss]")
+    image$Image <- data$Image_anguss
+    cb<-rbind(cb, image)
+  }
+  return(cb)}
+fcb2(table[9,])
+
+```
+
+# Function for codebook 3
+
+```{r}
+library
+fcb3 <- function(data) {
+  cb<-NULL
+  if (data$if_Bearbeiten) {
+    if ("," %in% data$Bearbeiten){
+          cleaned_data_bearbeiten <-tolower(unlist(fromJSON(data$Bearbeiten)))
+    print(cleaned_data_bearbeiten)
+    
+    condition <- tolower(cb_3$Table_ID) %in% cleaned_data_bearbeiten
+    } else{condition <-cb_3$Table_ID %in% data$Bearbeiten}
+    cb <- subset(cb_3, condition | Table_ID == '"always"')
+    cb$String <- sub("\\[Articel\\]", data$Articel, cb$String)
+
+  }
+  return(cb)
+}
+fcb3(table[5,])
+```
+
+# Function for codebook 4
+
+```{r}
+fcb4 <- function(data){
+  cb<-NULL
+  if(data$if_MV=="true"){
+    cb <- cb_4
+    cb$Image <- sub("\\[Image_MV_with\\]", data$Image_MV_with, cb$Image)
+    cb$Image <- sub("\\[Image_MV_without\\]", data$Image_MV_without, cb$Image)
+    }
+  return(cb)}
+
+
+fcb4(table[10,])
+```
+
+# Function for codebook 5
+
+```{r}
+fcb5 <- function(data){
+  cb<- NULL 
+  if(data$if_Gewinde){
+    condition1 <- cb_5$Table_ID == data$tool_gewinde
+    condition2 <- cb_5$Table_ID == '„always“'
+    condition3 <- cb_5$Table_ID == "[Image_gewinde]" 
+    condition4 <- cb_5$Table_ID == "[Note_gewinde]"
+    condition5 <- cb_5$Table_ID == " [if_Drehmoment]"
+    if(data$if_Drehmoment=="true"){
+      cb <- subset(cb_5, condition1 | condition2 | condition3 | condition4 | condition5)
+    }
+    else{
+      cb <- subset(cb_5, condition1 | condition2 | condition3 | condition4)
+    }
+    cb$String <-sub("\\[Gewinde_anzahl\\]", data$Gewinde_anzahl, cb$String)
+    cb$String <-sub("\\[Drehmoment\\]",data$Drehmoment, cb$String)
+    cb$String <-sub("\\[Gewinde_bezeichnung\\]",data$Gewinde_bezeichnung, cb$String)
+    cb$String <-sub("\\[Note_gewinde\\]",data$Note_gewinde, cb$String)
+    cb$Image <- sub("\\[Image_gewinde\\]", data$Image_gewinde, cb$Image)
+
+    }
+  return(cb)}
+
+fcb5(table[10, ])
+```
+
+# Function for codebook 6
+
+```{r}
+fcb6<- function(data){
+  cb<-NULL
+  if(data$if_Prüfen){
+    cleaned <- unlist(strsplit(data$Prüfen_woot, ', ', fixed = TRUE))
+    condition <- cb_6$Table_ID%in%cleaned
+    cb <- subset(cb_6, condition | Table_ID == '"always"')
+    cb$Image <- sub("\\[Image_prüfen\\]", data$Image_prüfen, cb$Image)
+    }
+  return(cb)}
+```
+
+# Function for codebook 7
+
+```{r}
+fcb7 <- function(data) {
+  cb <- NULL  
+  
+  if (data$if_Vp) {
+    if (data$vp_count_layer2 == "0") {
+      cb <- subset(cb_7, Table_ID == '"always"')
+    } else {
+      cb <- cb_7
+    }
+    cb$String <-sub("\\[vp_count_layer2\\]",data$vp_count_layer2, cb$String)
+    cb$String <-sub("\\[vp_count_layer\\]",data$vp_count_layer, cb$String)
+    cb$String <-sub("\\[vp_count_layer_pcs\\]",data$vp_count_layer_pcs, cb$String)
+
+    vp_count_layer_pcs <-as.numeric(data$vp_count_layer_pcs)
+    vp_count_layer<-as.numeric(data$vp_count_layer)
+    vp_count_layer2<-as.numeric(data$vp_count_layer2)
+    count = vp_count_layer_pcs *vp_count_layer +vp_count_layer2
+    
+    cb$String <-sub("\\[count_total\\]",count, cb$String)
+  }
+  
+  return(cb)
+}
+fcb7(table[7,])
+
+```
+
+```{r}
+
+```
+
+### Sop_list
+
+```{r}
+library(dplyr)
+library(knitr)
+library(kableExtra)
+library(tidyr)
+
+
+replace_minus_with_na <- function(x) {
+  ifelse(x == "-", NA, x)}
+  
+sop_list <- function(data){
+  if(data$Couple_product){
+    result <- list(paste(data$Articel,"/",data$Articel_coupl))
+  }
+  else {
+    result <- list(data$Articel)
+  }
+  
+  a <- list(fcb1(data), fcb2(data),fcb3(data),fcb4(data),fcb5(data),fcb6(data),fcb7(data))
+  for (x in a){
+      if (is.data.frame(x)){
+        x[]<- lapply(x, replace_minus_with_na)
+        x <- x %>% select(Section, String, Image) %>% melt(id="Section") %>% na.omit()
+
+        result <- append(result, list(x))
+        
+      }
+  }
+
+  return(result)
+}
+  sop <-sop_list(table[1,])
+```
+
+```{r}
+library(gt)
+library(tidyverse)
+library(glue)
+
+
+  sop <-sop_list(table[1,])
+  ac <- sop[[1]]
+  sop <- sop[-1]
+  gt(sop[[1]]) |>
+    tab_header(title = "S&P 500",
+               subtitle = glue("jj"))
+
+    
+
+```
+
+
+### visualization
+
+```{r}
+library(kableExtra)
+
+  
+```
