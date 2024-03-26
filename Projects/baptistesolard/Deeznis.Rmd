@@ -144,8 +144,8 @@ hist_by_type <- ggplot(all_data, aes(x = Colour, fill = Colour)) +
   facet_wrap(~ Type, ncol = 1) +  # Facet by object type
   theme_minimal()
 
-ggsave("SolutionByDennis/hist_by_type.png", plot = hist_by_type, 
-       width = 300, height = 200, units = "mm", dpi = 600, bg = "white")
+# ggsave("SolutionByDennis/hist_by_type.png", plot = hist_by_type, 
+#        width = 300, height = 200, units = "mm", dpi = 600, bg = "white")
        
 print(hist_by_type)
 
@@ -159,8 +159,8 @@ hist_combined <- ggplot(all_data, aes(x = Colour, fill = Colour)) +
   facet_wrap(~., ncol = 1) +  # Remove Type variable from facet_wrap
   theme_minimal()
 
-ggsave("SolutionByDennis/hist_combined.png", plot = hist_combined, 
-       width = 300, height = 200, units = "mm", dpi = 600, bg = "white")
+# ggsave("SolutionByDennis/hist_combined.png", plot = hist_combined, 
+#        width = 300, height = 200, units = "mm", dpi = 600, bg = "white")
 
 print(hist_combined)
 ```

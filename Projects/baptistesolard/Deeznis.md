@@ -1,11 +1,11 @@
     library(tidyverse)
 
     ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
-    ## ✔ forcats   1.0.0     ✔ stringr   1.5.1
-    ## ✔ ggplot2   3.5.0     ✔ tibble    3.2.1
-    ## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
-    ## ✔ purrr     1.0.2     
+    ## ✔ dplyr     1.1.1     ✔ readr     2.1.4
+    ## ✔ forcats   1.0.0     ✔ stringr   1.5.0
+    ## ✔ ggplot2   3.4.1     ✔ tibble    3.2.1
+    ## ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+    ## ✔ purrr     1.0.1     
     ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
@@ -15,7 +15,7 @@
     library(rio)
     library(here)
 
-    ## here() starts at C:/Users/denni/OneDrive/Dokumente/STUDIUM/Programming/R2 Data projects/Data-projects-with-R-and-GitHub
+    ## here() starts at C:/Lehre/Data-projects-with-R-and-GitHub
 
     # Set the working directory
     setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
@@ -158,8 +158,8 @@
     ## Warning in geom_histogram(color = "black", stat = "count"): Ignoring unknown
     ## parameters: `binwidth`, `bins`, and `pad`
 
-    ggsave("SolutionByDennis/hist_by_type.png", plot = hist_by_type, 
-           width = 300, height = 200, units = "mm", dpi = 600, bg = "white")
+    # ggsave("SolutionByDennis/hist_by_type.png", plot = hist_by_type, 
+    #        width = 300, height = 200, units = "mm", dpi = 600, bg = "white")
            
     print(hist_by_type)
 
@@ -177,8 +177,8 @@
     ## Warning in geom_histogram(color = "black", stat = "count"): Ignoring unknown
     ## parameters: `binwidth`, `bins`, and `pad`
 
-    ggsave("SolutionByDennis/hist_combined.png", plot = hist_combined, 
-           width = 300, height = 200, units = "mm", dpi = 600, bg = "white")
+    # ggsave("SolutionByDennis/hist_combined.png", plot = hist_combined, 
+    #        width = 300, height = 200, units = "mm", dpi = 600, bg = "white")
 
     print(hist_combined)
 
