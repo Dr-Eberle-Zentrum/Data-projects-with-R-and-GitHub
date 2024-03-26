@@ -1,0 +1,615 @@
+---
+title: "Tackling_Laura_Project"
+author: "Nicolai Schwarz"
+date: "2024-01-08"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+# get this packages
+library(tidyverse)
+library(dplyr)
+library(stringr)
+library(emo)
+library(readr)
+knitr::opts_chunk$set(echo = TRUE)
+ rm(list = ls())
+```
+
+Okay let's have a look, first we need to change columns and values from team roster.
+
+Therefor we could recycle the `auto_import_csv`-function from my other Project Solution.
+
+***
+
+```{r folder_content_roster, echo=FALSE}
+folder_path_roster <- "C:\\Users\\Pirate\\Documents\\Data-projects-with-R-and-GitHub\\Projects\\laura-burk\\volleyball-project\\team-rosters"
+
+ files <- list.files(folder_path_roster)
+
+ # need to change working directon
+files
+```
+
+***
+
+```{r all_paths, echo=TRUE}
+# Ain't working here due to wrong working direction
+
+folders <- list.files(getwd(), full.names = TRUE) %>%
+  .[!grepl("\\.", .)]
+
+folders
+
+```
+
+***
+
+```{r import, echo=TRUE }
+
+auto_import_csv <- function(file_path){
+  
+  file_list <- list.files(path = file_path, pattern = "\\.csv$", full.names = TRUE)        #-> here we could change the auto import to other data type's 
+  data_frames <- list()
+  
+  for (file in file_list) {
+    df_name <- tools::file_path_sans_ext(basename(file))  # uses filename as dataframe
+    
+    
+    data_frames[[df_name]] <- read.csv2(file, fileEncoding = "cp852")
+  }
+  
+  return(data_frames)
+}
+all_rosters <- auto_import_csv(folder_path_roster)
+str(all_rosters)
+#?row.names
+```
+
+***
+
+Okay god damn it, it took me fucking long time to notice, i just had to use the `read.csv2` function instead.
+
+should we supercharge the process now by using the `package(air)`?
+
+***
+
+
+```{r airup, echo=TRUE, eval=FALSE}
+install.packages("devtools") 
+devtools::install_github("soumyaray/air")
+```
+***
+
+Okay instead of going through the whole API stuff. let's do some minor adjustements by hand.
+
+Let's go for height first:
+
+***
+`#df <- mutate(df, Height = as.numeric(Height)/100)
+  #df$Height <- suppressWarnings(as.numeric(df$Height) / 100)`
+
+```{r adjust height in cm, echo=TRUE}
+all_rosters2 <- lapply(all_rosters, function(df) {
+  df %>%
+     mutate(Height = as.numeric(Height),
+           Height = ifelse(Height == 0 | Height > 3, NA, Height/100))
+
+    #mutate(Height = ifelse(Height == 0, NA,
+     #                      ifelse(as.numeric(substr(Height, 1, 1)) >= 3, as.numeric(paste0("1", substring(Height, 2))),
+      #                            as.numeric(Height))))
+})
+
+
+str(all_rosters2)
+all_rosters2
+```
+
+***
+
+And again did some useless extra work, due to value `999` equals `NA`and in the end its just an doc....
+
+So might be better, first mutate gender, get rid of unnecessary Positions and than finally fix the height into cm.
+
+**For the nationality might be easiest to implement an already existing country code list.**
+
+***
+
+```{r adjust gender, echo=TRUE}
+all_rosters3 <- lapply(all_rosters, function(df) {
+ df %>%
+    mutate(Gender = ifelse(str_detect(Gender, "^[fF]|2"), "female", "male"))
+})
+
+
+#str(all_rosters3)
+#all_rosters3
+```
+
+***
+
+Okay that was easy, probably should wrap it in a function to use it later on, on the other csv's aswell.
+
+Or should i punch all csv's in a list first ? `r emo::ji("thinking")`
+
+***
+
+Let's find some nice RegEx to fix the position Issues, or lets take a look in wiki first, might we could use something from there.
+
+-> Therefor we take a look what's the unique entry's in the "Position" column's
+
+***
+
+```{r unique_positions, echo=TRUE}
+
+unique_positions <- unique(unlist(lapply(all_rosters3, function(df) df$Position)))
+
+print(unique_positions)
+```
+***
+
+Okay lets make it more recyclable.
+
+***
+
+```{r unique_values, echo=TRUE}
+
+get_unique_values <- function(data, column){
+  unique_values <- unique(unlist(lapply(data, function(df) df[[column]])))
+  return(unique_values)
+}
+get_unique_values(all_rosters3, "Position")
+
+```
+
+***
+
+Okay lets go...
+
+***
+
+```{r adjust position, echo=TRUE}
+all_rosters4 <- lapply(all_rosters, function(df) {
+ df %>%
+    mutate(Position = str_replace_all(Position, "^[zZ].*|^[sS]e.*", "setter"),
+           Position = str_replace(Position, "^[mM].*", "middle blocker"))
+})
+
+
+#all_rosters4
+```
+
+***
+
+Yep this semse to be working, we could go on like that, but anyway there's still a lot of repeating, maybe we could just replace it with a **" adjustment map"**
+
+
+***
+```{r adjust_map position, echo=TRUE}
+
+adjust_map <- c("^[zZ].*|^[sS]e.*" = "setter",
+                "^[mM].*" = "middle blocker",
+                "^[aA]u.*|^[oO]u.*" = "outside hitter",
+                "^[dD].*|^[oO]p.*" = "opposite hitter",
+                "^[uU].*|^[lL].*" = "libero",
+                "^[tT]r.*|^[cC]h.*|.*[hH]ead.*" = "head coach")
+
+all_rosters5 <- lapply(all_rosters, function(df) {
+  df %>%
+    mutate(Position = str_replace_all(Position, adjust_map))
+})
+
+#str(all_rosters5)
+
+#all_rosters5
+```
+
+***
+
+Let's check what we got left, with our `get_unique_values()` function
+
+***
+
+```{r check_whats_left, echo=TRUE}
+get_unique_values(all_rosters5, "Position")
+```
+***
+
+looks pretty nice so far, how can we kick out, all unnecessary positions without calling them single again?
+
+`r emo::ji("thinking")` maybe just use an `ifelse` function before the `str_detect()`, nah this is getting to long and ugly
+
+instead we could just use the `filter`function, but im still not confident it works proper, i should check it.
+Aslong i'll kepp it in an extra chunk.
+
+```{r adjust_map position_kick_rest, echo=TRUE}
+
+all_rosters6 <- lapply(all_rosters, function(df) {
+  df %>%
+    mutate(Position = str_replace_all(Position, adjust_map))%>%
+    filter(Position %in% adjust_map)
+
+})
+
+#str(all_rosters6)
+
+#all_rosters6
+```
+
+***
+Let's have a look again whats left.
+```{r check_whats_left_filterd, echo=TRUE}
+get_unique_values(all_rosters6, "Position")
+```
+
+*** 
+
+seems like it's working, even if im still not sure, how R pulls out the right words (position names) from the whole `adjust_map` instead of looking for the pattern insight 
+&#x1F937;
+
+***
+
+Anyway next we need to fix the country code, would love to use a predefined country-code-list. 
+Due to its capability to recycle, but sounds like im missing the point again.
+So first take a look what values we got.
+Might be some simple Regex fixes the issues faster.
+
+***
+```{r check_country, echo=TRUE}
+get_unique_values(all_rosters, "Nationality")
+```
+
+***
+
+Alright, this looks to me like, we should do a semi automatic way, luckily there's already packages for `library(countrycode)`
+`r emo::ji("thinking")`
+
+Let's fix this German issues by hand and with some simple Regex and let the package do the rest.
+
+***
+
+```{r adjust_nation, echo=TRUE}
+
+all_rosters7 <- lapply(all_rosters6, function(df) {
+ df %>%
+    mutate(Nationality = str_replace_all(Nationality, "^[dD].*|^[gG].*", "Deutschland"),
+           Nationality = str_replace(Nationality, ".*wenia$", "Slovenia"),
+            Nationality = str_replace(Nationality, ".*lie$","Australien"))
+})
+```
+
+***
+
+```{r, IOC, echo=TRUE}
+#install.packages("countrycode")
+
+library(countrycode)
+
+apply_countrycode_de <- function(df) {
+  df$Nationality <- countrycode(df$Nationality, origin = "country.name.de", destination = "ioc", nomatch = NULL)
+  return(df)
+}
+
+all_rosters8 <- lapply(all_rosters7, apply_countrycode_de)
+
+apply_countrycode_en <- function(df) {
+  df$Nationality <- countrycode(df$Nationality, origin = "country.name.en", destination = "ioc", nomatch = NULL)
+  return(df)
+}
+
+all_rosters9 <- lapply(all_rosters8, apply_countrycode_en)
+
+#all_rosters9
+#?`countrycode-package`
+#?countrycode
+```
+
+***
+Let's check
+***
+```{r check_final_country, echo=TRUE}
+get_unique_values(all_rosters9, "Nationality")
+```
+
+***
+Okay we could shorten this last fucker by using second variable in the function and get the origin part in ones.
+
+And than put all the single parts together
+
+***
+
+okay this is working lets go for the topscorer `tsv` files
+this should be working simple by...
+
+***
+
+Alright, got no glue what to do.
+Let's start to import the `topscorer`files
+recycling all our previous stuff.
+
+***
+```{r folder_content_topscore, echo=FALSE}
+folder_path_topscorers <- "C:\\Users\\Pirate\\Documents\\Data-projects-with-R-and-GitHub\\Projects\\laura-burk\\volleyball-project\\topscorers"
+
+ files2 <- list.files(folder_path_topscorers)
+
+files2
+```
+
+***
+
+Okay first had to make the `auto_import_csv`function in a more comon usable `auto_import`function to make it capable for more datatyp's
+
+***
+```{r import, echo=TRUE }
+
+auto_import <- function(file_path, datatyp){
+  
+  file_list <- list.files(path = file_path, pattern = paste("\\.", datatyp, "$", sep = ""), full.names = TRUE)        #-> here we could change the auto import to other data type's 
+  data_frames <- list()
+  
+  for (file in file_list) {
+    df_name <- tools::file_path_sans_ext(basename(file))  # uses filename as dataframe
+    
+    read_call <- paste0("read.", datatyp, "2", sep = "")
+    data_frames[[df_name]] <- do.call(read_call, list(file, fileEncoding = 'cp852', row.names = NULL))
+  }
+  
+  return(data_frames)
+}
+all_rosters <- auto_import(folder_path_roster, datatyp="csv")
+#str(all_rosters)
+#all_rosters
+#?row.names
+```
+
+***
+
+-> God damn it, missread, the `topscorer`dat's are `.txt` instead of `.tsv` format
+need to change the endings, to get the `auto_import`function working 
+
+***
+
+**I want to use my `auto_import`function !!!**
+
+So let's change the dat endings of the topscorers files.
+
+***
+```{r txt_to_tsv, echo=TRUE, eval=FALSE}
+txt_files <- list.files(path = folder_path_topscorers, pattern = "\\.txt$", full.names = TRUE)
+
+for (file in txt_files) {
+  tsv_file <- sub("\\.txt$", ".tsv", file)
+  file.copy(file, tsv_file)
+}
+```
+
+***
+
+Let's do it with a modified suffix version
+
+***
+
+```{r import_all, echo=TRUE }
+
+auto_import <- function(file_path, datatyp, suffix = ""){
+  
+  file_list <- list.files(path = file_path, pattern = paste("\\.", datatyp, "$", sep = ""), full.names = TRUE)        #-> here we could change the auto import to other data type's  -> put that part in a seperate variable inside the function
+  data_frames <- list()
+  
+  for (file in file_list) {
+    df_name <- tools::file_path_sans_ext(basename(file))  # uses filename as dataframe
+    
+    read_call <- paste0("read_", datatyp, suffix, sep = "") # need to paste the "2" here to read (german) encodeing <- solved it with suffix
+    data_frames[[df_name]] <- do.call(read_call, list(file, locale = locale(encoding = "cp852")))
+  }
+  
+  return(data_frames)
+}
+
+```
+
+```{r import_topscore, echo=TRUE}
+all_topscores <- auto_import(folder_path_topscorers, datatyp = "tsv")
+str(all_topscores)
+```
+
+finally solved it
+
+***
+
+***
+
+## # need to change working directon for:
+
+** not working in Solution, due to we changed df from list of df into tibble**
+
+***
+
+```{r check_games, echo=TRUE, eval=FALSE}
+get_unique_values(all_games_clean, "Geschlecht")
+na_count <- sapply(all_games, function(df) sum(is.na(df$Geschlecht)))
+
+na_count
+
+
+```
+
+***
+
+```{r adjust_games, echo=TRUE}
+all_games_clean <- lapply(all_games, function(df) {
+    df %>%
+    setNames(gsub(" ", "_", colnames(.))) %>%
+  mutate(Mannschaft_1 = gsub("Ř", "ü", Mannschaft_1),
+         Mannschaft_2 = gsub("Ř", "ü", Mannschaft_2),
+         Gastgeber = gsub("Ř", "ü", Gastgeber),
+         Austragungsort = gsub("Ř", "ü", Austragungsort),
+         Geschlecht = ifelse(str_detect(Geschlecht, "^[fF]|2"), "female", "male"))
+})
+  
+all_games_clean
+```
+
+***
+
+Alright,so far, so good!
+
+Next mutating all these values requiered for the barplot.
+
+Let's get a list of all Teams first
+***
+```{r all_games_teams,echo=TRUE}
+all_games_teams <- get_unique_values(all_games_clean, "Mannschaft_1")
+all_games_teams
+```
+***
+
+now let's check how often each of them played at home and away
+
+***
+
+```{r home_games,echo=TRUE}
+num_home_games <-lapply(all_games_teams, function(team){
+  lapply(all_games_clean, function(df){
+    df%>%
+    filter(Mannschaft_1 == team)%>%
+    nrow()
+  })
+})
+
+num_away_games <-lapply(all_games_teams, function(team){
+  lapply(all_games_clean, function(df){
+    df%>%
+    filter(Mannschaft_2 == team)%>%
+    nrow()
+  })
+})
+
+num_total_games <-lapply(all_games_teams, function(team){
+  lapply(all_games_clean, function(df){
+    df%>%
+    filter(Mannschaft_1 == team|Mannschaft_2 == team)%>%
+    nrow()
+  })
+})
+
+```
+
+
+
+***
+
+This already looks like, as we can put it together.
+
+***
+
+```{r try}
+count_team_games <- function(team, df) {
+  home_games <- df %>%
+    filter(Mannschaft_1 == team) %>%
+    nrow()
+  
+  away_games <- df %>%
+    filter(Mannschaft_2 == team) %>%
+    nrow()
+  
+  total_games <- df %>%
+    filter(Mannschaft_1 == team | Mannschaft_2 == team) %>%
+    nrow()
+  
+  return(c(Home = home_games, Away = away_games, Total = total_games))
+}
+
+num_games_in_once <- lapply(all_games_teams, function(team) {
+  lapply(all_games_clean, count_team_games, team = team)
+})
+num_games_in_once
+```
+
+***
+
+Next go for win and losses
+
+***
+
+```{r try victory, echo=TRUE}
+num_victory <-lapply(all_games_teams, function(team){
+  lapply(all_games_clean, function(df){
+    df%>%
+    filter((Mannschaft_1 == team & Satzpunkte_1 == 3) | (Mannschaft_2 == team & Satzpunkte_2 == 3))%>%
+    nrow()
+  })
+})
+
+num_losses <-lapply(all_games_teams, function(team){
+  lapply(all_games_clean, function(df){
+    df%>%
+    filter((Mannschaft_1 == team & Satzpunkte_1 != 3) | (Mannschaft_2 == team & Satzpunkte_2 != 3))%>%
+    nrow()
+  })
+})
+num_losses
+```
+
+***
+For all the average stuff im not sure if it aint  more easy to combine all games into one df to get total counts more easy for each team.
+
+Anyway we can count total of sets now ans than let's see.
+
+***
+
+```{r total_sets_played_per_game, echo=TRUE}
+
+num_sets_per_game_played <-lapply(all_games_teams, function(team){
+  lapply(all_games_clean, function(df){
+    df%>%
+    filter(Mannschaft_1 == team|Mannschaft_2 == team)%>%
+    summarise(
+      Sum_Satzpunkte = sum(Satzpunkte_1 + Satzpunkte_2),
+      Avg_Satzpunkte = mean(Satzpunkte_1 + Satzpunkte_2)) # actually could put the whole sum function in the mean function
+  })
+})
+
+```
+***
+
+**Note:** * This is the total and average number of setsplayed per game* **not** average sets to win, wait a minute.....
+
+than it should be **right?**
+
+Next Average points per set
+
+***
+**Dunno here why its working with backticks but aint with normal ""**
+
+```{r avg_points_per_game, echo=TRUE}
+
+avg_points_per_set<- lapply(all_games_teams, function(team) {
+  lapply(all_games_clean, function(df) {
+    df %>%
+      filter(Mannschaft_1 == team | Mannschaft_2 == team) %>%
+      summarise(
+        Avg_Ballpunkte_first_set = mean(ifelse(Mannschaft_1 == team, `Satz_1_-_Ballpunkte_1`, `Satz_1_-_Ballpunkte_2`)),
+        Avg_Ballpunkte_sec_set = mean(ifelse(Mannschaft_1 == team, `Satz_2_-_Ballpunkte_1`, `Satz_2_-_Ballpunkte_2`)),
+        Avg_Ballpunkte_third_set = mean(ifelse(Mannschaft_1 == team, `Satz_3_-_Ballpunkte_1`, `Satz_3_-_Ballpunkte_2`)),
+        Avg_Ballpunkte_fourth_set = mean(ifelse(Mannschaft_1 == team, `Satz_4_-_Ballpunkte_1`, `Satz_4_-_Ballpunkte_2`)),
+        Avg_Ballpunkte_fifth_set = mean(ifelse(Mannschaft_1 == team, `Satz_5_-_Ballpunkte_1`, `Satz_5_-_Ballpunkte_2`))
+        
+      )
+  })
+})
+
+avg_points_per_set
+```
+
+```{r try}
+ try_home1 <- map_int(all_games_teams, ~all_games_clean %>%
+                      filter(Mannschaft1 == .x) %>%
+                      nrow())
+try_home_df1 <- data.frame(Team = all_games_teams, Anzahl_Heimspiele = try_home1)
+try_home_df1
+
+# oder
+#hier folgt dann mutate_result_stadium_variable chunk
+```
