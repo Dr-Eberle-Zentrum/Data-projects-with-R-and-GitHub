@@ -1,0 +1,123 @@
+---
+title: "Untitled"
+author: "David Prießnitz"
+date: "`r Sys.Date()`"
+output: md_document
+---
+
+#Data Cleaning
+```{r}
+library(tidyverse)
+
+df <- read.csv("StelaeCyprus.csv", 
+                 sep = ";", 
+                 header = TRUE,
+                 na = c("unknown", "undefined"))
+
+df[df == "not defined"] <- NA
+df[df == ""] <- NA
+
+names_to_keep <- c("Amathus", "Golgoi", "Idalion", "Kition", "Marion", "Salamis", "Soloi", "Tamassos")
+df <- df %>%
+  mutate(
+    type = str_replace_all(type, "\\?", ""),
+    type = if_else(catNo == 98 | catNo == 99, "6", type),
+    epoch = if_else(epoch == "antoninisch", "Antonine", epoch),
+    material = case_when(grepl("limestone", material) ~ "limestone",
+                              grepl("marble", material) ~ "marble",
+                              TRUE ~ NA_character_),
+    typeCertain = if_else(typeCertain == 0, FALSE, TRUE),
+     location = if_else(catNo == 12 & location == "probably Idalion", "Cyprus", location),
+   location = if_else(is.na(location), "Cyprus", location),
+   location = if_else(str_detect(location, "\\(\\?\\)"), "Cyprus", location),
+   location = case_when(
+      location %in% c("region of Limassol", "Limassol",
+ "Mathikoloni") ~ "Amathus",
+      location %in% c("Athienou", "Melousha", "Pergamon") ~ "Golgoi",
+      location == "Alambra (Larnaca)" ~ "Kition",
+      location %in% c("Pano Arodes", "Polis","Salamiu, NE of Kouklia (Alt Paphos)") ~ "Marion",
+      location %in% c("Kotschines (neighbourhood of Lysi)", "north of Lysi, district Famagusta") ~ "Salamis",
+      location == "Ambelia, near Morphou" ~ "Soloi",
+      location == "Pera (Asproji)" ~ "Tamassos",
+      TRUE ~ location 
+    ), 
+   location = case_when(
+    str_detect(location, paste(names_to_keep, collapse = "|")) ~ 
+      str_extract(location, paste(names_to_keep, collapse = "|")),
+    TRUE ~ location
+  )
+  )
+ 
+```
+
+
+#Create table to show amount of type per epoch
+```{r}
+df$epoch <- factor(df$epoch, ordered = TRUE, 
+                        levels = c("Antonine", "cypro-archaic", "cypro-classical","early imperial", "hellenistic", "julian-claudian"))
+df$type <- fct_relevel(df$type, c("6", "5b", "5a", "4b", "4a", "3", "2c", "2b", "2a", "2", "1b", "1a", "not defined"))
+df_cleaned <- df %>% filter(!is.na(typeDesc))
+
+count_table <- df_cleaned %>%
+  group_by(typeDesc, epoch, type) %>%
+  summarise(count = n(), .groups = 'drop')
+print(count_table)
+
+knitr::kable(table(df$typeDesc, df$epoch))
+```
+
+```{r}
+pastel_colors <- c("#ccb299", "#b2cce6", "#99b2cc", "#e6b2b2", "#b299cc", 
+                             "#cccc99", "#e6b2e6", "#b2e6cc", "#cce6b2", "#99ccb2", 
+                             "#cc99b2", "#b2cc99")
+
+count_table <- count_table %>%
+  mutate(typeDescType = paste(typeDesc, "(", type, ")", sep = ""))
+
+count_table$typeDescType <- fct_relevel(count_table$typeDescType, c(
+  "Grave stelae with guard animals, with two antithetical lions(1a)",
+  "Grave stelae with guard animals, crowned by two sphinxes(1b)",
+  "Wide symposium niche with high relief(2c)",
+  "Wide symposium niche with high relief, Fragment(2)",
+  "Symposium niche crowned by lion(2a)",
+  "Double niche with symposium scene(2b)",
+  "Niche stele(3)",
+  "Frameless, narrow, mostly crowned with anthemion(4b)",
+  "Frameless, crowned with plant ornamentation(4a)",
+  "Naiskos stele(5a)",
+  "pseudo-naiskos stele(5b)",
+  "Cippus(6)"
+))
+
+
+ggplot(count_table, aes(x = epoch, y = count, fill = typeDescType)) +
+  geom_bar(stat = "identity", position = "stack") +
+  geom_text(aes(label = count), position = position_stack(vjust = 0.5), size = 3) +
+  labs(title = "Count of grave reliefs found per epoch ", x = "Epoch", y = "Count", fill = "Type") +
+  scale_fill_manual(values = pastel_colors)  +  
+  theme_minimal() +
+theme(legend.position = "right",
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.title = element_text(face = "bold", hjust = 0.5))
+```
+
+```{r}
+knitr::kable(table(df$typeDesc, df$material))
+```
+
+```{r}
+df$type <- factor(df$type, levels = sort(unique(df$type)))
+
+ggplot(df, aes(x = type, fill = material)) +
+  geom_bar(position = "stack") +
+  geom_text(aes(label = after_stat(count)), position = position_stack(vjust = 0.5), stat = "count") +
+  labs(title = "Material Distribution per Type",
+       x = "Type",
+       y = "Count",
+       fill = "Material") +
+  theme_minimal() +
+    theme(legend.position = "right",
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.title = element_text(face = "bold", hjust = 0.5))
+```
+
