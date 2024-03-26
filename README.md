@@ -109,26 +109,9 @@ Example:
 
 Current projects:
 
-- Johanna (johannaroever) - [Visualisation for grave stelae from Cyprus during the Roman Empire](Projects/johannaroever/project-description.md)
-  - solution [by Elise](Projects/johannaroever/EliseGithubJohanna.md), [by David](Projects/johannaroever/Davidprntz.md), [by Martin](Projects/johannaroever/martin.md)
-- Timo (timow98) - [Soil data Visualization](Projects/timow98/project-description.md)
-  - solution [by Johanna](Projects/timow98/johannaroever.md), [by Elise](Projects/timow98/elbue.md), [by Martin](Projects/timow98/martin.md)
-- Maurice (mauriceschmetzer) - [US Immigrant Visas Issued](Projects/mauriceschmetzer/project-description.md)
-  - solution [by Timo](Projects/mauriceschmetzer/timow98.md), [by Johanna](Projects/mauriceschmetzer/johannaroever.md), [by Martin](Projects/mauriceschmetzer/martin.md)
-- Dennis (Deeznis) - [The Economic Impact of Remote Work on Urban Housing Markets](Projects/Deeznis/project-description.md)
-  - solution [by Maurice](Projects/Deeznis/Maurice.md), [by Martin](Projects/Deeznis/martin.md)
-- Baptiste (baptistesolard) - [Coloured Glass Beads in the Early Middle Ages](Projects/baptistesolard/project-description.md)
-  - solution [by Dennis](Projects/baptistesolard/Deeznis.md), [by Maurice](Projects/baptistesolard/Maurice.md), [by Martin](Projects/baptistesolard/martin.md)
-- David (Davidprntz) - [Bigmart a Marketing Analysis](Projects/DavidPrntz/Project-description.md)
-  - solution [by Baptiste](Projects/DavidPrntz/baptistesolard.md), [by Dennis](Projects/DavidPrntz/Deeznis.md), [by Martin](Projects/DavidPrntz/martin.md)
-- Elise (elbue) - [Questionaire evaluation](Projects/elbue/project-description.md)
-  - solution [by David](Projects/elbue/Davidprntz.md), [by Baptiste](Projects/elbue/baptistesolard.md)
-
-Dropped projects:
-
-- Marek (mqrek) - [Stock Performance Analysis of NVIDIA Corporation: Time Series Insights](Projects/mqrek/project-description.md)
-  - solution [by Timo](Projects/mqrek/timow98.md)
-
+- .. (..) - ..
+- .. (..) - ..
+- .. (..) - ..
 
 
 #### Goals
