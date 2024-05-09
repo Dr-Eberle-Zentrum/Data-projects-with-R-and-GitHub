@@ -106,6 +106,7 @@ In order to submit your project proposal, you have to upload it to GitHub as par
 Example:
 
 - Martin (martin-raden) - [Example project](Projects/martin-raden/project-description.md)
+- Arlene (ArleneHohl) - [Arlenes project](Projects/ArleneHohl/project-description.md)
 
 Current projects:
 
