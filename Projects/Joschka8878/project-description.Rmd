@@ -1,0 +1,24 @@
+---
+title: "project-description"
+author: "Joschka Christ"
+date: "2024-05-13"
+output: md_document
+---
+
+## Project Objective
+
+My goal is to identify whether individuals with immigrant backgrounds are more likely than Argentinian nationals to be eligible for the AUH (Universal Child Allowance) social program, and whether characteristics such as income level of the country of origin, industry of employment, and poverty level significantly alter the probability of that individual receiving an AUH cash transfer.
+
+## Data Set
+
+The data set sources from the [Argentinian Department of Statistics](https://www.indec.gob.ar/indec/web/Institucional-Indec-BasesDeDatos). The survey is known as the EPH (The Permanent Household Survey), and I will be using data from 2009 onwards. The survey includes a general household section and individual section, the latter of which asks each household resident questions on background, employment, and income. Using these variables, I can identify the criteria for receiving the AUH cash transfer (details to be explained later) and then measure up the share of immigrants and non-immigrants eligible for the cash transfer. Moreover, I will target more specific groups, such as immigrant-impoverished, immigrant and low-income country of origin, and so on and measure them against non-immigrants for eligibility for the AUH program. To assist with pulling the data from the database, I will use the package [eph](https://ropensci.github.io/eph/index.html). Note: The complete data set is massive, so I included a sample from 2016 quarter 4 of both the household and individual surveys.
+
+## Data Manipulation Goals:
+
+The first course of action is to identify the criteria for eligibility of receiving the AUH. In brief, the AUH is a cash transfer program aimed at unemployed and informal workers with children, somewhat similar to the German institution of "Kindergeld". The survey contains information on the relation of residents to one another, so I will be looking at heads of households and their spouses. Additionally, in Argentina, approximately 30% of children receive the AUH. Note that, a household may receive multiple transfer payments, one for each child or dependent with a max of five. Using these guidelines, I can identify whether either of the parents/guardians are eligible to receive any (and how many) transfer payments.
+
+## Data Visualization Goals:
+
+In terms of data visualization, I would like to create a bar graph measuring the percent of non-immigrants (the control group), immigrants, impoverished immigrants, immigrants from poor countries, etc. who are eligible for the AUH program. Thus, I am contrasting multiple categorical variables, in particular looking groups that significantly differ from the control group. As a small added level of complexity, I would like to also include the count above each percentage bar, just to see if the group is large enough to be considered significant. More thorough tests for significance will be performed later on (not part of this project).
+
+Here is a rough idea of my data visualization: ![](https://media.geeksforgeeks.org/wp-content/uploads/20210705121552/barplotcount.png)
