@@ -107,6 +107,7 @@ Example:
 
 - Martin (martin-raden) - [Example project](Projects/martin-raden/project-description.md)
 - Arlene (ArleneHohl) - [Arlenes project](Projects/ArleneHohl/project-description.md)
+- Jan (jan-thiele7) - [Jans project](Projects/jan-thiele7/project_description.md)
 
 Current projects:
 
