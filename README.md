@@ -111,7 +111,7 @@ Example:
 
 Current projects:
 
-- Meri (merinehlsen) - [Meris project](Projects/merinehlsen/project_description.md)
+- Meri (merinehlsen) - [Meris project](Projects/merinehlsen/project-description.md)
 - .. (..) - ..
 - .. (..) - ..
 
