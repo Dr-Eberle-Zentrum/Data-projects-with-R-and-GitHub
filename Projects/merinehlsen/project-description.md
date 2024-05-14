@@ -114,7 +114,7 @@ larvae, pupae and adult. Every transition from one stage to the next is
 an important bottleneck in development. Thus de- or ascelerations of the
 life cycle indicate biological relevancy.
 
-![Life cycle of the fruit fly](https%3A%2F%2Fwww.researchgate.net%2Fprofile%2FBedanta-Barik%2Fpublication%2F329948575%2Ffigure%2Ffig1%2FAS%3A855595011805187%401581001155882%2FLife-cycle-of-Drosophila-depicting-various-developmental-stages.png)
+![Life cycle of the fruit fly](/Projects/merinehlsen/fly_lifecycle.png)
 
 The paper asseses the time between transition from larvae to pupae and
 pupae to eclosion (= emergence of the adult fly), from what they
