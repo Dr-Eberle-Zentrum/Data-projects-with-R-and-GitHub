@@ -112,6 +112,7 @@ Example:
 Current projects:
 
 - Meri (merinehlsen) - [Meris project](Projects/merinehlsen/project-description.md)
+- Miguel Díaz de León (MiguelDLM) - [MiguelDLM project](Projects/MiguelDLM/project-description.md)
 - .. (..) - ..
 - .. (..) - ..
 
