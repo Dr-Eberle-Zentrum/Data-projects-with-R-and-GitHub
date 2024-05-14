@@ -116,6 +116,8 @@ life cycle indicate biological relevancy.
 
 ![Life cycle of the fruit fly](/Projects/merinehlsen/fly_lifecycle.png)
 
+Life cycle of *Drosophila melanogaster* [3]
+
 The paper asseses the time between transition from larvae to pupae and
 pupae to eclosion (= emergence of the adult fly), from what they
 conclude the duration of the following three “Stages” in development.
@@ -208,3 +210,7 @@ Drosophila123, The Journal of Nutrition, Volume 141, Issue 6, 2011,
 Pages 1127-1133, ISSN 0022-3166,
 <https://doi.org/10.3945/jn.111.138438>.
 (<https://www.sciencedirect.com/science/article/pii/S0022316622029753>)
+
+[3] Ong, Cynthia & Yung, Lin-Yue & Cai, Yu & Bay, Boon-Huat & Baeg,
+Gyeong. (2014). Drosophila melanogaster as a model organism to study
+nanotoxicity. Nanotoxicology. 9. 1-8. 10.3109/17435390.2014.940405.
