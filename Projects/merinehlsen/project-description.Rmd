@@ -17,7 +17,7 @@ I have taken all data from a paper from 2011[^2].
 
 This publication focuses on the comparison of two *Drosophila* species, *Drosophila melanogaster* and *Drosophila mojavensis*, aiming to characterize if these two ecologically different species to several dietary composition. While interesting, for this project I'd like you to focus on *D. melanogaster* and how the dietary composition effects survival, developmental time and concentration of biomolecules.
 
-I have compiled the relevant data into an [excel table](Projects/merinehlsen/flydata.xlsx).
+I have compiled the relevant data into an [excel table](/Projects/merinehlsen/flydata.xlsx).
 
 This dataset includes multiple characteristics for each of the three measurements, namely:
 

@@ -28,7 +28,7 @@ focus on *D. melanogaster* and how the dietary composition effects
 survival, developmental time and concentration of biomolecules.
 
 I have compiled the relevant data into an [excel
-table](Projects/merinehlsen/flydata.xlsx).
+table](/Projects/merinehlsen/flydata.xlsx).
 
 This dataset includes multiple characteristics for each of the three
 measurements, namely:
