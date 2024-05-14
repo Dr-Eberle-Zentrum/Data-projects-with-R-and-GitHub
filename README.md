@@ -112,7 +112,7 @@ Example:
 Current projects:
 
 - Meri (merinehlsen) - [Meris project](Projects/merinehlsen/project-description.md)
-- .. (..) - ..
+- Joschka (Joschka8878) - [Joschka's project](Projects/Joschka8878/project-description.md)
 - .. (..) - ..
 
 
