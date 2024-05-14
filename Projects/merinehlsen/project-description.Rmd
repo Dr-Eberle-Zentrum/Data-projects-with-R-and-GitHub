@@ -9,18 +9,25 @@ output: md_document
 
 ## What is this about?
 
-I have taken all data from a paper from 2011[^1].
-This publication focuses on the comparison of two *Drosophila* species, *Drosophila melanogaster* and *Drosophila mojavensis*, aiming to characterize if these two ecologically different species to several dietary composition. While interesting, for this project I'd like you to focus on *D. melanogaster* and how the dietary composition effects survival, developmental time and concentration of biomolecules.
+Diet is a major predictor of health and lifespan as well as a complex "enviroment" an individual needs to adapt to. High Sugar diets (HSD) in particular are known to cause Insulin resistance, leading to Type II diabetes, a disease that claimed 1.5 million lives in 2019 [^1]. Thus understanding how HSDs effect a biological system is essential in developing lines of treatment for diet-linked diseases like diabetes. Here is where *Drosophila melanogaster*, the fruit fly, comes into play. This fly is a popular model organism in biological research, as it offers a short developmental time and life span, as well as conserved gene regulatory and metabolic networks, that share high similarities with their human counterparts.
+The Goal of this project would be to define how the life span, developmental time and metabolism of *D. melanogaster* are effected by a HSD diet.
 
 ## What is this dataset?
-This dataset I generate of this publication includes multiple characteristics for each of the three measurements, namely:
+I have taken all data from a paper from 2011[^2].
+
+This publication focuses on the comparison of two *Drosophila* species, *Drosophila melanogaster* and *Drosophila mojavensis*, aiming to characterize if these two ecologically different species to several dietary composition. While interesting, for this project I'd like you to focus on *D. melanogaster* and how the dietary composition effects survival, developmental time and concentration of biomolecules.
+
+I have compiled the relevant data into an [excel table](/Projects/merinehlsen/flydata.xlsx).
+
+This dataset includes multiple characteristics for each of the three measurements, namely:
+
 1. dietary composity
 2. genetics
 3. sex
 
-Lets look at all of them individually in detail.
+Let's look at all of them individually in detail.
 
-### 1. dietary composition (hereafter diet)
+### 1. Dietary composition (hereafter diet)
 
 The publication looks at three different diets, characterized by the respecive amounts of protein (from yeast) and carbohydrates/ sugar (from sucrose) in ratio to each other. They establish them as high protein:sugar ratio (HPS), equal protein:sugar ratio (EPS), and low protein:sugar ratio (LPS), with following percentages of protein and sugar: 
 
@@ -34,27 +41,27 @@ HPS | 452
 EPS | 456
 LPS | 469
 
-### 2. genetics
+### 2. Genetics
 
-To acount for intra-specific variation the authors study 5 genetically different isofemale *D. melanogaster* lines. This is also interesting to this project as genetics can play huge effects in obesity risk etc.
+To account for intra-species variation the authors study 5 genetically different isofemale *D. melanogaster* lines. This is also interesting to this project as genetics can play huge effects in risk of diabetes or other metabolic diseases.
 
-### 3. sex
+### 3. Sex
 
 Lastly both survival and the Metabolic Pools are assesed for specifically for female and male flies. The developmental time on the other hand is determined independent on sex (mainly because the sex of larvae and pupae can not be determined easily by eye).
 
 ---
 
-Now onto the actual measurements of this dataset. Each one of these are compiled in a seperate sheet of the excel table.
+Now onto the actual measurements of this dataset. Each one of these are compiled in a separate sheet of the excel table.
 
 ### 1. Survival
 
 Survival here is given as the number of adults that eclose from the pupae stage per vial.
 
-#### 2. Deleopmental Time 
+### 2. Developmental Time 
 
-As holometabolous insects fruit flies undergo complete metamorphis, meaning that their life cycle is made up by four distinct stages: egg, larvae, pupae and adult. Every transition from one stage to the next is an important bottleneck in development. Thus de- or ascelerations of the life cycle indicate biological relevancy.
+As holometabolous insects fruit flies undergo complete metamorphosis, meaning that their life cycle is made up by four distinct stages: egg, larvae, pupae and adult. Every transition from one stage to the next is an important bottleneck in development. Thus de- or ascelerations of the life cycle indicate biological relevancy.
 
-![Life cycle of the fruit fly](https://www.researchgate.net/profile/Yu-Cai-26/publication/264127592/figure/fig1/AS:601624363954206@1520449834722/The-whole-life-cycle-of-the-fruit-fly-Drosophila-is-relatively-rapid-and-takes-only.png)
+![Life cycle of the fruit fly](https://www.researchgate.net/profile/Bedanta-Barik/publication/329948575/figure/fig1/AS:855595011805187@1581001155882/Life-cycle-of-Drosophila-depicting-various-developmental-stages.png)
 
 The paper asseses the time between transition from larvae to pupae and pupae to eclosion (= emergence of the adult fly), from what they conclude the duration of the following three "Stages" in development.
 
@@ -87,7 +94,12 @@ This was one of my big caviates with this paper: I think the visualization here 
 
 The overarching question I'm asking about the paper is basically if any of the measurements are "related", meaning that e.g. protein content can predict TGA content. Also rather than just looking at the mean of each measurement, I am interested if the variance (by SD here) behaves in a similar way.
 
-[^1]: Luciano M. Matzkin, Sarah Johnson, Christopher Paight, Goran Bozinovic, Therese A. Markow,
+---
+
+### Sources
+
+[^1]: WHO https://www.who.int/news-room/fact-sheets/detail/diabetes#:~:text=Type%202%20diabetes%20affects%20how,2%20diabetes%20is%20often%20preventable
+[^2]: Luciano M. Matzkin, Sarah Johnson, Christopher Paight, Goran Bozinovic, Therese A. Markow,
   Dietary Protein and Sugar Differentially Affect Development and Metabolic Pools in Ecologically Diverse Drosophila123,
   The Journal of Nutrition,
   Volume 141, Issue 6,
