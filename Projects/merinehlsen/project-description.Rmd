@@ -17,16 +17,17 @@ I have taken all data from a paper from 2011[^2].
 
 This publication focuses on the comparison of two *Drosophila* species, *Drosophila melanogaster* and *Drosophila mojavensis*, aiming to characterize if these two ecologically different species to several dietary composition. While interesting, for this project I'd like you to focus on *D. melanogaster* and how the dietary composition effects survival, developmental time and concentration of biomolecules.
 
-I have compiled the relevant data into an [excel table](Projects/merinehlsen/flydata.xlsx)
+I have compiled the relevant data into an [excel table](Projects/merinehlsen/flydata.xlsx).
 
 This dataset includes multiple characteristics for each of the three measurements, namely:
+
 1. dietary composity
 2. genetics
 3. sex
 
 Let's look at all of them individually in detail.
 
-### 1. dietary composition (hereafter diet)
+### 1. Dietary composition (hereafter diet)
 
 The publication looks at three different diets, characterized by the respecive amounts of protein (from yeast) and carbohydrates/ sugar (from sucrose) in ratio to each other. They establish them as high protein:sugar ratio (HPS), equal protein:sugar ratio (EPS), and low protein:sugar ratio (LPS), with following percentages of protein and sugar: 
 
@@ -40,11 +41,11 @@ HPS | 452
 EPS | 456
 LPS | 469
 
-### 2. genetics
+### 2. Genetics
 
 To account for intra-species variation the authors study 5 genetically different isofemale *D. melanogaster* lines. This is also interesting to this project as genetics can play huge effects in risk of diabetes or other metabolic diseases.
 
-### 3. sex
+### 3. Sex
 
 Lastly both survival and the Metabolic Pools are assesed for specifically for female and male flies. The developmental time on the other hand is determined independent on sex (mainly because the sex of larvae and pupae can not be determined easily by eye).
 
@@ -56,11 +57,11 @@ Now onto the actual measurements of this dataset. Each one of these are compiled
 
 Survival here is given as the number of adults that eclose from the pupae stage per vial.
 
-### 2. Deleopmental Time 
+### 2. Developmental Time 
 
 As holometabolous insects fruit flies undergo complete metamorphosis, meaning that their life cycle is made up by four distinct stages: egg, larvae, pupae and adult. Every transition from one stage to the next is an important bottleneck in development. Thus de- or ascelerations of the life cycle indicate biological relevancy.
 
-![Life cycle of the fruit fly](https://www.researchgate.net/profile/Yu-Cai-26/publication/264127592/figure/fig1/AS:601624363954206@1520449834722/The-whole-life-cycle-of-the-fruit-fly-Drosophila-is-relatively-rapid-and-takes-only.png)
+![Life cycle of the fruit fly](https://www.researchgate.net/profile/Bedanta-Barik/publication/329948575/figure/fig1/AS:855595011805187@1581001155882/Life-cycle-of-Drosophila-depicting-various-developmental-stages.png)
 
 The paper asseses the time between transition from larvae to pupae and pupae to eclosion (= emergence of the adult fly), from what they conclude the duration of the following three "Stages" in development.
 
@@ -92,6 +93,8 @@ So in short: Compile data into a more easily acessible format.
 This was one of my big caviates with this paper: I think the visualization here could be much improved. I am not a fan of barplots, so that's the one thing I'd ask you to avoide. Boxplots are the obvious answer here and please do use them plenty, but I would be interested, if you can find a nice way to include multiple measurements into one plot e.g. developmental time and survival or metabolic.
 
 The overarching question I'm asking about the paper is basically if any of the measurements are "related", meaning that e.g. protein content can predict TGA content. Also rather than just looking at the mean of each measurement, I am interested if the variance (by SD here) behaves in a similar way.
+
+---
 
 ### Sources
 

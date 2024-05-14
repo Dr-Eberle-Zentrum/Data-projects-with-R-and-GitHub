@@ -28,14 +28,18 @@ focus on *D. melanogaster* and how the dietary composition effects
 survival, developmental time and concentration of biomolecules.
 
 I have compiled the relevant data into an [excel
-table](Projects/merinehlsen/flydata.xlsx)
+table](Projects/merinehlsen/flydata.xlsx).
 
 This dataset includes multiple characteristics for each of the three
-measurements, namely: 1. dietary composity 2. genetics 3. sex
+measurements, namely:
+
+1.  dietary composity
+2.  genetics
+3.  sex
 
 Let’s look at all of them individually in detail.
 
-### 1. dietary composition (hereafter diet)
+### 1. Dietary composition (hereafter diet)
 
 The publication looks at three different diets, characterized by the
 respecive amounts of protein (from yeast) and carbohydrates/ sugar (from
@@ -78,14 +82,14 @@ content can be disregarded in the analysis here.
 </tbody>
 </table>
 
-### 2. genetics
+### 2. Genetics
 
 To account for intra-species variation the authors study 5 genetically
 different isofemale *D. melanogaster* lines. This is also interesting to
 this project as genetics can play huge effects in risk of diabetes or
 other metabolic diseases.
 
-### 3. sex
+### 3. Sex
 
 Lastly both survival and the Metabolic Pools are assesed for
 specifically for female and male flies. The developmental time on the
@@ -102,7 +106,7 @@ compiled in a separate sheet of the excel table.
 Survival here is given as the number of adults that eclose from the
 pupae stage per vial.
 
-### 2. Deleopmental Time
+### 2. Developmental Time
 
 As holometabolous insects fruit flies undergo complete metamorphosis,
 meaning that their life cycle is made up by four distinct stages: egg,
@@ -111,7 +115,7 @@ an important bottleneck in development. Thus de- or ascelerations of the
 life cycle indicate biological relevancy.
 
 ![Life cycle of the fruit
-fly](https://www.researchgate.net/profile/Yu-Cai-26/publication/264127592/figure/fig1/AS:601624363954206@1520449834722/The-whole-life-cycle-of-the-fruit-fly-Drosophila-is-relatively-rapid-and-takes-only.png)
+fly](https://www.researchgate.net/profile/Bedanta-Barik/publication/329948575/figure/fig1/AS:855595011805187@1581001155882/Life-cycle-of-Drosophila-depicting-various-developmental-stages.png)
 
 The paper asseses the time between transition from larvae to pupae and
 pupae to eclosion (= emergence of the adult fly), from what they
@@ -190,6 +194,8 @@ of the measurements are “related”, meaning that e.g. protein content can
 predict TGA content. Also rather than just looking at the mean of each
 measurement, I am interested if the variance (by SD here) behaves in a
 similar way.
+
+------------------------------------------------------------------------
 
 ### Sources
 
