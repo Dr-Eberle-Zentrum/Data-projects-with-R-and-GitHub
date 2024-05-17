@@ -115,6 +115,7 @@ Current projects:
 - Miguel Díaz de León (MiguelDLM) - [MiguelDLM project](Projects/MiguelDLM/project-description.md)
 - Joschka (Joschka8878) - [Joschka's project](Projects/Joschka8878/project-description.md)
 - Mohamed (DrMohamedElsherif) - [Mohamed's project](Projects/DrMohamedElsherif/project-description.md)
+- Sarah (sarahloeber) - [Sarahs project](Projects/sarahloeber/project-description.md)
 
 
 #### Goals

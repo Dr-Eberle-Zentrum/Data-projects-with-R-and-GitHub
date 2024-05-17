@@ -114,8 +114,9 @@ larvae, pupae and adult. Every transition from one stage to the next is
 an important bottleneck in development. Thus de- or ascelerations of the
 life cycle indicate biological relevancy.
 
-![Life cycle of the fruit
-fly](https://www.researchgate.net/profile/Bedanta-Barik/publication/329948575/figure/fig1/AS:855595011805187@1581001155882/Life-cycle-of-Drosophila-depicting-various-developmental-stages.png)
+![Life cycle of the fruit fly](/Projects/merinehlsen/fly_lifecycle.png)
+
+Life cycle of *Drosophila melanogaster* [3]
 
 The paper asseses the time between transition from larvae to pupae and
 pupae to eclosion (= emergence of the adult fly), from what they
@@ -209,3 +210,7 @@ Drosophila123, The Journal of Nutrition, Volume 141, Issue 6, 2011,
 Pages 1127-1133, ISSN 0022-3166,
 <https://doi.org/10.3945/jn.111.138438>.
 (<https://www.sciencedirect.com/science/article/pii/S0022316622029753>)
+
+[3] Ong, Cynthia & Yung, Lin-Yue & Cai, Yu & Bay, Boon-Huat & Baeg,
+Gyeong. (2014). Drosophila melanogaster as a model organism to study
+nanotoxicity. Nanotoxicology. 9. 1-8. 10.3109/17435390.2014.940405.
