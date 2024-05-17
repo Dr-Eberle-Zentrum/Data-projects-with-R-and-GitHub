@@ -106,14 +106,16 @@ In order to submit your project proposal, you have to upload it to GitHub as par
 Example:
 
 - Martin (martin-raden) - [Example project](Projects/martin-raden/project-description.md)
-- Arlene (ArleneHohl) - [Arlenes project](Projects/ArleneHohl/project-description.md)
-- Jan (jan-thiele7) - [Jans project](Projects/jan-thiele7/project_description.md)
 
 Current projects:
 
-- .. (..) - ..
-- .. (..) - ..
-- .. (..) - ..
+- Arlene (ArleneHohl) - [Arlenes project](Projects/ArleneHohl/project-description.md)
+- Jan (jan-thiele7) - [Jans project](Projects/jan-thiele7/project_description.md)
+- Meri (merinehlsen) - [Meris project](Projects/merinehlsen/project-description.md)
+- Miguel Díaz de León (MiguelDLM) - [MiguelDLM project](Projects/MiguelDLM/project-description.md)
+- Joschka (Joschka8878) - [Joschka's project](Projects/Joschka8878/project-description.md)
+- Mohamed (DrMohamedElsherif) - [Mohamed's project](Projects/DrMohamedElsherif/project-description.md)
+- Sarah (sarahloeber) - [Sarahs project](Projects/sarahloeber/project-description.md)
 
 
 #### Goals
