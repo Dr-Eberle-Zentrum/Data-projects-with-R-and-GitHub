@@ -9,13 +9,10 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## General topic of task
-Umschreiben damit es Aufgabenstellung ist
-
 The aim of the project is to look at the expectations of 15-year-old students in terms of their educational qualifications. This should be done on the basis of parents parent's highest level of education in different countries.
 
 
 ## Data Set
-Does dataset need preprocessing? What to do with NAs?
 
 The dataset is from OECD and contains the answers of students in the PISA student questionnaire. PISA means Programme for International Student Assessment and measures 15-year old's mathematical, reading and writing competencies. The study is conducted every three years across all OECD countries. The datset to be used contains the student questionnaire, where they answered questions about themselves, their family, how they think about their life, their school and schedule. You can find the dataset here https://www.oecd.org/pisa/data/2022database/ . To download the data yourself you need to go to the 'student questionnaire data file' in the 'SAS Data Files' section. This will download a zip folder with the (it took quite some time for me to download the data). 
 If you ever need to import sas files, I'd advise you to use the haven package:
