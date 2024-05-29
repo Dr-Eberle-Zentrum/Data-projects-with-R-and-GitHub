@@ -9,11 +9,11 @@ output: md_document
 
 ## What is this about?
 
-Diet is a major predictor of health and lifespan as well as a complex "enviroment" an individual needs to adapt to. High Sugar diets (HSD) in particular are known to cause Insulin resistance, leading to Type II diabetes, a disease that claimed 1.5 million lives in 2019 [^1]. Thus understanding how HSDs effect a biological system is essential in developing lines of treatment for diet-linked diseases like diabetes. Here is where *Drosophila melanogaster*, the fruit fly, comes into play. This fly is a popular model organism in biological research, as it offers a short developmental time and life span, as well as conserved gene regulatory and metabolic networks, that share high similarities with their human counterparts.
-The Goal of this project would be to define how the life span, developmental time and metabolism of *D. melanogaster* are effected by a HSD diet.
+Diet is a major predictor of health and lifespan as well as a complex "environment" an individual needs to adapt to. High Sugar Diets (HSD) for example are known to cause Insulin resistance, leading to Type II diabetes, a disease that claimed 1.5 million lives in 2019 (via [WHO](https://www.who.int/news-room/fact-sheets/detail/diabetes#:~:text=Type%202%20diabetes%20affects%20how,2%20diabetes%20is%20often%20preventable) [^1]). Thus understanding how HSDs effect a biological system is essential in developing lines of treatment for diet-linked diseases like diabetes. Here is where *Drosophila melanogaster*, the fruit fly, comes into play. This fly is a popular model organism in biological research, as it offers a short developmental time and life span, as well as conserved gene regulatory and metabolic networks, that share high similarities with their human counterparts.
+The Goal of this project would be to define how the life span, developmental time and metabolism of *D. melanogaster* are effected by the composition of their diet, specifically by HSDs.
 
 ## What is this dataset?
-I have taken all data from a paper from 2011[^2].
+I have taken all data from a [paper from 2011](https://www.sciencedirect.com/science/article/pii/S0022316622029753)[^2].
 
 This publication focuses on the comparison of two *Drosophila* species, *Drosophila melanogaster* and *Drosophila mojavensis*, aiming to characterize if these two ecologically different species to several dietary composition. While interesting, for this project I'd like you to focus on *D. melanogaster* and how the dietary composition effects survival, developmental time and concentration of biomolecules.
 
@@ -61,7 +61,7 @@ Survival here is given as the number of adults that eclose from the pupae stage 
 
 As holometabolous insects fruit flies undergo complete metamorphosis, meaning that their life cycle is made up by four distinct stages: egg, larvae, pupae and adult. Every transition from one stage to the next is an important bottleneck in development. Thus de- or ascelerations of the life cycle indicate biological relevancy.
 
-![Life cycle of the fruit fly](/Projects/merinehlsen/fly_lifecycle.png)
+![Life cycle of the fruit fly](fly_lifecycle.png)
 
 Life cycle of *Drosophila melanogaster* [^3]
 
@@ -86,7 +86,7 @@ Protein and TGA content were determined with standard colorimetric assays. For t
 
 In all tables you will find the mean per group as well as the standard deviation (SD) for each measurement. While this is not the most elegant to work with, I'd like you to keep the SD as a rough measurement for variance.
 
-All three characteristics (Survival, Developmental time and the metabolic pools) are kept in slightly different table formats, which stays true - though slightly more pointed due to my hand - to the original presentation in the publication. First I'd like you to combine the three tables into one conise table, so that the values for all measurements are easily findable from giving any combination of the three characteristics (dietary composity, genetics and sex). So you will have to reformat the individual tables to a singular format. What this format will look like, I will leave to you. 
+All three characteristics (Survival, Developmental time and the metabolic pools) are kept in slightly different table formats, which stays true - though slightly more pointed due to my hand - to the original presentation in the publication. First I'd like you to combine the three tables into one concise table, so that the values for all measurements are easily findable from giving any combination of the three characteristics (dietary composity, genetics and sex). So you will have to reformat the individual tables to a singular format. What this format will look like, I will leave to you. 
 
 So in short: Compile data into a more easily acessible format.
 
