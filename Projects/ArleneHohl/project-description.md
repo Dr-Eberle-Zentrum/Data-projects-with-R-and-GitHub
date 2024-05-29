@@ -1,15 +1,11 @@
 ## General topic of task
 
-Umschreiben damit es Aufgabenstellung ist
-
 The aim of the project is to look at the expectations of 15-year-old
 students in terms of their educational qualifications. This should be
 done on the basis of parents parent’s highest level of education in
 different countries.
 
 ## Data Set
-
-Does dataset need preprocessing? What to do with NAs?
 
 The dataset is from OECD and contains the answers of students in the
 PISA student questionnaire. PISA means Programme for International
@@ -26,7 +22,7 @@ download the data). If you ever need to import sas files, I’d advise you
 to use the haven package:
 
     library(haven)
-    #read_sas("cy08msp_stu_qqq.sas7bdat")
+    # read_sas("cy08msp_stu_qqq.sas7bdat")
 
 The whole datafile is actually so big I can’t upload it to GitHub.
 
@@ -69,7 +65,7 @@ to drop these objects or if you want to impute them.
 ## visualization goals & intermediates
 
 I plan on creating a plot looking similar to this. ![something like
-this](Projects/ArleneHohl/plot_idea.png).
+this](plot_idea.png).
 
 On the x-axis should be the parent’s highest level of education, and on
 the y-axis should be the expected qualification of the student. We want
