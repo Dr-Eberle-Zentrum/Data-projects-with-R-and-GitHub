@@ -267,16 +267,59 @@ So in short: Compile data into a more easily acessible format.
 
 This was one of my big caviates with this paper: I think the
 visualization here could be much improved. I am not a fan of barplots,
-so that’s the one thing I’d ask you to avoide. Boxplots are the obvious
-answer here and please do use them plenty, but I would be interested, if
-you can find a nice way to include multiple measurements into one plot
-e.g. developmental time and survival or metabolic.
+as they can hide the actual range of values and how they are
+distributed. So for visualization of the absolute measurements and their
+variance (i.e. SD) I’d like you to plot them as a violin barplot (see
+below for the general idea).
 
-The overarching question I’m asking about the paper is basically if any
-of the measurements are “related”, meaning that e.g. protein content can
-predict TGA content. Also rather than just looking at the mean of each
-measurement, I am interested if the variance (by SD here) behaves in a
-similar way.
+My visualization priorities (in no particular order) would be:
+
+-   ☐ Violin plot colored by diet and with **no** black outline
+
+-   ☐ Boxplot with no fill but white outlines
+
+-   ☐ Plot Absolute Values and Variance in two plots but one figure, so
+    that variance is below the absolute values
+
+-   ☐ no legend for the color
+
+-   ☐ pairwise bars indicating significance of difference between means
+    (t-test)
+
+![Idea for visualization of absolute measurements and their
+variance](visualization_abandvar.png)
+
+The overarching question I’m additionally asking about the paper is
+basically if any of the measurements are “related”, meaning that
+e.g. protein content can predict TGA content. Also rather than just
+looking at the mean of each measurement, I am interested if the variance
+(by SD here) behaves in a similar way. For this I am envisioning a plot,
+where you plot measurement 1 (absolute values or variance) against
+measurement 2 and indicate their “relatedness” with a linear regression
+(see below for the general idea).
+
+My visualization priorities (in no particular order) would be:
+
+-   ☐ Points with no outline, colored by diet
+
+-   ☐ Regression line
+
+-   ☐ R squared and p-values as text in the plot
+
+-   ☐ labeling potential outliers (no math required, but by visual
+    indication) with an arrow + text indicating their line
+
+![Idea for visualization of linear regression between
+measurements](visualization_lr.png)
+
+Overall please be sure to:
+
+-   ☐ Use a uniform colors for the three diets across plots (I’d like
+    something that is a bit like a gradient the way the diets are, so
+    e.g. yellow for HPS, green for EPS and blue for LPS).
+
+-   ☐ Plot Females and Males once seperately and once joined (if
+    applicable). For the violin boxplots please group them per diet.
 
 ------------------------------------------------------------------------
 
@@ -286,18 +329,22 @@ De Groef S, Wilms T, Balmand S, Calevro F, Callaerts P. Sexual
 Dimorphism in Metabolic Responses to Western Diet in Drosophila
 melanogaster. Biomolecules. 2021 Dec 27;12(1):33. doi:
 10.3390/biom12010033. PMID: 35053181; PMCID: PMC8774106.
-<https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8774106/> Matzkin LM,
-Johnson S, Paight C, Bozinovic G, Markow TA. Dietary protein and sugar
-differentially affect development and metabolic pools in ecologically
-diverse Drosophila. J Nutr. 2011 Jun;141(6):1127-33. doi:
+<https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8774106/>
+
+Matzkin LM, Johnson S, Paight C, Bozinovic G, Markow TA. Dietary protein
+and sugar differentially affect development and metabolic pools in
+ecologically diverse Drosophila. J Nutr. 2011 Jun;141(6):1127-33. doi:
 10.3945/jn.111.138438. Epub 2011 Apr 27. PMID: 21525254.
 <https://www.sciencedirect.com/science/article/pii/S0022316622029753>
+
 Shitomi-Jones LM, Akam L, Hunter D, Singh P, Mastana S. Genetic Risk
 Scores for the Determination of Type 2 Diabetes Mellitus (T2DM) in North
 India. Int J Environ Res Public Health. 2023 Feb 20;20(4):3729. doi:
 10.3390/ijerph20043729. PMID: 36834424; PMCID: PMC9959290.
-<https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9959290/> Ong C, Yung LY,
-Cai Y, Bay BH, Baeg GH. Drosophila melanogaster as a model organism to
-study nanotoxicity. Nanotoxicology. 2015 May;9(3):396-403. doi:
-10.3109/17435390.2014.940405. Epub 2014 Jul 22. PMID: 25051331.
+<https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9959290/>
+
+Ong C, Yung LY, Cai Y, Bay BH, Baeg GH. Drosophila melanogaster as a
+model organism to study nanotoxicity. Nanotoxicology. 2015
+May;9(3):396-403. doi: 10.3109/17435390.2014.940405. Epub 2014 Jul 22.
+PMID: 25051331.
 <https://www.tandfonline.com/doi/full/10.3109/17435390.2014.940405>
