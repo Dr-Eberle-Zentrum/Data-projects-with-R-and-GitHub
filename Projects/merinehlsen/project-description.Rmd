@@ -53,22 +53,26 @@ To account for intra-species variation, so variation of individuals of the same 
 
 ### 3. Sex
 
-Lastly both survival and the Metabolic Pools are assessed for specifically for female and male flies, as sex is know to influence the effects of diet on our traits of interest ([De Groef et al., 2022](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8774106/)[\^2]) The developmental time on the other hand is determined independent on sex (mainly because the sex of larvae and pupae can not be determined easily by eye).
+Lastly both survival and the Metabolic Pools are assessed for specifically for female and male flies, as sex is know to influence the effects of diet on our traits of interest ([De Groef et al., 2022](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8774106/)).
+
+The developmental time on the other hand is determined independent on sex (mainly because the sex of larvae and pupae can not be determined easily by eye).
 
 ------------------------------------------------------------------------
 
-Now onto the actual measurements of this dataset. Each one of these are compiled in a separate sheet of the excel table. I have also uploaded seperate csv tables for each of the three measurements.
+Now onto the actual measurements of this dataset. Each one of these are compiled in a separate sheet of the excel table. I have also uploaded separate csv tables for each of the three measurements.
 
 ### 1. [Survival](/Projects/merinehlsen/flydata_survival.csv)
 
 Survival here is given as the number of adults that eclose from the pupae stage per vial (see next paragraph 2. Developmental Time).
 
-The table
+Let's look at the head of the table to understand its content:
 
 ```{r survival_table, echo=FALSE}
-survival <- read.delim("flydata_survival.csv", sep = ";")
+survival <- read.delim("flydata_survival.csv", sep = ";", header = FALSE)
 head(survival)
 ```
+
+Here the first line indicates the diet and the second one the line. n here refers to the number of vials the researches observed the number of eclosed adults for. The mean and SD of those vials are listed subsequently (e.g. V2 and V3, V4 and V6).
 
 ### 2. [Developmental Time](/Projects/merinehlsen/flydata_developmental_time.csv)
 
@@ -86,10 +90,14 @@ The paper assesses the time between transition from larvae to pupae and pupae to
 | P-E | first pupation to first eclosion      |
 | L-E | first instar larvae to first eclosion |
 
+Again we can check the table to understand its contents:
+
 ```{r developmental_time_table, echo=FALSE}
-devtime <- read.delim("flydata_developmental_time.csv", sep = ";")
+devtime <- read.delim("flydata_developmental_time.csv", sep = ";", header = FALSE)
 head(devtime)
 ```
+
+Similarly to the previous table the mean and SD are listed subsequently (e.g. V2 and V3, V4 and V6), n also refering to the number to vials the researchers studied.
 
 ### 3. [Metabolic Pools](/Projects/merinehlsen/flydata_metabolic_pools.csv)
 
@@ -98,9 +106,11 @@ Lastly the paper looks at metabolic markers, specifically the dry weight, protei
 Protein and TGA content were determined with standard colorimetric assays. For these 5 flies are pooled to reach suffient concentrations and also reduce noise. The dry mass is also determined for these 5 flies (= 1 homogenate).
 
 ```{r metabolic_pools_table, echo=FALSE}
-metapools <- read.delim("flydata_metabolic_pools.csv", sep = ";")
+metapools <- read.delim("flydata_metabolic_pools.csv", sep = ";", header = FALSE)
 head(metapools)
 ```
+
+Unlike the previous tables the diets are indicated in rows here. Please note that n stands for the number of pools tested, each pool consisting of 5 flies. Again subsequent columns per group denote mean and SD.
 
 ## Goals
 
@@ -118,15 +128,15 @@ This was one of my big caviates with this paper: I think the visualization here 
 
 My visualization priorities (in no particular order) would be: 
 
-- [ ] Violin plot colored by diet and with **no** black outline 
+[ ] Violin plot colored by diet and with **no** black outline 
 
-- [ ] Boxplot with no fill but white outlines 
+[ ] Boxplot with no fill but white outlines 
 
-- [ ] Plot Absolute Values and Variance in two plots but one figure, so that variance is below the absolute values 
+[ ] Plot Absolute Values and Variance in two plots but one figure, so that variance is below the absolute values 
 
-- [ ] no legend for the color 
+[ ] no legend for the color 
 
-- [ ] pairwise bars indicating significance of difference between means (t-test)
+[ ] pairwise bars indicating significance of difference between means (t-test)
 
 ![Idea for visualization of absolute measurements and their variance](visualization_abandvar.png) 
 
@@ -134,21 +144,21 @@ The overarching question I'm additionally asking about the paper is basically if
 
 My visualization priorities (in no particular order) would be: 
 
-- [ ] Points with no outline, colored by diet 
+[ ] Points with no outline, colored by diet 
 
-- [ ] Regression line 
+[ ] Regression line 
 
-- [ ] R squared and p-values as text in the plot 
+[ ] R squared and p-values as text in the plot 
 
-- [ ] labeling potential outliers (no math required, but by visual indication) with an arrow + text indicating their line
+[ ] labeling potential outliers (no math required, but by visual indication) with an arrow + text indicating their line
 
 ![Idea for visualization of linear regression between measurements](visualization_lr.png)
 
 Overall please be sure to: 
 
-- [ ] Use a uniform colors for the three diets across plots (I'd like something that is a bit like a gradient the way the diets are, so e.g. yellow for HPS, green for EPS and blue for LPS). 
+[ ] Use a uniform colors for the three diets across plots (I'd like something that is a bit like a gradient the way the diets are, so e.g. yellow for HPS, green for EPS and blue for LPS). 
 
-- [ ] Plot Females and Males once seperately and once joined (if applicable). For the violin boxplots please group them per diet.
+[ ] Plot Females and Males once seperately and once joined (if applicable). For the violin boxplots please group them per diet.
 
 ------------------------------------------------------------------------
 

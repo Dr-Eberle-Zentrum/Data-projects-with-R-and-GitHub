@@ -113,45 +113,51 @@ risk of diabetes or other metabolic diseases ([Shitomi-Jones et al.,
 Lastly both survival and the Metabolic Pools are assessed for
 specifically for female and male flies, as sex is know to influence the
 effects of diet on our traits of interest ([De Groef et al.,
-2022](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8774106/)\[^2\]) The
-developmental time on the other hand is determined independent on sex
-(mainly because the sex of larvae and pupae can not be determined easily
-by eye).
+2022](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8774106/)).
+
+The developmental time on the other hand is determined independent on
+sex (mainly because the sex of larvae and pupae can not be determined
+easily by eye).
 
 ------------------------------------------------------------------------
 
 Now onto the actual measurements of this dataset. Each one of these are
 compiled in a separate sheet of the excel table. I have also uploaded
-seperate csv tables for each of the three measurements.
+separate csv tables for each of the three measurements.
 
 ### 1. [Survival](/Projects/merinehlsen/flydata_survival.csv)
 
 Survival here is given as the number of adults that eclose from the
 pupae stage per vial (see next paragraph 2. Developmental Time).
 
-The table
+Let’s look at the head of the table to understand its content:
 
-    ##       Diet  HPS     X HPS.1  X.1 HPS.2  X.2 HPS.3  X.3 HPS.4  X.4 EPS  X.5
-    ## 1     Line  1.0    NA   2.0   NA   3.0   NA   4.0   NA   5.0   NA   1   NA
-    ## 2       n  10.0    NA   5.0   NA  10.0   NA  10.0   NA   7.0   NA  10   NA
-    ## 3 Females  17.8 1.140  13.4 1.03  16.1 1.02  15.5 1.63  18.3 1.71  19 1.26
-    ## 4   Males  17.8 0.573  16.8 1.20  16.1 1.29  13.7 1.16  15.6 1.76  18 0.77
-    ## 5   Total  35.6 0.780  30.2 1.07  32.2 0.83  29.2 1.20  33.9 1.30  37 1.17
-    ## 6            NA    NA    NA   NA    NA   NA    NA   NA    NA   NA  NA   NA
-    ##   EPS.1  X.6 EPS.2  X.7 EPS.3  X.8 EPS.4  X.9  LPS X.10 LPS.1 X.11 LPS.2 X.12
-    ## 1   2.0   NA   3.0   NA   4.0   NA   5.0   NA  1.0   NA   2.0   NA   3.0   NA
-    ## 2   5.0   NA  10.0   NA  10.0   NA   6.0   NA 10.0   NA   5.0   NA  10.0   NA
-    ## 3  16.4 1.63  19.9 1.23  14.7 0.90  18.8 1.30 16.9 1.37  16.2 1.11  18.5 0.93
-    ## 4  11.0 1.82  14.9 1.57  15.3 1.12  13.2 1.30 16.2 0.92  18.4 0.93  16.1 0.80
-    ## 5  27.4 2.62  34.8 1.45  30.0 1.32  32.0 1.03 33.1 1.39  34.6 1.40  34.6 0.65
-    ## 6    NA   NA    NA   NA    NA   NA    NA   NA   NA   NA    NA   NA    NA   NA
-    ##   LPS.3 X.13 LPS.4 X.14
-    ## 1   4.0   NA   5.0   NA
-    ## 2  10.0   NA   7.0   NA
-    ## 3  19.4 0.82  18.1 1.39
-    ## 4  14.0 0.77  15.0 1.36
-    ## 5  33.4 0.96  33.1 1.14
-    ## 6    NA   NA    NA   NA
+    ##         V1   V2    V3   V4   V5   V6   V7   V8   V9  V10  V11 V12  V13  V14
+    ## 1     Diet  HPS    NA  HPS   NA  HPS   NA  HPS   NA  HPS   NA EPS   NA  EPS
+    ## 2     Line    1    NA    2   NA    3   NA    4   NA    5   NA   1   NA    2
+    ## 3       n    10    NA    5   NA   10   NA   10   NA    7   NA  10   NA    5
+    ## 4 Females  17.8 1.140 13.4 1.03 16.1 1.02 15.5 1.63 18.3 1.71  19 1.26 16.4
+    ## 5   Males  17.8 0.573 16.8 1.20 16.1 1.29 13.7 1.16 15.6 1.76  18 0.77   11
+    ## 6   Total  35.6 0.780 30.2 1.07 32.2 0.83 29.2 1.20 33.9 1.30  37 1.17 27.4
+    ##    V15  V16  V17  V18  V19  V20  V21  V22  V23  V24  V25  V26  V27  V28  V29
+    ## 1   NA  EPS   NA  EPS   NA  EPS   NA  LPS   NA  LPS   NA  LPS   NA  LPS   NA
+    ## 2   NA    3   NA    4   NA    5   NA    1   NA    2   NA    3   NA    4   NA
+    ## 3   NA   10   NA   10   NA    6   NA   10   NA    5   NA   10   NA   10   NA
+    ## 4 1.63 19.9 1.23 14.7 0.90 18.8 1.30 16.9 1.37 16.2 1.11 18.5 0.93 19.4 0.82
+    ## 5 1.82 14.9 1.57 15.3 1.12 13.2 1.30 16.2 0.92 18.4 0.93 16.1 0.80   14 0.77
+    ## 6 2.62 34.8 1.45   30 1.32   32 1.03 33.1 1.39 34.6 1.40 34.6 0.65 33.4 0.96
+    ##    V30  V31
+    ## 1  LPS   NA
+    ## 2    5   NA
+    ## 3    7   NA
+    ## 4 18.1 1.39
+    ## 5   15 1.36
+    ## 6 33.1 1.14
+
+Here the first line indicates the diet and the second one the line. n
+here refers to the number of vials the researches observed the number of
+eclosed adults for. The mean and SD of those vials are listed
+subsequently (e.g. V2 and V3, V4 and V6).
 
 ### 2. [Developmental Time](/Projects/merinehlsen/flydata_developmental_time.csv)
 
@@ -193,24 +199,26 @@ conclude the duration of the following three “Stages” in development.
 </tbody>
 </table>
 
-    ##   diet  HPS    X HPS.1 X.1 HPS.2 X.2 HPS.3 X.3 HPS.4 X.4  EPS  X.5 EPS.1  X.6
-    ## 1    n 10.0   NA     5  NA    10  NA  10.0  NA    10  NA 10.0   NA   5.0   NA
-    ## 2 line  1.0   NA     2  NA     3  NA   4.0  NA     5  NA  1.0   NA   2.0   NA
-    ## 3  L-P  6.3 0.15     6   0     6   0   5.9 0.1     6   0  6.4 0.16   6.0 0.00
-    ## 4  P-E  4.9 0.10     5   0     5   0   5.1 0.1     5   0  5.0 0.00   5.4 0.24
-    ## 5  L-E 11.2 0.13    11   0    11   0  11.0 0.0    11   0 11.4 0.16  11.4 0.24
-    ##   EPS.2  X.7 EPS.3 X.8 EPS.4  X.9  LPS X.10 LPS.1 X.11 LPS.2 X.12 LPS.3 X.13
-    ## 1  10.0   NA  10.0  NA  10.0   NA 10.0   NA     5   NA  10.0   NA  10.0   NA
-    ## 2   3.0   NA   4.0  NA   5.0   NA  1.0   NA     2   NA   3.0   NA   4.0   NA
-    ## 3   6.0 0.00   6.1 0.1   6.0 0.00  7.5 0.17     7    0   7.0 0.00   7.3 0.15
-    ## 4   5.2 0.13   5.0 0.0   5.1 0.14  5.1 0.10     5    0   5.2 0.13   5.0 0.21
-    ## 5  11.2 0.13  11.1 0.1  11.1 0.14 12.6 0.16    12    0  12.2 0.13  12.3 0.15
-    ##   LPS.4 X.14
-    ## 1  10.0   NA
-    ## 2   5.0   NA
-    ## 3   7.1 0.14
-    ## 4   5.3 0.18
-    ## 5  12.4 0.20
+Again we can check the table to understand its contents:
+
+    ##     V1   V2   V3  V4 V5  V6 V7  V8  V9 V10 V11  V12  V13  V14  V15  V16  V17
+    ## 1 diet  HPS   NA HPS NA HPS NA HPS  NA HPS  NA  EPS   NA  EPS   NA  EPS   NA
+    ## 2    n   10   NA   5 NA  10 NA  10  NA  10  NA   10   NA    5   NA   10   NA
+    ## 3 line    1   NA   2 NA   3 NA   4  NA   5  NA    1   NA    2   NA    3   NA
+    ## 4  L-P  6.3 0.15   6  0   6  0 5.9 0.1   6   0  6.4 0.16    6 0.00    6 0.00
+    ## 5  P-E  4.9 0.10   5  0   5  0 5.1 0.1   5   0    5 0.00  5.4 0.24  5.2 0.13
+    ## 6  L-E 11.2 0.13  11  0  11  0  11 0.0  11   0 11.4 0.16 11.4 0.24 11.2 0.13
+    ##    V18 V19  V20  V21  V22  V23 V24 V25  V26  V27  V28  V29  V30  V31
+    ## 1  EPS  NA  EPS   NA  LPS   NA LPS  NA  LPS   NA  LPS   NA  LPS   NA
+    ## 2   10  NA   10   NA   10   NA   5  NA   10   NA   10   NA   10   NA
+    ## 3    4  NA    5   NA    1   NA   2  NA    3   NA    4   NA    5   NA
+    ## 4  6.1 0.1    6 0.00  7.5 0.17   7   0    7 0.00  7.3 0.15  7.1 0.14
+    ## 5    5 0.0  5.1 0.14  5.1 0.10   5   0  5.2 0.13    5 0.21  5.3 0.18
+    ## 6 11.1 0.1 11.1 0.14 12.6 0.16  12   0 12.2 0.13 12.3 0.15 12.4 0.20
+
+Similarly to the previous table the mean and SD are listed subsequently
+(e.g. V2 and V3, V4 and V6), n also refering to the number to vials the
+researchers studied.
 
 ### 3. [Metabolic Pools](/Projects/merinehlsen/flydata_metabolic_pools.csv)
 
@@ -227,20 +235,24 @@ assays. For these 5 flies are pooled to reach suffient concentrations
 and also reduce noise. The dry mass is also determined for these 5 flies
 (= 1 homogenate).
 
-    ##                       line   X1     X X1.1   X.1   X2   X.2 X2.1   X.3   X3
-    ## 1                        n   10    NA   10    NA   10    NA    9    NA   10
-    ## 2                      sex    F    NA    M    NA    F    NA    M    NA    F
-    ## 3 Dry Mass, mg/ homogenate         NA         NA         NA         NA     
-    ## 4                      HPS 1.67 0.032 1.23 0.018 1.63 0.035 1.33 0.011 1.69
-    ## 5                      EPS 1.67 0.019 1.23 0.010 1.75 0.032 1.36 0.048 1.67
-    ## 6                      LPS 1.62 0.024 1.18 0.029 1.68 0.015 1.27 0.013 1.61
-    ##     X.4 X3.1   X.5   X4   X.6 X4.1   X.7   X5   X.8 X5.1   X.9
-    ## 1    NA   10    NA    9    NA   10    NA   10    NA   10    NA
-    ## 2    NA    M    NA    F    NA    M    NA    F    NA    M    NA
-    ## 3    NA         NA         NA         NA         NA         NA
-    ## 4 0.022 1.28 0.016 1.61 0.028 1.26 0.022 1.76 0.019 1.41 0.021
-    ## 5 0.011 1.27 0.022 1.61 0.019  1.2 0.010 1.78 0.021 1.41 0.017
-    ## 6 0.017 1.26 0.017 1.72 0.028 1.21 0.020 1.79 0.045 1.34 0.028
+    ##                         V1   V2    V3   V4    V5   V6    V7   V8    V9  V10
+    ## 1                     line    1    NA    1    NA    2    NA    2    NA    3
+    ## 2                        n   10    NA   10    NA   10    NA    9    NA   10
+    ## 3                      sex    F    NA    M    NA    F    NA    M    NA    F
+    ## 4 Dry Mass, mg/ homogenate         NA         NA         NA         NA     
+    ## 5                      HPS 1.67 0.032 1.23 0.018 1.63 0.035 1.33 0.011 1.69
+    ## 6                      EPS 1.67 0.019 1.23 0.010 1.75 0.032 1.36 0.048 1.67
+    ##     V11  V12   V13  V14   V15  V16   V17  V18   V19  V20   V21
+    ## 1    NA    3    NA    4    NA    4    NA    5    NA    5    NA
+    ## 2    NA   10    NA    9    NA   10    NA   10    NA   10    NA
+    ## 3    NA    M    NA    F    NA    M    NA    F    NA    M    NA
+    ## 4    NA         NA         NA         NA         NA         NA
+    ## 5 0.022 1.28 0.016 1.61 0.028 1.26 0.022 1.76 0.019 1.41 0.021
+    ## 6 0.011 1.27 0.022 1.61 0.019  1.2 0.010 1.78 0.021 1.41 0.017
+
+Unlike the previous tables the diets are indicated in rows here. Please
+note that n stands for the number of pools tested, each pool consisting
+of 5 flies. Again subsequent columns per group denote mean and SD.
 
 ## Goals
 
@@ -274,17 +286,17 @@ below for the general idea).
 
 My visualization priorities (in no particular order) would be:
 
--   ☐ Violin plot colored by diet and with **no** black outline
+\[ \] Violin plot colored by diet and with **no** black outline
 
--   ☐ Boxplot with no fill but white outlines
+\[ \] Boxplot with no fill but white outlines
 
--   ☐ Plot Absolute Values and Variance in two plots but one figure, so
-    that variance is below the absolute values
+\[ \] Plot Absolute Values and Variance in two plots but one figure, so
+that variance is below the absolute values
 
--   ☐ no legend for the color
+\[ \] no legend for the color
 
--   ☐ pairwise bars indicating significance of difference between means
-    (t-test)
+\[ \] pairwise bars indicating significance of difference between means
+(t-test)
 
 ![Idea for visualization of absolute measurements and their
 variance](visualization_abandvar.png)
@@ -300,26 +312,26 @@ measurement 2 and indicate their “relatedness” with a linear regression
 
 My visualization priorities (in no particular order) would be:
 
--   ☐ Points with no outline, colored by diet
+\[ \] Points with no outline, colored by diet
 
--   ☐ Regression line
+\[ \] Regression line
 
--   ☐ R squared and p-values as text in the plot
+\[ \] R squared and p-values as text in the plot
 
--   ☐ labeling potential outliers (no math required, but by visual
-    indication) with an arrow + text indicating their line
+\[ \] labeling potential outliers (no math required, but by visual
+indication) with an arrow + text indicating their line
 
 ![Idea for visualization of linear regression between
 measurements](visualization_lr.png)
 
 Overall please be sure to:
 
--   ☐ Use a uniform colors for the three diets across plots (I’d like
-    something that is a bit like a gradient the way the diets are, so
-    e.g. yellow for HPS, green for EPS and blue for LPS).
+\[ \] Use a uniform colors for the three diets across plots (I’d like
+something that is a bit like a gradient the way the diets are, so
+e.g. yellow for HPS, green for EPS and blue for LPS).
 
--   ☐ Plot Females and Males once seperately and once joined (if
-    applicable). For the violin boxplots please group them per diet.
+\[ \] Plot Females and Males once seperately and once joined (if
+applicable). For the violin boxplots please group them per diet.
 
 ------------------------------------------------------------------------
 
