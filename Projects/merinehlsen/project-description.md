@@ -286,16 +286,16 @@ below for the general idea).
 
 My visualization priorities (in no particular order) would be:
 
-\[ \] Violin plot colored by diet and with **no** black outline
+-\[ \] Violin plot colored by diet and with **no** black outline
 
-\[ \] Boxplot with no fill but white outlines
+-\[ \] Boxplot with no fill but white outlines
 
-\[ \] Plot Absolute Values and Variance in two plots but one figure, so
+-\[ \] Plot Absolute Values and Variance in two plots but one figure, so
 that variance is below the absolute values
 
-\[ \] no legend for the color
+-\[ \] no legend for the color
 
-\[ \] pairwise bars indicating significance of difference between means
+-\[ \] pairwise bars indicating significance of difference between means
 (t-test)
 
 ![Idea for visualization of absolute measurements and their
@@ -312,13 +312,13 @@ measurement 2 and indicate their “relatedness” with a linear regression
 
 My visualization priorities (in no particular order) would be:
 
-\[ \] Points with no outline, colored by diet
+-\[ \] Points with no outline, colored by diet
 
-\[ \] Regression line
+-\[ \] Regression line
 
-\[ \] R squared and p-values as text in the plot
+-\[ \] R squared and p-values as text in the plot
 
-\[ \] labeling potential outliers (no math required, but by visual
+-\[ \] labeling potential outliers (no math required, but by visual
 indication) with an arrow + text indicating their line
 
 ![Idea for visualization of linear regression between
@@ -326,11 +326,11 @@ measurements](visualization_lr.png)
 
 Overall please be sure to:
 
-\[ \] Use a uniform colors for the three diets across plots (I’d like
+-\[ \] Use a uniform colors for the three diets across plots (I’d like
 something that is a bit like a gradient the way the diets are, so
 e.g. yellow for HPS, green for EPS and blue for LPS).
 
-\[ \] Plot Females and Males once seperately and once joined (if
+-\[ \] Plot Females and Males once seperately and once joined (if
 applicable). For the violin boxplots please group them per diet.
 
 ------------------------------------------------------------------------
