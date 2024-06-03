@@ -105,17 +105,19 @@ their spouses who are non-immigrants and are eligible for the AUH; (b)
 the percentage of heads of households & their spouses who are immigrants
 who are eligible for the AUH vs. the percentage of heads of households &
 their spouses who are immigrants who are NOT eligible for the AUH; and
-(c) of those heads of household and spouses who are eligible, what are
-the percentages based on gender, age group (create age ranges), country
-of origin (within South America), province of origin (if born in
-Argentina), and education level (each being a separate graph).
+(c) of all those who are eligible, what are the percentages based on age
+group (create age ranges), country of origin (within South America),
+province of origin (if born in Argentina), and education level. For (c),
+I am looking for stacked bar plots of male and female over the different
+groups. In total, there should be six graphs.
 
 Here is a sample graph from other years, specifically for heads of
 household: ![](Share_of_HoH_receiving_AUH_by_immigrant_status.png)
 
 And here is a rough idea of my data visualization for part (c), with the
-y being the fraction or count and x being the categorical variables:
-![](https://media.geeksforgeeks.org/wp-content/uploads/20210705121552/barplotcount.png)
+y being the share of men and women from that group and x being the
+different groups or levels of the aforementioned variables:
+![](Graph.png)
 
 ## References
 
