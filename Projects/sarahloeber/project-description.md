@@ -4,51 +4,69 @@ In order to characterize second language learners language proficiency,
 several types of language assessments can be used. One of these
 assessments is called Elicited Imitation Test (EIT), a sentence
 repetition task that can measure general language proficiency as well as
-implicit knowledge of a language. During the test, the test-taker
-listens to recordings of sentences and has to repeat them verbatim. The
-tests can either be scored manually or by using different approaches,
-one of them being utilizing ASR for transcribing the test-taker response
-and calculating string edit distance (Isbell et al., 2023). In this
-project, I’m interested in how scores on the EIT relate to fluency, for
-instance if “higher” fluency features indicate higher scores on the EIT.
-Measuring fluency can be done automatically (de Jong et al., 2021) and
-the features are included in the dataset.
+implicit knowledge of a language and is widely used in Second Language Acquisition (SLA)
+Research. 
+During the test, the test-taker listens to recordings of sentences and repeats 
+them verbatim. 
+The tests can either be scored manually or by using automatic approaches.
+One of those automatic approaches is utilizing Automatic Speech Recognition (ASR) for transcribing 
+the test-taker response and calculating string edit distance (Isbell et al., 2023),
+which quantitatively characterizes the extent to which the test-taker response differs 
+from the stimulus.
+An aspect that can influence scores in spoken assessment situations is speech fluency. 
+In this project, I am interested in how the automatic scores on the EIT are influenced by fluency, 
+for instance if “higher” fluency features are reflected in higher automatic scores on the EIT.
+This is a simplified question since fluency features would rather influence the transcription of the ASR and therefore the edit distance and, in case of manual scoring, the human judgement, but we will stick with the above question for now. 
+Measuring fluency can be done automatically (de Jong et al., 2021) and the features are included 
+in the dataset.
 
 ### Dataset
 
 The dataset we will be working with is my own dataset- and the data was
 collected in March, so it’s still a bit messy but should be ready to
-work with.  
-The dataset contains responses of about 160 people who have taken an
-EIT, randomly assigned to five groups (which are indicated by
-test\_component\_id). Their responses are automatically scored using
-edit distance and I’ve extracted the fluency features per answer. We can
-ignore most of the columns for this project. The columns we are focusing
-on are
+work with. You can see two csv files here, one called fluency_features and one
+called total_scores.
+The fluency features dataset contains responses of about 160 people who have taken an
+EIT in English, randomly assigned to five groups (which are indicated by
+test_component_id). Their responses are automatically scored using ASR transcriptions and
+edit distance and I have extracted the fluency features per answer. 
+For ease of working, I have also uploaded a csv with the aggregated scores per user,
+which is the total_scores file.
 
-1.  *speechrate*, *articulationrate* which are two of the
-    characteristics of fluency. Simply put, higher speech rate and
-    higher articulation rate indicate higher perceived fluency,
+We can ignore most of the columns for this project. The columns we are focusing
+on in the fluency features dataset are
+
+1.  *articulationrate* and *npause* which are two of the
+    characteristics of fluency. Articulation rate measures how many syllables
+    have been uttered in the speaking time, whereas number of silent pauses
+    refers to the amount of times the test-taker paused during speaking time.
+    Simply put, higher articulation rate and
+    fewer number of pauses indicate higher perceived fluency.
 
 2.  *user\_id*, which is the participant number, and
-
-3.  *distancelv*, which is the edit distance, in this case Levenshtein
-    distance, between the transcription (what the participant said) and
-    the correct sentence (what they should have said). The Levenshtein
-    distance shows us how different these two strings are. In this
-    dataset, the Levenshtein distance score is negated for comparison
-    with other edit distance measures, which are not included in this
-    dataset. There is a distancelv2 column, but all this is still in
-    progress as I’m currently working on aggregated scores.
+    
+3. *test_component_id*, which refers to the conditions the participants got
+    assigned to randomly. For the sake of simplicity, I will not elaborate on
+    them here, but it's a good way to see if there are differences between the conditions.
+    
+In the csv named total_scores, you will find the columns *user_id* as well as *final_score*,
+which is the aggregated score of the test for each user. These range from 0 to 100. 
 
 ### Data manipulation goals
 
-Since the edit distance values are negated, this might make
-visualization problematic, so feel free to transform them to positive
-values. However, when doing this - higher scores then mean higher
-discrepancy from the target sentence so the more positive a score, the
-less accurate a participant has repeated the sentence, which is a bit
-counter intuitive.
+You might notice that the first few rows of the fluency features dataset are duplicated several times, 
+so we first need to make sure that there are no duplicates in the dataset. 
+
+Furthermore, in order to link everything to the aggregated scores, we should probably
+aggregate the fluency features from the fluency_features dataset as well and add those as additional 
+columns to the total scores. 
+This can be done in a super simple way.
+I would propose that per user, we just take the mean of their articulation rate as well as
+the mean of their silent pauses. These are two separate values, since a "total" score for fluency
+would have to take other variables into account as well. 
+Furthermore, for group comparison, we should also add a column with test_component_id to the 
+total scores. 
+
 
 ### Visualization goals
 
@@ -56,6 +74,12 @@ A scatterplot grouped by participant condition (test\_component\_id)
 would probably look nice, something like this - but feel free to be
 creative:
 ![](https://r-charts.com/en/tags/ggplot2/facets-ggplot2_files/figure-html/facet-wrap-ncol.png)
+For this plot, I would like if there were trend lines as well
+
+I also really liked Martin's suggestion of a 2D-density plot, which could look like this:
+![](https://i.sstatic.net/DxUL8.png)
+For this, it would be great to get all groups into one plot. If the differences between groups
+are small, however, this might not work as intended.
 
 ### References
 
