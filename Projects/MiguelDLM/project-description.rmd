@@ -52,6 +52,8 @@ According to @Marce-Nogue2011, Finite Elements results may present singularities
 
 The ```ggplot2``` library will be used to plot the force distribution in each axe (X, Y and Z). Each 3D model will be represented by a different line.
 
+![Plot example](./bilder/plot.png)
+
 Furthermore, each dataset will be segmented into distinct samples based on their proportion of the total size. This involves determining the minimum and maximum values for each coordinate, followed by dividing this length into 10 equal sub-samples. Consequently, each sub-sample will account for 10% of the total length of the 3D model along that axis. The average stress within each section will be calculated, culminating in a comprehensive plot that contrasts the average stress across each section and axis among the 3D models.
 
 
