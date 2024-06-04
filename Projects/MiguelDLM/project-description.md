@@ -8,9 +8,12 @@ complex problems more manageable through mathematical analysis
 [Fossils](https://gitlab.uliege.be/rboman/fossils), has significantly
 streamlined the process of conducting FEA on 3D virtual models of
 fossils, offering a quicker and more efficient approach than previously
-possible (Chatar et al., 2023).
+possible (Chatar et al., 2023). ![Finite Elements Analysis
+example](./bilder/model.png) Model structure before runing the Finite
+Elements Analysis
 
-![Finite Elements Analysis example](./bilder/mesh.png)
+![Finite Elements Analysis example](./bilder/mesh.png) Example of a
+Finite Elements Analysis
 
 Unfortunately, the output files provided by Fossils are in the `.msh`
 format, which may pose challenges when importing them into other
@@ -79,7 +82,8 @@ The `ggplot2` library will be used to plot the force distribution in
 each axe (X, Y and Z). Each 3D model will be represented by a different
 line.
 
-![Plot example](./plot.png)
+![Plot example](./bilder/plot.png) Example of a plot showing the average
+stress in the different points of the 3D model
 
 Furthermore, each dataset will be segmented into distinct samples based
 on their proportion of the total size. This involves determining the

@@ -23,8 +23,11 @@ header-includes:
 # Force distribution with Finite Element Analysis
 
 Finite Element Analysis (FEA) is a computational technique used to predict stress, strain, and deformation in structures. This method involves breaking down a structure into discrete elements, making complex problems more manageable through mathematical analysis [@Rayfield2007]. The advent of a novel software, [Fossils](https://gitlab.uliege.be/rboman/fossils), has significantly streamlined the process of conducting FEA on 3D virtual models of fossils, offering a quicker and more efficient approach than previously possible [@Chatar2023].
+![Finite Elements Analysis example](./bilder/model.png)
+Model structure before runing the Finite Elements Analysis
 
 ![Finite Elements Analysis example](./bilder/mesh.png)
+Example of a Finite Elements Analysis
 
 Unfortunately, the output files provided by Fossils are in the `.msh` format, which may pose challenges when importing them into other systems. To address this issue, a Python script was written to convert the `.msh` files into `.csv` files. The structure of the `.csv` files is as follows:
 
@@ -53,6 +56,7 @@ According to @Marce-Nogue2011, Finite Elements results may present singularities
 The ```ggplot2``` library will be used to plot the force distribution in each axe (X, Y and Z). Each 3D model will be represented by a different line.
 
 ![Plot example](./bilder/plot.png)
+Example of a plot showing the average stress in the different points of the 3D model
 
 Furthermore, each dataset will be segmented into distinct samples based on their proportion of the total size. This involves determining the minimum and maximum values for each coordinate, followed by dividing this length into 10 equal sub-samples. Consequently, each sub-sample will account for 10% of the total length of the 3D model along that axis. The average stress within each section will be calculated, culminating in a comprehensive plot that contrasts the average stress across each section and axis among the 3D models.
 
