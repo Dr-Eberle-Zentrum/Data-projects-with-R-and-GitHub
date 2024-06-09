@@ -1,0 +1,265 @@
+---
+title: "Solution fo Jan's project"
+output: md_document
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Solution for Jan's project
+
+This is my current solution for Jan's project. The goal was to create a plot with eco- and nutriscore of different food groups. I have to admit that I used ChatGPT quite a lot for this project, as I didn't have too much time on hand. So if you see any ways how the code can be optimised, feel free to let me know!
+
+## Step 1: install libraries
+
+```{r, warnings = FALSE, results='hide'}
+library("dplyr")
+library("tidyverse")
+library("ggplot2")
+```
+
+## Step 2: load data and select variables
+I used the subset Jan provided and selected the following variables: nutriscore_grade, ecoscore_grade and pnns_groups_1 and 2 (those included the different food categories). I then deleted rows containing missing data.
+
+```{r}
+data <- read.csv("data_openfood.csv") %>%
+  select(nutriscore_grade, ecoscore_grade, pnns_groups_1, pnns_groups_2) %>%
+  # Delete rows only containing NA or unknown/not-applicable
+  filter(!(is.na(nutriscore_grade) | nutriscore_grade %in% c("unknown", "not-applicable")),
+         !(is.na(ecoscore_grade) | ecoscore_grade %in% c("unknown", "not-applicable")),
+         # deleting data not having any food category
+         !(pnns_groups_1 == "unknown" & pnns_groups_2 == "unknown"))
+```
+
+This is how the dataset looks like:
+```{r, echo = FALSE}
+head(data)
+```
+
+## Step 3: Combine food categories
+
+As the food categories were saved in two variables, I tried to combine them. Those were the different categories in pnns_groups_1:
+
+```{r, echo = FALSE}
+table(data$pnns_groups_1)
+```
+
+And those were the groups in pnns_groups_2:
+
+```{r, echo = FALSE}
+table(data$pnns_groups_2)
+```
+
+As you can see, the second group was way more detailed. I decided to combine the following categories and keep the other categories as they are in pnns_groups_2.
+
+```{r}
+data <- data %>%
+  mutate(pnns_groups_2 = case_when(
+    pnns_groups_2 %in% c("Breakfast cereals", "Cereals") ~ "Cereals",
+    pnns_groups_2 %in% c("Sweets", "Biscuits and cakes", "Ice cream", "Dairy desserts", "Pastries") ~ "Sweets",
+    pnns_groups_2 %in% c("Fruits", "Vegetables") ~ "Fruits and Vegetables",
+    pnns_groups_2 %in% c("Fruit juices", "Fruit nectars") ~ "Fruit Juices and Nectars",
+    pnns_groups_2 %in% c("Potatoes", "Bread") ~ "Starchy Foods",
+    pnns_groups_2 %in% c("Meat", "Offals") ~ "Meat and Offals",
+    pnns_groups_2 == "Salty and fatty products" ~ "Salty snacks",
+    pnns_groups_2 == "Teas and herbal teas and coffees" ~ "Tea and coffee",
+    pnns_groups_2 == "Pizza pies and quiches" ~ "Pizza",
+    TRUE ~ pnns_groups_2
+  ))
+```
+
+Now it looks like this:
+
+```{r, echo = FALSE}
+table(data$pnns_groups_2)
+```
+
+## Step 4: Create and reshape matrix to count
+
+Because each category in itself varied a lot in their eco- and nutriscore, I then had to create a matrix for each category, counting how often which combination of nutri- and ecoscore appeared. To do this I first extracted the categories and defined possible values of nutri- and ecoscores.
+
+```{r}
+categories <- unique(data$pnns_groups_2)
+grades <- c('a', 'b', 'c', 'd', 'e')
+```
+
+Then I had to count, how often each combination appeared in each category. To do this, I created a list of dataframes with one dataframe for each category. Each dataframe contains the count of each possible combination.
+
+```{r}
+list_of_data_counts <- lapply(categories, function(cat) {
+  data_category <- data %>% filter(pnns_groups_2 == cat)  # filters data for current category
+  # creates matrix counting frequency of each combination of nutri- and ecoscore
+  # outer function is used to apply a function to all pairs of elements from two vectors
+  count_matrix <- outer(grades, grades, Vectorize(function(grade1, grade2) {
+    sum(data_category$nutriscore_grade == grade1 & data_category$ecoscore_grade == grade2)  # counts the combination
+  }))
+  count_matrix <- count_matrix[rev(seq_along(grades)), ]  # reverses sequence of rows so a is at bottom
+  colnames(count_matrix) <- grades  # puts column names to values in grades
+  rownames(count_matrix) <- rev(grades)  # puts reversed grades as row names
+  as.data.frame(count_matrix)  # converts matrix to dataframe me
+})
+
+# naming the elements of list according to category name
+names(list_of_data_counts) <- categories
+```
+
+Here is an example, how such a dataframe looks like for Sweets:
+
+```{r, echo=FALSE}
+list_of_data_counts[['Sweets']]
+```
+
+## Setp 5: Calculating center of mass
+
+Now I had to calculate the center of mass for every category.
+
+```{r}
+center_of_mass <- lapply(list_of_data_counts, function(count_matrix) {
+  # sum entries in count_matrix
+  num <- sum(count_matrix)
+  # weighting of columns
+  column_weights <- colSums(count_matrix) / num
+  # reverse sequence of rows
+  count_matrix <- count_matrix[rev(rownames(count_matrix)), ]
+  # weighting of rows
+  row_weights <- rowSums(count_matrix) / num
+  # calculation of center of mass, return x and y coordinates
+  c(sum(column_weights * 0:4), sum(row_weights * 0:4))
+})
+
+```
+
+Here is how this looks for Sweets as an example:
+
+```{r}
+center_of_mass[['Sweets']]
+```
+
+## Step 6: Calculating size of bubbles
+
+The size of bubbles was defined as the variance inside of the categories. That means that a category that differed a lot in eco- and nutriscore should have a bigger bubble size. Therefore, I first had to calculate the variances of the categories:
+
+```{r}
+variance_data <- data %>%
+  # group by categories
+  group_by(pnns_groups_2) %>%
+  summarise(
+    # calculate variance in nutriscore per category
+    nutriscore_var = var(as.numeric(factor(nutriscore_grade, levels = grades)), na.rm = TRUE),
+    # calculate variance in ecoscore per category
+    ecoscore_var = var(as.numeric(factor(ecoscore_grade, levels = grades)), na.rm = TRUE),
+    # bubbles size is sum of both variances
+    bubble_size = nutriscore_var + ecoscore_var
+  )
+
+head(variance_data)
+```
+
+Then I scaled the bubbles size to 1000 based on the maximum.
+
+```{r}
+# get maximum of bubble site
+max_bubble_size <- max(variance_data$bubble_size)
+# scale bubble size based on max
+variance_data <- variance_data %>%
+  mutate(bubble_size = (bubble_size / max_bubble_size) * 1000)
+
+head(variance_data)
+```
+
+As you can see, Cereals had the biggest variance = bubble size, so they now have a scaled bubble size of 1000.
+
+## Step 7: Plot
+
+Now it is time to plot the data.
+But first, I have to prepare the data. I first extracted the bubble size for each catagory.
+
+```{r}
+bubble_sizes <- variance_data[variance_data$pnns_groups_2 %in% categories, "bubble_size"]
+```
+
+And I extracted the x- and y-coordinates from center_of_mass.
+
+```{r}
+x_coordinates <- sapply(center_of_mass, function(x) x[1])
+y_coordinates <- sapply(center_of_mass, function(x) x[2])
+```
+
+Another objective of the project was to display the bubble colours based on the average of the coordinates. I used the colour scale provided in the project description.
+
+```{r}
+average_coordinates <- (x_coordinates + y_coordinates) / 2
+
+get_color <- function(average) {
+  if (average <= 0.5) {
+    return("green")
+  } else if (average <= 1.5) {
+    return("greenyellow")
+  } else if (average <= 2.5) {
+    return("yellow")
+  } else if (average <= 3.5) {
+    return("orange")
+  } else {
+    return("red")
+  }
+}
+
+# calculate colors for x coordinates
+color_x <- sapply(x_coordinates, get_color)
+
+# calculate colors for y coordinates
+color_y <- sapply(y_coordinates, get_color)
+```
+
+Lastly, I created a dataframe to be used for plotting.
+
+```{r}
+
+plot_data <- data.frame(
+  x = x_coordinates,
+  y = y_coordinates,
+  category = categories,
+  bubble_size = bubble_sizes,
+  color_nutri = color_x,
+  color_eco = color_y
+)
+
+head(plot_data)
+```
+
+Now it is finally time to plot!
+
+```{r}
+plot_data %>% 
+ggplot(aes(x = x, y = y)) +
+  # fill = nutri, colour = eco, shape: circles
+  geom_point(aes(size = bubble_size, fill = color_y), shape = 21 , colour = color_x) +
+  # no legend, set size of bubbles
+  scale_size_continuous(range = c(1, 10), guide = "none") +
+  scale_fill_identity() +
+  # add category-label
+  geom_text(aes(label = category), hjust = -0.4, size = 2) +
+  # add labs
+  labs(x = "Ecoscore", y = "Nutriscore", title = "Relationship between Nutri- and Ecoscore") +
+  # add scale
+  scale_x_continuous(breaks = 0:4, labels = c('a', 'b', 'c', 'd', 'e')) +
+  scale_y_continuous(breaks = 0:4, labels = c('a', 'b', 'c', 'd', 'e')) +
+  coord_cartesian(xlim = c(0, 4), ylim = c(0, 4)) +
+  # change design
+  theme_minimal() +
+  theme(
+    plot.background = element_rect(fill = "#f0f0f0"),
+    panel.grid.major = element_line(color = "gray", linetype = "dashed"),
+    axis.line = element_line(color = "black"),
+    axis.title.x = element_text(size = 16),
+    axis.title.y = element_text(size = 16),
+    axis.text.x = element_text(size = 12),
+    axis.text.y = element_text(size = 12),
+    plot.title = element_text(size = 18, hjust = 0.5)
+  )
+
+```
+
+As you can see, the category labels are a little all over the place. But I'm quite happy how close I got to Jans plot!
