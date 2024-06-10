@@ -1,0 +1,37 @@
+---
+title: "MiguelsProject_byMeri"
+author: "Meri Nehlsen"
+date: "2024-06-10"
+output: md_document
+---
+```{r}
+smoothstress <- read_delim("/Users/merinehlsen/Desktop/R2_DataProjects/R2_Data Projects/smooth_stress_tensor.csv")
+```
+
+```{r}
+smoothstress %>% 
+  ggplot(aes(x = X, y =`Von Misses Stress`))+
+  geom_line(color = "red")+
+  theme_classic()
+
+```
+
+```{r}
+smoothstress %>% 
+  ggplot(aes(x = Y, y =`Von Misses Stress`))+
+  geom_line(color = "red")+
+  theme_classic()
+
+```
+
+```{r}
+smoothstress %>% 
+  ggplot(aes(x = Z, y =`Von Misses Stress`))+
+  geom_line(color = "red")+
+  theme_classic()
+
+```
+
+
+
+
