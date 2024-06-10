@@ -1,0 +1,48 @@
+output: md_document
+
+### Solution for Arlene's project
+
+```{r message = FALSE, warning = FALSE} 
+# libraries
+library(tidyverse)
+library(dbplyr)
+library(ggplot2)
+
+# load the data
+load("~/Data Projects with R and GitHub/Projects/ArleneHohl/data_PISA.Rdata")
+head(data)
+```
+
+# Build parents' highest level of education for each person
+
+```{r message = FALSE, warning = FALSE} 
+# reverse the scores first, remove NAs 
+clean_data <- data[!is.na(data$ST005Q01JA) & !is.na(data$ST007Q01JA), ]
+
+clean_data$ST005Q01JA <- rev(clean_data$ST005Q01JA)
+clean_data$ST007Q01JA <- rev(clean_data$ST007Q01JA)
+
+# store the sum of the two columns in a new column called ED_PARENTS
+clean_data$ED_PARENTS <- clean_data$ST005Q01JA + clean_data$ST007Q01JA
+````
+
+
+# Expected education qualification
+```{r message = FALSE, warning = FALSE}
+# find the expected education qualification of the student
+education_columns <- c("ST327Q01JA", "ST327Q02JA", "ST327Q03JA", "ST327Q04JA", "ST327Q05JA", "ST327Q06JA", "ST327Q07JA", "ST327Q08JA")
+
+exp_level <- function(row) {
+  education_levels <- c("ISCED_8", "ISCED_7", "ISCED_6", "ISCED_5", "ISCED_4", "ISCED_3_4", "ISCED_3_3", "ISCED_2")
+  for (i in length(row):1) {
+    if (!is.na(row[i]) && row[i] == 1) {
+      return(education_levels[i])
+    }
+  }
+  return(NA) 
+}
+    
+clean_data$EXP_ED <- apply(clean_data[, education_columns], 1, exp_level)
+````
+
+
