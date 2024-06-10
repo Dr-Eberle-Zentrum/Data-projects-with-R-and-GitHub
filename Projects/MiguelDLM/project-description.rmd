@@ -41,7 +41,7 @@ Unfortunately, the output files provided by Fossils are in the `.msh` format, wh
 
 </div>
 
-The ```Von Misses Stress``` represents the stress on each point in the 3D space. The X, Y  and Z columns represents the coordinates of each point.
+The ```Von Misses Stress``` represents the stress on each point in the 3D space. The X, Y  and Z columns represents the coordinates of each point. (see data example [Download the data here](./smooth_stress_tensor.csv))
 
 ## Objectives
 

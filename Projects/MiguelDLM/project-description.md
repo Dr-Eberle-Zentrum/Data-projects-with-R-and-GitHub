@@ -57,7 +57,8 @@ as follows:
 </table>
 
 The `Von Misses Stress` represents the stress on each point in the 3D
-space. The X, Y and Z columns represents the coordinates of each point.
+space. The X, Y and Z columns represents the coordinates of each point
+ [(see data example)](./smooth_stress_tensor.csv).
 
 ## Objectives
 
