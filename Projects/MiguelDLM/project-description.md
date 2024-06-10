@@ -8,13 +8,12 @@ complex problems more manageable through mathematical analysis
 [Fossils](https://gitlab.uliege.be/rboman/fossils), has significantly
 streamlined the process of conducting FEA on 3D virtual models of
 fossils, offering a quicker and more efficient approach than previously
-possible (Chatar et al., 2023).
+possible (Chatar et al., 2023). ![Finite Elements Analysis
+example](./bilder/model.png) Model structure before runing the Finite
+Elements Analysis
 
-<figure>
-<img src="./bilder/mesh.png" alt="Finite Elements Analysis example" />
-<figcaption aria-hidden="true">Finite Elements Analysis
-example</figcaption>
-</figure>
+![Finite Elements Analysis example](./bilder/mesh.png) Example of a
+Finite Elements Analysis
 
 Unfortunately, the output files provided by Fossils are in the `.msh`
 format, which may pose challenges when importing them into other
@@ -58,7 +57,8 @@ as follows:
 </table>
 
 The `Von Misses Stress` represents the stress on each point in the 3D
-space. The X, Y and Z columns represents the coordinates of each point.
+space. The X, Y and Z columns represents the coordinates of each point
+ [(see data example)](./smooth_stress_tensor.csv).
 
 ## Objectives
 
@@ -83,6 +83,9 @@ The `ggplot2` library will be used to plot the force distribution in
 each axe (X, Y and Z). Each 3D model will be represented by a different
 line.
 
+![Plot example](./bilder/plot.png) Example of a plot showing the average
+stress in the different points of the 3D model
+
 Furthermore, each dataset will be segmented into distinct samples based
 on their proportion of the total size. This involves determining the
 minimum and maximum values for each coordinate, followed by dividing
@@ -100,10 +103,10 @@ open-source protocol to simulate muscle-driven biomechanical loading of
 bone</span>. *Methods in Ecology and Evolution*, *14*(3), 848–859.
 <https://doi.org/10.1111/2041-210X.14051>
 
-Marcé-Nogué, J., Fortuny, J., Gil, L., and Galobart, A. (2011).
-<span class="nocase">Using reverse engineering to reconstruct tetrapod
-skulls and analyse its feeding behaviour</span>. *Proceedings of the
-13th International Conference on Civil, Structural and Environmental
+Marcé-Nogué, J., Fortuny, J., Gil, L., and Galobart, A. (2011). <span
+class="nocase">Using reverse engineering to reconstruct tetrapod skulls
+and analyse its feeding behaviour</span>. *Proceedings of the 13th
+International Conference on Civil, Structural and Environmental
 Engineering Computing*, *January*. <https://doi.org/10.4203/ccp.96.237>
 
 Rayfield, E. J. (2007). <span class="nocase">Finite element analysis and
