@@ -13,7 +13,7 @@ load("~/Data Projects with R and GitHub/Projects/ArleneHohl/data_PISA.Rdata")
 head(data)
 ```
 
-# Build parents' highest level of education for each person
+## Data manipulation: Build parents' highest level of education for each person
 
 ```{r message = FALSE, warning = FALSE} 
 # reverse the scores first, remove NAs 
@@ -27,7 +27,7 @@ clean_data$ED_PARENTS <- clean_data$ST005Q01JA + clean_data$ST007Q01JA
 ````
 
 
-# Expected education qualification
+## Data manipulation: Expected education qualification
 ```{r message = FALSE, warning = FALSE}
 # find the expected education qualification of the student
 education_columns <- c("ST327Q01JA", "ST327Q02JA", "ST327Q03JA", "ST327Q04JA", "ST327Q05JA", "ST327Q06JA", "ST327Q07JA", "ST327Q08JA")
@@ -43,6 +43,13 @@ exp_level <- function(row) {
 }
     
 clean_data$EXP_ED <- apply(clean_data[, education_columns], 1, exp_level)
+
+# drop the NA values
+clean_data <- clean_data[!is.na(clean_data$EXP_ED), ]
 ````
 
+# Plot the data
+```{r message = FALSE, warning = FALSE}
+
+````
 
