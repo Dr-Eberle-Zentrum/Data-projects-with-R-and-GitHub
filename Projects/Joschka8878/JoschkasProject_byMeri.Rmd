@@ -1,0 +1,107 @@
+---
+title: "JoschkasProject_byMeri"
+author: "Meri Nehlsen"
+date: "2024-06-10"
+output: md_document
+---
+```{r}
+library(tidyverse)
+library(ggplot2)
+```
+
+```{r}
+# Load data from RData file
+load("~/Desktop/R2_DataProjects/R2_Data_Projects_Git/Projects/Joschka8878/Data.RData")
+
+# Filtering for eligibility
+# There is probably a better way to do this (e.g. filtering in one step) but this also works
+eligible <- Data %>% 
+  group_by(Household) %>% 
+  filter(any(Age <= 18))    # Child under 18
+
+eliunemployed <- eligible %>% 
+  filter(any(Employment_Status == "Unemployed")) %>% 
+  ungroup()
+
+elidom <- eligible %>% 
+  filter(any(Employment_Position %in% c("Unpaid Family Worker"))) %>% 
+  ungroup()
+
+elimin <- eligible %>% 
+  filter(any(Individual_Income < Min_Wage)) %>% 
+  ungroup()
+
+eligibleall <- rbind(eliunemployed, elidom, elimin) %>% 
+  distinct()
+# unemployed, domestic worker or informal worker/ self-employed worker earning less than minimum wage (that is)
+
+# mockeli <- eligibleall %>% 
+#   group_by(Household) %>% 
+#   filter(Age <= 18) %>% 
+#   summarise(AUH_Count = n()) %>% 
+#   ungroup() %>% 
+#   filter(AUH_Count > 0)
+# eligibleall <- merge(eligibleall, mockeli, by = "Household") 
+# Only mother (of two eligible parents recieves AUH)
+# maximum of 5 AUHs
+```
+
+```{r}
+non_im_eg <- eligibleall %>% 
+  filter(Age > 18) %>% 
+  filter(Family_Relationship == "Head of Household") %>% 
+  filter(Country_Of_Birth == "Argentina") %>% 
+  mutate(Status = "Born in Argentina") %>% 
+  mutate(Eligible = "Eligible")
+# non_im$AUH_Count[non_im$AUH_Count > 5] <- 5
+non_im_non <- Data %>% 
+  filter(Family_Relationship == "Head of Household") %>% 
+  filter(Country_Of_Birth == "Argentina") %>% 
+  mutate(Status = "Born in Argentina") %>% 
+  mutate(Eligible = "Not Eligible")
+non_im_non[!(non_im_non$Household %in% non_im_eg$Household),]
+
+im_eg <- eligibleall %>% 
+  filter(Age > 18) %>% 
+  filter(Family_Relationship == "Head of Household") %>% 
+  filter(Country_Of_Birth != "Argentina") %>% 
+  mutate(Status = "Born Abroad")%>% 
+  mutate(Eligible = "Eligible")
+# im$AUH_Count[im$AUH_Count > 5] <- 5
+im_non <- Data %>% 
+  filter(Family_Relationship == "Head of Household") %>% 
+  filter(Country_Of_Birth == "Argentina") %>% 
+  mutate(Status = "Born Abroad") %>% 
+  mutate(Eligible = "Not Eligible")
+im_non <- im_non[!(im_non$Household %in% im_eg$Household),]
+
+data_im <- rbind(non_im_eg, im_eg, non_im_non, im_non)
+```
+
+```{r}
+# data_im %>% 
+#   group_by(Status) %>% 
+#   summarise(Sum = sum(AUH_Count)) %>% 
+#   mutate(Percentage = Sum/length(unique(Data$Household))) %>% 
+#   #ungroup() %>% 
+#   #mutate(Sum = Sum/ sum(Sum)) %>% 
+#   ggplot(aes(x = as.factor(Status), y = Percentage))+
+#   geom_col(fill="#26466C")+
+#   geom_text(aes(label = Sum), nudge_y = 0.025)+
+#   theme_classic()+
+#   xlab("")+
+#   ylab("Percentage of HoH receiving AUH")+
+#   guides(fill = "none")
+
+data_im %>% 
+  group_by(Status, Eligible) %>% 
+  summarise(Percentage = n()/length(data_im$Household)) %>% 
+  filter(Eligible == "Eligible") %>% 
+  ungroup() %>% 
+  ggplot(aes(x = as.factor(Status), y = Percentage))+
+  geom_col(fill="#26466C")+
+  geom_text(aes(label = Percentage), nudge_y = 0.025)+
+  theme_classic()+
+  xlab("")+
+  ylab("Percentage of HoH receiving AUH")
+```
