@@ -5,6 +5,9 @@ output: md_document
 
 This is a project solution
 ```{r}
-
+survival<- read.csv2("flydata_survival.csv", sep=";", header=F)
+dev_time<- read.csv2("flydata_developmental_time.csv", sep = ";", header =FALSE)
+meta_pools<- read.csv2("flydata_metabolic_pools.csv", sep=";",
+                       header=FALSE)
 ```
 
