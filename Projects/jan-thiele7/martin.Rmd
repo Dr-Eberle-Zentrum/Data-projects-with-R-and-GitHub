@@ -1,0 +1,137 @@
+---
+title: "Solution for Jan"
+author: "Martin"
+output: md_document
+---
+
+```{r setup, echo=FALSE}
+library(tidyverse)
+library(ggrepel)
+library(scales)
+library( ggforce ) # geom_ellipse
+
+# set working directory to source file location
+library(this.path)
+setwd(this.path::here())
+```
+
+Hiermit kann man direkt aus dem gezippten Komplettdatenfile die Infos holen,
+wozu man aber erst die 900 MB downloaden muss.
+
+```{r import-gz, eval=FALSE}
+# läuft ca 45s
+groupCounts <-
+  read_tsv("en.openfoodfacts.org.products.csv.gz"
+         , col_select = c("nutriscore_grade"
+                        , "ecoscore_grade"
+                        , "pnns_groups_1"
+                        , "pnns_groups_2"
+                        , "countries"
+                        )
+         , na = c("NA","unknown","", "not-applicable")
+         ) |>
+  filter( countries == "Germany") |>
+  select( - countries ) |>
+  drop_na() |>
+  group_by(nutriscore_grade, ecoscore_grade, pnns_groups_1, pnns_groups_2) |>
+  summarize( n = n() )
+```
+
+Daher holen wir die Daten aus dem CSV-File, das nur 10 MB gross ist.
+
+```{r import-csv}
+groupCounts <-
+  read_csv("data_openfood.csv"
+         , col_select = c("nutriscore_grade"
+                          , "ecoscore_grade"
+                          , "pnns_groups_1"
+                          , "pnns_groups_2"
+         )
+         , na = c("NA","unknown","", "not-applicable")
+  ) |>
+  drop_na() |>
+  group_by(nutriscore_grade, ecoscore_grade, pnns_groups_1, pnns_groups_2) |>
+  summarize( n = n() )
+```
+
+Farben für die Scores definieren.
+```{r colors}
+scoreColors <- c("1" = "#009F00", "2" = "#00FF00", "3" = "#FFFF00", "4" = "#FFA500", "5" = "#FF0000")
+```
+
+Und Plot erstellen.
+```{r plot}
+
+groupCounts |>
+
+  # convert grades to numeric for mean and sd computation
+  rowwise() |>
+  mutate(
+    # ascii to alphabet position
+    nutriscore = utf8ToInt(str_to_lower(nutriscore_grade))-96,
+    ecoscore = utf8ToInt(str_to_lower(ecoscore_grade))-96,
+  ) |>
+  ungroup() |>
+  select(-ends_with("grade")) |>
+
+  # compute mean and sd for each group
+  # group_by(pnns_groups_1, pnns_groups_2) |>
+  group_by(pnns_groups_1) |>
+  dplyr::summarize(
+    nutriscore_mean = weighted.mean(nutriscore, n),
+    nutriscore_sd = Hmisc::wtd.var(nutriscore,n),
+    ecoscore_mean = weighted.mean(ecoscore,n),
+    ecoscore_sd = Hmisc::wtd.var(ecoscore,n),
+    .groups = "drop"
+  ) |>
+  ungroup() |>
+
+  # compute difference between nutriscore and ecoscore for visualization
+  mutate(
+    sd_diff = abs(nutriscore_sd - ecoscore_sd)
+    , eco_cat = round(ecoscore_mean, digits = 0) |> as_factor()
+    , nutri_cat = round(nutriscore_mean, digits = 0) |> as_factor()
+    ) |>
+
+  #### plotting ###
+  ggplot(aes(x=ecoscore_mean, y=nutriscore_mean)) +
+  theme_minimal() +
+
+  # legend points
+  geom_point(
+    data = tibble( ecoscore_mean = 1, nutriscore_mean = 1:5 ),
+    col=scoreColors, size=4, shape="\U25D6"
+  )+
+  geom_point(
+    data = tibble( ecoscore_mean = 1:5, nutriscore_mean = 1 ),
+    col=scoreColors, size=4, shape="\u25D7"
+  )+
+
+  # spheres of standard deviation
+  # geom_ellipse(aes(x0=ecoscore_mean, y0=nutriscore_mean, a=ecoscore_sd, b=nutriscore_sd, angle=0), col="lightgray") +
+  geom_errorbar(aes(ymin=nutriscore_mean-(nutriscore_sd), ymax=nutriscore_mean+(nutriscore_sd)), width=0.03, col="lightgray") +
+  geom_errorbarh(aes(xmin=ecoscore_mean-(ecoscore_sd), xmax=ecoscore_mean+(ecoscore_sd)), height=0.03, col="lightgray") +
+
+  # data points at mean centers
+  geom_point(aes(col = nutri_cat), size=4, shape="\u25D6") + # left half circle
+  geom_point(aes(col = eco_cat), size=4, shape="\U25D7", ) + # right half circle
+  # geom_point(aes(size=sd_diff, col = nutri_cat), shape="\u25D6") + # left half circle
+  # geom_point(aes(size=sd_diff, col = eco_cat), shape="\U25D7", ) + # right half circle
+
+  # data labels
+  geom_text_repel(aes(label=pnns_groups_1), size=3, max.overlaps = 30) +
+  # geom_text_repel(aes(label=pnns_groups_2), size=3, max.overlaps = 30) +
+
+  labs(title="Nutriscore vs Ecoscore by food group", x="Ecoscore", y="Nutriscore") +
+  # set x and y labels to integers
+  scale_x_continuous(breaks = 1:5,labels = c("A","B","C","D","E")) +
+  scale_y_continuous(breaks = 1:5,labels = c("A","B","C","D","E")) +
+  # use nutri-score color for fill color
+  scale_color_manual(values = scoreColors) +
+  # disable grid lines beside all ticks
+  theme(panel.grid.minor = element_blank()
+        , panel.grid.major = element_blank()
+        ) +
+  guides(size="none", col="none")
+
+```
