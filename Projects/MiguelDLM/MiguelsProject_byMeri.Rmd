@@ -4,9 +4,17 @@ author: "Meri Nehlsen"
 date: "2024-06-10"
 output: md_document
 ---
-```{r}
-smoothstress <- read_delim("/Users/merinehlsen/Desktop/R2_DataProjects/R2_Data Projects/smooth_stress_tensor.csv")
+```{r setup}
+library(tidyverse)
+library(ggplot2)
 ```
+
+```{r}
+smoothstress <- read_csv("https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/raw/main/Projects/MiguelDLM/smooth_stress_tensor.csv")
+```
+So when I read this file, I cannot find different 3D models. Is this something defined by the nodes?
+
+## Visualizing data set for understanding
 
 ```{r}
 smoothstress %>% 
@@ -32,6 +40,7 @@ smoothstress %>%
 
 ```
 
+Since the force distribution of the von misses stresses along the axises resembles a relief, I presume this is where the sampleing comes into play?
 
 
 

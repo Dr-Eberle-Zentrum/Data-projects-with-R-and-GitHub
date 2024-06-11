@@ -9,6 +9,9 @@ library(tidyverse)
 library(ggplot2)
 ```
 
+So right now the data wrangling is still very messy. I was having problems filtering for multiple criteria at the same time, so I will try to fix this part in the future!
+
+Also some of the plotting is still very wonky, so I will try to fix that as well!
 ```{r}
 # Load data from RData file
 load("~/Desktop/R2_DataProjects/R2_Data_Projects_Git/Projects/Joschka8878/Data.RData")
@@ -105,3 +108,72 @@ data_im %>%
   xlab("")+
   ylab("Percentage of HoH receiving AUH")
 ```
+
+```{r}
+data_imonly <- rbind(im_eg, im_non)
+
+data_imonly %>% 
+  group_by(Eligible) %>% 
+  summarise(Percentage = n()/length(data_imonly$Household)) %>% 
+  ungroup() %>% 
+  ggplot(aes(x = as.factor(Eligible), y = Percentage))+
+  geom_col(fill="#26466C")+
+  geom_text(aes(label = Percentage), nudge_y = 0.025)+
+  theme_classic()+
+  xlab("")+
+  ylab("Percentage of HoH receiving AUH")
+  
+```
+
+```{r}
+eligibleall %>% 
+  mutate(Age_Range = cut(Age, c(0,20,30,40,50,60,70,80,90,Inf))) %>% 
+  group_by(Age_Range, Sex) %>% 
+  summarise(Percentage = n()/length(data_im$Household)) %>% 
+  ungroup() %>%
+  ggplot(aes(fill = Sex, y=Percentage, x = Age_Range))+
+  geom_bar(position = "stack", stat = "identity")+
+  scale_fill_manual(values = c("#932322","#1D3A74"))+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+
+  theme_minimal()
+```
+
+```{r}
+eligibleall %>% 
+  filter(Country_Of_Birth != "Argentina") %>% 
+  group_by(Country_Of_Birth, Sex) %>% 
+  summarise(Percentage = n()/length(eligibleall$Household)) %>% 
+  ungroup() %>%
+  ggplot(aes(fill = Sex, y=Percentage, x =Country_Of_Birth))+
+  geom_bar(position = "stack", stat = "identity")+
+  scale_fill_manual(values = c("#932322","#1D3A74"))+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+
+  theme_classic()
+```
+
+```{r}
+eligibleall %>% 
+  filter(Country_Of_Birth == "Argentina") %>% 
+  group_by(Province_of_Birth, Sex) %>% 
+  summarise(Percentage = n()/length(data_im$Household)) %>% 
+  ungroup() %>%
+  ggplot(aes(fill = Sex, y=Percentage, x = Province_of_Birth))+
+  geom_bar(position = "stack", stat = "identity")+
+  scale_fill_manual(values = c("#932322","#1D3A74"))+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+
+  theme_classic()
+```
+
+```{r}
+eligibleall %>% 
+  group_by(Education_Level, Sex) %>% 
+  summarise(Percentage = n()/length(data_im$Household)) %>% 
+  ungroup() %>%
+  ggplot(aes(fill = Sex, y=Percentage, x = Education_Level))+
+  geom_bar(position = "stack", stat = "identity")+
+  scale_fill_manual(values = c("#932322","#1D3A74"))+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+
+  theme_minimal()
+```
+
+
