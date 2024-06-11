@@ -11,19 +11,28 @@ library(ggplot2)
 # load the data
 load("~/Data Projects with R and GitHub/Projects/ArleneHohl/data_PISA.Rdata")
 head(data)
+
+# select only columns needed
+clean_data <- data %>%
+  select(CNT, CNTSTUID, ST005Q01JA, ST007Q01JA, ST327Q01JA, ST327Q02JA, ST327Q03JA, ST327Q04JA, ST327Q05JA, ST327Q06JA, ST327Q07JA, ST327Q08JA) 
+head(clean_data)
 ```
 
 ## Data manipulation: Build parents' highest level of education for each person
 
 ```{r message = FALSE, warning = FALSE} 
 # reverse the scores first, remove NAs 
-clean_data <- data[!is.na(data$ST005Q01JA) & !is.na(data$ST007Q01JA), ]
+clean_data <- clean_data[!is.na(clean_data$ST005Q01JA) & !is.na(clean_data$ST007Q01JA), ]
 
-clean_data$ST005Q01JA <- rev(clean_data$ST005Q01JA)
-clean_data$ST007Q01JA <- rev(clean_data$ST007Q01JA)
+max_value <- max(clean_data$ST005Q01JA)
+clean_data$ST005Q01JA <- max_value + 1 - clean_data$ST005Q01JA
+
+max_value <- max(clean_data$ST007Q01JA)
+clean_data$ST007Q01JA <- max_value + 1 - clean_data$ST007Q01JA
 
 # store the sum of the two columns in a new column called ED_PARENTS
 clean_data$ED_PARENTS <- clean_data$ST005Q01JA + clean_data$ST007Q01JA
+head(clean_data)
 ````
 
 
@@ -44,12 +53,22 @@ exp_level <- function(row) {
     
 clean_data$EXP_ED <- apply(clean_data[, education_columns], 1, exp_level)
 
-# drop the NA values
+# drop the NA values and only keep relevant columns
 clean_data <- clean_data[!is.na(clean_data$EXP_ED), ]
+clean_data %>%
+  select(CNT, CNTSTUID, EXP_ED, ED_PARENTS) 
 ````
 
 # Plot the data
+
 ```{r message = FALSE, warning = FALSE}
+# plot for every country, starting with Japan
+
+data_japan <- clean_data %>% filter(CNT == "JPN") 
+
 
 ````
+
+
+
 
