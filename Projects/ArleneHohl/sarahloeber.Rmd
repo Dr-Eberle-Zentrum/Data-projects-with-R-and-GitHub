@@ -1,4 +1,6 @@
+---
 output: md_document
+---
 
 ### Solution for Arlene's project
 
