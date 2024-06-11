@@ -12,7 +12,7 @@ library(ggplot2)
 So right now the data wrangling is still very messy. I was having problems filtering for multiple criteria at the same time, so I will try to fix this part in the future!
 
 Also some of the plotting is still very wonky, so I will try to fix that as well!
-```{r}
+```{r results='hide'}
 # Load data from RData file
 load("~/Desktop/R2_DataProjects/R2_Data_Projects_Git/Projects/Joschka8878/Data.RData")
 
@@ -49,7 +49,7 @@ eligibleall <- rbind(eliunemployed, elidom, elimin) %>%
 # maximum of 5 AUHs
 ```
 
-```{r}
+```{r results='hide'}
 non_im_eg <- eligibleall %>% 
   filter(Age > 18) %>% 
   filter(Family_Relationship == "Head of Household") %>% 
