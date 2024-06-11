@@ -146,3 +146,12 @@ Und Plot erstellen.
       guides(size="none", col="none")
 
 ![](martin_files/figure-markdown_strict/plot-1.png)
+
+    ggsave("nutri-eco-score.martin.png", width=10, height=9, dpi=300)
+
+<figure>
+<img src="nutri-eco-score.martin.png"
+alt="Nutriscore vs Ecoscore by food group" />
+<figcaption aria-hidden="true">Nutriscore vs Ecoscore by food
+group</figcaption>
+</figure>

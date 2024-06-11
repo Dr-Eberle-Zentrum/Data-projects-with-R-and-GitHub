@@ -4,7 +4,7 @@ author: "Martin"
 output: md_document
 ---
 
-```{r setup, echo=FALSE}
+```{r setup, echo=FALSE, show=FALSE}
 library(tidyverse)
 library(ggrepel)
 library(scales)
@@ -134,4 +134,9 @@ groupCounts |>
         ) +
   guides(size="none", col="none")
 
+ggsave("nutri-eco-score.martin.png", width=10, height=9, dpi=300)
 ```
+
+![Nutriscore vs Ecoscore by food group](nutri-eco-score.martin.png)
+
+```{r}
