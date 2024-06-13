@@ -1,4 +1,7 @@
 ---
+title: "Solution for Arlene's project"
+author: "Sarah Löber"
+date: "2024-06-13"
 output: md_document
 ---
 
