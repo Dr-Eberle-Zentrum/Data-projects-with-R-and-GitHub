@@ -49,7 +49,7 @@ In the end I loaded the your prepared data ..
       # filter for people with goals
       filter(educationGoal > 0) 
 
-As you can see above, I used:
+As you can see below, I used:
 
 -   the minimal parental education score,
 -   created groups “1-2” etc. for these, and
