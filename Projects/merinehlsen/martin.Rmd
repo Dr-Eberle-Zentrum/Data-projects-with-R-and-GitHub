@@ -80,10 +80,9 @@ time <-
 data <- 
   left_join(survival, time, by=c("Diet", "Measure", "Line"))
 
-# nice table print with kable
-library(kableExtra)
+# table output
 data |>
-  kable(format="markdown", digits=2)
+  kable(format="markdown", digits=2, )
 
 ```
 
