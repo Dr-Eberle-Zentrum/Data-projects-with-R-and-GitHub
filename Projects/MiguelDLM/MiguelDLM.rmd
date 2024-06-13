@@ -1,0 +1,242 @@
+---
+title: "Project solution"
+output: md_document
+---
+
+## Loading the data
+First of all, we need to load the data. The following code chunk loads the data from the `smooth_stress_tensor.csv` file:
+
+```{r load_data, cache=TRUE}
+#load the library to read csv files hiding the messages and 
+#defining the path of the file
+library(readr)
+data <- suppressMessages(read_csv(paste0(getwd(), "/smooth_stress_tensor.csv")))
+#count the number of rows and columns of the data
+dim(data)
+#show the first rows of the data
+head(data)
+```
+
+## cleaning the data
+
+Before analyzing the data, we need to clean it. It is necesary to remove the 1 or 2% higher stress values of the dataset. The following code chunk removes the 1% higher stress values of the dataset:
+
+```{r cleaning_data}
+#remove the 1% higher stress values of the dataset
+data <- data[order(data$`Von Misses Stress`),]
+data <- data[-(1:round(nrow(data)*0.01)),]
+#count the number of rows of the data after cleaning
+dim(data)
+```
+
+## Subdividing the data
+
+The data will be subdivided into 10 groups, each one representing the 10% of the total length of the 3D model.
+
+```{r subdividing_data}
+#Get the minimum and maximum values for each coordinate
+min_x <- min(data$X)
+max_x <- max(data$X)
+min_y <- min(data$Y)
+max_y <- max(data$Y)
+min_z <- min(data$Z)
+max_z <- max(data$Z)
+#Divide the length of each coordinate into 10 equal sub-samples
+```{r}
+data$X_group <- cut(
+    data$X, 
+    breaks = seq(min_x, max_x, length.out = 11), 
+    include.lowest = TRUE
+)
+
+data$Y_group <- cut(
+    data$Y, 
+    breaks = seq(min_y, max_y, length.out = 11), 
+    include.lowest = TRUE
+)
+
+data$Z_group <- cut(
+    data$Z, 
+    breaks = seq(min_z, max_z, length.out = 11), 
+    include.lowest = TRUE
+)
+#count the number of rows in each group
+table(data$X_group)
+table(data$Y_group)
+table(data$Z_group)
+```
+Each table shows the number of rows in each group. The groups are equally distributed along the X, Y and Z axes.
+For example, the first table shows that in the first group of the X axis there are 10625 rows. This is the first 10% of the total length of the 3D model along the X axis.
+
+## Estimating the average stress in each group
+
+The following code chunk calculates the average stress in each group:
+
+```{r average_stress}
+#load the library dplyr
+library(dplyr)
+#calculate the average stress in each X group
+average_stress_X <- data %>%
+    group_by(X_group) %>%
+    summarise(average_stress = mean(`Von Misses Stress`))
+#calculate the average stress in each Y group
+average_stress_Y <- data %>%
+    group_by(Y_group) %>%
+    summarise(average_stress = mean(`Von Misses Stress`))
+#calculate the average stress in each Z group
+average_stress_Z <- data %>%
+    group_by(Z_group) %>%
+    summarise(average_stress = mean(`Von Misses Stress`))
+
+#show the first rows of the average stress
+head(average_stress_X)
+head(average_stress_Y)
+head(average_stress_Z)
+
+```
+## Rename the groups
+
+The groups in the X, Y and Z axes will be renamed to show the percentage of the total length of the 3D model that each group represents.
+```{r rename_groups}
+#load the library dplyr
+library(dplyr)
+#rename the groups in the X axis
+average_stress_X <- average_stress_X %>%
+    mutate(X_group = paste0(row_number() * 10, "%"))
+#rename the groups in the Y axis
+average_stress_Y <- average_stress_Y %>%
+    mutate(Y_group = paste0(row_number() * 10, "%"))
+#rename the groups in the Z axis
+average_stress_Z <- average_stress_Z %>%
+    mutate(Z_group = paste0(row_number() * 10, "%"))
+#show the first rows of the average stress
+head(average_stress_X)
+head(average_stress_Y)
+head(average_stress_Z)
+```
+
+
+## Plotting the results
+
+Now it is possible to plot the results. First, we will plot the average stress in the X axis and compare to the strees in the Y and Z axes. 
+
+```{r plot_results}
+#load the libraries
+library(ggplot2)
+library(png)
+library(grid)
+library(gridExtra)
+#read the image
+img <- readPNG("Z_axe.png")
+g <- rasterGrob(img, interpolate=TRUE)
+#plot the changes in the average stress in the Z axis accros the groups using geom_points and conecting them with geom_line
+p <- ggplot(average_stress_Z, aes(x = Z_group, y = average_stress, group = 1)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Average stress in the Z axis", x = "Z axis", y = "Average stress") +
+    theme_minimal()
+#combine the plot and the image
+grid.arrange(p, g, ncol = 1, heights = c(9, 1))
+```
+
+#compare across different species
+
+Now lets to replicate the same analysis using different species. The following code chunk loads the data from the `smooth_stress_tensor_species.csv` file:
+
+```{r load_data_species, cache=TRUE}
+#load the csv files for each species
+data_lion <- suppressMessages(read_csv(paste0(getwd(), "/smooth_stress_tensor (lion).csv")))
+data_hyaena <- suppressMessages(read_csv(paste0(getwd(), "/smooth_stress_tensor (hyaena).csv")))
+data_wolf <- suppressMessages(read_csv(paste0(getwd(), "/smooth_stress_tensor (wolf).csv")))
+data_bear <- suppressMessages(read_csv(paste0(getwd(), "/smooth_stress_tensor (bear).csv")))
+```
+
+## cleaning and preparing the data
+
+The following code chunk removes the 1% higher stress values of the dataset for each species, subdivides the data into 10 groups and calculates the average stress in each group:
+
+```{r cleaning_data_species}
+
+# Define the species names
+species_names <- c("lion", "hyaena", "wolf", "bear")
+# Initialize lists to store the data for each species
+average_stress_X_list <- list()
+average_stress_Y_list <- list()
+average_stress_Z_list <- list()
+
+# Process the data for each species
+for (i in seq_along(list(data_lion, data_hyaena, data_wolf, data_bear))) {
+    data <- list(data_lion, data_hyaena, data_wolf, data_bear)[[i]]
+    species <- species_names[i]
+    
+    # Remove the 1% higher stress values of the dataset
+    data <- data[order(data$`Von Misses Stress`),]
+    data <- data[-(1:round(nrow(data)*0.01)),]
+    
+    # Divide the length of each coordinate into 10 equal sub-samples
+    data$X_group <- cut(
+        data$X, 
+        breaks = seq(min_x, max_x, length.out = 11), 
+        include.lowest = TRUE,
+        labels = paste0(seq(10, 100, by = 10), "%")
+    )
+    data$Y_group <- cut(
+        data$Y, 
+        breaks = seq(min_y, max_y, length.out = 11), 
+        include.lowest = TRUE,
+        labels = paste0(seq(10, 100, by = 10), "%")
+    )
+    data$Z_group <- cut(
+        data$Z, 
+        breaks = seq(min_z, max_z, length.out = 11), 
+        include.lowest = TRUE,
+        labels = paste0(seq(10, 100, by = 10), "%")
+    )
+    
+    # Calculate the average stress in each X group
+    average_stress_X <- data %>%
+        group_by(X_group) %>%
+        summarise(average_stress = mean(`Von Misses Stress`))
+    
+    # Calculate the average stress in each Y group
+    average_stress_Y <- data %>%
+        group_by(Y_group) %>%
+        summarise(average_stress = mean(`Von Misses Stress`))
+    
+    # Calculate the average stress in each Z group
+    average_stress_Z <- data %>%
+        group_by(Z_group) %>%
+        summarise(average_stress = mean(`Von Misses Stress`))
+    
+    # Store the data for this species in the lists
+    average_stress_X_list[[species]] <- average_stress_X
+    average_stress_Y_list[[species]] <- average_stress_Y
+    average_stress_Z_list[[species]] <- average_stress_Z
+}
+
+# Combine the data for all species
+combined_data_X <- bind_rows(average_stress_X_list, .id = "Species")
+combined_data_Y <- bind_rows(average_stress_Y_list, .id = "Species")
+combined_data_Z <- bind_rows(average_stress_Z_list, .id = "Species")
+```
+
+## Plotting the results for all species in the Z axis
+
+Now it is possible to plot the results for all species in the Z axis in the same plot.
+
+```{r plot_results_species}
+#read the image (the same image will be used for all species)
+img <- readPNG("Z_axe.png")
+g <- rasterGrob(img, interpolate=TRUE)
+#plot the changes in the average stress in the Z axis accros the groups using geom_points and conecting them with geom_line
+#each species will be represented by a different line
+p <- ggplot(combined_data_Z, aes(x = Z_group, y = average_stress, group = Species, color = Species)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Average stress in the Z axis", x = "Z axis", y = "Average stress") +
+    theme_minimal()
+#combine the plot and the image
+grid.arrange(p, g, ncol = 1, heights = c(9, 1))
+```
+
+
