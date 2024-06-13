@@ -12,6 +12,8 @@ OPEN: handling of the third sheet… uuuhhh…
 
     reshapeUglySheet <- function( dataRaw ){
       
+      dataRaw <- setNames(dataRaw, as.character(1:ncol(dataRaw)))
+      
       rows <- list()
       for ( x in seq(2,(ncol(dataRaw)-1), by=2) ) {
         rows[[x]] <-
@@ -48,96 +50,21 @@ That way, both the survival and the time table have the same format in
 the end and can be joined into one.
 
     survival <- 
-      read_xlsx("flydata.xlsx", sheet="Survival", col_names = F) |> 
+      read_xlsx("flydata.xlsx", sheet="Survival", col_names = F, .name_repair="minimal") |> 
       reshapeUglySheet() |> 
       rename(n_survival = "N")
 
-    ## New names:
-    ## • `` -> `...1`
-    ## • `` -> `...2`
-    ## • `` -> `...3`
-    ## • `` -> `...4`
-    ## • `` -> `...5`
-    ## • `` -> `...6`
-    ## • `` -> `...7`
-    ## • `` -> `...8`
-    ## • `` -> `...9`
-    ## • `` -> `...10`
-    ## • `` -> `...11`
-    ## • `` -> `...12`
-    ## • `` -> `...13`
-    ## • `` -> `...14`
-    ## • `` -> `...15`
-    ## • `` -> `...16`
-    ## • `` -> `...17`
-    ## • `` -> `...18`
-    ## • `` -> `...19`
-    ## • `` -> `...20`
-    ## • `` -> `...21`
-    ## • `` -> `...22`
-    ## • `` -> `...23`
-    ## • `` -> `...24`
-    ## • `` -> `...25`
-    ## • `` -> `...26`
-    ## • `` -> `...27`
-    ## • `` -> `...28`
-    ## • `` -> `...29`
-    ## • `` -> `...30`
-    ## • `` -> `...31`
-
     time <- 
-      read_xlsx("flydata.xlsx", sheet="Developmental_Time", col_names = F) |> 
+      read_xlsx("flydata.xlsx", sheet="Developmental_Time", col_names = F, .name_repair="minimal") |> 
       reshapeUglySheet() |> 
       rename(n_time = "N")
-
-    ## New names:
-    ## • `` -> `...1`
-    ## • `` -> `...2`
-    ## • `` -> `...3`
-    ## • `` -> `...4`
-    ## • `` -> `...5`
-    ## • `` -> `...6`
-    ## • `` -> `...7`
-    ## • `` -> `...8`
-    ## • `` -> `...9`
-    ## • `` -> `...10`
-    ## • `` -> `...11`
-    ## • `` -> `...12`
-    ## • `` -> `...13`
-    ## • `` -> `...14`
-    ## • `` -> `...15`
-    ## • `` -> `...16`
-    ## • `` -> `...17`
-    ## • `` -> `...18`
-    ## • `` -> `...19`
-    ## • `` -> `...20`
-    ## • `` -> `...21`
-    ## • `` -> `...22`
-    ## • `` -> `...23`
-    ## • `` -> `...24`
-    ## • `` -> `...25`
-    ## • `` -> `...26`
-    ## • `` -> `...27`
-    ## • `` -> `...28`
-    ## • `` -> `...29`
-    ## • `` -> `...30`
-    ## • `` -> `...31`
 
     data <- 
       left_join(survival, time, by=c("Diet", "Measure", "Line"))
 
-    # nice table print with kable
-    library(kableExtra)
-
-    ## 
-    ## Attache Paket: 'kableExtra'
-    ## 
-    ## Das folgende Objekt ist maskiert 'package:dplyr':
-    ## 
-    ##     group_rows
-
+    # table output
     data |>
-      kable(format="markdown", digits=2)
+      knitr::kable(format="markdown", digits=2, )
 
 <table>
 <colgroup>

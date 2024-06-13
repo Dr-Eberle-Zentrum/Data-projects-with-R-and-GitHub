@@ -30,6 +30,8 @@ OPEN: handling of the third sheet... uuuhhh...
 
 reshapeUglySheet <- function( dataRaw ){
   
+  dataRaw <- setNames(dataRaw, as.character(1:ncol(dataRaw)))
+  
   rows <- list()
   for ( x in seq(2,(ncol(dataRaw)-1), by=2) ) {
     rows[[x]] <-
@@ -68,12 +70,12 @@ That way, both the survival and the time table have the same format in the end a
 
 ```{r import}
 survival <- 
-  read_xlsx("flydata.xlsx", sheet="Survival", col_names = F) |> 
+  read_xlsx("flydata.xlsx", sheet="Survival", col_names = F, .name_repair="minimal") |> 
   reshapeUglySheet() |> 
   rename(n_survival = "N")
 
 time <- 
-  read_xlsx("flydata.xlsx", sheet="Developmental_Time", col_names = F) |> 
+  read_xlsx("flydata.xlsx", sheet="Developmental_Time", col_names = F, .name_repair="minimal") |> 
   reshapeUglySheet() |> 
   rename(n_time = "N")
 
@@ -82,7 +84,7 @@ data <-
 
 # table output
 data |>
-  kable(format="markdown", digits=2, )
+  knitr::kable(format="markdown", digits=2, )
 
 ```
 
