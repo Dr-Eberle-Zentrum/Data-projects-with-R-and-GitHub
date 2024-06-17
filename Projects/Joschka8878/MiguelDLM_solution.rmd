@@ -11,6 +11,7 @@ First let's load the data.
 ```{r load-data}
 #set the working directory to the folder where this file is located
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+library(tidyverse)
 
 # Load the data from the RData file that is in the same folder as this Rmd file
 load(paste0(getwd(), "/EPH_DATA.RData"))
