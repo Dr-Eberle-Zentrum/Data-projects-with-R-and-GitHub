@@ -4,20 +4,19 @@ output: md_document
 ---
 
 
-```{r}
+```{r, echo=FALSE}
 library(tidyverse)
 library(dplyr)
 survival<- read.csv2("flydata_survival.csv", sep=";", header=F)
-dev_time<- read.csv2("flydata_developmental_time.csv", sep = ";", header =FALSE)
-meta_pools<- read.csv2("flydata_metabolic_pools.csv", sep=";",
-                       header=FALSE)
+dev_time<- read.csv2("flydata_developmental_time.csv", sep = ";", header =F)
+meta_pools<- read.csv2("flydata_metabolic_pools.csv", sep=";", header=F)
 ```
 
 
 ```{r}
-survival_wide<- survival[c(1:6),] %>%
+survival_wide<- survival[c(1:6),]%>%
   rbind("Female SD", "Male SD", "Total SD")
-survival_wide[c(7:9), c(2:31)]<-NA
+survival_wide[c(7:9),c(2:31)]<-NA
 
 
 test1=survival_wide[, seq(1, ncol(survival_wide), by = 2)]%>%
@@ -25,15 +24,58 @@ test1=survival_wide[, seq(1, ncol(survival_wide), by = 2)]%>%
   select(-V1)
 
 test2=survival_wide[, seq(2, ncol(survival_wide), by = 2)]%>%
-  drop_na()
+  drop_na()%>%
+  setNames(names(test1))
 
-names(test1)<- names(test2)
 test3= rbind(test2,test1, make.row.names=F)
-
 survival_wide= cbind(survival_wide$V1, test3)
 
 ```
+
+
 ```{r}
-survival_wide
+survival_long <- survival_wide %>%
+  pivot_longer(
+    cols = -`survival_wide$V1`, 
+    names_to = "variable",  
+    values_to = "value"     
+  ) %>%
+  pivot_wider(
+    names_from = `survival_wide$V1`, 
+    values_from = value
+  )%>%
+  select(-variable)
+```
+```{r}
+survival_long
+```
+```{r}
+dev_time_wide<- dev_time%>%
+  rbind("L-P SD", "P-E SD", "L-E SD")
+dev_time_wide[c(7:9),c(2:31)]<-NA
+
+test1=dev_time_wide[, seq(1, ncol(dev_time_wide), by = 2)]%>%
+  drop_na()%>%
+  select(-V1)
+
+test2=dev_time_wide[, seq(2, ncol(dev_time_wide), by = 2)]%>%
+  drop_na()%>%
+  setNames(names(test1))
+test3= rbind(test2,test1, make.row.names=F)
+dev_time_wide= cbind(dev_time_wide$V1, test3)
+```
+
+```{r}
+dev_time_long <- dev_time_wide %>%
+  pivot_longer(
+    cols = -`dev_time_wide$V1`, 
+    names_to = "variable",  
+    values_to = "value"     
+  ) %>%
+   pivot_wider(
+     names_from = `dev_time_wide$V1`, 
+     values_from = value
+   )%>%
+  select(-variable)
 ```
 
