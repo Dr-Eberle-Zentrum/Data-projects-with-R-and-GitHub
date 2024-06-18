@@ -23,7 +23,7 @@ eligible <- Data %>%
   filter(any(Age <= 18))    # Child under 18
 
 eliunemployed <- eligible %>% 
-  filter(any(Employment_Status == "Unemployed")) %>% 
+  filter(any(Unemployed == 1)) %>% 
   ungroup()
 
 elidom <- eligible %>% 
@@ -51,14 +51,14 @@ eligibleall <- rbind(eliunemployed, elidom, elimin) %>%
 
 ```{r results='hide'}
 non_im_eg <- eligibleall %>% 
-  filter(Age > 18) %>% 
-  filter(Family_Relationship == "Head of Household") %>% 
+  # filter(Age > 18) %>% 
+  filter(Family_Relationship %in% c("Head of Household", "Spouse")) %>% 
   filter(Country_Of_Birth == "Argentina") %>% 
   mutate(Status = "Born in Argentina") %>% 
   mutate(Eligible = "Eligible")
 # non_im$AUH_Count[non_im$AUH_Count > 5] <- 5
 non_im_non <- Data %>% 
-  filter(Family_Relationship == "Head of Household") %>% 
+  filter(Family_Relationship %in% c("Head of Household", "Spouse")) %>% 
   filter(Country_Of_Birth == "Argentina") %>% 
   mutate(Status = "Born in Argentina") %>% 
   mutate(Eligible = "Not Eligible")
@@ -126,6 +126,7 @@ data_imonly %>%
 ```
 
 ```{r}
+Ages <- c()
 eligibleall %>% 
   mutate(Age_Range = cut(Age, c(0,20,30,40,50,60,70,80,90,Inf))) %>% 
   group_by(Age_Range, Sex) %>% 
