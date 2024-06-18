@@ -4,6 +4,17 @@
     library(gridExtra)
     library(scales)
 
+### Background
+
+\#Finite Element Analysis
+
+-   used to predict stresses/ deformations on structures under defined
+    conditions
+-   reduction of 3D model to \##finite## number of \##elements##
+
+![Finite Elements Analysis representing stress on a Jaw
+bone](./bilder/mesh.png)
+
 ### 1. Iterative import of datasets:
 
 I import the data sets into a list by iteration of the respective url to
@@ -23,6 +34,8 @@ into a data frame, that is easier to work with, using `bind_rows`.
     smoothstress_animals <- bind_rows(smoothstress, .id = "animal")
 
 ## 2. Resclaing the coordinates per dimension onto a scale from 0 to 1:
+
+![Rescaling Example](./dimension_example.png)
 
 Here I am using the `across` function to perform the same actions
 (rescaling values to new scale from 0 to 10 with `scales::rescale` and
