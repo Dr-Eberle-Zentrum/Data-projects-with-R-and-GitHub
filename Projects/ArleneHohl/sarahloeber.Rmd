@@ -21,7 +21,7 @@ head(data)
 
 # select only columns needed
 clean_data <- data %>%
-  select(CNT, CNTSTUID, ST005Q01JA, ST007Q01JA, ST327Q01JA, ST327Q02JA, ST327Q03JA, ST327Q04JA, ST327Q05JA, ST327Q06JA, ST327Q07JA, ST327Q08JA) 
+  select(CNT, CNTSTUID, ST005Q01JA, ST007Q01JA, starts_with("ST327")) 
 head(clean_data)
 ```
 
@@ -29,20 +29,25 @@ head(clean_data)
 
 ```{r message = FALSE, warning = FALSE} 
 # remove NAs 
-clean_data <- clean_data[!is.na(clean_data$ST005Q01JA) & !is.na(clean_data$ST007Q01JA), ]
+clean_data <- clean_data %>%
+  drop_na(ST005Q01JA, ST007Q01JA)
 
 # reverse the scores by getting the max value of the column (+1) and subtracting the actual value
-max_value <- max(clean_data$ST005Q01JA)
-clean_data$ST005Q01JA <- max_value + 1 - clean_data$ST005Q01JA
 
-max_value <- max(clean_data$ST007Q01JA)
-clean_data$ST007Q01JA <- max_value + 1 - clean_data$ST007Q01JA
+clean_data <- clean_data %>%
+ mutate(
+   ST005Q01JA = max(ST005Q01JA) +1 -ST005Q01JA,
+   ST007Q01JA = max(ST007Q01JA) +1 -ST007Q01JA
+ )
 
 head(clean_data)
 ````
 ```{r message = FALSE, warning = FALSE}
 # store the sum of the two columns in a new column called ED_PARENTS
-clean_data$ED_PARENTS <- clean_data$ST005Q01JA + clean_data$ST007Q01JA
+clean_data <- clean_data %>%
+  mutate(ED_PARENTS = ST005Q01JA + ST007Q01JA) %>%
+  drop_na(ED_PARENTS)
+
 head(clean_data)
 ````
 
@@ -68,6 +73,8 @@ clean_data$EXP_ED <- apply(clean_data[, education_columns], 1, exp_level)
 clean_data <- clean_data[!is.na(clean_data$EXP_ED), ]
 clean_data %>%
   select(CNT, CNTSTUID, EXP_ED, ED_PARENTS) 
+
+head(clean_data)
 
 # also map numerical values to the expected education
 
