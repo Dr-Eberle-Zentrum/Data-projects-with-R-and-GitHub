@@ -35,7 +35,7 @@ education\_columns &lt;- c(“ST327Q01JA”, “ST327Q02JA”, “ST327Q03JA”,
 # Function to find the highest level of education expected to be finished
 
 find\_highest\_education &lt;- function(row) { levels &lt;- which(row
-== 1) if(length(levels) == 0) { return(NA) } else { return(max(levels))
+== 1) if (length(levels) == 0) { return(NA) } else { return(max(levels))
 } }
 
 # Apply the function to each row of the specified columns and create a new column
@@ -75,7 +75,5 @@ labs(title = “Parent’s Education vs. Student’s Expected Education by
 Country”, x = “Parent’s Highest Level of Education (Mean)”, y = “Highest
 Expected Education Level”, size = “Number of Students”) +
 theme\_minimal() + facet\_wrap(~ CNT)
-
-# Display the combined plot
 
 print(combined\_plot)
