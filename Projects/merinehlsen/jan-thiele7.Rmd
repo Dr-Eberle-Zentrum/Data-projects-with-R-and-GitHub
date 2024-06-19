@@ -54,10 +54,10 @@ print(survival_wide)
 #   mutate(across(c(`Females `, `Males `, `Total `, `Female_SD`, `Male_SD`, `Total_SD`), as.numeric, .names = "{.col}"))
 
 #sapply(gsub(",",".",survival_wide$`Females `), as.numeric) 
+survival_wide<- survival_wide%>%
+  rename('Diet'='ï»¿Diet')
 survival_wide <- survival_wide %>%
-  mutate(across(-c(Case,Line,'ï»¿Diet',`n `), ~ as.numeric(gsub(",", ".", .))))
-
-names(survival_wide)
+  mutate(across(-c(Case,Line,Diet,`n `), ~ as.numeric(gsub(",", ".", .))))
 ```
 
 
