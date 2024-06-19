@@ -14,8 +14,9 @@ meta_pools<- read.csv2("flydata_metabolic_pools.csv", sep=";", header=F)
 
 
 ```{r}
+#This chunk changes the structure of the dataset so that each column represents a different case, including all the mean and sd values for male and female.
 survival_wide<- survival[c(1:6),]%>%
-  rbind("Female SD", "Male SD", "Total SD")
+  rbind("Female_SD", "Male_SD", "Total_SD")
 survival_wide[c(7:9),c(2:31)]<-NA
 
 
@@ -30,7 +31,58 @@ test2=survival_wide[, seq(2, ncol(survival_wide), by = 2)]%>%
 test3= rbind(test2,test1, make.row.names=F)
 survival_wide= cbind(survival_wide$V1, test3)
 
+# renaming of each column to case1-30 to have a unique identifier
+survival_wide <- survival_wide %>%
+  rename_with(.cols = -`survival_wide$V1`, .fn = ~paste0("Case", seq_along(.)))
+
+
+print(survival_wide)
 ```
+
+
+```{r}
+survival_wide <- survival_wide %>%
+  pivot_longer(cols = -`survival_wide$V1`, names_to = "Case", values_to = "Value") %>%
+  pivot_wider(names_from = `survival_wide$V1`, values_from = Value)
+
+print(survival_wide)
+
+```
+
+```{r}
+# survival_wide <- survival_wide %>%
+#   mutate(across(c(`Females `, `Males `, `Total `, `Female_SD`, `Male_SD`, `Total_SD`), as.numeric, .names = "{.col}"))
+
+#sapply(gsub(",",".",survival_wide$`Females `), as.numeric) 
+survival_wide <- survival_wide %>%
+  mutate(across(-c(Case,Line,'ï»¿Diet',`n `), ~ as.numeric(gsub(",", ".", .))))
+
+names(survival_wide)
+```
+
+
+```{r}
+survival_long <- survival_wide %>%
+  pivot_longer(
+    cols = c("Females ","Males ","Total ","Female_SD", "Male_SD",   "Total_SD"),
+    names_to = c("sex", ".value"),
+    names_pattern = "(female|male|total) (mean|sd)"
+  )
+
+print(survival_long)
+
+```
+
+
+
+
+
+
+
+
+
+
+
 
 
 ```{r}
@@ -46,9 +98,10 @@ survival_long <- survival_wide %>%
   )%>%
   select(-variable)
 ```
-```{r}
-survival_long
-```
+
+
+
+
 ```{r}
 dev_time_wide<- dev_time%>%
   rbind("L-P SD", "P-E SD", "L-E SD")
