@@ -6,11 +6,11 @@
 
 ### Background
 
-\#Finite Element Analysis
+# Finite Element Analysis
 
 -   used to predict stresses/ deformations on structures under defined
     conditions
--   reduction of 3D model to \##finite## number of \##elements##
+-   reduction of 3D model to **finite** number of **elements**
 
 ![Finite Elements Analysis representing stress on a Jaw
 bone](./bilder/mesh.png)
@@ -35,11 +35,21 @@ into a data frame, that is easier to work with, using `bind_rows`.
 
 ## 2. Resclaing the coordinates per dimension onto a scale from 0 to 1:
 
+The goal is to compare the stress on the jaws of our different animals,
+relative along the dimension of their jaw. To do so, the data has to be
+rescaled in two steps:
+
+1.  rescaling the values onto a scale from 0 to 1
+2.  cutting the rescaled values into 10 “slices”
+
+Both of these steps have to be performed **per animal and dimension**
+within the same data frame.
+
 ![Rescaling Example](./dimension_example.png)
 
 Here I am using the `across` function to perform the same actions
 (rescaling values to new scale from 0 to 10 with `scales::rescale` and
-assigning the intervalls in which the entries fall based on that with
+assigning the intervals in which the entries fall based on that with
 `cut`) for all three dimensions in one command to avoide copy and
 pasting.
 
@@ -70,6 +80,9 @@ pasting.
 
 ## 3. Calculating Mean Von Misses Stress per interval
 
+Finally, in order to not plot a bunch of point per intervall, I am
+taking the Mean of all values in that interval.
+
     range_names <- c("X_range_breaks","Y_range_breaks","Z_range_breaks")
 
     # First attempt: 
@@ -91,23 +104,16 @@ pasting.
     for (i in range_names){
       .data <- smoothstress_animals %>%
         group_by(across(all_of(i)), animal) %>%
-        summarise(MeanStress = mean(`Von Misses Stress`)) %>% 
+        summarise(MeanStress = mean(`Von Misses Stress`),
+                  SDStress = sd(`Von Misses Stress`)) %>%
         ungroup() %>% 
         mutate(MockDimension = i)
-      
       if (exists("smoothstress_ranges")){
         smoothstress_ranges <- bind_rows(smoothstress_ranges, .data)
       } else {
         smoothstress_ranges <- .data
       }
     }
-
-    ## `summarise()` has grouped output by 'X_range_breaks'. You can override using
-    ## the `.groups` argument.
-    ## `summarise()` has grouped output by 'Y_range_breaks'. You can override using
-    ## the `.groups` argument.
-    ## `summarise()` has grouped output by 'Z_range_breaks'. You can override using
-    ## the `.groups` argument.
 
     # Creating "easier" columns to work with for range and MockDimension
     range_map <- c("(0,0.1]" = 0.1, 
@@ -126,7 +132,7 @@ pasting.
       mutate(range = coalesce(X_range_breaks, Y_range_breaks, Z_range_breaks)) %>%
       mutate(RelativeCoordinate = range_map[range]) %>% 
       mutate(Dimension = dimension_map[MockDimension]) %>% 
-      select(animal, Dimension, RelativeCoordinate, MeanStress) %>% 
+      select(animal, Dimension, RelativeCoordinate, MeanStress, SDStress) %>% 
       drop_na()
 
 ## 4. Visualization of Data
@@ -145,6 +151,41 @@ pasting.
       facet_grid(cols = vars(Dimension))
 
 ![](MiguelsProject_byMeri_files/figure-markdown_strict/Visualization-1.png)
+
+Also just to represent a bit all of the point averaged I am adding a
+`geom_ribbon` of the Standard Deviation.
+
+    ggplot(smoothstress_ranges, aes(x=RelativeCoordinate, y = MeanStress, color = animal))+
+      geom_ribbon(aes(ymin = MeanStress - SDStress, ymax = MeanStress + SDStress, fill = animal),
+                  alpha = 0.2, colour = NA)+
+      theme_classic()+
+      geom_point()+
+      geom_line()+
+      xlab("Relative Coordinate")+
+      ylab("Mean von Misses Stress")+
+      scale_color_manual(values = c(
+        "bear" = "brown",
+        "hyaena" = "#E15634",
+        "lion" ="#FFBF46",
+        "wolf" = "grey"))+
+      scale_fill_manual(values = c(
+        "bear" = "brown",
+        "hyaena" = "#E15634",
+        "lion" ="#FFBF46",
+        "wolf" = "grey"))+
+      facet_grid(cols = vars(Dimension))
+
+![](MiguelsProject_byMeri_files/figure-markdown_strict/VisualizationPlusSD-1.png)
+
+So what are my amateur conclusions?
+
+1.  Lion and wolf display very similar profiles.
+2.  Bear deviates slightly from lion and wolf.
+3.  Hyaenas are stressed.
+
+Is this correlated with phylogeny of species?
+
+![Phylogeny of Carnivora](./Carnivora_phylogeny.png) Not really.
 
 ## Archived Old Solution:
 
