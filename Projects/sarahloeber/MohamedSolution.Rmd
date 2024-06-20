@@ -12,35 +12,33 @@ options(scipen=999)
 ***
 
 ```{r libraries}
-library(readr)
-library(ggplot2)
-library(dplyr)
 library(tidyverse)
 ```
 
 
 ```{r data-import}
-# Load dataset 
-file_path <- "C:/Users/Admin/Downloads/dataset_fluency_features.csv"
-dataset_fluency_features <- read.csv(file_path, header = TRUE, stringsAsFactors = FALSE)
+# Set the working directory to the location of the current script
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-# Remove duplicate rows
-dataset_fluency_features_clean <- unique(dataset_fluency_features)
+# Load the dataset
+dataset_fluency_features <- read.csv("dataset_fluency_features.csv", header = TRUE, stringsAsFactors = FALSE)
 
-# Filter dataset to include only specific columns
-dataset_fluency_features_filtered <- dataset_fluency_features_clean[c("articulationrate", "npause", "user_id", "test_component_id")]
-
-# Check data structures of the dataset 
-str(dataset_fluency_features_filtered)
-
-# Strip any leading or trailing whitespace from articulationrate
-dataset_fluency_features_filtered$articulationrate <- trimws(dataset_fluency_features_filtered$articulationrate)
-
-# Replace commas in zeros with periods in articulationrate
-dataset_fluency_features_filtered$articulationrate <- gsub(",", ".", dataset_fluency_features_filtered$articulationrate)
-
-# Convert articulationrate to numeric
-dataset_fluency_features_filtered$articulationrate <- as.numeric(dataset_fluency_features_filtered$articulationrate)
+#' Data preprocessing as following: Remove duplicate rows
+#' Filter dataset to include only specific columns
+#' Strip any leading or trailing whitespace from articulationrate
+#' Replace commas in zeros with periods in articulationrate
+#' Convert articulationrate to numeric then
+#' Drop any NAs
+dataset_fluency_features_filtered <- dataset_fluency_features %>%
+  distinct() %>%  # Remove duplicate rows
+  select(articulationrate, npause, user_id, test_component_id) %>%  # Select specific columns
+  mutate(
+    articulationrate = articulationrate %>%
+      trimws() %>%  # Remove leading and trailing whitespace
+      gsub(",", ".", .) %>%  # Replace commas with periods
+      as.numeric()  # Convert to numeric
+  ) %>% 
+  drop_na()  # Drop rows with any NA values
 
 
 # Aggregate the dataset by user_id 
@@ -52,16 +50,15 @@ dataset_aggregated <- dataset_fluency_features_filtered %>%
   )
 
 # Load dataset 
-file_path2 <- "C:/Users/Admin/Downloads/dataset_total_score.csv"
-dataset_total_score <- read.csv(file_path2, header = TRUE, stringsAsFactors = FALSE)
+dataset_total_score <- read.csv("dataset_total_score.csv", header = TRUE, stringsAsFactors = FALSE)
 
-# Perform a left join to include columns from dataset_total_score
-merged_datasets <- left_join(dataset_aggregated, dataset_total_score, by = "user_id")
+# Perform left join and remove NA values in a pipeline
+merged_datasets <- dataset_aggregated %>%
+  left_join(dataset_total_score, by = "user_id") %>%  # Perform left join
+  na.omit()  # Drop rows with any NA values
 
-
-# NAs were generated in the total_score column because the features dataset has more row
-# Therefore, I dropped those few rows
-merged_datasets <- na.omit(merged_datasets)
+# Check data structure of merged dataset
+str(merged_datasets)
 
 #################  Visualization #################
 # Create scatterplot with facets one for each test component
@@ -76,17 +73,59 @@ scatterplot_faceted <- ggplot(merged_datasets, aes(x = mean_articulationrate, y 
 
 print(scatterplot_faceted)
 
-# Create 2D density plot colored by test_component_id
-density_plot_colored <- ggplot(dataset_aggregated, aes(x = mean_articulationrate, y = mean_npause, color = factor(test_component_id))) +
+# Create 2D density plot with filled faces and no color legend
+density_plot_filled <- ggplot(dataset_aggregated, aes(x = mean_articulationrate, y = mean_npause, fill = factor(test_component_id))) +
   geom_density_2d() +
   labs(title = "2D Density Plot",
        x = "Mean Articulation Rate",
        y = "Mean Npause",
-       color = "Test Component ID") +
+       fill = "Test Component ID") +
+  theme_minimal() +
+  guides(fill = FALSE)  # Remove fill legend
+
+print(density_plot_filled)
+
+########### Sarah's Recommendations #########
+
+# Create scatterplot of Number of Pauses vs. Final Scores
+scatterplot_npause <- ggplot(merged_datasets, aes(x = mean_npause, y = final_score)) +
+  geom_point() +
+  labs(title = "Scatterplot: Mean Npause vs. Final Scores",
+       x = "Mean Number of Pauses",
+       y = "Final Scores") +
   theme_minimal()
 
-print(density_plot_colored)
+print(scatterplot_npause)
 
+# Create scatterplot of Articulation Rate vs. Final Scores
+scatterplot_articulation <- ggplot(merged_datasets, aes(x = mean_articulationrate, y = final_score)) +
+  geom_point() +
+  labs(title = "Scatterplot: Mean Articulation Rate vs. Final Scores",
+       x = "Mean Articulation Rate",
+       y = "Final Scores") +
+  theme_minimal()
+
+print(scatterplot_articulation)
+
+# Create 2D density plot of Number of Pauses and Final Scores
+density_plot_npause <- ggplot(merged_datasets, aes(x = mean_npause, y = final_score)) +
+  geom_density_2d() +
+  labs(title = "2D Density Plot: Mean Npause vs. Final Scores",
+       x = "Mean Number of Pauses",
+       y = "Final Scores") +
+  theme_minimal()
+
+print(density_plot_npause)
+
+# Create 2D density plot of Articulation Rate and Final Scores
+density_plot_articulation <- ggplot(merged_datasets, aes(x = mean_articulationrate, y = final_score)) +
+  geom_density_2d() +
+  labs(title = "2D Density Plot: Mean Articulation Rate vs. Final Scores",
+       x = "Mean Articulation Rate",
+       y = "Final Scores") +
+  theme_minimal()
+
+print(density_plot_articulation)
 ```
 <div class="alert alert-block alert-info">
 End of Solution
