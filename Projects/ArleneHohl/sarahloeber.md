@@ -7,8 +7,6 @@ an easier solution, I’d love to hear it :)
 
     # libraries
     library(tidyverse)
-    library(dbplyr)
-    library(ggplot2)
 
     # load the data
     load("~/Data Projects with R and GitHub/Projects/ArleneHohl/data_PISA.Rdata")
@@ -33,7 +31,7 @@ an easier solution, I’d love to hear it :)
 
     # select only columns needed
     clean_data <- data %>%
-      select(CNT, CNTSTUID, ST005Q01JA, ST007Q01JA, ST327Q01JA, ST327Q02JA, ST327Q03JA, ST327Q04JA, ST327Q05JA, ST327Q06JA, ST327Q07JA, ST327Q08JA) 
+      select(CNT, CNTSTUID, ST005Q01JA, ST007Q01JA, starts_with("ST327")) 
     head(clean_data)
 
     ## # A tibble: 6 × 12
@@ -51,14 +49,16 @@ an easier solution, I’d love to hear it :)
 ## Data manipulation: Build parents’ highest level of education for each person
 
     # remove NAs 
-    clean_data <- clean_data[!is.na(clean_data$ST005Q01JA) & !is.na(clean_data$ST007Q01JA), ]
+    clean_data <- clean_data %>%
+      drop_na(ST005Q01JA, ST007Q01JA)
 
     # reverse the scores by getting the max value of the column (+1) and subtracting the actual value
-    max_value <- max(clean_data$ST005Q01JA)
-    clean_data$ST005Q01JA <- max_value + 1 - clean_data$ST005Q01JA
 
-    max_value <- max(clean_data$ST007Q01JA)
-    clean_data$ST007Q01JA <- max_value + 1 - clean_data$ST007Q01JA
+    clean_data <- clean_data %>%
+     mutate(
+       ST005Q01JA = max(ST005Q01JA) +1 -ST005Q01JA,
+       ST007Q01JA = max(ST007Q01JA) +1 -ST007Q01JA
+     )
 
     head(clean_data)
 
@@ -75,7 +75,10 @@ an easier solution, I’d love to hear it :)
     ## #   ST327Q07JA <dbl>, ST327Q08JA <dbl>
 
     # store the sum of the two columns in a new column called ED_PARENTS
-    clean_data$ED_PARENTS <- clean_data$ST005Q01JA + clean_data$ST007Q01JA
+    clean_data <- clean_data %>%
+      mutate(ED_PARENTS = ST005Q01JA + ST007Q01JA) %>%
+      drop_na(ED_PARENTS)
+
     head(clean_data)
 
     ## # A tibble: 6 × 13
@@ -127,6 +130,20 @@ an easier solution, I’d love to hear it :)
     ## 10 EST   23300013 ISCED_6            8
     ## # ℹ 13,876 more rows
 
+    head(clean_data)
+
+    ## # A tibble: 6 × 14
+    ##   CNT   CNTSTUID ST005Q01JA ST007Q01JA ST327Q01JA ST327Q02JA ST327Q03JA
+    ##   <chr>    <dbl>      <dbl>      <dbl>      <dbl>      <dbl>      <dbl>
+    ## 1 EST   23300001          5          5          1          2          1
+    ## 2 EST   23300002          5          5          1          2          1
+    ## 3 EST   23300003          5          5         NA         NA          1
+    ## 4 EST   23300004          5          4          1          3          1
+    ## 5 EST   23300005          5          5          1          1          1
+    ## 6 EST   23300006          5          5          1          2          1
+    ## # ℹ 7 more variables: ST327Q04JA <dbl>, ST327Q05JA <dbl>, ST327Q06JA <dbl>,
+    ## #   ST327Q07JA <dbl>, ST327Q08JA <dbl>, ED_PARENTS <dbl>, EXP_ED <chr>
+
     # also map numerical values to the expected education
 
     isced_mapping <- c(
@@ -153,34 +170,30 @@ This plot is far away from perfect and it took me a while to even get it
 into that shape (and obviously a lot of ChatGPT). What is missing are
 the error bars as well as the “median line” that is shown in the
 original plot. Furthermore, I have commented out the scale\_y\_discrete
-part, it just removes the labels when I leave it in. The geom\_line
-needs to be revised to being just one straight line, but I did not have
-time to find out how that would work. Also interesting is the fact that
-the bubbles for low socioeconomic status (or parent education level) for
-Germany and Estonia are so high on the 2 and 4-level. Probably a mistake
-from my side…
+part, it just removes the labels when I leave it in. Also interesting is
+the fact that the bubbles for low socioeconomic status (or parent
+education level) for Germany and Estonia are so high on the 2 and
+4-level. Probably a mistake from my side…
 
     #get data ready for plotting, add mean of numeric column. Also get number of students for the bubble plot later
     sum_data <- clean_data %>%
       group_by(ED_PARENTS, CNT) %>%
       summarise(
+        global_avg_exp_ed = mean(EXP_ED_NUM, na.rm = TRUE),
         mean_exp_ed = mean(EXP_ED_NUM, na.rm = TRUE),
+        sd_exp_ed = sd(EXP_ED_NUM, na.rm = TRUE),
         no_students = n()
       ) %>%
       ungroup()
 
-    # Calculating the global average for the straight trend line later
-    global_avg <- clean_data %>%
-      group_by(ED_PARENTS) %>%
-      summarise(global_avg_exp_ed = mean(EXP_ED_NUM, na.rm = TRUE))
-
-    plot_data <- sum_data %>%
-      left_join(global_avg, by = "ED_PARENTS")
-
     # Plot the data
-    plot <- ggplot(plot_data, aes(x = factor(ED_PARENTS), y = mean_exp_ed, color = CNT)) +
+    country_labels <- c("DEU" = "Germany", "EST" = "Estonia", "JPN" = "Japan")
+
+    ggplot(sum_data, aes(x = factor(ED_PARENTS), y = mean_exp_ed, color = CNT)) +
+      scale_color_brewer(palette = "Accent") +
       geom_point(aes(size = no_students), alpha = 0.8) + 
-      #geom_line(aes(y = global_avg_exp_ed, group = 1), linetype = "dashed", color = "grey") +
+      geom_hline(aes(yintercept=first(global_avg_exp_ed)), linetype = "dashed", color = "grey") +
+      geom_errorbar(aes(ymin = mean_exp_ed - sd_exp_ed, ymax = mean_exp_ed + sd_exp_ed), width = 0.2) +
       scale_size(range = c(1, 15)) +
       labs(
         title = "Expected Educational Achievement by Parents' Socioeconomic Status",
@@ -188,13 +201,13 @@ from my side…
         y = "Expected Educational Achievement"
       ) +
       theme_minimal() +
-      theme(legend.position = "none") +
-      facet_wrap(vars(CNT)) +
-      scale_x_discrete(breaks = c("2", "4", "5", "6", "7", "8", "9", "10"),
-                       labels = c("Bottom 20%", "", "", "", "", "", "Top 20%", ""))
-      #scale_y_discrete(breaks = c("4", "5", "6", "7"),
-                       #labels = c("ISCED4", "ISCED5", "ISCED6", "ISCED7"))
+      theme(legend.position = "none",
+            strip.text = element_text(size = 10),
+            axis.text.x = element_text(angle = 45, hjust = 1)) +
+      facet_grid(cols=vars(CNT), scales = "free_x", space = "free_x", labeller = labeller(CNT = country_labels)) +
+      scale_x_discrete(labels = function(labels) {
+        c("Bottom 20%", rep("", length(labels) - 2), "Top 20%")
+      }) +
+      scale_y_continuous(breaks = c(1, 2, 3, 4, 5, 6, 7, 8), labels = c("ISCED2", "ISCED3.3", "ISCED3.4", "ISCED4", "ISCED5", "ISCED6", "ISCED7", "ISCED8"))
 
-    print(plot)
-
-![](sarahloeber_files/figure-markdown_strict/unnamed-chunk-5-1.png)
+![](sarahloeber_files/figure-markdown_strict/plot-1.png)

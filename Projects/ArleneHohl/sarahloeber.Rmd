@@ -9,11 +9,9 @@ output: md_document
 
 Below is my solution for Arlene's project. It is not quite finished yet, at least the plot looks unfinished. I had trouble bringing it in the same form as the example plot and eventually just gave up. So if there's an easier solution, I'd love to hear it :)
 
-```{r message = FALSE, warning = FALSE} 
+```{r load data, message = FALSE, warning = FALSE} 
 # libraries
 library(tidyverse)
-library(dbplyr)
-library(ggplot2)
 
 # load the data
 load("~/Data Projects with R and GitHub/Projects/ArleneHohl/data_PISA.Rdata")
@@ -27,7 +25,7 @@ head(clean_data)
 
 ## Data manipulation: Build parents' highest level of education for each person
 
-```{r message = FALSE, warning = FALSE} 
+```{r data cleaning, message = FALSE, warning = FALSE} 
 # remove NAs 
 clean_data <- clean_data %>%
   drop_na(ST005Q01JA, ST007Q01JA)
@@ -41,19 +39,19 @@ clean_data <- clean_data %>%
  )
 
 head(clean_data)
-````
-```{r message = FALSE, warning = FALSE}
+```
+```{r socioeconomic status, message = FALSE, warning = FALSE}
 # store the sum of the two columns in a new column called ED_PARENTS
 clean_data <- clean_data %>%
   mutate(ED_PARENTS = ST005Q01JA + ST007Q01JA) %>%
   drop_na(ED_PARENTS)
 
 head(clean_data)
-````
+```
 
 ## Data manipulation: Expected education qualification
 
-```{r message = FALSE, warning = FALSE}
+```{r qualification, message = FALSE, warning = FALSE}
 # find the expected education qualification of the student with a for-loop
 education_columns <- c("ST327Q01JA", "ST327Q02JA", "ST327Q03JA", "ST327Q04JA", "ST327Q05JA", "ST327Q06JA", "ST327Q07JA", "ST327Q08JA")
 
@@ -95,38 +93,37 @@ clean_data <- clean_data %>%
 
 clean_data <- clean_data %>%
   filter(!is.na(EXP_ED_NUM), !is.na(ED_PARENTS))
-````
+```
 
 # Plot the data
 
 This plot is far away from perfect and it took me a while to even get it into that shape (and obviously a lot of ChatGPT). What is missing are the error bars as well as the "median
 line" that is shown in the original plot. Furthermore, I have commented out the scale_y_discrete part, it just removes the labels when I leave it in. 
-The geom_line needs to be revised to being just one straight line, but I did not have time to find out how that would work. 
 Also interesting is the fact that the bubbles for low socioeconomic status (or parent education level) for Germany and Estonia are so high on the 2 and 4-level. Probably a mistake from my side... 
 
-```{r message = FALSE, warning = FALSE}
+```{r df for plot, message = FALSE, warning = FALSE}
 
 #get data ready for plotting, add mean of numeric column. Also get number of students for the bubble plot later
 sum_data <- clean_data %>%
   group_by(ED_PARENTS, CNT) %>%
   summarise(
+    global_avg_exp_ed = mean(EXP_ED_NUM, na.rm = TRUE),
     mean_exp_ed = mean(EXP_ED_NUM, na.rm = TRUE),
+    sd_exp_ed = sd(EXP_ED_NUM, na.rm = TRUE),
     no_students = n()
   ) %>%
   ungroup()
+```
 
-# Calculating the global average for the straight trend line later
-global_avg <- clean_data %>%
-  group_by(ED_PARENTS) %>%
-  summarise(global_avg_exp_ed = mean(EXP_ED_NUM, na.rm = TRUE))
-
-plot_data <- sum_data %>%
-  left_join(global_avg, by = "ED_PARENTS")
-
+```{r plot, message=FALSE, warning=FALSE}
 # Plot the data
-plot <- ggplot(plot_data, aes(x = factor(ED_PARENTS), y = mean_exp_ed, color = CNT)) +
+country_labels <- c("DEU" = "Germany", "EST" = "Estonia", "JPN" = "Japan")
+
+ggplot(sum_data, aes(x = factor(ED_PARENTS), y = mean_exp_ed, color = CNT)) +
+  scale_color_brewer(palette = "Accent") +
   geom_point(aes(size = no_students), alpha = 0.8) + 
-  #geom_line(aes(y = global_avg_exp_ed, group = 1), linetype = "dashed", color = "grey") +
+  geom_hline(aes(yintercept=first(global_avg_exp_ed)), linetype = "dashed", color = "grey") +
+  geom_errorbar(aes(ymin = mean_exp_ed - sd_exp_ed, ymax = mean_exp_ed + sd_exp_ed), width = 0.2) +
   scale_size(range = c(1, 15)) +
   labs(
     title = "Expected Educational Achievement by Parents' Socioeconomic Status",
@@ -134,13 +131,13 @@ plot <- ggplot(plot_data, aes(x = factor(ED_PARENTS), y = mean_exp_ed, color = C
     y = "Expected Educational Achievement"
   ) +
   theme_minimal() +
-  theme(legend.position = "none") +
-  facet_wrap(vars(CNT)) +
-  scale_x_discrete(breaks = c("2", "4", "5", "6", "7", "8", "9", "10"),
-                   labels = c("Bottom 20%", "", "", "", "", "", "Top 20%", ""))
-  #scale_y_discrete(breaks = c("4", "5", "6", "7"),
-                   #labels = c("ISCED4", "ISCED5", "ISCED6", "ISCED7"))
+  theme(legend.position = "none",
+        strip.text = element_text(size = 10),
+        axis.text.x = element_text(angle = 45, hjust = 1)) +
+  facet_grid(cols=vars(CNT), scales = "free_x", space = "free_x", labeller = labeller(CNT = country_labels)) +
+  scale_x_discrete(labels = function(labels) {
+    c("Bottom 20%", rep("", length(labels) - 2), "Top 20%")
+  }) +
+  scale_y_continuous(breaks = c(1, 2, 3, 4, 5, 6, 7, 8), labels = c("ISCED2", "ISCED3.3", "ISCED3.4", "ISCED4", "ISCED5", "ISCED6", "ISCED7", "ISCED8"))
 
-print(plot)
-
-````
+```
