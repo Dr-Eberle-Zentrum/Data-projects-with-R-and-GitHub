@@ -72,61 +72,27 @@
     survival_wide <- survival_wide %>%
       mutate(across(-c(Case,Line,Diet,n), ~ as.numeric(gsub(",", ".", .))))
 
-    # survival_wide <- survival_wide %>%
-    #   rename(
-    #     Female_mean = Females,
-    #     Male_mean = Males,
-    #     Total_mean = Total,
-    #     Female_sd = `Female SD`,
-    #     Male_sd = `Male SD`,
-    #     Total_sd = `Total SD`
-    #   )
-    # 
-    # survival_long <- survival_wide %>%
-    #   pivot_longer(
-    #     cols = starts_with("Female_") | starts_with("Male_") | starts_with("Total_"),
-    #     names_to = c("sex", "metric"),
-    #     names_pattern = "(Female|Male|Total)_(mean|sd)"
-    #   )
-    # 
-    # print(survival_long)
+    survival_final<- survival_wide %>%
+      rename(
+        Female_mean = Females,
+        Male_mean = Males,
+        Total_mean = Total,
+        Female_sd = `Female SD`,
+        Male_sd = `Male SD`,
+        Total_sd = `Total SD`
+      )%>%
+      pivot_longer(
+        cols = starts_with("Female_") | starts_with("Male_") | starts_with("Total_"),
+        names_to = c("sex", ".value"),
+        names_pattern = "(Female|Male|Total)_(mean|sd)"
+      )
 
-    # survival_long <- survival_wide %>%
-    #   pivot_longer(
-    #     cols = -`survival_wide$V1`, 
-    #     names_to = "variable",  
-    #     values_to = "value"     
-    #   ) %>%
-    #   pivot_wider(
-    #     names_from = `survival_wide$V1`, 
-    #     values_from = value
-    #   )%>%
-    #   select(-variable)
+    ggplot(survival_final, aes(x=Diet, y=mean, fill=Diet)) + 
+      geom_violin()
 
-    # dev_time_wide<- dev_time%>%
-    #   rbind("L-P SD", "P-E SD", "L-E SD")
-    # dev_time_wide[c(7:9),c(2:31)]<-NA
-    # 
-    # test1=dev_time_wide[, seq(1, ncol(dev_time_wide), by = 2)]%>%
-    #   drop_na()%>%
-    #   select(-V1)
-    # 
-    # test2=dev_time_wide[, seq(2, ncol(dev_time_wide), by = 2)]%>%
-    #   drop_na()%>%
-    #   setNames(names(test1))
-    # test3= rbind(test2,test1, make.row.names=F)
-    # dev_time_wide= cbind(dev_time_wide$V1, test3)
-    # ```
-    # 
-    # ```{r}
-    # dev_time_long <- dev_time_wide %>%
-    #   pivot_longer(
-    #     cols = -`dev_time_wide$V1`, 
-    #     names_to = "variable",  
-    #     values_to = "value"     
-    #   ) %>%
-    #    pivot_wider(
-    #      names_from = `dev_time_wide$V1`, 
-    #      values_from = value
-    #    )%>%
-    #   select(-variable)
+![](jan-thiele7_files/figure-markdown_strict/unnamed-chunk-6-1.png)
+
+    ggplot(survival_final, aes(x=Diet, y=sd, fill=Diet)) + 
+      geom_violin()
+
+![](jan-thiele7_files/figure-markdown_strict/unnamed-chunk-7-1.png)
