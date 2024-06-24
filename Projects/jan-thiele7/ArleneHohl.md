@@ -8,12 +8,17 @@ feel free to let me know!
 
 ## Step 1: install libraries
 
+    library("tidyverse")
+
 ## Step 2: load data and select variables
 
 I used the subset Jan provided and selected the following variables:
 nutriscore\_grade, ecoscore\_grade and pnns\_groups\_1 and 2 (those
 included the different food categories). I then deleted rows containing
 missing data.
+
+    data <- read_csv("data_openfood.csv", na = c("", "NA", "unknown", "not-applicable"), col_select = c("nutriscore_grade","ecoscore_grade", "pnns_groups_1", "pnns_groups_2")) %>% 
+      drop_na()
 
 This is how the dataset looks like:
 

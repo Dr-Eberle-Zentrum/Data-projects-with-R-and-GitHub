@@ -14,14 +14,14 @@ This is my current solution for Jan's project. The goal was to create a plot wit
 
 ## Step 1: install libraries
 
-```{r, include=FALSE}
+```{r, echo=T, results='hide',  message = F}
 library("tidyverse")
 ```
 
 ## Step 2: load data and select variables
 I used the subset Jan provided and selected the following variables: nutriscore_grade, ecoscore_grade and pnns_groups_1 and 2 (those included the different food categories). I then deleted rows containing missing data.
 
-```{r, include = FALSE}
+```{r, echo=T, results='hide', warnings = F, message = F}
 data <- read_csv("data_openfood.csv", na = c("", "NA", "unknown", "not-applicable"), col_select = c("nutriscore_grade","ecoscore_grade", "pnns_groups_1", "pnns_groups_2")) %>% 
   drop_na()
 
