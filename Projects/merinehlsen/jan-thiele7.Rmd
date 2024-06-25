@@ -13,6 +13,10 @@ dev_time<- readr::read_csv2("flydata_developmental_time.csv",col_names = F)
 meta_pools<- readr::read_csv2("flydata_metabolic_pools.csv",col_names = F)
 ```
 
+```{r}
+head(survival)
+```
+
 
 ```{r}
 #This chunk changes the structure of the dataset so that each column represents a different case, including all the mean and sd values for male and female.
@@ -38,7 +42,7 @@ survival_wide <- survival_wide %>%
   rename_with(.cols = -`variablen`, .fn = ~paste0("Case", seq_along(.)))
 
 
-print(survival_wide)
+head(survival_wide)
 ```
 
 
@@ -47,15 +51,12 @@ survival_wide <- survival_wide %>%
   pivot_longer(cols = -`variablen`, names_to = "Case", values_to = "Value") %>%
   pivot_wider(names_from = `variablen`, values_from = Value)
 
-print(survival_wide)
-
-```
-
-```{r}
 survival_wide <- survival_wide %>%
   mutate(across(-c(Case,Line,Diet,n), ~ as.numeric(gsub(",", ".", .))))
-```
 
+head(survival_wide)
+
+```
 
 ```{r}
 survival_final<- survival_wide %>%
@@ -72,6 +73,8 @@ survival_final<- survival_wide %>%
     names_to = c("sex", ".value"),
     names_pattern = "(Female|Male|Total)_(mean|sd)"
   )
+
+head(survival_final)
 
 ```
 
