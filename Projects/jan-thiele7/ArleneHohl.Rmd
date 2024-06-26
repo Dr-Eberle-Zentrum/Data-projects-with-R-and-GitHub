@@ -1,6 +1,6 @@
 ---
 title: "Solution fo Jan's project"
-output: md_document
+output: html_document
 date: "`r Sys.Date()`"
 ---
 
@@ -215,11 +215,11 @@ head(final_data)
 
 Now it is finally time to plot!
 
-```{r}
+```{r, warnings = FALSE, message = F}
 final_data %>% 
 ggplot(aes(x = center_x, y = center_y)) +
   # fill = nutri, colour = eco, shape: circles
-  geom_point(aes(size = bubble_size, color = color_factor_x, fill = color_factor_y, stroke = 2), shape = 21) +
+  geom_point(aes(size = bubble_size, color = color_factor_x, fill = color_factor_y, stroke = 1.5), shape = 21) +
   # no legend, set size of bubbles
   scale_size_continuous(range = c(1, 10), guide = "none") +
   scale_fill_identity() +
