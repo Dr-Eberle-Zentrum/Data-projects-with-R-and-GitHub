@@ -1,0 +1,68 @@
+---
+title: "Joschka's Solution to Sarah's Project"
+author: "Joschka Christ"
+date: "2024-06-29"
+output: md_document
+---
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(readr)
+
+dataset_fluency_features <- read.csv("dataset_fluency_features.csv")
+dataset_total_score <- read.csv("dataset_total_score.csv")
+
+dataset_fluency_features_agg <- dataset_fluency_features %>%
+  distinct() %>%
+  mutate(articulationrate  = str_replace_all(articulationrate, ",", ".") %>%
+           as.numeric(articulationrate)) %>%
+  mutate(npause = as.numeric(npause)) %>%
+  mutate(test_component_id = as.numeric(test_component_id)) %>%
+  mutate(user_id = as.numeric(user_id)) %>%
+aggregate(cbind(articulationrate, npause, test_component_id) ~ user_id, FUN = mean)
+
+Full_Data <- left_join(dataset_fluency_features_agg, dataset_total_score, by = "user_id") # Left join b/c 4 user_ids missing in total score dataset
+
+ggplot(Full_Data, aes(x = articulationrate, y = npause, color = factor(test_component_id))) +
+  geom_point() +
+    geom_smooth(method = "lm", se = FALSE, color = "black") +
+  facet_wrap(~ test_component_id, nrow = 1) +
+  labs(
+    title = "Scatterplot of Articulation Rate vs. Number of Pauses by Test Group",
+    x = "Avg. Number of Pauses",
+    y = "Avg. Articulation Rate"
+  ) +
+  theme_minimal()
+
+ggplot(Full_Data, aes(x = final_score, y = npause, color = factor(test_component_id))) +
+  geom_point() +
+    geom_smooth(method = "lm", se = FALSE, color = "black") +
+  facet_wrap(~ test_component_id, nrow = 1) +
+  labs(
+    title = "Scatterplot of Articulation Rate vs. Number of Pauses by Test Group",
+    x = "Avg. Number of Pauses",
+    y = "Final Test Score"
+  ) +
+  theme_minimal()
+
+ggplot(Full_Data, aes(x = articulationrate, y = npause, color = factor(test_component_id))) +
+  geom_density_2d() +  # Create 2D density plot
+  labs(
+    title = "2D Density Plot of Articulation Rate vs. Number of Pauses by Test Group",
+    x = "Avg. Articulation Rate",
+    y = "Avg. Number of Pauses",
+    color = "Test Group"
+  ) +
+  theme_minimal()
+
+ggplot(Full_Data, aes(x = final_score, y = npause, color = factor(test_component_id))) +
+  geom_density_2d() +  # Create 2D density plot
+  labs(
+    title = "2D Density Plot of Final Scores vs. Number of Pauses by Test Group",
+    x = "Final Test Score",
+    y = "Avg. Number of Pauses",
+    color = "Test Group"
+  ) +
+  theme_minimal()
+```
