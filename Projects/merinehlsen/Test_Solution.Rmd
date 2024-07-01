@@ -1,0 +1,97 @@
+title: "Solution_byArlene"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readxl)
+library(dplyr)
+library(tidyr)
+```
+
+```{r}
+rename_columns <- function(df, start, prefix) {
+  positions <- seq(start, ncol(df), by = 2)
+  new_names <- paste0(prefix, seq_along(positions))
+  colnames(df)[positions] <- new_names
+  return(df)
+}
+
+reorganize_sheets <- function(data, sheetname, rownames){
+  data <- data %>% 
+    rename_columns(2, paste0(sheetname, "_mean_")) %>%
+    rename_columns(3, paste0(sheetname, "_sd_"))
+  colnames(data)[1] <- "index"
+  data[4:6, 1] <- paste0(sheetname, "_", rownames, "_mean")
+  mean_cols <- data %>% select(contains("mean")) %>% as.matrix()
+  sd_cols <- data %>% slice(-c(1:3)) %>% select(contains("sd")) %>% as.matrix()
+  combined_data <- rbind(mean_cols, sd_cols) %>% as.data.frame()
+  combined_data$index <- c(data$index, paste0(sheetname, "_", rownames, "_sd"))
+  combined_data %>% pivot_longer(cols = contains("mean"), names_to = "mean", values_to = "value") %>%
+    pivot_wider(names_from = index, values_from = value) %>% select(-"mean")
+}
+
+transform_data <- function(data, exclude_columns, new_sex, mean_column, sd_column) {
+  data %>%
+    select(-all_of(exclude_columns)) %>%
+    mutate(sex = new_sex) %>%
+    rename_with(~ c("survival_mean", "survival_sd"), c(mean_column, sd_column))
+}
+
+process_data <- function(data, prefix, rownames, exclude_columns, sex, mean_col, sd_col) {
+  data %>%
+    reorganize_sheets(prefix, rownames) %>%
+    transform_data(exclude_columns, sex, mean_col, sd_col)
+}
+
+```
+
+```{r}
+data_survival <- read_excel("flydata.xlsx", sheet = "Survival", col_names = FALSE)
+data_developm <- read_excel("flydata.xlsx", sheet = "Developmental_Time", col_names = FALSE)
+
+rownames_survival <- c("Females", "Males", "Total")
+rownames_developm <- c("L-P", "P-E", "L-E")
+
+data_fem_survival <- process_data(data_survival, "Survival", rownames_survival, 
+                                  c("Survival_Males_mean", "Survival_Males_sd", "Survival_Total_mean", "Survival_Total_sd"), 
+                                  "F", "Survival_Females_mean", "Survival_Females_sd")
+
+data_male_survival <- process_data(data_survival, "Survival", rownames_survival, 
+                                   c("Survival_Females_mean", "Survival_Females_sd", "Survival_Total_mean", "Survival_Total_sd"), 
+                                   "M", "Survival_Males_mean", "Survival_Males_sd")
+
+data_total_survival <- process_data(data_survival, "Survival", rownames_survival, 
+                                    c("Survival_Females_mean", "Survival_Females_sd", "Survival_Males_mean", "Survival_Males_sd"), 
+                                    "Total", "Survival_Total_mean", "Survival_Total_sd")
+
+data_survival_developm <- bind_rows(data_fem_survival, data_male_survival, data_total_survival) %>%
+  merge(reorganize_sheets(data_developm, "Developmental_Time", rownames_developm), by = c("n", "Line", "Diet"))
+
+```
+
+```{r}
+data_metabolic <- read_excel("flydata.xlsx", sheet = "Metabolic_Pools", col_names = FALSE) %>% slice(-c(18:58))
+
+process_metabolic <- function(data, prefix, rownames, diet) {
+  reorganize_sheets(data, prefix, rownames) %>%
+    select(c(line, n, sex, ends_with("mean"), ends_with("sd"))) %>%
+    mutate(diet = diet) %>%
+    rename_with(~ c(paste0(prefix, "_mean"), paste0(prefix, "_sd")), ends_with("mean", "sd"))
+}
+
+data_drymass <- process_metabolic(data_metabolic %>% slice(c(1:3, 5:7)), "Drymass", c("HPS", "EPS", "LPS"), "HPS")
+data_protein <- process_metabolic(data_metabolic %>% slice(c(1:3, 10:12)), "Protein", c("HPS", "EPS", "LPS"), "EPS")
+data_triglycerides <- process_metabolic(data_metabolic %>% slice(-c(4:14)), "Triglycerides", c("HPS", "EPS", "LPS"), "LPS")
+
+data_metabolic <- bind_rows(data_drymass, data_protein, data_triglycerides) %>%
+  rename(Line = line, Diet = diet)
+
+```
+
+```{r}
+final_data <- left_join(data_survival_developm, data_metabolic, by = c("Line", "n", "Diet", "sex"))
+
+```
+
