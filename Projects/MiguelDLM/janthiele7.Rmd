@@ -19,7 +19,7 @@ wolf<- read.csv("smooth_stress_tensor (bear).csv")
 
 ```{r}
 #to make work flow easier data frames are put into a list
-animals<- list(bear,hyaena,lion,wolf)
+animals<- list(bear=bear,hyaena=hyaena,lion=lion,wolf=wolf)
 ```
 
 
@@ -99,9 +99,83 @@ all_segments <- function(df, segment_cols, value_col) {
 #apply onto each frame within animal segmented
 animals_means <- map(animals_segmented, ~ all_segments(.x, segment_cols, value_col))
 
-# View the result for each dataframe
-print(animals_means)
+```
 
+4. Extracting Mean Values per Axis
+```{r}
+#we need to create three dataframes containing the X/Y/Z means for Von Misses Stress for each animal
+names(animals_means) <- c("bear", "hyena", "lion", "wolf")
+
+# Select columns that end with "2" in each dataframe for the x axis
+x_axis<- map(animals_means, ~ select(.x, ends_with("2")))
+
+# and combine them into one dataframe
+x_axis <- bind_cols(animals_means[[1]]$segments_X,x_axis$bear,x_axis$hyena,x_axis$lion,x_axis$wolf)
+names(x_axis)<- c("segment","bear","hyena","lion","wolf")
+
+# Select columns that end with "4" in each dataframe for the x axis
+y_axis<- map(animals_means, ~ select(.x, ends_with("4")))
+
+# and combine them into one dataframe
+y_axis <- bind_cols(animals_means[[1]]$segments_Y,y_axis$bear,y_axis$hyena,y_axis$lion,y_axis$wolf)
+names(y_axis)<- c("segment","bear","hyena","lion","wolf")
+
+# Select columns that end with "4" in each dataframe for the x axis
+z_axis<- map(animals_means, ~ select(.x, ends_with("6")))
+
+# and combine them into one dataframe
+z_axis <- bind_cols(animals_means[[1]]$segments_Z,z_axis$bear,z_axis$hyena,z_axis$lion,z_axis$wolf)
+names(z_axis)<- c("segment","bear","hyena","lion","wolf")
+
+```
+
+5. Creating plots
+
+
+```{r}
+x_axis_longer<- x_axis %>%
+    pivot_longer(cols = c("bear","hyena","lion","wolf"),
+                 names_to = "animal",
+                 values_to = "value")
+
+x_axis_longer%>%
+  ggplot(aes(x = segment, y = value, color = animal)) +
+    geom_point() +
+    geom_line() +
+    labs(y = "Stress", title = "Stress by Segment for Different Animals") +
+    theme_minimal()
+```
+
+
+
+
+```{r}
+y_axis_longer<- y_axis %>%
+    pivot_longer(cols = c("bear","hyena","lion","wolf"),
+                 names_to = "animal",
+                 values_to = "value")
+
+y_axis_longer%>%
+  ggplot(aes(x = segment, y = value, color = animal)) +
+    geom_point() +
+    geom_line() +
+    labs(y = "Stress", title = "Stress by Segment for Different Animals") +
+    theme_minimal()
+
+```
+
+```{r}
+z_axis_longer<- z_axis %>%
+    pivot_longer(cols = c("bear","hyena","lion","wolf"),
+                 names_to = "animal",
+                 values_to = "value")
+
+z_axis_longer%>%
+  ggplot(aes(x = segment, y = value, color = animal)) +
+    geom_point() +
+    geom_line() +
+    labs(y = "Stress", title = "Stress by Segment for Different Animals") +
+    theme_minimal()
 ```
 
 
