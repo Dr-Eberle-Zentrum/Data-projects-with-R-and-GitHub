@@ -1,0 +1,38 @@
+---
+title: "Solution for Jan's project"
+author: "Sarah Löber"
+date: "2024-07-01"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is my attempt for a solution for Jan's project. 
+
+```{r data, warning=FALSE}
+# read in dataset
+food_data <- read.csv("/Users/sarahlober/Data Projects with R and GitHub/Projects/jan-thiele7/data_openfood.csv")
+head(food_data)
+```
+I did not quite grasp the categorization variables as the head does not tell me much about them, so I'm doing some more exploration.
+
+```{r variables, warning=FALSE}
+table(food_data$pnns_groups_1)
+table(food_data$pnns_groups_2)
+```
+
+## Plotting the data
+
+I'm getting the data ready for plotting first, then create the actual plot.
+
+```{r plot data, warning=FALSE}
+plot(pressure)
+```
+
+```{r plot nutriscore, warning=FALSE}
+
+```
