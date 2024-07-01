@@ -13,12 +13,18 @@
 
     library(ggplot2)
 
-So right now the data wrangling is still very messy. I was having
-problems filtering for multiple criteria at the same time, so I will try
-to fix this part in the future!
+# Solution to Joschka’s Project by Meri
 
-Also some of the plotting is still very wonky, so I will try to fix that
-as well!
+So right now the data wrangling is still very messy, because I am
+splitting the Data set into “sub-datasets”. However I was unsure of how
+to perform the filtering in parallel on the data set (maybe using `if` /
+`ifelse`? I am just guessing here), so I’d love to get some feedback on
+that!
+
+## Data filtering
+
+First I am loading the data and filtering on eligibility based on the
+employment criteria.
 
     # Load data from RData file
     load("~/Desktop/R2_DataProjects/R2_Data_Projects_Git/Projects/Joschka8878/Data.RData")
@@ -29,53 +35,55 @@ as well!
       group_by(Household) %>% 
       filter(any(Age <= 18))    # Child under 18
 
+    # Unemployed
     eliunemployed <- eligible %>% 
-      filter(any(Employment_Status == "Unemployed")) %>% 
+      filter(any(Unemployed == 1)) %>% 
       ungroup()
 
+    # Informal workers
     elidom <- eligible %>% 
       filter(any(Employment_Position %in% c("Unpaid Family Worker"))) %>% 
       ungroup()
 
+    eliinf <- eligible %>% 
+      filter_at(vars(Paid_Vacation, Bonus, Sick_Days, Health_Insurance, Pension_Discount), any_vars(. =="No"))
+
+    # Earning less than minium wage
     elimin <- eligible %>% 
       filter(any(Individual_Income < Min_Wage)) %>% 
       ungroup()
 
-    eligibleall <- rbind(eliunemployed, elidom, elimin) %>% 
+    # Combining all into one dataframe
+    eligibleall <- rbind(eliunemployed, elidom, elimin, eliinf) %>% 
       distinct()
-    # unemployed, domestic worker or informal worker/ self-employed worker earning less than minimum wage (that is)
 
-    # mockeli <- eligibleall %>% 
-    #   group_by(Household) %>% 
-    #   filter(Age <= 18) %>% 
-    #   summarise(AUH_Count = n()) %>% 
-    #   ungroup() %>% 
-    #   filter(AUH_Count > 0)
-    # eligibleall <- merge(eligibleall, mockeli, by = "Household") 
-    # Only mother (of two eligible parents recieves AUH)
-    # maximum of 5 AUHs
+Next I am filtering for Eligible/ Non-Eligible Households and their
+origin (Argentina or Abroad).
 
+    # Eligible + Born in Argentina
     non_im_eg <- eligibleall %>% 
-      filter(Age > 18) %>% 
-      filter(Family_Relationship == "Head of Household") %>% 
+      filter(Family_Relationship %in% c("Head of Household", "Spouse")) %>% 
       filter(Country_Of_Birth == "Argentina") %>% 
       mutate(Status = "Born in Argentina") %>% 
       mutate(Eligible = "Eligible")
-    # non_im$AUH_Count[non_im$AUH_Count > 5] <- 5
+
+    # Not Eligible + Born in Argentina
     non_im_non <- Data %>% 
-      filter(Family_Relationship == "Head of Household") %>% 
+      filter(Family_Relationship %in% c("Head of Household", "Spouse")) %>% 
       filter(Country_Of_Birth == "Argentina") %>% 
       mutate(Status = "Born in Argentina") %>% 
       mutate(Eligible = "Not Eligible")
     non_im_non[!(non_im_non$Household %in% non_im_eg$Household),]
 
+    # Eligible + Born Abroad
     im_eg <- eligibleall %>% 
       filter(Age > 18) %>% 
       filter(Family_Relationship == "Head of Household") %>% 
       filter(Country_Of_Birth != "Argentina") %>% 
       mutate(Status = "Born Abroad")%>% 
       mutate(Eligible = "Eligible")
-    # im$AUH_Count[im$AUH_Count > 5] <- 5
+
+    # Not Eligible + Born Abroad
     im_non <- Data %>% 
       filter(Family_Relationship == "Head of Household") %>% 
       filter(Country_Of_Birth == "Argentina") %>% 
@@ -83,21 +91,25 @@ as well!
       mutate(Eligible = "Not Eligible")
     im_non <- im_non[!(im_non$Household %in% im_eg$Household),]
 
+    # Combining all into one dataframe
     data_im <- rbind(non_im_eg, im_eg, non_im_non, im_non)
 
-    # data_im %>% 
-    #   group_by(Status) %>% 
-    #   summarise(Sum = sum(AUH_Count)) %>% 
-    #   mutate(Percentage = Sum/length(unique(Data$Household))) %>% 
-    #   #ungroup() %>% 
-    #   #mutate(Sum = Sum/ sum(Sum)) %>% 
-    #   ggplot(aes(x = as.factor(Status), y = Percentage))+
-    #   geom_col(fill="#26466C")+
-    #   geom_text(aes(label = Sum), nudge_y = 0.025)+
-    #   theme_classic()+
-    #   xlab("")+
-    #   ylab("Percentage of HoH receiving AUH")+
-    #   guides(fill = "none")
+## Visualization
+
+First (a):
+
+> the percentage of heads of households & their spouses who are
+> immigrants who are eligible for the AUH vs. the percentage of heads of
+> Households & their spouses who are non-immigrants and are eligible for
+> the AUH
+
+Here I group my adjusted data set by Status (= Origin of Birth) and
+Eligibility, before summarising the percentage of each of the four
+groups (count of entries `n()` by total number of entries
+`length(data_im$Household)`), filtering for eligible households after
+that to only plot those. Plotting is just a basic ggplot boxplot with
+the Percentages as labels (using the `plyr::round_any` to round the
+percentages).
 
     data_im %>% 
       group_by(Status, Eligible) %>% 
@@ -106,15 +118,26 @@ as well!
       ungroup() %>% 
       ggplot(aes(x = as.factor(Status), y = Percentage))+
       geom_col(fill="#26466C")+
-      geom_text(aes(label = Percentage), nudge_y = 0.025)+
+      geom_text(aes(label = plyr::round_any(Percentage, 0.0001, round)), nudge_y = 0.025)+
       theme_classic()+
       xlab("")+
-      ylab("Percentage of HoH receiving AUH")
+      ylab("Percentage of HoH receiving AUH")+
+      ggtitle("Percentage of Argentinian HoHs receiving AUH")
 
-    ## `summarise()` has grouped output by 'Status'. You can override using the
-    ## `.groups` argument.
+![](JoschkasProject_byMeri_files/figure-markdown_strict/a-1.png)
 
-![](JoschkasProject_byMeri_files/figure-markdown_strict/unnamed-chunk-4-1.png)
+Second (b):
+
+> the percentage of heads of households & their spouses who are
+> immigrants who are eligible for the AUH vs. the percentage of heads of
+> households & their spouses who are immigrants who are NOT eligible for
+> the AUH
+
+Basically I tackled this the same way as (a) only creating another
+dataframe (yikes, I know…) to have the correct length/ number of entries
+for the Percentage. Probably a better way to do that using only the
+original dataframe, but I did not have the time to get around to do that
+(Sorry!).
 
     data_imonly <- rbind(im_eg, im_non)
 
@@ -124,12 +147,21 @@ as well!
       ungroup() %>% 
       ggplot(aes(x = as.factor(Eligible), y = Percentage))+
       geom_col(fill="#26466C")+
-      geom_text(aes(label = Percentage), nudge_y = 0.025)+
+      geom_text(aes(label = plyr::round_any(Percentage, 0.0001, round)), nudge_y = 0.025)+
       theme_classic()+
       xlab("")+
-      ylab("Percentage of HoH receiving AUH")
+      ylab("Percentage of HoHs")+
+      ggtitle("Eligibility of Immigrants for AUH")
 
-![](JoschkasProject_byMeri_files/figure-markdown_strict/unnamed-chunk-5-1.png)
+![](JoschkasProject_byMeri_files/figure-markdown_strict/b-1.png) And
+lastly onto (c):
+
+> of all those who are eligible, what are the percentages based on age
+> group (create age ranges), country of origin (within South America),
+> province of origin (if born in Argentina), and education level.
+
+Starting with the age, where I cut the age into ranges before
+calculating the Percentage as usual.
 
     eligibleall %>% 
       mutate(Age_Range = cut(Age, c(0,20,30,40,50,60,70,80,90,Inf))) %>% 
@@ -139,13 +171,24 @@ as well!
       ggplot(aes(fill = Sex, y=Percentage, x = Age_Range))+
       geom_bar(position = "stack", stat = "identity")+
       scale_fill_manual(values = c("#932322","#1D3A74"))+
+      scale_x_discrete(labels = c("(0,20]" = "0-20",
+                                "(20,30]" = "20-30",
+                                "(30,40]" = "30-40",
+                                "(40,50]" = "40-50",
+                                "(50,60]" = "50-60",
+                                "(60,70]" = "60-70",
+                                "(70,80]" = "70-80",
+                                "(80,90]" = "80-90",
+                                "(90,Inf]" = "90 or older",
+                                "NA" = "Not specified"))+
+      theme_classic()+
       theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+
-      theme_minimal()
+      xlab("Age Category")+
+      ggtitle("Eligibilty by Age")
 
-    ## `summarise()` has grouped output by 'Age_Range'. You can override using the
-    ## `.groups` argument.
+![](JoschkasProject_byMeri_files/figure-markdown_strict/c_age-1.png)
 
-![](JoschkasProject_byMeri_files/figure-markdown_strict/unnamed-chunk-6-1.png)
+Next by country of Birth (if born outside of Argentia):
 
     eligibleall %>% 
       filter(Country_Of_Birth != "Argentina") %>% 
@@ -155,13 +198,37 @@ as well!
       ggplot(aes(fill = Sex, y=Percentage, x =Country_Of_Birth))+
       geom_bar(position = "stack", stat = "identity")+
       scale_fill_manual(values = c("#932322","#1D3A74"))+
+      theme_classic()+ # Has to be called BEFORE the theme(axis.text)
       theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+
-      theme_classic()
+      xlab("Country of Birth")
 
-    ## `summarise()` has grouped output by 'Country_Of_Birth'. You can override using
-    ## the `.groups` argument.
+![](JoschkasProject_byMeri_files/figure-markdown_strict/c_countryall-1.png)
 
-![](JoschkasProject_byMeri_files/figure-markdown_strict/unnamed-chunk-7-1.png)
+Just South American Countries
+
+    eligibleall %>% 
+      filter(Country_Of_Birth %in% c("BOLIVIA",
+                                     "BRASIL",
+                                     "CHILE",
+                                     "COLOMBIA",
+                                     "ECUADOR",
+                                     "PERU",
+                                     "PARAGUAY",
+                                     "URUGUAY",
+                                     "VENEZUELA")) %>% 
+      group_by(Country_Of_Birth, Sex) %>% 
+      summarise(Percentage = n()/length(eligibleall$Household)) %>% 
+      ungroup() %>%
+      ggplot(aes(fill = Sex, y=Percentage, x =Country_Of_Birth))+
+      geom_bar(position = "stack", stat = "identity")+
+      scale_fill_manual(values = c("#932322","#1D3A74"))+
+      theme_classic()+ # Has to be called BEFORE the theme(axis.text)
+      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+
+      xlab("Country of Birth")
+
+![](JoschkasProject_byMeri_files/figure-markdown_strict/c_countrsouthamerica-1.png)
+
+Province of birth (if born in Argentina)
 
     eligibleall %>% 
       filter(Country_Of_Birth == "Argentina") %>% 
@@ -171,13 +238,13 @@ as well!
       ggplot(aes(fill = Sex, y=Percentage, x = Province_of_Birth))+
       geom_bar(position = "stack", stat = "identity")+
       scale_fill_manual(values = c("#932322","#1D3A74"))+
+      theme_classic()+
       theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+
-      theme_classic()
+      xlab("Province of Birth")
 
-    ## `summarise()` has grouped output by 'Province_of_Birth'. You can override using
-    ## the `.groups` argument.
+![](JoschkasProject_byMeri_files/figure-markdown_strict/c_provence-1.png)
 
-![](JoschkasProject_byMeri_files/figure-markdown_strict/unnamed-chunk-8-1.png)
+And last but not least Education level:
 
     eligibleall %>% 
       group_by(Education_Level, Sex) %>% 
@@ -186,10 +253,8 @@ as well!
       ggplot(aes(fill = Sex, y=Percentage, x = Education_Level))+
       geom_bar(position = "stack", stat = "identity")+
       scale_fill_manual(values = c("#932322","#1D3A74"))+
+      theme_classic()+
       theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+
-      theme_minimal()
+      xlab("Level of Education")
 
-    ## `summarise()` has grouped output by 'Education_Level'. You can override using
-    ## the `.groups` argument.
-
-![](JoschkasProject_byMeri_files/figure-markdown_strict/unnamed-chunk-9-1.png)
+![](JoschkasProject_byMeri_files/figure-markdown_strict/c_education-1.png)
