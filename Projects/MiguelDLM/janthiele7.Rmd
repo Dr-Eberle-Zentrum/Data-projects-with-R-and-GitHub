@@ -3,85 +3,106 @@ title: "janthiele7_solution_for_miguel"
 output: md_document
 ---
 
-```{r}
+```{r, error=FALSE}
 #load packages
 library(tidyverse)
 library(dplyr)
 ```
 
-#### Reading data
+```{r, error=FALSE}
+#loading datasets
+bear<- read.csv("smooth_stress_tensor (bear).csv")
+hyaena<- read.csv("smooth_stress_tensor (hyaena).csv")
+lion<- read.csv("smooth_stress_tensor (lion).csv")
+wolf<- read.csv("smooth_stress_tensor (bear).csv")
+```
+
 ```{r}
-#defining function to read the data
-process_data <- function(file_path) {
-  data <- read.csv(file_path)
+#to make work flow easier data frames are put into a list
+animals<- list(bear,hyaena,lion,wolf)
+```
+
+
+The project requires the following steps:
+1. Removing the top 2 % of the Von Misses Stress Measurement in each data set
+2. Dividing each dataset along it's three axis into 10 equal sized segments 
+3. Calculating average von Misses Stress on each section for each animal and axis
+4. Creating plots that display the average Von Misses Stress within each axis for each animal
+
+1. Removing top 2% 
+```{r}
+#defining a function to remove the top 2% (0.02)
+top2 <- function(df, column, percent) {
+  
+#calculating cutoff value 
+    upper_cutoff <- max(df[[column]]) - percent * (max(df[[column]]) -min(df[[column]]))
+    
+    # Filter the DataFrame to remove the top X% rows
+filtered_df<-df %>%
+        filter(df[[column]] < upper_cutoff)
+
+return(filtered_df)
 }
 ```
 
-
-
-"According to Marcé-Nogué et al. (2011), Finite Elements results may present singularities at the contact and constraint points, for this reason many researchers choose to remove the 1 or 2% higher stress values of the dataset."
-
-So we will remove the top 2 % of the Misses Stress Measurement as a part of prepocessing. For that we will design a function.
 ```{r}
-filter_extreme_values <- function(data, top_percent = 2) {
-  cutoff <- quantile(data$Von.Misses.Stress, probs = 1 - top_percent / 100)
-  filtered_data <- data %>% filter(Von.Misses.Stress <= cutoff)
-  return(filtered_data)
+animals_filtered<-lapply(animals, top2, column = "Von.Misses.Stress", percent = 0.02)
+```
+
+2. Dividing axis of the datasets into 10 equal parts
+```{r}
+#Creating a function that segments dataframes axis into 10 equal parts
+segments <- function(df) {
+    df %>%
+        mutate(
+            segments_X = cut(X, breaks = 10, labels = FALSE),
+            segments_Y = cut(Y, breaks = 10, labels = FALSE),
+            segments_Z = cut(Z, breaks = 10, labels = FALSE)
+        )
 }
 ```
 
-
-####Segmenting data 
-
-function that segments the data into 10 equal parts 
 ```{r}
-segment_data <- function(data, axis, segments = 10) {
-    min_val <- min(data[[axis]], na.rm = TRUE)
-    max_val <- max(data[[axis]], na.rm = TRUE)
-    segment_length <- (max_val - min_val) / segments
-    
-    breaks <- seq(min_val, max_val, by = segment_length)
-    labels <- 1:segments
-    
-    data <- data %>%
-      mutate(segment = cut(data[[axis]], breaks = breaks, labels = labels, include.lowest = TRUE, right = FALSE))
-    
-    return(data)
-  }
+#applying function to animals 
+animals_segmented <- lapply(animals, segments)
 ```
 
-segmenting all datasets into 10 equal parts along their axis
+3. Calculating averages Von Misses Stress per section
+
 ```{r}
+# Define the segment columns and the variable to summarize
+segment_cols <- c("segments_X", "segments_Y", "segments_Z")
+value_col <- "Von.Misses.Stress"
+
+# Function to calculate mean per segment
+mean_segment <- function(df, segment_col, value_col) {
+    df %>%
+        group_by(across(all_of(segment_col))) %>%
+        summarize(mean_stress = mean(.data[[value_col]], na.rm = TRUE), .groups = 'drop')
+}
+# 
 
 ```
 
 
-####Calculating averages
-
-Defining function to calculate average stress along the 10 segments 
 ```{r}
-average_stress_by_segment <- function(segmented_data) {
-    averaged_data <- segmented_data %>%
-      group_by(segment) %>%
-      summarise(avg_stress = mean(Von_Mises_Stress, na.rm = TRUE))
-    
-    return(averaged_data)
-  }
+#function to apply on all dataframes
+all_segments <- function(df, segment_cols, value_col) {
+    means_list <- map(segment_cols, ~ mean_segment(df, .x, value_col))
+    names(means_list) <- segment_cols
+    reduce(means_list, bind_cols)
+}
+
 ```
 
-#### Plotting 
-
-Define plot function
 ```{r}
-plot_avg_stress <- function(averaged_data, axis, animal_name) {
-    ggplot(averaged_data, aes(x = as.numeric(as.character(segment)), y = avg_stress, group = animal_name)) +
-      geom_line() +
-      labs(title = paste("Average Stress Distribution along", axis, "Axis"),
-           x = paste(axis, "Segments"),
-           y = "Average Von Misses Stress",
-           color = "Animal") +
-      theme_minimal() +
-      theme(legend.position = "top")
-  }
+#apply onto each frame within animal segmented
+animals_means <- map(animals_segmented, ~ all_segments(.x, segment_cols, value_col))
+
+# View the result for each dataframe
+print(animals_means)
+
 ```
+
+
 
