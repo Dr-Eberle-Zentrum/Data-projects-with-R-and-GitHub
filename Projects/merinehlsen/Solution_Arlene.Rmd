@@ -1,6 +1,6 @@
 ---
 title: "Solution_byArlene"
-output: html_document
+output: md_document
 date: "`r Sys.Date()`"
 ---
 
@@ -11,6 +11,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library("readxl")
 library("dplyr")
+library(tidyr)
+
 ```
 
 So far, I was only able to combine the different data into one dataframe. I will try to create the plots in the next week!
@@ -76,12 +78,12 @@ reorganize_sheets <- function(data, sheetname, rowname1, rowname2, rowname3){
 Now let's change the structure of the survival and development data.
 But first, here is an example how the sheet for survival looked before reshaping it:
 
-```{r}
+```{r, message=FALSE}
 head(read_excel("flydata.xlsx", sheet = "Survival", col_names = F))
 ```
 
 
-```{r}
+```{r, warnings = F, message=FALSE}
 data_survival <- read_excel("flydata.xlsx", sheet = "Survival", col_names = F) %>% 
   reorganize_sheets("Survival", "Females", "Males", "Total")
 
@@ -146,7 +148,8 @@ Now that the development and survival data are combined, I will look at metaboli
 
 First I wrote a function to read and process the metabolic pool data. The dataframe looked like this at first:
 
-```{r}
+```{r, results='hide', message=FALSE}
+# how can I supress the console output?
 read_excel("flydata.xlsx", sheet = "Metabolic_Pools", col_names = F)
 ```
 
@@ -172,7 +175,7 @@ process_metabolic_pool <- function(sheetname, rows) {
 
 Now I use this function for all three different types of metabolic pools (drymass, protein and triglycerides) and also renamed the columns.
 
-```{r}
+```{r, warnings = F, message=FALSE}
 data_drymass <- process_metabolic_pool("Drymass", c(1:3, 5:7)) %>% 
   rename(mean_drymass = mean, sd_drymass = sd)
 
