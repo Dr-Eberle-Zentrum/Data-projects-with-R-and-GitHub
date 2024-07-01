@@ -9,29 +9,52 @@ output: md_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## Solution for Jan's project
 
-This is my attempt for a solution for Jan's project. 
+This is my attempt for a solution for Jan's project. I will use the dataset that Jan provided.
 
+### Libraries
+```{r libraries}
+library(tidyverse)
+```
+
+### Read in data
 ```{r data, warning=FALSE}
 # read in dataset
 food_data <- read.csv("/Users/sarahlober/Data Projects with R and GitHub/Projects/jan-thiele7/data_openfood.csv")
 head(food_data)
 ```
-I did not quite grasp the categorization variables as the head does not tell me much about them, so I'm doing some more exploration.
+
+I did not quite grasp the categories in the categorization variables as the head does not tell me much about them, so I'm taking a look at them first.
 
 ```{r variables, warning=FALSE}
 table(food_data$pnns_groups_1)
 table(food_data$pnns_groups_2)
 ```
 
-## Plotting the data
+### Cleaning the data
 
-I'm getting the data ready for plotting first, then create the actual plot.
+I'm getting the data ready for plotting first, then create the actual plot. I'm removing the unknown / not-applicable categories, drop the NAs (if there are any) and change the groups to factor. 
 
 ```{r plot data, warning=FALSE}
-plot(pressure)
+
+df <- food_data %>%
+  drop_na(pnns_groups_1, nutriscore_grade, ecoscore_grade) %>%
+  filter(
+    pnns_groups_1 != "unknown" & 
+    nutriscore_grade != "unknown" & 
+    ecoscore_grade != "unknown" & 
+    nutriscore_grade != "not-applicable" & 
+    ecoscore_grade != "not-applicable") %>%
+  mutate(pnns_groups_2 = factor(pnns_groups_2)
+  )
 ```
+
+Then I had to ask ChatGPT for advice on how to tackle this plot since I was clueless about the shape I needed to put the data in in order to achieve a plot like in the example. 
+```{r visualize, warning=FALSE}
+
+```
+
 
 ```{r plot nutriscore, warning=FALSE}
 
