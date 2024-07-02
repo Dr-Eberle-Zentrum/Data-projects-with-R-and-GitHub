@@ -14,7 +14,7 @@ library(dplyr)
 bear<- read.csv("smooth_stress_tensor (bear).csv")
 hyaena<- read.csv("smooth_stress_tensor (hyaena).csv")
 lion<- read.csv("smooth_stress_tensor (lion).csv")
-wolf<- read.csv("smooth_stress_tensor (bear).csv")
+wolf<- read.csv("smooth_stress_tensor (wolf).csv")
 ```
 
 ```{r}
@@ -130,8 +130,6 @@ names(z_axis)<- c("segment","bear","hyena","lion","wolf")
 ```
 
 5. Creating plots
-
-
 ```{r}
 x_axis_longer<- x_axis %>%
     pivot_longer(cols = c("bear","hyena","lion","wolf"),
@@ -145,10 +143,6 @@ x_axis_longer%>%
     labs(y = "Stress", title = "Stress by Segment for Different Animals") +
     theme_minimal()
 ```
-
-
-
-
 ```{r}
 y_axis_longer<- y_axis %>%
     pivot_longer(cols = c("bear","hyena","lion","wolf"),

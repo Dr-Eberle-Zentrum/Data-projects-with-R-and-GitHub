@@ -18,7 +18,7 @@
     bear<- read.csv("smooth_stress_tensor (bear).csv")
     hyaena<- read.csv("smooth_stress_tensor (hyaena).csv")
     lion<- read.csv("smooth_stress_tensor (lion).csv")
-    wolf<- read.csv("smooth_stress_tensor (bear).csv")
+    wolf<- read.csv("smooth_stress_tensor (wolf).csv")
 
     #to make work flow easier data frames are put into a list
     animals<- list(bear=bear,hyaena=hyaena,lion=lion,wolf=wolf)
