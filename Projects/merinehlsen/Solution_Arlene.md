@@ -255,34 +255,36 @@ Now I finally combined the processed data into one final dataframe:
       merge(data_triglycerides, by=c("line", "n", "sex","diet")) %>% 
       # rename so dataframes have same column names
       rename(Line = line,
-             Diet = diet) %>% 
-      left_join(data_survival_developm, data_metabolic, by = c("Line", "n", "Diet", "sex"))
+             Diet = diet,
+             n_metabolic = n) %>% 
+      left_join(data_survival_developm, data_metabolic, by = c("Line", "Diet", "sex")) %>% 
+      rename(n_suvival_developm = n)
 
 This is how it looks like now:
 
     head(final_data)
 
-    ##   Line  n sex Diet mean_drymass sd_drymass mean_protein sd_protein
-    ## 1    1 10   F  EPS         1.67      0.019          365       15.2
-    ## 2    1 10   F  HPS         1.67      0.032          324       13.7
-    ## 3    1 10   F  LPS         1.62      0.024          320         12
-    ## 4    1 10   M  EPS         1.23       0.01          259       6.71
-    ## 5    1 10   M  HPS         1.23      0.018          247         17
-    ## 6    1 10   M  LPS         1.18      0.029          245       10.9
-    ##   mean_triglycerides sd_triglycerides      survival_mean survival_sd
-    ## 1                157             7.32                 19        1.26
-    ## 2                111             6.95               17.8        1.14
-    ## 3                157             8.83 16.899999999999999        1.37
-    ## 4                109              3.6                 18        0.77
-    ## 5               92.9             4.96               17.8       0.573
-    ## 6                107             6.14               16.2        0.92
-    ##   Developmental_Time_L-P_mean Developmental_Time_P-E_mean
-    ## 1                          19                          18
-    ## 2                        17.8                        17.8
-    ## 3          16.899999999999999                        16.2
-    ## 4                          19                          18
-    ## 5                        17.8                        17.8
-    ## 6          16.899999999999999                        16.2
+    ##   Line n_metabolic sex Diet mean_drymass sd_drymass mean_protein sd_protein
+    ## 1    1          10   F  EPS         1.67      0.019          365       15.2
+    ## 2    1          10   F  HPS         1.67      0.032          324       13.7
+    ## 3    1          10   F  LPS         1.62      0.024          320         12
+    ## 4    1          10   M  EPS         1.23       0.01          259       6.71
+    ## 5    1          10   M  HPS         1.23      0.018          247         17
+    ## 6    1          10   M  LPS         1.18      0.029          245       10.9
+    ##   mean_triglycerides sd_triglycerides n_suvival_developm      survival_mean
+    ## 1                157             7.32                 10                 19
+    ## 2                111             6.95                 10               17.8
+    ## 3                157             8.83                 10 16.899999999999999
+    ## 4                109              3.6                 10                 18
+    ## 5               92.9             4.96                 10               17.8
+    ## 6                107             6.14                 10               16.2
+    ##   survival_sd Developmental_Time_L-P_mean Developmental_Time_P-E_mean
+    ## 1        1.26                          19                          18
+    ## 2        1.14                        17.8                        17.8
+    ## 3        1.37          16.899999999999999                        16.2
+    ## 4        0.77                          19                          18
+    ## 5       0.573                        17.8                        17.8
+    ## 6        0.92          16.899999999999999                        16.2
     ##   Developmental_Time_L-E_mean Developmental_Time_L-P_sd
     ## 1                          37                      1.26
     ## 2                        35.6                      1.14

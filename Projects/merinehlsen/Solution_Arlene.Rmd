@@ -195,13 +195,16 @@ head(data_drymass)
 ## Combine into one dataframe
 
 Now I finally combined the processed data into one final dataframe:
+
 ```{r}
 final_data <- merge(data_drymass, data_protein, by=c("line", "n", "sex", "diet")) %>% 
   merge(data_triglycerides, by=c("line", "n", "sex","diet")) %>% 
   # rename so dataframes have same column names
   rename(Line = line,
-         Diet = diet) %>% 
-  left_join(data_survival_developm, data_metabolic, by = c("Line", "n", "Diet", "sex"))
+         Diet = diet,
+         n_metabolic = n) %>% 
+  left_join(data_survival_developm, data_metabolic, by = c("Line", "Diet", "sex")) %>% 
+  rename(n_suvival_developm = n)
 ```
 
 This is how it looks like now:
