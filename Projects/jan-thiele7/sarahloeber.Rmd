@@ -16,6 +16,7 @@ This is my attempt for a solution for Jan's project. I will use the dataset that
 ### Libraries
 ```{r libraries}
 library(tidyverse)
+library(ggrepel)
 ```
 
 ### Read in data
@@ -25,7 +26,7 @@ food_data <- read.csv("/Users/sarahlober/Data Projects with R and GitHub/Project
 head(food_data)
 ```
 
-I did not quite grasp the categories in the categorization variables as the head does not tell me much about them, so I'm taking a look at them first.
+I did not quite grasp the categories in the categorization variables as the head does not tell me much about them, so I'm taking a look at them first. I then decided to go with the second group category only, as this gives more information about the categories than groups 1. 
 
 ```{r variables, warning=FALSE}
 table(food_data$pnns_groups_1)
@@ -50,12 +51,75 @@ df <- food_data %>%
   )
 ```
 
-Then I had to ask ChatGPT for advice on how to tackle this plot since I was clueless about the shape I needed to put the data in in order to achieve a plot like in the example. 
-```{r visualize, warning=FALSE}
+For this next part, I did not really know how to approach it. I took your idea from the description and started off with a heatmap, however, that did not really work out as I wanted. The rownames have to be unique, therefore cannot be grouped and a matrix takes numeric variables only. It looks cool but did not help me much. 
 
+```{r visualize, warning=FALSE}
+# convert data to matrix 
+
+df1 <- df %>%
+  select(-c(X, countries_en, product_name, pnns_groups_1))
+
+df1$nutriscore <- as.numeric(as.factor(df1$nutriscore_grade))
+df1$ecoscore <- as.numeric(as.factor(df1$ecoscore_grade)) 
+df1$pnns_group <- as.numeric(df1$pnns_groups_2) 
+
+rn <- df1[,3]
+rn <- make.unique(as.character(rn))
+df1 <- df1[,-3]
+
+df1 <- df1 %>%
+  select(-c(nutriscore_grade, ecoscore_grade))
+rownames(df1) <- rn
+
+matrix <- as.matrix(df1)
+heatmap(matrix, scale="column")
+```
+So I had ChatGPT do it in the end...
+```{r data visualization}
+nutriscore_levels <- c("a" = 1, "b" = 2, "c" = 3, "d" = 4, "e" = 5)
+ecoscore_levels <- c("a" = 1, "b" = 2, "c" = 3, "d" = 4, "e" = 5)
+
+# Compute the centers and sizes of the bubbles
+plot_data <- df %>%
+  group_by(pnns_groups_2, nutriscore_grade, ecoscore_grade) %>%
+  summarise(count = n()) %>%
+  ungroup() %>%
+  mutate(nutriscore_value = nutriscore_levels[nutriscore_grade],
+         ecoscore_value = ecoscore_levels[ecoscore_grade])
+
+# Compute the size of bubbles based on the number of unique combinations within each group
+bubble_size <- df %>%
+  group_by(pnns_groups_2) %>%
+  summarise(size = n_distinct(nutriscore_grade, ecoscore_grade))
+
+# Merge bubble size with plot data
+plot_data <- plot_data %>%
+  left_join(bubble_size, by = "pnns_groups_2") %>%
+  group_by(pnns_groups_2) %>%
+  slice_max(order_by = count, n = 1) %>%
+  ungroup()
 ```
 
-
+And this is the plot that came out of it. I'm not super happy with it, but I'll send this out for feedback so I have time to revise it later :) 
 ```{r plot nutriscore, warning=FALSE}
+nutriscore_colors <- c("a" = "#009e73", "b" = "#d6db32", "c" = "#f7c239", "d" = "#e06666", "e" = "#e21a1a")
+ecoscore_colors <- c("a" = "#009e73", "b" = "#d6db32", "c" = "#f7c239", "d" = "#e06666", "e" = "#e21a1a")
+
+# Create the plot
+ggplot(plot_data, aes(x = ecoscore_value, y = nutriscore_value, size = size)) +
+  geom_point(aes(color = nutriscore_grade, fill = ecoscore_grade), alpha = 0.6, shape = 21, 
+             position = position_jitter(width = 0.9, height = 0.6)) +
+  scale_size_area(max_size = 20, guide = 'none') +
+  scale_color_manual(values = nutriscore_colors) +
+  scale_fill_manual(values = ecoscore_colors) +
+  scale_x_continuous(breaks = 1:5, labels = names(ecoscore_levels)) +
+  scale_y_continuous(breaks = 1:5, labels = names(nutriscore_levels)) +
+  theme_minimal() +
+  labs(
+    title = "Relationship between Nutri- and Ecoscore",
+    x = "Ecoscore",
+    y = "Nutriscore"
+  ) +
+  geom_text_repel(aes(label = pnns_groups_2), size = 2, max.overlaps = Inf, box.padding = 0.2, point.padding = 0.2, force = 1, segment.size = 0.2)
 
 ```
