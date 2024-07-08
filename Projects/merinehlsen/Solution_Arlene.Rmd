@@ -1,6 +1,6 @@
 ---
 title: "Solution_byArlene"
-output: md_document
+output: html_document
 date: "`r Sys.Date()`"
 ---
 
@@ -8,14 +8,20 @@ date: "`r Sys.Date()`"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
-library("readxl")
-library("dplyr")
-library(tidyr)
+```{r, warnings = F, message=FALSE}
 
+suppressMessages({
+  suppressWarnings({
+    library("readxl")
+    library("dplyr")
+    library(tidyr)
+    library("gridExtra")
+    library(ggsignif)
+    library(ggrepel)
+  })
+})
 ```
 
-So far, I was only able to combine the different data into one dataframe. I will try to create the plots in the next week!
 
 ## Sheet 1 & 2: Survival & Developmental_Time
 
@@ -87,7 +93,7 @@ head(read_excel("flydata.xlsx", sheet = "Survival", col_names = F))
 data_survival <- read_excel("flydata.xlsx", sheet = "Survival", col_names = F) %>% 
   reorganize_sheets("Survival", "Females", "Males", "Total")
 
-data_developm <- read_excel("flydata.xlsx", sheet = "Survival", col_names = F) %>% 
+data_developm <- read_excel("flydata.xlsx", sheet = "Developmental_Time", col_names = F) %>% 
   reorganize_sheets("Developmental_Time", "L-P", "P-E", "L-E")
 ```
 It now looks like this, which is already way cleaner!
@@ -98,7 +104,7 @@ head(data_survival)
 But now I also want to have a new column with the sex in the survival dataframe. I wrote a function for that.
 
 ```{r}
-transform_data <- function(data, exclude_columns, new_sex, mean_column, sd_column) {
+transform_data_surviv <- function(data, exclude_columns, new_sex, mean_column, sd_column) {
   data %>%
     # only select one sex
     select(-all_of(exclude_columns)) %>%
@@ -110,31 +116,81 @@ transform_data <- function(data, exclude_columns, new_sex, mean_column, sd_colum
 }
 ```
 
-Now let's use this function on the data. In the following, I already combined the new dataframes with the development dataframe.
+Now let's use this function on the survival data.
 
 ```{r}
-data_survival_developm <-
+data_survival <-
   bind_rows(
-    transform_data(
+    transform_data_surviv(
       data_survival,
       exclude_columns = c("Survival_Males_mean", "Survival_Males_sd", "Survival_Total_mean", "Survival_Total_sd"),
       new_sex = "F",
       mean_column = "Survival_Females_mean",
       sd_column = "Survival_Females_sd"),
-    transform_data(
+    transform_data_surviv(
       data_survival,
       exclude_columns = c("Survival_Females_mean", "Survival_Females_sd", "Survival_Total_mean", "Survival_Total_sd"),
       new_sex = "M",
       mean_column = "Survival_Males_mean",
       sd_column = "Survival_Males_sd"),
-    transform_data(
+    transform_data_surviv(
       data_survival,
       exclude_columns = c("Survival_Females_mean", "Survival_Females_sd", "Survival_Males_mean", "Survival_Males_sd"),
       new_sex = "Total",
       mean_column = "Survival_Total_mean",
-      sd_column = "Survival_Total_sd")) %>% 
-  merge(data_developm, by = c("n", "Line", "Diet"), all = F)
+      sd_column = "Survival_Total_sd"))
 ```
+
+Let's also do this for development.
+
+```{r}
+transform_data_developm <- function(data, exclude_columns, new_developm, mean_column, sd_column) {
+  data %>%
+    # only select one sex
+    select(-all_of(exclude_columns)) %>%
+    # add new column with sex
+    mutate(developmental_time = new_developm) %>%
+    # rename columns so sex not in column name anymore
+    rename(developmental_mean = !!sym(mean_column),
+           developmental_sd = !!sym(sd_column))
+  }
+```
+
+
+```{r}
+
+data_developm <-
+  bind_rows(
+    transform_data_developm(
+      data_developm,
+      exclude_columns = c("Developmental_Time_P-E_mean", "Developmental_Time_P-E_sd", "Developmental_Time_L-E_mean", "Developmental_Time_L-E_sd"),
+      new_developm = "L-P",
+      mean_column = "Developmental_Time_L-P_mean",
+      sd_column = "Developmental_Time_L-P_sd"),
+    transform_data_developm(
+      data_developm,
+      exclude_columns = c("Developmental_Time_P-E_mean", "Developmental_Time_P-E_sd", "Developmental_Time_L-P_mean", "Developmental_Time_L-P_sd"),
+      new_developm = "L-E",
+      mean_column = "Developmental_Time_L-E_mean",
+      sd_column = "Developmental_Time_L-E_sd"),
+    transform_data_developm(
+      data_developm,
+      exclude_columns = c("Developmental_Time_L-E_mean", "Developmental_Time_L-E_sd", "Developmental_Time_L-P_mean", "Developmental_Time_L-P_sd"),
+      new_developm = "P-E",
+      mean_column = "Developmental_Time_P-E_mean",
+      sd_column = "Developmental_Time_P-E_sd"))
+```
+And now I combine the two:
+
+```{r}
+data_survival_developm <- data_developm %>% 
+  rename(Line = line,
+         Diet = diet,
+         n_developm = n) %>% 
+  merge(data_survival, by = c("Line", "Diet"), all = F) %>% 
+  rename(n_survival = n)
+```
+
 
 So the data for survival and development now look like this:
 ```{r}
@@ -149,7 +205,7 @@ Now that the development and survival data are combined, I will look at metaboli
 First I wrote a function to read and process the metabolic pool data. The dataframe looked like this at first:
 
 ```{r, results='hide', message=FALSE}
-# how can I supress the console output?
+
 read_excel("flydata.xlsx", sheet = "Metabolic_Pools", col_names = F)
 ```
 
@@ -158,9 +214,7 @@ read_excel("flydata.xlsx", sheet = "Metabolic_Pools", col_names = F)
 
 process_metabolic_pool <- function(sheetname, rows) {
   # read data
-  read_excel("flydata.xlsx", sheet = "Metabolic_Pools", col_names = F) %>% 
-    # delete irrelevant notes at the bottom of excel sheet
-    slice(-c(18:58)) %>% 
+  read_excel("flydata.xlsx", sheet = "Metabolic_Pools", col_names = F, n_max=17) %>% 
     # only get relevant data (drymass, proteins or driglycerides)
     slice(rows) %>%
     # reorganize sheets with function above
@@ -203,8 +257,7 @@ final_data <- merge(data_drymass, data_protein, by=c("line", "n", "sex", "diet")
   rename(Line = line,
          Diet = diet,
          n_metabolic = n) %>% 
-  left_join(data_survival_developm, data_metabolic, by = c("Line", "Diet", "sex")) %>% 
-  rename(n_suvival_developm = n)
+  left_join(data_survival_developm, data_metabolic, by = c("Line", "Diet", "sex"))
 ```
 
 This is how it looks like now:
@@ -212,7 +265,229 @@ This is how it looks like now:
 ```{r}
 head(final_data)
 ```
+As a final step, lets convert the columns containing numerical data to numeric.
+
+```{r, warnings = F, message = F}
+# check if column only contains numeric values
+
+is_numeric_column <- function(x) {
+  all(!is.na(as.numeric(x)))
+}
+
+# change them to numeric
+final_data[] <- lapply(final_data, function(x) if (is_numeric_column(x)) as.numeric(x) else x)
+```
+
 
 ## Plot 
 
-I will plot the data in the next week.
+Now let's create the plots.
+
+### Plot for survival
+
+```{r, warning=F}
+
+# Plot absolute values
+plot_absolute_survival <- final_data %>% 
+  ggplot( aes(x = Diet, y = survival_mean, fill = Diet)) +
+  geom_violin(trim = FALSE, color = NA) +
+  scale_fill_manual(values = c("HPS" = "yellow", "EPS" = "lightgreen", "LPS" = "lightblue")) +
+  geom_boxplot(width = 0.2, fill = NA, color = "white") +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  ylab("Absolute variance survival") +
+  xlab("Diet")+
+  geom_signif(comparisons = list(c("EPS", "HPS") ,c("EPS","LPS"), c("HPS","LPS")), 
+              test = t.test,
+              map_signif_level=c("***"=0.001, "**"=0.01, "*"=0.05),
+              # hide.ns does not work?
+              hide.ns = T)
+
+# Plot variance
+plot_variance_survival <- final_data %>%
+  ggplot(aes(x = Diet, y = survival_sd, fill = Diet)) +
+  geom_violin(trim = FALSE, color = NA) +
+  scale_fill_manual(values = c("HPS" = "yellow", "EPS" = "lightgreen", "LPS" = "lightblue")) +
+  geom_boxplot(width = 0.2, fill = NA, color = "white") +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  ylab("variance (SD)") +
+  xlab("Diet")
+
+# show both in one 
+grid.arrange(plot_absolute_survival, plot_variance_survival, ncol = 1)
+```
+
+
+### Plot for development
+
+
+```{r, warning=F}
+# Plot absolute values
+plot_absolute_developm <- final_data %>% 
+  ggplot( aes(x = Diet, y = developmental_mean, fill = Diet)) +
+  geom_violin(trim = FALSE, color = NA) +
+  scale_fill_manual(values = c("HPS" = "yellow", "EPS" = "lightgreen", "LPS" = "lightblue")) +
+  geom_boxplot(width = 0.2, fill = NA, color = "white") +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  ylab("Absolute variance developmental time") +
+  xlab("Diet")+
+  geom_signif(comparisons = list(c("EPS", "HPS") ,c("EPS","LPS"), c("HPS","LPS")), 
+              test = t.test,
+              map_signif_level=c("***"=0.001, "**"=0.01, "*"=0.05),
+              # hide.ns does not work?
+              hide.ns = TRUE)
+
+# Plot variance
+plot_variance_developm <- final_data %>%
+  ggplot(aes(x = Diet, y = developmental_sd, fill = Diet)) +
+  geom_violin(trim = FALSE, color = NA) +
+  scale_fill_manual(values = c("HPS" = "yellow", "EPS" = "lightgreen", "LPS" = "lightblue")) +
+  geom_boxplot(width = 0.2, fill = NA, color = "white") +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  ylab("variance (SD)") +
+  xlab("Diet")
+
+# show both in one 
+grid.arrange(plot_absolute_developm, plot_variance_developm, ncol = 1)
+```
+## Plot for metabolic pools
+### Proteins
+
+```{r, warning=F}
+# Plot absolute values
+plot_absolute_protein <- final_data %>% 
+  ggplot( aes(x = Diet, y = mean_protein, fill = Diet)) +
+  geom_violin(trim = FALSE, color = NA) +
+  scale_fill_manual(values = c("HPS" = "yellow", "EPS" = "lightgreen", "LPS" = "lightblue")) +
+  geom_boxplot(width = 0.2, fill = NA, color = "white") +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  ylab("Absolute variance protein in metabolic pool") +
+  xlab("Diet")+
+  geom_signif(comparisons = list(c("EPS", "HPS") ,c("EPS","LPS"), c("HPS","LPS")), 
+              test = t.test,
+              map_signif_level=c("***"=0.001, "**"=0.01, "*"=0.05),
+              # hide.ns does not work?
+              hide.ns = T)
+
+# Plot variance
+plot_variance_protein <- final_data %>%
+  ggplot(aes(x = Diet, y = sd_protein, fill = Diet)) +
+  geom_violin(trim = FALSE, color = NA) +
+  scale_fill_manual(values = c("HPS" = "yellow", "EPS" = "lightgreen", "LPS" = "lightblue")) +
+  geom_boxplot(width = 0.2, fill = NA, color = "white") +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  ylab("variance (SD)") +
+  xlab("Diet")
+
+# show both in one 
+grid.arrange(plot_absolute_protein, plot_variance_protein, ncol = 1)
+```
+### Triglycerides
+
+```{r, warning=F}
+# Plot absolute values
+plot_absolute_triglycerides <- final_data %>% 
+  ggplot( aes(x = Diet, y = mean_triglycerides, fill = Diet)) +
+  geom_violin(trim = FALSE, color = NA) +
+  scale_fill_manual(values = c("HPS" = "yellow", "EPS" = "lightgreen", "LPS" = "lightblue")) +
+  geom_boxplot(width = 0.2, fill = NA, color = "white") +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  ylab("Absolute variance triglycerides in metabolic pool") +
+  xlab("Diet")+
+  geom_signif(comparisons = list(c("EPS", "HPS") ,c("EPS","LPS"), c("HPS","LPS")), 
+              test = t.test,
+              map_signif_level=c("***"=0.001, "**"=0.01, "*"=0.05),
+              # hide.ns does not work?
+              hide.ns = T)
+
+# Plot variance
+plot_variance_triglycerides <- final_data %>%
+  ggplot(aes(x = Diet, y = sd_triglycerides, fill = Diet)) +
+  geom_violin(trim = FALSE, color = NA) +
+  scale_fill_manual(values = c("HPS" = "yellow", "EPS" = "lightgreen", "LPS" = "lightblue")) +
+  geom_boxplot(width = 0.2, fill = NA, color = "white") +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  ylab("variance (SD)") +
+  xlab("Diet")
+
+# show both in one 
+grid.arrange(plot_absolute_triglycerides, plot_variance_triglycerides, ncol = 1)
+```
+### Drymass
+
+```{r, warning=F}
+# Plot absolute values
+plot_absolute_drymass <- final_data %>% 
+  ggplot( aes(x = Diet, y = mean_drymass, fill = Diet)) +
+  geom_violin(trim = FALSE, color = NA) +
+  scale_fill_manual(values = c("HPS" = "yellow", "EPS" = "lightgreen", "LPS" = "lightblue")) +
+  geom_boxplot(width = 0.2, fill = NA, color = "white") +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  ylab("Absolute variance drymass in metabolic pool") +
+  xlab("Diet")+
+  geom_signif(comparisons = list(c("EPS", "HPS") ,c("EPS","LPS"), c("HPS","LPS")), 
+              test = t.test,
+              map_signif_level=c("***"=0.001, "**"=0.01, "*"=0.05),
+              # hide.ns does not work?
+              hide.ns = T)
+
+# Plot variance
+plot_variance_drymass <- final_data %>%
+  ggplot(aes(x = Diet, y = sd_drymass, fill = Diet)) +
+  geom_violin(trim = FALSE, color = NA) +
+  scale_fill_manual(values = c("HPS" = "yellow", "EPS" = "lightgreen", "LPS" = "lightblue")) +
+  geom_boxplot(width = 0.2, fill = NA, color = "white") +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  ylab("variance (SD)") +
+  xlab("Diet")
+
+# show both in one 
+grid.arrange(plot_absolute_drymass, plot_variance_drymass, ncol = 1)
+```
+
+### Relationship triglycerides and protein
+
+```{r}
+# Lineare Regression berechnen
+fit <- lm(mean_triglycerides ~ mean_protein, data = final_data)
+
+# R^2 und p-Wert berechnen
+r_squared <- summary(fit)$r.squared
+p_value <- summary(fit)$coefficients[2, 4]
+
+# Plot erstellen
+plot_protein_triglycerides <- ggplot(final_data, aes(x = mean_protein, y = mean_triglycerides, color = Diet)) +
+  geom_point(size = 3, shape = 16, alpha = 0.6) +
+  geom_smooth(method = "lm", se = FALSE, color = "black") +
+  annotate("text", x = Inf, y = Inf, label = paste("R² =", round(r_squared, 2), "\n", "p =", format(p_value, digits = 2)),
+           hjust = 1.1, vjust = 1.1, size = 5) +
+  labs(title = "Relationship between protein- und triglycerides",
+       x = "Protein (Mean)",
+       y = "Triglycerides (Mean)") +
+  scale_color_manual(values = c("HPS" = "yellow", "EPS" = "lightgreen", "LPS" = "lightblue"))+
+  theme_minimal() +
+  theme(legend.position = "right")
+
+# Potenzielle Ausreißer markieren
+outliers <- final_data %>% 
+  filter(mean_protein > mean(mean_protein) + 2 * sd(mean_protein) | mean_triglycerides > mean(mean_triglycerides) + 2 * sd(mean_triglycerides))
+
+plot_protein_triglycerides <- plot_protein_triglycerides +
+  geom_text_repel(data = outliers, aes(label = Line), size = 3, arrow = arrow(length = unit(0.02, "npc")))
+
+# Plot anzeigen
+print(plot_protein_triglycerides)
+```
+
+
+
+
