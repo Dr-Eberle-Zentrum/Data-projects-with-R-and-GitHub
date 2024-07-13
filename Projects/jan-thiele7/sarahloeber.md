@@ -31,7 +31,7 @@ dataset that Jan provided.
 ### Read in data
 
     # read in dataset
-    food_data <- read.csv("/Users/sarahlober/Data Projects with R and GitHub/Projects/jan-thiele7/data_openfood.csv")
+    food_data <- read.csv("./data_openfood.csv")
     head(food_data)
 
     ##   X                                 product_name countries_en nutriscore_grade
@@ -49,73 +49,13 @@ dataset that Jan provided.
     ## 5        unknown       unknown       unknown
     ## 6        unknown       unknown       unknown
 
-I did not quite grasp the categories in the categorization variables as
-the head does not tell me much about them, so I’m taking a look at them
-first. I then decided to go with the second group category only, as this
-gives more information about the categories than groups 1.
 
-    table(food_data$pnns_groups_1)
+    ### Cleaning the data
 
-    ## 
-    ##     Alcoholic beverages               Beverages    Cereals and potatoes 
-    ##                    1832                    5150                    7696 
-    ##         Composite foods          Fat and sauces          Fish Meat Eggs 
-    ##                    4257                    4356                    6938 
-    ##   Fruits and vegetables Milk and dairy products            Salty snacks 
-    ##                    4984                    8585                    2509 
-    ##           Sugary snacks                 unknown 
-    ##                    9205                  111680
+    I'm getting the data ready for plotting first, then create the actual plot. I'm removing the unknown / not-applicable categories, drop the NAs (if there are any) and change the groups to factor. I am also summarising groups together so I have less groups in the plot later (which makes it easier to read compared to my first version.)
 
-    table(food_data$pnns_groups_2)
 
-    ## 
-    ##              Alcoholic beverages                       Appetizers 
-    ##                             1832                              513 
-    ## Artificially sweetened beverages               Biscuits and cakes 
-    ##                              548                             3124 
-    ##                            Bread                Breakfast cereals 
-    ##                             1782                             1430 
-    ##                          Cereals                           Cheese 
-    ##                             3186                             3753 
-    ##               Chocolate products                   Dairy desserts 
-    ##                             1587                             1200 
-    ##             Dressings and sauces                     Dried fruits 
-    ##                             3235                              439 
-    ##                             Eggs                             Fats 
-    ##                              345                             1121 
-    ##                 Fish and seafood                     Fruit juices 
-    ##                             1852                              996 
-    ##                    Fruit nectars                           Fruits 
-    ##                              154                             1562 
-    ##                        Ice cream                          Legumes 
-    ##                              681                              996 
-    ##                             Meat                  Milk and yogurt 
-    ##                             1310                             2951 
-    ##                             Nuts                           Offals 
-    ##                             1086                               11 
-    ##                   One-dish meals                         Pastries 
-    ##                             3434                              125 
-    ##           Pizza pies and quiches     Plant-based milk substitutes 
-    ##                              632                              635 
-    ##                         Potatoes                   Processed meat 
-    ##                              302                             3420 
-    ##         Salty and fatty products                       Sandwiches 
-    ##                              910                              191 
-    ##                            Soups              Sweetened beverages 
-    ##                               72                             1775 
-    ##                           Sweets Teas and herbal teas and coffees 
-    ##                             4369                              140 
-    ##                          unknown            Unsweetened beverages 
-    ##                           111680                               53 
-    ##                       Vegetables       Waters and flavored waters 
-    ##                             2911                              849
-
-### Cleaning the data
-
-I’m getting the data ready for plotting first, then create the actual
-plot. I’m removing the unknown / not-applicable categories, drop the NAs
-(if there are any) and change the groups to factor.
-
+    ```r
     df <- food_data %>%
       drop_na(pnns_groups_1, nutriscore_grade, ecoscore_grade) %>%
       filter(
@@ -123,8 +63,25 @@ plot. I’m removing the unknown / not-applicable categories, drop the NAs
         nutriscore_grade != "unknown" & 
         ecoscore_grade != "unknown" & 
         nutriscore_grade != "not-applicable" & 
-        ecoscore_grade != "not-applicable") %>%
-      mutate(pnns_groups_2 = factor(pnns_groups_2)
+        ecoscore_grade != "not-applicable"
+      ) %>%
+      mutate(
+        pnns_groups_2 = factor(pnns_groups_2),
+        pnns_groups_2 = case_when(
+          pnns_groups_2 %in% c("Offals", "Meat") ~ "Meat",
+          pnns_groups_2 %in% c("Fruit juices", "Fruit nectars") ~ "Fruit juices",
+          pnns_groups_2 %in% c("Cereals", "Breakfast cereals") ~ "Cereals",
+          pnns_groups_2 %in% c("Teas and herbal teas and coffees", "Unsweetened beverages") ~ "Unsweetened beverages",
+          pnns_groups_2 %in% c("Plant-based milk substitutes", "Milk and yogurt") ~ "Milk and yogurt",
+          pnns_groups_2 %in% c("Ice cream", "Dairy desserts") ~ "Dairy desserts",
+          pnns_groups_2 %in% c("Biscuits and cakes", "Pastries") ~ "Pastries",
+          pnns_groups_2 %in% c("Pizza pies and quiches") ~ "Pizza",
+          pnns_groups_2 %in% c("Artificially sweetened beverages") ~ "Sweetened beverages",
+          pnns_groups_2 %in% c("Dried fruit", "Nuts") ~ "Nuts and dried fruit",
+          pnns_groups_2 %in% c("Sandwiches", "Soups") ~ "Sandwiches and soups",
+          pnns_groups_2 %in% c("One-dish meals", "Salty and fatty products") ~ "Salty and fatty products",
+          TRUE ~ as.character(pnns_groups_2)
+        )
       )
 
 For this next part, I did not really know how to approach it. I took
@@ -134,27 +91,25 @@ unique, therefore cannot be grouped and a matrix takes numeric variables
 only. It looks cool but did not help me much.
 
     # convert data to matrix 
+    #df1 <- df %>%
+    #  select(-c(X, countries_en, product_name, pnns_groups_1))
 
-    df1 <- df %>%
-      select(-c(X, countries_en, product_name, pnns_groups_1))
+    #df1$nutriscore <- as.numeric(as.factor(df1$nutriscore_grade))
+    #df1$ecoscore <- as.numeric(as.factor(df1$ecoscore_grade)) 
+    #df1$pnns_group <- as.numeric(df1$pnns_groups_2) 
 
-    df1$nutriscore <- as.numeric(as.factor(df1$nutriscore_grade))
-    df1$ecoscore <- as.numeric(as.factor(df1$ecoscore_grade)) 
-    df1$pnns_group <- as.numeric(df1$pnns_groups_2) 
+    #rn <- df1[,3]
+    #rn <- make.unique(as.character(rn))
+    #df1 <- df1[,-3]
 
-    rn <- df1[,3]
-    rn <- make.unique(as.character(rn))
-    df1 <- df1[,-3]
+    #df1 <- df1 %>%
+    #  select(-c(nutriscore_grade, ecoscore_grade))
+    #rownames(df1) <- rn
 
-    df1 <- df1 %>%
-      select(-c(nutriscore_grade, ecoscore_grade))
-    rownames(df1) <- rn
+    #matrix <- as.matrix(df1)
+    #heatmap(matrix, scale="column")
 
-    matrix <- as.matrix(df1)
-    heatmap(matrix, scale="column")
-
-![](sarahloeber_files/figure-markdown_strict/visualize-1.png) So I had
-ChatGPT do it in the end…
+So I had ChatGPT do it in the end…
 
     nutriscore_levels <- c("a" = 1, "b" = 2, "c" = 3, "d" = 4, "e" = 5)
     ecoscore_levels <- c("a" = 1, "b" = 2, "c" = 3, "d" = 4, "e" = 5)
@@ -182,17 +137,18 @@ ChatGPT do it in the end…
       slice_max(order_by = count, n = 1) %>%
       ungroup()
 
-And this is the plot that came out of it. I’m not super happy with it,
-but I’ll send this out for feedback so I have time to revise it later :)
+And this is the plot that came out of it. The labels are a bit tricky
+since they overlap and that does not look great in the plot. I changed
+the size of the circle around the circle so the colours are clearer.
 
     nutriscore_colors <- c("a" = "#009e73", "b" = "#d6db32", "c" = "#f7c239", "d" = "#e06666", "e" = "#e21a1a")
     ecoscore_colors <- c("a" = "#009e73", "b" = "#d6db32", "c" = "#f7c239", "d" = "#e06666", "e" = "#e21a1a")
 
     # Create the plot
-    ggplot(plot_data, aes(x = ecoscore_value, y = nutriscore_value, size = size)) +
-      geom_point(aes(color = nutriscore_grade, fill = ecoscore_grade), alpha = 0.6, shape = 21, 
-                 position = position_jitter(width = 0.9, height = 0.6)) +
-      scale_size_area(max_size = 20, guide = 'none') +  # Remove the count legend
+    ggplot(plot_data, aes(x = ecoscore_value, y = nutriscore_value, size = size, label = pnns_groups_2)) +
+      geom_point(aes(color = nutriscore_grade, fill = ecoscore_grade), alpha = 0.6, shape = 21, stroke = 2, 
+                 position = position_jitter(width = 0.3, height = 0.3)) +
+      scale_size_area(max_size = 14, guide = 'none') +
       scale_color_manual(values = nutriscore_colors) +
       scale_fill_manual(values = ecoscore_colors) +
       scale_x_continuous(breaks = 1:5, labels = names(ecoscore_levels)) +
@@ -203,6 +159,6 @@ but I’ll send this out for feedback so I have time to revise it later :)
         x = "Ecoscore",
         y = "Nutriscore"
       ) +
-      geom_text_repel(aes(label = pnns_groups_2), size = 2, max.overlaps = Inf, box.padding = 0.2, point.padding = 0.2, force = 1, segment.size = 0.2)
+      geom_text_repel(size = 2, box.padding = 0.3, point.padding = 0.2)
 
 ![](sarahloeber_files/figure-markdown_strict/plot%20nutriscore-1.png)

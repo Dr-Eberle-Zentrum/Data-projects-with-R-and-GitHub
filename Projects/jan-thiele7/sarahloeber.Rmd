@@ -22,20 +22,14 @@ library(ggrepel)
 ### Read in data
 ```{r data, warning=FALSE}
 # read in dataset
-food_data <- read.csv("/Users/sarahlober/Data Projects with R and GitHub/Projects/jan-thiele7/data_openfood.csv")
+food_data <- read.csv("./data_openfood.csv")
 head(food_data)
 ```
-
-I did not quite grasp the categories in the categorization variables as the head does not tell me much about them, so I'm taking a look at them first. I then decided to go with the second group category only, as this gives more information about the categories than groups 1. 
-
-```{r variables, warning=FALSE}
-table(food_data$pnns_groups_1)
-table(food_data$pnns_groups_2)
 ```
 
 ### Cleaning the data
 
-I'm getting the data ready for plotting first, then create the actual plot. I'm removing the unknown / not-applicable categories, drop the NAs (if there are any) and change the groups to factor. 
+I'm getting the data ready for plotting first, then create the actual plot. I'm removing the unknown / not-applicable categories, drop the NAs (if there are any) and change the groups to factor. I am also summarising groups together so I have less groups in the plot later (which makes it easier to read compared to my first version.)
 
 ```{r plot data, warning=FALSE}
 
@@ -46,16 +40,33 @@ df <- food_data %>%
     nutriscore_grade != "unknown" & 
     ecoscore_grade != "unknown" & 
     nutriscore_grade != "not-applicable" & 
-    ecoscore_grade != "not-applicable") %>%
-  mutate(pnns_groups_2 = factor(pnns_groups_2)
+    ecoscore_grade != "not-applicable"
+  ) %>%
+  mutate(
+    pnns_groups_2 = factor(pnns_groups_2),
+    pnns_groups_2 = case_when(
+      pnns_groups_2 %in% c("Offals", "Meat") ~ "Meat",
+      pnns_groups_2 %in% c("Fruit juices", "Fruit nectars") ~ "Fruit juices",
+      pnns_groups_2 %in% c("Cereals", "Breakfast cereals") ~ "Cereals",
+      pnns_groups_2 %in% c("Teas and herbal teas and coffees", "Unsweetened beverages") ~ "Unsweetened beverages",
+      pnns_groups_2 %in% c("Plant-based milk substitutes", "Milk and yogurt") ~ "Milk and yogurt",
+      pnns_groups_2 %in% c("Ice cream", "Dairy desserts") ~ "Dairy desserts",
+      pnns_groups_2 %in% c("Biscuits and cakes", "Pastries") ~ "Pastries",
+      pnns_groups_2 %in% c("Pizza pies and quiches") ~ "Pizza",
+      pnns_groups_2 %in% c("Artificially sweetened beverages") ~ "Sweetened beverages",
+      pnns_groups_2 %in% c("Dried fruit", "Nuts") ~ "Nuts and dried fruit",
+      pnns_groups_2 %in% c("Sandwiches", "Soups") ~ "Sandwiches and soups",
+      pnns_groups_2 %in% c("One-dish meals", "Salty and fatty products") ~ "Salty and fatty products",
+      TRUE ~ as.character(pnns_groups_2)
+    )
   )
+
 ```
 
 For this next part, I did not really know how to approach it. I took your idea from the description and started off with a heatmap, however, that did not really work out as I wanted. The rownames have to be unique, therefore cannot be grouped and a matrix takes numeric variables only. It looks cool but did not help me much. 
 
 ```{r visualize, warning=FALSE}
 # convert data to matrix 
-
 df1 <- df %>%
   select(-c(X, countries_en, product_name, pnns_groups_1))
 
@@ -100,16 +111,16 @@ plot_data <- plot_data %>%
   ungroup()
 ```
 
-And this is the plot that came out of it. I'm not super happy with it, but I'll send this out for feedback so I have time to revise it later :) 
+And this is the plot that came out of it. The labels are a bit tricky since they overlap and that does not look great in the plot. I changed the size of the circle around the circle so the colours are clearer.
 ```{r plot nutriscore, warning=FALSE}
 nutriscore_colors <- c("a" = "#009e73", "b" = "#d6db32", "c" = "#f7c239", "d" = "#e06666", "e" = "#e21a1a")
 ecoscore_colors <- c("a" = "#009e73", "b" = "#d6db32", "c" = "#f7c239", "d" = "#e06666", "e" = "#e21a1a")
 
 # Create the plot
-ggplot(plot_data, aes(x = ecoscore_value, y = nutriscore_value, size = size)) +
-  geom_point(aes(color = nutriscore_grade, fill = ecoscore_grade), alpha = 0.6, shape = 21, 
-             position = position_jitter(width = 0.9, height = 0.6)) +
-  scale_size_area(max_size = 20, guide = 'none') +
+ggplot(plot_data, aes(x = ecoscore_value, y = nutriscore_value, size = size, label = pnns_groups_2)) +
+  geom_point(aes(color = nutriscore_grade, fill = ecoscore_grade), alpha = 0.6, shape = 21, stroke = 2, 
+             position = position_jitter(width = 0.3, height = 0.3)) +
+  scale_size_area(max_size = 14, guide = 'none') +
   scale_color_manual(values = nutriscore_colors) +
   scale_fill_manual(values = ecoscore_colors) +
   scale_x_continuous(breaks = 1:5, labels = names(ecoscore_levels)) +
@@ -120,6 +131,6 @@ ggplot(plot_data, aes(x = ecoscore_value, y = nutriscore_value, size = size)) +
     x = "Ecoscore",
     y = "Nutriscore"
   ) +
-  geom_text_repel(aes(label = pnns_groups_2), size = 2, max.overlaps = Inf, box.padding = 0.2, point.padding = 0.2, force = 1, segment.size = 0.2)
+  geom_text_repel(size = 2, box.padding = 0.3, point.padding = 0.2)
 
 ```
