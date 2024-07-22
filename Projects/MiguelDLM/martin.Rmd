@@ -29,7 +29,7 @@ data <-
   URLencode() |>
   # read data
   # read_csv("https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/raw/main/Projects/MiguelDLM/smooth_stress_tensor.csv") |>
-  read_csv(id="animal", ) |>
+  read_csv(id="animal") |>
   # simplify stress column name
   rename( stress = `Von Misses Stress`) |>
   # extract animal from url
