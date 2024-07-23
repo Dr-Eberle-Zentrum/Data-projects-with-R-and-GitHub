@@ -7,7 +7,7 @@ the data from the `smooth_stress_tensor.csv` file:
     #defining the path of the file
     library(here)
 
-    ## here() starts at /home/miguel/Documents/R Course/Data-projects-with-R-and-GitHub
+    ## here() starts at C:/Lehre/Data-projects-with-R-and-GitHub
 
     library(readr)
 
@@ -114,13 +114,13 @@ The following code chunk calculates the average stress in each group:
     library(dplyr)
 
     ## 
-    ## Attaching package: 'dplyr'
+    ## Attache Paket: 'dplyr'
 
-    ## The following objects are masked from 'package:stats':
+    ## Die folgenden Objekte sind maskiert von 'package:stats':
     ## 
     ##     filter, lag
 
-    ## The following objects are masked from 'package:base':
+    ## Die folgenden Objekte sind maskiert von 'package:base':
     ## 
     ##     intersect, setdiff, setequal, union
 
@@ -239,9 +239,9 @@ stress in the X axis and compare to the strees in the Y and Z axes.
     library(gridExtra)
 
     ## 
-    ## Attaching package: 'gridExtra'
+    ## Attache Paket: 'gridExtra'
 
-    ## The following object is masked from 'package:dplyr':
+    ## Das folgende Objekt ist maskiert 'package:dplyr':
     ## 
     ##     combine
 
@@ -367,8 +367,6 @@ the same plot.
     library(gridExtra)
     library(here)
 
-    ## here() starts at /home/miguel/Documents/R Course/Data-projects-with-R-and-GitHub
-
     # Function to read an image and create a rasterGrob
     read_image_as_grob <- function(image_path) {
         img <- readPNG(here("Projects", "MiguelDLM", image_path))
@@ -394,8 +392,7 @@ the same plot.
     p_z <- create_plot(combined_data_Z, "Z", "Z", g_z)
 
     ## Warning: `aes_string()` was deprecated in ggplot2 3.0.0.
-    ## ℹ Please use tidy evaluation idioms with `aes()`.
-    ## ℹ See also `vignette("ggplot2-in-packages")` for more information.
+    ## ℹ Please use tidy evaluation ideoms with `aes()`
     ## This warning is displayed once every 8 hours.
     ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
     ## generated.
