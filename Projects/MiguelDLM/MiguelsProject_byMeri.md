@@ -53,16 +53,6 @@ assigning the intervals in which the entries fall based on that with
 `cut`) for all three dimensions in one command to avoide copy and
 pasting.
 
-    # First attempt: using too much C&P but testing if the function work like I want them to.
-    # smoothstress_animals <- smoothstress_animals %>% 
-    #   group_by(animal) %>% 
-    #   mutate(xrange = scales::rescale(X, to = c(0,1))) %>% 
-    #   mutate(yrange = scales::rescale(Y, to = c(0,1))) %>% 
-    #   mutate(zrange = scales::rescale(Z, to = c(0,1))) %>% 
-    #   mutate(xbreaks = cut(xrange, (0:10)/10)) %>% 
-    #   mutate(ybreaks = cut(xrange, (0:10)/10)) %>% 
-    #   mutate(zbreaks = cut(xrange, (0:10)/10))
-
     #Rescaling the coordinates and creating breaks
     smoothstress_animals <- smoothstress_animals %>% 
       group_by(animal) %>% 
@@ -84,22 +74,6 @@ Finally, in order to not plot a bunch of point per intervall, I am
 taking the Mean of all values in that interval.
 
     range_names <- c("X_range_breaks","Y_range_breaks","Z_range_breaks")
-
-    # First attempt: 
-    # for (i in range_names){
-    #   .data <- smoothstress_animals %>%
-    #     group_by(i, animal) %>%
-    #     summarise(Mean = mean(`Von Misses Stress`))
-    #   smoothstress_ranges <- cbind(smoothstress_ranges, .data)
-    # }
-    # Column i is not found. -> i is not read into group_by I guess
-
-    # Attempt using across(): did not return data in the format I wanted
-    # smoothstress_ranges <- smoothstress_animals %>% 
-    #   group_by(across(
-    #     .col = c(all_of(range_names), animal),
-    #   )) %>% 
-    #   summarise(MeanStress = mean(`Von Misses Stress`))
 
     for (i in range_names){
       .data <- smoothstress_animals %>%

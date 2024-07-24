@@ -59,15 +59,16 @@ as labels (using the `plyr::round_any` to round the percentages).
       distinct() %>% 
       filter(Criterium_AUH == "Yes") %>% 
       ggplot(aes(x = as.factor(Criterium_Origin), y = Percentage))+
-      geom_col(fill="#26466C")+
+      geom_col(fill="#D38CA6")+
       geom_text(aes(label = plyr::round_any(Percentage, 0.0001, round)), nudge_y = 0.025)+
       theme_classic()+
       xlab("")+
       ylab("Percentage of HoH receiving AUH")+
       ggtitle("Percentage of Argentinian HoHs receiving AUH")
 
-![](JoschkasProject_byMeri_files/figure-markdown_strict/a-1.png) Second
-(b):
+![](JoschkasProject_byMeri_files/figure-markdown_strict/a-1.png)
+
+Second (b):
 
 > the percentage of heads of households & their spouses who are
 > immigrants who are eligible for the AUH vs. the percentage of heads of
@@ -84,15 +85,16 @@ as labels (using the `plyr::round_any` to round the percentages).
       distinct() %>% 
       ungroup() %>% 
       ggplot(aes(x = as.factor(Criterium_AUH), y = Percentage))+
-      geom_col(fill="#26466C")+
+      geom_col(fill="#D38CA6")+
       geom_text(aes(label = plyr::round_any(Percentage, 0.0001, round)), nudge_y = 0.025)+
       theme_classic()+
       xlab("")+
       ylab("Percentage of HoHs")+
       ggtitle("Eligibility of Immigrants for AUH")
 
-![](JoschkasProject_byMeri_files/figure-markdown_strict/b-1.png) And
-lastly onto (c):
+![](JoschkasProject_byMeri_files/figure-markdown_strict/b-1.png)
+
+And lastly onto (c):
 
 > of all those who are eligible, what are the percentages based on age
 > group (create age ranges), country of origin (within South America),
