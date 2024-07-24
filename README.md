@@ -113,7 +113,7 @@ Current projects:
 - Jan (jan-thiele7) - [Jans project](Projects/jan-thiele7/project_description.md)
   - solutions by [Arlene](Projects/jan-thiele7/ArleneHohl.md)
 - Meri (merinehlsen) - [Meris project](Projects/merinehlsen/project-description.md)
-  - solutions by [Arlene](Projects/jan-merinehlsen/Solution_Arlene.md)
+  - solutions by [Arlene](Projects/merinehlsen/Solution_Arlene.md)
 - Miguel Díaz de León (MiguelDLM) - [MiguelDLM project](Projects/MiguelDLM/project-description.md)
 - Joschka (Joschka8878) - [Joschka's project](Projects/Joschka8878/project-description.md)
 - Mohamed (DrMohamedElsherif) - [Mohamed's project](Projects/DrMohamedElsherif/Final-project-description.md)
