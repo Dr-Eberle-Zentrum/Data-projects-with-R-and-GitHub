@@ -57,7 +57,7 @@
 
 ![](Joschka_Solution_files/figure-markdown_strict/unnamed-chunk-1-1.png)
 
-    ggplot(Full_Data, aes(x = final_score, y = npause, color = factor(test_component_id))) +
+    ggplot(Full_Data, aes(x = npause, y = final_score, color = factor(test_component_id))) +
       geom_point() +
         geom_smooth(method = "lm", se = FALSE, color = "black") +
       facet_wrap(~ test_component_id, nrow = 1) +
