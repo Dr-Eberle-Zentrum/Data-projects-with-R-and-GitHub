@@ -296,7 +296,7 @@ Now it is finally time to plot!
     final_data %>% 
     ggplot(aes(x = center_x, y = center_y)) +
       # fill = nutri, colour = eco, shape: circles
-      geom_point(aes(size = bubble_size, color = color_factor_x, fill = color_factor_y, stroke = 2), shape = 21) +
+      geom_point(aes(size = bubble_size, color = color_factor_x, fill = color_factor_y, stroke = 1.5), shape = 21) +
       # no legend, set size of bubbles
       scale_size_continuous(range = c(1, 10), guide = "none") +
       scale_fill_identity() +
@@ -329,9 +329,6 @@ Now it is finally time to plot!
         axis.text.y = element_text(size = 12),
         plot.title = element_text(size = 18, hjust = 0.5)
       )
-
-    ## Scale for fill is already present.
-    ## Adding another scale for fill, which will replace the existing scale.
 
 ![](ArleneHohl_files/figure-markdown_strict/unnamed-chunk-17-1.png)
 

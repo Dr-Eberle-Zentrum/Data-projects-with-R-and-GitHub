@@ -1,6 +1,6 @@
 ---
 title: "Solution fo Jan's project"
-output: html_document
+output: md_document
 date: "`r Sys.Date()`"
 ---
 
