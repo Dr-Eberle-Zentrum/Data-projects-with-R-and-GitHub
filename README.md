@@ -110,6 +110,7 @@ Example:
 Current projects:
 
 - Arlene (ArleneHohl) - [Arlenes project](Projects/ArleneHohl/project-description.md)
+  - solutions by [Mohamed](Projects/ArleneHohl/ArleneProjectByMohamed.md)
 - Jan (jan-thiele7) - [Jans project](Projects/jan-thiele7/project_description.md)
   - solutions by [Arlene](Projects/jan-thiele7/ArleneHohl.md)
 - Meri (merinehlsen) - [Meris project](Projects/merinehlsen/project-description.md)
