@@ -111,19 +111,24 @@ Current projects:
 
 - Arlene (ArleneHohl) - [Arlenes project](Projects/ArleneHohl/project-description.md)
   - solutions by 
-    [Mohamed](Projects/ArleneHohl/ArleneProjectByMohamed.md)
+    [Mohamed](Projects/ArleneHohl/ArleneProjectByMohamed.md),
+    [Martin](Projects/ArleneHohl/martin.md),
 - Jan (jan-thiele7) - [Jans project](Projects/jan-thiele7/project_description.md)
   - solutions by 
-    [Arlene](Projects/jan-thiele7/ArleneHohl.md)
+    [Arlene](Projects/jan-thiele7/ArleneHohl.md),
+    [Martin](Projects/jan-thiele7/martin.md)
 - Meri (merinehlsen) - [Meris project](Projects/merinehlsen/project-description.md)
   - solutions by 
-    [Arlene](Projects/merinehlsen/Solution_Arlene.md)
+    [Arlene](Projects/merinehlsen/Solution_Arlene.md),
+    [Martin](Projects/merinehlsen/martin.md)
 - Miguel Díaz de León (MiguelDLM) - [MiguelDLM project](Projects/MiguelDLM/project-description.md)
   - solutions by 
-    [Meri](Projects/MiguelDLM/MiguelsProject_byMeri.md)
+    [Meri](Projects/MiguelDLM/MiguelsProject_byMeri.md),
+    [Meri](Projects/MiguelDLM/martin.md)
 - Joschka (Joschka8878) - [Joschka's project](Projects/Joschka8878/project-description.md)
   - solutions by 
-    [Meri](Projects/Joschka8878/JoschkasProject_byMeri.md)
+    [Meri](Projects/Joschka8878/JoschkasProject_byMeri.md),
+    [Martin](Projects/Joschka8878/martin.md)
 - Mohamed (DrMohamedElsherif) - [Mohamed's project](Projects/DrMohamedElsherif/Final-project-description.md)
   - solutions by 
     [Joschka](Projects/DrMohamedElsherif/Joschka-s_Solution.md)
