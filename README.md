@@ -122,7 +122,7 @@ Current projects:
 - Mohamed (DrMohamedElsherif) - [Mohamed's project](Projects/DrMohamedElsherif/Final-project-description.md)
   - solutions by [Joschka](Projects/DrMohamedElsherif/Joschka-s_Solution.md)
 - Sarah (sarahloeber) - [Sarahs project](Projects/sarahloeber/project-description.md)
-  - solutions by [Joschka](Projects/sarahloeber/Joschka_Solution.md)
+  - solutions by [Joschka](Projects/sarahloeber/Joschka_Solution.md), [Mohamed](Projects/sarahloeber/MohamedSolution.md)
 
 
 #### Goals
