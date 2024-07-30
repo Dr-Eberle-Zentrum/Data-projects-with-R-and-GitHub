@@ -2,10 +2,10 @@
 
 #### **Loading the Data**
 
-    # Set working directory
-    setwd("C:/Users/Admin/Downloads/Data-projects-with-R-and-GitHub/Projects/ArleneHohl")
+    # Get the directory of the current script and set it
+    setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-    # Load PISA data
+    # Load PISA data with a relative path
     load("data_PISA.Rdata")
 
 #### **PISA Data Pre-processing**
@@ -50,10 +50,6 @@
     # Compute the summed score for the parents' education levels for each person
     data <- data %>%
        mutate(ED_PARENTS = rowSums(select(data, ST005Q01JA, ST007Q01JA), na.rm = TRUE))
-       
-    # Define the columns of interest
-    education_columns <- c("ST327Q01JA", "ST327Q02JA", "ST327Q03JA", "ST327Q04JA", 
-                           "ST327Q05JA", "ST327Q06JA", "ST327Q07JA", "ST327Q08JA")
 
 ##### <span style="color: blue;">Find the Expected Education Level for each Student</span>
 
@@ -133,13 +129,13 @@
     library(scales)
 
     ## 
-    ## Attaching package: 'scales'
+    ## Attache Paket: 'scales'
 
-    ## The following object is masked from 'package:purrr':
+    ## Das folgende Objekt ist maskiert 'package:purrr':
     ## 
     ##     discard
 
-    ## The following object is masked from 'package:readr':
+    ## Das folgende Objekt ist maskiert 'package:readr':
     ## 
     ##     col_factor
 
@@ -173,3 +169,56 @@
       scale_y_continuous(breaks = 1:8, labels = c("ISCED2", "ISCED3.3", "ISCED3.4", "ISCED4", "ISCED5", "ISCED6", "ISCED7", "ISCED8"))
 
 ![](ArleneProjectByMohamed_files/figure-markdown_strict/setup7-1.png)
+
+    ########### Some of Arlene's Recommendation ##############
+    library(cowplot)
+
+    ## 
+    ## Attache Paket: 'cowplot'
+
+    ## Das folgende Objekt ist maskiert 'package:lubridate':
+    ## 
+    ##     stamp
+
+    # Define country labels
+    country_labels <- c("DEU" = "Germany", "EST" = "Estonia", "JPN" = "Japan")
+
+    # Create the main plot
+    main_plot <- ggplot(sum_data, aes(x = factor(ED_PARENTS), y = mean_exp_ed, color = CNT)) +
+      scale_color_brewer(palette = "Accent") +
+      geom_point(aes(size = no_students), alpha = 0.8) + 
+      geom_hline(aes(yintercept = mean(global_avg_exp_ed, na.rm = TRUE)), linetype = "dashed", color = "grey") +
+      geom_errorbar(aes(ymin = mean_exp_ed - sd_exp_ed, ymax = mean_exp_ed + sd_exp_ed), width = 0.2) +
+      scale_size(range = c(1, 15), name = "Number of Students") +
+      labs(
+        title = "Expected Educational Achievement by Parents' Socioeconomic Status",
+        x = "Parents' Socioeconomic Status",
+        y = "Expected Educational Achievement",
+        color = "Country",
+        caption = "Data source: PISA"
+      ) +
+      theme_minimal() +
+      theme(
+        legend.position = "right",
+        strip.text = element_text(size = 10),
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        panel.spacing = unit(1, "lines") # Add space between panels
+      ) +
+      facet_grid(cols = vars(CNT), scales = "free_x", space = "free_x", labeller = labeller(CNT = country_labels)) +
+      scale_x_discrete(labels = function(labels) {
+        c("Bottom 20%", rep("", length(labels) - 2), "Top 20%")
+      }) +
+      scale_y_continuous(breaks = 1:8, labels = c("ISCED2", "ISCED3.3", "ISCED3.4", "ISCED4", "ISCED5", "ISCED6", "ISCED7", "ISCED8"))
+
+    # Create the legend comment
+    legend_comment <- ggdraw() + 
+      draw_text("----- Average across countries", 
+                x = 0.5, y = 0.5, hjust = 0.5, size = 10, color = "grey")
+
+    # Combine the main plot and the legend comment
+    combined_plot <- plot_grid(main_plot, legend_comment, ncol = 1, rel_heights = c(1, 0.05))
+
+    # Print the combined plot
+    print(combined_plot)
+
+![](ArleneProjectByMohamed_files/figure-markdown_strict/setup7-2.png)
