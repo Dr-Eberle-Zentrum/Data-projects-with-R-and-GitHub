@@ -1,0 +1,143 @@
+---
+title: "Solution for Arlene's project"
+author: "Sarah Löber"
+date: "2024-06-13"
+output: md_document
+---
+
+### Solution for Arlene's project
+
+Below is my solution for Arlene's project. It is not quite finished yet, at least the plot looks unfinished. I had trouble bringing it in the same form as the example plot and eventually just gave up. So if there's an easier solution, I'd love to hear it :)
+
+```{r load data, message = FALSE, warning = FALSE} 
+# libraries
+library(tidyverse)
+
+# load the data
+load("~/Data Projects with R and GitHub/Projects/ArleneHohl/data_PISA.Rdata")
+head(data)
+
+# select only columns needed
+clean_data <- data %>%
+  select(CNT, CNTSTUID, ST005Q01JA, ST007Q01JA, starts_with("ST327")) 
+head(clean_data)
+```
+
+## Data manipulation: Build parents' highest level of education for each person
+
+```{r data cleaning, message = FALSE, warning = FALSE} 
+# remove NAs 
+clean_data <- clean_data %>%
+  drop_na(ST005Q01JA, ST007Q01JA)
+
+# reverse the scores by getting the max value of the column (+1) and subtracting the actual value
+
+clean_data <- clean_data %>%
+ mutate(
+   ST005Q01JA = max(ST005Q01JA) +1 -ST005Q01JA,
+   ST007Q01JA = max(ST007Q01JA) +1 -ST007Q01JA
+ )
+
+head(clean_data)
+```
+```{r socioeconomic status, message = FALSE, warning = FALSE}
+# store the sum of the two columns in a new column called ED_PARENTS
+clean_data <- clean_data %>%
+  mutate(ED_PARENTS = ST005Q01JA + ST007Q01JA) %>%
+  drop_na(ED_PARENTS)
+
+head(clean_data)
+```
+
+## Data manipulation: Expected education qualification
+
+```{r qualification, message = FALSE, warning = FALSE}
+# find the expected education qualification of the student with a for-loop
+education_columns <- c("ST327Q01JA", "ST327Q02JA", "ST327Q03JA", "ST327Q04JA", "ST327Q05JA", "ST327Q06JA", "ST327Q07JA", "ST327Q08JA")
+
+exp_level <- function(row) {
+  education_levels <- c("ISCED_2", "ISCED_3_3", "ISCED_3_4", "ISCED_4", "ISCED_5", "ISCED_6", "ISCED_7", "ISCED_8")
+  for (i in length(row):1) {
+    if (!is.na(row[i]) && row[i] == 1) {
+      return(education_levels[i])
+    }
+  }
+  return(NA) 
+}
+    
+clean_data$EXP_ED <- apply(clean_data[, education_columns], 1, exp_level)
+
+# drop the NA values and only keep relevant columns
+clean_data <- clean_data[!is.na(clean_data$EXP_ED), ]
+clean_data %>%
+  select(CNT, CNTSTUID, EXP_ED, ED_PARENTS) 
+
+head(clean_data)
+
+# also map numerical values to the expected education
+
+isced_mapping <- c(
+  "ISCED_2" = 1,
+  "ISCED_3_3" = 2,
+  "ISCED_3_4" = 3,
+  "ISCED_4" = 4,
+  "ISCED_5" = 5,
+  "ISCED_6" = 6,
+  "ISCED_7" = 7,
+  "ISCED_8" = 8
+)
+
+clean_data <- clean_data %>%
+  mutate(EXP_ED_NUM = isced_mapping[EXP_ED],
+         ED_PARENTS = as.numeric(ED_PARENTS))
+
+clean_data <- clean_data %>%
+  filter(!is.na(EXP_ED_NUM), !is.na(ED_PARENTS))
+```
+
+# Plot the data
+
+This plot is far away from perfect and it took me a while to even get it into that shape (and obviously a lot of ChatGPT). What is missing are the error bars as well as the "median
+line" that is shown in the original plot. Furthermore, I have commented out the scale_y_discrete part, it just removes the labels when I leave it in. 
+Also interesting is the fact that the bubbles for low socioeconomic status (or parent education level) for Germany and Estonia are so high on the 2 and 4-level. Probably a mistake from my side... 
+
+```{r df for plot, message = FALSE, warning = FALSE}
+
+#get data ready for plotting, add mean of numeric column. Also get number of students for the bubble plot later
+sum_data <- clean_data %>%
+  group_by(ED_PARENTS, CNT) %>%
+  summarise(
+    global_avg_exp_ed = mean(EXP_ED_NUM, na.rm = TRUE),
+    mean_exp_ed = mean(EXP_ED_NUM, na.rm = TRUE),
+    sd_exp_ed = sd(EXP_ED_NUM, na.rm = TRUE),
+    no_students = n()
+  ) %>%
+  ungroup()
+```
+
+```{r plot, message=FALSE, warning=FALSE}
+# Plot the data
+country_labels <- c("DEU" = "Germany", "EST" = "Estonia", "JPN" = "Japan")
+
+ggplot(sum_data, aes(x = factor(ED_PARENTS), y = mean_exp_ed, color = CNT)) +
+  scale_color_brewer(palette = "Accent") +
+  geom_point(aes(size = no_students), alpha = 0.8) + 
+  geom_hline(aes(yintercept=first(global_avg_exp_ed)), linetype = "dashed", color = "grey") +
+  geom_errorbar(aes(ymin = mean_exp_ed - sd_exp_ed, ymax = mean_exp_ed + sd_exp_ed), width = 0.2) +
+  scale_size(range = c(1, 15)) +
+  labs(
+    title = "Expected Educational Achievement by Parents' Socioeconomic Status",
+    x = "Parents' Socioeconomic Status",
+    y = "Expected Educational Achievement"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none",
+        strip.text = element_text(size = 10),
+        axis.text.x = element_text(angle = 45, hjust = 1)) +
+  facet_grid(cols=vars(CNT), scales = "free_x", space = "free_x", labeller = labeller(CNT = country_labels)) +
+  scale_x_discrete(labels = function(labels) {
+    c("Bottom 20%", rep("", length(labels) - 2), "Top 20%")
+  }) +
+  scale_y_continuous(breaks = c(1, 2, 3, 4, 5, 6, 7, 8), labels = c("ISCED2", "ISCED3.3", "ISCED3.4", "ISCED4", "ISCED5", "ISCED6", "ISCED7", "ISCED8"))
+
+```
