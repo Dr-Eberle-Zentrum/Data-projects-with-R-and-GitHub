@@ -112,10 +112,12 @@ Current projects:
 - Arlene (ArleneHohl) - [Arlenes project](Projects/ArleneHohl/project-description.md)
   - solutions by 
     [Mohamed](Projects/ArleneHohl/ArleneProjectByMohamed.md),
+    [Sarah](Projects/ArleneHohl/sarahloeber.md),
     [Martin](Projects/ArleneHohl/martin.md),
 - Jan (jan-thiele7) - [Jans project](Projects/jan-thiele7/project_description.md)
   - solutions by 
     [Arlene](Projects/jan-thiele7/ArleneHohl.md),
+    [Sarah](Projects/jan-thiele7/sarahloeber.md),
     [Martin](Projects/jan-thiele7/martin.md)
 - Meri (merinehlsen) - [Meris project](Projects/merinehlsen/project-description.md)
   - solutions by 
