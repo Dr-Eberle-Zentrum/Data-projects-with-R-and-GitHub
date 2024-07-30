@@ -124,7 +124,7 @@ Current projects:
 - Miguel Díaz de León (MiguelDLM) - [MiguelDLM project](Projects/MiguelDLM/project-description.md)
   - solutions by 
     [Meri](Projects/MiguelDLM/MiguelsProject_byMeri.md),
-    [Meri](Projects/MiguelDLM/martin.md)
+    [Martin](Projects/MiguelDLM/martin.md)
 - Joschka (Joschka8878) - [Joschka's project](Projects/Joschka8878/project-description.md)
   - solutions by 
     [Meri](Projects/Joschka8878/JoschkasProject_byMeri.md),
