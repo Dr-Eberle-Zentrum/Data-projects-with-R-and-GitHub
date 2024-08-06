@@ -13,6 +13,23 @@
     ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
 
     library(dplyr)
+    library(gridExtra)
+
+    ## 
+    ## Attache Paket: 'gridExtra'
+    ## 
+    ## Das folgende Objekt ist maskiert 'package:dplyr':
+    ## 
+    ##     combine
+
+    library(cowplot)
+
+    ## 
+    ## Attache Paket: 'cowplot'
+    ## 
+    ## Das folgende Objekt ist maskiert 'package:lubridate':
+    ## 
+    ##     stamp
 
     #loading datasets
     bear<- read.csv("smooth_stress_tensor (bear).csv")
@@ -162,12 +179,13 @@ axis for each animal
                      names_to = "animal",
                      values_to = "value")
 
-    x_axis_longer%>%
+    plot_x<- x_axis_longer%>%
       ggplot(aes(x = segment, y = value, color = animal)) +
         geom_point() +
         geom_line() +
-        labs(y = "Stress", title = "Stress by Segment for Different Animals") +
+        labs(y = "Stress") +
         theme_minimal()
+    plot_x
 
 ![](janthiele7_files/figure-markdown_strict/unnamed-chunk-12-1.png)
 
@@ -176,25 +194,58 @@ axis for each animal
                      names_to = "animal",
                      values_to = "value")
 
-    y_axis_longer%>%
+    plot_y<- y_axis_longer%>%
       ggplot(aes(x = segment, y = value, color = animal)) +
         geom_point() +
         geom_line() +
-        labs(y = "Stress", title = "Stress by Segment for Different Animals") +
-        theme_minimal()
-
-![](janthiele7_files/figure-markdown_strict/unnamed-chunk-13-1.png)
+        labs(y = "Stress") +
+        theme_minimal()+
+      theme(legend.position = "none",
+            axis.title.y = element_blank(),  
+            axis.text.y = element_blank())
 
     z_axis_longer<- z_axis %>%
         pivot_longer(cols = c("bear","hyena","lion","wolf"),
                      names_to = "animal",
                      values_to = "value")
 
-    z_axis_longer%>%
+    plot_z<- z_axis_longer%>%
       ggplot(aes(x = segment, y = value, color = animal)) +
         geom_point() +
         geom_line() +
-        labs(y = "Stress", title = "Stress by Segment for Different Animals") +
-        theme_minimal()
+        labs(y = "Stress") +
+        theme_minimal()+
+      theme(axis.title.y = element_blank(),  
+            axis.text.y = element_blank(),
+            legend.position = "none")
 
-![](janthiele7_files/figure-markdown_strict/unnamed-chunk-14-1.png)
+    legend <- cowplot::get_legend(plot_x)
+
+    ## Warning in get_plot_component(plot, "guide-box"): Multiple components found;
+    ## returning the first one. To return all, use `return_all = TRUE`.
+
+    plot_x <- plot_x + theme(legend.position = "none")
+    # Combine plots into a single grid with a shared legend and a main title
+    combined_plot <- grid.arrange(
+      arrangeGrob(
+        plot_x,
+        plot_y,
+        plot_z,
+        legend,
+        ncol = 4
+      ),
+      top = "Von Misses Stress on X Y and Z of different animals jaws" # Adjust the heights: 90% for plots, 10% for legend
+    )
+
+![](janthiele7_files/figure-markdown_strict/unnamed-chunk-15-1.png)
+
+    # Display the combined plot
+    print(combined_plot)
+
+    ## TableGrob (2 x 1) "arrange": 2 grobs
+    ##   z     cells    name                grob
+    ## 1 1 (2-2,1-1) arrange     gtable[arrange]
+    ## 2 2 (1-1,1-1) arrange text[GRID.text.212]
+
+    # plot_xyz=grid.arrange(
+    # plot_x + theme(legend.position="none"), plot_y+ theme(legend.position="none"), plot_z, nrow=2, legend="bottom")
