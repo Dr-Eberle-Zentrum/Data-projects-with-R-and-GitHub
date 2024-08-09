@@ -122,10 +122,12 @@ Current projects:
 - Meri (merinehlsen) - [Meris project](Projects/merinehlsen/project-description.md)
   - solutions by 
     [Arlene](Projects/merinehlsen/Solution_Arlene.md),
+    [Jan](Projects/merinehlsen/jan-thiele7.md),
     [Martin](Projects/merinehlsen/martin.md)
 - Miguel Díaz de León (MiguelDLM) - [MiguelDLM project](Projects/MiguelDLM/project-description.md)
   - solutions by 
     [Meri](Projects/MiguelDLM/MiguelsProject_byMeri.md),
+    [Jan](Projects/MiguelDLM/janthiele7.md),
     [Martin](Projects/MiguelDLM/martin.md)
 - Joschka (Joschka8878) - [Joschka's project](Projects/Joschka8878/project-description.md)
   - solutions by 
