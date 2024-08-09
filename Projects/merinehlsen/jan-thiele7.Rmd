@@ -1,0 +1,164 @@
+---
+title: "jan-thiele7"
+output: md_document
+---
+
+
+```{r load-libraries, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(dplyr)
+library(readr)
+survival<- readr::read_csv2("flydata_survival.csv", col_names = F)
+dev_time<- readr::read_csv2("flydata_developmental_time.csv",col_names = F)
+meta_pools<- readr::read_csv2("flydata_metabolic_pools.csv",col_names = F)
+```
+
+```{r}
+head(survival)
+```
+
+
+```{r}
+#This chunk changes the structure of the dataset so that each column represents a different case, including all the mean and sd values for male and female.
+survival_wide<- survival[c(1:6),]
+#survival_wide[c(7:9),]<-NA
+
+
+test1=survival_wide[, seq(1, ncol(survival_wide), by = 2)]%>%
+  drop_na()%>%
+  select(-X1)
+
+test2=survival_wide[, seq(2, ncol(survival_wide), by = 2)]%>%
+  drop_na()%>%
+  setNames(names(test1))
+
+test3= rbind(test2,test1, make.row.names=F)
+survival_wide= cbind( variablen=c(survival_wide$X1,"Female SD", "Male SD", "Total SD"), test3)
+
+
+
+# renaming of each column to case1-30 to have a unique identifier
+survival_wide <- survival_wide %>%
+  rename_with(.cols = -`variablen`, .fn = ~paste0("Case", seq_along(.)))
+
+
+head(survival_wide)
+```
+
+
+```{r}
+survival_wide <- survival_wide %>%
+  pivot_longer(cols = -`variablen`, names_to = "Case", values_to = "Value") %>%
+  pivot_wider(names_from = `variablen`, values_from = Value)
+
+survival_wide <- survival_wide %>%
+  mutate(across(-c(Case,Line,Diet,n), ~ as.numeric(gsub(",", ".", .))))
+
+head(survival_wide)
+
+```
+
+```{r}
+survival_final<- survival_wide %>%
+  rename(
+    Female_mean = Females,
+    Male_mean = Males,
+    Total_mean = Total,
+    Female_sd = `Female SD`,
+    Male_sd = `Male SD`,
+    Total_sd = `Total SD`
+  )%>%
+  pivot_longer(
+    cols = starts_with("Female_") | starts_with("Male_") | starts_with("Total_"),
+    names_to = c("sex", ".value"),
+    names_pattern = "(Female|Male|Total)_(mean|sd)"
+  )
+
+head(survival_final)
+
+```
+
+```{r}
+ggplot(survival_final, aes(x=Diet, y=mean, fill=Diet)) + 
+  geom_violin()+
+  ylab("survival time")+
+  xlab("")+
+  ggtitle("Mean of survival time")+
+  labs(caption = "EPS = equal protein:sugar ratio; HPS = high protein:sugar ratio; \nLPS = low protein:sugar ratio")+
+  theme_minimal()+
+  theme(plot.caption = element_text(hjust = 0, size = 10),
+        plot.margin = unit(c(0, 0, 1, 1), "cm")) 
+```
+
+```{r}
+ggplot(survival_final, aes(x=Diet, y=sd, fill=Diet)) + 
+  geom_violin()+
+  ylab("survival time")+
+  xlab("")+
+  ggtitle("Standard deviation of survival time")+
+  labs(caption = "EPS = equal protein:sugar ratio; HPS = high protein:sugar ratio; \nLPS = low protein:sugar ratio")+
+  theme_minimal()+
+  theme(plot.caption = element_text(hjust = 0, size = 10),
+        plot.margin = unit(c(0, 0, 1, 1), "cm")) 
+```
+
+##### Developement Time #####
+```{r}
+#This chunk changes the structure of the dataset so that each column represents a different case, including all the mean and sd values for male and female.
+dev_time_wide<- dev_time[c(1:6),]
+#dev_time_wide[c(7:9),]<-NA
+
+
+test1=dev_time_wide[, seq(1, ncol(dev_time_wide), by = 2)]%>%
+  drop_na()%>%
+  select(-X1)
+
+test2=dev_time_wide[, seq(2, ncol(dev_time_wide), by = 2)]%>%
+  drop_na()%>%
+  setNames(names(test1))
+
+test3= rbind(test2,test1, make.row.names=F)
+dev_time_wide= cbind( variablen=c(dev_time_wide$X1,"L-P_SD", "P-E_SD", "L-E_SD"), test3)
+
+
+
+# renaming of each column to case1-30 to have a unique identifier
+dev_time_wide <- dev_time_wide %>%
+  rename_with(.cols = -`variablen`, .fn = ~paste0("Case", seq_along(.)))
+```
+
+```{r}
+dev_time_wide <- dev_time_wide %>%
+  pivot_longer(cols = -`variablen`, names_to = "Case", values_to = "Value") %>%
+  pivot_wider(names_from = `variablen`, values_from = Value)
+
+survival_wide <- survival_wide %>%
+  mutate(across(-c(Case,Line,Diet,n), ~ as.numeric(gsub(",", ".", .))))
+```
+
+```{r}
+dev_time_final<- dev_time_wide %>%
+  rename(
+    L_P_mean ='L-P',
+    P_E_mean ='P-E',
+    L_E_mean ='L-E',
+    L_P_sd = `L-P_SD`,
+    P_E_sd = `P-E_SD`,
+    L_E_sd = `L-E_SD`
+  )%>%
+  pivot_longer(
+    cols = starts_with("L_P_") | starts_with("P_E_") | starts_with("L_E_"),
+    names_to = c("stage", ".value"),
+    names_pattern = "(L_P|P_E|L_E)_(mean|sd)"
+  )
+```
+
+```{r}
+# ggplot(dev_time_final, aes(x=diet, y=mean)) + 
+#   geom_violin()+
+#   ylab("Developmental Time")+
+#   xlab("")+
+#   ggtitle("Mean of developmental time")+
+#   labs(caption = "EPS = equal protein:sugar ratio; HPS = high protein:sugar ratio; \nLPS = low protein:sugar ratio")
+```
+
