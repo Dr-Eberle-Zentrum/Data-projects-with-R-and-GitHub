@@ -9,15 +9,23 @@ output: md_document
 First let's load the data.
 
 ```{r load-data}
-#set the working directory to the folder where this file is located
-setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+library(here)
 library(tidyverse)
 
-# Load the data from the RData file that is in the same folder as this Rmd file
-load(paste0(getwd(), "/EPH_DATA.RData"))
+# Navigate to a subdirectory within your project
+setwd(here::here("Projects/Joschka8878"))
+# Load the data from the RData file located in the same folder as this Rmd file
+load("Data.RData")
 
-#count the number of rows
-nrow(EPH_DATA)
+Data$Country_Group <- ifelse(Data$Country_Of_Birth == "Argentina", "Argentina", "Other")
+
+# Remove duplicates and keep the unique rows for each individual
+Data_original <- Data %>%
+    distinct(Individual, .keep_all = TRUE) %>%
+    select(Household, everything()) %>%
+    filter(Family_Relationship == "Head of Household") 
+
+
 ```
 
 ## Explorig the data
@@ -26,82 +34,143 @@ Let's explore the data a bit.
 
 ```{r explore-data}
 # Summary of the data
-summary(EPH_DATA)
+summary(Data)
 
 # Variable names
-names(EPH_DATA)
+names(Data)
 #number of rows
-nrow(EPH_DATA)
-```
-
-The original dataset cointains 235,332 records and 198 variables, not all of them are relevant for the analysis. Let's filter the data to include only the relevant variables.
-According to the document "Diseño de Registro y Estructura para las bases  preliminares Hogar y Personas" (design of the register and structure for the preliminary household and person databases), the variable "NRO_HOGAR" is the household identifier, the Variable CH03 define the role of the person in the household and the variable CH06 is the age of the person. We first need to filter the data to include only the people that are the head of the household and kids under 18 years old.
-
-```{r filter-data}
-#Count the number of kids under 18 years old
-sum(EPH_DATA$CH06 < 18)
-# Filter the data to include only the head of the household and kids under 18 years old
-EPH_DATA <- EPH_DATA[EPH_DATA$CH03 == 1 | EPH_DATA$CH06 < 18, ]
-#number of rows
-nrow(EPH_DATA)
-```
-We have now 139,451, however, not all households have kids under 18 years old. Lets now filter the data again to include only houses with kids under 18 years old.
-
-```{r filter-data2}
-# Filter the data to include only houses with kids under 18 years old
-EPH_DATA <- EPH_DATA[EPH_DATA$NRO_HOGAR %in% EPH_DATA[EPH_DATA$CH06 < 18, ]$NRO_HOGAR, ]
-#number of rows
-nrow(EPH_DATA)
-```
-
-We have now 139,451 records.
-Now lets separate the people that was born in Argentina from the people that was born in other countries to compare the chances to apply for the program.
-According to the same document, the variable "CH15" is the country of birth of the person.
-
-The options 1, 2 and 3 correspond to Argentina, so we will filter the data to include only the people that was born in Argentina. The options 4,5 and 9 are for foreign countries. Let's add a new column to indicate the origin of the person.
-
-```{r add-origin-variable}
-# Add a new column to indicate the origin of the person
-EPH_DATA$Origen <- ifelse(EPH_DATA$CH15 %in% c(1,2,3), 'Argentina', 'Extranjero')
-#count the number of people by origin
-table(EPH_DATA$Origen)
+nrow(Data)
 
 ```
 
+## Data Cleaning
 
-```{r count-households-combined}
-# Count the number of unique households by origin
-conteos_unicos <- EPH_DATA %>%
-    group_by(Origen) %>%
-    summarise(Count = n_distinct(CODUSU))
+We will create a new data frame with the columns we need for the analysis. 
 
-# Create a bar plot
-ggplot(data = conteos_unicos, aes(x = Origen, y = Count, fill = Origen)) +
-    geom_col() +
-    labs(title = "Number of unique households by origin",
-             x = "Origin",
-             y = "Number of unique households") +
-    scale_fill_manual(values = c("Argentina" = "blue", "Extranjero" = "red")) +
-    theme_minimal()
+```{r data-cleaning}
+Data <- Data %>%
+    distinct(Individual, .keep_all = TRUE) %>%
+    select(Household, everything()) %>%
+    filter(Family_Relationship == "Head of Household") %>%
+    left_join(Data %>%
+                            filter(Family_Relationship %in% c("Child/stepchild", "Grandchild")) %>%
+                            group_by(Household) %>%
+                            summarise(Number_of_Children = n()),
+                        by = "Household") %>%
+    filter(!is.na(Number_of_Children)) %>%
+    filter(Unemployed == 1)
+
 ```
-This plot shows the number of households were at least one person under 18 lives by origin of the people. If we want to compare the chances of applying for the program between households with people born in Argentina and households with people born in other countries, we need to consider additional filters to make the comparison more accurate. For example, we could filter the data to include only households with kids under 18 years old and with a monthly income below a certain threshold.
+We removed duplicates and selected only the head of the household. We then joined the data with the number of children in the household. Then, we removed the households without children. Finally, we filtered the households where the head of the household is unemployed.
 
-The avobe code can be simplified by using the `dplyr` package for applying the filters and summarizing the data. The following code shows how to do this.
+## Data Analysis
 
-```{r count-households-dplyr}
+We may compare the number of individual in the Data frame and the Data_original frame. This will let us know how many of the total individuals (Data_original) are elegible for the AUH program (Data).
+
+```{r data-analysis1}
+
 library(dplyr)
 library(ggplot2)
 
-EPH_DATA %>%
-    filter(CH03 == 1 | CH06 < 18) %>%
-    filter(NRO_HOGAR %in% .$NRO_HOGAR[CH06 < 18]) %>%
-    mutate(Origen = ifelse(CH15 %in% c(1, 2, 3), 'Argentina', 'Extranjero')) %>%
-    count(Origen) %>%
-    ggplot(aes(x = Origen, y = n, fill = Origen)) +
-        geom_col() +
-        labs(title = "Number of unique households by origin",
-                 x = "Origin",
-                 y = "Number of unique households") +
-        scale_fill_manual(values = c("Argentina" = "blue", "Extranjero" = "red")) +
-        theme_minimal()
+total_individuals <- nrow(Data_original)
+
+eligible_individuals <- nrow(Data)
+
+non_eligible_individuals <- total_individuals - eligible_individuals
+
+summary_df <- data.frame(
+    Category = c("Non-Eligible for AUH", "Eligible for AUH"),
+    Count = c(non_eligible_individuals, eligible_individuals),
+    Percentage = c(non_eligible_individuals / total_individuals, eligible_individuals / total_individuals)
+)
+
+ggplot(summary_df, aes(x = Category, y = Count, fill = Category)) +
+  geom_bar(stat = "identity", alpha = 0.5) +
+  geom_text(aes(label = scales::percent(Percentage)), vjust = -0.5) +
+  theme_minimal() +
+  labs(title = "Number of individuals eligible for AUH",
+      x = "Eligibility",
+      y = "Number of individuals") +
+  scale_fill_manual(values = c("Non-Eligible for AUH" = "blue", "Eligible for AUH" = "red")) +
+  scale_x_discrete(labels = c("Non-Eligible for AUH", "Eligible for AUH"))+ 
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"))
+```
+
+From the total number of households (Data_original), we can see that only 2% of the individuals are eligible for the AUH program because they are unemployed and have children.
+
+## Analyze the elegible households by criteria
+
+First, we will count the number of households by country of birth.
+
+```{r data-analysis}
+conteos <- Data %>%
+    count(Country_Of_Birth) %>%
+    arrange((n))
+
+Data$Country_Of_Birth <- factor(Data$Country_Of_Birth, levels = conteos$Country_Of_Birth)
+
+ggplot(Data, aes(x = Country_Of_Birth, fill = Country_Group)) +
+    geom_bar() +
+    coord_flip() + 
+    theme_minimal() +
+    labs(title = "Number of households by country of birth",
+        x = "Country of Birth",
+        y = "Number of households") +
+    scale_fill_manual(values = c("Argentina" = "blue", "Other" = "red"))+ 
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+```
+
+Instead of plotting the number of households by country of birth, we may compare if the household is from Argentina or not.
+
+```{r data-analysis2}
+
+ggplot(Data, aes(x = Country_Group, fill = Country_Group)) +
+    geom_bar() +
+    theme_minimal() +
+    labs(title = "Number of households by country of birth",
+        x = "Country of Birth",
+        y = "Number of households") +
+    scale_fill_manual(values = c("Argentina" = "blue", "Other" = "red"))+
+    #add the percentage of households in each category
+    geom_text(aes(label = scales::percent((..count..)/sum(..count..))), stat = "count", vjust = -0.5) + 
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+```
+
+We may compare the number of households by age and nationality.
+
+```{r data-analysis3}
+
+Data$Age_Group <- cut(Data$Age, breaks = c(0, 18, 30, 40, 50, 60, 70, 80, 90, 100), labels = c("0-18", "19-30", "31-40", "41-50", "51-60", "61-70", "71-80", "81-90", "91-100"))
+
+ggplot(Data, aes(x = Age_Group, fill = Country_Group)) +
+    geom_bar() +
+    theme_minimal() +
+    labs(title = "Number of households by age group",
+        x = "Age Group",
+        y = "Number of households") +
+    scale_fill_manual(values = c("Argentina" = "blue", "Other" = "red"))+ 
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"))
+    
+```
+
+We may compare the number of households by age and sex.
+
+```{r data-analysis4}
+
+ggplot(Data, aes(x = Age_Group, fill= Sex)) +
+    geom_bar() +
+    theme_minimal() +
+    labs(title = "Number of households  by age group",
+        x = "Age Group",
+        y = "Number of households") +
+    scale_fill_manual(values= c("Male" = "blue", "Female" = "red")) + 
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
 ```
