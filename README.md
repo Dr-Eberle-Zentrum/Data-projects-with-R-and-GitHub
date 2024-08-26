@@ -132,10 +132,12 @@ Current projects:
 - Joschka (Joschka8878) - [Joschka's project](Projects/Joschka8878/project-description.md)
   - solutions by 
     [Meri](Projects/Joschka8878/JoschkasProject_byMeri.md),
+    [Miguel](Projects/Joschka8878/MiguelDLM.md),
     [Martin](Projects/Joschka8878/martin.md)
 - Mohamed (DrMohamedElsherif) - [Mohamed's project](Projects/DrMohamedElsherif/Final-project-description.md)
   - solutions by 
-    [Joschka](Projects/DrMohamedElsherif/Joschka-s_Solution.md)
+    [Joschka](Projects/DrMohamedElsherif/Joschka-s_Solution.md),
+    [Miguel](Projects/DrMohamedElsherif/Miguel.md)
 - Sarah (sarahloeber) - [Sarahs project](Projects/sarahloeber/project-description.md)
   - solutions by 
     [Joschka](Projects/sarahloeber/Joschka_Solution.md), 
