@@ -109,40 +109,10 @@ Example:
 
 Current projects:
 
-- Arlene (ArleneHohl) - [Arlenes project](Projects/ArleneHohl/project-description.md)
-  - solutions by 
-    [Mohamed](Projects/ArleneHohl/ArleneProjectByMohamed.md),
-    [Sarah](Projects/ArleneHohl/sarahloeber.md),
-    [Martin](Projects/ArleneHohl/martin.md),
-- Jan (jan-thiele7) - [Jans project](Projects/jan-thiele7/project_description.md)
-  - solutions by 
-    [Arlene](Projects/jan-thiele7/ArleneHohl.md),
-    [Sarah](Projects/jan-thiele7/sarahloeber.md),
-    [Martin](Projects/jan-thiele7/martin.md)
-- Meri (merinehlsen) - [Meris project](Projects/merinehlsen/project-description.md)
-  - solutions by 
-    [Arlene](Projects/merinehlsen/Solution_Arlene.md),
-    [Jan](Projects/merinehlsen/jan-thiele7.md),
-    [Martin](Projects/merinehlsen/martin.md)
-- Miguel Díaz de León (MiguelDLM) - [MiguelDLM project](Projects/MiguelDLM/project-description.md)
-  - solutions by 
-    [Meri](Projects/MiguelDLM/MiguelsProject_byMeri.md),
-    [Jan](Projects/MiguelDLM/janthiele7.md),
-    [Martin](Projects/MiguelDLM/martin.md)
-- Joschka (Joschka8878) - [Joschka's project](Projects/Joschka8878/project-description.md)
-  - solutions by 
-    [Meri](Projects/Joschka8878/JoschkasProject_byMeri.md),
-    [Miguel](Projects/Joschka8878/MiguelDLM.md),
-    [Martin](Projects/Joschka8878/martin.md)
-- Mohamed (DrMohamedElsherif) - [Mohamed's project](Projects/DrMohamedElsherif/Final-project-description.md)
-  - solutions by 
-    [Joschka](Projects/DrMohamedElsherif/Joschka-s_Solution.md),
-    [Miguel](Projects/DrMohamedElsherif/Miguel.md)
-- Sarah (sarahloeber) - [Sarahs project](Projects/sarahloeber/project-description.md)
-  - solutions by 
-    [Joschka](Projects/sarahloeber/Joschka_Solution.md), 
-    [Mohamed](Projects/sarahloeber/MohamedSolution.md)
-
+- NAME (GITHUBNAME) - [...](Projects/...)
+- NAME (GITHUBNAME) - [...](Projects/...)
+- NAME (GITHUBNAME) - [...](Projects/...)
+- NAME (GITHUBNAME) - [...](Projects/...)
 
 #### Goals
 
