@@ -30,7 +30,7 @@ Note: To download the dataset you will have to create a free account on
 Kaggle. Don’t worry you won’t receive any spam mail or advertisement. If
 you still decide that you do not want to create an account I will link
 the .csv file in my directory where this markdown file is also stored.
-The directory can be found at </Projects/kickbones1>.
+The directory can be found [here](kaggle_dataset.csv).
 
 # Manipulation Goals
 
@@ -41,7 +41,7 @@ do is summing up the app usage time for every device model.
 # Visualization Goals
 
 Try to visualize the data in such a way that it will more or less lead
-to such a [graph](graph_idea.pdf)
+to such a [graph](graph_idea.pdf).
 
 If possible also try to add add the logo of the operating system for
 every mobile device. It doesn’t have to be the exact same image I used,
