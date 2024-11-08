@@ -109,8 +109,8 @@ Example:
 
 Current projects:
 
-- NAME (GITHUBNAME) - [...](Projects/...)
-- NAME (GITHUBNAME) - [...](Projects/...)
+- Luis (kickbones1) - [](Projects/...)
+- NAME (GITHUBNAME) - [Luis' project](Projects/kickbones1/project-description.md)
 - NAME (GITHUBNAME) - [...](Projects/...)
 - NAME (GITHUBNAME) - [...](Projects/...)
 
