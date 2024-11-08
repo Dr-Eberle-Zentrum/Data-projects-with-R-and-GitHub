@@ -30,7 +30,7 @@ Note: To download the dataset you will have to create a free account on
 Kaggle. Don’t worry you won’t receive any spam mail or advertisement. If
 you still decide that you do not want to create an account I will link
 the .csv file in my directory where this markdown file is also stored.
-The directory can be found [here](kaggle_dataset.csv).
+The dataset can be found [here](kaggle_dataset.csv).
 
 # Manipulation Goals
 
