@@ -110,7 +110,7 @@ Example:
 Current projects:
 
 - Luis (kickbones1) - [Luis' project](Projects/kickbones1/project-description.md)
-- NAME (GITHUBNAME) - [...](Projects/...)
+- Silin Qian (Selena-qian) - [Silin's project](Projects/Selena-qian/project-description.md)
 - NAME (GITHUBNAME) - [...](Projects/...)
 - NAME (GITHUBNAME) - [...](Projects/...)
 
