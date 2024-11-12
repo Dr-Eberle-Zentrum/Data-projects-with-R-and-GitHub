@@ -41,7 +41,7 @@ do is summing up the app usage time for every device model.
 # Visualization Goals
 
 Try to visualize the data in such a way that it will more or less lead
-to such a [graph](graph_idea.pdf).
+to such a ![](graph_idea.jpg).
 
 If possible also try to add add the logo of the operating system for
 every mobile device. It doesn’t have to be the exact same image I used,
