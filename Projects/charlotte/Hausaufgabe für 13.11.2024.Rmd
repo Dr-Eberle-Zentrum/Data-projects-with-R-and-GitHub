@@ -5,15 +5,9 @@ output: html_notebook
 
 ### Charlottes Projektbeschreibung 🐌🐌🐌
 
-🐌**Der verwendete Datensatz**
+🐌**Aufgabe 1: Datenbereinigung**
 
-21331-02i_00.csv
-
--   Gesthörer nach Hochschularten, Hochschulen und Geschlecht in NRW
-
-🐌**Aufgabe Datenbereinigung:**
-
-1.  Datensatz laden
+1.  Datensatz laden (verwendeter Datensatz findet sich hier: <https://www.govdata.de/suche/daten/gasthorer-nach-hochschularten-hochschulen-und-geschlecht-land-wintersemester> )
 
 Der Datensatz ist auch iwie "falschrum", das muss noch gedreht werden
 
@@ -27,26 +21,24 @@ Der Datensatz ist auch iwie "falschrum", das muss noch gedreht werden
 
 5.  Neue ***`Variable`*** erstellen: Die Summe der Gasthörer\*innen insgesamt der drei Universitäten für ein Wintersemesterf
 
-🐌**Aufgabe Datenvisualisierung:**
+🐌**Aufgabe 2: Datenvisualisierung**
 
--   Die x-Achse sollen die Wintersemester sein (also WS 07/08, .....)
+**`Erster Teil:`**
 
--   Die x-Achse soll die Anzahl der Gasthörer\*innen Insgesamt sein
+![](images/Mein Projekt Bild 1-01.png)
+
+Die x-Achse sollen die Wintersemester, die y-Achse die Anzahl der Gasthörer\*innen Insgesamt
 
 -   Die drei ausgewählten Universitäten, sowie die erstellte Variable Universitäten insgesamt
 
-Der Graph sollte am Ende ungefähr so aussehen:
+-   Die Punkte für die Jahre und Anzahl der Gasthörer\*innen sollten für die Universitäten jeweils durch eine dünne Linie verbunden sein
 
-***`Bild einfügen`***
+-   Am Ende der Linie soll der Name der Uni jeweils in einem Kasten mit schwarzer Umrandung stehen
 
--   Die Punkte sollen durch eine linie verbunden sein
+-   Alle Linien und Punkte sollen die gleiche Farbe haben, nur die Linien und Punkte für die Variable Universitäten Insgesamt soll eine eigene Farbe haben
 
--   Am Ende der Linie soll der Name der Uni in einem Kasten mit schwarzer umrandung stehen
+**`Zweiter Teil: das Ganze animieren :)`**
 
--   Alle linien sollen eine Farbe haben, bis auf Unis gesamt, das soll eine andere Farbe haben als die anderen
+![](images/Mein Projekt Bild 2.png)
 
-Besonderheit:
-
-versuche den Graphen mit gganimate() zu animieren. Anfangs sollen nur die Datenpunkte fürs WS 07/08 zu sehen sein, dann die linie zu den nächsten Wintersemester usw. Die Beschriftung der einzelnen Linien läuft mit der Animierung mit. Das soll ungefähr so aussehen:
-
-***`Bild einfügen`***
+versuche den Graphen mit gganimate() zu animieren. Anfangs sollen nur die Datenpunkte fürs WS 07/08 zu sehen sein, dann die linie zu den nächsten Wintersemester usw. Die Beschriftung der einzelnen Linien läuft mit der Animierung mit.
