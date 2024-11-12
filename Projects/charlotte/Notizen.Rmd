@@ -1,0 +1,36 @@
+---
+title: "Notes"
+author: "Charlotte"
+date: "2024-10-29"
+output: html_document
+---
+### R chunks
+
+**Allgemein**
+
+-   wie erstellt man ein R chunk? --\> \*\*Str + Alt + I
+-   hinter {r} kann man eine überschrift des R chunks schreiben, also zum Beispiel {r Überschrift}
+-   Nach dem schreiben auf "Knit" drücken, dann werden die Codes ausgeführt
+
+**was gibt es für Optionen?**
+
+-   **eval = FALSE**: prevents code from being evaluated. (And obviously if the code is not run, no results will be generated). This is useful for displaying example code, or for disabling a large block of code without commenting each line.
+-   **include = FALSE**: runs the code, but doesn’t show the code or results in the final document. Use this for setup code that you don’t want cluttering your report.
+-   **echo = false**: prevents code, but not the results from appearing in the finished file. Use this when writing reports aimed at people who don’t want to see the underlying R code.
+-   **message = FALSE or warning = FALSE**: prevents messages or warnings from appearing in the finished file.
+-   **results = ´hide´**: hides printed output
+-   **fig.show = ´hide´**: hides plots
+-   **error = TRUE**: causes the render to continue even if code returns an error. This is rarely something you’ll want to include in the final version of your report, but can be very useful if you need to debug exactly what is going on inside your .Rmd. It’s also useful if you’re teaching R and want to deliberately include an error.
+-   **error = FALSE**: causes knitting to fail if there is a single error in the document
+
+**Ausprobieren**
+
+```{r erster Code}
+knitr::kable(
+  mtcars[1:5, ],
+  caption="A knitr kable."
+)
+```
+
+- ?knitr::kable --> zeigt andere Möglichkeiten Tabellen darzustellen
+- andere Packete: **xtabe**, **stargazer**, **pander**, **tables**, **ascii**

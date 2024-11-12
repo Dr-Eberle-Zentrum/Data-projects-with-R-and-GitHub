@@ -1,0 +1,52 @@
+---
+title: "Projektbeschreibung Charlotte"
+output: html_notebook
+---
+
+### Charlottes Projektbeschreibung 🐌🐌🐌
+
+🐌**Der verwendete Datensatz**
+
+21331-02i_00.csv
+
+-   Gesthörer nach Hochschularten, Hochschulen und Geschlecht in NRW
+
+🐌**Aufgabe Datenbereinigung:**
+
+1.  Datensatz laden
+
+Der Datensatz ist auch iwie "falschrum", das muss noch gedreht werden
+
+1.  Alle Zeilen in denen keine Angaben zur Anzahl der Gasthörer\*innen (weder Insgesamt, noch männlich, noch weiblich) löschen
+
+2.  Die Zeilen, in denen Angaben zu Insgesamt und zu männlich gemacht wurden, nicht jedoch zu weiblich, mit der entsprechenden Zahl ergänzen (Insgesamt - männlich), das gleiche auch, wenn nur die Angabe für männlich fehlt –\> das ist immer in den zeilen der Fall, in denen es nur Gasthörer\*innen eines geschlechts gab, statt eine 0 hinzuschreiben, wurde ein - reingeschrieben
+
+3.  Drei universitäten aussuchen, in denen so viele Jahre wie möglich vollzählig sind
+
+4.  Nur die Jahre behalten, in denen alle Universitäten angaben gemacht habe
+
+5.  Neue ***`Variable`*** erstellen: Die Summe der Gasthörer\*innen insgesamt der drei Universitäten für ein Wintersemesterf
+
+🐌**Aufgabe Datenvisualisierung:**
+
+-   Die x-Achse sollen die Wintersemester sein (also WS 07/08, .....)
+
+-   Die x-Achse soll die Anzahl der Gasthörer\*innen Insgesamt sein
+
+-   Die drei ausgewählten Universitäten, sowie die erstellte Variable Universitäten insgesamt
+
+Der Graph sollte am Ende ungefähr so aussehen:
+
+***`Bild einfügen`***
+
+-   Die Punkte sollen durch eine linie verbunden sein
+
+-   Am Ende der Linie soll der Name der Uni in einem Kasten mit schwarzer umrandung stehen
+
+-   Alle linien sollen eine Farbe haben, bis auf Unis gesamt, das soll eine andere Farbe haben als die anderen
+
+Besonderheit:
+
+versuche den Graphen mit gganimate() zu animieren. Anfangs sollen nur die Datenpunkte fürs WS 07/08 zu sehen sein, dann die linie zu den nächsten Wintersemester usw. Die Beschriftung der einzelnen Linien läuft mit der Animierung mit. Das soll ungefähr so aussehen:
+
+***`Bild einfügen`***

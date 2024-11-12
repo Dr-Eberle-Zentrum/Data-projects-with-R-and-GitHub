@@ -1,0 +1,61 @@
+---
+title: "Hausaufgabe R Markdown"
+author: "Charlotte"
+date: "2024-10-29"
+output: html_document
+---
+
+```{r, Tabelle erstellen, include= FALSE}
+
+library(readxl)
+library(tidyr)
+library(dplyr)
+
+data_raw <- read_excel("C:/Users/charl/Documents/Uni/5. Semester/Seminar_R und GitHub/Data_Hausaufgabe.xlsx", col_names = FALSE) %>%
+  slice(-1)  
+
+data_clean <- data_raw %>%
+  separate(...1, 
+           into = c("Common name", "Species name", "Number of mammal populations included", 
+                    "Start year", "End year", "Average relative change in abundance"), 
+           sep = ",") %>%
+  mutate(`Average relative change in abundance` = as.numeric(gsub("%", "", `Average relative change in abundance`)),
+         across(c("Number of mammal populations included", "Start year", "End year"), as.numeric))
+```
+
+## Wildlife is making a comeback in Europe
+
+Shown is the average relative change in the abundance (the number of individuals in a population) of animals across selected mammal populations in Europe.For example, the numbers for Eurasian beavers shows the average relative change in the abundance of beavers between 1960 and 2016 across 98 studied populations.
+
+```{r, Graph erstellen, echo= FALSE}
+library(ggplot2)
+library(dplyr)
+# Daten sortieren nach "Average relative change in abundance"
+data_sorted <- data_clean %>%
+  arrange(desc(`Average relative change in abundance`))
+
+# Erstellen der Textlabels mit "Common name", "Start year" und "End year"
+data_sorted <- data_sorted %>%
+  mutate(label = paste(`Common name`, "-", `Start year`, "to", `End year`))
+
+# Plot erstellen
+ggplot(data_sorted, aes(x = 0, 
+                        xend = `Average relative change in abundance`,
+                        y = reorder(label, `Average relative change in abundance`),
+                        yend = reorder(label, `Average relative change in abundance`))) +
+  geom_segment(arrow = arrow(length = unit(0.3, "cm")), color = "grey") +  # Pfeile von links nach rechts
+  geom_point(aes(x = `Average relative change in abundance`), size = 3, color = "darkslateblue") +  # Punkte hinzufügen
+  geom_text(aes(x = `Average relative change in abundance`, 
+                label = `Average relative change in abundance`), 
+            hjust = -0.5, size = 3.5, color = "darkslateblue") +  # Werte hinzufügen
+  theme_minimal() +
+  labs(x = "Average Relative Change in Animal Population", y = NULL) +  # Entfernt den Plot-Titel
+  xlim(0, max(data_sorted$`Average relative change in abundance`) + 0.1) +  # Anpassen der x-Achse
+  theme(axis.text.y = element_text(size = 10, face = "bold", hjust = 1),  # Schriftart fett für Common name
+        panel.grid = element_blank(),  # Entfernt das graue Gitter
+        panel.background = element_rect(fill = "white"))  # Weißer Hintergrund
+```
+
+\* **The Loggerhead turtle is a reptile, not a mammal but has been included as importand, well-sudied animal in Europe that has made a significant recovery.**
+
+**Source:** Sophie Ledger et al. (2022). Wildlife Comeback in Europe: Opportunities and challenges for species recovery. Final report to Rewilding Europe by the Zoological Society of London, BirdLife International and the European Bird Census Council. London, UK: ZSL. **Icons** sources from the Noun Project.**OurWordinData.org** - Research and data to make progress against the world's largest problems.
