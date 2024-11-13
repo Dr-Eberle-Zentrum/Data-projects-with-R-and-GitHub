@@ -111,6 +111,7 @@ Current projects:
 -   Luis (kickbones1) - [Luis' project](Projects/kickbones1/project-description.md)
 -   Silin Qian (Selena-qian) - [Silin's project](Projects/Selena-qian/project-description.md)
 -   Charlotte Rigot (janaelodie) - [Charlottes project](Projects/charlotte/project-description.md)
+-   Gulmira Kairzhanova (GulmiraKairr) - [Gulmira's project](Projects/GulmiraKairr/ProjectDescription.md)
 -   NAME (GITHUBNAME) - [...](Projects/...)
 
 #### Goals
