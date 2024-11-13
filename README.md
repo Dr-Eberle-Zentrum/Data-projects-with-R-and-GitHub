@@ -113,7 +113,7 @@ Current projects:
 -   Charlotte Rigot (janaelodie) - [Charlottes project](Projects/charlotte/project-description.md)
 -   Gulmira Kairzhanova (GulmiraKairr) - [Gulmira's project](Projects/GulmiraKairr/ProjectDescription.md)
 -   Dennis Flad (shad-lad-flad) - [Dennis' project](Projects/shad-lad-flad/project_description.md)
--   Yuguang Chen(Yuguang Chen) - [Yuguang's projekt](Projects/yuguang Chen/projekt_description.Rmd)
+-   Yuguang Chen (Yuguang Chen) - [Yuguang's projekt](Projects/yuguang Chen/projekt_description.md)
 -   NAME (GITHUBNAME) - [...](Projects/...)
 
 #### Goals
