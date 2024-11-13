@@ -8,12 +8,12 @@ Summarize and visualize the basic information of 2024 tennis tournaments.
 
 ##data manipulation goals
 
-Step 1: Clean all NA
-Step 2: pick up only 50 matches, in which contain at least one top 50 players
-Step 3: Categorize these matches in two group, hard and clay
-Step 4: Calculate the first point won rate in both groups, and calculate the average rate.
+Step 1: Clean all NA\n
+Step 2: pick up only 50 matches, in which contain at least one top 50 players\n
+Step 3: Categorize these matches in two group, hard and clay\n
+Step 4: Calculate the first point won rate in both groups, and calculate the average rate.\n
 Step 5: rank the top 50 players from high to low.
 
 ##visualization goals
-The top 50 players need to be ranked, so that we can observe the distribution of first point won rate with the ranking. 
-[Visualization goals](Projects/yuguang%20Chen/visualization.jpg)
+The top 50 players need to be ranked, so that we can observe the distribution of first point won rate with the ranking. \n
+[Visualization goals](Data-projects-with-R-and-GitHub/Projects/yuguang%20Chen/visualization.jpg)
