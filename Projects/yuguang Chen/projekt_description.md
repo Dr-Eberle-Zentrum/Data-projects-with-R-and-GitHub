@@ -18,4 +18,4 @@ This dataset contains too many columns, making it difficult to visualize all asp
 ## Visualization Goals
 
 The top 50 players need to be ranked to observe the distribution of the first point won rate with respect to their rankings.  
-![Visualization Goals]("Data-projects-with-R-and-GitHub/Projects/yuguang Chen/visualization.jpg")
+![Visualization Goals](Data-projects-with-R-and-GitHub/Projects/yuguang%20Chen/visualization.jpg)
