@@ -112,6 +112,7 @@ Current projects:
 -   Silin Qian (Selena-qian) - [Silin's project](Projects/Selena-qian/project-description.md)
 -   Charlotte Rigot (janaelodie) - [Charlottes project](Projects/charlotte/project-description.md)
 -   Gulmira Kairzhanova (GulmiraKairr) - [Gulmira's project](Projects/GulmiraKairr/ProjectDescription.md)
+-   Dennis Flad (shad-lad-flad) - [Dennis' project](Projects/shad-lad-flad/project_description.md)
 -   NAME (GITHUBNAME) - [...](Projects/...)
 
 #### Goals
