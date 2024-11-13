@@ -114,6 +114,7 @@ Current projects:
 -   Gulmira Kairzhanova (GulmiraKairr) - [Gulmira's project](Projects/GulmiraKairr/ProjectDescription.md)
 -   Dennis Flad (shad-lad-flad) - [Dennis' project](Projects/shad-lad-flad/project_description.md)
 -   Yuguang Chen (Yuguang Chen) - [Yuguang's projekt](Projects/yuguang%20Chen/projekt_description.md)
+-   Yue Zhang (Yue_Z9) - [Yue's project](Projects/Yue_Z9/project-description.md)
 -   NAME (GITHUBNAME) - [...](Projects/...)
 
 #### Goals
