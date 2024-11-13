@@ -16,4 +16,4 @@ Step 5: rank the top 50 players from high to low.
 
 ##visualization goals
 The top 50 players need to be ranked, so that we can observe the distribution of first point won rate with the ranking. 
-[Visualization goals](Projects/yuguang Chen/visualization.jpg)
+[Visualization goals](Projects/yuguang%20Chen/visualization.jpg)
