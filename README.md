@@ -6,7 +6,6 @@ This project accompanies the course
 
 at the Dr. Eberle Centre for Digital Competencies at the University of Tübingen.
 
-
 ## Tutorials
 
 -   [Git-ing started](Tutorials/git-started.md)
@@ -30,7 +29,7 @@ All tutorials are summarized within the
 
 ------------------------------------------------------------------------
 
-## Project descriptions
+## Project descriptions {#project-descriptions}
 
 During the course, you have to formulate a data wrangling project. That is, you should name or provide a data set, say how the data should be (re)structured and set some visualization goals. You can use a data set you are working on (note, you might have to make it anonymous to share it) or a data set freely available online, from a publication, whatever. I strongly suggest "dirty" data that has to be cleaned up and reformatted! Data cleanup, transformation and extension should be one (big) part of your project!
 
@@ -38,7 +37,7 @@ The formulated projects are the set of exercises you and your fellow students wi
 
 ------------------------------------------------------------------------
 
-### Phase 1 - Drafting a project description
+### Phase 1 - Drafting a project description {#phase-1---drafting-a-project-description}
 
 <img src="https://img.icons8.com/external-flaticons-lineal-color-flat-icons/344/external-project-web-development-flaticons-lineal-color-flat-icons.png" width="100px"/>
 
@@ -66,7 +65,7 @@ Try to think of something "non-standard"...
 
 Double check that you think the data set you picked provides (somehow) all information needed to draw your plot of interest.
 
-#### Write up your project description
+#### Write up your project description {#write-up-your-project-description}
 
 Write an R Markdown file `project-description.Rmd` to
 
@@ -101,18 +100,18 @@ In order to submit your project proposal, you have to upload it to GitHub as par
 -   wait a minute (to get things published automatically)
 -   check the [project website](https://dr-eberle-zentrum.github.io/Data-projects-with-R-and-GitHub/) if your project draft is listed, linked and correctly rendered
 
-#### Available projects
+#### Available projects {#available-projects}
 
 Example:
 
-- Martin (martin-raden) - [Example project](Projects/martin-raden/project-description.md)
+-   Martin (martin-raden) - [Example project](Projects/martin-raden/project-description.md)
 
 Current projects:
 
-- Luis (kickbones1) - [Luis' project](Projects/kickbones1/project-description.md)
-- Silin Qian (Selena-qian) - [Silin's project](Projects/Selena-qian/project-description.md)
-- NAME (GITHUBNAME) - [...](Projects/...)
-- NAME (GITHUBNAME) - [...](Projects/...)
+-   Luis (kickbones1) - [Luis' project](Projects/kickbones1/project-description.md)
+-   Silin Qian (Selena-qian) - [Silin's project](Projects/Selena-qian/project-description.md)
+-   Charlotte Rigot (janaelodie) - [Charlottes project](Projects/charlotte/project-description.md)
+-   NAME (GITHUBNAME) - [...](Projects/...)
 
 #### Goals
 
@@ -125,7 +124,7 @@ At the end of Phase 1 you will have a better understanding of
 
 ------------------------------------------------------------------------
 
-### Phase 2 - Reviewing a project description 
+### Phase 2 - Reviewing a project description {#phase-2---reviewing-a-project-description}
 
 <img src="https://img.icons8.com/external-filled-outline-geotatah/344/external-comment-customer-satisfaction-filled-outline-filled-outline-geotatah.png" width="100px"/>
 
@@ -135,10 +134,9 @@ To ensure the drafted projects are understandable and doable, we will do a peer 
 
 For each project draft, we will assign two reviewers at random. The *reviewer assignments* are as follows:
 
-- **YOU** will review projects of: *the two subsequent students in the list of [Available projects](#available-projects)*
-- if you are the last in the list, you will review the first two students, etc.
-- use respective GitHub user names for contact
-
+-   **YOU** will review projects of: *the two subsequent students in the list of [Available projects](#available-projects)*
+-   if you are the last in the list, you will review the first two students, etc.
+-   use respective GitHub user names for contact
 
 **Each reviewer** is supposed to
 
@@ -170,7 +168,7 @@ At the end of Phase 2 you will
 
 ------------------------------------------------------------------------
 
-### Phase 3 - Finalizing your project description
+### Phase 3 - Finalizing your project description {#phase-3---finalizing-your-project-description}
 
 <img src="https://img.icons8.com/external-phatplus-lineal-color-phatplus/344/external-project-design-thinking-phatplus-lineal-color-phatplus-2.png" width="100px"/>
 
@@ -196,7 +194,7 @@ At the end of Phase 3 you will
 
 ------------------------------------------------------------------------
 
-## Tackling a suggested project
+## Tackling a suggested project {#tackling-a-suggested-project}
 
 Given a project description, you will try to solve the task. In order to practice real work flow life cycles, you will create your solution first in your own git branch and suggest it via a pull request on GitHub. This provides the project owner the possibility to review your solution and to give you feedback, which you can discuss within the pull request. Once all are happy with the solution it can be merged into the main branch of the course repository and thus be published.
 
@@ -210,7 +208,7 @@ Note: we are still working all on ONE GITHUB REPOSITORY! We do *not create a for
 
 ------------------------------------------------------------------------
 
-### Phase 1 - Posting your initial solution
+### Phase 1 - Posting your initial solution {#phase-1---posting-your-initial-solution}
 
 <img src="https://img.icons8.com/external-justicon-lineal-color-justicon/344/external-coding-responsive-web-design-justicon-lineal-color-justicon-3.png" width="100px"/>
 
@@ -270,7 +268,7 @@ At the end of Phase 1 you will
 -   have worked on a data wrangling and visualization project (in your own independent git branch)
 -   have created a pull request on GitHub to incorporate your suggested project solution
 
-### Phase 2 - Reviewing and finalizing
+### Phase 2 - Reviewing and finalizing {#phase-2---reviewing-and-finalizing}
 
 <img src="https://img.icons8.com/external-parzival-1997-outline-color-parzival-1997/344/external-training-human-resource-management-parzival-1997-outline-color-parzival-1997.png" width="100px"/>
 
@@ -311,7 +309,7 @@ At the end of Phase 2 you will
 -   have integrated an interactive reviewing cycle in your project solution
 -   be ready for the next project! :grin:
 
-## Beautifying your project
+## Beautifying your project {#beautifying-your-project}
 
 Finally, it is not only about content but presentation matters. Thus, you will have to beautify your HTML output. Here some ideas where to start:
 
@@ -325,26 +323,26 @@ Finally, it is not only about content but presentation matters. Thus, you will h
     -   provide used formulas etc. to compute statistics/values/...
 -   ...
 
-# Common Issues
+# Common Issues {#common-issues}
 
-## Rendering HTML files stored on GitHub
+## Rendering HTML files stored on GitHub {#rendering-html-files-stored-on-github}
 
 If your solutions generates HTML output files, you cannot directly view/render them on GitHub, since the page is made to work on source files not rendered output.
 
 ### If your HTML file does not use JavaScript:
 
-In case your HTML file works without JavaScript (just static text and image output), you can use [https://htmlpreview.github.io/](https://htmlpreview.github.io/)
+In case your HTML file works without JavaScript (just static text and image output), you can use <https://htmlpreview.github.io/>
 
-- open the file on github.com in your browser
-- click on the `Raw` button in the upper right corner
-- copy the URL of the now shown file
-- either paste the URL to the linked page from above
-  - or just prefix it with `http://htmlpreview.github.io/?`
+-   open the file on github.com in your browser
+-   click on the `Raw` button in the upper right corner
+-   copy the URL of the now shown file
+-   either paste the URL to the linked page from above
+    -   or just prefix it with `http://htmlpreview.github.io/?`
 
 Note: `htmlpreview` is only working for HTML pages *without JavaScript* content!
- 
+
 ### If your HTML file is based on JavaScript:
 
-In case your HTML file is making use of JavaScript, you can use [https://raw.githack.com/](https://raw.githack.com/)
+In case your HTML file is making use of JavaScript, you can use <https://raw.githack.com/>
 
 The procedure is the same as above but the final URL is slightly different, see website.
