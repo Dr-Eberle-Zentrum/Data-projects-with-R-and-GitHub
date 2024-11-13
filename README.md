@@ -6,7 +6,6 @@ This project accompanies the course
 
 at the Dr. Eberle Centre for Digital Competencies at the University of Tübingen.
 
-
 ## Tutorials
 
 -   [Git-ing started](Tutorials/git-started.md)
@@ -105,14 +104,16 @@ In order to submit your project proposal, you have to upload it to GitHub as par
 
 Example:
 
-- Martin (martin-raden) - [Example project](Projects/martin-raden/project-description.md)
+-   Martin (martin-raden) - [Example project](Projects/martin-raden/project-description.md)
 
 Current projects:
 
-- NAME (GITHUBNAME) - [...](Projects/...)
-- NAME (GITHUBNAME) - [...](Projects/...)
-- NAME (GITHUBNAME) - [...](Projects/...)
-- NAME (GITHUBNAME) - [...](Projects/...)
+-   Luis (kickbones1) - [Luis' project](Projects/kickbones1/project-description.md)
+-   Silin Qian (Selena-qian) - [Silin's project](Projects/Selena-qian/project-description.md)
+-   Charlotte Rigot (janaelodie) - [Charlottes project](Projects/charlotte/project-description.md)
+-   Gulmira Kairzhanova (GulmiraKairr) - [Gulmira's project](Projects/GulmiraKairr/ProjectDescription.md)
+-   Dennis Flad (shad-lad-flad) - [Dennis' project](Projects/shad-lad-flad/project_description.md)
+-   NAME (GITHUBNAME) - [...](Projects/...)
 
 #### Goals
 
@@ -125,7 +126,7 @@ At the end of Phase 1 you will have a better understanding of
 
 ------------------------------------------------------------------------
 
-### Phase 2 - Reviewing a project description 
+### Phase 2 - Reviewing a project description
 
 <img src="https://img.icons8.com/external-filled-outline-geotatah/344/external-comment-customer-satisfaction-filled-outline-filled-outline-geotatah.png" width="100px"/>
 
@@ -135,10 +136,9 @@ To ensure the drafted projects are understandable and doable, we will do a peer 
 
 For each project draft, we will assign two reviewers at random. The *reviewer assignments* are as follows:
 
-- **YOU** will review projects of: *the two subsequent students in the list of [Available projects](#available-projects)*
-- if you are the last in the list, you will review the first two students, etc.
-- use respective GitHub user names for contact
-
+-   **YOU** will review projects of: *the two subsequent students in the list of [Available projects](#available-projects)*
+-   if you are the last in the list, you will review the first two students, etc.
+-   use respective GitHub user names for contact
 
 **Each reviewer** is supposed to
 
@@ -333,18 +333,18 @@ If your solutions generates HTML output files, you cannot directly view/render t
 
 ### If your HTML file does not use JavaScript:
 
-In case your HTML file works without JavaScript (just static text and image output), you can use [https://htmlpreview.github.io/](https://htmlpreview.github.io/)
+In case your HTML file works without JavaScript (just static text and image output), you can use <https://htmlpreview.github.io/>
 
-- open the file on github.com in your browser
-- click on the `Raw` button in the upper right corner
-- copy the URL of the now shown file
-- either paste the URL to the linked page from above
-  - or just prefix it with `http://htmlpreview.github.io/?`
+-   open the file on github.com in your browser
+-   click on the `Raw` button in the upper right corner
+-   copy the URL of the now shown file
+-   either paste the URL to the linked page from above
+    -   or just prefix it with `http://htmlpreview.github.io/?`
 
 Note: `htmlpreview` is only working for HTML pages *without JavaScript* content!
- 
+
 ### If your HTML file is based on JavaScript:
 
-In case your HTML file is making use of JavaScript, you can use [https://raw.githack.com/](https://raw.githack.com/)
+In case your HTML file is making use of JavaScript, you can use <https://raw.githack.com/>
 
 The procedure is the same as above but the final URL is slightly different, see website.

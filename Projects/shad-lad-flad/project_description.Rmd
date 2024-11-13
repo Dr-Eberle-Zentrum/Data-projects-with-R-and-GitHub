@@ -1,0 +1,114 @@
+---
+title: "World of Warships - Popularity Contest"
+output: md_document
+---
+
+
+## What this project is about
+
+In this project, we will look at the playerbase data of the Game "World of Warships".
+The goal is to find out which Nation is the most popular by taking the total amount of battles played per ship into account. 
+
+### About the Data
+
+You will be provided with the data in the form of a xlsx file, called "wows_playerbase_data.xlsx". This data has been provided by \
+[wows-numbers.com](https://wows-numbers.com/ships/). \
+Inside, you can find every single currently released Ship with its respective Tier, Shiptype and Nation attached. \
+[The xlsx format has been chosen to stop the columns from being formatted into a date]
+
+Additionally, each ship has columns that show the amount of total games played per ship, together with its win rate, average damage and some more additional data.
+
+#### There are **13 Nations**:
+
+- Europe
+- Commonwealth
+- The Netherlands
+- Italy
+- U.S.A.
+- Pan-Asia
+- France
+- U.S.S.R.
+- Germany
+- U.K.
+- Japan
+- Spain
+- Pan-America
+
+#### There are **5 Ship Types**:
+
+- Destroyer
+- Cruiser
+- Battleship
+- Aircraft Carrier
+- Submarine
+
+#### In total there are **11 Tiers**.
+
+------------------------------
+
+## The Contest
+
+To determine which Nation is the most popular, we will look at the data for each Nation, Ship type and Tier.
+
+The contest will introduce a simple point system that will keep track of its popularity.
+
+Each nation will form groups for every tier, containing one ship of every ship type. The ships of these groups will be the ones that have the highest amount of battles in its tier.
+
+
+#### Restrictions:
+
+- **Spain, Pan-America, Pan-Asia, The Netherlands, Commonwealth and Europe will be excluded** from this contest, since they do not have a competitor for every shiptype in every tier.
+
+- **Submarines and Aircraft carriers will be excluded from this contest** due to the fact, that they are not available for every nation and Tier.
+
+- **Ships below Tier 3** are banned since some nations are lacking battleships and destroyers.
+
+- **Ships of Tier 11**, also known as "Superships", **are also banned**, since they divert from the normal flow of progression in this game and are not designed to be played often by the average player
+
+- **Ships below 200 000 battles** will be excluded, since they are either too new or not popular enough to be considered.
+
+-------------------------
+
+#### A group example for tier 3:
+
+##### **Japan**:
+
+|Shiptype|Tier|Shipname|Battles|Winrate|Average Damage|
+|---|---|---|---|---|---|---|
+|	Battleship|	3	|Kawachi	|2541886	|49.55 %	|20 099|
+|	Cruiser	|3	|Tenryu	|2969168	|48.7 %	|18 313|
+|	Destroyer	|3|	Wakatake	|2136183|	48.54 %	|15 793|
+
+
+
+##### **U.S.A**:
+
+|Shiptype|Tier|Shipname|Battles|Winrate|Average Damage|
+|---|---|---|---|---|---|---|
+|	Battleship	|3	|South Carolina	|3800000	|48.69 %	|21 182
+|	Cruiser	|3	|St. Louis	|5954447	|51.29 %	|21 945
+|	Destroyer	|3	|Wickes	|2392688	|47.53 %	|14 077
+
+In this example we can see that the U.S.A. has the most played battles with every single ship type at Tier 3 compared to Japan.
+
+So the U.S.A. would actually get **all 3 Points** in this stage of the contest. This of course can change, once we bring in the other competing Nations.
+
+--------------------------------
+
+## Optional Bonus Points:
+
+Should there be a need to break a tie in points, the following bonus points can be awarded:
+
+- **Winrate Bonus**: The Nation with the highest average winrate of each type at tier 10 will get an additional point.
+- **Damage Bonus**: The Nation with the highest accumulated average damage from tier 8 to 10 will get an additional point.
+
+--------------------------------
+
+#### Results:
+In the end the points should be accumulated and by Tier 10 the **Top 3 most popular nations** should be determined. The most unpopular nation should also be highlighted.
+This can either be portrayed by  showing the final results with **a table** or **a plot** that keeps track of the **points on the y-axis** for each nation and the **tiers on the x-axis** in any nice looking form.
+
+--------------------------------
+
+
+
