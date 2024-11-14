@@ -7,22 +7,20 @@ output: md_document
 
 # Project Description
 
-## About the data 
+## Data Set
 
-**General Topic**
-
-This project will use publicly available behavioural data from Kalbe & Schwabe (2022). The study investigates category-specific behavioral tagging and its impact on episodic memory. [Here you can find the published paper](https://www.psy.uni-hamburg.de/arbeitsbereiche/kognitionspsychologie/publikationen/kalbe-2021-journal-experimental-psychology.pdf).
-The data consits of four different experiments, with a total number of 285 participants involved in the four experiments. The primary measure used to quantify memory performance in this study is the corrected recognition score. Corrected recognition is computed by subtraction false alarms from hits.
-**Note: You can pick one of the four experiments, you do not have to analyse all four or pool them. Knowledge about category-specific behavioral tagging and memory is not necessary for working on this project.** 
-
-**Data Set**
-
-The data can be found [here](https://osf.io/qpm3t/). As mentioned before, the data consits of four experiments, per participant there are four .csv files in the zip-folder, each representing one experimental phase. For this project only phase 4 is relvant, thus files for phase 1 to 3 can be left out in the process of data cleaning, manipulation and visualization. For example, for participant 1, there are files named "vp_1_phase_1_cond_animals", "vp_1_phase_2_cond_animals", "vp_1_phase_3_cond_animals", and "vp_1_phase_4_cond_animals". In this case, only the file "vp_1_phase_4_cond_animals" is needed for the computation, as it contains the data from phase 4. This pattern applies to all participants across the experiments. Further, the data is categorized as either $CS+$ (representing the condition, i.e. the shocked category which is either 'animal' or 'tool') or $CS-$ (representing non-shocked category which for example would be 'animal' if shocked category or $CS+$ would be 'tool'). 
+This project will use publicly available behavioral data from Kalbe & Schwabe (2022). The unprocessed data can be found [here](https://osf.io/qpm3t/), the prepocessed data, can be found in the folder ['project-data'](~/Data-projects-with-R-and-GitHub/Projects/celineony/project-data).
 
 **Data Manipulation**
 
-The variables of the .csv files are explained in the .txt file (experiment 1: __phase_4_data_format.txt). In order to comupute corrected recotnition only the variables (or columns in the .csv file) 'object', 'seenBefore', 'shockedCategory' and 'buttonPressedForcedChoice' are needed additionally a new variable 'correctedRecognition' has to be created.
+-   Read the data into your local R environment
+
+-   Compute corrected recognition scores
+
+    -   Corrected recognition is computed by subtraction false alarms from hits
+
+-   To store corrected recognition scores you have to create a new variable / column
 
 **Visualization**
 
-Reproduce Figure 3: Recreate the figure from the paper using the provided data. You can choose which of the four experiments you want to plot.
+[Here you can find the published paper](https://www.psy.uni-hamburg.de/arbeitsbereiche/kognitionspsychologie/publikationen/kalbe-2021-journal-experimental-psychology.pdf). Have a look at *Figure 3*. Try to recreate the figure using the provided data. You can choose which of the four experiments you want to plot.
