@@ -119,9 +119,9 @@ Current projects:
 - Beilei (Beilei-Wang) - [Income distributions](Projects/Beilei-Wang/project-description.md)
 - Celine (celineony) - [Behavorial data](Projects/celineony/project-description.md)
 - Felix (felix-gogollok) - ...
-- Manuel (ManuDoerrich) - [Behavorial data](Projects/ManuDoerrich/project-description.md)
+- Manuel (ManuDoerrich) - [Nutrition data](Projects/ManuDoerrich/project-description.md)
 - Nicolas (NicolasDelgadoL) - ...
-- Sun (MoonSunKyung) - [Behavorial data](Projects/SunKyoung%20Moon/project-description.md)
+- Sun (MoonSunKyung) - [Promotion strategies](Projects/SunKyoung%20Moon/project_description.md)
 
 
 #### Goals
