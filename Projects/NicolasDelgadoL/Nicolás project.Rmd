@@ -1,6 +1,6 @@
 ---
 title: "Nicolás' Data Project"
-output: html_document
+output: md_document
 date: "2024-11-14"
 ---
 
