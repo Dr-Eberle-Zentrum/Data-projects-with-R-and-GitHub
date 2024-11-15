@@ -1,3 +1,8 @@
+---
+title: "Nutrient data"
+output: md_document
+---
+
 # Phase 1 - Drafting a project
 
 The idea of the data project is to extract and process some nutrient data of various food and drinks. I am interested in the composition with respect to macro- and micronutrients. In the end, a sum of nutrients should be represented by several plots showing the distribution of nutrients for the consumed food every day. 

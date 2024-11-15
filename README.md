@@ -108,15 +108,21 @@ Example:
 
 Current projects:
 
--   Luis (kickbones1) - [Luis' project](Projects/kickbones1/project-description.md)
--   Silin Qian (Selena-qian) - [Silin's project](Projects/Selena-qian/project-description.md)
--   Charlotte Rigot (janaelodie) - [Charlottes project](Projects/charlotte/project-description.md)
--   Gulmira Kairzhanova (GulmiraKairr) - [Gulmira's project](Projects/GulmiraKairr/ProjectDescription.md)
--   Dennis Flad (shad-lad-flad) - [Dennis' project](Projects/shad-lad-flad/project_description.md)
--   Yuguang Chen (Yuguang Chen) - [Yuguang's projekt](Projects/yuguang%20Chen/projekt_description.md)
--   Yue Zhang (Yue_Z9) - [Yue's project](Projects/Yue_Z9/project-description.md)
--   Jungi Hong (JungiHong) - [Jungi's project](Projects/JungiHong/project-description.md)
--   NAME (GITHUBNAME) - [...](Projects/...)
+- Luis (kickbones1) - [Luis' project](Projects/kickbones1/project-description.md)
+- Silin (Selena-qian) - [Silin's project](Projects/Selena-qian/project-description.md)
+- Charlotte (janaelodie) - [Charlottes project](Projects/charlotte/project-description.md)
+- Gulmira (GulmiraKairr) - [Gulmira's project](Projects/GulmiraKairr/ProjectDescription.md)
+- Dennis (shad-lad-flad) - [Dennis' project](Projects/shad-lad-flad/project_description.md)
+- Yuguang (Yuguang Chen) - [Yuguang's project](Projects/yuguang%20Chen/projekt_description.md)
+- Yue (Yue_Z9) - [Yue's project](Projects/Yue_Z9/project-description.md)
+- Jungi (JungiHong) - [Jungi's project](Projects/JungiHong/project-description.md)
+- Beilei (Beilei-Wang) - [Income distributions](Projects/Beilei-Wang/project-description.md)
+- Celine (celineony) - [Behavorial data](Projects/celineony/project-description.md)
+- Felix (felix-gogollok) - ...
+- Manuel (ManuDoerrich) - [Behavorial data](Projects/ManuDoerrich/project-description.md)
+- Nicolas (NicolasDelgadoL) - ...
+- Sun (MoonSunKyung) - [Behavorial data](Projects/SunKyoung%20Moon/project-description.md)
+
 
 #### Goals
 
