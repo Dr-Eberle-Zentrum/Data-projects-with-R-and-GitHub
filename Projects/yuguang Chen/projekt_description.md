@@ -1,15 +1,22 @@
-#Topic of the task
+# [Data-projects-with-R-and-GitHub](https://dr-eberle-zentrum.github.io/Data-projects-with-R-and-GitHub/)
+##Topic of the task
 
 Summarize and visualize the basic information of 2024 tennis tournaments.
 
-##Topic description
+## Topic Description
 
-[dataset about tennis](https://github.com/JeffSackmann/tennis_atp/blob/master/atp_matches_qual_chall_2024.csv) This data set contains some basic information about tennis tournaments, such as tournament id, type of surface, winner's name and loser's name etc. Through this data set, i can do categorization, analysis and visualization. 
+[Dataset about tennis](https://github.com/JeffSackmann/tennis_atp/blob/master/atp_matches_qual_chall_2024.csv)  
+This dataset contains too many columns, making it difficult to visualize all aspects in one chart. Therefore, before visualizing, the dataset needs to be cleaned. Filter out all NA values and select useful columns for visualization. I intend to analyze the first point won rate of the top 50 players on hard and clay surfaces. This rate can reflect the consistency of players on different surfaces, which can help their teams improve techniques.
 
-##data manipulation goals
+## Data Manipulation Goals
 
-First, the data need to be clean. Because it contains many NA in everywhere. Second, there are too many columus, so How to create a meaningful visualization with so many columns is also a challenge.
+- **Step 1**: Clean all NA values  
+- **Step 2**: Select only 50 matches, each containing at least one top 50 player  
+- **Step 3**: Categorize these matches into two groups: hard and clay  
+- **Step 4**: Calculate the first point won rate for both groups and determine the average rate  
+- **Step 5**: Rank the top 50 players from high to low to visualize the rate distribution  
 
-##visualization goals
+## Visualization Goals
 
-First, we can categorize the data by competition location to observe what types of matches are held in each city. Then, we can classify the competition surface. Additionally, we could analyze a player’s win rate at different surface or examine a particular player’s win rate against specific opponents.
+The top 50 players need to be ranked to observe the distribution of the first point won rate with respect to their rankings.  
+![Visualization Goals](Data-projects-with-R-and-GitHub/Projects/yuguang%20Chen/visualization.jpg)
