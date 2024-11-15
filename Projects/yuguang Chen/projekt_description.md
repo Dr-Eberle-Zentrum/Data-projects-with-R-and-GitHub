@@ -1,5 +1,6 @@
 # [Data-projects-with-R-and-GitHub](https://dr-eberle-zentrum.github.io/Data-projects-with-R-and-GitHub/)
-##Topic of the task
+
+## Topic of the task
 
 Summarize and visualize the basic information of 2024 tennis tournaments.
 
@@ -19,4 +20,4 @@ This dataset contains too many columns, making it difficult to visualize all asp
 ## Visualization Goals
 
 The top 50 players need to be ranked to observe the distribution of the first point won rate with respect to their rankings.  
-![Visualization Goals](Data-projects-with-R-and-GitHub/Projects/yuguang%20Chen/visualization.jpg)
+![Visualization Goals](visualization.jpg)
