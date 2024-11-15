@@ -11,6 +11,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Social media app-preference of young adults by personality profile
 
+Hello there!
+
 In this project, you are tasked with generating a spider-web diagram on the relation between social-media applications use and the personality profiles of more than 3000 users. We want to focus on the data regarding "young adults" (18 to 34) in particular. The social media platforms included are Whatsapp, Facebook and Instagram, and the personality profiles are are based the "Big-5" trait-model of personality, which measures Openness, Conscientiousness, Extraversion, Agreeableness and Neuroticism by means of a standardized questionnaire.
 
 ### Data
@@ -32,7 +34,9 @@ The goal is to create a spider-web diagram that looks like the one in the exampl
 
 Note the illustration below includes Twitter, snapchat and LinkedIn, which are not part of the data. Instead, the legend should include the 8 combinations of social media use mentioned above.
 
-Which conclusions/hypotyhesis can we draw from the resulting graph? 
+Which conclusions/hypotyhesis can we draw from the resulting graph? Do they match some of the resluts of the study (found in "Presentation 1")?
+
+Best of luck on your implementation!
  
  <img src="Example spider-web diagram.png" width="500">
 
