@@ -118,7 +118,7 @@ Current projects:
 - Jungi (JungiHong) - [Jungi's project](Projects/JungiHong/project-description.md)
 - Beilei (Beilei-Wang) - [Income distributions](Projects/Beilei-Wang/project-description.md)
 - Celine (celineony) - [Behavorial data](Projects/celineony/project-description.md)
-- Felix (felix-gogollok) - ...
+- Felix (felix-gogollok) [Historical data analysis regarding genocides](Projects/felix-gogollok/historical-data-analysis/project-description.md)
 - Manuel (ManuDoerrich) - [Nutrition data](Projects/ManuDoerrich/project-description.md)
 - Nicolas (NicolasDelgadoL) - [social media & personality](Projects/NicolasDelgadoL/Nicolás-project.md)
 - Sun (MoonSunKyung) - [Promotion strategies](Projects/SunKyoung%20Moon/project_description.md)
