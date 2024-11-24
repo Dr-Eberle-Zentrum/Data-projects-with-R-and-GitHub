@@ -21,4 +21,4 @@ The variety of data types can lead to a number of different analytical direction
 
 # Visualization Goals
 I want to compare the mean values of different pollutants and give the time variation of the pollutant with the highest pollution value in top3 regions. For the first task I would use a geom_bar for comparison and then a geom_linie to analyze the second situation.
-![](description.jpg)
+![](airfoto.jpg)
