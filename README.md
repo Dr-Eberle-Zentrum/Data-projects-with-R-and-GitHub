@@ -131,7 +131,7 @@ Current projects:
 - Dennis (shad-lad-flad) - [Dennis' project](Projects/shad-lad-flad/project_description.md)
 - Yuguang (Yuguang Chen) - [Yuguang's project](Projects/yuguang%20Chen/projekt_description.md)
 - Yue (Yue_Z9) - [Yue's project](Projects/Yue_Z9/project-description.md)
-- Jungi (JungiHong) - [Jungi's project](Projects/JungiHong/project-description.md)
+- Jungi (JungiHong) - [Volleyball Passing](Projects/JungiHong/project-description.md)
 - Beilei (Beilei-Wang) - [Income distributions](Projects/Beilei-Wang/project-description.md)
 - Celine (celineony) - [Behavorial data](Projects/celineony/project-description.md)
 - Felix (felix-gogollok) [Historical data analysis regarding genocides](Projects/felix-gogollok/historical-data-analysis/project-description.md)
