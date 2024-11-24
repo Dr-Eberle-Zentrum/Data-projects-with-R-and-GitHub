@@ -15,7 +15,8 @@ The dataset is already available in the project folder under
 [Dataset](https://catalog.data.gov/dataset/air-quality/resource/f3ed1638-92da-4f88-bb6b-7d3940514574)
 has been published by Department of Health and Mental Hygiene (DOHMH) on
 the Open-Data. The dataset consists of csv/rdf/json/xml file with 12
-attributes. Under [landing
+attributes. Name/Geo Type Name/Start\_Date/Data Value are relevant for
+my project. Under [landing
 page](https://data.cityofnewyork.us/Environment/Air-Quality/c3uy-2p5r/about_data)
 you can find more information.
 
@@ -27,6 +28,7 @@ regions, or comparing mean values of different pollutants.
 
 # Visualization Goals
 
-I mainly want to compare the mean values of different pollutants. This
-can be done by calculating the mean value of each pollutant in the data
-and then plotting a geom\_bar to show. ![](description.jpg)
+I want to compare the mean values of different pollutants and give the
+time variation of the pollutant with the highest pollution value in top3
+regions. For the first task I would use a geom\_bar for comparison and
+then a geom\_linie to analyze the second situation. ![](airfoto.jpg)
