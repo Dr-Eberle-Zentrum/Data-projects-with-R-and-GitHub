@@ -5,8 +5,9 @@
 ### General Topic:
 
 <hr>
-The project aims to analyze to find any coorelation between demographic
-background \[of your choice\] presented in the data and depression rate.
+The project aims to analyze to find how the the frequency of depressive
+disorder reports changed over time for different age groups, genders,
+and race-ethnicity categories.
 <hr>
 
 ### The Data set:
@@ -30,9 +31,9 @@ dataframe is messy and not in a usual tidy form.
 
 The the main task prior to doing some visualization is tidying the given
 data. <br> 1. Please make sure that data table has a tidy form (one
-observation per row, one variable per column, one value per cell). 2.
-Since the “Percent” values are not relating to the “Frequency” values,
-thus, please recompute them (per year) to get the respective
+observation per row, one variable per column, one value per cell). <br>
+2. Since the “Percent” values are not relating to the “Frequency”
+values, thus, please recompute them (per year) to get the respective
 Frequency-fraction in percent. Create a separate column called “Annual
 Frequency”. You will use it later for graph.
 
@@ -44,9 +45,9 @@ Frequency”. You will use it later for graph.
 
 I would like to see some graph like
 [this:](https://www.thelancet.com/cms/10.1016/S0140-6736(21)02143-7/asset/c7d6c323-1ef7-475a-bd3d-f9c6eab69294/main.assets/gr4_lrg.jpg)![](https://www.frontiersin.org/files/Articles/1066706/fpsyg-13-1066706-HTML-r1/image_m/fpsyg-13-1066706-g002.jpg).
-<br> This chart is not related to the actual dataset. <br> 1. Plot a
+<br> **This chart is not related to the actual dataset.** <br> 1. Plot a
 graph with “Annual Frequncy” on the y-axis, and “Years” on the x-axis.
-2. Make 3 graphs, where: - (1) lines are colored by “Education level” -
-(2) lines are colored by “Race-Ethnicy” - (3) lines are colored by “Age”
-categories 3. Make sure that all three graphs appear on one frame as
-shown in the example. <br>
+<br> 2. Make 3 graphs, where: - (1) lines are colored by “Education
+level” - (2) lines are colored by “Race-Ethnicy” - (3) lines are colored
+by “Age” categories <br> 3. Make sure that all three graphs appear on
+one frame as shown in the example. <br>
