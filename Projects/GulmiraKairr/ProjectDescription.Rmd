@@ -13,7 +13,8 @@ The project aims to analyze to find how the the frequency of depressive disorder
 ### The Data set: 
 
 <hr>
-The dataset can be downloaded from the [github page](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/GulmiraKairr/adult-depression.csv/). The table displays the proportion of adults who were ever told they had a depressive disorder in California. It contains data for California only. The data are from the California Behavioral Risk Factor Surveillance Survey (BRFSS). The data contains information on annual number of depressive disorder records from 2012 to 2018. It also contains number of recorded disorders for different age groups, gender, education levels, and race-ethicity catrgories. The current stage of the dataframe is messy and not in a usual tidy form. 
+The dataset can be downloaded from the [github page](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/GulmiraKairr/adult-depression.csv) 
+The table displays the proportion of adults who were ever told they had a depressive disorder in California. It contains data for California only. The data are from the California Behavioral Risk Factor Surveillance Survey (BRFSS). The data contains information on annual number of depressive disorder records from 2012 to 2018. It also contains number of recorded disorders for different age groups, gender, education levels, and race-ethicity catrgories. The current stage of the dataframe is messy and not in a usual tidy form. 
 <hr>
 
 ### Data Manipulation Goals: 

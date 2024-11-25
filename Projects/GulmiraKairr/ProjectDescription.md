@@ -14,7 +14,7 @@ and race-ethnicity categories.
 
 <hr>
 The dataset can be downloaded from the [github
-page](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/GulmiraKairr/adult-depression.csv/).
+page](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/GulmiraKairr/adult-depression.csv)
 The table displays the proportion of adults who were ever told they had
 a depressive disorder in California. It contains data for California
 only. The data are from the California Behavioral Risk Factor
