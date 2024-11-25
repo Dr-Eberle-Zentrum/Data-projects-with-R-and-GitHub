@@ -13,10 +13,10 @@ and race-ethnicity categories.
 ### The Data set:
 
 <hr>
-The dataset can be downloaded from the [github
-page](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/GulmiraKairr/adult-depression.csv)
-The table displays the proportion of adults who were ever told they had
-a depressive disorder in California. It contains data for California
+The dataset can be downloaded from the
+[here](https://data.chhs.ca.gov/dataset/5a281abf-1730-43b0-b17b-ac6a35db5760/resource/724c6fd8-a645-4e52-b63f-32631a20db5d/download/adult-depression-lghc-indicator-24.csv)
+<br> The table displays the proportion of adults who were ever told they
+had a depressive disorder in California. It contains data for California
 only. The data are from the California Behavioral Risk Factor
 Surveillance Survey (BRFSS). The data contains information on annual
 number of depressive disorder records from 2012 to 2018. It also
@@ -43,8 +43,8 @@ Frequency”. You will use it later for graph.
 
 <hr>
 
-I would like to see some graph like
-[this:](https://www.thelancet.com/cms/10.1016/S0140-6736(21)02143-7/asset/c7d6c323-1ef7-475a-bd3d-f9c6eab69294/main.assets/gr4_lrg.jpg)![](https://www.frontiersin.org/files/Articles/1066706/fpsyg-13-1066706-HTML-r1/image_m/fpsyg-13-1066706-g002.jpg).
+I would like to see some graph like this:
+![](https://www.frontiersin.org/files/Articles/1066706/fpsyg-13-1066706-HTML-r1/image_m/fpsyg-13-1066706-g002.jpg).
 <br> **This chart is not related to the actual dataset.** <br> 1. Plot a
 graph with “Annual Frequncy” on the y-axis, and “Years” on the x-axis.
 <br> 2. Make 3 graphs, where: - (1) lines are colored by “Education
