@@ -121,7 +121,7 @@ Current projects:
 - Felix (felix-gogollok) - ...
 - Manuel (ManuDoerrich) - [Nutrition data](Projects/ManuDoerrich/project-description.md)
 - Nicolas (NicolasDelgadoL) - [social media & personality](Projects/NicolasDelgadoL/Nicolás-project.md)
-- Sun (MoonSunKyung) - [Promotion strategies](Projects/SunKyoung%20Moon/project_description.md)
+- Sun (MoonSunKyung) - [Promotion strategies](Projects/SunKyoung Moon/project_description.md)
 
 
 #### Goals
