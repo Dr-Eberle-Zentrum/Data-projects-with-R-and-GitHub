@@ -306,7 +306,12 @@ An example of a possible graph is provided
 [here.](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/shad-lad-flad/wows_contest_graph_example.png)  
   
 The idea of the graph is to not only track the amount of points, but
-also to keep track of the point progression per tier within the graph.  
+also to keep track of the point progression per tier within the graph.
+In my example I have added text for the tier in which that nation has
+received points.  
+Some will have the same tier displayed with the rest of the available
+points, and some nations will not have that tier mentioned because they
+haven’t received any points in it.  
 The nations should be ordered by their final point count in descending
 order.  
 Your final representation can vary, but should contain the same
