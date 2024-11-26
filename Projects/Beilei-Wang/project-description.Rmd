@@ -1,3 +1,8 @@
+---
+title: "project-description"
+output: md_document
+---
+
 # [Data-projects-with-R-and-GitHub](https://dr-eberle-zentrum.github.io/Data-projects-with-R-and-GitHub/)
 
 ## General Topic

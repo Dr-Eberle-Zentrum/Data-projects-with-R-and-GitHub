@@ -57,6 +57,21 @@ Note down where you got your data from, since you will later have to provide som
 
 **Eventually: the more ugly the data the better!** 😜 Don't try to be nice but provide what you have. Reality is neither nice nor without errors, bugs and **misformatted data**... Let's get used to it!
 
+**online vs. local**
+
+If the data set is online and available for download *without registration or user accounts*, you can directly link it. 
+This is often the case for data from databases or supplements from articles.
+
+*If user credentials are needed* to access the data, please 
+- ensure you are allowed to share it! (licence? this is a public github repository!)
+- download the data to your project folder
+- link the local file in your data description (to make people aware it is accessible)
+- add a link where you got the data from
+
+*If the data is large (>50MB per file)*,
+- you cannot upload it to github (file size limits)
+- you should shrink it
+
 #### Visualization goals
 
 Next, formulate some rough idea what you would like to see. If you want to (re)produce a plot you have seen, store the image. Or just draw a sketch by hand of how it should look like and make a photo. Anything to transport your idea is fine.
@@ -71,6 +86,7 @@ Write an R Markdown file `project-description.Rmd` to
 
 -   introduce shortly the general topic of your task (to put it in context)
 -   introduce the data set(s), it's origin and important information of what-is-what, etc.
+    - e.g. show the first line of the data set/file and, if needed, explain the column names (or tell where to find such information)
 -   define data manipulation goals if needed (also fine if this is the main focus of the project!)
 -   define the visualization goal(s) and possible intermediates
 
@@ -108,17 +124,17 @@ Example:
 
 Current projects:
 
-- Luis (kickbones1) - [Luis' project](Projects/kickbones1/project-description.md)
+- Luis (kickbones1) - [Phone Usage Time](Projects/kickbones1/project-description.md)
 - Silin (Selena-qian) - [Silin's project](Projects/Selena-qian/project-description.md)
 - Charlotte (janaelodie) - [Charlottes project](Projects/charlotte/project-description.md)
 - Gulmira (GulmiraKairr) - [Gulmira's project](Projects/GulmiraKairr/ProjectDescription.md)
 - Dennis (shad-lad-flad) - [Dennis' project](Projects/shad-lad-flad/project_description.md)
 - Yuguang (Yuguang Chen) - [Yuguang's project](Projects/yuguang%20Chen/projekt_description.md)
 - Yue (Yue_Z9) - [Yue's project](Projects/Yue_Z9/project-description.md)
-- Jungi (JungiHong) - [Jungi's project](Projects/JungiHong/project-description.md)
+- Jungi (JungiHong) - [Volleyball Passing](Projects/JungiHong/project-description.md)
 - Beilei (Beilei-Wang) - [Income distributions](Projects/Beilei-Wang/project-description.md)
 - Celine (celineony) - [Behavorial data](Projects/celineony/project-description.md)
-- Felix (felix-gogollok) - ...
+- Felix (felix-gogollok) [Historical data analysis regarding genocides](Projects/felix-gogollok/historical-data-analysis/project-description.md)
 - Manuel (ManuDoerrich) - [Nutrition data](Projects/ManuDoerrich/project-description.md)
 - Nicolas (NicolasDelgadoL) - [social media & personality](Projects/NicolasDelgadoL/Nicolás-project.md)
 - Sun (MoonSunKyung) - [Promotion strategies](Projects/SunKyoung Moon/project_description.md)
