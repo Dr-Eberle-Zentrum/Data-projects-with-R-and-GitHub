@@ -10,7 +10,11 @@ The goal of this project is to visualize the foreign language proficiency of ind
 
 ## The Data Set
 
+<<<<<<< HEAD
 The data set is from [Eurostat](https://ec.europa.eu/eurostat/en/). You can view and download the full dataset [here](https://ec.europa.eu/eurostat/databrowser/view/edat_aes_l23/default/table?lang=en&category=educ.educ_lang.educ_lang_00.edat_aes_l2) or download the `.csv.gz` file [here](lang_known.csv). For this project, we will focus specifically on data from 2022 for individuals aged 18–69. For more information about the dataset, please refer to this [website](https://ec.europa.eu/eurostat/cache/metadata/en/trng_aes_12m_esms.htm) for metadata details.
+=======
+The data set is from [Eurostat](https://ec.europa.eu/eurostat/en/). You can view and download the full dataset [here](https://ec.europa.eu/eurostat/databrowser/view/edat_aes_l23/default/table?lang=en&category=educ.educ_lang.educ_lang_00.edat_aes_l2) or download the `.csv.gz` file [here](lang_known.csv.gz). For this project, we will focus specifically on data from 2022 for individuals aged 18–69. For more information about the dataset, please refer to this [website](https://ec.europa.eu/eurostat/cache/metadata/en/trng_aes_12m_esms.htm) for metadata details.
+>>>>>>> 2de2460a9bebb84473753484b4068f97d7adca4d
 
 ## Data Manipulation Goals
 
