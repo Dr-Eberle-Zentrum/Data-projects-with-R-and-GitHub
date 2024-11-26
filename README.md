@@ -137,7 +137,7 @@ Current projects:
 - Felix (felix-gogollok) [Historical data analysis regarding genocides](Projects/felix-gogollok/historical-data-analysis/project-description.md)
 - Manuel (ManuDoerrich) - [Nutrition data](Projects/ManuDoerrich/project-description.md)
 - Nicolas (NicolasDelgadoL) - [social media & personality](Projects/NicolasDelgadoL/Nicolás-project.md)
-- Sun (MoonSunKyung) - [Promotion strategies](Projects/SunKyoung Moon/project_description.md)
+- Sun (MoonSunKyung) - [Shopping Trends by Age group and Sex](Projects/SunKyoung Moon/project_description.md)
 
 
 #### Goals
