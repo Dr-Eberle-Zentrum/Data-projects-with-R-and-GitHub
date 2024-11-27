@@ -143,10 +143,9 @@ A visualisation-example-drawing is shown below (Note: The legened is
 only valid for the histogram.). The pie chart can show the relative
 energy uptake per macronutrient and directly compare it to some general
 recommendation given below. You could add some bar showing the actual
-energy uptake vs the energy demand (not shown in plot, but actually the
-answer to i) ). The one or more histograms could represent the uptake of
-minerals and micronutrients as bars that show the “progress” in
-achieving ones demand (given below).
+energy uptake vs the energy demand. The one or more histograms could
+represent the uptake of minerals and micronutrients as bars that show
+the “progress” in achieving ones demand (given below).
 
 The figures could also be simplified and the data presented in several
 charts.
