@@ -66,8 +66,12 @@ which are not part of the data. Instead, the legend should include the 8
 combinations of social media use mentioned above.
 
 Which conclusions/hypotyhesis can we draw from the resulting graph? Do
-they match some of the resluts of the study (found in “Presentation 1”)?
+they match some of the results of the study (found in “Presentation 1”)?
 
 Best of luck on your implementation!
 
-<img src="Example spider-web diagram.png" width="500">
+<figure>
+<img src="Example%20spider-web%20diagram.png%20=200x"
+alt="Example spider-web diagram" />
+<figcaption aria-hidden="true">Example spider-web diagram</figcaption>
+</figure>
