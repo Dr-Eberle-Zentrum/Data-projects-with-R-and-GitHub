@@ -17,11 +17,11 @@ food plan could offer some alternative daily food “recommendations”. But
 be careful, your food might be found under another name in the dataset.
 You could also use the two plans provided below.). Then, you should
 calculate the total uptake (in g or mg) from the foods, i.e., the uptake
-of the aforementioned macronutrients, minerals, and micronutrients.
-Therefore, you need to approximate the amount of all foods that were
-consumed. Finally, you can calculate a (fictive) persons Daily Energy
-Demand and the relative contribution of each macronutrient. The total
-mineral and micronutrient uptake only needs to be summed up.
+of the aforementioned macronutrients, minerals, and vitamins. Therefore,
+you need to approximate the amount of all foods that were consumed.
+Finally, you can calculate a (fictive) persons Daily Energy Demand and
+the relative contribution of each macronutrient. The total mineral and
+vitamin uptake only needs to be summed up.
 
 Potential additions to the project:  
 -The dataset could be imported directly from the webpage.  
@@ -144,8 +144,8 @@ only valid for the histogram.). The pie chart can show the relative
 energy uptake per macronutrient and directly compare it to some general
 recommendation given below. You could add some bar showing the actual
 energy uptake vs the energy demand. The one or more histograms could
-represent the uptake of minerals and micronutrients as bars that show
-the “progress” in achieving ones demand (given below).
+represent the uptake of minerals and vitamins as bars that show the
+“progress” in achieving ones demand (given below).
 
 The figures could also be simplified and the data presented in several
 charts.
@@ -176,7 +176,7 @@ Some general recommendation for the saturation of the Daily Energy
 Demand \[kJ\] by the macronutrients carbo hydrates, lipids, and proteins
 is 55%, 30%, and 15%, respectively.
 
-### Nutrient demand and energy density
+### Micronutrient demand and macronutrients energy density
 
 <!-- Erste Tabelle -->
 <table>
@@ -217,7 +217,7 @@ Sodium
 <table>
 <tr>
 <th>
-Micronutrient
+Vitamin
 </th>
 <th>
 Demand \[mg/day\]

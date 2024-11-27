@@ -10,8 +10,8 @@ Based on some predefined foods that were (hypothetically) consumed within a day,
 i) and ii) could be visualised somehow in the same pie plot. iii) could be represented well by a histogram. The drawing of one possible outcome is shown elsewhere.
 
 To this end, you are supposed to filter the dataset for some predefined foods (perhaps your favourite foods you wish to eat within a day? Any food plan could offer some alternative daily food "recommendations". But be careful, your food might be found under another name in the dataset. You could also use the two plans provided below.). 
-Then, you should calculate the total uptake (in g or mg) from the foods, i.e., the uptake of the aforementioned macronutrients, minerals, and micronutrients. Therefore, you need to approximate the amount of all foods that were consumed.
-Finally, you can calculate a (fictive) persons Daily Energy Demand and the relative contribution of each macronutrient. The total mineral and micronutrient uptake only needs to be summed up. 
+Then, you should calculate the total uptake (in g or mg) from the foods, i.e., the uptake of the aforementioned macronutrients, minerals, and vitamins. Therefore, you need to approximate the amount of all foods that were consumed.
+Finally, you can calculate a (fictive) persons Daily Energy Demand and the relative contribution of each macronutrient. The total mineral and vitamin uptake only needs to be summed up. 
 
 Potential additions to the project: \
 -The dataset could be imported directly from the webpage. \
@@ -52,7 +52,7 @@ The complete data set is provided by and available at [The Swiss Food Compositio
 ## Visualisation goals:
 The data could be represented as a pie chart and one or more histograms. A visualisation-example-drawing is shown below (Note: The legened is only valid for the histogram.).
 The pie chart can show the relative energy uptake per macronutrient and directly compare it to some general recommendation given below. You could add some bar showing the actual energy uptake vs the energy demand.
-The one or more histograms could represent the uptake of minerals and micronutrients as bars that show the "progress" in achieving ones demand (given below). 
+The one or more histograms could represent the uptake of minerals and vitamins as bars that show the "progress" in achieving ones demand (given below). 
 
 The figures could also be simplified and the data presented in several charts. 
 
@@ -79,7 +79,7 @@ with: \
 
 Some general recommendation for the saturation of the Daily Energy Demand [kJ] by the macronutrients carbo hydrates, lipids, and proteins is 55%, 30%, and 15%, respectively. 
 
-### Nutrient demand and energy density
+### Micronutrient demand and macronutrients energy density
 <div style="display: flex; justify-content: space-between;">
 <!-- Erste Tabelle -->
 <table>
@@ -95,7 +95,7 @@ Some general recommendation for the saturation of the Daily Energy Demand [kJ] b
 <!-- Zweite Tabelle -->
 <table>
   <tr>
-    <th>Micronutrient</th>
+    <th>Vitamin</th>
     <th>Demand [mg/day]</th>
   </tr>
   <tr><td>Vitamin B1 (Thiamine)</td><td>1.1</td></tr>
