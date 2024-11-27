@@ -14,14 +14,14 @@ is shown elsewhere.
 To this end, you are supposed to filter the dataset for some predefined
 foods (perhaps your favourite foods you wish to eat within a day? Any
 food plan could offer some alternative daily food “recommendations”. But
-be careful, your food might be found under another name in the
-dataset.). Then, you should calculate the total uptake (in g or mg) from
-the foods, i.e., the uptake of the aforementioned macronutrients,
-minerals, and micronutrients. Therefore, you need to approximate the
-amount of all foods that were consumed. Finally, you can calculate a
-(fictive) persons Daily Energy Demand and the relative contribution of
-each macronutrient. The total mineral and micronutrient uptake only
-needs to be summed up.
+be careful, your food might be found under another name in the dataset.
+You could also use the two plans provided below.). Then, you should
+calculate the total uptake (in g or mg) from the foods, i.e., the uptake
+of the aforementioned macronutrients, minerals, and micronutrients.
+Therefore, you need to approximate the amount of all foods that were
+consumed. Finally, you can calculate a (fictive) persons Daily Energy
+Demand and the relative contribution of each macronutrient. The total
+mineral and micronutrient uptake only needs to be summed up.
 
 Potential additions to the project:  
 -The dataset could be imported directly from the webpage.  
@@ -290,3 +290,24 @@ Proteins
   
 Note: Some of the given demand values vary between people and thus, were
 approximated/averaged where necessary.
+
+### Example dietary plans
+
+Day 1:  
+-Wholegrain Bread: 100g  
+-Apple: 150g  
+-Chicken Breast, cooked: 120g  
+-Broccoli, steamed: 100g  
+-Olive Oil: 10g  
+-Almonds: 30g  
+-Low-fat Yogurt: 150g  
+
+  
+Day 2:  
+-Rice, cooked: 150g  
+-Banana: 120g  
+-Salmon, grilled: 150g  
+-Spinach, cooked: 100g  
+-Sunflower Oil: 10g  
+-Walnuts: 20g  
+-Milk, semi-skimmed: 200ml  
