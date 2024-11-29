@@ -124,20 +124,20 @@ Example:
 
 Current projects:
 
-- Luis (kickbones1) - [Luis' project](Projects/kickbones1/project-description.md)
+- Luis (kickbones1) - [Phone Usage Time](Projects/kickbones1/project-description.md)
 - Silin (Selena-qian) - [Silin's project](Projects/Selena-qian/project-description.md)
 - Charlotte (janaelodie) - [Charlottes project](Projects/charlotte/project-description.md)
 - Gulmira (GulmiraKairr) - [Gulmira's project](Projects/GulmiraKairr/ProjectDescription.md)
 - Dennis (shad-lad-flad) - [Dennis' project](Projects/shad-lad-flad/project_description.md)
 - Yuguang (Yuguang Chen) - [Yuguang's project](Projects/yuguang%20Chen/projekt_description.md)
 - Yue (Yue_Z9) - [Yue's project](Projects/Yue_Z9/project-description.md)
-- Jungi (JungiHong) - [Jungi's project](Projects/JungiHong/project-description.md)
+- Jungi (JungiHong) - [Volleyball Passing](Projects/JungiHong/project-description.md)
 - Beilei (Beilei-Wang) - [Income distributions](Projects/Beilei-Wang/project-description.md)
 - Celine (celineony) - [Behavorial data](Projects/celineony/project-description.md)
 - Felix (felix-gogollok) [Historical data analysis regarding genocides](Projects/felix-gogollok/historical-data-analysis/project-description.md)
 - Manuel (ManuDoerrich) - [Nutrition data](Projects/ManuDoerrich/project-description.md)
 - Nicolas (NicolasDelgadoL) - [social media & personality](Projects/NicolasDelgadoL/Nicolás-project.md)
-- Sun (MoonSunKyung) - [Promotion strategies](Projects/SunKyoung%20Moon/project_description.md)
+- Sun (MoonSunKyung) - [Shopping Trends by Age group and Sex](Projects/SunKyoung Moon/project_description.md)
 
 
 #### Goals
