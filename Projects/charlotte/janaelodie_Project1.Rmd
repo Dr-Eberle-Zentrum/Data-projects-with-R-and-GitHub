@@ -4,8 +4,7 @@ author: "janaelodie"
 output: md_document
 ---
 
-
-```{r setup}
+```{r setup, include= FALSE}
 
 library(readr)
 library(gridExtra)
@@ -118,7 +117,7 @@ age_plot <- ggplot(split_data$Age, aes(x = Year, y = Percent, color = Age, group
 
 ## My solution to Gulmira´s project
 
-```{r visualisation}
+```{r visualisation, echo= FALSE}
 grid.arrange(
   education_plot, race_ethnicity_plot, age_plot, 
   ncol = 3
