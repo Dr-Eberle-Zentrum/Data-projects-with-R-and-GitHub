@@ -69,3 +69,6 @@ and frequency of passing attempts impact overall performance.
     value represented in the graph’s legend. A high Pearson R (close to
     1 or -1) will show a clear upward or downward trend, while a low
     value (closer to 0) will show a more scattered distribution.
+
+The examples for the visualization are in the link:
+[visualization](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/main/Projects/JungiHong)
