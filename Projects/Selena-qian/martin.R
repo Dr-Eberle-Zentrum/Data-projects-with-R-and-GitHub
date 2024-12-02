@@ -9,14 +9,14 @@ rstudioapi::getSourceEditorContext()$path |>
 
 # library(countrycode)
 # identify respective flag for a given column of country names
-# country2flag <- function(country) {
-#   country[[1]] |>
-#     countrycode::countrycode("country.name", "iso2c") |>
-#     str_to_lower() |>
-#     map(~str_c("<img src='https://raw.githubusercontent.com/hampusborgos/country-flags/refs/heads/main/png250px/",.,".png' width='20'/>")) |>
-#     paste(country[[1]]) |>
-#     as_tibble_col()
-# }
+country2flag <- function(country) {
+  country[[1]] |>
+    countrycode::countrycode("country.name", "iso2c") |>
+    str_to_lower() |>
+    map(~str_c("<img src='https://raw.githubusercontent.com/hampusborgos/country-flags/refs/heads/main/png250px/",.,".png' width='20' />")) |>
+    paste(country[[1]], " - <img src='https://raw.githubusercontent.com/hampusborgos/country-flags/refs/heads/main/png250px/eu.png' width='20' />") |>
+    as_tibble_col(column_name = "title")
+}
 
 data <- read_csv("lang_known.csv.gz")
 
@@ -41,18 +41,13 @@ data |>
   ungroup() |>
   # drop EU27
   dplyr::filter(geo != "EU27") |>
-  # create facet labels with flag images
-  mutate( flag = geo |>
-            countrycode::countrycode("country.name", "iso2c") |>
-            str_to_lower() |>
-            map(~str_c("<img src='https://raw.githubusercontent.com/hampusborgos/country-flags/refs/heads/main/png250px/",.,".png' width='20'/>")) %>%
-            paste(geo)) |>
   # plot barplot with facet per geo
   ggplot(aes(x = n_lang, y = deviation, fill = deviation)) +
   geom_bar(stat = "identity") +
   labs(x = "Number of known languages",
-       y = "Deviation from EU27 average [%]",
-       fill = "Deviation") +
+       y = "Difference to EU27 average [%]") +
+  # disable fill legend
+  guides(fill = FALSE) +
   # use gradient fill scale from blue to red
   scale_fill_gradient2(high = "blue", low = "red") +
   # dotted line at y=0
@@ -64,9 +59,9 @@ data |>
   theme_minimal() +
 # country flags
 # https://umairdurrani.com/posts/images_in_facets/images_in_facets
-  facet_wrap(~geo, labeller = as_labeller(flag)) + # set flag image as facet label
+  facet_wrap(~geo, labeller = country2flag) + # set flag image as facet label
   theme(
-    strip.text.x = ggtext::element_markdown(size = 10) # ensure rendering of flags
+    strip.text.x = ggtext::element_markdown() # ensure rendering of flags
   )
 
 
