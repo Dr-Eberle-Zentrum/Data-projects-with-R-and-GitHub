@@ -227,9 +227,9 @@ Given a project description, you will try to solve the task. In order to practic
 
 This workflow is described and summarized in
 
--   [Section 6.5 Your repo with branching](https://edav.info/github.html#your-repo-with-branching)
--   [Step 4: Branch](https://edav.info/github.html#step-4-branch)
--   [Step 5: Work, commit and push](https://edav.info/github.html#step-5-work-commit-and-push)
+-   [Section 6.5 Your repo with branching](https://edav.info/git_GitHub.html#your-repo-with-branching)
+-   [Step 4: Branch](https://edav.info/git_GitHub.html#step-4-branch)
+-   [Step 5: Work, commit and push](https://edav.info/git_GitHub.html#step-5-work-commit-and-push)
 
 Note: we are still working all on ONE GITHUB REPOSITORY! We do *not create a fork*, i.e. our own copy of the repository on GitHub, which is also detailed in the linked material. The latter (forking) is needed, if you don't have writing permissions to a repository. But the overall workflow is more or less the same.
 
