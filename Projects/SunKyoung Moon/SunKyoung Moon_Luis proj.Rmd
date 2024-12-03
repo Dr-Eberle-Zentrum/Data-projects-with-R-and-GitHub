@@ -8,14 +8,12 @@ library(ggplot2)
 library(dplyr)
 library(tidyr)
 
-##Loading Data
+#Loading Data
 url <- "https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/refs/heads/main/Projects/SunKyoung%20Moon/kaggle_dataset.csv"
 
 data <- read.csv(url)
-#C:/R2_data/kaggle_dataset.csv
 head(data)
 
-##Data Manipulation
 # Convert app usage time from minutes/day to hours/day
 data <- data %>%
   mutate(AppUsageHours = `App.Usage.Time..min.day.` / 60)
@@ -39,7 +37,7 @@ data <- data %>%
     TRUE ~ "Others"
   ))
 
-##Visualization
+#Visualization part!
 ggplot(data, aes(x = Device.Model, y = AppUsageHours, fill = Gender)) +
   geom_violin(alpha = 0.7, scale = "width") +
   geom_point(aes(color = AgeGroup), position = position_jitter(width = 0.2, height = 0), alpha = 0.5) +

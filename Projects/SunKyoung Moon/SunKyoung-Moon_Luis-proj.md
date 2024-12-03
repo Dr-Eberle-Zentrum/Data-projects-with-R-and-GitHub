@@ -1,13 +1,14 @@
 library(ggplot2) library(dplyr) library(tidyr)
 
-\##Loading Data url &lt;-
+\#Loading Data url &lt;-
 “<https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/refs/heads/main/Projects/SunKyoung%20Moon/kaggle_dataset.csv>”
 
-data &lt;- read.csv(url) \#C:/R2\_data/kaggle\_dataset.csv head(data)
+data &lt;- read.csv(url) head(data)
 
-\##Data Manipulation \# Convert app usage time from minutes/day to
-hours/day data &lt;- data %&gt;% mutate(AppUsageHours =
-`App.Usage.Time..min.day.` / 60)
+# Convert app usage time from minutes/day to hours/day
+
+data &lt;- data %&gt;% mutate(AppUsageHours = `App.Usage.Time..min.day.`
+/ 60)
 
 # Compute median app usage time and sum users for each device model
 
@@ -22,16 +23,17 @@ data &lt;- data %&gt;% mutate(AgeGroup = case\_when( Age &gt;= 20 & Age
 & Age &lt;= 49 ~ “40-49”, Age &gt;= 50 & Age &lt;= 59 ~ “50-59”, TRUE ~
 “Others” ))
 
-\##Visualization ggplot(data, aes(x = Device.Model, y = AppUsageHours,
-fill = Gender)) + geom\_violin(alpha = 0.7, scale = “width”) +
-geom\_point(aes(color = AgeGroup), position = position\_jitter(width =
-0.2, height = 0), alpha = 0.5) + scale\_fill\_manual(values = c(“Male” =
-“blue”, “Female” = “red”)) + scale\_color\_manual(values = c( “20-29” =
-“gray”, “30-39” = “green”, “40-49” = “pink”, “50-59” = “purple” )) +
-labs( title = “Mobile Device Usage for Different Models”, subtitle =
-“Median app usage time differentiated by gender and age groups”, x =
-“Device Model”, y = “Median App Usage Time (hours/day)”, fill =
-“Gender”, color = “Age Group” ) + theme\_minimal()
+\#Visualization part! ggplot(data, aes(x = Device.Model, y =
+AppUsageHours, fill = Gender)) + geom\_violin(alpha = 0.7, scale =
+“width”) + geom\_point(aes(color = AgeGroup), position =
+position\_jitter(width = 0.2, height = 0), alpha = 0.5) +
+scale\_fill\_manual(values = c(“Male” = “blue”, “Female” = “red”)) +
+scale\_color\_manual(values = c( “20-29” = “gray”, “30-39” = “green”,
+“40-49” = “pink”, “50-59” = “purple” )) + labs( title = “Mobile Device
+Usage for Different Models”, subtitle = “Median app usage time
+differentiated by gender and age groups”, x = “Device Model”, y =
+“Median App Usage Time (hours/day)”, fill = “Gender”, color = “Age
+Group” ) + theme\_minimal()
 
 device\_user\_counts &lt;- data %&gt;% group\_by(Device.Model) %&gt;%
 summarize(UserCount = n())
