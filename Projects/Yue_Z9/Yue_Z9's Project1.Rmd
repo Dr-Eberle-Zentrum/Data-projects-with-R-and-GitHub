@@ -1,0 +1,83 @@
+---
+title: "Yue_Z9Project1"
+output: md_document
+date: "2024-12-03"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+```{r pressure,echo=FALSE}
+library(ggplot2)
+library(dplyr)
+library(lubridate)
+data <- read.csv("Air_Quality.csv")
+
+pollutant_means <- data %>%
+  group_by(Name) %>%
+  summarise(Mean_Value = mean(Data.Value, na.rm = TRUE)) %>%
+  arrange(Mean_Value)
+
+ggplot(pollutant_means, aes(x = reorder(Name, Mean_Value), y = Mean_Value)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  coord_flip() + 
+  labs(title = "Average Value of Different Pollutants",
+       x = "Pollutant Name",
+       y = "Average Data Value") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
+    axis.title = element_text(size = 12),
+    axis.text = element_text(size = 10)
+  )
+
+highest_mean_pollutant <- data %>%
+  group_by(Name) %>%
+  summarise(Mean_Value = mean(Data.Value, na.rm = TRUE)) %>%
+  arrange(desc(Mean_Value)) %>%
+  slice(1) %>%
+  pull(Name)
+
+
+highest_pollutant_data <- data %>%
+  filter(Name == highest_mean_pollutant)
+
+
+highest_pollutant_data$Start_Date <- as.Date(highest_pollutant_data$Start_Date, format = "%m/%d/%Y")
+highest_pollutant_data$Year <- year(highest_pollutant_data$Start_Date)
+
+
+yearly_avg_pollutant <- highest_pollutant_data %>%
+  group_by(Geo.Place.Name, Year) %>%
+  summarise(Yearly_Avg_Value = mean(Data.Value, na.rm = TRUE)) %>%
+  ungroup()
+
+
+top_3_regions <- yearly_avg_pollutant %>%
+  group_by(Geo.Place.Name) %>%
+  summarise(Avg_Yearly_Value = mean(Yearly_Avg_Value, na.rm = TRUE)) %>%
+  top_n(3, Avg_Yearly_Value) %>%
+  pull(Geo.Place.Name)
+
+
+top_3_regions_data <- yearly_avg_pollutant %>%
+  filter(Geo.Place.Name %in% top_3_regions)
+
+
+ggplot(top_3_regions_data, aes(x = Year, y = Yearly_Avg_Value, color = Geo.Place.Name, group = Geo.Place.Name)) +
+  geom_line() +
+  labs(title = paste("Time Series of", highest_mean_pollutant, "for Top 3 Regions by Yearly Average"),
+       x = "Year",
+       y = "Yearly Average Value (mcg/m3)",
+       color = "Region") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, size = 12),
+    axis.title = element_text(size = 12),
+    axis.text = element_text(size = 10)
+  )
+
+```
