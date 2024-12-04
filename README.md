@@ -18,6 +18,7 @@ All tutorials are summarized within the
 
 -   [Project descriptions](#project-descriptions)
     -   [Phase 1 - Drafting a project description](#phase-1---drafting-a-project-description)
+        -   [List of available projects](#available-projects)
     -   [Phase 2 - Reviewing a project description](#phase-2---reviewing-a-project-description)
     -   [Phase 3 - Finalizing your project description](#phase-3---finalizing-your-project-description)
 -   [Tackling a suggested project](#tackling-a-suggested-project)
