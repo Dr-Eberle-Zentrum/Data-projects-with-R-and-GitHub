@@ -1,6 +1,6 @@
 ---
 title: 'First project attempt - SunKyoungs project'
-output: md_document
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -27,8 +27,18 @@ url <- "https://raw.githubusercontent.com/OscarL7/Shopping-Trends-Analysis/main/
 data_raw <- read.csv(url)
 
 # Data processing
-data_pro <- data_raw |>
-  select(all_of(c("Customer.ID", "Age", "Gender", "Purchase.Amount..USD.", "Frequency.of.Purchases")))
+data_pro <- data_raw %>%
+  select(all_of(c("Customer.ID", "Age", "Gender", "Purchase.Amount..USD.", "Frequency.of.Purchases"))) %>%
+  mutate(`Frequency [1/year]` = case_when(
+    Frequency.of.Purchases == "Annually" ~ 1,
+    Frequency.of.Purchases == "Bi-Weekly" ~ 52/2,
+    Frequency.of.Purchases == "Every 3 Months" ~ 4,
+    Frequency.of.Purchases == "Fortnightly" ~ 52/2,
+    Frequency.of.Purchases == "Monthly" ~ 12,
+    Frequency.of.Purchases == "Quarterly" ~ 4,
+    Frequency.of.Purchases == "Weekly" ~ 52,
+    TRUE ~ 10000
+  ))
 
 # Preview the data
 head(data_pro)
@@ -38,7 +48,7 @@ head(data_pro)
 
 Purchase amount by age for two genders:
 
-```{r visualise data}
+```{r visualisation I}
 LabsAge <- c("18-22", "23-27", "28-32", "33-37", "38-42",
              "43-47", "48-52", "53-57", "58-62", "63-67",
              "68-70")
@@ -53,24 +63,27 @@ p1 <- data_pro %>%
   geom_bar(stat = "identity", position = "dodge") +
   labs(title = "Consumers Purchase Amount by Age and Gender",
        x = "Age",
-       y = "Total\n Purchase\n Amount\n (USD)") +
+       y = "Total\n Purchase\n Amount\n [USD]") +
   scale_x_discrete(labels = LabsAge) +
   theme_minimal() +
   theme(plot.title = element_text(face = "bold"),
         axis.title.y = element_text(angle = 0, vjust = 1)) 
 
 p1
+```
 
+Purchase frequency (per year) by age for two genders (Numeric frequency was calculated based on the Frequency of Purchases):
+```{r visualisation II}
 p2 <- data_pro %>%
   mutate(AgeGroup = cut(Age, breaks = seq(18, 72, by = 5), right = FALSE),
          Gender = factor(Gender, levels = c("Male", "Female"))) %>%
   group_by(AgeGroup, Gender) %>%
-  summarise(FreqPurchase = n(), .groups = 'drop') %>%
+  summarise(FreqPurchase = sum(`Frequency [1/year]`), .groups = 'drop') %>%
   ggplot(aes(x = AgeGroup, y = FreqPurchase, fill = Gender)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(title = "Consumers Frequency of Purchase by Age and Gender",
        x = "Age",
-       y = "Frequency of\n Purchase") +
+       y = "Frequency\n of\n Purchase\n [1/year]") +
   scale_x_discrete(labels = LabsAge) +
   theme_minimal() +
   theme(plot.title = element_text(face = "bold"),
