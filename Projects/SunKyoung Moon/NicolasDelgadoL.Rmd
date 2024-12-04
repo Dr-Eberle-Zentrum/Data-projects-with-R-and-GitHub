@@ -6,25 +6,29 @@ date: "2024-12-04"
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+options(repos = c(CRAN = "https://cloud.r-project.org/"))
 ```
 
 # Data Loading
 
+```{r loading}
 install.packages("here")
 library(here)
 setwd(here())
 getwd()
 data <- read.csv("../SunKyoung Moon/shopping_trends_updated.csv")
-data <- read.csv(here("R & Github", "Projects", "SunKyoung Moon", "student_lifestyle_dataset.csv"))
+```
 
-# Data Exploration+
+# Data Exploration
+
 ```{r data}
 View(data)
 hist(data$Age)
 ```
 
 # Graph 1: Female consumers’ purchase amount by age group
-```{r data}
+
+```{r graphs}
 data <- data$age_by_group 
 data$age_by_group <- c()
 ```
@@ -35,7 +39,5 @@ data$age_by_group <- c()
 
 # Graph 4: Male consumers’ frequency of purchases by age group
 
-
 ```{r plot1, echo=FALSE}
 ```
-
