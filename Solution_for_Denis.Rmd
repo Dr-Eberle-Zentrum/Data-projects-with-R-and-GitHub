@@ -36,25 +36,22 @@ dat$Win.rate <- gsub(" ", "", dat$Win.rate)
 dat$Battles <- as.numeric(dat$Battles) 
 dat$Avg..damage <- as.numeric(dat$Avg..damage) 
 dat$Win.rate <- as.numeric(dat$Win.rate) 
-dat
+#dat
 ```
 
 
 
 ```{r}
 dat <- dat %>% filter(Tier >= 3 & Tier <= 10)
-dat
 ```
 
 
 ```{r}
 dat <- dat %>% filter(Battles >= 200000)
-dat
 ```
 
 ```{r}
 dat <- subset(dat, !(Type %in% c("Submarine ", "Aircraft Carrier ")))
-dat
 ```
 
 
@@ -65,7 +62,6 @@ dat1 <- dat %>%
   group_by(Nation, Tier, Type) %>%
   filter(Battles == max(Battles, na.rm = TRUE)) %>%
   ungroup()
-dat1
 ```
 
 
@@ -75,8 +71,6 @@ dat1 <- dat1 %>%
   mutate(ship_type_count = n_distinct(Type)) %>%
   filter(ship_type_count == 3) %>%
   ungroup()
-
-print(dat1)
 ```
 
 
@@ -85,8 +79,6 @@ dat_groups <- dat1 %>%
   group_by(Nation, Tier) %>%
   slice_head(n = 3) %>%  
   ungroup()
-
-print(dat_groups)
 ```
 
 
@@ -99,7 +91,6 @@ dat_grouped <- dat_groups %>%
     total_battles = sum(Battles, na.rm = TRUE), 
     avg_winrate = mean(Win.rate, na.rm = TRUE), 
     avg_damage = mean(Avg..damage, na.rm = TRUE))
-dat_grouped
 ```
 
 
