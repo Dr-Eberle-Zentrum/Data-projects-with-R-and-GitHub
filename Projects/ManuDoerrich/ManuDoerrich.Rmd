@@ -1,0 +1,82 @@
+---
+title: 'First project attempt - SunKyoungs project'
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(dplyr)
+library(ggplot2)
+library(gridExtra)
+```
+## General project topic
+
+Companies often discover unique patterns when organizing and visualizing consumer data. This project aims to visualize shopping trends of American consumers by age group and gender, focusing on their Purchase Amount and Frequency of Purchases. You need to create four separate graphs:
+
+  1. Female consumers’ purchase amount by age group,
+  2. Male consumers’ purchase amount by age group,
+  3. Female consumers’ frequency of purchases by age group,
+  4. Male consumers’ frequency of purchases by age group.
+
+## The Data Set (manipulated)
+```{r import data}
+# Define the URL of the raw csv file
+url <- "https://raw.githubusercontent.com/OscarL7/Shopping-Trends-Analysis/main/shopping_trends_updated.csv"
+
+# Import the csv file 
+data_raw <- read.csv(url)
+
+# Data processing
+data_pro <- data_raw |>
+  select(all_of(c("Customer.ID", "Age", "Gender", "Purchase.Amount..USD.", "Frequency.of.Purchases")))
+
+# Preview the data
+head(data_pro)
+```
+
+## Visualisation
+
+Purchase amount by age for two genders:
+
+```{r visualise data}
+LabsAge <- c("18-22", "23-27", "28-32", "33-37", "38-42",
+             "43-47", "48-52", "53-57", "58-62", "63-67",
+             "68-70")
+  
+# Grouping ages into 5-year intervals and calculating total purchase amount by age group and gender
+p1 <- data_pro %>%
+  mutate(AgeGroup = cut(Age, breaks = seq(18, 72, by = 5), right = FALSE),
+         Gender = factor(Gender, levels = c("Male", "Female"))) %>%
+  group_by(AgeGroup, Gender) %>%
+  summarise(TotalPurchase = sum(Purchase.Amount..USD.), .groups = 'drop') %>%
+  ggplot(aes(x = AgeGroup, y = TotalPurchase, fill = Gender)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Consumers Purchase Amount by Age and Gender",
+       x = "Age",
+       y = "Total\n Purchase\n Amount\n (USD)") +
+  scale_x_discrete(labels = LabsAge) +
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold"),
+        axis.title.y = element_text(angle = 0, vjust = 1)) 
+
+p1
+
+p2 <- data_pro %>%
+  mutate(AgeGroup = cut(Age, breaks = seq(18, 72, by = 5), right = FALSE),
+         Gender = factor(Gender, levels = c("Male", "Female"))) %>%
+  group_by(AgeGroup, Gender) %>%
+  summarise(FreqPurchase = n(), .groups = 'drop') %>%
+  ggplot(aes(x = AgeGroup, y = FreqPurchase, fill = Gender)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Consumers Frequency of Purchase by Age and Gender",
+       x = "Age",
+       y = "Frequency of\n Purchase") +
+  scale_x_discrete(labels = LabsAge) +
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold"),
+        axis.title.y = element_text(angle = 0, vjust = 1)) 
+
+p2
+
+
+```
