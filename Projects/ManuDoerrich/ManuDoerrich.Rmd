@@ -1,6 +1,6 @@
 ---
 title: 'First project attempt - SunKyoungs project'
-output: html_document
+output: md_document
 ---
 
 ```{r setup, include=FALSE}
@@ -18,7 +18,7 @@ Companies often discover unique patterns when organizing and visualizing consume
   3. Female consumers’ frequency of purchases by age group,
   4. Male consumers’ frequency of purchases by age group.
 
-## The Data Set (manipulated)
+## The Data Set (processed)
 ```{r import data}
 # Define the URL of the raw csv file
 url <- "https://raw.githubusercontent.com/OscarL7/Shopping-Trends-Analysis/main/shopping_trends_updated.csv"
