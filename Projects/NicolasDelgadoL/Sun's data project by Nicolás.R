@@ -14,7 +14,7 @@ hist(data$Age)
 
 # Graph 1: Female consumers’ purchase amount by age group
 data <- data$age_by_group 
-data$age_by_group <- c()
+data$age_by_group <- c( )
 # Graph 2: Male consumers’ purchase amount by age group
 
 # Graph 3: Female consumers’ frequency of purchases by age group

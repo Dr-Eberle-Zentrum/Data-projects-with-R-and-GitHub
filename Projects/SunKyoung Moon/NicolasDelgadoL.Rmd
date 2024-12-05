@@ -5,16 +5,13 @@ date: "2024-12-04"
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, root.dir = here::here())
 options(repos = c(CRAN = "https://cloud.r-project.org/"))
 ```
 
 # Data Loading
 
 ```{r loading}
-install.packages("here")
-library(here)
-setwd(here())
 getwd()
 data <- read.csv("../SunKyoung Moon/shopping_trends_updated.csv")
 ```
@@ -33,11 +30,8 @@ data <- data$age_by_group
 data$age_by_group <- c()
 ```
 
-# Graph 2: Male consumers’ purchase amount by age group
+### Graph 2: Male consumers’ purchase amount by age group
 
 # Graph 3: Female consumers’ frequency of purchases by age group
 
 # Graph 4: Male consumers’ frequency of purchases by age group
-
-```{r plot1, echo=FALSE}
-```
