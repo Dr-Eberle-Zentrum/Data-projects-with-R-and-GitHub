@@ -1,0 +1,90 @@
+---
+title: "Yue_Z9"
+output: md_document
+date: "2024-12-04"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r pressure,echo=FALSE}
+
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(readxl)
+
+#the first one
+#read xlsx file
+file<-"Volleyball Passing- USA and TU.xlsx"
+data <- read_excel(file,sheet = "TU sort by pass score")
+new_data <- data[1:6, 6:9]
+
+#Data manipulation
+colnames(new_data) <- c("Pass Score", "Attempts", "Points_Won", "Points_Lost")
+new_data <- new_data %>%
+  mutate(
+    Pass_Score = as.factor("Pass Score"),
+    Attempts = as.numeric(Attempts),
+    Points_Won = as.numeric(Points_Won),
+    Points_Lost = as.numeric(Points_Lost))
+
+tidy_data <- new_data %>%
+  pivot_longer(cols = c(Points_Won, Points_Lost), 
+               names_to = "Outcome", 
+               values_to = "Count")
+
+clean_data <- tidy_data %>%
+  group_by(`Pass Score`)%>%
+  filter(`Pass Score` %in% c("zeros", "ones", "twos", "threes"))%>%
+  mutate(`Pass Score` = factor(`Pass Score`, levels = c("zeros", "ones", "twos", "threes")))
+
+
+# visualization
+ggplot(clean_data, aes(x = `Pass Score`, y= Count ,fill = Outcome)) +
+  geom_bar(stat = "identity", position = "stack") +
+  labs(
+    title = "Stacked Bar Chart: Breakdown of Points Won and Lost by Pass Score",
+    x = "Pass Score Categories",
+    y = "Total Attempts"
+  ) +
+  theme_minimal() +
+  scale_fill_manual(values = c("Points_Won" = "skyblue", "Points_Lost" = "tomato"))
+
+#THE second
+data <- data.frame(
+  PassingScore = c(2.1, 2.3, 2.2, 2.0, 2.4),
+  PointsWon = c(140, 161, 117, 93, 150),
+  PointsLost = c(81, 58, 30, 67, 53)
+)
+
+# cor
+cor_won <- cor(data$PassingScore, data$PointsWon, use = "complete.obs")
+cor_lost <- cor(data$PassingScore, data$PointsLost, use = "complete.obs")
+
+#long
+data_long <- data %>% 
+  pivot_longer(cols = -PassingScore, 
+               names_to = "Type", 
+               values_to = "Points")
+
+# plot
+ggplot(data_long, aes(x = PassingScore, y = Points, color = Type)) +
+  geom_point(aes(shape = Type), size = 3) + 
+  geom_smooth(method = "lm", se = FALSE) +  
+  scale_color_manual(values = c("PointsWon" = "blue", "PointsLost" = "red")) +
+  scale_shape_manual(values = c("PointsWon" = 4, "PointsLost" = 4)) +
+  labs(title = "Correlation Between Passing Scores and Points Won/Lost",
+       x = "Passing Score (Average)", 
+       y = "Points (Won or Lost)",
+       color = "", shape = "") +
+  annotate("text", x = 2.0, y = 180, 
+           label = paste("Won Trend (r =", round(cor_won, 2), ")", sep = ""),
+           color = "blue", hjust = 0, vjust = 1) +
+  annotate("text", x = 2.0, y = 170, 
+           label = paste("Lost Trend (r =", round(cor_lost, 2), ")", sep = ""),
+           color = "red", hjust = 0, vjust = 1) +
+  theme_minimal() +
+  theme(legend.position = "topleft")
+
+```
