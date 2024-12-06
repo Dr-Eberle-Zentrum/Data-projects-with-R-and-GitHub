@@ -15,7 +15,7 @@ library(tidyr)
 library(readxl)
 
 #the first one
-#read file
+#read xlsx file
 file<-"Volleyball Passing- USA and TU.xlsx"
 data <- read_excel(file,sheet = "TU sort by pass score")
 new_data <- data[1:6, 6:9]
@@ -49,5 +49,9 @@ ggplot(clean_data, aes(x = `Pass Score`, y= Count ,fill = Outcome)) +
     y = "Total Attempts"
   ) +
   theme_minimal() +
-  scale_fill_manual(values = c("Points_Won" = "skyblue", "Points_Lost" = "red"))
+  scale_fill_manual(values = c("Points_Won" = "skyblue", "Points_Lost" = "tomato"))
+
+#THE second
+file2<-"passing stats vs Tulane.xlsx"
+data2 <- read_excel(file,sheet = "totals")
 ```
