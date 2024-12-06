@@ -58,18 +58,20 @@ data <- data.frame(
   PointsLost = c(81, 58, 30, 67, 53)
 )
 
-# 计算相关性
+# cor
 cor_won <- cor(data$PassingScore, data$PointsWon, use = "complete.obs")
 cor_lost <- cor(data$PassingScore, data$PointsLost, use = "complete.obs")
 
+#long
 data_long <- data %>% 
   pivot_longer(cols = -PassingScore, 
                names_to = "Type", 
                values_to = "Points")
-# 绘制散点图和趋势线
+
+# plot
 ggplot(data_long, aes(x = PassingScore, y = Points, color = Type)) +
-  geom_point(aes(shape = Type), size = 3) + # 添加散点
-  geom_smooth(method = "lm", se = FALSE) +  # 添加线性回归线
+  geom_point(aes(shape = Type), size = 3) + 
+  geom_smooth(method = "lm", se = FALSE) +  
   scale_color_manual(values = c("PointsWon" = "blue", "PointsLost" = "red")) +
   scale_shape_manual(values = c("PointsWon" = 4, "PointsLost" = 4)) +
   labs(title = "Correlation Between Passing Scores and Points Won/Lost",
