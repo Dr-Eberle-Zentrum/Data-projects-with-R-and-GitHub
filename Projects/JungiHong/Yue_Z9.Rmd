@@ -52,6 +52,37 @@ ggplot(clean_data, aes(x = `Pass Score`, y= Count ,fill = Outcome)) +
   scale_fill_manual(values = c("Points_Won" = "skyblue", "Points_Lost" = "tomato"))
 
 #THE second
-file2<-"passing stats vs Tulane.xlsx"
-data2 <- read_excel(file,sheet = "totals")
+data <- data.frame(
+  PassingScore = c(2.1, 2.3, 2.2, 2.0, 2.4),
+  PointsWon = c(140, 161, 117, 93, 150),
+  PointsLost = c(81, 58, 30, 67, 53)
+)
+
+# 计算相关性
+cor_won <- cor(data$PassingScore, data$PointsWon, use = "complete.obs")
+cor_lost <- cor(data$PassingScore, data$PointsLost, use = "complete.obs")
+
+data_long <- data %>% 
+  pivot_longer(cols = -PassingScore, 
+               names_to = "Type", 
+               values_to = "Points")
+# 绘制散点图和趋势线
+ggplot(data_long, aes(x = PassingScore, y = Points, color = Type)) +
+  geom_point(aes(shape = Type), size = 3) + # 添加散点
+  geom_smooth(method = "lm", se = FALSE) +  # 添加线性回归线
+  scale_color_manual(values = c("PointsWon" = "blue", "PointsLost" = "red")) +
+  scale_shape_manual(values = c("PointsWon" = 4, "PointsLost" = 4)) +
+  labs(title = "Correlation Between Passing Scores and Points Won/Lost",
+       x = "Passing Score (Average)", 
+       y = "Points (Won or Lost)",
+       color = "", shape = "") +
+  annotate("text", x = 2.0, y = 180, 
+           label = paste("Won Trend (r =", round(cor_won, 2), ")", sep = ""),
+           color = "blue", hjust = 0, vjust = 1) +
+  annotate("text", x = 2.0, y = 170, 
+           label = paste("Lost Trend (r =", round(cor_lost, 2), ")", sep = ""),
+           color = "red", hjust = 0, vjust = 1) +
+  theme_minimal() +
+  theme(legend.position = "topleft")
+
 ```
