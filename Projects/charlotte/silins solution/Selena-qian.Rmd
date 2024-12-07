@@ -1,0 +1,126 @@
+---
+output: md_document
+---
+## Import Data
+```{r import}
+library(tidyverse)
+library(ggplot2)
+
+dt <- read_delim("https://www.landesdatenbank.nrw.de/ldbnrwws/downloader/00/tables/21331-02i_00.csv",
+                delim = ";",
+               locale = locale(encoding = "ISO-8859-1"), #Set the character encoding explicitly
+               skip = 6,
+               col_names = c("Semester", "University", "Total", "Male", "Female"), #Name the columns
+               col_types = cols(Semester = col_character(),
+                                University = col_character(),
+                                Total = col_integer(), Male = col_integer(), Female = col_integer()),
+               trim_ws = FALSE,
+               na = c("", "NA", "-")) #replace missing data with NA
+```
+
+## Data Cleaning
+```{r clean}
+
+#cleaning the data
+dt_clean <- dt[1:(nrow(dt)-3), ] %>% 
+  #calculate the missing value
+  rowwise() %>%
+  mutate(
+    na_count = sum(is.na(c(Total, Male, Female))),
+    Total = if_else(na_count > 0 & na_count < 3 & is.na(Total), Male + Female, Total),
+    Male = if_else(na_count > 0 & na_count < 3 & is.na(Male), Total - Female, Male),
+    Female = if_else(na_count > 0 & na_count < 3 & is.na(Female), Total - Male, Female)
+  ) %>%
+  ungroup() %>% 
+  select(-na_count) %>%
+  mutate(Hierarchy = (str_count(University, ("\\G ")) / 2),
+         University = str_replace_all(University, "\\G ", "")) %>%  #Calculate the hierarchy, Remove the spaces
+  print()
+
+#create Unis_Total:I'm not sure I understand the task correctly. Is it asking for this total of three universities to be added up like I did?
+  dt_plot <- dt_clean %>% 
+    group_by(Semester) %>%
+    summarise(
+      University = "Unis_Total",
+      Total = sum(Total, na.rm = TRUE),
+      Female = sum(Female, na.rm = TRUE),
+      Male = sum(Male, na.rm = TRUE),
+      Type = "Total",
+      .groups = "drop"
+    ) %>%
+  ungroup() %>%
+  bind_rows(
+    dt_clean %>% 
+      filter(University %in% c("Universität Bielefeld", "Universität Bochum", "Universität Bonn")) %>% 
+      mutate(Type = "Uni")
+  ) %>% print()
+
+```
+
+## Ploting
+```{r plot}
+last_points <- dt_plot %>%
+  group_by(University) %>%
+  filter(Semester == max(Semester))
+
+dt_plot %>% 
+  mutate(Semester = as.factor(Semester)) %>% 
+  ggplot(aes(x = Semester, y = Total, group = University, color = Type)) +
+  geom_point() +
+  geom_line() +
+  geom_label(data = last_points, aes(label = University), nudge_x = 1.3, nudge_y = 1200, color = "black")
+#Because the Total value after summing is too large, the lines of the other three universities do not show up well. Do I need to adjust the scale of the y-axis?
+```
+
+## Animation
+```{r animation}
+knitr::opts_chunk$set(dev = "png", dev.args = list(type = "cairo"))
+options(bitmapType = "cairo")
+
+library(gganimate)
+library(htmlwidgets)
+library(htmltools)
+
+dt_year <- dt_plot %>%
+  mutate(Year = as.numeric(str_extract(Semester, "\\d{4}")))
+
+last_points <- dt_year %>%
+  group_by(University) %>%
+  filter(Semester == max(Semester))
+
+animation <- ggplot(dt_year, aes(x = as.integer(Year), y = Total, group = University, color = Type)) +
+  geom_point() +
+  geom_line() +
+  geom_label(data = last_points, aes(label = University), nudge_x = 1.3, nudge_y = 1200, color = "black") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))+  # 旋转标签并调整对齐
+  scale_x_continuous(
+  breaks = seq(min(dt_year$Year), max(dt_year$Year), by = 1),
+  labels = dt_year$Semester %>% unique()) +
+  transition_reveal(along = Year) +  # Transition along the Semester
+  ease_aes("linear")
+
+#tbh I haven't gone very deep into the gganimate package, especially in the export to html part, I tried a lot of methods provided by chatgpt, including using htmltools::save_html(), directly using anim_save() and html_renderer(). htmlwidgets::as_widget() and so on, but all of them failed. The code below seems to work. It is provided by chatgpt.
+
+gif_file <- "animation.gif"
+animate(animation, renderer = gifski_renderer(gif_file), width = 800, height = 600)
+
+html_content <- tags$html(
+  tags$body(
+    tags$h2("Animation"),
+    tags$img(src = gif_file)
+  )
+)
+
+save_html(html_content, file = "animation.html")
+
+########Error: Failed to knit md file.########
+# Quitting from lines 77-117 [animation] (Selena-qian.Rmd)  
+# Error in `device()`:  
+# ! Unable to start png() device  
+# Backtrace:  
+#  1. gganimate::animate(...)  
+#  2. gganimate:::animate.gganim(...)  
+#  4. gganimate:::draw_frames(...)  
+#  6. grDevices (local) device(files[i], width = 800, height = 600, units = "in", res = 96)  
+# Execution halted
+```
