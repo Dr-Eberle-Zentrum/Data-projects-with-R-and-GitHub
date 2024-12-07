@@ -1,0 +1,73 @@
+---
+title: "solution from Yuguang"
+output: md_document
+date: "2024-12-04"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo=FALSE, message=FALSE}
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+data <- read.csv("C:/Users/Yugua/Desktop/R2/Air_Quality.csv")
+# Data manipulation for first graph.
+data_task1 <- data |>
+  select(Name, Data.Value) |>
+  group_by(Name) |>
+  summarise(Mean_value = mean(Data.Value, na.rm = TRUE)) |>
+  mutate(Code = LETTERS[1:n()])
+# visualization for first graph
+ggplot(data_task1, aes(x = Code, y = Mean_value, fill = Name))+
+  geom_bar(stat = "identity", show.legend = TRUE)+
+  scale_fill_discrete(name = "Pollutants")+
+  labs(
+    title = "Average Valus of pollutants",
+    x = "Name",
+    y = "Mean_Value"
+  )+
+  theme(
+    legend.position = "bottom",
+    legend.key.size = unit(0.1, "cm"),
+    legend.text = element_text(size = 6)
+  )
+
+#data manipulation for second task
+#The first variable is to store the pollutant which has the highest Value
+data_pollutant <- data |>
+  mutate(Year = year(dmy(Start_Date))) |>
+  group_by(Name) |>
+  summarise(Max_value = max(Data.Value, na.rm = TRUE), .groups = "drop") |>
+  arrange(desc(Max_value)) |>
+  slice(1) |>
+  pull(Name) |>
+  print()
+#The second variable is to store the top 3 Place, according to the previous variable
+data_region <- data |>
+  filter(Name == "Asthma emergency department visits due to PM2.5") |>
+  mutate(
+    Start_Date = ifelse(!grepl("^\\d{2}/\\d{2}/\\d{4}$", Start_Date), NA, Start_Date),
+    Year = year(dmy(Start_Date))) |>
+  arrange(desc(Data.Value)) |>
+  head(3) |>
+  pull(Geo.Place.Name)|>
+  print()
+#This variable is to select data we need according to previous two variables.
+data_task2 <- data |>
+  filter(Name == "Asthma emergency department visits due to PM2.5") |>
+  filter(Geo.Place.Name == c("Central Harlem - Morningside Heights", "East Harlem", "High Bridge - Morrisania")) |>
+  mutate(Year = year(dmy(Start_Date)))
+#visualization.
+ggplot(data_task2, aes(x = Year, y = Data.Value, color = factor(Geo.Place.Name)))+
+  geom_line()+
+  labs(
+    x = "Year",
+    y = "Value (mcg/m3)",
+    color = "region"
+  )+
+  theme(
+  )
+
+```
