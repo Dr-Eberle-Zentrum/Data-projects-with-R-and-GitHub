@@ -1,0 +1,806 @@
+Warship ;Tier ;Type ;Nation ;Battles ;Win rate ;Avg. frags ;Avg. damage ;Avg. experience ;Avg. planes destroyed ;Kills / deaths
+Bismarck ;8;Battleship ;Germany ;22 576 493 ;49.63 % ;0.65 ;51 406 ;1 350 ;2.89 ;1.02
+Shimakaze ;10;Destroyer ;Japan ;20 507 223 ;48.59 % ;0.7 ;44 588 ;1 515 ;0.8 ;1.17
+Yamato ;10;Battleship ;Japan ;17 459 481 ;48.04 % ;0.7 ;83 570 ;1 755 ;2.24 ;1.22
+Grosser Kurfürst ;10;Battleship ;Germany ;17 156 234 ;49.06 % ;0.69 ;74 377 ;1 584 ;2.72 ;1.07
+Tirpitz ;8;Battleship ;Germany ;16 139 165 ;48.59 % ;0.63 ;48 942 ;1 352 ;2.16 ;1.02
+Gneisenau ;7;Battleship ;Germany ;14 618 949 ;50.03 % ;0.7 ;43 851 ;1 219 ;3.09 ;1.14
+North Carolina ;8;Battleship ;U.S.A. ;14 108 436 ;48.77 % ;0.67 ;52 844 ;1 356 ;3.75 ;1.17
+Montana ;10;Battleship ;U.S.A. ;13 710 021 ;48.76 % ;0.77 ;81 716 ;1 720 ;3.43 ;1.4
+Nürnberg ;6;Cruiser ;Germany ;12 755 914 ;49.16 % ;0.53 ;25 825 ;1 021 ;1.02 ;0.75
+Hindenburg ;10;Cruiser ;Germany ;12 715 990 ;48.43 % ;0.66 ;72 320 ;1 678 ;2.44 ;1.2
+New Mexico ;6;Battleship ;U.S.A. ;12 402 234 ;49.97 % ;0.72 ;39 705 ;1 104 ;1.65 ;1.36
+Fuso ;6;Battleship ;Japan ;11 905 972 ;50.76 % ;0.78 ;44 623 ;1 164 ;1.52 ;1.54
+Colorado ;7;Battleship ;U.S.A. ;11 689 681 ;49.31 % ;0.7 ;47 582 ;1 261 ;1.85 ;1.32
+Friedrich der Grosse ;9;Battleship ;Germany ;11 330 246 ;48.12 % ;0.58 ;56 288 ;1 365 ;1.94 ;0.9
+Königsberg ;5;Cruiser ;Germany ;11 227 912 ;50.41 % ;0.6 ;23 678 ;886;0.55 ;0.85
+Bayern ;6;Battleship ;Germany ;11 077 500 ;49.68 % ;0.69 ;39 200 ;1 082 ;1.94 ;1.24
+Des Moines ;10;Cruiser ;U.S.A. ;10 920 956 ;49.53 % ;0.72 ;63 001 ;1 724 ;3.24 ;1.12
+Iowa ;9;Battleship ;U.S.A. ;10 808 218 ;48.31 % ;0.65 ;61 680 ;1 423 ;2.82 ;1.1
+Omaha ;5;Cruiser ;U.S.A. ;10 523 399 ;49.85 % ;0.61 ;23 607 ;896;0.91 ;0.83
+Nagato ;7;Battleship ;Japan ;10 472 060 ;49.37 % ;0.72 ;49 686 ;1 291 ;1.49 ;1.31
+Amagi ;8;Battleship ;Japan ;10 352 580 ;50.55 % ;0.74 ;57 692 ;1 420 ;2.59 ;1.39
+Admiral Hipper ;8;Cruiser ;Germany ;10 032 794 ;49.11 % ;0.5 ;36 904 ;1 359 ;2.31 ;0.78
+Yorck ;7;Cruiser ;Germany ;9 987 391 ;49.48 % ;0.56 ;31 721 ;1 207 ;1.4 ;0.87
+New York ;5;Battleship ;U.S.A. ;9 833 374 ;48.83 % ;0.64 ;32 179 ;921;0.84 ;1.17
+König ;5;Battleship ;Germany ;9 711 032 ;50.79 % ;0.74 ;36 104 ;933;1.72 ;1.37
+Zao ;10;Cruiser ;Japan ;9 527 446 ;48.91 % ;0.73 ;72 497 ;1 631 ;2.32 ;1.42
+Minotaur ;10;Cruiser ;U.K. ;9 094 593 ;49.25 % ;0.8 ;62 996 ;1 661 ;4.15 ;1.35
+Gearing ;10;Destroyer ;U.S.A. ;9 093 705 ;48.84 % ;0.69 ;44 427 ;1 608 ;1.56 ;1.08
+Wyoming ;4;Battleship ;U.S.A. ;9 048 653 ;49.95 % ;0.83 ;31 694 ;717;1 ;1.55
+Kongo ;5;Battleship ;Japan ;8 751 241 ;49.83 % ;0.67 ;33 748 ;938;1.59 ;1.27
+Mogami ;8;Cruiser ;Japan ;8 658 603 ;49.98 % ;0.62 ;40 747 ;1 369 ;1.57 ;0.98
+Minekaze ;5;Destroyer ;Japan ;8 493 246 ;50.62 % ;0.77 ;23 775 ;892;0.08 ;1.17
+Akatsuki ;7;Destroyer ;Japan ;8 492 172 ;49.36 % ;0.65 ;26 129 ;1 182 ;0.76 ;0.97
+Kagero ;8;Destroyer ;Japan ;8 014 131 ;48.92 % ;0.64 ;29 679 ;1 348 ;0.42 ;1.02
+Myoko ;7;Cruiser ;Japan ;7 975 302 ;50.74 % ;0.66 ;36 083 ;1 232 ;1.62 ;1.05
+Scharnhorst ;7;Battleship ;Germany ;7 846 563 ;51.41 % ;0.81 ;48 317 ;1 360 ;2.12 ;1.35
+Yugumo ;9;Destroyer ;Japan ;7 782 386 ;48.49 % ;0.67 ;35 658 ;1 394 ;0.62 ;1.08
+Izumo ;9;Battleship ;Japan ;7 563 872 ;48.2 % ;0.61 ;61 387 ;1 479 ;1.66 ;1.02
+Aoba ;6;Cruiser ;Japan ;7 555 993 ;50.46 % ;0.59 ;27 390 ;1 087 ;1.47 ;0.9
+Furutaka ;5;Cruiser ;Japan ;7 527 144 ;49.92 % ;0.54 ;21 359 ;865;0.63 ;0.76
+Roon ;9;Cruiser ;Germany ;7 223 689 ;49.39 % ;0.55 ;51 903 ;1 445 ;1.57 ;1.1
+Fiji ;7;Cruiser ;U.K. ;7 101 497 ;52.36 % ;0.82 ;40 448 ;1 347 ;1.72 ;1.39
+Fletcher ;9;Destroyer ;U.S.A. ;7 045 190 ;49.87 % ;0.7 ;36 300 ;1 490 ;1.26 ;1.1
+Isokaze ;4;Destroyer ;Japan ;6 908 511 ;50.53 % ;0.87 ;23 016 ;703;0.1 ;1.31
+Moskva ;10;Cruiser ;U.S.S.R. ;6 807 121 ;49.05 % ;0.61 ;64 555 ;1 612 ;2.87 ;1
+Benson ;8;Destroyer ;U.S.A. ;6 637 313 ;50.41 % ;0.65 ;28 851 ;1 419 ;1.25 ;1.03
+Musashi ;9;Battleship ;Japan ;6 629 307 ;54.47 % ;0.91 ;89 111 ;1 736 ;1.13 ;1.8
+Shchors ;7;Cruiser ;U.S.S.R. ;6 627 127 ;50.27 % ;0.66 ;38 728 ;1 344 ;1.14 ;0.99
+Halland ;10;Destroyer ;Europe ;6 570 373 ;49.55 % ;0.71 ;47 616 ;1 697 ;5.17 ;1.22
+Thunderer ;10;Battleship ;U.K. ;6 502 609 ;50.18 % ;0.79 ;99 394 ;1 837 ;2.99 ;1.56
+Missouri ;9;Battleship ;U.S.A. ;6 393 825 ;53.23 % ;0.82 ;70 815 ;1 737 ;3.04 ;1.37
+Atago ;8;Cruiser ;Japan ;6 374 592 ;50.1 % ;0.6 ;38 890 ;1 359 ;1.6 ;1.06
+Mahan ;7;Destroyer ;U.S.A. ;6 298 080 ;50.2 % ;0.62 ;23 718 ;1 307 ;0.49 ;0.91
+Fubuki ;6;Destroyer ;Japan ;6 274 156 ;48.5 % ;0.58 ;21 301 ;998;0.7 ;0.85
+Jean Bart ;9;Battleship ;France ;6 242 079 ;52.63 % ;0.9 ;83 315 ;1 778 ;3.45 ;1.48
+Farragut ;6;Destroyer ;U.S.A. ;6 236 677 ;50.06 % ;0.59 ;19 869 ;1 065 ;0.73 ;0.84
+Conqueror ;10;Battleship ;U.K. ;6 168 184 ;50.04 % ;0.77 ;101 157 ;1 733 ;2.4 ;1.62
+Edinburgh ;8;Cruiser ;U.K. ;6 090 441 ;51.12 % ;0.66 ;40 100 ;1 423 ;2.53 ;1.11
+Nicholas ;5;Destroyer ;U.S.A. ;6 034 022 ;48.76 % ;0.6 ;17 326 ;881;0.74 ;0.78
+Budyonny ;6;Cruiser ;U.S.S.R. ;6 012 234 ;51.44 % ;0.66 ;32 141 ;1 139 ;1.45 ;0.99
+St. Louis ;3;Cruiser ;U.S.A. ;5 954 447 ;51.29 % ;0.82 ;21 945 ;587;0.01 ;1.32
+République ;10;Battleship ;France ;5 904 298 ;49.11 % ;0.8 ;88 464 ;1 654 ;2.93 ;1.42
+Smolensk ;10;Cruiser ;U.S.S.R. ;5 901 502 ;49.37 % ;0.8 ;76 772 ;1 791 ;3.43 ;1.39
+Ibuki ;9;Cruiser ;Japan ;5 837 794 ;49.31 % ;0.6 ;51 535 ;1 466 ;1.69 ;1.14
+Cleveland ;8;Cruiser ;U.S.A. ;5 782 697 ;50.46 % ;0.59 ;39 619 ;1 364 ;3.31 ;0.91
+Kuma ;4;Cruiser ;Japan ;5 782 687 ;51.28 % ;0.82 ;24 870 ;730;0.4 ;1.19
+Richelieu ;8;Battleship ;France ;5 782 661 ;51.73 % ;0.76 ;61 097 ;1 500 ;3.46 ;1.25
+Lyon ;7;Battleship ;France ;5 776 000 ;51.82 % ;0.9 ;54 707 ;1 363 ;2.81 ;1.7
+Myogi ;4;Battleship ;Japan ;5 743 178 ;48.52 % ;0.66 ;26 599 ;693;0.83 ;1.24
+Phoenix ;4;Cruiser ;U.S.A. ;5 618 589 ;49.17 % ;0.66 ;21 434 ;711;0.3 ;0.93
+Leander ;6;Cruiser ;U.K. ;5 588 841 ;52.67 % ;0.76 ;31 131 ;1 144 ;1.73 ;1.24
+King George V ;7;Battleship ;U.K. ;5 484 747 ;52.02 % ;0.83 ;57 063 ;1 408 ;1.98 ;1.54
+Kaiser ;4;Battleship ;Germany ;5 437 545 ;51.5 % ;0.99 ;37 313 ;740;1.88 ;2.04
+Kitakaze ;9;Destroyer ;Japan ;5 392 127 ;51.1 % ;0.78 ;46 891 ;1 663 ;1.68 ;1.21
+Neptune ;9;Cruiser ;U.K. ;5 390 228 ;49.6 % ;0.68 ;49 782 ;1 464 ;2.98 ;1.1
+Akizuki ;8;Destroyer ;Japan ;5 357 408 ;51.34 % ;0.75 ;38 486 ;1 609 ;2.4 ;1.12
+Alsace ;9;Battleship ;France ;5 337 353 ;50.51 % ;0.76 ;69 882 ;1 521 ;2.5 ;1.26
+Clemson ;4;Destroyer ;U.S.A. ;5 293 999 ;50.82 % ;0.9 ;21 810 ;715;0.05 ;1.27
+Chapayev ;8;Cruiser ;U.S.S.R. ;5 114 650 ;50.76 % ;0.61 ;42 843 ;1 472 ;2.06 ;0.96
+Dmitri Donskoi ;9;Cruiser ;U.S.S.R. ;5 092 918 ;50.58 % ;0.6 ;53 366 ;1 501 ;1.83 ;1.09
+Karlsruhe ;4;Cruiser ;Germany ;5 050 059 ;49.36 % ;0.63 ;18 543 ;640;0.09 ;0.89
+Yoshino ;10;Cruiser ;Japan ;5 014 657 ;48.02 % ;0.63 ;74 017 ;1 601 ;2.82 ;1.23
+Ernst Gaede ;6;Destroyer ;Germany ;4 980 594 ;50.81 % ;0.61 ;21 034 ;1 051 ;0.64 ;0.88
+Atlanta ;7;Cruiser ;U.S.A. ;4 947 397 ;50.1 % ;0.68 ;29 975 ;1 343 ;3 ;0.97
+Admiral Graf Spee ;6;Cruiser ;Germany ;4 843 828 ;53.67 % ;0.66 ;32 502 ;1 098 ;1.79 ;1.08
+Georgia ;9;Battleship ;U.S.A. ;4 746 635 ;52.91 % ;0.89 ;78 400 ;1 679 ;3.2 ;1.43
+T-22 ;5;Destroyer ;Germany ;4 462 445 ;48.68 % ;0.54 ;16 445 ;868;0.84 ;0.74
+La Galissonnière ;6;Cruiser ;France ;4 357 927 ;50.62 % ;0.58 ;28 773 ;1 044 ;1.71 ;0.84
+Monarch ;8;Battleship ;U.K. ;4 317 877 ;50.45 % ;0.69 ;59 442 ;1 516 ;2.73 ;1.25
+Salem ;10;Cruiser ;U.S.A. ;4 288 335 ;48.3 % ;0.69 ;63 942 ;1 618 ;3.59 ;1.07
+Charles Martel ;8;Cruiser ;France ;4 257 572 ;51.35 % ;0.65 ;48 363 ;1 453 ;2.11 ;1.08
+Pommern ;9;Battleship ;Germany ;4 241 678 ;50.19 % ;0.67 ;63 384 ;1 467 ;2.27 ;0.99
+Kremlin ;10;Battleship ;U.S.S.R. ;4 237 802 ;51.39 % ;0.8 ;82 718 ;1 787 ;4.27 ;1.33
+Algérie ;7;Cruiser ;France ;4 185 487 ;50.65 % ;0.62 ;38 485 ;1 234 ;1.48 ;1.01
+Baltimore ;8;Cruiser ;U.S.A. ;4 148 174 ;50.76 % ;0.58 ;39 407 ;1 421 ;3.88 ;0.86
+Worcester ;10;Cruiser ;U.S.A. ;4 123 432 ;49.46 % ;0.71 ;64 410 ;1 682 ;4.53 ;1.23
+Vladivostok ;8;Battleship ;U.S.S.R. ;4 073 631 ;52.78 % ;0.83 ;60 828 ;1 655 ;3.97 ;1.4
+Shiratsuyu ;7;Destroyer ;Japan ;4 069 784 ;52.65 % ;0.77 ;30 555 ;1 368 ;0.45 ;1.32
+Mutsuki ;5;Destroyer ;Japan ;4 040 469 ;48.54 % ;0.56 ;18 614 ;843;0.69 ;0.85
+Mikhail Kutuzov ;8;Cruiser ;U.S.S.R. ;3 976 283 ;52.21 % ;0.71 ;51 612 ;1 474 ;2.45 ;1.3
+Émile Bertin ;5;Cruiser ;France ;3 956 587 ;52.2 % ;0.63 ;25 688 ;912;1.32 ;0.9
+Alaska ;9;Cruiser ;U.S.A. ;3 932 113 ;54.51 % ;0.78 ;66 214 ;1 719 ;2.92 ;1.36
+Schlieffen ;10;Battleship ;Germany ;3 925 162 ;50.59 % ;0.79 ;78 655 ;1 665 ;3.32 ;1.06
+Queen Elizabeth ;6;Battleship ;U.K. ;3 897 171 ;50.38 % ;0.71 ;43 347 ;1 160 ;2.95 ;1.28
+Z-52 ;10;Destroyer ;Germany ;3 862 709 ;49.69 % ;0.63 ;38 443 ;1 602 ;1.94 ;0.98
+Emerald ;5;Cruiser ;U.K. ;3 820 599 ;49.29 % ;0.56 ;19 433 ;854;0.73 ;0.76
+South Carolina ;3;Battleship ;U.S.A. ;3 800 000 ;48.69 % ;0.7 ;21 182 ;563;0.02 ;1.23
+Stalingrad ;10;Cruiser ;U.S.S.R. ;3 790 825 ;53.39 % ;0.81 ;82 426 ;1 900 ;4.25 ;1.35
+Iron Duke ;5;Battleship ;U.K. ;3 775 087 ;51.02 % ;0.79 ;39 527 ;994;1.78 ;1.44
+Sinop ;7;Battleship ;U.S.S.R. ;3 761 712 ;52.99 % ;0.92 ;56 431 ;1 508 ;3.28 ;1.53
+Buffalo ;9;Cruiser ;U.S.A. ;3 732 773 ;49.06 % ;0.57 ;47 289 ;1 434 ;2.34 ;0.9
+Kamikaze R ;5;Destroyer ;Japan ;3 697 316 ;57.68 % ;1.19 ;35 401 ;1 235 ;0.01 ;2.14
+Z-23 ;8;Destroyer ;Germany ;3 673 441 ;50.51 % ;0.62 ;28 660 ;1 437 ;0.93 ;0.95
+Harugumo ;10;Destroyer ;Japan ;3 668 746 ;49.07 % ;0.72 ;52 001 ;1 626 ;2.25 ;1.06
+Normandie ;6;Battleship ;France ;3 650 246 ;52.33 % ;0.87 ;47 474 ;1 184 ;0.72 ;1.65
+Blyskawica ;7;Destroyer ;Europe ;3 606 288 ;49.19 % ;0.57 ;23 990 ;1 138 ;0.49 ;0.84
+Venezia ;10;Cruiser ;Italy ;3 550 904 ;50.47 % ;0.79 ;79 434 ;1 866 ;3.15 ;1.76
+Leberecht Maass ;7;Destroyer ;Germany ;3 545 824 ;52.01 % ;0.7 ;26 508 ;1 279 ;0.66 ;1.07
+Lion ;9;Battleship ;U.K. ;3 525 263 ;49.85 % ;0.67 ;72 325 ;1 520 ;2.08 ;1.34
+V-170 ;4;Destroyer ;Germany ;3 498 560 ;50.71 % ;0.87 ;21 924 ;674;0.05 ;1.26
+Massachusetts ;8;Battleship ;U.S.A. ;3 476 632 ;53.83 % ;0.87 ;64 315 ;1 631 ;5.33 ;1.46
+Lexington ;8;Aircraft Carrier ;U.S.A. ;3 454 426 ;48.49 % ;0.73 ;52 759 ;1 531 ;4.45 ;2.84
+Dunkerque ;6;Battleship ;France ;3 396 650 ;51.46 % ;0.77 ;44 564 ;1 218 ;2.06 ;1.22
+Sovetsky Soyuz ;9;Battleship ;U.S.S.R. ;3 393 541 ;50.96 % ;0.75 ;67 934 ;1 615 ;2.28 ;1.24
+Ranger ;6;Aircraft Carrier ;U.S.A. ;3 343 687 ;49.02 % ;0.59 ;33 932 ;1 151 ;3.56 ;1.74
+Petropavlovsk ;10;Cruiser ;U.S.S.R. ;3 327 372 ;51.59 % ;0.72 ;68 131 ;1 797 ;4.66 ;1.19
+Z-46 ;9;Destroyer ;Germany ;3 314 037 ;51.43 % ;0.71 ;36 758 ;1 579 ;1.04 ;1.14
+Henri IV ;10;Cruiser ;France ;3 296 663 ;49.52 % ;0.74 ;77 301 ;1 699 ;2.67 ;1.39
+Izmail ;6;Battleship ;U.S.S.R. ;3 292 248 ;52%;0.91 ;48 665 ;1 329 ;3.67 ;1.49
+Hatsuharu ;6;Destroyer ;Japan ;3 243 623 ;51.97 % ;0.69 ;24 785 ;1 167 ;1.12 ;1.13
+Ryujo ;6;Aircraft Carrier ;Japan ;3 230 533 ;51.27 % ;0.74 ;40 694 ;1 260 ;3.52 ;3.2
+Oktyabrskaya Revolutsiya ;5;Battleship ;U.S.S.R. ;3 226 878 ;52.93 % ;0.95 ;45 361 ;1 129 ;2.4 ;1.87
+New Orleans ;7;Cruiser ;U.S.A. ;3 129 933 ;49.32 % ;0.56 ;33 900 ;1 221 ;2.38 ;0.86
+U-69 ;6;Submarine ;Germany ;3 076 258 ;50.78 % ;0.49 ;21 079 ;1 043 ;0 ;0.82
+Kolberg ;3;Cruiser ;Germany ;3 056 500 ;48.74 % ;0.67 ;16 285 ;540;0 ;0.96
+Östergötland ;9;Destroyer ;Europe ;3 056 443 ;50.59 % ;0.73 ;41 192 ;1 672 ;3.02 ;1.37
+Murmansk ;5;Cruiser ;U.S.S.R. ;3 029 778 ;52.61 % ;0.79 ;30 242 ;1 057 ;1.22 ;1.18
+Seattle ;9;Cruiser ;U.S.A. ;3 019 836 ;49.74 % ;0.57 ;46 982 ;1 472 ;3.11 ;0.99
+Tenryu ;3;Cruiser ;Japan ;2 969 168 ;48.7 % ;0.72 ;18 313 ;593;0.03 ;1.01
+Nelson ;7;Battleship ;U.K. ;2 918 445 ;54.52 % ;0.92 ;61 651 ;1 519 ;2.02 ;1.62
+Midway ;10;Aircraft Carrier ;U.S.A. ;2 911 473 ;46.86 % ;0.76 ;72 776 ;1 728 ;5.51 ;3.05
+Pensacola ;6;Cruiser ;U.S.A. ;2 906 053 ;49.59 % ;0.51 ;26 348 ;1 034 ;2.82 ;0.74
+Warspite ;6;Battleship ;U.K. ;2 835 986 ;51.51 % ;0.81 ;44 859 ;1 280 ;1.79 ;1.49
+Saint-Louis ;9;Cruiser ;France ;2 820 296 ;50.07 % ;0.62 ;57 605 ;1 504 ;1.94 ;1.14
+Shokaku ;8;Aircraft Carrier ;Japan ;2 805 811 ;49.43 % ;0.78 ;54 356 ;1 564 ;3.96 ;3.6
+Lightning ;8;Destroyer ;U.K. ;2 747 200 ;52.49 % ;0.78 ;33 159 ;1 644 ;1.06 ;1.29
+Svietlana ;4;Cruiser ;U.S.S.R. ;2 731 997 ;51.49 % ;0.74 ;22 669 ;707;0.18 ;1.05
+Nassau ;3;Battleship ;Germany ;2 712 849 ;51.67 % ;1.05 ;29 361 ;600;0.04 ;2.04
+Öland ;8;Destroyer ;Europe ;2 694 257 ;50.33 % ;0.66 ;30 893 ;1 619 ;4.07 ;1.14
+Belfast ;7;Cruiser ;U.K. ;2 679 169 ;56.48 % ;0.94 ;47 175 ;1 524 ;1.97 ;1.72
+Danae ;4;Cruiser ;U.K. ;2 639 659 ;51.22 % ;0.78 ;20 800 ;672;0.71 ;1.1
+Izyaslav ;4;Destroyer ;U.S.S.R. ;2 608 348 ;50.06 % ;0.73 ;18 196 ;684;0.1 ;0.97
+Yueyang ;10;Destroyer ;Pan-Asia ;2 547 417 ;51.33 % ;0.77 ;54 535 ;1 752 ;1.5 ;1.36
+Kawachi ;3;Battleship ;Japan ;2 541 886 ;49.55 % ;0.74 ;20 099 ;571;0.04 ;1.25
+Duke of York ;7;Battleship ;U.K. ;2 533 474 ;50.35 % ;0.75 ;50 316 ;1 326 ;3.09 ;1.29
+Ohio ;10;Battleship ;U.S.A. ;2 514 715 ;52.75 % ;0.91 ;94 837 ;1 911 ;4.3 ;1.58
+Daring ;10;Destroyer ;U.K. ;2 498 372 ;51.67 % ;0.79 ;45 910 ;1 705 ;1.71 ;1.37
+Bourgogne ;10;Battleship ;France ;2 456 922 ;53.13 % ;0.98 ;105 877 ;2 001 ;3.76 ;1.83
+Khabarovsk ;10;Destroyer ;U.S.S.R. ;2 455 950 ;51.01 % ;0.75 ;56 276 ;1 650 ;1.85 ;1.36
+ARP Takao ;8;Cruiser ;Japan ;2 406 168 ;52.01 % ;0.65 ;42 631 ;1 318 ;1.29 ;1.1
+Wickes ;3;Destroyer ;U.S.A. ;2 392 688 ;47.53 % ;0.65 ;14 077 ;531;0.02 ;0.81
+Napoli ;10;Cruiser ;Italy ;2 361 658 ;49.99 % ;0.72 ;62 798 ;1 674 ;2.65 ;1.22
+Jutland ;9;Destroyer ;U.K. ;2 312 174 ;52.26 % ;0.78 ;39 000 ;1 694 ;1.28 ;1.44
+U-190 ;8;Submarine ;Germany ;2 310 048 ;49.96 % ;0.43 ;25 088 ;1 371 ;0 ;0.7
+Giulio Cesare ;5;Battleship ;Italy ;2 292 517 ;60.14 % ;1.32 ;58 562 ;1 413 ;2.07 ;2.89
+Skåne ;7;Destroyer ;Europe ;2 252 835 ;51.52 % ;0.62 ;26 566 ;1 421 ;2.34 ;1.07
+Amalfi ;8;Cruiser ;Italy ;2 232 318 ;51.53 % ;0.67 ;46 756 ;1 592 ;3.01 ;1.19
+Asashio ;8;Destroyer ;Japan ;2 217 954 ;52.96 % ;0.81 ;55 057 ;1 678 ;0.08 ;1.7
+Ägir ;9;Cruiser ;Germany ;2 194 096 ;51.94 % ;0.65 ;59 153 ;1 572 ;2.91 ;1.05
+Brindisi ;9;Cruiser ;Italy ;2 193 962 ;50.62 % ;0.7 ;60 982 ;1 653 ;1.96 ;1.41
+Aigle ;6;Destroyer ;France ;2 167 144 ;50.64 % ;0.67 ;24 839 ;1 091 ;0.29 ;1.01
+Bretagne ;5;Battleship ;France ;2 164 223 ;49.69 % ;0.73 ;36 275 ;963;1.7 ;1.28
+Prinz Eugen ;8;Cruiser ;Germany ;2 160 569 ;49.84 % ;0.5 ;36 805 ;1 343 ;2.7 ;0.84
+Prinz Rupprecht ;9;Battleship ;Germany ;2 156 958 ;52.06 % ;0.79 ;68 306 ;1 602 ;2.46 ;1.12
+Pyotr Velikiy ;5;Battleship ;U.S.S.R. ;2 152 278 ;51.32 % ;0.84 ;40 933 ;1 084 ;2.45 ;1.39
+Wakatake ;3;Destroyer ;Japan ;2 136 183 ;48.54 % ;0.67 ;15 793 ;543;0.02 ;0.93
+Alabama ;8;Battleship ;U.S.A. ;2 127 336 ;50.54 % ;0.72 ;55 818 ;1 479 ;3.93 ;1.32
+Dallas ;6;Cruiser ;U.S.A. ;2 127 319 ;51.34 % ;0.59 ;28 011 ;1 130 ;3.48 ;0.9
+Tallinn ;8;Cruiser ;U.S.S.R. ;2 116 084 ;50.43 % ;0.58 ;39 776 ;1 478 ;3.81 ;0.87
+Texas ;5;Battleship ;U.S.A. ;2 111 736 ;53.27 % ;0.82 ;41 371 ;1 213 ;3.47 ;1.56
+Orion ;4;Battleship ;U.K. ;2 105 799 ;52.66 % ;1.14 ;42 750 ;788;2.36 ;2.32
+Duguay-Trouin ;4;Cruiser ;France ;2 092 596 ;51.85 % ;0.81 ;26 189 ;676;0.45 ;1.2
+Umikaze ;2;Destroyer ;Japan ;2 084 637 ;48.72 % ;0.78 ;14 075 ;507;0 ;1.25
+Ognevoi ;8;Destroyer ;U.S.S.R. ;2 065 094 ;50.63 % ;0.63 ;29 934 ;1 514 ;1.39 ;1.08
+ARP Kongo ;5;Battleship ;Japan ;2 059 411 ;53.47 % ;0.84 ;40 601 ;1 002 ;1.58 ;1.65
+Udaloi ;9;Destroyer ;U.S.S.R. ;2 052 041 ;51.2 % ;0.71 ;40 845 ;1 597 ;1.5 ;1.22
+Riga ;9;Cruiser ;U.S.S.R. ;2 051 956 ;50.89 % ;0.61 ;51 584 ;1 575 ;2.3 ;1.03
+Helena ;7;Cruiser ;U.S.A. ;2 049 127 ;50.88 % ;0.67 ;37 176 ;1 334 ;2.96 ;1.03
+Furious ;6;Aircraft Carrier ;U.K. ;2 047 479 ;51.34 % ;0.7 ;39 746 ;1 270 ;4.25 ;2.46
+Jervis ;7;Destroyer ;U.K. ;2 045 786 ;53.05 % ;0.79 ;27 525 ;1 399 ;0.47 ;1.27
+Cossack ;8;Destroyer ;U.K. ;2 015 751 ;52.15 % ;0.77 ;34 271 ;1 662 ;0.28 ;1.38
+Azuma ;9;Cruiser ;Japan ;1 994 779 ;52.2 % ;0.72 ;73 022 ;1 687 ;2.46 ;1.54
+Prinz Heinrich ;7;Battleship ;Germany ;1 967 979 ;52.66 % ;0.86 ;51 344 ;1 463 ;2.45 ;1.28
+Zara ;7;Cruiser ;Italy ;1 964 130 ;51.74 % ;0.69 ;41 205 ;1 435 ;1.72 ;1.25
+Grozovoi ;10;Destroyer ;U.S.S.R. ;1 961 796 ;50.24 % ;0.69 ;44 264 ;1 635 ;3.16 ;1.14
+Tashkent ;9;Destroyer ;U.S.S.R. ;1 937 424 ;49.61 % ;0.63 ;41 291 ;1 665 ;1.02 ;1.07
+Gadjah Mada ;7;Destroyer ;Pan-Asia ;1 933 692 ;53.59 % ;0.81 ;33 256 ;1 425 ;0.51 ;1.35
+Kiev ;8;Destroyer ;U.S.S.R. ;1 903 777 ;50.42 % ;0.63 ;34 366 ;1 487 ;1.09 ;1.01
+Hakuryu ;10;Aircraft Carrier ;Japan ;1 883 174 ;48.8 % ;0.85 ;81 369 ;1 735 ;5.24 ;3.78
+Trento ;6;Cruiser ;Italy ;1 882 798 ;50.51 % ;0.59 ;30 878 ;1 161 ;2.33 ;0.91
+Langley ;4;Aircraft Carrier ;U.S.A. ;1 880 188 ;50.76 % ;0.66 ;26 181 ;707;2.66 ;1.95
+Chung Mu ;9;Destroyer ;Pan-Asia ;1 876 513 ;52.43 % ;0.8 ;47 082 ;1 683 ;1.21 ;1.4
+Loyang ;8;Destroyer ;Pan-Asia ;1 866 076 ;50.14 % ;0.58 ;25 634 ;1 437 ;1.13 ;0.92
+Marceau ;10;Destroyer ;France ;1 863 997 ;50.09 % ;0.71 ;43 683 ;1 662 ;3.63 ;1.09
+Zieten ;8;Battleship ;Germany ;1 837 060 ;51.83 % ;0.79 ;56 512 ;1 571 ;3.64 ;1.14
+Icarus ;6;Destroyer ;U.K. ;1 823 700 ;51.76 % ;0.68 ;21 360 ;1 140 ;0.28 ;1.08
+Kansas ;8;Battleship ;U.S.A. ;1 776 997 ;49.8 % ;0.68 ;57 115 ;1 550 ;4.8 ;1.27
+Derzki ;3;Destroyer ;U.S.S.R. ;1 763 511 ;49.07 % ;0.7 ;14 370 ;531;0 ;0.89
+Kronshtadt ;9;Cruiser ;U.S.S.R. ;1 732 487 ;56.05 % ;0.78 ;67 106 ;1 807 ;1.37 ;1.5
+Shinonome ;6;Destroyer ;Japan ;1 732 092 ;54.82 % ;0.9 ;30 438 ;1 295 ;0.02 ;1.44
+Implacable ;8;Aircraft Carrier ;U.K. ;1 710 649 ;49%;0.72 ;52 428 ;1 581 ;4.55 ;3.02
+Hosho ;4;Aircraft Carrier ;Japan ;1 694 640 ;51.8 % ;0.76 ;30 007 ;753;2.41 ;2.7
+Västerås ;6;Destroyer ;Europe ;1 682 927 ;51.94 % ;0.63 ;22 499 ;1 248 ;1.53 ;1.06
+Vermont ;10;Battleship ;U.S.A. ;1 680 525 ;50.24 % ;0.84 ;90 235 ;1 802 ;3.8 ;1.65
+U-2501 ;10;Submarine ;Germany ;1 669 394 ;48.21 % ;0.46 ;35 799 ;1 528 ;0 ;0.76
+Yamagiri ;11;Destroyer ;Japan ;1 664 371 ;48.8 % ;0.73 ;51 043 ;1 698 ;1.25 ;1.21
+Dresden ;2;Cruiser ;Germany ;1 659 447 ;49.26 % ;0.83 ;15 666 ;514;0 ;1.43
+Alexander Nevsky ;10;Cruiser ;U.S.S.R. ;1 658 886 ;50.15 % ;0.68 ;71 204 ;1 784 ;3.5 ;1.32
+Hsienyang ;8;Destroyer ;Pan-Asia ;1 650 907 ;50.89 % ;0.66 ;33 352 ;1 540 ;1.53 ;1.1
+Prinz Eitel Friedrich ;6;Battleship ;Germany ;1 619 470 ;53.44 % ;0.91 ;46 894 ;1 382 ;3.17 ;1.56
+V-25 ;2;Destroyer ;Germany ;1 614 085 ;48.18 % ;1.08 ;17 441 ;571;0 ;1.76
+Minsk ;7;Destroyer ;U.S.S.R. ;1 601 831 ;51.34 % ;0.64 ;27 278 ;1 334 ;0.73 ;0.97
+Preussen ;10;Battleship ;Germany ;1 592 143 ;49.15 % ;0.68 ;75 924 ;1 580 ;3.16 ;1.05
+Sims ;7;Destroyer ;U.S.A. ;1 562 267 ;50.22 % ;0.59 ;22 840 ;1 396 ;1.19 ;0.95
+Fushun ;6;Destroyer ;Pan-Asia ;1 557 006 ;52.76 % ;0.71 ;27 049 ;1 187 ;0.65 ;1.17
+Slava ;10;Battleship ;U.S.S.R. ;1 550 731 ;50.97 % ;0.86 ;99 692 ;1 938 ;4.17 ;1.76
+Benham ;9;Destroyer ;U.S.A. ;1 546 743 ;54.89 % ;0.94 ;49 444 ;1 824 ;0.96 ;1.88
+Friesland ;9;Destroyer ;Europe ;1 528 633 ;50.71 % ;0.69 ;45 233 ;1 741 ;3.59 ;1.13
+Forrest Sherman ;10;Destroyer ;U.S.A. ;1 513 451 ;48.67 % ;0.68 ;54 011 ;1 661 ;2.73 ;1.04
+Weser ;6;Aircraft Carrier ;Germany ;1 507 953 ;49.58 % ;0.59 ;33 102 ;1 152 ;4.05 ;2.3
+Roma ;8;Battleship ;Italy ;1 503 124 ;52.06 % ;0.76 ;59 588 ;1 601 ;2.78 ;1.37
+Francesco Caracciolo ;7;Battleship ;Italy ;1 501 808 ;51.61 % ;0.78 ;53 119 ;1 474 ;2.92 ;1.43
+Hermelin ;1;Cruiser ;Germany ;1 493 964 ;49.29 % ;1.36 ;10 310 ;597;0 ;3
+Gnevny ;6;Destroyer ;U.S.S.R. ;1 476 408 ;50.45 % ;0.58 ;20 860 ;1 146 ;0.57 ;0.84
+Molotov ;6;Cruiser ;U.S.S.R. ;1 465 990 ;51.19 % ;0.63 ;32 615 ;1 171 ;1.19 ;0.93
+Shikishima ;10;Battleship ;Japan ;1 456 930 ;52.08 % ;0.87 ;100 712 ;1 882 ;3.39 ;1.64
+Massachusetts B ;8;Battleship ;U.S.A. ;1 452 973 ;55.23 % ;0.94 ;68 408 ;1 772 ;5.78 ;1.57
+Cristoforo Colombo ;10;Battleship ;Italy ;1 448 184 ;49.5 % ;0.79 ;90 762 ;1 814 ;2.76 ;1.4
+Leningrad ;7;Destroyer ;U.S.S.R. ;1 431 792 ;51.93 % ;0.69 ;27 948 ;1 297 ;0.51 ;1.13
+Minnesota ;9;Battleship ;U.S.A. ;1 425 758 ;49.61 % ;0.72 ;70 484 ;1 631 ;3.05 ;1.39
+Lenin ;8;Battleship ;U.S.S.R. ;1 410 113 ;54.22 % ;0.92 ;65 582 ;1 807 ;4.54 ;1.57
+Cachalot ;6;Submarine ;U.S.A. ;1 394 963 ;50.35 % ;0.46 ;18 805 ;1 003 ;0 ;0.75
+Satsuma ;11;Battleship ;Japan ;1 394 481 ;49.38 % ;0.82 ;107 957 ;1 837 ;2.43 ;1.65
+Albemarle ;8;Cruiser ;U.K. ;1 394 312 ;51.61 % ;0.65 ;46 496 ;1 569 ;4.25 ;1.09
+Mainz ;8;Cruiser ;Germany ;1 392 873 ;52%;0.67 ;51 533 ;1 597 ;3.53 ;1.13
+Arkansas Beta ;4;Battleship ;U.S.A. ;1 378 054 ;53.75 % ;1.04 ;38 222 ;880;0 ;1.92
+Kléber ;10;Destroyer ;France ;1 376 585 ;52%;0.8 ;54 153 ;1 756 ;2.08 ;1.28
+G-101 ;3;Destroyer ;Germany ;1 356 591 ;48.56 % ;0.77 ;16 814 ;556;0.01 ;1.06
+Vittorio Veneto ;8;Battleship ;Italy ;1 346 081 ;50.85 % ;0.72 ;57 439 ;1 609 ;3.36 ;1.3
+Devonshire ;6;Cruiser ;U.K. ;1 345 628 ;51.84 % ;0.66 ;32 315 ;1 222 ;3.35 ;0.99
+Mogador ;9;Destroyer ;France ;1 343 081 ;52.29 % ;0.81 ;45 245 ;1 705 ;1.12 ;1.3
+Jean Bart B ;9;Battleship ;France ;1 332 904 ;51.73 % ;0.84 ;82 141 ;1 820 ;3.88 ;1.35
+ARP Myoko ;7;Cruiser ;Japan ;1 330 132 ;51.87 % ;0.71 ;36 152 ;1 188 ;1.63 ;1.12
+Ishizuchi ;4;Battleship ;Japan ;1 322 182 ;52.99 % ;1.01 ;36 956 ;871;0.18 ;1.75
+Visby ;5;Destroyer ;Europe ;1 321 899 ;50.66 % ;0.57 ;18 149 ;1 021 ;1.53 ;0.9
+Bogatyr ;3;Cruiser ;U.S.S.R. ;1 308 066 ;50.19 % ;0.81 ;22 120 ;573;0 ;1.28
+Chester ;2;Cruiser ;U.S.A. ;1 296 901 ;46.46 % ;0.55 ;11 976 ;469;0 ;0.87
+Gallant ;6;Destroyer ;U.K. ;1 295 298 ;51.39 % ;0.71 ;23 787 ;1 137 ;0.02 ;1.14
+Drake ;9;Cruiser ;U.K. ;1 285 475 ;52.24 % ;0.69 ;63 702 ;1 669 ;2.23 ;1.38
+Gouden Leeuw ;10;Cruiser ;The Netherlands ;1 284 413 ;50.72 % ;0.7 ;74 519 ;1 843 ;5.62 ;1.16
+Raimondo Montecuccoli ;5;Cruiser ;Italy ;1 280 689 ;51%;0.56 ;23 304 ;970;2.31 ;0.84
+Chikuma ;2;Cruiser ;Japan ;1 279 487 ;48.72 % ;0.65 ;14 368 ;501;0 ;1.04
+Caledon ;3;Cruiser ;U.K. ;1 275 145 ;49.15 % ;0.72 ;17 624 ;538;0.11 ;1.03
+Jianwei ;5;Destroyer ;Pan-Asia ;1 275 020 ;50.71 % ;0.65 ;22 010 ;934;0.16 ;0.96
+Kaga ;8;Aircraft Carrier ;Japan ;1 271 345 ;51.86 % ;0.84 ;65 798 ;1 698 ;3.53 ;3.43
+Hood ;7;Battleship ;U.K. ;1 266 732 ;51.48 % ;0.8 ;50 427 ;1 383 ;2.9 ;1.47
+Acasta ;5;Destroyer ;U.K. ;1 259 623 ;49.82 % ;0.6 ;17 396 ;909;0.22 ;0.88
+Indianapolis ;7;Cruiser ;U.S.A. ;1 246 951 ;50.37 % ;0.6 ;33 376 ;1 267 ;1.59 ;0.9
+Anshan ;6;Destroyer ;Pan-Asia ;1 234 331 ;51.81 % ;0.68 ;23 782 ;1 176 ;0.92 ;1.09
+Yubari ;4;Cruiser ;Japan ;1 231 637 ;52.43 % ;0.87 ;25 377 ;852;2.93 ;1.33
+Surrey ;7;Cruiser ;U.K. ;1 227 721 ;52.27 % ;0.69 ;41 710 ;1 444 ;2.69 ;1.2
+Puerto Rico ;10;Cruiser ;U.S.A. ;1 225 354 ;50.56 % ;0.66 ;67 980 ;1 774 ;3.77 ;1.11
+Podvoisky ;5;Destroyer ;U.S.S.R. ;1 221 198 ;49.12 % ;0.56 ;17 853 ;947;0.48 ;0.72
+Lepanto ;9;Battleship ;Italy ;1 219 698 ;50.4 % ;0.72 ;70 528 ;1 662 ;2.49 ;1.3
+Le Fantasque ;8;Destroyer ;France ;1 218 241 ;52.72 % ;0.79 ;35 722 ;1 675 ;1.61 ;1.22
+Arizona ;6;Battleship ;U.S.A. ;1 204 568 ;54.54 % ;0.92 ;50 108 ;1 322 ;1.42 ;1.91
+August von Parseval ;8;Aircraft Carrier ;Germany ;1 195 412 ;49.62 % ;0.76 ;54 558 ;1 583 ;4.53 ;3.02
+Salmon ;8;Submarine ;U.S.A. ;1 185 720 ;51.59 % ;0.51 ;28 313 ;1 484 ;0 ;0.9
+Annapolis ;11;Cruiser ;U.S.A. ;1 184 571 ;49.17 % ;0.86 ;78 985 ;1 944 ;4.05 ;1.44
+Kidd ;8;Destroyer ;U.S.A. ;1 183 487 ;51.96 % ;0.66 ;29 688 ;1 615 ;4.09 ;1.23
+T-61 ;6;Destroyer ;Germany ;1 174 671 ;57.06 % ;0.96 ;31 956 ;1 461 ;1 ;1.67
+Sampson ;2;Destroyer ;U.S.A. ;1 139 683 ;45.64 % ;0.63 ;11 134 ;455;0 ;0.88
+Black Swan ;1;Cruiser ;U.K. ;1 131 785 ;51.16 % ;1.33 ;8 176 ;579;0 ;2.68
+Mackensen ;6;Battleship ;Germany ;1 131 530 ;52.64 % ;0.88 ;44 592 ;1 289 ;0.88 ;1.39
+Friant ;3;Cruiser ;France ;1 126 745 ;48.77 % ;0.75 ;19 294 ;542;0.14 ;1.08
+Kii ;8;Battleship ;Japan ;1 125 694 ;51.01 % ;0.73 ;57 031 ;1 536 ;3.85 ;1.31
+ARP Haruna ;5;Battleship ;Japan ;1 123 664 ;52.26 % ;0.79 ;38 291 ;954;1.49 ;1.52
+Odin ;8;Battleship ;Germany ;1 108 034 ;53.65 % ;0.85 ;61 800 ;1 678 ;4.97 ;1.32
+Gremyashchy ;5;Destroyer ;U.S.S.R. ;1 087 425 ;54.61 % ;0.96 ;29 125 ;1 222 ;0.5 ;1.72
+Balao ;10;Submarine ;U.S.A. ;1 085 354 ;49.48 % ;0.52 ;37 621 ;1 631 ;0 ;0.92
+Black ;9;Destroyer ;U.S.A. ;1 081 125 ;53.4 % ;0.76 ;40 254 ;1 715 ;1.56 ;1.34
+Mecklenburg ;10;Battleship ;Germany ;1 080 284 ;51.88 % ;0.87 ;96 509 ;1 895 ;4.26 ;1.56
+Goliath ;10;Cruiser ;U.K. ;1 080 051 ;50.92 % ;0.73 ;79 920 ;1 820 ;3.45 ;1.46
+Asashio B ;8;Destroyer ;Japan ;1 068 659 ;53.22 % ;0.84 ;55 007 ;1 717 ;0.09 ;1.72
+ARP Haguro ;7;Cruiser ;Japan ;1 063 572 ;49.36 % ;0.59 ;31 761 ;1 037 ;1.22 ;0.87
+Vauquelin ;7;Destroyer ;France ;1 052 333 ;52.65 % ;0.75 ;28 875 ;1 438 ;0.46 ;1.13
+Guépard ;6;Destroyer ;France ;1 043 983 ;52.19 % ;0.71 ;25 208 ;1 208 ;0.54 ;1.05
+Erie ;1;Cruiser ;U.S.A. ;1 031 452 ;49.06 % ;1.15 ;10 312 ;545;0 ;2.35
+Rhein ;4;Aircraft Carrier ;Germany ;1 022 772 ;51.37 % ;0.66 ;27 242 ;712;4.44 ;2.37
+Somers ;10;Destroyer ;U.S.A. ;1 019 018 ;55.28 % ;0.87 ;59 403 ;1 835 ;0.19 ;1.8
+Campbeltown ;3;Destroyer ;U.K. ;1 016 951 ;52.94 % ;0.91 ;21 845 ;777;0.04 ;1.33
+ARP Hiei ;5;Battleship ;Japan ;1 013 524 ;52.84 % ;0.8 ;39 575 ;986;1.63 ;1.52
+Småland ;10;Destroyer ;Europe ;1 004 717 ;54.29 % ;0.84 ;45 918 ;1 900 ;4.99 ;1.54
+Andrea Doria ;6;Battleship ;Italy ;979 594 ;50.02 % ;0.76 ;42 754 ;1 251 ;3.74 ;1.33
+Orlan ;1;Cruiser ;U.S.S.R. ;968 712 ;48.85 % ;1.04 ;9 903 ;528;0 ;1.96
+Haarlem ;8;Cruiser ;The Netherlands ;968 494 ;52.26 % ;0.59 ;45 953 ;1 626 ;5.54 ;1.02
+Johan de Witt ;9;Cruiser ;The Netherlands ;967 009 ;52.29 % ;0.65 ;60 824 ;1 726 ;4.75 ;1.17
+Shenyang ;4;Destroyer ;Pan-Asia ;954 027 ;52.32 % ;0.93 ;25 717 ;738;0.22 ;1.48
+Hermes ;4;Aircraft Carrier ;U.K. ;949 311 ;52.19 % ;0.73 ;26 694 ;737;2.32 ;2.4
+Duca d'Aosta ;6;Cruiser ;Italy ;944 280 ;51.78 % ;0.63 ;28 247 ;1 173 ;1.41 ;0.97
+Audacious ;10;Aircraft Carrier ;U.K. ;938 622 ;48.84 % ;0.85 ;77 877 ;1 765 ;4.77 ;3.69
+Emden ;2;Cruiser ;Germany ;937 291 ;53.4 % ;0.97 ;18 535 ;634;0 ;1.69
+U-4501 ;10;Submarine ;Germany ;936 185 ;49%;0.5 ;36 236 ;1 604 ;0 ;1.03
+Serov ;6;Aircraft Carrier ;U.S.S.R. ;932 531 ;50.97 % ;0.67 ;39 592 ;1 263 ;4.31 ;2.25
+Lazo ;7;Cruiser ;U.S.S.R. ;924 574 ;50.32 % ;0.63 ;40 917 ;1 321 ;1.64 ;1.09
+Marblehead ;5;Cruiser ;U.S.A. ;921 191 ;52.57 % ;0.69 ;27 330 ;1 027 ;0.31 ;0.98
+Graf Zeppelin ;8;Aircraft Carrier ;Germany ;917 870 ;48.16 % ;0.68 ;51 238 ;1 533 ;4.2 ;2.31
+Scharnhorst '43 ;7;Battleship ;Germany ;914 436 ;50.56 % ;0.72 ;42 999 ;1 332 ;2.86 ;1.13
+Admiral Nakhimov ;10;Aircraft Carrier ;U.S.S.R. ;901 895 ;49.15 % ;0.83 ;91 051 ;1 783 ;6.17 ;2.45
+Mutsu ;6;Battleship ;Japan ;898 825 ;52.92 % ;0.87 ;50 241 ;1 364 ;1.35 ;1.54
+St. Vincent ;10;Battleship ;U.K. ;897 656 ;52.79 % ;0.9 ;98 689 ;1 944 ;4.22 ;1.56
+Tirpitz B ;8;Battleship ;Germany ;888 063 ;50.98 % ;0.72 ;56 371 ;1 597 ;2.92 ;1.07
+Jinan ;10;Cruiser ;Pan-Asia ;887 426 ;48.46 % ;0.74 ;62 618 ;1 690 ;4.9 ;1.2
+De Grasse ;6;Cruiser ;France ;877 191 ;52.78 % ;0.68 ;33 031 ;1 189 ;1.71 ;1.05
+Hawkins ;5;Cruiser ;U.K. ;876 009 ;49.78 % ;0.48 ;20 801 ;905;2.17 ;0.69
+Eendracht ;7;Cruiser ;The Netherlands ;875 044 ;51.18 % ;0.62 ;37 499 ;1 407 ;3.21 ;0.96
+Groningen ;9;Destroyer ;The Netherlands ;873 985 ;50.23 % ;0.65 ;44 331 ;1 678 ;3.87 ;1.03
+Alaska B ;9;Cruiser ;U.S.A. ;865 316 ;52.91 % ;0.7 ;61 581 ;1 697 ;2.95 ;1.16
+Charleston ;3;Cruiser ;U.S.A. ;862 221 ;52.5 % ;1.08 ;27 219 ;753;0.04 ;1.99
+Colbert ;10;Cruiser ;France ;855 195 ;51.02 % ;0.83 ;71 950 ;1 862 ;4.21 ;1.47
+Iwami ;9;Battleship ;Japan ;847 513 ;49.27 % ;0.65 ;65 248 ;1 511 ;2.52 ;1.16
+Storozhevoi ;2;Destroyer ;U.S.S.R. ;846 675 ;47.13 % ;0.69 ;11 141 ;446;0 ;0.98
+Gorizia ;7;Cruiser ;Italy ;839 421 ;52.38 % ;0.72 ;41 527 ;1 540 ;1.16 ;1.32
+Felix Schultz ;9;Destroyer ;Germany ;826 180 ;49.04 % ;0.66 ;44 654 ;1 610 ;2.06 ;1.06
+Perth ;6;Cruiser ;Commonwealth ;817 413 ;54.11 % ;0.75 ;32 910 ;1 264 ;1.59 ;1.29
+Pobeda ;8;Aircraft Carrier ;U.S.S.R. ;817 020 ;50.13 % ;0.76 ;60 846 ;1 646 ;4.8 ;2.58
+Kearsarge ;9;Battleship ;U.S.A. ;813 549 ;50.76 % ;0.74 ;72 791 ;1 632 ;2.68 ;1.52
+Elbing ;10;Destroyer ;Germany ;798 207 ;48.54 % ;0.71 ;59 458 ;1 699 ;3.1 ;1.16
+Max Immelmann ;10;Aircraft Carrier ;Germany ;796 091 ;48.63 % ;0.74 ;84 778 ;1 685 ;4.67 ;2.78
+Jaguar ;5;Destroyer ;France ;794 031 ;51.12 % ;0.7 ;22 116 ;993;0.21 ;1.03
+Hannover ;11;Battleship ;Germany ;793 717 ;49.15 % ;0.71 ;88 302 ;1 722 ;3.58 ;1.01
+Z-31 ;7;Destroyer ;Germany ;790 129 ;50.98 % ;0.6 ;26 055 ;1 366 ;1.18 ;1.01
+Kirov ;5;Cruiser ;U.S.S.R. ;786 018 ;52.39 % ;0.63 ;29 228 ;984;0.75 ;0.9
+Flint ;7;Cruiser ;U.S.A. ;781 770 ;54.38 % ;0.83 ;41 515 ;1 556 ;3.98 ;1.36
+Bellerophon ;3;Battleship ;U.K. ;774 591 ;49.65 % ;0.91 ;29 390 ;596;0.2 ;1.74
+Undine ;6;Submarine ;U.K. ;774 218 ;50.59 % ;0.48 ;19 765 ;1 039 ;0 ;0.78
+Conte di Cavour ;5;Battleship ;Italy ;771 181 ;49.03 % ;0.79 ;38 456 ;1 034 ;1.3 ;1.34
+Condé ;11;Cruiser ;France ;770 082 ;49.77 % ;0.92 ;91 772 ;1 987 ;2.74 ;1.76
+Okhotnik ;5;Destroyer ;U.S.S.R. ;757 726 ;53.63 % ;0.89 ;25 434 ;1 111 ;0.09 ;1.26
+Kamikaze ;5;Destroyer ;Japan ;749 488 ;60.68 % ;1.32 ;39 130 ;1 442 ;0.01 ;2.7
+Cherbourg ;8;Cruiser ;France ;749 437 ;52.91 % ;0.67 ;48 033 ;1 594 ;3.73 ;1.05
+Gustav-Julius Maerker ;8;Destroyer ;Germany ;748 496 ;48.41 % ;0.6 ;32 696 ;1 505 ;1.25 ;0.92
+Kotovsky ;5;Cruiser ;U.S.S.R. ;736 457 ;49.36 % ;0.49 ;21 461 ;898;0.87 ;0.66
+Z-39 ;7;Destroyer ;Germany ;734 022 ;53.98 % ;0.76 ;29 697 ;1 451 ;1.24 ;1.37
+Z-44 ;9;Destroyer ;Germany ;728 953 ;47.75 % ;0.58 ;35 478 ;1 465 ;1.07 ;0.98
+HSF Harekaze ;8;Destroyer ;Japan ;727 514 ;50.65 % ;0.66 ;30 004 ;1 484 ;0.94 ;1.05
+Fujin ;5;Destroyer ;Japan ;720 385 ;59.38 % ;1.24 ;36 540 ;1 364 ;0.01 ;2.44
+Derfflinger ;5;Battleship ;Germany ;719 324 ;50.77 % ;0.77 ;36 711 ;1 036 ;0.75 ;1.27
+Jäger ;9;Destroyer ;Europe ;708 237 ;52.24 % ;0.74 ;44 795 ;1 701 ;0.19 ;1.51
+Irian ;8;Cruiser ;Pan-Asia ;706 070 ;50.98 % ;0.68 ;49 366 ;1 571 ;3.27 ;1.11
+Gascogne ;8;Battleship ;France ;704 595 ;50.52 % ;0.74 ;58 870 ;1 540 ;2.68 ;1.39
+Malta ;10;Aircraft Carrier ;U.K. ;702 495 ;48.88 % ;0.83 ;85 129 ;1 742 ;4.7 ;2.5
+Manfred von Richthofen ;10;Aircraft Carrier ;Germany ;700 345 ;48.74 % ;0.81 ;79 601 ;1 708 ;5.36 ;3.48
+Neustrashimy ;9;Destroyer ;U.S.S.R. ;695 316 ;52.9 % ;0.79 ;40 777 ;1 713 ;2.13 ;1.57
+Courbet ;4;Battleship ;France ;684 653 ;49.04 % ;0.9 ;34 455 ;715;1.11 ;1.67
+Patrie ;11;Battleship ;France ;681 574 ;50.21 % ;0.92 ;111 927 ;2 038 ;3.31 ;1.64
+Hashidate ;1;Cruiser ;Japan ;680 608 ;50.21 % ;1.27 ;11 317 ;572;0 ;2.61
+Rooke ;7;Battleship ;U.K. ;677 251 ;52.4 % ;0.9 ;57 950 ;1 577 ;3.65 ;1.44
+ARP Kirishima ;5;Battleship ;Japan ;669 516 ;52.98 % ;0.8 ;39 352 ;977;1.49 ;1.54
+Brest ;9;Cruiser ;France ;650 597 ;52.87 % ;0.69 ;62 691 ;1 715 ;3.27 ;1.08
+Sejong ;9;Cruiser ;Pan-Asia ;647 500 ;50.12 % ;0.66 ;51 062 ;1 605 ;4.28 ;1.09
+Marco Polo ;9;Battleship ;Italy ;646 613 ;49.11 % ;0.64 ;68 208 ;1 586 ;2.04 ;1.11
+Huanghe ;6;Cruiser ;Pan-Asia ;644 658 ;52.37 % ;0.67 ;29 367 ;1 258 ;3.92 ;1.08
+Duncan ;9;Battleship ;U.K. ;643 387 ;52.54 % ;0.81 ;77 756 ;1 813 ;3.59 ;1.39
+Bayard ;8;Cruiser ;France ;635 038 ;54.08 % ;0.81 ;55 463 ;1 732 ;3.38 ;1.43
+Chumphon ;7;Cruiser ;Pan-Asia ;630 320 ;50.11 % ;0.6 ;31 573 ;1 340 ;3.79 ;0.9
+Kijkduin ;6;Cruiser ;The Netherlands ;625 613 ;51.16 % ;0.58 ;28 940 ;1 183 ;3.63 ;0.9
+Brandenburg ;8;Battleship ;Germany ;609 024 ;52.2 % ;0.85 ;60 515 ;1 661 ;4.53 ;1.27
+Enterprise ;8;Aircraft Carrier ;U.S.A. ;596 516 ;53.76 % ;0.94 ;61 047 ;1 857 ;6.29 ;4.79
+Vampire II ;10;Destroyer ;Commonwealth ;595 592 ;52.36 % ;0.8 ;49 908 ;1 805 ;1.66 ;1.29
+Hayate ;10;Destroyer ;Japan ;588 653 ;49.26 % ;0.71 ;44 136 ;1 594 ;1.52 ;1.12
+Gangut ;4;Battleship ;U.S.S.R. ;582 311 ;50.58 % ;1.15 ;40 390 ;824;1.03 ;2.17
+Incomparable ;10;Battleship ;U.K. ;581 738 ;51.86 % ;0.93 ;92 478 ;1 881 ;3.43 ;1.52
+Marseille ;10;Cruiser ;France ;581 308 ;52.31 % ;0.81 ;80 304 ;1 902 ;3.96 ;1.33
+Imperator Nikolai I ;4;Battleship ;U.S.S.R. ;577 064 ;60.8 % ;1.35 ;49 145 ;1 029 ;0.07 ;2.73
+Hawke ;8;Battleship ;U.K. ;575 834 ;51.52 % ;0.85 ;64 836 ;1 748 ;5 ;1.39
+Vanguard ;8;Battleship ;U.K. ;563 574 ;50.47 % ;0.7 ;58 613 ;1 592 ;3.81 ;1.36
+Harbin ;8;Cruiser ;Pan-Asia ;556 444 ;50.15 % ;0.64 ;40 177 ;1 543 ;4.27 ;0.99
+Siegfried ;9;Cruiser ;Germany ;542 820 ;54.72 % ;0.78 ;68 630 ;1 737 ;2.76 ;1.34
+Wakeful ;4;Destroyer ;U.K. ;536 282 ;49.79 % ;0.86 ;21 284 ;716;0.22 ;1.3
+Tromp ;10;Destroyer ;The Netherlands ;529 527 ;48.97 % ;0.67 ;49 552 ;1 656 ;2.22 ;1.12
+Ashitaka ;7;Battleship ;Japan ;520 167 ;50.61 % ;0.78 ;53 956 ;1 332 ;0.62 ;1.41
+Exeter ;5;Cruiser ;U.K. ;512 264 ;54.51 % ;0.73 ;28 961 ;1 150 ;3.03 ;1.16
+Ragnar ;10;Destroyer ;Europe ;511 229 ;54.6 % ;0.84 ;61 239 ;1 951 ;4.82 ;1.64
+Wisconsin ;10;Battleship ;U.S.A. ;506 262 ;50.35 % ;0.9 ;96 619 ;1 861 ;4.11 ;1.64
+Franklin D. Roosevelt ;10;Aircraft Carrier ;U.S.A. ;496 217 ;50.31 % ;0.78 ;91 612 ;1 745 ;4.43 ;2.75
+Sturdy ;8;Submarine ;U.K. ;494 384 ;50.08 % ;0.42 ;24 139 ;1 412 ;0 ;0.65
+Atago B ;8;Cruiser ;Japan ;483 858 ;52.77 % ;0.71 ;48 017 ;1 662 ;2.38 ;1.36
+Weymouth ;2;Cruiser ;U.K. ;483 400 ;47.95 % ;0.7 ;15 212 ;491;0 ;1.22
+United States ;11;Aircraft Carrier ;U.S.A. ;480 178 ;47.88 % ;0.95 ;106 212 ;1 909 ;5.31 ;2.65
+Ark Royal ;6;Aircraft Carrier ;U.K. ;478 991 ;52.89 % ;0.78 ;38 815 ;1 358 ;4.18 ;2.62
+Rahmat ;6;Cruiser ;Pan-Asia ;472 641 ;50.39 % ;0.6 ;26 453 ;1 134 ;3.49 ;0.89
+Edgar ;11;Cruiser ;U.K. ;463 311 ;48.16 % ;0.83 ;74 349 ;1 937 ;5.28 ;1.44
+W. Virginia '41 ;6;Battleship ;U.S.A. ;455 940 ;54.82 % ;0.94 ;55 229 ;1 422 ;1.8 ;1.77
+Saipan ;8;Aircraft Carrier ;U.S.A. ;446 679 ;49.58 % ;0.78 ;58 231 ;1 638 ;4.15 ;3.91
+Austin ;10;Cruiser ;U.S.A. ;445 017 ;51.26 % ;0.87 ;66 212 ;1 873 ;5.6 ;1.49
+Yudachi ;7;Destroyer ;Japan ;441 937 ;52.46 % ;0.7 ;32 933 ;1 478 ;0.15 ;1.34
+Tachibana ;2;Destroyer ;Japan ;439 262 ;52.58 % ;1.2 ;19 119 ;748;0 ;2
+Chkalov ;8;Aircraft Carrier ;U.S.S.R. ;435 981 ;52.38 % ;0.89 ;64 730 ;1 779 ;5.79 ;3.14
+Vampire ;3;Destroyer ;Commonwealth ;435 489 ;57.86 % ;1.18 ;25 285 ;858;0.33 ;2.1
+Dalarna ;11;Destroyer ;Europe ;435 333 ;49.57 % ;0.76 ;51 597 ;1 936 ;5.63 ;1.31
+HSF Admiral Graf Spee ;6;Cruiser ;Germany ;428 149 ;53.89 % ;0.66 ;32 077 ;1 128 ;1.57 ;1.09
+Southern Dragon ;7;Cruiser ;Japan ;427 286 ;50.76 % ;0.66 ;36 585 ;1 190 ;1.43 ;1.02
+Le Terrible ;8;Destroyer ;France ;427 218 ;50.69 % ;0.71 ;32 943 ;1 556 ;0.37 ;1.1
+Renown ;6;Battleship ;U.K. ;425 120 ;49.71 % ;0.75 ;41 584 ;1 242 ;3.99 ;1.14
+Marlborough ;9;Battleship ;U.K. ;415 933 ;49.14 % ;0.67 ;73 068 ;1 667 ;2.18 ;1.24
+Shimanto ;8;Cruiser ;Japan ;414 531 ;50.98 % ;0.65 ;43 132 ;1 555 ;5.08 ;1.06
+Scharnhorst B ;7;Battleship ;Germany ;410 688 ;52.85 % ;0.83 ;51 892 ;1 592 ;2.8 ;1.3
+ARP Ashigara ;7;Cruiser ;Japan ;410 197 ;49.92 % ;0.61 ;33 627 ;1 083 ;1.25 ;0.92
+Novik ;2;Cruiser ;U.S.S.R. ;406 241 ;46.2 % ;0.7 ;14 212 ;489;0 ;1.17
+Thrasher ;10;Submarine ;U.K. ;401 913 ;48.21 % ;0.48 ;35 337 ;1 562 ;0 ;0.73
+Hizen ;9;Battleship ;Japan ;398 925 ;49.28 % ;0.69 ;70 106 ;1 606 ;1.54 ;1.26
+Mikoyan ;5;Cruiser ;U.S.S.R. ;398 014 ;50.73 % ;0.52 ;22 686 ;955;0.99 ;0.7
+Takahashi ;9;Cruiser ;Japan ;396 684 ;51.41 % ;0.63 ;50 328 ;1 619 ;4.25 ;1.21
+Carnot ;9;Cruiser ;France ;393 794 ;51.25 % ;0.63 ;60 262 ;1 593 ;2.71 ;1.1
+Celebes ;5;Cruiser ;The Netherlands ;391 324 ;51.32 % ;0.61 ;26 282 ;986;1.44 ;0.93
+Duca degli Abruzzi ;7;Cruiser ;Italy ;390 388 ;51.77 % ;0.68 ;36 012 ;1 367 ;1.18 ;1.28
+Genova ;5;Cruiser ;Italy ;387 420 ;51.38 % ;0.61 ;25 504 ;1 068 ;1.29 ;0.85
+Repulse ;6;Battleship ;U.K. ;386 328 ;52.13 % ;0.86 ;50 570 ;1 379 ;1.54 ;1.48
+Omono ;7;Cruiser ;Japan ;385 038 ;50.17 % ;0.64 ;35 255 ;1 334 ;2.76 ;0.98
+Gato ;10;Submarine ;U.S.A. ;384 132 ;50.75 % ;0.66 ;43 133 ;1 800 ;0 ;1.07
+Clausewitz ;11;Cruiser ;Germany ;383 936 ;48.2 % ;0.74 ;89 142 ;1 865 ;3.18 ;1.5
+Paolo Emilio ;9;Destroyer ;Italy ;382 785 ;51.4 % ;0.88 ;44 689 ;1 600 ;0.59 ;1.12
+Albany ;2;Cruiser ;U.S.A. ;378 491 ;51.55 % ;0.83 ;15 532 ;614;0 ;1.27
+Alberto di Giussano ;4;Cruiser ;Italy ;377 756 ;49.15 % ;0.8 ;23 351 ;740;3.09 ;1.18
+Gryf ;1;Cruiser ;Europe ;375 088 ;48.21 % ;1.98 ;12 721 ;724;0 ;4.18
+Luca Tarigo ;7;Destroyer ;Italy ;371 921 ;52.66 % ;0.77 ;27 182 ;1 518 ;1.01 ;1.28
+Smith ;2;Destroyer ;U.S.A. ;371 824 ;51%;0.99 ;15 992 ;691;0 ;1.5
+Longjiang ;2;Destroyer ;Pan-Asia ;371 240 ;46.84 % ;0.86 ;16 102 ;546;0 ;1.59
+Hill ;5;Destroyer ;U.S.A. ;367 210 ;54.75 % ;0.86 ;26 267 ;1 205 ;1.77 ;1.4
+Agincourt ;5;Battleship ;U.K. ;365 900 ;57.47 % ;1.26 ;50 645 ;1 315 ;0 ;2.1
+Gokase ;6;Cruiser ;Japan ;364 886 ;50.81 % ;0.66 ;26 713 ;1 113 ;2.04 ;0.99
+Monaghan ;6;Destroyer ;U.S.A. ;361 781 ;53.65 % ;0.76 ;25 592 ;1 269 ;1.99 ;1.29
+Haida ;7;Destroyer ;Commonwealth ;358 403 ;54.29 % ;0.78 ;28 664 ;1 538 ;0.82 ;1.38
+Yodo ;10;Cruiser ;Japan ;351 392 ;49.43 % ;0.7 ;61 744 ;1 712 ;4.53 ;1.28
+Brisbane ;10;Cruiser ;Commonwealth ;349 288 ;49.77 % ;0.67 ;51 111 ;1 697 ;4.79 ;1.16
+ZF-6 ;9;Destroyer ;Germany ;345 030 ;49.57 % ;0.7 ;36 700 ;1 638 ;1.73 ;1.07
+Álvaro de Bazán ;10;Destroyer ;Spain ;339 695 ;48.39 % ;0.61 ;44 160 ;1 607 ;1.67 ;0.98
+Adriatico ;9;Destroyer ;Italy ;339 573 ;50.11 % ;0.67 ;36 667 ;1 613 ;0.84 ;1.08
+Anchorage ;8;Cruiser ;U.S.A. ;338 717 ;50.78 % ;0.62 ;47 599 ;1 547 ;2.48 ;0.97
+Strasbourg ;7;Battleship ;France ;338 168 ;52.09 % ;0.84 ;56 456 ;1 552 ;1.97 ;1.29
+Tiger ;5;Battleship ;U.K. ;336 188 ;50.6 % ;0.85 ;39 452 ;1 053 ;1.04 ;1.42
+Nebraska ;8;Battleship ;U.S.A. ;335 921 ;50.75 % ;0.74 ;53 468 ;1 637 ;5.37 ;1.43
+Aviere ;6;Destroyer ;Italy ;331 930 ;54.17 % ;0.85 ;25 839 ;1 348 ;1.2 ;1.45
+Jurien de la Gravière ;2;Cruiser ;France ;329 649 ;46.74 % ;0.71 ;15 664 ;480;0 ;1.19
+Orkan ;8;Destroyer ;Europe ;329 440 ;51.02 % ;0.65 ;29 018 ;1 623 ;1.48 ;1.12
+Agano ;5;Cruiser ;Japan ;328 351 ;49.51 % ;0.59 ;21 173 ;873;1.19 ;0.81
+Vittorio Cuniberti ;8;Destroyer ;Italy ;327 173 ;51.15 % ;0.73 ;30 698 ;1 640 ;1.04 ;1.22
+Turenne ;3;Battleship ;France ;323 805 ;48.83 % ;0.84 ;25 699 ;564;0.01 ;1.57
+Bajie ;9;Battleship ;Pan-Asia ;320 414 ;50.38 % ;0.71 ;72 601 ;1 659 ;1.85 ;1.31
+König Albert ;3;Battleship ;Germany ;320 135 ;59.7 % ;1.36 ;38 880 ;910;0.1 ;2.91
+Atlântico ;8;Battleship ;Pan-America ;318 700 ;54.96 % ;0.98 ;70 739 ;1 793 ;4.7 ;1.57
+Eagle ;11;Aircraft Carrier ;U.K. ;316 910 ;50.05 % ;1 ;111 982 ;1 942 ;4.22 ;3.33
+Yorktown ;8;Aircraft Carrier ;U.S.A. ;316 113 ;51.03 % ;0.68 ;55 631 ;1 652 ;7.04 ;2.69
+Phra Ruang ;3;Destroyer ;Pan-Asia ;315 194 ;47.58 % ;0.69 ;17 150 ;547;0.15 ;1.11
+Krasny Krym ;5;Cruiser ;U.S.S.R. ;314 940 ;51.96 % ;0.63 ;25 863 ;1 013 ;1.24 ;0.93
+De Zeven Provinciën ;8;Cruiser ;The Netherlands ;310 020 ;52.97 % ;0.66 ;48 026 ;1 726 ;7.26 ;1.32
+Kaga B ;8;Aircraft Carrier ;Japan ;308 293 ;51.71 % ;0.82 ;65 058 ;1 704 ;3.17 ;3.09
+Cossack B ;8;Destroyer ;U.K. ;306 624 ;52.15 % ;0.77 ;33 544 ;1 719 ;0.42 ;1.38
+London ;6;Cruiser ;U.K. ;306 029 ;51.93 % ;0.64 ;32 237 ;1 235 ;2.66 ;1.01
+Viribus Unitis ;5;Battleship ;Europe ;305 678 ;53.68 % ;1 ;46 565 ;1 228 ;0.09 ;1.84
+Indomitable ;8;Aircraft Carrier ;U.K. ;305 353 ;50.51 % ;0.77 ;63 212 ;1 756 ;4.45 ;3.16
+Asturias ;7;Cruiser ;Spain ;303 617 ;50.66 % ;0.63 ;36 283 ;1 295 ;1.68 ;0.96
+Ignacio Allende ;8;Cruiser ;Pan-America ;300 243 ;51.24 % ;0.66 ;38 938 ;1 593 ;4.88 ;1.06
+Cataluña ;8;Cruiser ;Spain ;299 746 ;51.49 % ;0.7 ;46 979 ;1 603 ;2.82 ;1.14
+Florida ;7;Battleship ;U.S.A. ;299 503 ;51.98 % ;0.83 ;55 364 ;1 579 ;4.48 ;1.44
+ARP Nachi ;7;Cruiser ;Japan ;293 680 ;50.94 % ;0.67 ;35 229 ;1 099 ;1.6 ;1.02
+Aurora ;3;Cruiser ;U.S.S.R. ;293 530 ;51.75 % ;0.97 ;25 138 ;772;0.05 ;1.56
+Druid ;10;Destroyer ;U.K. ;292 145 ;54.27 % ;0.92 ;58 605 ;1 957 ;2.84 ;1.52
+Komsomolets ;4;Aircraft Carrier ;U.S.S.R. ;291 426 ;50.39 % ;0.61 ;25 146 ;693;1.88 ;1.79
+Split ;8;Destroyer ;Europe ;289 918 ;49.58 % ;0.65 ;29 554 ;1 510 ;1.49 ;0.95
+Yumihari ;8;Battleship ;Japan ;288 688 ;50.21 % ;0.79 ;62 808 ;1 647 ;2.45 ;1.36
+Andalucía ;9;Cruiser ;Spain ;287 319 ;51.34 % ;0.67 ;57 861 ;1 658 ;2.38 ;1.15
+Attilio Regolo ;10;Destroyer ;Italy ;280 480 ;50.99 % ;0.8 ;51 401 ;1 749 ;1.51 ;1.31
+Castilla ;10;Cruiser ;Spain ;278 687 ;50.5 % ;0.8 ;74 881 ;1 863 ;3 ;1.42
+Ise ;6;Battleship ;Japan ;277 653 ;53.62 % ;0.79 ;44 143 ;1 330 ;4.94 ;1.89
+Wujing ;9;Battleship ;Pan-Asia ;277 568 ;49.96 % ;0.66 ;65 545 ;1 613 ;3.05 ;1.11
+Wichita ;8;Cruiser ;U.S.A. ;276 756 ;53.18 % ;0.71 ;45 841 ;1 676 ;4.13 ;1.17
+Graf Zeppelin B ;8;Aircraft Carrier ;Germany ;274 936 ;48.86 % ;0.69 ;51 608 ;1 557 ;4.06 ;2.2
+Gdansk ;10;Destroyer ;Europe ;272 127 ;51.15 % ;0.79 ;53 991 ;1 725 ;1.72 ;1.22
+Klas Horn ;4;Destroyer ;Europe ;271 885 ;47.57 % ;0.67 ;18 302 ;654;0.8 ;0.97
+Plymouth ;10;Cruiser ;U.K. ;264 644 ;51.76 % ;0.78 ;61 240 ;1 805 ;2.5 ;1.36
+Dante Alighieri ;4;Battleship ;Italy ;264 274 ;49.39 % ;1.15 ;40 655 ;829;2.83 ;2.19
+Ipiranga ;8;Battleship ;Pan-America ;262 860 ;51.99 % ;0.82 ;63 648 ;1 729 ;2.93 ;1.3
+Ruggiero di Lauria ;10;Battleship ;Italy ;256 301 ;52.71 % ;0.97 ;104 320 ;2 002 ;2.36 ;1.9
+Adatara ;9;Battleship ;Japan ;256 231 ;51.53 % ;0.77 ;75 439 ;1 744 ;2.18 ;1.47
+Mikasa ;2;Battleship ;Japan ;255 285 ;54.01 % ;1.05 ;19 596 ;653;0 ;1.97
+Boise ;7;Cruiser ;U.S.A. ;254 575 ;53.57 % ;0.78 ;41 665 ;1 480 ;2.62 ;1.43
+Flandre ;8;Battleship ;France ;253 935 ;52.77 % ;0.81 ;61 977 ;1 709 ;5.16 ;1.35
+ARP Yamato ;10;Battleship ;Japan ;253 325 ;49.29 % ;0.76 ;89 721 ;1 927 ;2.28 ;1.42
+Bougainville ;1;Cruiser ;France ;252 035 ;49.34 % ;1.3 ;8 168 ;564;0 ;2.85
+Pyotr Bagration ;8;Cruiser ;U.S.S.R. ;250 100 ;50.85 % ;0.61 ;44 255 ;1 573 ;4.41 ;1.02
+Moltke ;4;Battleship ;Germany ;247 712 ;48.93 % ;1.13 ;39 403 ;829;1.11 ;2.23
+Yahagi ;5;Cruiser ;Japan ;245 340 ;53.03 % ;0.65 ;25 508 ;1 046 ;1.56 ;0.97
+Borodino ;8;Battleship ;U.S.S.R. ;243 045 ;54.13 % ;0.82 ;64 082 ;1 819 ;4.36 ;1.31
+Lüshun ;10;Destroyer ;Pan-Asia ;243 025 ;53.29 % ;0.85 ;52 075 ;1 870 ;2.04 ;1.52
+Oklahoma ;5;Battleship ;U.S.A. ;242 383 ;53.12 % ;0.85 ;41 331 ;1 119 ;1.88 ;1.51
+Delaware ;9;Battleship ;U.S.A. ;236 728 ;52.46 % ;0.75 ;66 636 ;1 779 ;4.13 ;1.53
+S-189 ;8;Submarine ;U.S.S.R. ;235 221 ;49.95 % ;0.41 ;24 431 ;1 433 ;0 ;0.71
+Nueve de Julio ;7;Cruiser ;Pan-America ;234 434 ;52.83 % ;0.76 ;40 519 ;1 475 ;2.6 ;1.31
+Bungo ;10;Battleship ;Japan ;233 344 ;52.08 % ;0.98 ;102 928 ;1 944 ;2.85 ;1.99
+Knyaz Suvorov ;3;Battleship ;U.S.S.R. ;233 125 ;48.37 % ;1.05 ;30 428 ;643;0.23 ;1.95
+Chungking ;5;Cruiser ;Pan-Asia ;231 327 ;50.2 % ;0.55 ;21 188 ;927;2.09 ;0.8
+Lambros Katsonis ;9;Destroyer ;Europe ;230 300 ;49.33 % ;0.59 ;33 913 ;1 534 ;1.19 ;0.86
+Admiral Makarov ;6;Cruiser ;U.S.S.R. ;228 306 ;51.86 % ;0.64 ;35 245 ;1 232 ;2.34 ;1.03
+Santander ;9;Cruiser ;Pan-America ;225 925 ;51.43 % ;0.63 ;47 881 ;1 653 ;3.5 ;1.04
+Novorossiysk ;6;Battleship ;U.S.S.R. ;224 909 ;53.29 % ;0.97 ;51 833 ;1 465 ;2.27 ;1.76
+Zorkiy ;11;Destroyer ;U.S.S.R. ;222 500 ;54.9 % ;0.92 ;72 364 ;2 120 ;3.56 ;2.16
+Admiral Schröder ;9;Cruiser ;Germany ;221 301 ;55.25 % ;0.73 ;58 950 ;1 755 ;4.07 ;1.18
+Giuseppe Verdi ;9;Battleship ;Italy ;218 192 ;51.19 % ;0.73 ;66 938 ;1 656 ;2.53 ;1.16
+Maestrale ;5;Destroyer ;Italy ;213 999 ;51.68 % ;0.76 ;21 416 ;1 050 ;0.43 ;1.18
+Erich Loewenhardt ;6;Aircraft Carrier ;Germany ;213 326 ;55.52 % ;0.87 ;45 624 ;1 488 ;4.15 ;3.48
+I-56 ;8;Submarine ;Japan ;212 952 ;49.89 % ;0.59 ;28 684 ;1 403 ;0 ;0.84
+Almirante Cochrane ;6;Cruiser ;Pan-America ;211 554 ;52.21 % ;0.73 ;28 598 ;1 167 ;2.09 ;1.21
+Maine ;11;Battleship ;U.S.A. ;210 836 ;51.26 % ;1 ;115 514 ;2 056 ;4.09 ;1.97
+Grom ;7;Destroyer ;Europe ;210 358 ;51.37 % ;0.71 ;27 179 ;1 404 ;0.77 ;1.08
+Dreadnought ;3;Battleship ;U.K. ;210 233 ;53.33 % ;1.24 ;36 139 ;892;0 ;2.39
+München ;7;Cruiser ;Germany ;207 744 ;51.75 % ;0.62 ;37 596 ;1 404 ;1.96 ;1.04
+Hornet ;8;Aircraft Carrier ;U.S.A. ;207 682 ;50.59 % ;0.85 ;62 754 ;1 642 ;3.33 ;2.88
+Coronel Bolognesi ;7;Cruiser ;Pan-America ;205 822 ;50.46 % ;0.68 ;33 692 ;1 322 ;2.54 ;1.04
+Yoshino B ;10;Cruiser ;Japan ;204 610 ;47.54 % ;0.63 ;72 751 ;1 689 ;2.88 ;1.18
+San Martín ;10;Cruiser ;Pan-America ;197 727 ;52.1 % ;0.8 ;63 821 ;1 899 ;4.83 ;1.45
+Champagne ;8;Battleship ;France ;197 577 ;52.44 % ;0.86 ;70 921 ;1 791 ;3.04 ;1.87
+Independence ;6;Aircraft Carrier ;U.S.A. ;195 011 ;50.04 % ;0.53 ;32 942 ;1 178 ;6.23 ;1.97
+Z-42 ;10;Destroyer ;Germany ;194 050 ;53.54 % ;0.76 ;45 966 ;1 827 ;2.32 ;1.36
+La Argentina ;5;Cruiser ;Pan-America ;193 313 ;50.78 % ;0.72 ;24 723 ;951;1.55 ;1.01
+Michelangelo ;9;Cruiser ;Italy ;191 386 ;55.76 % ;0.92 ;68 627 ;1 932 ;3.14 ;1.47
+AL Littorio ;8;Battleship ;Italy ;189 709 ;52.35 % ;0.85 ;64 434 ;1 713 ;3.41 ;1.51
+Hyuga ;7;Battleship ;Japan ;188 214 ;54.27 % ;0.97 ;61 919 ;1 614 ;1.56 ;2.03
+AL Yukikaze ;8;Destroyer ;Japan ;186 685 ;52.43 % ;0.89 ;36 765 ;1 674 ;0.74 ;1.63
+De Ruyter ;4;Cruiser ;The Netherlands ;184 980 ;50.51 % ;0.92 ;29 146 ;811;2.44 ;1.55
+Weimar ;7;Cruiser ;Germany ;183 850 ;53.68 % ;0.75 ;40 995 ;1 489 ;2.32 ;1.23
+Baleares ;6;Cruiser ;Spain ;183 605 ;51.05 % ;0.64 ;30 075 ;1 127 ;1.8 ;0.96
+California ;7;Battleship ;U.S.A. ;181 711 ;51.21 % ;0.77 ;52 976 ;1 479 ;4.26 ;1.52
+Chengan ;1;Cruiser ;Pan-Asia ;180 554 ;48.99 % ;1.38 ;8 195 ;562;0 ;2.8
+Pommern B ;9;Battleship ;Germany ;178 666 ;49.81 % ;0.66 ;62 150 ;1 554 ;2.5 ;0.94
+Tachibana Lima ;2;Destroyer ;Japan ;176 999 ;53.16 % ;1.15 ;18 231 ;774;0 ;2.03
+Bourrasque ;4;Destroyer ;France ;170 659 ;49.89 % ;0.88 ;22 487 ;709;0.17 ;1.36
+Valkyrie ;3;Destroyer ;U.K. ;170 480 ;48.67 % ;0.93 ;19 722 ;635;0.05 ;1.55
+Ochakov ;8;Cruiser ;U.S.S.R. ;168 134 ;50.43 % ;0.58 ;38 346 ;1 550 ;3.74 ;0.91
+Illinois ;9;Battleship ;U.S.A. ;167 618 ;53.73 % ;0.85 ;79 767 ;1 849 ;4.46 ;1.46
+Marblehead Lima ;5;Cruiser ;U.S.A. ;164 846 ;52.78 % ;0.68 ;27 793 ;1 124 ;0.39 ;0.99
+Galicia ;5;Cruiser ;Spain ;162 356 ;49.27 % ;0.61 ;23 009 ;907;0.5 ;0.82
+Karl XIV Johan ;9;Battleship ;Europe ;160 812 ;51.88 % ;0.77 ;65 339 ;1 722 ;3.93 ;1.23
+Diana ;2;Cruiser ;U.S.S.R. ;160 117 ;51.49 % ;0.81 ;16 935 ;613;0 ;1.39
+Tulsa ;9;Cruiser ;U.S.A. ;158 971 ;50.98 % ;0.62 ;48 841 ;1 591 ;3.22 ;1.03
+Congress ;8;Cruiser ;U.S.A. ;156 131 ;53.17 % ;0.63 ;44 762 ;1 616 ;4.46 ;0.99
+Tone ;8;Cruiser ;Japan ;154 747 ;51.91 % ;0.66 ;40 731 ;1 511 ;2.38 ;1.57
+Varyag ;3;Cruiser ;U.S.S.R. ;154 660 ;52.71 % ;0.97 ;25 552 ;742;0 ;1.58
+Béarn ;6;Aircraft Carrier ;France ;154 147 ;57.01 % ;0.91 ;42 701 ;1 535 ;8.24 ;3.38
+Sims B ;7;Destroyer ;U.S.A. ;154 135 ;51.27 % ;0.58 ;24 729 ;1 531 ;1.78 ;0.94
+Rio de Janeiro ;5;Battleship ;Pan-America ;153 447 ;53.06 % ;1.02 ;45 531 ;1 144 ;0 ;1.79
+Belfast '43 ;8;Cruiser ;U.K. ;151 229 ;49.36 % ;0.53 ;35 915 ;1 471 ;2.33 ;0.85
+Essex ;10;Aircraft Carrier ;U.S.A. ;150 635 ;52.31 % ;0.91 ;89 379 ;1 983 ;10.17 ;3.4
+Devastation ;11;Battleship ;U.K. ;148 518 ;49.69 % ;0.83 ;119 365 ;2 015 ;2.66 ;1.79
+Romulus ;3;Destroyer ;Europe ;146 365 ;45.74 % ;0.66 ;15 466 ;560;0.39 ;0.94
+Siroco ;5;Destroyer ;France ;145 935 ;52.58 % ;0.78 ;23 186 ;1 108 ;0.16 ;1.22
+Stord ;6;Destroyer ;Europe ;140 481 ;51.3 % ;0.67 ;21 572 ;1 174 ;0.68 ;1.03
+Louisiana ;10;Battleship ;U.S.A. ;140 103 ;51.03 % ;0.83 ;82 145 ;1 882 ;4.11 ;1.75
+Delny ;10;Destroyer ;U.S.S.R. ;139 410 ;51.95 % ;0.74 ;57 924 ;1 770 ;2.44 ;1.62
+Atlanta B ;7;Cruiser ;U.S.A. ;138 291 ;51.46 % ;0.66 ;32 098 ;1 538 ;3.71 ;0.96
+Dunkerque B ;6;Battleship ;France ;135 358 ;54.04 % ;0.91 ;51 534 ;1 513 ;3.25 ;1.41
+Poltava ;7;Battleship ;U.S.S.R. ;132 974 ;53.37 % ;0.87 ;56 002 ;1 614 ;3.54 ;1.55
+Encounter ;9;Cruiser ;Commonwealth ;132 279 ;52.31 % ;0.73 ;64 691 ;1 759 ;1.51 ;1.37
+Sevastopol ;10;Cruiser ;U.S.S.R. ;131 399 ;51.41 % ;0.75 ;75 787 ;1 891 ;3.59 ;1.46
+AL Sov. Rossiya ;9;Battleship ;U.S.S.R. ;130 921 ;49.65 % ;0.66 ;65 985 ;1 592 ;1.73 ;1.13
+Kunming ;11;Destroyer ;Pan-Asia ;129 606 ;49.86 % ;0.78 ;63 615 ;1 859 ;1.79 ;1.24
+San Diego ;8;Cruiser ;U.S.A. ;129 108 ;53.91 % ;0.81 ;49 488 ;1 778 ;5.87 ;1.47
+Admiral Ushakov ;11;Battleship ;U.S.S.R. ;128 279 ;51.16 % ;0.77 ;89 586 ;1 905 ;5.11 ;1.28
+Tátra ;2;Destroyer ;Europe ;127 766 ;42.72 % ;0.84 ;15 045 ;538;0 ;1.32
+Leone ;6;Destroyer ;Italy ;125 987 ;50.85 % ;0.63 ;24 263 ;1 233 ;0.42 ;1.05
+Katori ;3;Cruiser ;Japan ;125 181 ;56.52 % ;1.09 ;29 666 ;880;0.65 ;1.94
+Wukong ;8;Cruiser ;Pan-Asia ;123 788 ;48.44 % ;0.52 ;41 025 ;1 407 ;2.51 ;0.82
+Constellation ;8;Battleship ;U.S.A. ;121 131 ;51.13 % ;0.73 ;54 904 ;1 649 ;4.91 ;1.18
+Sicilia ;10;Battleship ;Italy ;120 406 ;52.3 % ;0.98 ;95 785 ;1 975 ;3.83 ;1.66
+AL Azuma ;9;Cruiser ;Japan ;118 311 ;51.34 % ;0.68 ;69 657 ;1 649 ;2.36 ;1.44
+Siliwangi ;8;Destroyer ;Pan-Asia ;117 278 ;50.16 % ;0.6 ;31 808 ;1 561 ;1.07 ;1
+Anhalt ;8;Battleship ;Germany ;116 675 ;50.71 % ;0.74 ;56 917 ;1 598 ;3.36 ;1.3
+Queen Mary ;4;Battleship ;U.K. ;116 428 ;49.39 % ;1.14 ;41 219 ;838;1.37 ;2.12
+AL Montpelier ;8;Cruiser ;U.S.A. ;116 296 ;52.87 % ;0.68 ;43 704 ;1 637 ;5.5 ;1.14
+Auckland ;8;Cruiser ;Commonwealth ;114 709 ;51.43 % ;0.71 ;48 773 ;1 631 ;2.23 ;1.15
+Renown '44 ;7;Battleship ;U.K. ;113 278 ;52.48 % ;0.9 ;50 874 ;1 512 ;3.67 ;1.41
+Dido ;6;Cruiser ;U.K. ;112 120 ;51.99 % ;0.69 ;30 205 ;1 244 ;2.8 ;1.14
+Cheshire ;8;Cruiser ;U.K. ;111 295 ;51.83 % ;0.64 ;45 335 ;1 608 ;5.42 ;1.12
+Von der Tann ;3;Battleship ;Germany ;110 845 ;48.88 % ;1.19 ;33 900 ;700;0.35 ;2.4
+Medea ;2;Destroyer ;U.K. ;110 125 ;45.22 % ;1.06 ;17 181 ;575;0 ;1.9
+Eritrea ;1;Cruiser ;Italy ;109 131 ;51.48 % ;2.21 ;13 198 ;752;0 ;5.82
+Joshua Humphreys ;11;Destroyer ;U.S.A. ;108 771 ;49.26 % ;0.69 ;49 431 ;1 769 ;2.84 ;1.19
+Rhode Island ;10;Battleship ;U.S.A. ;108 720 ;51.54 % ;0.94 ;93 802 ;1 981 ;4.24 ;1.63
+Iwaki Alpha ;4;Cruiser ;Japan ;108 113 ;57.9 % ;1.19 ;33 061 ;958;0.83 ;1.92
+Daisen ;9;Battleship ;Japan ;108 033 ;51.43 % ;0.77 ;71 395 ;1 686 ;2.64 ;1.27
+Rochester ;8;Cruiser ;U.S.A. ;107 808 ;52%;0.69 ;48 555 ;1 659 ;5.41 ;1.21
+Nino Bixio ;2;Cruiser ;Italy ;107 455 ;44.51 % ;0.86 ;17 435 ;575;0 ;1.45
+Canarias ;6;Cruiser ;Spain ;106 273 ;52.66 % ;0.67 ;30 258 ;1 230 ;2.06 ;1.07
+Delhi ;5;Cruiser ;Commonwealth ;105 694 ;51.22 % ;0.77 ;27 294 ;1 060 ;2.49 ;1.2
+Almirante Cervera ;4;Cruiser ;Spain ;104 186 ;49.35 % ;1.15 ;31 209 ;815;0.95 ;1.72
+Taranto ;3;Cruiser ;Italy ;103 679 ;44.33 % ;0.74 ;18 438 ;578;0.05 ;1.07
+Minegumo ;9;Destroyer ;Japan ;102 773 ;51.66 % ;0.8 ;41 718 ;1 663 ;0.05 ;1.5
+Napoli B ;10;Cruiser ;Italy ;98 110 ;48.81 % ;0.69 ;60 642 ;1 727 ;2.72 ;1.1
+Dmitry Pozharsky ;8;Cruiser ;U.S.S.R. ;97 392 ;49.37 % ;0.6 ;44 430 ;1 447 ;3.31 ;0.97
+Mainz B ;8;Cruiser ;Germany ;97 249 ;51.07 % ;0.64 ;48 672 ;1 560 ;3.58 ;1.02
+Curtatone ;2;Destroyer ;Italy ;95 972 ;48.37 % ;1.56 ;25 383 ;747;0 ;2.97
+Cerberus ;10;Cruiser ;Commonwealth ;94 666 ;51.82 % ;0.84 ;87 025 ;1 947 ;2.27 ;1.69
+Dalian ;9;Cruiser ;Pan-Asia ;92 263 ;50.48 % ;0.62 ;51 875 ;1 654 ;3.46 ;1.14
+Somme ;9;Destroyer ;U.K. ;92 174 ;52.99 % ;0.79 ;39 980 ;1 744 ;1.64 ;1.57
+Sekiryu ;11;Aircraft Carrier ;Japan ;92 098 ;50.81 % ;1.05 ;116 246 ;2 001 ;5.82 ;3.58
+Gibraltar ;10;Cruiser ;U.K. ;91 450 ;51.15 % ;0.8 ;72 777 ;1 897 ;3.26 ;1.39
+Uganda ;7;Cruiser ;Commonwealth ;89 372 ;49.7 % ;0.66 ;35 502 ;1 394 ;2.07 ;1.03
+Novosibirsk ;11;Cruiser ;U.S.S.R. ;88 441 ;50.92 % ;0.86 ;86 297 ;1 967 ;3.02 ;1.41
+Sun Yat-Sen ;9;Battleship ;Pan-Asia ;87 731 ;50.71 % ;0.67 ;66 178 ;1 663 ;2.97 ;1.12
+Kitakami ;10;Cruiser ;Japan ;87 141 ;51.69 % ;0.92 ;67 932 ;1 803 ;0.04 ;2.19
+Fusilier ;3;Destroyer ;France ;84 538 ;46.85 % ;0.8 ;18 127 ;595;0.02 ;1.17
+Turbine ;4;Destroyer ;Italy ;83 788 ;49.72 % ;0.99 ;24 341 ;794;0.7 ;1.59
+Fenyang ;8;Destroyer ;Pan-Asia ;80 555 ;48.27 % ;0.57 ;33 013 ;1 531 ;4.21 ;0.93
+Muavenet ;5;Destroyer ;Europe ;80 458 ;49.57 % ;0.61 ;18 326 ;982;0.41 ;0.91
+Maya ;7;Cruiser ;Japan ;78 838 ;54.3 % ;0.77 ;40 192 ;1 493 ;2.77 ;1.34
+Defence ;10;Cruiser ;U.K. ;76 907 ;52.03 % ;0.86 ;81 025 ;1 921 ;2.89 ;1.5
+Hobart ;6;Cruiser ;Commonwealth ;69 778 ;52.84 % ;0.79 ;32 771 ;1 306 ;2.46 ;1.36
+Velos ;9;Destroyer ;Europe ;69 750 ;49.94 % ;0.68 ;35 736 ;1 621 ;2.27 ;1.15
+Huron ;7;Destroyer ;Commonwealth ;68 616 ;53.29 % ;0.75 ;24 684 ;1 470 ;1.14 ;1.29
+Yukon ;7;Battleship ;Commonwealth ;66 262 ;53.75 % ;0.88 ;55 907 ;1 601 ;3.03 ;1.62
+Enseigne Gabolde ;2;Destroyer ;France ;65 727 ;44.02 % ;1.06 ;17 853 ;583;0 ;1.77
+Toulon ;7;Cruiser ;France ;64 999 ;54.99 % ;0.77 ;41 674 ;1 536 ;2.79 ;1.25
+Z-35 ;8;Destroyer ;Germany ;64 529 ;49.11 % ;0.58 ;28 841 ;1 546 ;1.49 ;0.93
+Ignis Purgatio ;8;Battleship ;Japan ;62 507 ;50.02 % ;0.73 ;58 737 ;1 578 ;3.06 ;1.36
+Cross of Dorn ;8;Cruiser ;Germany ;61 890 ;50.93 % ;0.63 ;47 364 ;1 555 ;3.5 ;0.98
+Van Kinsbergen ;1;Cruiser ;The Netherlands ;61 602 ;44.05 % ;1.91 ;13 007 ;710;0 ;3.71
+Tiger '59 ;8;Cruiser ;U.K. ;61 575 ;53.59 % ;0.68 ;41 246 ;1 713 ;5.02 ;1.33
+Aquila ;8;Aircraft Carrier ;Italy ;60 945 ;53.95 % ;0.93 ;70 990 ;1 803 ;3.77 ;3.39
+North Carolina CLR ;8;Battleship ;U.S.A. ;60 676 ;50.86 % ;0.79 ;61 278 ;1 701 ;4.84 ;1.46
+West Virginia '44 ;7;Battleship ;U.S.A. ;59 364 ;53.28 % ;0.93 ;54 660 ;1 558 ;4.8 ;1.58
+Los Andes ;9;Battleship ;Pan-America ;59 253 ;55.47 % ;1.08 ;95 465 ;2 084 ;3.03 ;1.74
+Chkalov B ;8;Aircraft Carrier ;U.S.S.R. ;58 477 ;50.15 % ;0.76 ;56 968 ;1 676 ;5.98 ;2.44
+Tokachi ;7;Cruiser ;Japan ;58 174 ;50.77 % ;0.68 ;31 828 ;1 368 ;2.27 ;1.05
+Almirante Grau ;8;Cruiser ;Pan-America ;55 886 ;53%;0.74 ;48 861 ;1 745 ;7.16 ;1.36
+Collingwood ;7;Battleship ;U.K. ;55 733 ;53.3 % ;0.93 ;61 527 ;1 607 ;1.91 ;1.49
+Hampshire ;8;Cruiser ;U.K. ;54 785 ;49.74 % ;0.64 ;42 753 ;1 529 ;3.29 ;1.02
+Loyang B ;8;Destroyer ;Pan-Asia ;54 734 ;50.27 % ;0.62 ;26 806 ;1 607 ;1.84 ;1
+Córdoba ;4;Cruiser ;Pan-America ;53 954 ;49.02 % ;1.09 ;27 425 ;771;1.1 ;1.67
+Juruá ;6;Destroyer ;Pan-America ;52 023 ;52.25 % ;0.75 ;23 246 ;1 262 ;0.04 ;1.24
+Ragnarok ;8;Battleship ;Japan ;51 639 ;50.88 % ;0.73 ;59 191 ;1 600 ;3.09 ;1.33
+Java ;3;Cruiser ;The Netherlands ;51 541 ;48.37 % ;1.09 ;28 654 ;734;1.04 ;2.08
+Sanzang ;8;Aircraft Carrier ;Pan-Asia ;50 809 ;48.18 % ;0.68 ;54 418 ;1 557 ;3.62 ;2.76
+L'Aventurier ;8;Destroyer ;France ;50 745 ;53.61 % ;0.91 ;38 735 ;1 825 ;1.36 ;1.71
+Komissar ;10;Cruiser ;U.S.S.R. ;50 497 ;52.02 % ;0.84 ;81 823 ;1 948 ;3.08 ;1.88
+Colossus ;8;Aircraft Carrier ;U.K. ;50 287 ;54.51 % ;0.98 ;73 623 ;1 855 ;4.2 ;3.71
+Orage ;9;Destroyer ;France ;49 236 ;53.85 % ;0.85 ;43 662 ;1 864 ;1.72 ;1.58
+Diana Lima ;2;Cruiser ;U.S.S.R. ;49 127 ;54.22 % ;1.4 ;23 896 ;832;0 ;3.04
+Libertad ;10;Battleship ;Pan-America ;49 054 ;54.91 % ;1.12 ;112 898 ;2 152 ;3.36 ;1.72
+Piemonte ;11;Cruiser ;Italy ;46 741 ;49.4 % ;0.85 ;88 026 ;1 940 ;2.28 ;1.74
+Scarlet Thunder ;9;Battleship ;U.K. ;44 723 ;50.55 % ;0.69 ;75 363 ;1 740 ;3.98 ;1.25
+Alliance ;8;Submarine ;U.K. ;44 263 ;49.74 % ;0.37 ;20 655 ;1 373 ;0 ;0.65
+Mysore ;6;Cruiser ;Commonwealth ;43 112 ;54.56 % ;0.77 ;33 053 ;1 405 ;3.44 ;1.47
+Leipzig ;6;Cruiser ;Germany ;42 889 ;53.05 % ;0.74 ;30 037 ;1 293 ;1.35 ;1.17
+Halford ;9;Destroyer ;U.S.A. ;42 748 ;49.25 % ;0.57 ;36 960 ;1 586 ;1.31 ;1.21
+Almirante Oquendo ;9;Cruiser ;Spain ;42 375 ;50.55 % ;0.63 ;61 502 ;1 646 ;1.64 ;1.22
+Jacksonville ;11;Cruiser ;U.S.A. ;41 989 ;55.03 % ;1.11 ;104 947 ;2 278 ;5.42 ;2.34
+Kearsarge B ;9;Battleship ;U.S.A. ;41 918 ;50.98 % ;0.72 ;71 133 ;1 706 ;2.93 ;1.49
+HSF Harekaze II ;8;Destroyer ;Japan ;39 782 ;51.47 % ;0.74 ;32 870 ;1 663 ;0.11 ;1.25
+Schill ;8;Cruiser ;Germany ;39 687 ;52.76 % ;0.69 ;47 110 ;1 604 ;2.6 ;1.12
+Méndez Núñez ;2;Cruiser ;Spain ;39 648 ;47.72 % ;1.38 ;26 717 ;704;0 ;2.72
+Cassard ;10;Destroyer ;France ;38 109 ;56.01 % ;1.1 ;62 813 ;2 048 ;2.23 ;2.31
+L'Adroit ;5;Destroyer ;France ;37 834 ;48.98 % ;0.61 ;18 100 ;931;0.06 ;0.94
+Nazario Sauro ;3;Destroyer ;Italy ;36 896 ;50.62 % ;1.32 ;27 545 ;797;0.28 ;2.67
+Oleg ;3;Cruiser ;U.S.S.R. ;36 859 ;53.83 % ;1.06 ;26 902 ;776;0 ;1.89
+Wiesbaden ;8;Cruiser ;Germany ;36 768 ;52.06 % ;0.67 ;43 180 ;1 620 ;5.06 ;1.14
+Hector ;9;Cruiser ;Commonwealth ;36 035 ;52.7 % ;0.7 ;52 536 ;1 693 ;2.55 ;1.23
+Van Speijk ;9;Cruiser ;The Netherlands ;36 007 ;55.34 % ;0.75 ;68 629 ;1 909 ;5.39 ;1.5
+Hildebrand ;10;Cruiser ;Germany ;35 289 ;54.9 % ;0.82 ;70 496 ;2 024 ;3.59 ;1.85
+FR25 ;7;Destroyer ;Italy ;35 049 ;50.87 % ;0.71 ;26 593 ;1 435 ;1.14 ;1.09
+Karl von Schönberg ;6;Destroyer ;Germany ;32 359 ;53.04 % ;0.68 ;23 523 ;1 253 ;1.19 ;1.21
+Hércules ;1;Cruiser ;Pan-America ;32 021 ;46.13 % ;2.99 ;18 727 ;861;0 ;5.92
+ARP Maya ;8;Cruiser ;Japan ;30 853 ;54.68 % ;0.77 ;51 120 ;1 786 ;2.78 ;1.64
+HSF Hiei ;5;Battleship ;Japan ;30 448 ;56%;0.98 ;49 189 ;1 334 ;2.25 ;1.84
+Vallejo ;9;Cruiser ;U.S.A. ;29 214 ;52.41 % ;0.68 ;65 197 ;1 744 ;4.7 ;1.39
+Júpiter ;1;Cruiser ;Spain ;29 098 ;43.17 % ;2.87 ;18 336 ;855;0 ;5.24
+AL Prinz Heinrich ;7;Battleship ;Germany ;28 337 ;53.81 % ;1.01 ;54 155 ;1 604 ;2.63 ;1.53
+STAR Kitakaze ;9;Destroyer ;Japan ;27 964 ;49.68 % ;0.69 ;42 017 ;1 596 ;2.08 ;1.02
+AL Shimakaze ;10;Destroyer ;Japan ;27 652 ;50.85 % ;0.82 ;48 349 ;1 736 ;0.82 ;1.56
+Le Hardi ;7;Destroyer ;France ;27 141 ;53.59 % ;0.89 ;31 706 ;1 633 ;0.63 ;1.74
+Saipan B ;8;Aircraft Carrier ;U.S.A. ;27 123 ;48.76 % ;0.68 ;57 070 ;1 574 ;3.65 ;2.68
+Gelderland ;2;Cruiser ;The Netherlands ;26 232 ;41.13 % ;0.91 ;17 724 ;548;0.01 ;1.7
+Francesco Ferruccio ;7;Cruiser ;Italy ;25 497 ;55.16 % ;0.86 ;46 382 ;1 651 ;2.04 ;1.77
+Duchaffault ;6;Destroyer ;France ;25 476 ;57.01 % ;0.95 ;29 048 ;1 502 ;0.54 ;2.01
+Stord '43 ;7;Destroyer ;Europe ;25 443 ;49.01 % ;0.56 ;23 035 ;1 345 ;0.61 ;0.92
+Brandenburg B ;8;Battleship ;Germany ;25 235 ;52.1 % ;0.86 ;59 835 ;1 718 ;4.42 ;1.28
+Johnston ;9;Destroyer ;U.S.A. ;25 180 ;52.4 % ;0.75 ;42 945 ;1 741 ;1.77 ;1.39
+Indefatigable ;3;Battleship ;U.K. ;25 048 ;46.77 % ;1.21 ;34 664 ;692;0.59 ;2.41
+Svea ;10;Cruiser ;Europe ;24 752 ;54.71 % ;0.9 ;70 728 ;2 032 ;4.14 ;1.84
+AL Ägir ;9;Cruiser ;Germany ;24 349 ;51.08 % ;0.58 ;53 770 ;1 570 ;3.02 ;0.9
+Dupleix ;6;Cruiser ;France ;24 190 ;51.92 % ;0.66 ;30 238 ;1 205 ;0.96 ;0.99
+Black B ;9;Destroyer ;U.S.A. ;23 411 ;50.25 % ;0.61 ;34 818 ;1 619 ;1.46 ;0.98
+Tsurugi ;9;Battleship ;Japan ;23 138 ;49.82 % ;0.71 ;69 279 ;1 639 ;1.64 ;1.17
+Victoria ;9;Battleship ;Spain ;22 173 ;51.55 % ;0.84 ;81 626 ;1 841 ;2.32 ;1.63
+Tashkent '39 ;7;Destroyer ;U.S.S.R. ;21 878 ;53.21 % ;0.78 ;30 748 ;1 482 ;0.47 ;1.36
+Eastern Dragon ;7;Cruiser ;Japan ;21 294 ;49.84 % ;0.62 ;35 286 ;1 295 ;1.49 ;0.99
+Navarin ;9;Battleship ;U.S.S.R. ;21 024 ;53.96 % ;0.85 ;75 345 ;1 877 ;3.73 ;1.31
+Numancia ;8;Cruiser ;Spain ;20 179 ;51.06 % ;0.72 ;42 232 ;1 638 ;2.34 ;1.25
+Chikuma II ;9;Cruiser ;Japan ;20 079 ;52.22 % ;0.66 ;49 725 ;1 651 ;1.37 ;1.52
+Dunedin ;4;Cruiser ;Commonwealth ;19 921 ;48.11 % ;1.1 ;29 057 ;825;1.37 ;1.62
+Ship Smasha ;8;Destroyer ;Pan-Asia ;19 470 ;47.12 % ;0.53 ;31 396 ;1 510 ;3.84 ;0.79
+Iwami B ;9;Battleship ;Japan ;19 368 ;49.67 % ;0.68 ;66 478 ;1 612 ;2.52 ;1.23
+Tianjin ;9;Cruiser ;Pan-Asia ;17 016 ;51.83 % ;0.67 ;63 163 ;1 723 ;3.02 ;1.23
+Sutlej ;1;Cruiser ;Commonwealth ;16 942 ;48.19 % ;3.52 ;21 907 ;982;0 ;7.12
+Elli ;6;Cruiser ;Europe ;16 161 ;53.07 % ;0.69 ;30 323 ;1 254 ;2.29 ;1.15
+Kléber CLR ;10;Destroyer ;France ;15 694 ;51.07 % ;0.79 ;54 299 ;1 762 ;1.8 ;1.31
+Caradoc ;3;Cruiser ;Commonwealth ;14 767 ;46.7 % ;1.52 ;33 846 ;844;0.14 ;2.46
+Vicente Guerrero ;3;Cruiser ;Pan-America ;14 032 ;44.16 % ;1.02 ;24 443 ;661;0.71 ;1.69
+Roon CLR ;9;Cruiser ;Germany ;13 484 ;50.76 % ;0.6 ;59 847 ;1 635 ;2.13 ;1.19
+AL Cheshire ;8;Cruiser ;U.K. ;12 896 ;52.27 % ;0.77 ;47 425 ;1 635 ;5.73 ;1.39
+Navarra ;3;Cruiser ;Spain ;12 480 ;43.07 % ;1.18 ;28 113 ;696;0.28 ;1.98
+Shinonome B ;6;Destroyer ;Japan ;12 147 ;51.09 % ;0.82 ;24 591 ;1 348 ;0.02 ;1.27
+BA Montana ;10;Battleship ;U.S.A. ;11 027 ;52.66 % ;1.01 ;102 520 ;2 002 ;3.85 ;2.14
+Smolensk B ;10;Cruiser ;U.S.S.R. ;10 693 ;51.13 % ;0.9 ;84 554 ;1 979 ;3.54 ;1.64
+Almirante Barroso ;2;Cruiser ;Pan-America ;10 555 ;49.37 % ;1.61 ;28 458 ;741;0 ;3.48
+Port Jackson ;2;Cruiser ;Commonwealth ;10 413 ;49.69 % ;1.56 ;29 487 ;804;0 ;3.45
+Nottingham ;8;Cruiser ;U.K. ;10 289 ;51.06 % ;0.67 ;43 818 ;1 537 ;0.86 ;1.06
+Jupiter '42 ;7;Destroyer ;U.K. ;10 098 ;56.7 % ;0.95 ;30 940 ;1 732 ;0.4 ;1.95
+Louchuan ;9;Battleship ;Pan-Asia ;9 907 ;51.32 % ;0.72 ;75 311 ;1 709 ;2.54 ;1.45
+Theseus ;8;Aircraft Carrier ;U.K. ;9 384 ;53.76 % ;0.88 ;81 986 ;1 869 ;3.63 ;3.25
+Mengchong ;9;Cruiser ;Pan-Asia ;8 424 ;50.48 % ;0.58 ;53 152 ;1 570 ;2.86 ;0.86
+Alabama ST ;8;Battleship ;U.S.A. ;8 247 ;59.61 % ;1.08 ;75 555 ;1 932 ;6 ;2.21
+Repulse B ;6;Battleship ;U.K. ;8 198 ;50.82 % ;0.88 ;49 516 ;1 431 ;1.37 ;1.43
+Tennessee ;8;Battleship ;U.S.A. ;7 753 ;56.05 % ;1.14 ;85 884 ;2 008 ;4.71 ;2.5
+Picardie ;8;Battleship ;France ;7 659 ;51.34 % ;0.81 ;62 110 ;1 689 ;2.68 ;1.62
+STAR Edinburgh ;8;Cruiser ;U.K. ;6 985 ;51.97 % ;0.62 ;37 901 ;1 576 ;3.93 ;1.18
+AL Hornet ;8;Aircraft Carrier ;U.S.A. ;6 566 ;49.8 % ;0.88 ;62 908 ;1 667 ;3.41 ;2.91
+Ning Hai ;3;Cruiser ;Pan-Asia ;6 501 ;50.43 % ;1.72 ;38 581 ;989;0.11 ;3.18
+Xin Zhong Guo 14 ;6;Submarine ;Pan-Asia ;6 203 ;51.8 % ;0.38 ;19 149 ;1 102 ;0 ;0.74
+Rodney ;7;Battleship ;U.K. ;5 809 ;55.6 % ;1.1 ;63 516 ;1 728 ;3.12 ;1.76
+Rattlehead ;5;Cruiser ;U.S.A. ;5 538 ;55.66 % ;0.96 ;34 630 ;1 328 ;0.36 ;1.58
+Brennus ;10;Cruiser ;France ;5 356 ;55.26 % ;0.95 ;101 214 ;2 130 ;2.19 ;2.04
+Almirante Abreu ;2;Cruiser ;Pan-America ;4 838 ;57.67 % ;1.83 ;31 574 ;1 006 ;0 ;4.12
+Zao CLR ;10;Cruiser ;Japan ;4 461 ;49.94 % ;0.72 ;70 482 ;1 812 ;2.52 ;1.35
+Lazo B ;7;Cruiser ;U.S.S.R. ;4 427 ;51.87 % ;0.7 ;43 773 ;1 469 ;1.59 ;1.14
+BA Tirpitz ;8;Battleship ;Germany ;4 105 ;50.55 % ;0.71 ;55 620 ;1 632 ;2.61 ;1.01
+AL Avrora ;3;Cruiser ;U.S.S.R. ;4 052 ;52.57 % ;1.61 ;36 429 ;1 064 ;0.05 ;2.9
+Xuan Wu ;9;Battleship ;Pan-Asia ;3 480 ;51.85 % ;0.72 ;70 927 ;1 703 ;3.64 ;1.36
+Kozma Minin ;9;Cruiser ;U.S.S.R. ;3 265 ;56.05 % ;0.78 ;66 202 ;1 991 ;2.68 ;1.79
+Chikuma II Golden ;9;Cruiser ;Japan ;3 043 ;54.95 % ;0.77 ;55 799 ;1 793 ;1.41 ;1.91
+Alabama VL ;8;Battleship ;U.S.A. ;2 204 ;64.16 % ;1.17 ;83 621 ;2 298 ;6.46 ;2.96
+BA Takahashi ;9;Cruiser ;Japan ;1 825 ;51.52 % ;0.52 ;40 766 ;1 510 ;3.27 ;1.04
+Montcalm ;6;Cruiser ;France ;1 766 ;53.25 % ;0.88 ;43 277 ;1 474 ;2.35 ;1.57
+Brisbane B ;10;Cruiser ;Commonwealth ;1 350 ;46.78 % ;0.53 ;45 136 ;1 647 ;3.89 ;0.86
+Bagration ;8;Cruiser ;U.S.S.R. ;1 337 ;48.6 % ;0.45 ;32 582 ;1 434 ;3.84 ;0.64
+Zhu Que ;8;Destroyer ;Pan-Asia ;1 220 ;52.33 % ;0.73 ;29 510 ;1 692 ;3.33 ;1.31
+Azuma B ;9;Cruiser ;Japan ;970;49.87 % ;0.73 ;79 552 ;1 793 ;2.03 ;1.38
+Orion '44 ;6;Cruiser ;U.K. ;762;59.98 % ;1 ;33 206 ;1 520 ;2.57 ;2.18
+Alabama B ;8;Battleship ;U.S.A. ;607;49.58 % ;0.81 ;62 757 ;1 737 ;4.75 ;1.54
+München B ;7;Cruiser ;Germany ;304;47.32 % ;0.64 ;34 569 ;1 414 ;1.64 ;0.97
+La Pampa ;10;Destroyer ;Pan-America ;37;77.56 % ;1.52 ;72 504 ;2 325 ;1.34 ;3.83
+Utrecht ;10;Cruiser ;The Netherlands ;- ;- ;- ;- ;- ;- ;-
+Monmouth ;10;Cruiser ;U.K. ;- ;- ;- ;- ;- ;- ;-
+Menno van Coehoorn ;9;Cruiser ;The Netherlands ;- ;- ;- ;- ;- ;- ;-
+Jaarsveld ;8;Cruiser ;The Netherlands ;- ;- ;- ;- ;- ;- ;-
+S-1 ;6;Submarine ;U.S.S.R. ;- ;- ;- ;- ;- ;- ;-
+L-20 ;8;Submarine ;U.S.S.R. ;- ;- ;- ;- ;- ;- ;-
+K-1 ;10;Submarine ;U.S.S.R. ;- ;- ;- ;- ;- ;- ;-
+Werner Voss ;10;Aircraft Carrier ;Germany ;- ;- ;- ;- ;- ;- ;-
+Teng She ;7;Battleship ;Pan-Asia ;- ;- ;- ;- ;- ;- ;-
+DD 214 ;4;Destroyer ;U.S.A. ;- ;- ;- ;- ;- ;- ;-
+Shinano ;10;Aircraft Carrier ;Japan ;- ;- ;- ;- ;- ;- ;-
+Vrijheid ;8;Cruiser ;The Netherlands ;- ;- ;- ;- ;- ;- ;-
+Lugdunum ;7;Battleship ;Europe ;- ;- ;- ;- ;- ;- ;-
+Kalmar ;5;Destroyer ;Europe ;- ;- ;- ;- ;- ;- ;-
+Taihang ;9;Battleship ;Pan-Asia ;- ;- ;- ;- ;- ;- ;-
+Balao 2 ;10;Submarine ;U.S.A. ;- ;- ;- ;- ;- ;- ;-
+Frank Friday ;9;Destroyer ;U.S.A. ;- ;- ;- ;- ;- ;- ;-
+Incheon ;10;Cruiser ;Pan-Asia ;- ;- ;- ;- ;- ;- ;-
+Ravenna ;10;Cruiser ;Italy ;- ;- ;- ;- ;- ;- ;-
+Vladimir Monomakh ;10;Cruiser ;U.S.S.R. ;- ;- ;- ;- ;- ;- ;-
+Noord-Brabant ;10;Cruiser ;The Netherlands ;- ;- ;- ;- ;- ;- ;-
+Vrijheid ;10;Cruiser ;The Netherlands ;- ;- ;- ;- ;- ;- ;-
+Colorado 2 ;7;Battleship ;U.S.A. ;- ;- ;- ;- ;- ;- ;-
+North Carolina 2 ;8;Battleship ;U.S.A. ;- ;- ;- ;- ;- ;- ;-
+Admiraal ;8;Cruiser ;The Netherlands ;- ;- ;- ;- ;- ;- ;-
+Iowa 2 ;9;Battleship ;U.S.A. ;- ;- ;- ;- ;- ;- ;-
+Montana 2 ;10;Battleship ;U.S.A. ;- ;- ;- ;- ;- ;- ;-
+Utah ;10;Battleship ;U.S.A. ;- ;- ;- ;- ;- ;- ;-
+Cumberland ;10;Battleship ;U.K. ;- ;- ;- ;- ;- ;- ;-
+Comodoro ;10;Battleship ;Pan-America ;- ;- ;- ;- ;- ;- ;-
+Prins van Oranje ;10;Cruiser ;The Netherlands ;- ;- ;- ;- ;- ;- ;-
+Archerfish ;10;Submarine ;U.S.A. ;- ;- ;- ;- ;- ;- ;-
+Amerigo Vespucci ;10;Battleship ;Italy ;- ;- ;- ;- ;- ;- ;-
+Otto Lilienthal ;10;Aircraft Carrier ;Germany ;- ;- ;- ;- ;- ;- ;-
+Prinz Sigismund ;9;Battleship ;Germany ;- ;- ;- ;- ;- ;- ;-
+Georg Hoffmann ;10;Destroyer ;Germany ;- ;- ;- ;- ;- ;- ;-
+Statenland ;8;Cruiser ;The Netherlands ;- ;- ;- ;- ;- ;- ;-
+Yari ;10;Cruiser ;Japan ;- ;- ;- ;- ;- ;- ;-
+Niord ;9;Battleship ;Europe ;- ;- ;- ;- ;- ;- ;-
+Admiral Orlov ;10;Aircraft Carrier ;U.S.S.R. ;- ;- ;- ;- ;- ;- ;-
+Lübeck ;10;Destroyer ;Germany ;- ;- ;- ;- ;- ;- ;-
+Södermanland ;10;Destroyer ;Europe ;- ;- ;- ;- ;- ;- ;-
+Petrozavodsk ;10;Cruiser ;U.S.S.R. ;- ;- ;- ;- ;- ;- ;-
+Volunteer State ;8;Battleship ;U.S.A. ;- ;- ;- ;- ;- ;- ;-

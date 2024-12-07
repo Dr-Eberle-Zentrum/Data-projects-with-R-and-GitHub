@@ -1,0 +1,52 @@
+---
+title: "Reproduce-this-super-nice-chart-_exclamation-mark_"
+author: "Felix Gogollok"
+date: "2024-10-27"
+output: md_document
+---
+
+
+
+# Reproduce this super nice chart!
+
+It is often that you find a chart that you really like but have no idea how to do.
+An example might be the following one (click the image to enlarge).
+
+
+[![](Wildlife-comeback-in-Europe-1.png){ width=50% }](Wildlife-comeback-in-Europe-1.png)
+
+Which is shown and detailed on [https://ourworldindata.org](https://ourworldindata.org/europe-mammal-comeback).
+
+## Goal of the project
+
+The idea of this project is to recreate this plot as close as possible using `ggplot` and the data available in the provided [CSV file](https://ourworldindata.org/uploads/2022/09/Mammal-comeback-in-Europe-data-OWID-download.csv) with the following content (first lines):
+
+
+
+```{r echo=FALSE}
+library(readr)
+knitr::kable(
+  read_csv("Mammal-comeback-in-Europe-data-OWID-download.csv",
+           show_col_types = F)[1:5,]
+)
+```
+
+
+### Visualization priorities (from high to low)
+
+- line style with animal name labels
+- percent labels at line ends
+- time range label at line start
+- x-axis marks
+- arrow line style
+- annotation of brown bear
+- text coloring
+- relative font sizes
+- animal symbol for brown bear [![](icons8-bear-67.png)](icons8-bear-67.png)
+
+Let's see how close you can get! As a starting point, you might want to have a look at [The R Graph Gallery](https://r-graph-gallery.com/).
+
+Looking forward to see your solutions!
+
+Best,
+Martin

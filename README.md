@@ -6,7 +6,6 @@ This project accompanies the course
 
 at the Dr. Eberle Centre for Digital Competencies at the University of Tübingen.
 
-
 ## Tutorials
 
 -   [Git-ing started](Tutorials/git-started.md)
@@ -19,6 +18,7 @@ All tutorials are summarized within the
 
 -   [Project descriptions](#project-descriptions)
     -   [Phase 1 - Drafting a project description](#phase-1---drafting-a-project-description)
+        -   [List of available projects](#available-projects)
     -   [Phase 2 - Reviewing a project description](#phase-2---reviewing-a-project-description)
     -   [Phase 3 - Finalizing your project description](#phase-3---finalizing-your-project-description)
 -   [Tackling a suggested project](#tackling-a-suggested-project)
@@ -58,6 +58,21 @@ Note down where you got your data from, since you will later have to provide som
 
 **Eventually: the more ugly the data the better!** 😜 Don't try to be nice but provide what you have. Reality is neither nice nor without errors, bugs and **misformatted data**... Let's get used to it!
 
+**online vs. local**
+
+If the data set is online and available for download *without registration or user accounts*, you can directly link it. 
+This is often the case for data from databases or supplements from articles.
+
+*If user credentials are needed* to access the data, please 
+- ensure you are allowed to share it! (licence? this is a public github repository!)
+- download the data to your project folder
+- link the local file in your data description (to make people aware it is accessible)
+- add a link where you got the data from
+
+*If the data is large (>50MB per file)*,
+- you cannot upload it to github (file size limits)
+- you should shrink it
+
 #### Visualization goals
 
 Next, formulate some rough idea what you would like to see. If you want to (re)produce a plot you have seen, store the image. Or just draw a sketch by hand of how it should look like and make a photo. Anything to transport your idea is fine.
@@ -72,6 +87,7 @@ Write an R Markdown file `project-description.Rmd` to
 
 -   introduce shortly the general topic of your task (to put it in context)
 -   introduce the data set(s), it's origin and important information of what-is-what, etc.
+    - e.g. show the first line of the data set/file and, if needed, explain the column names (or tell where to find such information)
 -   define data manipulation goals if needed (also fine if this is the main focus of the project!)
 -   define the visualization goal(s) and possible intermediates
 
@@ -105,14 +121,25 @@ In order to submit your project proposal, you have to upload it to GitHub as par
 
 Example:
 
-- Martin (martin-raden) - [Example project](Projects/martin-raden/project-description.md)
+-   Martin (martin-raden) - [Example project](Projects/martin-raden/project-description.md)
 
 Current projects:
 
-- NAME (GITHUBNAME) - [...](Projects/...)
-- NAME (GITHUBNAME) - [...](Projects/...)
-- NAME (GITHUBNAME) - [...](Projects/...)
-- NAME (GITHUBNAME) - [...](Projects/...)
+- Luis (kickbones1) - [Phone Usage Time](Projects/kickbones1/project-description.md)
+- Silin (Selena-qian) - [Silin's project](Projects/Selena-qian/project-description.md)
+- Charlotte (janaelodie) - [Charlottes project](Projects/charlotte/project-description.md)
+- Gulmira (GulmiraKairr) - [Gulmira's project](Projects/GulmiraKairr/ProjectDescription.md)
+- Dennis (shad-lad-flad) - [Dennis' project](Projects/shad-lad-flad/project_description.md)
+- Yuguang (Yuguang Chen) - [Yuguang's project](Projects/yuguang%20Chen/projekt_description.md)
+- Yue (Yue_Z9) - [Yue's project](Projects/Yue_Z9/project-description.md)
+- Jungi (JungiHong) - [Volleyball Passing](Projects/JungiHong/project-description.md)
+- Beilei (Beilei-Wang) - [Income distributions](Projects/Beilei-Wang/project-description.md)
+- Celine (celineony) - [Behavorial data](Projects/celineony/project-description.md)
+- Felix (felix-gogollok) [Whisky statistics](Projects/felix-gogollok/whisky-statistics/project-description.md)
+- Manuel (ManuDoerrich) - [Nutrition data](Projects/ManuDoerrich/project-description.md)
+- Nicolas (NicolasDelgadoL) - [social media & personality](Projects/NicolasDelgadoL/Nicolás-project.md)
+- Sun (MoonSunKyung) - [Shopping Trends by Age group and Sex](Projects/SunKyoung Moon/project_description.md)
+
 
 #### Goals
 
@@ -125,7 +152,7 @@ At the end of Phase 1 you will have a better understanding of
 
 ------------------------------------------------------------------------
 
-### Phase 2 - Reviewing a project description 
+### Phase 2 - Reviewing a project description
 
 <img src="https://img.icons8.com/external-filled-outline-geotatah/344/external-comment-customer-satisfaction-filled-outline-filled-outline-geotatah.png" width="100px"/>
 
@@ -135,10 +162,9 @@ To ensure the drafted projects are understandable and doable, we will do a peer 
 
 For each project draft, we will assign two reviewers at random. The *reviewer assignments* are as follows:
 
-- **YOU** will review projects of: *the two subsequent students in the list of [Available projects](#available-projects)*
-- if you are the last in the list, you will review the first two students, etc.
-- use respective GitHub user names for contact
-
+-   **YOU** will review projects of: *the two subsequent students in the list of [Available projects](#available-projects)*
+-   if you are the last in the list, you will review the first two students, etc.
+-   use respective GitHub user names for contact
 
 **Each reviewer** is supposed to
 
@@ -202,9 +228,9 @@ Given a project description, you will try to solve the task. In order to practic
 
 This workflow is described and summarized in
 
--   [Section 6.5 Your repo with branching](https://edav.info/github.html#your-repo-with-branching)
--   [Step 4: Branch](https://edav.info/github.html#step-4-branch)
--   [Step 5: Work, commit and push](https://edav.info/github.html#step-5-work-commit-and-push)
+-   [Section 6.5 Your repo with branching](https://edav.info/git_GitHub.html#your-repo-with-branching)
+-   [Step 4: Branch](https://edav.info/git_GitHub.html#step-4-branch)
+-   [Step 5: Work, commit and push](https://edav.info/git_GitHub.html#step-5-work-commit-and-push)
 
 Note: we are still working all on ONE GITHUB REPOSITORY! We do *not create a fork*, i.e. our own copy of the repository on GitHub, which is also detailed in the linked material. The latter (forking) is needed, if you don't have writing permissions to a repository. But the overall workflow is more or less the same.
 
@@ -333,18 +359,18 @@ If your solutions generates HTML output files, you cannot directly view/render t
 
 ### If your HTML file does not use JavaScript:
 
-In case your HTML file works without JavaScript (just static text and image output), you can use [https://htmlpreview.github.io/](https://htmlpreview.github.io/)
+In case your HTML file works without JavaScript (just static text and image output), you can use <https://htmlpreview.github.io/>
 
-- open the file on github.com in your browser
-- click on the `Raw` button in the upper right corner
-- copy the URL of the now shown file
-- either paste the URL to the linked page from above
-  - or just prefix it with `http://htmlpreview.github.io/?`
+-   open the file on github.com in your browser
+-   click on the `Raw` button in the upper right corner
+-   copy the URL of the now shown file
+-   either paste the URL to the linked page from above
+    -   or just prefix it with `http://htmlpreview.github.io/?`
 
 Note: `htmlpreview` is only working for HTML pages *without JavaScript* content!
- 
+
 ### If your HTML file is based on JavaScript:
 
-In case your HTML file is making use of JavaScript, you can use [https://raw.githack.com/](https://raw.githack.com/)
+In case your HTML file is making use of JavaScript, you can use <https://raw.githack.com/>
 
 The procedure is the same as above but the final URL is slightly different, see website.
