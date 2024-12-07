@@ -34,8 +34,7 @@ dt_clean <- dt[1:(nrow(dt)-3), ] %>%
   ungroup() %>% 
   select(-na_count) %>%
   mutate(Hierarchy = (str_count(University, ("\\G ")) / 2),
-         University = str_replace_all(University, "\\G ", "")) %>%  #Calculate the hierarchy, Remove the spaces
-  print()
+         University = str_replace_all(University, "\\G ", ""))  #Calculate the hierarchy, Remove the spaces
 
 #create Unis_Total:I'm not sure I understand the task correctly. Is it asking for this total of three universities to be added up like I did?
   dt_plot <- dt_clean %>% 
@@ -53,7 +52,7 @@ dt_clean <- dt[1:(nrow(dt)-3), ] %>%
     dt_clean %>% 
       filter(University %in% c("Universität Bielefeld", "Universität Bochum", "Universität Bonn")) %>% 
       mutate(Type = "Uni")
-  ) %>% print()
+  )
 
 ```
 
@@ -74,45 +73,10 @@ dt_plot %>%
 
 ## Animation
 ```{r animation}
-knitr::opts_chunk$set(dev = "png", dev.args = list(type = "cairo"))
-options(bitmapType = "cairo")
+#Since this section causes R to not be able to knit out the markdown file, I've turned this section completely into a comment. 
+#This code actually runs and generates gifs and html. But tbh I haven't gone very deep into the gganimate package, especially in the export to html part, I tried a lot of methods provided by chatgpt, including using htmltools::save_html(), directly using anim_save() and html_renderer(). htmlwidgets::as_widget() and so on, but all of them failed. The code below seems to work. It is provided by chatgpt.
 
-library(gganimate)
-library(htmlwidgets)
-library(htmltools)
-
-dt_year <- dt_plot %>%
-  mutate(Year = as.numeric(str_extract(Semester, "\\d{4}")))
-
-last_points <- dt_year %>%
-  group_by(University) %>%
-  filter(Semester == max(Semester))
-
-animation <- ggplot(dt_year, aes(x = as.integer(Year), y = Total, group = University, color = Type)) +
-  geom_point() +
-  geom_line() +
-  geom_label(data = last_points, aes(label = University), nudge_x = 1.3, nudge_y = 1200, color = "black") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))+  # 旋转标签并调整对齐
-  scale_x_continuous(
-  breaks = seq(min(dt_year$Year), max(dt_year$Year), by = 1),
-  labels = dt_year$Semester %>% unique()) +
-  transition_reveal(along = Year) +  # Transition along the Semester
-  ease_aes("linear")
-
-#tbh I haven't gone very deep into the gganimate package, especially in the export to html part, I tried a lot of methods provided by chatgpt, including using htmltools::save_html(), directly using anim_save() and html_renderer(). htmlwidgets::as_widget() and so on, but all of them failed. The code below seems to work. It is provided by chatgpt.
-
-gif_file <- "animation.gif"
-animate(animation, renderer = gifski_renderer(gif_file), width = 800, height = 600)
-
-html_content <- tags$html(
-  tags$body(
-    tags$h2("Animation"),
-    tags$img(src = gif_file)
-  )
-)
-
-save_html(html_content, file = "animation.html")
-
+#The error message by kniting is as follows:
 ########Error: Failed to knit md file.########
 # Quitting from lines 77-117 [animation] (Selena-qian.Rmd)  
 # Error in `device()`:  
@@ -123,4 +87,46 @@ save_html(html_content, file = "animation.html")
 #  4. gganimate:::draw_frames(...)  
 #  6. grDevices (local) device(files[i], width = 800, height = 600, units = "in", res = 96)  
 # Execution halted
+
+
+# knitr::opts_chunk$set(dev = "png", dev.args = list(type = "cairo"))
+# options(bitmapType = "cairo")
+# 
+# library(gganimate)
+# library(htmlwidgets)
+# library(htmltools)
+# 
+# dt_year <- dt_plot %>%
+#   mutate(Year = as.numeric(str_extract(Semester, "\\d{4}")))
+# 
+# last_points <- dt_year %>%
+#   group_by(University) %>%
+#   filter(Semester == max(Semester))
+# 
+# animation <- ggplot(dt_year, aes(x = as.integer(Year), y = Total, group = University, color = Type)) +
+#   geom_point() +
+#   geom_line() +
+#   geom_label(data = last_points, aes(label = University), nudge_x = 1.3, nudge_y = 1200, color = "black") +
+#   theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
+#   scale_x_continuous(
+#   breaks = seq(min(dt_year$Year), max(dt_year$Year), by = 1),
+#   labels = dt_year$Semester %>% unique()) +
+#   transition_reveal(along = Year) +  # Transition along the Semester
+#   ease_aes("linear")
+# 
+# 
+# 
+# gif_file <- "animation.gif"
+# animate(animation, renderer = gifski_renderer(gif_file), width = 800, height = 600)
+# 
+# html_content <- tags$html(
+#   tags$body(
+#     tags$h2("Animation"),
+#     tags$img(src = gif_file)
+#   )
+# )
+# 
+# save_html(html_content, file = "animation.html")
+
+
 ```
