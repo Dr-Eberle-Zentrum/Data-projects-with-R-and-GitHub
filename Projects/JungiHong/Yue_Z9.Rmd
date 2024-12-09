@@ -10,8 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r pressure,echo=FALSE}
 
 library(ggplot2)
-library(dplyr)
-library(tidyr)
+library(tidyverse)
 library(readxl)
 
 #the first one
@@ -22,23 +21,21 @@ new_data <- data[1:6, 6:9]
 
 #Data manipulation
 colnames(new_data) <- c("Pass Score", "Attempts", "Points_Won", "Points_Lost")
-new_data <- new_data %>%
+
+clean_data <- new_data %>%
   mutate(
     Pass_Score = as.factor("Pass Score"),
     Attempts = as.numeric(Attempts),
     Points_Won = as.numeric(Points_Won),
-    Points_Lost = as.numeric(Points_Lost))
-
-tidy_data <- new_data %>%
-  pivot_longer(cols = c(Points_Won, Points_Lost), 
-               names_to = "Outcome", 
-               values_to = "Count")
-
-clean_data <- tidy_data %>%
-  group_by(`Pass Score`)%>%
-  filter(`Pass Score` %in% c("zeros", "ones", "twos", "threes"))%>%
+    Points_Lost = as.numeric(Points_Lost)
+  ) %>%
+  pivot_longer(
+    cols = c(Points_Won, Points_Lost), 
+    names_to = "Outcome", 
+    values_to = "Count"
+  ) %>%
+  group_by(`Pass Score`) %>%
   mutate(`Pass Score` = factor(`Pass Score`, levels = c("zeros", "ones", "twos", "threes")))
-
 
 # visualization
 ggplot(clean_data, aes(x = `Pass Score`, y= Count ,fill = Outcome)) +
@@ -52,39 +49,57 @@ ggplot(clean_data, aes(x = `Pass Score`, y= Count ,fill = Outcome)) +
   scale_fill_manual(values = c("Points_Won" = "skyblue", "Points_Lost" = "tomato"))
 
 #THE second
-data <- data.frame(
-  PassingScore = c(2.1, 2.3, 2.2, 2.0, 2.4),
-  PointsWon = c(140, 161, 117, 93, 150),
-  PointsLost = c(81, 58, 30, 67, 53)
-)
+#get data
+folder_path <- "passing stats"
+file_list <- list.files(path = folder_path, pattern = "\\.xlsx$", full.names = TRUE)
+#read every data
+extract_totals_data <- function(file_path) {
+  data <- read_excel(file_path, sheet = "totals")
+#last 3
+  last_three_rows <- tail(data, 3)
+  colnames(last_three_rows) <- as.character(last_three_rows[1, ])
+#delate first row
+  last_three_rows <- last_three_rows[-1, ]
+#filter
+  filtered_data <- last_three_rows[, c("side-outs", "points", "average")]
+  return(filtered_data)
+}
+#new data
+results_list <- lapply(file_list, extract_totals_data)
+final_results <- do.call(rbind, results_list)
+final_results <- final_results %>%
+  mutate(average = round(as.numeric(average), 2))
+print(final_results)
+
+final_results$points <- as.numeric(as.character(final_results$points))
+final_results$average <- as.numeric(as.character(final_results$average))
+
+#won and lost
+won_data <- final_results[final_results$`side-outs` == "won", ]
+lost_data <- final_results[final_results$`side-outs` == "lost", ]
+won_cor <- cor(won_data$average, final_results$average[final_results$`side-outs` == "won"], use = "complete.obs")
 
 # cor
-cor_won <- cor(data$PassingScore, data$PointsWon, use = "complete.obs")
-cor_lost <- cor(data$PassingScore, data$PointsLost, use = "complete.obs")
-
-#long
-data_long <- data %>% 
-  pivot_longer(cols = -PassingScore, 
-               names_to = "Type", 
-               values_to = "Points")
+lost_cor <- cor(lost_data$average, final_results$average[final_results$`side-outs` == "lost"], use = "complete.obs")
 
 # plot
-ggplot(data_long, aes(x = PassingScore, y = Points, color = Type)) +
-  geom_point(aes(shape = Type), size = 3) + 
-  geom_smooth(method = "lm", se = FALSE) +  
-  scale_color_manual(values = c("PointsWon" = "blue", "PointsLost" = "red")) +
-  scale_shape_manual(values = c("PointsWon" = 4, "PointsLost" = 4)) +
+ggplot(final_results, aes(x = average, y = points, color = `side-outs`, shape = `side-outs`)) +
+  geom_point(size = 3) +
+  geom_smooth(method = "lm", se = FALSE) + 
+  scale_color_manual(values = c("won" = "blue", "lost" = "red")) +
+  scale_shape_manual(values = c("won" = 16, "lost" = 17)) + 
   labs(title = "Correlation Between Passing Scores and Points Won/Lost",
        x = "Passing Score (Average)", 
        y = "Points (Won or Lost)",
-       color = "", shape = "") +
+       color = "Side-outs", shape = "Side-outs") + 
   annotate("text", x = 2.0, y = 180, 
-           label = paste("Won Trend (r =", round(cor_won, 2), ")", sep = ""),
+           label = paste("Won Trend (r =", round(won_cor, 2), ")", sep = ""),
            color = "blue", hjust = 0, vjust = 1) +
   annotate("text", x = 2.0, y = 170, 
-           label = paste("Lost Trend (r =", round(cor_lost, 2), ")", sep = ""),
+           label = paste("Lost Trend (r =", round(lost_cor, 2), ")", sep = ""),
            color = "red", hjust = 0, vjust = 1) +
   theme_minimal() +
   theme(legend.position = "topleft")
+
 
 ```
