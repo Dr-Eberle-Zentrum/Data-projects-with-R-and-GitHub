@@ -24,6 +24,8 @@
 
 ## Chart one
 
+[chart
+one](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/YueZ/Projects/Yue_Z9/solution-from-Yuguang_files/figure-markdown_strict/chart_one-1.png)
 ![](solution-from-Yuguang_files/figure-markdown_strict/chart_one-1.png)
 
 ## Chart two data

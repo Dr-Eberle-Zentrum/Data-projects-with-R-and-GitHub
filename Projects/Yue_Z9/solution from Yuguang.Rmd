@@ -16,6 +16,7 @@ data_task1 <- data |>
   summarise(Mean_value = mean(Data.Value, na.rm = TRUE))
 ```
 ## Chart one
+[chart one](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/YueZ/Projects/Yue_Z9/solution-from-Yuguang_files/figure-markdown_strict/chart_one-1.png)
 ```{r chart_one, echo=FALSE, eval=TRUE}
 # visualization for first graph
 ggplot(data_task1, aes(x = Name, y = Mean_value))+
