@@ -1,6 +1,6 @@
 # This is my solution for Yue’s project.
 
-## Chart one
+## Chart one data
 
     library(tidyverse)
 
@@ -22,6 +22,8 @@
       group_by(Name) |>
       summarise(Mean_value = mean(Data.Value, na.rm = TRUE))
 
+## Chart one
+
     # visualization for first graph
     ggplot(data_task1, aes(x = Name, y = Mean_value))+
       geom_bar(stat = "identity", show.legend = TRUE, fill = "blue")+
@@ -36,7 +38,7 @@
 
 ![](solution-from-Yuguang_files/figure-markdown_strict/chart_one-1.png)
 
-## Chart two
+## Chart two data
 
     #data manipulation for second task
 
@@ -71,6 +73,8 @@
       group_by(Geo.Place.Name,Year) |>
       slice_max(Data.Value, n = 1)|>
       ungroup()
+
+## chart two
 
     #visualization.
     ggplot(data_task2, aes(x = Year, y = Data.Value, color = factor(Geo.Place.Name)))+
