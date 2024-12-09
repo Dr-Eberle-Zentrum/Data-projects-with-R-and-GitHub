@@ -24,6 +24,18 @@
 
 ## Chart one
 
+    # visualization for first graph
+    ggplot(data_task1, aes(x = Name, y = Mean_value))+
+      geom_bar(stat = "identity", show.legend = TRUE, fill = "blue")+
+      labs(
+        title = "Average Valus of pollutants",
+        x = "Name",
+        y = "Mean_Value"
+      )+
+      theme(
+        axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 5)
+      )
+
 ![](solution-from-Yuguang_files/figure-markdown_strict/chart_one-1.png)
 
 ## Chart two data
@@ -63,5 +75,17 @@
       ungroup()
 
 ## chart two
+
+    #visualization.
+    ggplot(data_task2, aes(x = Year, y = Data.Value, color = factor(Geo.Place.Name)))+
+      geom_line()+
+      scale_x_continuous(breaks = unique(data_task2$Year))+
+      labs(
+        x = "Year",
+        y = "Value (mcg/m3)",
+        color = "region"
+      )+
+      theme(
+      )
 
 ![](solution-from-Yuguang_files/figure-markdown_strict/chart_two-1.png)

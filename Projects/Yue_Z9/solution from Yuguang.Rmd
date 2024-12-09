@@ -17,7 +17,7 @@ data_task1 <- data |>
 ```
 ## Chart one
 
-```{r chart_one, echo=FALSE, eval=TRUE}
+```{r chart_one, echo=TRUE, eval=TRUE}
 # visualization for first graph
 ggplot(data_task1, aes(x = Name, y = Mean_value))+
   geom_bar(stat = "identity", show.legend = TRUE, fill = "blue")+
@@ -62,7 +62,7 @@ data_task2 <- data |>
   ungroup()
 ```
 ## chart two
-```{r chart_two, echo=FALSE, eval=TRUE}
+```{r chart_two, echo=TRUE, eval=TRUE}
 #visualization.
 ggplot(data_task2, aes(x = Year, y = Data.Value, color = factor(Geo.Place.Name)))+
   geom_line()+
