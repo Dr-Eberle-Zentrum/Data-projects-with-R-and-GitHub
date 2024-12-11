@@ -1,0 +1,112 @@
+---
+title: "solution-file"
+author: "Felix Gogollok"
+date: "2024-12-09"
+output: html_document
+---
+
+# My solution to the project
+
+```{r setup, include=FALSE}
+
+# Load necessary libraries
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(fmsb)  # For the spider web plot
+
+# Load actual data
+# Assume Data Sheet 2 is a CSV file that contains the actual data
+data <- read.csv("Data Sheet 2.csv")
+
+# Load the variable explanations
+variable_info <- read.csv("Data Sheet 1.csv")
+
+# View the first few rows of Data Sheet 1 to understand the variable descriptions
+head(variable_info)
+
+# View the first few rows of Data Sheet 2 (actual data) to inspect its structure
+head(data)
+
+# Filter for young adults (age 18-34)
+young_adults <- data %>%
+  filter(Age >= 18 & Age <= 34)
+
+# Create a new variable for social media combinations based on 'has_whatsapp', 'has_facebook', and 'has_instagram'
+young_adults <- young_adults %>%
+  mutate(social_media_combination = case_when(
+    has_whatsapp == 1 & has_facebook == 0 & has_instagram == 0 ~ "Whatsapp",
+    has_whatsapp == 0 & has_facebook == 1 & has_instagram == 0 ~ "Facebook",
+    has_whatsapp == 0 & has_facebook == 0 & has_instagram == 1 ~ "Instagram",
+    has_whatsapp == 1 & has_facebook == 1 & has_instagram == 0 ~ "Whatsapp-Facebook",
+    has_whatsapp == 0 & has_facebook == 1 & has_instagram == 1 ~ "Facebook-Instagram",
+    has_whatsapp == 1 & has_facebook == 0 & has_instagram == 1 ~ "Whatsapp-Instagram",
+    has_whatsapp == 1 & has_facebook == 1 & has_instagram == 1 ~ "Whatsapp-Facebook-Instagram",
+    has_whatsapp == 0 & has_facebook == 0 & has_instagram == 0 ~ "None"
+  ))
+
+# Average personality traits for each social media combination
+avg_personality <- young_adults %>%
+  group_by(social_media_combination) %>%
+  summarise(
+    BFI_Extra = mean(BFI_Extra, na.rm = TRUE),
+    BFI_Agree = mean(BFI_Agree, na.rm = TRUE),
+    BFI_Consc = mean(BFI_Consc, na.rm = TRUE),
+    BFI_Neuro = mean(BFI_Neuro, na.rm = TRUE),
+    BFI_Open = mean(BFI_Open, na.rm = TRUE)
+  )
+
+# Prepare data for radar chart (spider web)
+avg_personality_spider <- avg_personality %>%
+  select(social_media_combination, BFI_Extra, BFI_Agree, BFI_Consc, BFI_Neuro, BFI_Open) %>%
+  pivot_longer(cols = -social_media_combination, names_to = "Trait", values_to = "Score")
+
+# Ensure all combinations are present and fill missing data with NA if necessary
+all_combinations <- c("Whatsapp", "Facebook", "Instagram", "Whatsapp-Facebook", "Facebook-Instagram", "Whatsapp-Instagram", "Whatsapp-Facebook-Instagram", "None")
+avg_personality_spider <- avg_personality_spider %>%
+  complete(social_media_combination = all_combinations, Trait, fill = list(Score = NA)) %>%
+  group_by(social_media_combination) %>%
+  fill(Score, .direction = "downup")
+
+# Reshape for radar chart plotting
+avg_personality_spider_wide <- avg_personality_spider %>%
+  pivot_wider(names_from = Trait, values_from = Score)
+
+# Create the radar chart (spider web)
+radar_data <- avg_personality_spider_wide %>%
+  select(-social_media_combination)
+
+# Scale the data for radar chart
+radar_data_scaled <- as.data.frame(lapply(radar_data, scales::rescale))
+
+# Add row for max/min values to complete the radar chart
+radar_data_scaled <- rbind(rep(5, ncol(radar_data_scaled)), rep(0, ncol(radar_data_scaled)), radar_data_scaled)
+
+# Export the radar chart as a PNG file
+png("social_media_personality_radar_chart.png", width = 800, height = 800)
+
+# Plot the radar chart (spider web)
+radarchart(radar_data_scaled,
+           axistype = 1,
+           pcol = rainbow(8, alpha = 0.6),
+           pfcol = rainbow(8, alpha = 0.3),
+           plwd = 3,
+           axislabcol = "grey",
+           cglcol = "grey",
+           cglwd = 0.8,
+           axislab = c("Extraversion", "Agreeableness", "Conscientiousness", "Neuroticism", "Openness"),
+           caxislabels = seq(0, 5, by = 1),
+           title = "Personality Profile by Social Media Use (Young Adults)"
+)
+
+# Add a legend
+legend("topright", legend = avg_personality_spider_wide$social_media_combination, fill = rainbow(8, alpha = 0.6), cex = 0.8)
+
+# Finalize the PNG file
+dev.off()
+
+# Export the .png file
+
+png("social_media_personality_spider_chart.png", width = 800, height = 800)
+
+```

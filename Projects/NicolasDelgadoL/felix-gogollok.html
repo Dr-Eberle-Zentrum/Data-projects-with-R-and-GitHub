@@ -11,7 +11,7 @@
 
 <meta name="author" content="Felix Gogollok" />
 
-<meta name="date" content="2024-12-01" />
+<meta name="date" content="2024-12-09" />
 
 <title>solution-file</title>
 
@@ -352,213 +352,113 @@ display: none;
 
 <h1 class="title toc-ignore">solution-file</h1>
 <h4 class="author">Felix Gogollok</h4>
-<h4 class="date">2024-12-01</h4>
+<h4 class="date">2024-12-09</h4>
 
 </div>
 
 
-<div id="my-solution-for-the-nutritional-data-project" class="section level1">
-<h1>My solution for the nutritional data project</h1>
-<div id="vorbemerkung" class="section level3">
-<h3>Vorbemerkung:</h3>
-<div id="land-und-volk" class="section level4">
-<h4><em><em>Land und Volk</em></em></h4>
-<div id="von-rainer-maria-rilke" class="section level5">
-<h5><em>von Rainer Maria Rilke</em></h5>
-<hr />
-<blockquote>
-<p>Gott war guter Laune. Geizen</p>
-</blockquote>
-<blockquote>
-<p>ist doch wohl nicht seine Art;</p>
-</blockquote>
-<blockquote>
-<p>und er lächelte: da ward</p>
-</blockquote>
-<blockquote>
-<p>Böhmen, reich an tausend Reizen.</p>
-</blockquote>
-<hr />
-<blockquote>
-<p>Wie erstarrtes Licht liegt Weizen</p>
-</blockquote>
-<blockquote>
-<p>zwischen Bergen, waldbehaart,</p>
-</blockquote>
-<blockquote>
-<p>und der Baum, den dichtgeschart</p>
-</blockquote>
-<blockquote>
-<p>Früchte drücken, fordert Spreizen.</p>
-</blockquote>
-<hr />
-<blockquote>
-<p>Gott gab Hütten; voll von Schafen</p>
-</blockquote>
-<blockquote>
-<p>Ställe; und der Dirne klafft</p>
-</blockquote>
-<blockquote>
-<p>vor Gesundheit fast das Mieder.</p>
-</blockquote>
-<hr />
-<blockquote>
-<p>Gab den Burschen all, den braven,</p>
-</blockquote>
-<blockquote>
-<p>in die raue Faust die Kraft,</p>
-</blockquote>
-<blockquote>
-<p>in das Herz - die Heimatlieder.</p>
-</blockquote>
-<hr />
-</div>
-</div>
-<div id="aus-larenopfer-1895" class="section level4">
-<h4><em>Aus: Larenopfer (1895)</em></h4>
-<pre><code>
-# Load necessary libraries
-library(tidyverse)
+<div id="my-solution-to-the-project" class="section level1">
+<h1>My solution to the project</h1>
+<pre><code># Load necessary libraries
+library(dplyr)
+library(tidyr)
 library(ggplot2)
-library(viridis)
+library(fmsb)  # For the spider web plot
 
-# Example data: 8 ingredients
-# We assume that the data from the Swiss nutrient database was downloaded and saved as a CSV file.
-# Replace the file path with your actual CSV file location.
+# Load actual data
+# Assume Data Sheet 2 is a CSV file that contains the actual data
+data &lt;- read.csv(&quot;Data Sheet 2.csv&quot;)
 
-# Read the example data (ensure to adjust the path to your file)
-nutrient_data &lt;- read.csv(&quot;Swiss_food_composition_database.csv&quot;)
+# Load the variable explanations
+variable_info &lt;- read.csv(&quot;Data Sheet 1.csv&quot;)
 
-# Ingredients for Голубцы
-ingredients &lt;- c(&quot;Beef, minced, pan fried (without addition of fat and salt)&quot;, &quot;Savoy cabbage, steamed (without addition of salt)&quot;, &quot;Spinach, steamed (without addition of salt)&quot;, &quot;Spirits, 40 vol% (e.g. Vodka, gin)&quot;, &quot;Wheat flour, white, type 400&quot;, &quot;Margarine, without butter, 70 - 80 % Fett&quot;, &quot;Salt, sea salt, standard, white, without iodine and fluoride added&quot;, &quot;Rosemary, fresh&quot;)
+# View the first few rows of Data Sheet 1 to understand the variable descriptions
+head(variable_info)
 
-# Filter relevant nutrient values from the database
-# Used columns:
-# &quot;Name&quot;, &quot;Energy, kilocalories (kcal)&quot;, &quot;Energy, kilojoules (kJ)&quot;, &quot;Fat, total (g)&quot;, 
-# &quot;Fatty acids, saturated (g)&quot;, &quot;Fatty acids, monounsaturated (g)&quot;, &quot;Fatty acids, polyunsaturated (g)&quot;, 
-# &quot;Cholesterol (mg)&quot;, &quot;Protein (g)&quot;, &quot;Carbohydrates, available (g)&quot;, &quot;Dietary fibres (g)&quot;,
-# and the usual Vitamin and Mineral columns
+# View the first few rows of Data Sheet 2 (actual data) to inspect its structure
+head(data)
 
-nutrient_selection &lt;- nutrient_data %&gt;%
-  filter(Name %in% ingredients) %&gt;%
-  select(
-    Name, 
-    `Energy, kilocalories (kcal)`, 
-    `Energy, kilojoules (kJ)`,
-    `Fat, total (g)`, 
-    `Fatty acids, saturated (g)`, 
-    `Fatty acids, monounsaturated (g)`, 
-    `Fatty acids, polyunsaturated (g)`, 
-    `Cholesterol (mg)`,
-    `Protein (g)`, 
-    `Carbohydrates, available (g)`, 
-    `Dietary fibres (g)`,
-    `Vitamin A activity, RE (µg-RE)`,
-    `Vitamin A activity, RAE (µg-RE)`, 
-    `Beta-carotene activity (µg-BCE)`, 
-    `Beta-carotene (µg)`,
-    `Vitamin B1 (thiamine) (mg)`, 
-    `Vitamin B2 (riboflavin) (mg)`, 
-    `Vitamin B6 (pyridoxine) (mg)`, 
-    `Vitamin B12 (cobalamin) (µg)`,
-    `Niacin (mg)`, 
-    `Folate (µg)`, 
-    `Pantothenic acid (mg)`, 
-    `Vitamin C (ascorbic acid) (mg)`, 
-    `Vitamin D (calciferol) (µg)`,
-    `Vitamin E (α-tocopherol) (mg)`, 
-    `Potassium (K) (mg)`, 
-    `Sodium (Na) (mg)`, 
-    `Chloride (Cl) (mg)`, 
-    `Calcium (Ca) (mg)`, 
-    `Phosphorus (P) (mg)`, 
-    `Iron (Fe) (mg)`, 
-    `Iodide (I) (µg)`, 
-    `Zinc (Zn) (mg)`, 
-    `Selenium (Se) (µg)`
+# Filter for young adults (age 18-34)
+young_adults &lt;- data %&gt;%
+  filter(Age &gt;= 18 &amp; Age &lt;= 34)
+
+# Create a new variable for social media combinations based on &#39;has_whatsapp&#39;, &#39;has_facebook&#39;, and &#39;has_instagram&#39;
+young_adults &lt;- young_adults %&gt;%
+  mutate(social_media_combination = case_when(
+    has_whatsapp == 1 &amp; has_facebook == 0 &amp; has_instagram == 0 ~ &quot;Whatsapp&quot;,
+    has_whatsapp == 0 &amp; has_facebook == 1 &amp; has_instagram == 0 ~ &quot;Facebook&quot;,
+    has_whatsapp == 0 &amp; has_facebook == 0 &amp; has_instagram == 1 ~ &quot;Instagram&quot;,
+    has_whatsapp == 1 &amp; has_facebook == 1 &amp; has_instagram == 0 ~ &quot;Whatsapp-Facebook&quot;,
+    has_whatsapp == 0 &amp; has_facebook == 1 &amp; has_instagram == 1 ~ &quot;Facebook-Instagram&quot;,
+    has_whatsapp == 1 &amp; has_facebook == 0 &amp; has_instagram == 1 ~ &quot;Whatsapp-Instagram&quot;,
+    has_whatsapp == 1 &amp; has_facebook == 1 &amp; has_instagram == 1 ~ &quot;Whatsapp-Facebook-Instagram&quot;,
+    has_whatsapp == 0 &amp; has_facebook == 0 &amp; has_instagram == 0 ~ &quot;None&quot;
+  ))
+
+# Average personality traits for each social media combination
+avg_personality &lt;- young_adults %&gt;%
+  group_by(social_media_combination) %&gt;%
+  summarise(
+    BFI_Extra = mean(BFI_Extra, na.rm = TRUE),
+    BFI_Agree = mean(BFI_Agree, na.rm = TRUE),
+    BFI_Consc = mean(BFI_Consc, na.rm = TRUE),
+    BFI_Neuro = mean(BFI_Neuro, na.rm = TRUE),
+    BFI_Open = mean(BFI_Open, na.rm = TRUE)
   )
 
-# Daily requirements (example values based on general guidelines from Switzerland)
-daily_requirements &lt;- c(
-  Energy_kcal = 2000,  # kcal
-  Energy_kJ = 8400,    # kJ
-  Fat_g = 70,          # g
-  Saturated_Fat_g = 20,  # g
-  Monounsaturated_Fat_g = 20,  # g
-  Polyunsaturated_Fat_g = 10,  # g
-  Cholesterol_mg = 300,  # mg
-  Protein_g = 50,       # g
-  Carbohydrates_g = 300,  # g
-  Fiber_g = 30,          # g
-  Vitamin_A_µg_RE = 800, # µg-RE
-  Vitamin_B1_mg = 1.2,   # mg
-  Vitamin_B2_mg = 1.3,   # mg
-  Vitamin_B6_mg = 1.5,   # mg
-  Vitamin_B12_µg = 2.4,  # µg
-  Niacin_mg = 16,        # mg
-  Folate_µg = 400,       # µg
-  Pantothenic_acid_mg = 5, # mg
-  Vitamin_C_mg = 90,     # mg
-  Vitamin_D_µg = 20,     # µg
-  Vitamin_E_mg = 15,     # mg
-  Potassium_mg = 3500,   # mg
-  Sodium_mg = 2300,      # mg
-  Chloride_mg = 3600,    # mg
-  Calcium_mg = 1000,     # mg
-  Phosphorus_mg = 700,   # mg
-  Iron_mg = 10,          # mg
-  Iodine_µg = 150,       # µg
-  Zinc_mg = 11,          # mg
-  Selenium_µg = 55       # µg
+# Prepare data for radar chart (spider web)
+avg_personality_spider &lt;- avg_personality %&gt;%
+  select(social_media_combination, BFI_Extra, BFI_Agree, BFI_Consc, BFI_Neuro, BFI_Open) %&gt;%
+  pivot_longer(cols = -social_media_combination, names_to = &quot;Trait&quot;, values_to = &quot;Score&quot;)
+
+# Ensure all combinations are present and fill missing data with NA if necessary
+all_combinations &lt;- c(&quot;Whatsapp&quot;, &quot;Facebook&quot;, &quot;Instagram&quot;, &quot;Whatsapp-Facebook&quot;, &quot;Facebook-Instagram&quot;, &quot;Whatsapp-Instagram&quot;, &quot;Whatsapp-Facebook-Instagram&quot;, &quot;None&quot;)
+avg_personality_spider &lt;- avg_personality_spider %&gt;%
+  complete(social_media_combination = all_combinations, Trait, fill = list(Score = NA)) %&gt;%
+  group_by(social_media_combination) %&gt;%
+  fill(Score, .direction = &quot;downup&quot;)
+
+# Reshape for radar chart plotting
+avg_personality_spider_wide &lt;- avg_personality_spider %&gt;%
+  pivot_wider(names_from = Trait, values_from = Score)
+
+# Create the radar chart (spider web)
+radar_data &lt;- avg_personality_spider_wide %&gt;%
+  select(-social_media_combination)
+
+# Scale the data for radar chart
+radar_data_scaled &lt;- as.data.frame(lapply(radar_data, scales::rescale))
+
+# Add row for max/min values to complete the radar chart
+radar_data_scaled &lt;- rbind(rep(5, ncol(radar_data_scaled)), rep(0, ncol(radar_data_scaled)), radar_data_scaled)
+
+# Export the radar chart as a PNG file
+png(&quot;social_media_personality_radar_chart.png&quot;, width = 800, height = 800)
+
+# Plot the radar chart (spider web)
+radarchart(radar_data_scaled,
+           axistype = 1,
+           pcol = rainbow(8, alpha = 0.6),
+           pfcol = rainbow(8, alpha = 0.3),
+           plwd = 3,
+           axislabcol = &quot;grey&quot;,
+           cglcol = &quot;grey&quot;,
+           cglwd = 0.8,
+           axislab = c(&quot;Extraversion&quot;, &quot;Agreeableness&quot;, &quot;Conscientiousness&quot;, &quot;Neuroticism&quot;, &quot;Openness&quot;),
+           caxislabels = seq(0, 5, by = 1),
+           title = &quot;Personality Profile by Social Media Use (Young Adults)&quot;
 )
 
-# Calculate the daily coverage for each nutrient category for each ingredient
-nutrient_selection &lt;- nutrient_selection %&gt;%
-  mutate(
-    Energy_coverage = `Energy, kilocalories (kcal)` / daily_requirements[&quot;Energy_kcal&quot;],
-    Energy_kJ_coverage = `Energy, kilojoules (kJ)` / daily_requirements[&quot;Energy_kJ&quot;],
-    Fat_coverage = `Fat, total (g)` / daily_requirements[&quot;Fat_g&quot;],
-    Saturated_Fat_coverage = `Fatty acids, saturated (g)` / daily_requirements[&quot;Saturated_Fat_g&quot;],
-    Monounsaturated_Fat_coverage = `Fatty acids, monounsaturated (g)` / daily_requirements[&quot;Monounsaturated_Fat_g&quot;],
-    Polyunsaturated_Fat_coverage = `Fatty acids, polyunsaturated (g)` / daily_requirements[&quot;Polyunsaturated_Fat_g&quot;],
-    Cholesterol_coverage = `Cholesterol (mg)` / daily_requirements[&quot;Cholesterol_mg&quot;],
-    Protein_coverage = `Protein (g)` / daily_requirements[&quot;Protein_g&quot;],
-    Carbohydrates_coverage = `Carbohydrates, available (g)` / daily_requirements[&quot;Carbohydrates_g&quot;],
-    Fiber_coverage = `Dietary fibres (g)` / daily_requirements[&quot;Fiber_g&quot;],
-    Vitamin_A_coverage = `Vitamin A activity, RE (µg-RE)` / daily_requirements[&quot;Vitamin_A_µg_RE&quot;],
-    Vitamin_B1_coverage = `Vitamin B1 (thiamine) (mg)` / daily_requirements[&quot;Vitamin_B1_mg&quot;],
-    Vitamin_B2_coverage = `Vitamin B2 (riboflavin) (mg)` / daily_requirements[&quot;Vitamin_B2_mg&quot;],
-    Vitamin_B6_coverage = `Vitamin B6 (pyridoxine) (mg)` / daily_requirements[&quot;Vitamin_B6_mg&quot;],
-    Vitamin_B12_coverage = `Vitamin B12 (cobalamin) (µg)` / daily_requirements[&quot;Vitamin_B12_µg&quot;],
-    Niacin_coverage = `Niacin (mg)` / daily_requirements[&quot;Niacin_mg&quot;],
-    Folate_coverage = `Folate (µg)` / daily_requirements[&quot;Folate_µg&quot;],
-    Pantothenic_acid_coverage = `Pantothenic acid (mg)` / daily_requirements[&quot;Pantothenic_acid_mg&quot;],
-    Vitamin_C_coverage = `Vitamin C (ascorbic acid) (mg)` / daily_requirements[&quot;Vitamin_C_mg&quot;],
-    Vitamin_D_coverage = `Vitamin D (calciferol) (µg)` / daily_requirements[&quot;Vitamin_D_µg&quot;],
-    Vitamin_E_coverage = `Vitamin E (α-tocopherol) (mg)` / daily_requirements[&quot;Vitamin_E_mg&quot;]
-  )
+# Add a legend
+legend(&quot;topright&quot;, legend = avg_personality_spider_wide$social_media_combination, fill = rainbow(8, alpha = 0.6), cex = 0.8)
 
-# Sum the coverage for all nutrients
-total_coverage &lt;- colSums(nutrient_selection[, -1]) / length(ingredients)
+# Finalize the PNG file
+dev.off()
 
-# Create the data for the pie chart
-pie_data &lt;- tibble(
-  Nutrient = c(
-    &quot;Energy&quot;, &quot;Fat&quot;, &quot;Saturated Fats&quot;, &quot;Monounsaturated Fats&quot;, &quot;Polyunsaturated Fats&quot;, &quot;Cholesterol&quot;,
-    &quot;Protein&quot;, &quot;Carbohydrates&quot;, &quot;Fiber&quot;, &quot;Vitamin A&quot;, &quot;Vitamin B1&quot;, &quot;Vitamin B2&quot;, &quot;Vitamin B6&quot;, &quot;Vitamin B12&quot;,
-    &quot;Niacin&quot;, &quot;Folate&quot;, &quot;Pantothenic acid&quot;, &quot;Vitamin C&quot;, &quot;Vitamin D&quot;, &quot;Vitamin E&quot;
-  ),
-  Coverage = c(
-    total_coverage[&quot;Energy_coverage&quot;], total_coverage[&quot;Fat_coverage&quot;],
-    total_coverage[&quot;Saturated_Fat_coverage&quot;], total_coverage[&quot;Monounsaturated_Fat_coverage&quot;],
-    total_coverage[&quot;Polyunsaturated_Fat_coverage&quot;], total_coverage[&quot;Cholesterol_coverage&quot;],
-    total_coverage[&quot;Protein_coverage&quot;], total_coverage[&quot;Carbohydrates_coverage&quot;],
-    total_coverage[&quot;Fiber_coverage&quot;], total_coverage[&quot;Vitamin_A_coverage&quot;], total_coverage[&quot;Vitamin_B1_coverage&quot;],
-    total_coverage[&quot;Vitamin_B2_coverage&quot;], total_coverage[&quot;Vitamin_B6_coverage&quot;],
+# Export the .png file
 
+png(&quot;social_media_personality_spider_chart.png&quot;, width = 800, height = 800)
 </code></pre>
-</div>
-</div>
 </div>
 
 

@@ -2,60 +2,240 @@
 title: "solution-file"
 author: "Felix Gogollok"
 date: "2024-12-01"
-output: md_document
+output: html_document
 ---
 
 # My solution for the nutritional data project
 
-## First, I checked the structure of the data to get an overview of the variables and their types. Then, I looked at the first few rows of the data to see the actual values. I also checked the summary statistics of the data to get an overview of the distribution of the variables:
+### Vorbemerkung:
 
-````
-# Load the data
-nutritional_data <- read.csv("Schweizer_Nahrwertdatenbank.csv")
+#### _*Land und Volk*_
+##### _von Rainer Maria Rilke_
 
-# Check the structure of the data
-str(nutritional_data)
+---
 
-# Check the first few rows of the data
-head(nutritional_data)
+> Gott war guter Laune. Geizen
 
-# Check the summary statistics of the data
-summary(nutritional_data)
+> ist doch wohl nicht seine Art;
 
-````
+> und er lächelte: da ward
 
-## Next, I checked for missing values and duplicates in the data. I removed the duplicates and created a subset of the data for fruits and vegetables. I then checked the summary statistics of the subset and created a boxplot of the energy content of fruits and vegetables. Finally, I saved the boxplot as a PNG file:
+> Böhmen, reich an tausend Reizen.
 
-````
+---
 
-# Check for missing values
-colSums(is.na(nutritional_data))
+> Wie erstarrtes Licht liegt Weizen
 
-# Check for duplicates
-duplicated_rows <- nutritional_data[duplicated(nutritional_data), ]
+> zwischen Bergen, waldbehaart,
 
-# Remove duplicates
-nutritional_data <- nutritional_data[!duplicated(nutritional_data), ]
+> und der Baum, den dichtgeschart
 
-# Check the unique values of the food group column
-unique(nutritional_data$food_group)
+> Früchte drücken, fordert Spreizen.
 
-````
+---
 
-## Now I began to create a pi chart and a histogram side by side under the joint heading “Der Energiegehalt eines typisch russischen Mittagsgerichtes". The pie chart contains 
+> Gott gab Hütten; voll von Schafen
 
-````
+> Ställe; und der Dirne klafft
 
-# Create a subset of the data for fruits and vegetables
-fruits_vegetables <- nutritional_data[nutritional_data$food_group %in% c("Fruits", "Vegetables"), ]
+> vor Gesundheit fast das Mieder.
 
-# Check the summary statistics of the subset
-summary(fruits_vegetables)
+---
 
-# Create a boxplot of the energy content of fruits and vegetables
-boxplot(fruits_vegetables$energy_kcal, main = "Energy Content of Fruits and Vegetables", ylab = "Energy (kcal)")
+> Gab den Burschen all, den braven,
 
-# Save the boxplot as a PNG file
-png("energy_content_fruits_vegetables.png")
+> in die raue Faust die Kraft,
+
+> in das Herz - die Heimatlieder.
+
+---
+
+#### _Aus: Larenopfer (1895)_
+
+
+# My solution to the task
+
+````{r}
+
+# Load necessary libraries
+library(tidyverse)
+library(ggplot2)
+
+# Read the dataset from .csv
+nutrient_data <- read.csv("Swiss_food_composition_database.csv")
+
+# Ingredients for Голубцы
+ingredients <- c("Beef, minced, pan fried (without addition of fat and salt)", 
+                 "Savoy cabbage, steamed (without addition of salt)", 
+                 "Spinach, steamed (without addition of salt)", 
+                 "Spirits, 40 vol% (e.g. Vodka, gin)", 
+                 "Wheat flour, white, type 400", 
+                 "Margarine, without butter, 70 - 80 % Fett", 
+                 "Salt, sea salt, standard, white, without iodine and fluoride added", 
+                 "Rosemary, fresh")
+
+# Filter relevant nutrient values from the database
+nutrient_selection <- nutrient_data %>%
+  filter(Name %in% ingredients) %>%
+  select(
+    Name, 
+    `Energy, kilocalories (kcal)`, 
+    `Energy, kilojoules (kJ)`,
+    `Fat, total (g)`, 
+    `Fatty acids, saturated (g)`, 
+    `Fatty acids, monounsaturated (g)`, 
+    `Fatty acids, polyunsaturated (g)`, 
+    `Cholesterol (mg)`,
+    `Protein (g)`, 
+    `Carbohydrates, available (g)`, 
+    `Dietary fibres (g)`,
+    `Vitamin A activity, RE (µg-RE)`,
+    `Vitamin A activity, RAE (µg-RE)`, 
+    `Beta-carotene activity (µg-BCE)`, 
+    `Beta-carotene (µg)`,
+    `Vitamin B1 (thiamine) (mg)`, 
+    `Vitamin B2 (riboflavin) (mg)`, 
+    `Vitamin B6 (pyridoxine) (mg)`, 
+    `Vitamin B12 (cobalamin) (µg)`,
+    `Niacin (mg)`, 
+    `Folate (µg)`, 
+    `Pantothenic acid (mg)`, 
+    `Vitamin C (ascorbic acid) (mg)`, 
+    `Vitamin D (calciferol) (µg)`,
+    `Vitamin E (α-tocopherol) (mg)`, 
+    `Potassium (K) (mg)`, 
+    `Sodium (Na) (mg)`, 
+    `Chloride (Cl) (mg)`, 
+    `Calcium (Ca) (mg)`, 
+    `Phosphorus (P) (mg)`, 
+    `Iron (Fe) (mg)`, 
+    `Iodide (I) (µg)`, 
+    `Zinc (Zn) (mg)`, 
+    `Selenium (Se) (µg)`
+  )
+
+# Daily requirements (example values based on general guidelines from Switzerland)
+daily_requirements <- c(
+  Energy_kcal = 2000,  # kcal
+  Energy_kJ = 8400,    # kJ
+  Fat_g = 70,          # g
+  Saturated_Fat_g = 20,  # g
+  Monounsaturated_Fat_g = 20,  # g
+  Polyunsaturated_Fat_g = 10,  # g
+  Cholesterol_mg = 300,  # mg
+  Protein_g = 50,       # g
+  Carbohydrates_g = 300,  # g
+  Fiber_g = 30,          # g
+  Vitamin_A_µg_RE = 800, # µg-RE
+  Vitamin_B1_mg = 1.2,   # mg
+  Vitamin_B2_mg = 1.3,   # mg
+  Vitamin_B6_mg = 1.5,   # mg
+  Vitamin_B12_µg = 2.4,  # µg
+  Niacin_mg = 16,        # mg
+  Folate_µg = 400,       # µg
+  Pantothenic_acid_mg = 5, # mg
+  Vitamin_C_mg = 90,     # mg
+  Vitamin_D_µg = 20,     # µg
+  Vitamin_E_mg = 15,     # mg
+  Potassium_mg = 3500,   # mg
+  Sodium_mg = 2300,      # mg
+  Chloride_mg = 3600,    # mg
+  Calcium_mg = 1000,     # mg
+  Phosphorus_mg = 700,   # mg
+  Iron_mg = 10,          # mg
+  Iodine_µg = 150,       # µg
+  Zinc_mg = 11,          # mg
+  Selenium_µg = 55       # µg
+)
+
+# Calculate the daily coverage for each nutrient category for each ingredient
+nutrient_selection <- nutrient_selection %>%
+  mutate(
+    Energy_coverage = `Energy, kilocalories (kcal)` / daily_requirements["Energy_kcal"],
+    Energy_kJ_coverage = `Energy, kilojoules (kJ)` / daily_requirements["Energy_kJ"],
+    Fat_coverage = `Fat, total (g)` / daily_requirements["Fat_g"],
+    Saturated_Fat_coverage = `Fatty acids, saturated (g)` / daily_requirements["Saturated_Fat_g"],
+    Monounsaturated_Fat_coverage = `Fatty acids, monounsaturated (g)` / daily_requirements["Monounsaturated_Fat_g"],
+    Polyunsaturated_Fat_coverage = `Fatty acids, polyunsaturated (g)` / daily_requirements["Polyunsaturated_Fat_g"],
+    Cholesterol_coverage = `Cholesterol (mg)` / daily_requirements["Cholesterol_mg"],
+    Protein_coverage = `Protein (g)` / daily_requirements["Protein_g"],
+    Carbohydrates_coverage = `Carbohydrates, available (g)` / daily_requirements["Carbohydrates_g"],
+    Fiber_coverage = `Dietary fibres (g)` / daily_requirements["Fiber_g"],
+    Vitamin_A_coverage = `Vitamin A activity, RE (µg-RE)` / daily_requirements["Vitamin_A_µg_RE"],
+    Vitamin_B1_coverage = `Vitamin B1 (thiamine) (mg)` / daily_requirements["Vitamin_B1_mg"],
+    Vitamin_B2_coverage = `Vitamin B2 (riboflavin) (mg)` / daily_requirements["Vitamin_B2_mg"],
+    Vitamin_B6_coverage = `Vitamin B6 (pyridoxine) (mg)` / daily_requirements["Vitamin_B6_mg"],
+    Vitamin_B12_coverage = `Vitamin B12 (cobalamin) (µg)` / daily_requirements["Vitamin_B12_µg"],
+    Niacin_coverage = `Niacin (mg)` / daily_requirements["Niacin_mg"],
+    Folate_coverage = `Folate (µg)` / daily_requirements["Folate_µg"],
+    Pantothenic_acid_coverage = `Pantothenic acid (mg)` / daily_requirements["Pantothenic_acid_mg"],
+    Vitamin_C_coverage = `Vitamin C (ascorbic acid) (mg)` / daily_requirements["Vitamin_C_mg"],
+    Vitamin_D_coverage = `Vitamin D (calciferol) (µg)` / daily_requirements["Vitamin_D_µg"],
+    Vitamin_E_coverage = `Vitamin E (α-tocopherol) (mg)` / daily_requirements["Vitamin_E_mg"]
+  )
+
+# Sum of the coverage for all nutrients
+total_coverage <- colSums(nutrient_selection[, -1]) / length(ingredients)
+
+# Create the data for the pie chart
+pie_data <- tibble(
+  Nutrient = c(
+    "Energy", "Fat", "Saturated Fats", "Monounsaturated Fats", "Polyunsaturated Fats", "Cholesterol",
+    "Protein", "Carbohydrates", "Fiber", "Vitamin A", "Vitamin B1", "Vitamin B2", "Vitamin B6", "Vitamin B12",
+    "Niacin", "Folate", "Pantothenic acid", "Vitamin C", "Vitamin D", "Vitamin E"
+  ),
+  Coverage = c(
+    total_coverage["Energy_coverage"], total_coverage["Fat_coverage"],
+    total_coverage["Saturated_Fat_coverage"], total_coverage["Monounsaturated_Fat_coverage"],
+    total_coverage["Polyunsaturated_Fat_coverage"], total_coverage["Cholesterol_coverage"],
+    total_coverage["Protein_coverage"], total_coverage["Carbohydrates_coverage"],
+    total_coverage["Fiber_coverage"], total_coverage["Vitamin_A_coverage"], total_coverage["Vitamin_B1_coverage"],
+    total_coverage["Vitamin_B2_coverage"], total_coverage["Vitamin_B6_coverage"], 
+    total_coverage["Vitamin_B12_coverage"], 
+    total_coverage["Niacin_coverage"], total_coverage["Folate_coverage"], total_coverage["Pantothenic_acid_coverage"],
+    total_coverage["Vitamin_C_coverage"], total_coverage["Vitamin_D_coverage"], total_coverage["Vitamin_E_coverage"]
+  )
+)
+
+# Add categories for better understanding of the nutrients
+pie_data <- pie_data %>%
+  mutate(
+    Category = case_when(
+      Nutrient %in% c("Energy", "Fat", "Saturated Fats", "Monounsaturated Fats", "Polyunsaturated Fats", "Cholesterol", "Protein", "Carbohydrates", "Fiber") ~ "Macronutrients",
+      Nutrient %in% c("Vitamin A", "Vitamin B1", "Vitamin B2", "Vitamin B6", "Vitamin B12", "Niacin", "Folate", "Pantothenic acid", "Vitamin C", "Vitamin D", "Vitamin E") ~ "Vitamins",
+      TRUE ~ "Minerals"
+    )
+  )
+
+# Calculate the proportion of each nutrient category to the total demand (summed up coverage)
+pie_data <- pie_data %>%
+  mutate(
+    Percent = Coverage / sum(Coverage) * 100
+  )
+
+# Plot the pie chart using ggplot2
+ggplot(pie_data, aes(x = "", y = Percent, fill = Nutrient)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar(theta = "y") +
+  theme_void() +
+  scale_fill_viridis(discrete = TRUE, option = "C") +
+  labs(
+    title = "Daily nutrient demand saturation",
+    subtitle = "with the detailed contributions of macronutrients, vitamins and minerals to the daily nutrient demand of an average human of Swiss state affiliation"
+  ) +
+  theme(
+    legend.title = element_blank(),
+    legend.text = element_text(size = 10),
+    plot.title = element_text(hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5)
+  ) +
+  theme(legend.position = "right")
+
+# Export the pie chart as a .PNG file
+ggsave("daily_nutrient_saturation_pie_chart.png", width = 8, height = 8, dpi = 300)
+
+# Print the plot to the console
+print("Pie chart successfully created and saved as 'daily_nutrient_saturation_pie_chart.png'")
+
 
 ````

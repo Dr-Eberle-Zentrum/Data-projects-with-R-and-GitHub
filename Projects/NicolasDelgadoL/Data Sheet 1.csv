@@ -1,0 +1,67 @@
+﻿Variable;Explanation;Response scale
+Age;Age;
+Gender;Gender;1 = male, 2 = female
+Education;Highest educational degree;1 = no graduation, 2 = streamed secondary school for lesser able students, 3 = secondary school leaving certificate, 4 = vocational baccalaureate diploma, 5 = A-level / High school diploma, 6 = university of applied sciences degree, 7 = university degree
+has_whatsapp;"""Is whatsapp installed in your phone?""";1 = yes, 0 = no
+has_facebook;"""Do you have a Facebook account?""";1 = yes, 0 = no
+has_instagram;"""Do you have an Instagram account?""";1 = yes, 0 = no
+bfi_01;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 01";1 = very inapplicable, ..., 5 = very applicable
+bfi_02;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 02";1 = very inapplicable, ..., 5 = very applicable
+bfi_03;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 03";1 = very inapplicable, ..., 5 = very applicable
+bfi_04;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 04";1 = very inapplicable, ..., 5 = very applicable
+bfi_05;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 05";1 = very inapplicable, ..., 5 = very applicable
+bfi_06;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 06";1 = very inapplicable, ..., 5 = very applicable
+bfi_07;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 07";1 = very inapplicable, ..., 5 = very applicable
+bfi_08;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 08";1 = very inapplicable, ..., 5 = very applicable
+bfi_09;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 09";1 = very inapplicable, ..., 5 = very applicable
+bfi_10;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 10";1 = very inapplicable, ..., 5 = very applicable
+bfi_11;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 11";1 = very inapplicable, ..., 5 = very applicable
+bfi_12;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 12";1 = very inapplicable, ..., 5 = very applicable
+bfi_13;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 13";1 = very inapplicable, ..., 5 = very applicable
+bfi_14;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 14";1 = very inapplicable, ..., 5 = very applicable
+bfi_15;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 15";1 = very inapplicable, ..., 5 = very applicable
+bfi_16;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 16";1 = very inapplicable, ..., 5 = very applicable
+bfi_17;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 17";1 = very inapplicable, ..., 5 = very applicable
+bfi_18;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 18";1 = very inapplicable, ..., 5 = very applicable
+bfi_19;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 19";1 = very inapplicable, ..., 5 = very applicable
+bfi_20;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 20";1 = very inapplicable, ..., 5 = very applicable
+bfi_21;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 21";1 = very inapplicable, ..., 5 = very applicable
+bfi_22;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 22";1 = very inapplicable, ..., 5 = very applicable
+bfi_23;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 23";1 = very inapplicable, ..., 5 = very applicable
+bfi_24;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 24";1 = very inapplicable, ..., 5 = very applicable
+bfi_25;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 25";1 = very inapplicable, ..., 5 = very applicable
+bfi_26;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 26";1 = very inapplicable, ..., 5 = very applicable
+bfi_27;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 27";1 = very inapplicable, ..., 5 = very applicable
+bfi_28;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 28";1 = very inapplicable, ..., 5 = very applicable
+bfi_29;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 29";1 = very inapplicable, ..., 5 = very applicable
+bfi_30;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 30";1 = very inapplicable, ..., 5 = very applicable
+bfi_31;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 31";1 = very inapplicable, ..., 5 = very applicable
+bfi_32;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 32";1 = very inapplicable, ..., 5 = very applicable
+bfi_33;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 33";1 = very inapplicable, ..., 5 = very applicable
+bfi_34;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 34";1 = very inapplicable, ..., 5 = very applicable
+bfi_35;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 35";1 = very inapplicable, ..., 5 = very applicable
+bfi_36;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 36";1 = very inapplicable, ..., 5 = very applicable
+bfi_37;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 37";1 = very inapplicable, ..., 5 = very applicable
+bfi_38;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 38";1 = very inapplicable, ..., 5 = very applicable
+bfi_39;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 39";1 = very inapplicable, ..., 5 = very applicable
+bfi_40;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 40";1 = very inapplicable, ..., 5 = very applicable
+bfi_41;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 41";1 = very inapplicable, ..., 5 = very applicable
+bfi_42;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 42";1 = very inapplicable, ..., 5 = very applicable
+bfi_43;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 43";1 = very inapplicable, ..., 5 = very applicable
+bfi_44;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 44";1 = very inapplicable, ..., 5 = very applicable
+bfi_45;"Big Five Inventory (Rammstedt & Danner, 2016; based on John et al., 1991) Item 45";1 = very inapplicable, ..., 5 = very applicable
+BFI_Extra;Extraversion - Total score;
+BFI_Extra_Durchs;Extraversion - Assertiveness;
+BFI_Extra_Aktiv;Extraversion - Activity;
+BFI_Agree;Agreeableness - Total score;
+BFI_Agree_Altru;Agreeableness - Altruism;
+BFI_Agree_Entgeg;Agreeableness - Compliance;
+BFI_Consc;Conscientiousness - Total score;
+BFI_Consc_Ordentlich;Conscientiousness - Order;
+BFI_Consc_Selbstdisz;Conscientiousness - Self-Discipline;
+BFI_Neuro;Neuroticism - Total score;
+BFI_Neuro_Aengstl;Neuroticism - Anxiety;
+BFI_Neuro_Depr;Neuroticism - Depression;
+BFI_Open;Openness - Total score;
+BFI_Open_Aesth;Openness - Aesthetics;
+BFI_Open_Idea;Openness - Ideas;
