@@ -87,7 +87,7 @@ steamed: 100g -Olive Oil: 10g -Almonds: 30g - “Almond”
     # Visualization 
 
     ggplot(d1 %>%
-             # compute energ
+             # compute total energy as well as for carbs, lipids, proteins
              summarise(
                energy_carbs = sum(energy_carbs),
                energy_proteins = sum(energy_proteins),
@@ -95,18 +95,20 @@ steamed: 100g -Olive Oil: 10g -Almonds: 30g - “Almond”
                total_energy = sum(total_energy)
                
              ) %>%
-             
+             # percentage of energy for each macronutrient 
              mutate(
                percent_carbs = (energy_carbs / total_energy) * 100,
                percent_proteins = (energy_proteins / total_energy) * 100,
                percent_lipids = (energy_lipids / total_energy) * 100
                
              ) %>%
+             
              # reshape into long format for plotting
              pivot_longer(cols = starts_with("percent"),
                           names_to = "Nutrient",
                           values_to = "Actual_Percentage") %>%
              
+             # recode names + add recommended values 
              mutate(
                Nutrient = recode(Nutrient, 
                                  "percent_carbs" = "Carbohydrates",
@@ -122,12 +124,14 @@ steamed: 100g -Olive Oil: 10g -Almonds: 30g - “Almond”
              pivot_longer(cols = c(Actual_Percentage, Recommended_Percentage),
                           names_to = "Type",
                           values_to = "Percentage"),
+           
+           
             aes(x = " ", y = Percentage, fill = Nutrient)) +
       geom_bar(stat = "identity", position = "stack", width = 1) +
-      coord_polar(theta = "y") +
-      facet_wrap(~Type, labeller = as_labeller(c(
-        "Actual_Percentage" = "Actual",
-        "Recommended_Percentage" = "Recommended"
+      
+      coord_polar(theta = "y")  + # converts bar into pie chart
+      # create second pie chart as reference 
+      facet_wrap(~Type, labeller = as_labeller (c("Actual_Percentage" = "Actual", "Recommended_Percentage" = "Recommended"
       ))) +
       
       theme_bw() +
@@ -227,3 +231,93 @@ Oil: 10g -Walnuts: 20g -Soy Milk: 200ml
                 position = position_stack(vjust = 0.5))
 
 ![](celineony_files/figure-markdown_strict/unnamed-chunk-7-1.png)
+
+Histogram for Macronutrient Day 1
+
+    # Compute total intake and merge with recommendations
+    day01_macronutrient <- d1 %>%
+      select(Calcium = `Calcium.(Ca).(mg)`, Phosphorus = `Phosphorus.(P).(mg)`, Sodium = `Sodium.(Na).(mg)`) %>%
+      summarise(
+        Calcium = sum(Calcium, na.rm = TRUE),
+        Phosphorus = sum(Phosphorus, na.rm = TRUE),
+        Sodium = sum(Sodium, na.rm = TRUE)
+      ) %>%
+      pivot_longer(cols = everything(), names_to = "Nutrient", values_to = "Total_Actual_Intake") %>%
+      left_join(
+        data.frame(
+          Nutrient = c("Calcium", "Phosphorus", "Sodium"),
+          Recommended_Intake = c(1000, 700, 1500)
+        ),
+        by = "Nutrient"
+      ) %>%
+      mutate(Percent_of_Recommendation = (Total_Actual_Intake / Recommended_Intake) * 100)
+
+    # Reshape data into long format for ggplot
+    day01_macronutrient_long <- day01_macronutrient %>%
+      pivot_longer(
+        cols = c(Total_Actual_Intake, Recommended_Intake),
+        names_to = "Intake_Type",
+        values_to = "Value"
+      )
+
+    # Plot the data
+    ggplot(day01_macronutrient_long, aes(x = Nutrient, y = Value, fill = Intake_Type)) +
+      geom_bar(stat = "identity", position = "dodge", width = 0.6) +
+      labs(
+        title = "Macronutrients: Actual vs Recommended Intake",
+        x = "Nutrient",
+        y = "Intake (mg)"
+      ) +
+      scale_fill_manual(
+        name = NULL, # removes heading of legend
+        values = c("Recommended_Intake" = "#A2CD5A","Total_Actual_Intake" = "#79CDCD"),
+        labels = c("Recommended Intake","Actual Intake")
+      ) +
+      theme_minimal()
+
+![](celineony_files/figure-markdown_strict/unnamed-chunk-8-1.png)
+
+Histogram for Macronutrient Day 2
+
+    # Compute total intake and merge with recommendations
+    day02_macronutrient <- d2 %>%
+      select(Calcium = `Calcium.(Ca).(mg)`, Phosphorus = `Phosphorus.(P).(mg)`, Sodium = `Sodium.(Na).(mg)`) %>%
+      summarise(
+        Calcium = sum(Calcium, na.rm = TRUE),
+        Phosphorus = sum(Phosphorus, na.rm = TRUE),
+        Sodium = sum(Sodium, na.rm = TRUE)
+      ) %>%
+      pivot_longer(cols = everything(), names_to = "Nutrient", values_to = "Total_Actual_Intake") %>%
+      left_join(
+        data.frame(
+          Nutrient = c("Calcium", "Phosphorus", "Sodium"),
+          Recommended_Intake = c(1000, 700, 1500)
+        ),
+        by = "Nutrient"
+      ) %>%
+      mutate(Percent_of_Recommendation = (Total_Actual_Intake / Recommended_Intake) * 100)
+
+    # Reshape data into long format for ggplot
+    day02_macronutrient_long <- day02_macronutrient %>%
+      pivot_longer(
+        cols = c(Total_Actual_Intake, Recommended_Intake),
+        names_to = "Intake_Type",
+        values_to = "Value"
+      )
+
+    # Plot the data
+    ggplot(day02_macronutrient_long, aes(x = Nutrient, y = Value, fill = Intake_Type)) +
+     geom_bar(stat = "identity", position = "dodge", width = 0.6) +
+      labs(
+        title = "Macronutrients: Actual vs Recommended Intake",
+        x = "Nutrient",
+        y = "Intake (mg)"
+      ) +
+      scale_fill_manual(
+        name = NULL, # removes heading of legend
+        values = c("Recommended_Intake" = "#A2CD5A","Total_Actual_Intake" = "#79CDCD"),
+        labels = c("Recommended Intake","Actual Intake")
+      ) +
+      theme_minimal()
+
+![](celineony_files/figure-markdown_strict/unnamed-chunk-9-1.png)
