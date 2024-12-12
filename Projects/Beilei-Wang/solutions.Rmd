@@ -1,0 +1,57 @@
+---
+title: "beilei"
+author: "beilei"
+output: md_document
+---
+
+```{r setup, include= FALSE}
+# Load necessary libraries
+library(tidyverse)
+
+# Step 1: Read CSV files and pool the data
+base_url <- "https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/shad-lad-flad/Projects/celineony/project-data"
+file_names <- c("data_expr1.csv", "data_expr2.csv", "data_expr3.csv", "data_expr4.csv")
+file_urls <- paste0(base_url, "/", file_names)
+
+# Step 2: Read, process, and combine CSV files in one pipe
+data <- map_dfr(file_urls, ~ read_csv(.x, col_types = cols(), id = "source")) %>%
+  mutate(
+    study_id = match(source, file_urls),  # Assign study_id
+    participant_id = row_number(),       # Generate unique participant IDs
+    cr = hit - fa                        # Compute corrected recognition score
+  )
+
+# Display the first few rows to verify
+head(data)
+
+# Step 3: Create the plot
+ggplot(data, aes(x = phase, y = cr, fill = condition)) +
+  # Grouped bar plot with summary statistic (mean) per phase and condition
+  geom_bar(stat = "summary", fun = "mean", position = position_dodge(width = 0.9), color = "black") +
+  # Add individual data points over the bars using jitter within dodge position
+  geom_jitter(position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.9),
+              shape = 1,  # Use hollow circles
+              color = "gray50",  # Set point color to gray
+              alpha = 0.5,  # Make points semi-transparent
+              size = 2) +  # Adjust point size
+  # Facet by study_id (experiment number)
+  facet_wrap(~ study_id, labeller = as_labeller(c("1" = "Experiment 1", "2" = "Experiment 2", 
+                                                  "3" = "Experiment 3", "4" = "Experiment 4")),
+             scales = "free_x") +
+  # Labels for axes and legend
+  labs(x = "Phase", y = "Corrected Recognition Score (CR)", fill = "Condition") +
+  # Change legend labels directly
+  scale_fill_manual(values = c("CSp" = "gray30", "CSm" = "white"),
+                    labels = c("CSp" = "CS+", "CSm" = "CS-")) +
+  theme_minimal() +
+  theme(
+    legend.position = "top",  # Place the legend on the top
+    strip.text = element_text(size = 12),  # Facet labels (Experiment 1, 2...)
+    axis.text = element_text(size = 10),  # Axis text size
+    axis.title = element_text(size = 12),  # Axis title size
+    legend.title = element_text(size = 12), 
+    legend.text = element_text(size = 10),  # Legend text size
+    strip.background = element_blank(),  # Remove background of facet labels
+    panel.border = element_blank()  # Remove borders around panels
+  )
+```
