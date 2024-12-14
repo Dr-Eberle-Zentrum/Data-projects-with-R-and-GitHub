@@ -15,7 +15,8 @@ library(ggplot2)
 library(readr)
 
 # Read the dataset from .csv
-nutrient_data <- read.csv("Swiss_food_composition_database.csv")
+nutrient_data <- read_csv("Swiss_food_composition_database.csv", col_names = TRUE)
+
 
 # Ingredients for Голубцы
 ingredients <- c("Beef, minced, pan fried (without addition of fat and salt)", 
@@ -29,7 +30,7 @@ ingredients <- c("Beef, minced, pan fried (without addition of fat and salt)",
 
 # Filter relevant nutrient values from the database
 nutrient_selection <- nutrient_data %>%
-  filter(Name %in% ingredients) %>%
+  filter(ingredients %in% nutrient_data) %>%
   select(
     `Name`, 
     `Energy, kilocalories (kcal)`, 
