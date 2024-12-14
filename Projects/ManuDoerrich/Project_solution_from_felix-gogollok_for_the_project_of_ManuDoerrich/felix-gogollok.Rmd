@@ -7,59 +7,12 @@ output: html_document
 
 # My solution for the nutritional data project
 
-### Vorbemerkung:
-
-#### _*Land und Volk*_
-##### _von Rainer Maria Rilke_
-
----
-
-> Gott war guter Laune. Geizen
-
-> ist doch wohl nicht seine Art;
-
-> und er lächelte: da ward
-
-> Böhmen, reich an tausend Reizen.
-
----
-
-> Wie erstarrtes Licht liegt Weizen
-
-> zwischen Bergen, waldbehaart,
-
-> und der Baum, den dichtgeschart
-
-> Früchte drücken, fordert Spreizen.
-
----
-
-> Gott gab Hütten; voll von Schafen
-
-> Ställe; und der Dirne klafft
-
-> vor Gesundheit fast das Mieder.
-
----
-
-> Gab den Burschen all, den braven,
-
-> in die raue Faust die Kraft,
-
-> in das Herz - die Heimatlieder.
-
----
-
-#### _Aus: Larenopfer (1895)_
-
-
-# My solution to the task
-
 ````{r}
 
 # Load necessary libraries
 library(tidyverse)
 library(ggplot2)
+library(readr)
 
 # Read the dataset from .csv
 nutrient_data <- read.csv("Swiss_food_composition_database.csv")
@@ -78,7 +31,7 @@ ingredients <- c("Beef, minced, pan fried (without addition of fat and salt)",
 nutrient_selection <- nutrient_data %>%
   filter(Name %in% ingredients) %>%
   select(
-    Name, 
+    `Name`, 
     `Energy, kilocalories (kcal)`, 
     `Energy, kilojoules (kJ)`,
     `Fat, total (g)`, 
@@ -91,7 +44,7 @@ nutrient_selection <- nutrient_data %>%
     `Dietary fibres (g)`,
     `Vitamin A activity, RE (µg-RE)`,
     `Vitamin A activity, RAE (µg-RE)`, 
-    `Beta-carotene activity (µg-BCE)`, 
+    `Beta- carotene activity (µg-BCE)`, 
     `Beta-carotene (µg)`,
     `Vitamin B1 (thiamine) (mg)`, 
     `Vitamin B2 (riboflavin) (mg)`, 
@@ -133,7 +86,7 @@ daily_requirements <- c(
   Vitamin_B12_µg = 2.4,  # µg
   Niacin_mg = 16,        # mg
   Folate_µg = 400,       # µg
-  Pantothenic_acid_mg = 5, # mg
+  Panthothenic_acid_mg = 5, # mg
   Vitamin_C_mg = 90,     # mg
   Vitamin_D_µg = 20,     # µg
   Vitamin_E_mg = 15,     # mg
@@ -168,7 +121,7 @@ nutrient_selection <- nutrient_selection %>%
     Vitamin_B12_coverage = `Vitamin B12 (cobalamin) (µg)` / daily_requirements["Vitamin_B12_µg"],
     Niacin_coverage = `Niacin (mg)` / daily_requirements["Niacin_mg"],
     Folate_coverage = `Folate (µg)` / daily_requirements["Folate_µg"],
-    Pantothenic_acid_coverage = `Pantothenic acid (mg)` / daily_requirements["Pantothenic_acid_mg"],
+    Pantothenic_acid_coverage = `Panthothenic acid (mg)` / daily_requirements["Pantothenic_acid_mg"],
     Vitamin_C_coverage = `Vitamin C (ascorbic acid) (mg)` / daily_requirements["Vitamin_C_mg"],
     Vitamin_D_coverage = `Vitamin D (calciferol) (µg)` / daily_requirements["Vitamin_D_µg"],
     Vitamin_E_coverage = `Vitamin E (α-tocopherol) (mg)` / daily_requirements["Vitamin_E_mg"]
@@ -182,7 +135,7 @@ pie_data <- tibble(
   Nutrient = c(
     "Energy", "Fat", "Saturated Fats", "Monounsaturated Fats", "Polyunsaturated Fats", "Cholesterol",
     "Protein", "Carbohydrates", "Fiber", "Vitamin A", "Vitamin B1", "Vitamin B2", "Vitamin B6", "Vitamin B12",
-    "Niacin", "Folate", "Pantothenic acid", "Vitamin C", "Vitamin D", "Vitamin E"
+    "Niacin", "Folate", "Panthothenic acid", "Vitamin C", "Vitamin D", "Vitamin E"
   ),
   Coverage = c(
     total_coverage["Energy_coverage"], total_coverage["Fat_coverage"],
@@ -202,7 +155,7 @@ pie_data <- pie_data %>%
   mutate(
     Category = case_when(
       Nutrient %in% c("Energy", "Fat", "Saturated Fats", "Monounsaturated Fats", "Polyunsaturated Fats", "Cholesterol", "Protein", "Carbohydrates", "Fiber") ~ "Macronutrients",
-      Nutrient %in% c("Vitamin A", "Vitamin B1", "Vitamin B2", "Vitamin B6", "Vitamin B12", "Niacin", "Folate", "Pantothenic acid", "Vitamin C", "Vitamin D", "Vitamin E") ~ "Vitamins",
+      Nutrient %in% c("Vitamin A", "Vitamin B1", "Vitamin B2", "Vitamin B6", "Vitamin B12", "Niacin", "Folate", "Panthothenic acid", "Vitamin C", "Vitamin D", "Vitamin E") ~ "Vitamins",
       TRUE ~ "Minerals"
     )
   )
@@ -235,7 +188,11 @@ ggplot(pie_data, aes(x = "", y = Percent, fill = Nutrient)) +
 ggsave("daily_nutrient_saturation_pie_chart.png", width = 8, height = 8, dpi = 300)
 
 # Print the plot to the console
-print("Pie chart successfully created and saved as 'daily_nutrient_saturation_pie_chart.png'")
+print("Pie chart successfully created, saved as 'daily_nutrient_saturation_pie_chart.png and embedded into the markdown file.")
 
 
 ````
+
+# Result
+
+![Resulting diagram](daily_nutrient_saturation_pie_chart.png)
