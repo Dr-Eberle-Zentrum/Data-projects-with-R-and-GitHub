@@ -9,16 +9,6 @@
     ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
     ## New names:
 
-    ## Warning: There were 3 warnings in `mutate()`.
-    ## The first warning was:
-    ## ℹ In argument: `Attempts = as.numeric(Attempts)`.
-    ## Caused by warning:
-    ## ! 强制改变过程中产生了NA
-    ## ℹ Run `dplyr::last_dplyr_warnings()` to see the 2 remaining warnings.
-
-    ## Warning: Removed 2 rows containing missing values or values outside the scale range
-    ## (`geom_bar()`).
-
 ![](Yue_Z9_files/figure-markdown_strict/pressure-1.png)
 
     ## New names:
