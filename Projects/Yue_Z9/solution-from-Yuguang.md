@@ -20,7 +20,8 @@
     data_task1 <- data |>
       select(Name, Data.Value) |>
       group_by(Name) |>
-      summarise(Mean_value = mean(Data.Value, na.rm = TRUE))
+      summarise(Mean_value = mean(Data.Value, na.rm = TRUE)) |>
+      arrange(Mean_value)
 
 ## Chart one
 
@@ -50,12 +51,6 @@
       arrange(desc(Max_value)) |>
       slice_head(n = 1) |>
       pull(Name)
-
-    ## Warning: There was 1 warning in `mutate()`.
-    ## ℹ In argument: `Year = year(dmy(Start_Date))`.
-    ## Caused by warning:
-    ## !  282 failed to parse.
-
     #This data_region is also to store a data set, which contains only three Geo.Place.Name
     data_region <- data |>
       filter(Name == data_pollutant) |>
@@ -79,7 +74,7 @@
     #visualization.
     ggplot(data_task2, aes(x = Year, y = Data.Value, color = factor(Geo.Place.Name)))+
       geom_line()+
-      scale_x_continuous(breaks = unique(data_task2$Year))+
+      scale_x_continuous(breaks = seq(min(data_task2$Year), max(data_task2$Year), by = 1))+
       labs(
         x = "Year",
         y = "Value (mcg/m3)",
