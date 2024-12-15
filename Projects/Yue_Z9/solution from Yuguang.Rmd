@@ -6,7 +6,7 @@ output: md_document
 # This is my solution for Yue's project.
 
 ## Chart one data
-```{r data1}
+```{r data1, warning = FALSE}
 library(tidyverse)
 data <- read.csv("https://data.cityofnewyork.us/api/views/c3uy-2p5r/rows.csv?accessType=DOWNLOAD")
 # Data manipulation for first graph.
@@ -32,7 +32,7 @@ ggplot(data_task1, aes(x = Name, y = Mean_value))+
 ```
 
 ## Chart two data
-```{r data}
+```{r data, warning = FALSE}
 #data manipulation for second task
 
 #In this part, data_pollutant is to store a data set, which only include the name, so that i can see the name, i know it is a bit silly...
