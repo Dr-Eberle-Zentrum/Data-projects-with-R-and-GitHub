@@ -21,9 +21,7 @@
         x = "Name",
         y = "Mean_Value"
       )+
-      theme(
-        axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 5)
-      )
+      theme()
 
 ![](solution-from-Yuguang_files/figure-markdown_strict/chart_one-1.png)
 
