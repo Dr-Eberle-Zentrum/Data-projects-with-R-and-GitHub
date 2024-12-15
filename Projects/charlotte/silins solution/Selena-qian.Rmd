@@ -2,8 +2,10 @@
 output: html_document
 ---
 # **Guest students at universities and other higher education institutions in NRW**
-### Solution for Charlotte's Project from Silin
+**Solution for Charlotte's Project from Silin**
+
 ******
+
 ## Import Data
 ******
 ```{r import, message = FALSE, warning = FALSE}
@@ -11,25 +13,25 @@ library(tidyverse)
 library(ggplot2)
 
 dt <- read_delim("https://www.landesdatenbank.nrw.de/ldbnrwws/downloader/00/tables/21331-02i_00.csv",
-                delim = ";",
+                delim = ";", #Set the delimiter
                locale = locale(encoding = "ISO-8859-1"), #Set the character encoding explicitly
                skip = 6,
                col_names = c("Semester", "University", "Total", "Male", "Female"), #Name the columns
                col_types = cols(Semester = col_character(),
                                 University = col_character(),
                                 Total = col_integer(), Male = col_integer(), Female = col_integer()),
-               trim_ws = FALSE,
+               trim_ws = FALSE, #keep the whitespaces for hierarchy calculation
                na = c("", "NA", "-")) #replace missing data with NA
 print(dt)
 ```
 
-## Data Cleaning
+## Data Cleaning and Manipulation
 ******
 ```{r clean, warning = FALSE}
 
 ###############cleaning the data#################
 dt_clean <- dt %>%
-  slice(1:(n()-3)) %>% 
+  slice(1:(n()-3)) %>% #Clean the end of the table
   rowwise() %>% # Ensures operations in mutate are applied row by row, not column-wise
   mutate(
     na_count = sum(is.na(c(Total, Male, Female))),
@@ -44,7 +46,7 @@ dt_clean <- dt %>%
   filter(University %in% c("Universität Bielefeld", "Universität Bochum", "Universität Bonn"))
 print(dt_clean)
 
-############Add Unis_Total##############
+############Create Unis_Total##############
 dt_plot <- dt_clean %>%
     group_by(Semester) %>%
     summarise(
@@ -52,19 +54,19 @@ dt_plot <- dt_clean %>%
       Total = sum(Total, na.rm = TRUE),
       Female = sum(Female, na.rm = TRUE),
       Male = sum(Male, na.rm = TRUE),
-      Type = "Total",
+      Type = "Total", # set the Type for the coloring in ggplot
       .groups = "drop"
     ) %>%
   ungroup() %>%
   bind_rows(
     dt_clean %>% 
       filter(University %in% c("Universität Bielefeld", "Universität Bochum", "Universität Bonn")) %>% 
-      mutate(Type = "Uni")
-  )
+      mutate(Type = "Uni") #set the Type for the coloring in ggplot
+  ) #combine Unis_Total with the three universities
 print(dt_plot)
 ```
 
-## Ploting
+## Plotting
 ******
 ```{r plot}
 dt_plot %>% 
@@ -92,13 +94,15 @@ dt_plot %>%
 
 ## Animation
 ******
-```{r animation, results = FALSE}
+```{r animation, results = FALSE, message = FALSE, warning = FALSE}
 library(gganimate)
 
-dt_year <- dt_plot %>%
-  mutate(Year = as.numeric(str_extract(Semester, "\\d{4}")))
+#Convert the Semester data on the x-axis to integer format, since the animation requires a numeric variable move along.
 
-animation <- ggplot(dt_year, aes(x = as.integer(Year), y = Total, group = University, color = Type)) +
+dt_year <- dt_plot %>%
+  mutate(Year = as.integer(str_extract(Semester, "\\d{4}")))
+
+animation <- ggplot(dt_year, aes(x = Year, y = Total, group = University, color = Type)) +
   geom_point() +
   geom_line() +
   geom_label(data = . %>% group_by(University) %>% filter(Semester == max(Semester)), 
