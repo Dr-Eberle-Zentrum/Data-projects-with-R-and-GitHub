@@ -77,10 +77,11 @@ final_results$average <- as.numeric(as.character(final_results$average))
 #won and lost
 won_data <- final_results[final_results$`side-outs` == "won", ]
 lost_data <- final_results[final_results$`side-outs` == "lost", ]
-won_cor <- cor(won_data$average, final_results$average[final_results$`side-outs` == "won"], use = "complete.obs")
+
 
 # cor
-lost_cor <- cor(lost_data$average, final_results$average[final_results$`side-outs` == "lost"], use = "complete.obs")
+won_cor <- cor(won_data$average, won_data$points, use = "complete.obs")
+lost_cor <- cor(lost_data$average,lost_data$points, use = "complete.obs")
 
 # plot
 ggplot(final_results, aes(x = average, y = points, color = `side-outs`, shape = `side-outs`)) +
