@@ -27,9 +27,7 @@ ggplot(data_task1, aes(x = Mean_value, y = reorder(Name, Mean_value)))+
     x = "Name",
     y = "Mean_Value"
   )+
-  theme(
-    axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 5)
-  )
+  theme()
 ```
 
 ## Chart two data
