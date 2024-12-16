@@ -13,11 +13,18 @@ knitr::opts_chunk$set(echo = TRUE)
 library(dplyr)
 library(ggplot2)
 library(ggtext)
+library(countrycode)
+
+# set wd to script's source
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # load dataset
 data <- read.csv("lang_known.csv")
 
+###########################
 # Data Manipulation
+###########################
+
 selected <- data %>%
   # filter by year 2022
   filter(TIME_PERIOD == 2022) %>%
@@ -32,37 +39,39 @@ selected <- data %>%
     n_lang == "2 languages" ~ "2",
     n_lang == "3 languages or more" ~ "3+",
   )) %>%
-  # compute averages for known languages
-  group_by(geo, n_lang) %>%
-  mutate(Average = mean(OBS_VALUE)) %>%
-  # Compute the difference between country average and EU average
-  group_by(n_lang, isced11) %>%
-  mutate(EU_Avg = Average[geo == "European Union - 27 countries (from 2020)"]) %>%
-  mutate(avg_diff = EU_Avg - Average) %>%
+  # filter for all educational backgrounds
+  filter(isced11 == "All ISCED 2011 levels") %>%
+  # separate EU data to calculate difference in avg's
+  group_by(n_lang) %>%
+  mutate(EU_Avg = OBS_VALUE[geo == "European Union - 27 countries (from 2020)"]) %>%
   ungroup() %>%
+  # Compute the difference between country average and EU average
+  mutate(avg_diff = EU_Avg - OBS_VALUE) %>%
   # Keep only one row per country and known language
   distinct(geo, n_lang, .keep_all = TRUE) %>%
   # drop unused attributes
-  select( -c(DATAFLOW, LAST.UPDATE, freq, unit, OBS_FLAG, OBS_VALUE)) %>%
+  select( -c(DATAFLOW, LAST.UPDATE, freq, unit, OBS_FLAG)) %>%
   # drop the EU data
   filter(geo != "European Union - 27 countries (from 2020)")
 
-# Data Visualization
-
-# add html link for img
-selected <- selected %>%
-  mutate(
-    geo_label = case_when(
-      geo == "Germany" ~ "<img src='https://flagcdn.com/w40/de.png' height='15' width='25'/> Germany - <img src='https://flagcdn.com/w40/eu.png' width='25'/>",
-      geo == "France" ~ "<img src='https://flagcdn.com/w40/fr.png' height='15' width='25'/> France - <img src='https://flagcdn.com/w40/eu.png' width='25'/>",
-      geo == "Belgium" ~ "<img src='https://flagcdn.com/w40/be.png' height='15' width='25'/> Belgium - <img src='https://flagcdn.com/w40/eu.png' width='25'/>",
-      geo == "Sweden" ~ "<img src='https://flagcdn.com/w40/se.png' height='15' width='25'/> Sweden - <img src='https://flagcdn.com/w40/eu.png' width='25'/>",
-      TRUE ~ geo
-    )
-  )
+###########################
+# Data Visualization         
+###########################
 
 selected %>%
-  ggplot(aes(x = as.factor(n_lang), y = avg_diff, fill = avg_diff)) +  
+  mutate(
+    # get iso 2-letter code dynamically
+    iso2 = countrycode(geo, origin = "country.name", destination = "iso2c"),
+    # create geo_label with flags and country name
+    geo_label = paste0(
+      "<img src='https://flagcdn.com/w40/", tolower(iso2), ".png' height='15' width='25'/> ",
+      geo, 
+      " - <img src='https://flagcdn.com/w40/eu.png' width='25'/>"
+    )
+  ) %>%
+  ggplot(aes(x = as.factor(n_lang), y = avg_diff, fill = avg_diff)) + 
+  
+  # add barplot
   geom_bar(stat = "identity", width = 0.7, aes(alpha = abs(avg_diff)), color = "black") +
   
   # Add dotted horizontal line at 0%
@@ -75,7 +84,7 @@ selected %>%
     size = 3, color = "black"
   ) +
   
-  # Custom gradient scale for fill: Darker shades for low negative values and red for positive
+  # Custom gradient scale for fill: Darker shades of blue for low negative values and red for positive
   scale_fill_gradientn(
     colours = c("blue3", "blue", "white", "red", "red3")
   ) +
