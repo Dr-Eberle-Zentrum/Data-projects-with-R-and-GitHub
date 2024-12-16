@@ -134,7 +134,7 @@ Entries of the data table are shown for the first ten out of 129
 columns.
 
 The complete data set is provided by and available at [The Swiss Food
-Composition Database](https://naehrwertdaten.ch/en/downloads/).
+Composition Database](m).
 
 ## Visualisation goals:
 
