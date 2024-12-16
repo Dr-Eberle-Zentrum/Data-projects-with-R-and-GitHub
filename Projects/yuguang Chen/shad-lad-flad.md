@@ -48,4 +48,4 @@
       scale_shape_manual(values = c(15, 17)) +
       scale_color_manual(values = c("red", "blue"))
 
-![](tennis_mdfile_files/figure-markdown_strict/unnamed-chunk-1-1.png)
+![](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/shad-lad-flad/Projects/yuguang%20Chen/initial-project-solution_files/figure-markdown_strict/visualization_top50tennis_shad-lad-flad.png)
