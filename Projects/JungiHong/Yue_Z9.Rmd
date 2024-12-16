@@ -1,0 +1,106 @@
+---
+title: "Yue_Z9"
+output: md_document
+date: "2024-12-04"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r pressure,echo=FALSE}
+
+library(ggplot2)
+library(tidyverse)
+library(readxl)
+
+#the first one
+#read xlsx file
+file<-"Volleyball Passing- USA and TU.xlsx"
+data <- read_excel(file,sheet = "TU sort by pass score")
+new_data <- data[2:5, 6:9]
+
+#Formation of new data
+colnames(new_data) <- c("Pass Score", "Attempts", "Points_Won", "Points_Lost")
+
+clean_data <- new_data %>%
+  mutate(
+    Pass_Score = as.factor("Pass Score"),
+    Attempts = as.numeric(Attempts),
+    Points_Won = as.numeric(Points_Won),
+    Points_Lost = as.numeric(Points_Lost)
+  ) %>%
+  pivot_longer(
+    cols = c(Points_Won, Points_Lost), 
+    names_to = "Outcome", 
+    values_to = "Count"
+  ) %>%
+  group_by(`Pass Score`) %>%
+  mutate(`Pass Score` = factor(`Pass Score`, levels = c("zeros", "ones", "twos", "threes")))
+
+# visualization
+ggplot(clean_data, aes(x = `Pass Score`, y= Count ,fill = Outcome)) +
+  geom_bar(stat = "identity", position = "stack") +
+  labs(
+    title = "Stacked Bar Chart: Breakdown of Points Won and Lost by Pass Score",
+    x = "Pass Score Categories",
+    y = "Total Attempts"
+  ) +
+  theme_minimal() +
+  scale_fill_manual(values = c("Points_Won" = "skyblue", "Points_Lost" = "tomato"))
+
+#THE second
+#get data
+folder_path <- "passing stats"
+file_list <- list.files(path = folder_path, pattern = "\\.xlsx$", full.names = TRUE)
+#read every data
+extract_totals_data <- function(file_path) {
+  data <- read_excel(file_path, sheet = "totals")
+#last 3
+  last_three_rows <- tail(data, 3)
+  colnames(last_three_rows) <- as.character(last_three_rows[1, ])
+#delate first row
+  last_three_rows <- last_three_rows[-1, ]
+#filter
+  filtered_data <- last_three_rows[, c("side-outs", "points", "average")]
+  return(filtered_data)
+}
+#new data
+results_list <- lapply(file_list, extract_totals_data)
+final_results <- do.call(rbind, results_list)
+final_results <- final_results %>%
+  mutate(average = round(as.numeric(average), 2))
+print(final_results)
+
+final_results$points <- as.numeric(as.character(final_results$points))
+final_results$average <- as.numeric(as.character(final_results$average))
+
+#won and lost
+won_data <- final_results[final_results$`side-outs` == "won", ]
+lost_data <- final_results[final_results$`side-outs` == "lost", ]
+
+
+# cor
+won_cor <- cor(won_data$average, won_data$points, use = "complete.obs")
+lost_cor <- cor(lost_data$average,lost_data$points, use = "complete.obs")
+
+# plot
+ggplot(final_results, aes(x = average, y = points, color = `side-outs`, shape = `side-outs`)) +
+  geom_point(size = 3) +
+  geom_smooth(method = "lm", se = FALSE) + 
+  scale_color_manual(values = c("won" = "blue", "lost" = "red")) +
+  scale_shape_manual(values = c("won" = 16, "lost" = 17)) + 
+  labs(title = "Correlation Between Passing Scores and Points Won/Lost",
+       x = "Passing Score (Average)", 
+       y = "Points (Won or Lost)",
+       color = "Side-outs", shape = "Side-outs") + 
+  annotate("text", x = 2.0, y = 180, 
+           label = paste("Won Trend (r =", round(won_cor, 2), ")", sep = ""),
+           color = "blue", hjust = 0, vjust = 1) +
+  annotate("text", x = 2.0, y = 170, 
+           label = paste("Lost Trend (r =", round(lost_cor, 2), ")", sep = ""),
+           color = "red", hjust = 0, vjust = 1) +
+  theme_minimal() +
+  theme(legend.position = "topleft")
+
+
+```
