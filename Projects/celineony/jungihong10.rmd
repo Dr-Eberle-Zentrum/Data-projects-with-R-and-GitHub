@@ -1,0 +1,145 @@
+---
+title: "jungihong10"
+author: "jungihong10"
+output: md_document
+---
+
+```{r setup, include= FALSE}
+
+
+
+# Load necessary libraries
+library(tidyverse)
+
+# Define the directory containing the data files
+data_dir <- "/Users/jungihong/Desktop/R_projects/"
+
+# List all CSV files in the directory
+file_list <- list.files(path = data_dir, pattern = "data_expr\\d+\\.csv", full.names = TRUE)
+
+# Number of participants in each dataset
+participant_counts <- c(44, 84, 85, 163)
+
+# Cumulative participant offset for each study
+cumulative_offset <- cumsum(c(0, participant_counts[-length(participant_counts)]))
+
+# Function to read and process each file
+read_and_adjust_ids <- function(file_path, study_id, offset) {
+  # Read the CSV file quietly
+  data <- read_csv(file_path, show_col_types = FALSE)
+  
+  # Ensure participant_id is numeric and adjust for uniqueness
+  data <- data %>%
+    mutate(
+      participant_id = as.numeric(participant_id) + offset, # Add the cumulative offset
+      study_id = study_id # Assign study ID
+    )
+  
+  return(data)
+}
+
+# Read all files and process them
+data_all <- map2_df(file_list, seq_along(file_list), ~read_and_adjust_ids(.x, .y, cumulative_offset[.y]))
+
+# Check for consistency: Each participant should have 6 rows
+participant_row_counts <- data_all %>%
+  group_by(participant_id) %>%
+  summarise(row_count = n(), .groups = "drop")
+
+if (any(participant_row_counts$row_count != 6)) {
+  stop("Some participants do not have exactly 6 rows. Please check the data.")
+}
+
+# Preview the combined data
+print(head(data_all))
+
+# Optionally, write the combined data to a new CSV
+write_csv(data_all, "combined_experiment_data.csv")
+
+cat("Combined data has been written to 'combined_experiment_data.csv'.\n")
+library(ggplot2)
+library(dplyr)
+
+# Assume the combined dataset is already loaded as `data_all`
+# Compute corrected recognition
+data_all <- data_all %>%
+  mutate(corrected_recognition = hit - fa)
+
+# Set the order of the 'phase' factor levels
+data_all$phase <- factor(data_all$phase, levels = c("pre-conditioning", "conditioning", "post-conditioning"))
+data_all$condition <- factor(data_all$condition, levels = c("CSp", "CSm"))
+
+
+# Create the plot
+ggplot(data_all, aes(x = phase, y = corrected_recognition, fill = condition)) +
+  # Bar plot for mean values
+  geom_bar(stat = "summary", fun = "mean", position = position_dodge(width = 0.9), color = "black") +
+  # Error bars for standard error
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = position_dodge(width = 0.9), width = 0.2) +
+  # Add individual data points
+  geom_jitter(aes(color = condition), position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.9), alpha = 0.5) +
+  # Facet by study_id
+  facet_wrap(~ study_id, labeller = as_labeller(c(
+    `1` = "Experiment 1",
+    `2` = "Experiment 2",
+    `3` = "Experiment 3",
+    `4` = "Experiment 4"
+  ))) +
+  # Customize labels and themes
+  scale_y_continuous(limits = c(0, 0.75), breaks = seq(0, 0.75, by = 0.25)) +
+  scale_fill_manual(values = c("darkgray" , "white"), name = expression("Condition: " ~ CS^"+" ~ " and " ~ CS^"-")) +
+  scale_color_manual(values = c("CS+" = "darkgray", "CS-" = "white"), guide = "none") + # Swap grey and white for conditions
+  labs(
+    title = "Recognition Performance Expressed as Hit Rate Minus False Alarm Rate in Experiments 1-4",
+    x = NULL,
+    y = "Corrected recognition"
+  ) +
+  theme_bw(base_size = 14) +
+  theme(
+    legend.position = "top",
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    strip.text = element_text(face = "bold"),
+    axis.title.x = element_blank()
+  )
+
+
+```
+
+## My solution to Celine's project
+
+```{r visualisation, echo= FALSE}
+# Plot for Corrected Recognition in Different Phases Across Experiments
+ggplot(data_all, aes(x = phase, y = corrected_recognition, fill = condition)) +
+  # Bar plot for mean values
+  geom_bar(stat = "summary", fun = "mean", position = position_dodge(width = 0.9), color = "black") +
+  # Error bars for standard error
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = position_dodge(width = 0.9), width = 0.2) +
+  # Add individual data points
+  geom_jitter(aes(color = condition), position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.9), alpha = 0.5) +
+  # Facet by study_id
+  facet_wrap(~ study_id, labeller = as_labeller(c(
+    `1` = "Experiment 1",
+    `2` = "Experiment 2",
+    `3` = "Experiment 3",
+    `4` = "Experiment 4"
+  ))) +
+  # Customize labels and themes
+  scale_y_continuous(limits = c(0, 0.75), breaks = seq(0, 0.75, by = 0.25)) +
+  scale_fill_manual(values = c("darkgray" , "white"), name = expression("Condition: " ~ CS^"+" ~ " and " ~ CS^"-")) +
+  scale_color_manual(values = c("CS+" = "darkgray", "CS-" = "white"), guide = "none") + # Swap grey and white for conditions
+  labs(
+    title = "Recognition Performance Expressed as Hit Rate Minus False Alarm Rate in Experiments 1-4",
+    x = NULL,
+    y = "Corrected recognition"
+  ) +
+  theme_bw(base_size = 14) +
+  theme(
+    legend.position = "top",
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    strip.text = element_text(face = "bold"),
+    axis.title.x = element_blank()
+  )
+
+```
