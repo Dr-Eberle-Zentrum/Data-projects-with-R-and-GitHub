@@ -5,17 +5,18 @@ output: md_document
 ---
 
 ```{r setup, include= FALSE}
-
-library(readr)
 library(gridExtra)
 library(tidyverse)
+library(here)
 
-#### (1) Datensatz laden ####
-setwd("C:/Users/charl/Documents/Uni/5. Semester/Seminar_R und GitHub/")
-data <- read_csv("adult-depression-lghc-indicator-24.csv", na = "NA")
 
-### (2) Datensatz in Teildatensätze unterteilen ####
-data$Strata <- as.character(data$Strata)                # Sicherstellen, dass Strata als Zeichenkette vorliegt
+data <- read_csv(here("Projects", "GulmiraKairr", "adult-depression.csv"), na = "NA")
+```
+
+## My solution to Gulmira´s project (first option)
+
+```{r visualisation, echo= FALSE}
+
 strata_categories <- unique(data$Strata)                # Liste der eindeutigen Werte in Strata
 split_data <- lapply(strata_categories, function(cat) { # Datensätze nach Kategorie aufteilen
   cat <- as.character(cat)                              # Sicherstellen, dass cat eine Zeichenkette ist
@@ -85,7 +86,6 @@ race_ethnicity_plot <- ggplot(split_data$`Race-Ethnicity`, aes(x = Year, y = Per
     color = guide_legend(ncol = 1),
     fill = guide_legend(ncol = 1)
   )
-race_ethnicity_plot
 ### Age
 age_plot <- ggplot(split_data$Age, aes(x = Year, y = Percent, color = Age, group = Age)) +
   geom_ribbon(aes(ymin = `Lower 95% CL`, ymax = `Upper 95% CL`, fill = Age), 
@@ -113,11 +113,6 @@ age_plot <- ggplot(split_data$Age, aes(x = Year, y = Percent, color = Age, group
     fill = guide_legend(ncol = 1)
   )
 
-```
-
-## My solution to Gulmira´s project
-
-```{r visualisation, echo= FALSE}
 grid.arrange(
   education_plot, race_ethnicity_plot, age_plot, 
   ncol = 3
@@ -125,10 +120,39 @@ grid.arrange(
 
 ```
 
-#### **What I still have to do (if I find the time until Wednesday):**
 
--   Create the variable you described (for now, I used the "Percent" variable because I didn't quite understand what you mean by the "Annual frequency" variable).
+## My solution to Gulmira´s project (second option)
+```{r visualisation2, echo= FALSE}
+data_clean <- data %>%
+  filter(Strata %in% c("Education", "Race-Ethnicity", "Age")) %>% # Nur die relevanten Kategorien auswählen
+  select(Year, Strata, `Strata Name`, Percent, `Lower 95% CL`, `Upper 95% CL`) %>% 
+  rename(Category = Strata, Subcategory = `Strata Name`) # Einheitliche Spaltennamen
 
--   Make all the plots and legends the same size (at the moment, it looks quite messy because they all have different sizes).
-
--   "Round" the lines in the plot (I didn't find how to do this, so I'll have to look into it again).\
+#### (3) Visualisierung mit Facetting ####
+ggplot(data_clean, aes(x = Year, y = Percent, color = Subcategory, group = Subcategory)) +
+  geom_ribbon(aes(ymin = `Lower 95% CL`, ymax = `Upper 95% CL`, fill = Subcategory), 
+              alpha = 0.3, color = NA) +
+  geom_line(size = 1) +
+  geom_line(aes(y = `Lower 95% CL`), linetype = "dashed", size = 0.8) +
+  geom_line(aes(y = `Upper 95% CL`), linetype = "dashed", size = 0.8) +
+  labs(
+    x = "Year",
+    y = "Annual Frequency (%)",
+    color = "Subcategory",
+    fill = "Subcategory"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 14, face = "bold"),
+    axis.title = element_text(size = 12),
+    legend.position = "bottom",
+    legend.key.size = unit(0.25, "cm"),
+    legend.key.width = unit(0.25, "cm"),
+    legend.text = element_text(size = 12)
+  ) +
+  guides(
+    color = guide_legend(ncol = 1),  # Vertikale Legende
+    fill = guide_legend(ncol = 1)
+  ) +
+  facet_wrap(~Category, ncol = 3, scales = "free_y")  # Eine Facette für jede Kategorie
+```
