@@ -1,46 +1,60 @@
 ---
-title: "kickbones1_from SunKyoung Moon"
+title: "kickbones1_from SunKyoung Moon(Ver.2.0)"
 output: md_document
-date: "2024-12-03"
+date: "2024-12-17"
 ---
 
+```{r load-libraries, echo=TRUE}
+
+# Load necessary libraries
 library(ggplot2)
 library(dplyr)
 library(tidyr)
 
-#Loading Data
-url <- "https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/refs/heads/main/Projects/SunKyoung%20Moon/kaggle_dataset.csv"
-
-data <- read.csv(url)
+# Load data
+path <- "C:/R2_data/kaggle_dataset.csv"
+data <- read.csv(path)
 head(data)
 
 # Convert app usage time from minutes/day to hours/day
-data <- data %>%
+mutate_data <- data %>%
   mutate(AppUsageHours = `App.Usage.Time..min.day.` / 60)
 
-# Compute median app usage time and sum users for each device model
-device_summary <- data %>%
-  group_by(`Device.Model`, Gender) %>%
-  summarize(
-    MedianAppUsage = median(AppUsageHours, na.rm = TRUE),
-    UserCount = n()
-  ) %>%
-  ungroup()
+# Calculate user count per device model and sort in descending order
+device_user_counts <- mutate_data %>%
+  group_by(Device.Model) %>%
+  summarize(UserCount = n()) %>%
+  arrange(desc(UserCount)) # Sort by user count
 
-# Summarize age groups for scatter plot
-data <- data %>%
+# Convert Device.Model to a factor with levels ordered by UserCount
+mutate_data$Device.Model <- factor(
+  mutate_data$Device.Model,
+  levels = device_user_counts$Device.Model
+)
+
+# Add user count to device labels for display on the x-axis
+mutate_data <- mutate_data %>%
+  left_join(device_user_counts, by = "Device.Model") %>%
+  mutate(DeviceLabel = paste0(Device.Model, "\n", UserCount, " Users"))
+
+# Add age group column for grouping points in the scatter plot
+age_data <- mutate_data %>%
   mutate(AgeGroup = case_when(
     Age >= 20 & Age <= 29 ~ "20-29",
     Age >= 30 & Age <= 39 ~ "30-39",
     Age >= 40 & Age <= 49 ~ "40-49",
     Age >= 50 & Age <= 59 ~ "50-59",
-    TRUE ~ "Others"
+    TRUE ~ "Others" # Default for ages outside defined ranges
   ))
 
-#Visualization part!
-ggplot(data, aes(x = Device.Model, y = AppUsageHours, fill = Gender)) +
-  geom_violin(alpha = 0.7, scale = "width") +
-  geom_point(aes(color = AgeGroup), position = position_jitter(width = 0.2, height = 0), alpha = 0.5) +
+# Visualization: Violin plot with scatter plot overlay
+ggplot(age_data, aes(x = DeviceLabel, y = AppUsageHours, fill = Gender)) +
+  geom_violin(alpha = 0.7, scale = "width", position = position_dodge(width = 0.8)) +
+  geom_point(
+    aes(color = AgeGroup),
+    position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.8),
+    alpha = 0.5
+  ) +
   scale_fill_manual(values = c("Male" = "blue", "Female" = "red")) +
   scale_color_manual(values = c(
     "20-29" = "gray",
@@ -50,26 +64,13 @@ ggplot(data, aes(x = Device.Model, y = AppUsageHours, fill = Gender)) +
   )) +
   labs(
     title = "Mobile Device Usage for Different Models",
-    subtitle = "Median app usage time differentiated by gender and age groups",
+    subtitle = "Median app usage time differentiated by gender and age groups\nUser count displayed on x-axis",
     x = "Device Model",
     y = "Median App Usage Time (hours/day)",
     fill = "Gender",
     color = "Age Group"
   ) +
-  theme_minimal()
-
-device_user_counts <- data %>%
-  group_by(Device.Model) %>%
-  summarize(UserCount = n())
-
-ggplot(device_user_counts, aes(x = Device.Model, y = UserCount)) +
-  geom_col(fill = "lightblue") +
-  geom_text(aes(label = UserCount), vjust = -0.5) +
-  labs(
-    title = "User Count per Device Model",
-    x = "Device Model",
-    y = "User Count"
-  ) +
-  theme_minimal()
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
   
   
