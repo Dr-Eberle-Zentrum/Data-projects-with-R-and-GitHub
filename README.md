@@ -18,6 +18,7 @@ All tutorials are summarized within the
 
 -   [Project descriptions](#project-descriptions)
     -   [Phase 1 - Drafting a project description](#phase-1---drafting-a-project-description)
+        -   [List of available projects](#available-projects)
     -   [Phase 2 - Reviewing a project description](#phase-2---reviewing-a-project-description)
     -   [Phase 3 - Finalizing your project description](#phase-3---finalizing-your-project-description)
 -   [Tackling a suggested project](#tackling-a-suggested-project)
@@ -286,6 +287,8 @@ Now it is time to [open a pull request](https://github.com/Dr-Eberle-Zentrum/Dat
 -   **invite** the project owner as a **reviewer**
     -   suggest him/her as reviewer (upper right in GitHub Pull Request interface)
     -   send him/her a message via a comment "@USERNAME"
+-   make your pull request a **draft**, to highlight it is work in progress (and not ready for merging)
+    -   to this end, click on "Convert to draft" in the upper right below the reviewer list
 
 #### Goal
 
