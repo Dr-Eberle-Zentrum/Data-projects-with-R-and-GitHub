@@ -1,0 +1,53 @@
+---
+title: "Yue_Z9"
+output: md_document
+date: "2024-12-04"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r pressure,echo=FALSE}
+
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(readxl)
+
+#the first one
+#read xlsx file
+file<-"Volleyball Passing- USA and TU.xlsx"
+data <- read_excel(file,sheet = "TU sort by pass score")
+new_data <- data[1:6, 6:9]
+
+#Data manipulation
+colnames(new_data) <- c("Pass Score", "Attempts", "Points_Won", "Points_Lost")
+new_data <- new_data %>%
+  mutate(
+    Pass_Score = as.factor("Pass Score"),
+    Attempts = as.numeric(Attempts),
+    Points_Won = as.numeric(Points_Won),
+    Points_Lost = as.numeric(Points_Lost))
+
+tidy_data <- new_data %>%
+  pivot_longer(cols = c(Points_Won, Points_Lost), 
+               names_to = "Outcome", 
+               values_to = "Count")
+
+clean_data <- tidy_data %>%
+  group_by(`Pass Score`)%>%
+  filter(`Pass Score` %in% c("zeros", "ones", "twos", "threes"))%>%
+  mutate(`Pass Score` = factor(`Pass Score`, levels = c("zeros", "ones", "twos", "threes")))
+
+
+# visualization
+ggplot(clean_data, aes(x = `Pass Score`, y= Count ,fill = Outcome)) +
+  geom_bar(stat = "identity", position = "stack") +
+  labs(
+    title = "Stacked Bar Chart: Breakdown of Points Won and Lost by Pass Score",
+    x = "Pass Score Categories",
+    y = "Total Attempts"
+  ) +
+  theme_minimal() +
+  scale_fill_manual(values = c("Points_Won" = "skyblue", "Points_Lost" = "tomato"))
+```
