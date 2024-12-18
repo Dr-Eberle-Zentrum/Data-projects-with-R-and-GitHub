@@ -1,0 +1,164 @@
+---
+title: "Project Solution for Denis's Project (first trial)"
+author: "Gulmira" 
+output: md_document
+date: "2024-12-04"
+---
+
+---
+title: "Project Solution for Denis's Project (first trial)"
+author: "Gulmira" 
+output: md_document
+date: "2024-12-04"
+---
+
+
+
+```{r}
+library(dplyr)
+library(readr)
+library(ggplot2)
+```
+
+
+```{r}
+dat <- read.csv2("wows_playerbase_data.csv", stringsAsFactors = FALSE)
+dat <- dat[-c(762:805), ]
+```
+
+
+```{r}
+dat$Battles <- gsub(" ", "", dat$Battles) 
+dat$Avg..damage <- gsub(" ", "", dat$Avg..damage) 
+dat$Win.rate <- gsub("%", "", dat$Win.rate)  
+dat$Win.rate <- gsub(" ", "", dat$Win.rate)
+
+dat$Battles <- as.numeric(dat$Battles) 
+dat$Avg..damage <- as.numeric(dat$Avg..damage) 
+dat$Win.rate <- as.numeric(dat$Win.rate) 
+```
+
+
+
+```{r}
+dat <- dat %>% filter(Tier >= 3 & Tier <= 10)
+```
+
+
+```{r}
+dat <- dat %>% filter(Battles >= 200000)
+```
+
+```{r}
+dat <- subset(dat, !(Type %in% c("Submarine ", "Aircraft Carrier ")))
+```
+
+
+
+
+```{r}
+dat1 <- dat %>%
+  group_by(Nation, Tier, Type) %>%
+  filter(Battles == max(Battles, na.rm = TRUE)) %>%
+  ungroup()
+```
+
+
+```{r}
+dat1 <- dat1 %>%
+  group_by(Nation, Tier) %>%
+  mutate(ship_type_count = n_distinct(Type)) %>%
+  filter(ship_type_count == 3) %>%
+  ungroup()
+```
+
+
+```{r}
+dat_groups <- dat1 %>%
+  group_by(Nation, Tier) %>%
+  slice_head(n = 3) %>%  
+  ungroup()
+```
+
+
+
+
+```{r}
+dat_grouped <- dat_groups %>%
+  group_by(Nation, Tier, Type) %>%
+  summarise(
+    total_battles = sum(Battles, na.rm = TRUE), 
+    avg_winrate = mean(Win.rate, na.rm = TRUE), 
+    avg_damage = mean(Avg..damage, na.rm = TRUE))
+```
+
+
+```{r}
+dat_grouped <- dat_grouped %>%
+  group_by(Nation, Tier) %>%
+  mutate(
+    points = ifelse(total_battles == max(total_battles), 1, 0)
+  ) %>%
+  ungroup()
+
+nation_points <- dat_grouped %>%
+  group_by(Nation) %>%
+  summarise(
+    total_points = sum(points)
+  ) %>%
+  arrange(desc(total_points))  # Sort nations by total points, descending order
+
+most_unpopular_nation <- nation_points %>%
+  filter(total_points == min(total_points))
+
+top_3_nations <- nation_points %>%
+  slice_head(n = 3)  # Select the top 3 nations based on total points
+
+top_3_nations
+most_unpopular_nation
+```
+
+
+
+
+
+
+```{r}
+top_ships <- dat_grouped %>%
+  group_by(Nation, Tier, Type) %>%
+  filter(total_battles == max(total_battles)) %>% 
+  slice(1) 
+
+head(top_ships)
+
+```
+
+```{r}
+dat_points_summary <- dat_grouped %>%
+  group_by(Nation, Tier) %>%
+  summarise(tier_points = sum(points)) %>%
+  ungroup()
+
+nation_total_points <- dat_points_summary %>%
+  group_by(Nation) %>%
+  summarise(total_points = sum(tier_points)) %>%
+  ungroup() %>%
+  arrange(desc(total_points))
+```
+
+
+
+```{r}
+ggplot(dat_points_summary, aes(x = tier_points, y = reorder(Nation, -tier_points), fill = factor(Tier))) +
+  geom_bar(stat = "identity") +
+    geom_text(aes(label = Tier), position = position_stack(vjust = 0.5), color = "white") +  # Add tier labels on the bars
+
+  labs(
+    x = "Points",
+    y = "Nation",
+    title = "Popularity of Nations by Tier in World of Warships",
+    fill = "Tier"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+```
