@@ -1,323 +1,156 @@
-Functions
+Diet plans
 
-    # function to convert data type
-    convert_numeric <- function(df, col_to_convert) {
-      
-      # col to numeric 
-      convert <- function(col) {
-        # convert to character first in case of factors being converted into numeric
-        return(as.numeric(as.character(col)))
-      }
-      
-      df[col_to_convert] = lapply(df[col_to_convert], convert)
-      return(df)
-    }
-
-Prepare data
-
-    # create subset of relevant columns
-    dat <- data %>%
-      select("ID","Name", "Category",
-             "Calcium.(Ca).(mg)", "Phosphorus.(P).(mg)", "Sodium.(Na).(mg)",
-             "Vitamin.B1.(thiamine).(mg)","Vitamin.B2.(riboflavin).(mg)","Vitamin.B6.(pyridoxine).(mg)",
-             "Carbohydrates,.available.(g)","Protein.(g)","Fat,.total.(g)" )
-
-    # filter food for diet plans
-    dat <- dat[grep("Apple|Bread|Chicken|Broccoli|Oil|Almond|Yogurt|Rice|Banana|Salmon|Sunflower Oil|spinach|Walnut|Soya drink", 
-                    dat$Name, ignore.case = T),]
-
-    dat[grep("Apple|Bread|Chicken|Broccoli|Oil|Almond|Yogurt|Rice|Banana|Salmon|Sunflower Oil|spinach|Walnut|Soya drink", 
-             dat$Name, ignore.case = TRUE), "Name"]
-
-    # View(dat[grep("Apple|Bread|Chicken|Broccoli|Oil|Almond|Yogurt|Rice|Banana|Salmon|spinach|Sunflower Oil|Walnut|Soya drink", 
-    #               dat$Name, ignore.case = T),])
-
-    # dim(dat[grep("Apple|Bread|Chicken|Broccoli|Oil|Almond|Yogurt|Rice|Banana|Salmon|spinach|Sunflower Oil|Walnut|Soya drink", 
-    #             dat$Name, ignore.case = T),])
-
-Fictive person X
-
-    # daily average of person x
-    ## BMR (Basal Metabolic Rate) = 4.2 kj * body weight * hours a day
-    ## DEM (Daily Energy Demand) = BMR * PAL
-    personX <- data.frame(
-      body_weight = 70,
-      PAL = 1.65,
-      BMR = (4.2 * 70 * 24)
-    )
-
-    personX$DEM <- (personX$BMR * personX$PAL)
-
-Diet plans Day 1: -Wholegrain Bread: 100g - “Wholewheat bread” in data
--Apple: 150g - “Apple, fresh” -Chicken Breast, cooked: 120g -Broccoli,
-steamed: 100g -Olive Oil: 10g -Almonds: 30g - “Almond”  
+Day 1: -Wholegrain Bread: 100g - “Wholewheat bread” in data -Apple:
+150g - “Apple, fresh” -Chicken Breast, cooked: 120g - “Chicken, breast,
+with skin, raw” -Broccoli, steamed: 100g - “Broccoli, steamed (without
+addition of salt)” -Olive oil: 10g -Almonds: 30g - “Almond”  
 -Low-fat Yogurt: 150g - “Yogurt, low fat”
-
-    energy_density <- c(Carbs = 17, Lipids = 37, Proteins = 17)
-
-    ### df for day 1
-    d1 <- dat[c(1, 10, 38, 47, 84, 175, 187 ), ]
-    # almond, apple, broccoli, chicken, olive oil, bread, yogurt 
-
-    # prepare df 
-    summary(d1)
-    str(d1)
-
-    data.frame(Index = seq_along(d1), Name = names(d1))
-    d1 <- convert_numeric(d1, 4:12)
-
-
-    d1 <- d1 %>% 
-      mutate(
-        BMR = personX$BMR,
-        DEM = personX$DEM,
-        energy_carbs = d1$`Carbohydrates,.available.(g)` * energy_density["Carbs"],
-        energy_proteins = `Protein.(g)` * energy_density["Proteins"],
-        energy_lipids = `Fat,.total.(g)` * energy_density["Lipids"],
-        total_energy = energy_carbs + energy_proteins + energy_lipids,
-        percent_carbs = (energy_carbs / total_energy) * 100,
-        percent_proteins = (energy_proteins / total_energy) * 100,
-        percent_lipids = (energy_lipids / total_energy) * 100,
-        recommended_carbs_percent = 55,
-        recommended_proteins_percent = 15,
-        recommended_lipids_percent  = 30,
-        
-      )
-
-    # Visualization 
-
-    ggplot(d1 %>%
-             # compute total energy as well as for carbs, lipids, proteins
-             summarise(
-               energy_carbs = sum(energy_carbs),
-               energy_proteins = sum(energy_proteins),
-               energy_lipids = sum(energy_lipids),
-               total_energy = sum(total_energy)
-               
-             ) %>%
-             # percentage of energy for each macronutrient 
-             mutate(
-               percent_carbs = (energy_carbs / total_energy) * 100,
-               percent_proteins = (energy_proteins / total_energy) * 100,
-               percent_lipids = (energy_lipids / total_energy) * 100
-               
-             ) %>%
-             
-             # reshape into long format for plotting
-             pivot_longer(cols = starts_with("percent"),
-                          names_to = "Nutrient",
-                          values_to = "Actual_Percentage") %>%
-             
-             # recode names + add recommended values 
-             mutate(
-               Nutrient = recode(Nutrient, 
-                                 "percent_carbs" = "Carbohydrates",
-                                 "percent_proteins" = "Proteins",
-                                 "percent_lipids" = "Lipids"),
-               Recommended_Percentage = case_when(
-                 Nutrient == "Carbohydrates" ~ 55,
-                 Nutrient == "Proteins" ~ 15,
-                 Nutrient == "Lipids" ~ 30)
-               
-             ) %>%
-             
-             pivot_longer(cols = c(Actual_Percentage, Recommended_Percentage),
-                          names_to = "Type",
-                          values_to = "Percentage"),
-           
-           
-            aes(x = " ", y = Percentage, fill = Nutrient)) +
-      geom_bar(stat = "identity", position = "stack", width = 1) +
-      
-      coord_polar(theta = "y")  + # converts bar into pie chart
-      # create second pie chart as reference 
-      facet_wrap(~Type, labeller = as_labeller (c("Actual_Percentage" = "Actual", "Recommended_Percentage" = "Recommended"
-      ))) +
-      
-      theme_bw() +
-      labs(title = "Macronutrient Contributions: Actual vs Recommended") +
-      theme(legend.position = "bottom") +
-      scale_fill_manual(values = c("Carbohydrates" = "#A2CD5A", "Lipids" = "#EEAD0E", "Proteins" = "#79CDCD")) +
-      geom_text(aes(label = paste0(round(Percentage, 1), "%")), 
-                position = position_stack(vjust = 0.5))
-
-![](celineony_files/figure-markdown_strict/unnamed-chunk-5-1.png)
 
 Day 2: -Rice, cooked: 150g - “Rice parboiled, cooked in salted water
 (uniodised)”  
 -Banana: 120g -Salmon, smoked: 150g -Spinach, steamed: 100g -Sunflower
-Oil: 10g -Walnuts: 20g -Soy Milk: 200ml
+Oil: 10g -Walnuts: 20g -Soya drink, plain, with calcium and vitamin
+fortified: 200ml
 
+    # Subset relevant columns
+    dat <- data %>%
+      select(
+        "ID", "Name", "Category",
+        "Fat, total (g)", "Carbohydrates, available (g)", "Protein (g)",
+        "Vitamin B1 (thiamine) (mg)", "Vitamin B2 (riboflavin) (mg)", "Vitamin B6 (pyridoxine) (mg)",
+        "Calcium (Ca) (mg)", "Sodium (Na) (mg)", "Phosphorus (P) (mg)"
+      ) %>%
+      
+      # Filter for specific foods
+      filter(str_detect(Name, regex("Apple|Bread|Chicken|Broccoli|Oil|Almond|Yogurt|Rice|Banana|Salmon|Sunflower Oil|Spinach|Walnut|Soya drink",
+        ignore_case = TRUE
+        
+      ))) %>%
+      # Add diet column
+      mutate(Diet = case_when(
+        Name %in% c("Almond", "Wholewheat bread", "Apple, fresh", "Chicken, breast, with skin, raw", 
+                    "Broccoli, steamed (without addition of salt)", "Olive oil", "Yogurt, low fat") ~ "Diet 1",
+        Name %in% c("Banana, raw", "Rice parboiled, cooked in salted water (uniodised)", "Salmon, smoked", 
+                    "Spinach, steamed (without addition of salt)", "Sunflower oil", "Walnut", 
+                    "Soya drink, plain, with calcium and vitamin fortified") ~ "Diet 2",
+        TRUE ~ NA_character_
+      )) %>%
+      # remove NAs
+      filter(!is.na(Diet))
+
+    # Convert character columns to numeric for calculations
+    convert_numeric <- setdiff(names(dat), c("ID", "Name", "Category", "Diet"))
+    dat[convert_numeric] <- lapply(dat[convert_numeric], as.numeric)
+
+    ## Warning in lapply(dat[convert_numeric], as.numeric): NAs introduced by coercion
+
+    # Energy density for macronutrients
     energy_density <- c(Carbs = 17, Lipids = 37, Proteins = 17)
 
-    ### df for day 2
-    d2 <- dat[c(17, 104, 122, 151, 157, 159, 168),]
-    # banana, rice, salmon, soya drink, spinach, sunflower oil, walnut
-
-    summary(d2)
-    str(d2)
-    data.frame(Index = seq_along(d2), Name = names(d2))
-    d2 <- convert_numeric(d2, 4:12)
-
-    ## Warning in FUN(X[[i]], ...): NAs introduced by coercion
-
-    d2 <- d2 %>% 
+    # Add energy columns and recommended percentages
+    dat <- dat %>%
       mutate(
-        BMR = personX$BMR,
-        DEM = personX$DEM,
-        energy_carbs = d1$`Carbohydrates,.available.(g)` * energy_density["Carbs"],
-        energy_proteins = `Protein.(g)` * energy_density["Proteins"],
-        energy_lipids = `Fat,.total.(g)` * energy_density["Lipids"],
+        energy_carbs = `Carbohydrates, available (g)` * energy_density["Carbs"],
+        energy_proteins = `Protein (g)` * energy_density["Proteins"],
+        energy_lipids = `Fat, total (g)` * energy_density["Lipids"],
         total_energy = energy_carbs + energy_proteins + energy_lipids,
         percent_carbs = (energy_carbs / total_energy) * 100,
         percent_proteins = (energy_proteins / total_energy) * 100,
-        percent_lipids = (energy_lipids / total_energy) * 100,
-        recommended_carbs_percent = 55,
-        recommended_proteins_percent = 15,
-        recommended_lipids_percent  = 30,
-        
+        percent_lipids = (energy_lipids / total_energy) * 100
       )
 
-    ## pie chart day 2
-    ggplot(d2 %>%
-             # compute energ
-             summarise(
-               energy_carbs = sum(energy_carbs),
-               energy_proteins = sum(energy_proteins),
-               energy_lipids = sum(energy_lipids),
-               total_energy = sum(total_energy)
-               
-             ) %>%
-             
-             mutate(
-               percent_carbs = (energy_carbs / total_energy) * 100,
-               percent_proteins = (energy_proteins / total_energy) * 100,
-               percent_lipids = (energy_lipids / total_energy) * 100
-               
-             ) %>%
-             # reshape into long format for plotting
-             pivot_longer(cols = starts_with("percent"),
-                          names_to = "Nutrient",
-                          values_to = "Actual_Percentage") %>%
-             
-             mutate(
-               Nutrient = recode(Nutrient, 
-                                 "percent_carbs" = "Carbohydrates",
-                                 "percent_proteins" = "Proteins",
-                                 "percent_lipids" = "Lipids"),
-               Recommended_Percentage = case_when(
-                 Nutrient == "Carbohydrates" ~ 55,
-                 Nutrient == "Proteins" ~ 15,
-                 Nutrient == "Lipids" ~ 30)
-               
-             ) %>%
-             
-             pivot_longer(cols = c(Actual_Percentage, Recommended_Percentage),
-                          names_to = "Type",
-                          values_to = "Percentage"),
-           aes(x = " ", y = Percentage, fill = Nutrient)) +
-      geom_bar(stat = "identity", position = "stack", width = 1) +
-      coord_polar(theta = "y") +
-      facet_wrap(~Type, labeller = as_labeller(c(
-        "Actual_Percentage" = "Actual",
-        "Recommended_Percentage" = "Recommended"
-      ))) +
+    # group by diet
+    dat_by_diet <- dat %>%
       
-      theme_bw() +
-      labs(title = "Macronutrient Contributions: Actual vs Recommended") +
-      theme(legend.position = "bottom") +
-      scale_fill_manual(values = c("Carbohydrates" = "#A2CD5A", "Lipids" = "#EEAD0E", "Proteins" = "#79CDCD")) +
-      geom_text(aes(label = paste0(round(Percentage, 1), "%")), 
-                position = position_stack(vjust = 0.5))
-
-![](celineony_files/figure-markdown_strict/unnamed-chunk-7-1.png)
-
-Histogram for Macronutrient Day 1
-
-    # Compute total intake and merge with recommendations
-    day01_macronutrient <- d1 %>%
-      select(Calcium = `Calcium.(Ca).(mg)`, Phosphorus = `Phosphorus.(P).(mg)`, Sodium = `Sodium.(Na).(mg)`) %>%
+      group_by(Diet) %>%
+      
       summarise(
-        Calcium = sum(Calcium, na.rm = TRUE),
-        Phosphorus = sum(Phosphorus, na.rm = TRUE),
-        Sodium = sum(Sodium, na.rm = TRUE)
+        energy_carbs = sum(energy_carbs, na.rm = TRUE),
+        energy_proteins = sum(energy_proteins, na.rm = TRUE),
+        energy_lipids = sum(energy_lipids, na.rm = TRUE),
+        total_energy = sum(total_energy, na.rm = TRUE)
       ) %>%
-      pivot_longer(cols = everything(), names_to = "Nutrient", values_to = "Total_Actual_Intake") %>%
-      left_join(
-        data.frame(
-          Nutrient = c("Calcium", "Phosphorus", "Sodium"),
-          Recommended_Intake = c(1000, 700, 1500)
-        ),
-        by = "Nutrient"
+      
+      mutate(
+        Carbohydrates = (energy_carbs / total_energy) * 100,
+        Proteins  = (energy_proteins / total_energy) * 100,
+        Lipids  = (energy_lipids / total_energy) * 100
       ) %>%
-      mutate(Percent_of_Recommendation = (Total_Actual_Intake / Recommended_Intake) * 100)
+      
+      select(Diet, Carbohydrates, Proteins, Lipids)%>%
+      pivot_longer(cols = -Diet, names_to = "Nutrient", values_to = "Percentage")
 
-    # Reshape data into long format for ggplot
-    day01_macronutrient_long <- day01_macronutrient %>%
-      pivot_longer(
-        cols = c(Total_Actual_Intake, Recommended_Intake),
-        names_to = "Intake_Type",
-        values_to = "Value"
+Pie chart for Macronutrient
+
+    # recommended intake
+    recommended_macronutrient <- tibble(
+      Diet = "Recommended Macronutrient",
+      Nutrient = c("Carbohydrates", "Proteins", "Lipids"),
+      Percentage = c(55, 15, 30)
+    )
+
+    # combine data for plot
+    dat_macronutrient <- bind_rows(dat_by_diet, recommended_macronutrient)
+
+    dat_macronutrient_labels <- dat_macronutrient %>%
+      group_by(Diet) %>%
+      arrange(Diet, desc(Nutrient)) %>%
+      mutate(
+        pos = cumsum(Percentage) - (Percentage / 2),  # position in the middle
+        label = paste0(round(Percentage, 1), "%")    # format label as percentage
       )
 
-    # Plot the data
-    ggplot(day01_macronutrient_long, aes(x = Nutrient, y = Value, fill = Intake_Type)) +
-      geom_bar(stat = "identity", position = "dodge", width = 0.6) +
+    # ggplot
+    ggplot(dat_macronutrient_labels, aes(x = "", y = Percentage, fill = Nutrient)) +
+      geom_bar(stat = "identity", width = 1) +
+      geom_text(aes(y = pos, label = label), color = "white", size = 3) +  # Add labels
+      coord_polar("y", start = 0) +
+      facet_wrap(~Diet, scales = "free") +
       labs(
-        title = "Macronutrients: Actual vs Recommended Intake",
-        x = "Nutrient",
-        y = "Intake (mg)"
+        title = "Macronutrient Distribution: Diet 1, Diet 2, and Recommended Intake",
+        fill = "Nutrient: "
       ) +
-      scale_fill_manual(
-        name = NULL, # removes heading of legend
-        values = c("Recommended_Intake" = "#A2CD5A","Total_Actual_Intake" = "#79CDCD"),
-        labels = c("Recommended Intake","Actual Intake")
-      ) +
-      theme_minimal()
-
-![](celineony_files/figure-markdown_strict/unnamed-chunk-8-1.png)
-
-Histogram for Macronutrient Day 2
-
-    # Compute total intake and merge with recommendations
-    day02_macronutrient <- d2 %>%
-      select(Calcium = `Calcium.(Ca).(mg)`, Phosphorus = `Phosphorus.(P).(mg)`, Sodium = `Sodium.(Na).(mg)`) %>%
-      summarise(
-        Calcium = sum(Calcium, na.rm = TRUE),
-        Phosphorus = sum(Phosphorus, na.rm = TRUE),
-        Sodium = sum(Sodium, na.rm = TRUE)
-      ) %>%
-      pivot_longer(cols = everything(), names_to = "Nutrient", values_to = "Total_Actual_Intake") %>%
-      left_join(
-        data.frame(
-          Nutrient = c("Calcium", "Phosphorus", "Sodium"),
-          Recommended_Intake = c(1000, 700, 1500)
-        ),
-        by = "Nutrient"
-      ) %>%
-      mutate(Percent_of_Recommendation = (Total_Actual_Intake / Recommended_Intake) * 100)
-
-    # Reshape data into long format for ggplot
-    day02_macronutrient_long <- day02_macronutrient %>%
-      pivot_longer(
-        cols = c(Total_Actual_Intake, Recommended_Intake),
-        names_to = "Intake_Type",
-        values_to = "Value"
+      scale_fill_manual(values = c("Carbohydrates" = "#00BFFF", "Proteins" = "#1E90FF", "Lipids" = "#1874CD")) +
+      theme_minimal() +
+      theme(
+        axis.title = element_blank(),
+        axis.text = element_blank(),
+        panel.grid = element_blank(),
+        legend.position = "bottom",
+        strip.text = element_text(size = 12)
       )
 
-    # Plot the data
-    ggplot(day02_macronutrient_long, aes(x = Nutrient, y = Value, fill = Intake_Type)) +
-     geom_bar(stat = "identity", position = "dodge", width = 0.6) +
-      labs(
-        title = "Macronutrients: Actual vs Recommended Intake",
-        x = "Nutrient",
-        y = "Intake (mg)"
-      ) +
-      scale_fill_manual(
-        name = NULL, # removes heading of legend
-        values = c("Recommended_Intake" = "#A2CD5A","Total_Actual_Intake" = "#79CDCD"),
-        labels = c("Recommended Intake","Actual Intake")
-      ) +
-      theme_minimal()
+![](celineony_files/figure-markdown_strict/unnamed-chunk-3-1.png)
 
-![](celineony_files/figure-markdown_strict/unnamed-chunk-9-1.png)
+Bar chart for Minerals
+
+    dat_minerals <- dat %>%
+      group_by(Diet) %>%
+      summarise(
+        Calcium = sum(`Calcium (Ca) (mg)`, na.rm = TRUE),
+        Phosphorus = sum(`Phosphorus (P) (mg)`, na.rm = TRUE),
+        Sodium = sum(`Sodium (Na) (mg)`, na.rm = TRUE)
+      ) %>%
+      pivot_longer(cols = -Diet, names_to = "Nutrient", values_to = "Percentage") %>%
+      # add recommended intake
+      bind_rows(
+        tibble(
+      Diet = "Recommended Intake",
+      Nutrient = c("Calcium", "Phosphorus", "Sodium"),
+      Percentage = c(1000, 700, 1500))
+      )
+
+    # plot
+
+    ggplot(dat_minerals, aes(x = Nutrient, y = Percentage, fill = Diet)) +
+      geom_bar(stat = "identity", position = "dodge") +
+      labs(
+        title = "Actual vs Recommended Mineral Intake",
+        x = "Nutrient",
+        y = "Intake (mg)",
+        fill = "Diet"
+      ) +
+      theme_minimal() +
+      scale_fill_manual(values = c("Diet 1" = "#009ACD", "Diet 2" = "#A2CD5A", "Recommended Intake" = "#79CDCD"))
+
+![](celineony_files/figure-markdown_strict/unnamed-chunk-4-1.png)
