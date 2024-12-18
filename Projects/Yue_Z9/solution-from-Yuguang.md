@@ -40,9 +40,7 @@
     #This data_region is also to store a data set, which contains only three Geo.Place.Name
     data_region <- data |>
       filter(Name == data_pollutant) |>
-      mutate(
-        Start_Date = ifelse(!grepl("^\\d{2}/\\d{2}/\\d{4}$", Start_Date), NA, Start_Date),
-        Year = year(dmy(Start_Date))) |>
+      mutate(Year = year(dmy(Start_Date))) |>
       arrange(desc(Data.Value)) |>
       slice_head(n = 3) |>
       pull(Geo.Place.Name)
