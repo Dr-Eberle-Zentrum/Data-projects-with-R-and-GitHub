@@ -1,0 +1,13 @@
+---
+title: "kickbones1_from SunKyoung Moon(fist trial)"
+author: "Luis"
+output: md_document
+date: "2024-12-03"
+---
+
+#Result Image
+![Result](solution for kickbones1(first trial).png)
+
+```r
+```{r, echo=FALSE, out.width="50%"}
+knitr::include_graphics("solution for kickbones1(first trial).png")
