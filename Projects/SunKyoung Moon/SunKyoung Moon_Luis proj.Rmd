@@ -1,6 +1,6 @@
 ---
 title: "kickbones1_from SunKyoung Moon(Ver.2.0)"
-output: md_document
+output: html_document
 date: "2024-12-17"
 ---
 
