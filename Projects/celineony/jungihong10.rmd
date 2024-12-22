@@ -4,15 +4,13 @@ author: "jungihong10"
 output: md_document
 ---
 
-```{r setup, include= FALSE}
-
-
+```{r visualisation, echo= FALSE}
 
 # Load necessary libraries
 library(tidyverse)
 
 # Define the directory containing the data files
-data_dir <- "/Users/jungihong/Desktop/R_projects/"
+data_dir <- here("project-data")
 
 # List all CSV files in the directory
 file_list <- list.files(path = data_dir, pattern = "data_expr\\d+\\.csv", full.names = TRUE)
@@ -106,40 +104,3 @@ ggplot(data_all, aes(x = phase, y = corrected_recognition, fill = condition)) +
 
 ```
 
-## My solution to Celine's project
-
-```{r visualisation, echo= FALSE}
-# Plot for Corrected Recognition in Different Phases Across Experiments
-ggplot(data_all, aes(x = phase, y = corrected_recognition, fill = condition)) +
-  # Bar plot for mean values
-  geom_bar(stat = "summary", fun = "mean", position = position_dodge(width = 0.9), color = "black") +
-  # Error bars for standard error
-  stat_summary(fun.data = mean_se, geom = "errorbar", position = position_dodge(width = 0.9), width = 0.2) +
-  # Add individual data points
-  geom_jitter(aes(color = condition), position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.9), alpha = 0.5) +
-  # Facet by study_id
-  facet_wrap(~ study_id, labeller = as_labeller(c(
-    `1` = "Experiment 1",
-    `2` = "Experiment 2",
-    `3` = "Experiment 3",
-    `4` = "Experiment 4"
-  ))) +
-  # Customize labels and themes
-  scale_y_continuous(limits = c(0, 0.75), breaks = seq(0, 0.75, by = 0.25)) +
-  scale_fill_manual(values = c("darkgray" , "white"), name = expression("Condition: " ~ CS^"+" ~ " and " ~ CS^"-")) +
-  scale_color_manual(values = c("CS+" = "darkgray", "CS-" = "white"), guide = "none") + # Swap grey and white for conditions
-  labs(
-    title = "Recognition Performance Expressed as Hit Rate Minus False Alarm Rate in Experiments 1-4",
-    x = NULL,
-    y = "Corrected recognition"
-  ) +
-  theme_bw(base_size = 14) +
-  theme(
-    legend.position = "top",
-    panel.grid.major = element_blank(),
-    panel.grid.minor = element_blank(),
-    strip.text = element_text(face = "bold"),
-    axis.title.x = element_blank()
-  )
-
-```
