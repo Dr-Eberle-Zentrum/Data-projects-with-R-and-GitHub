@@ -1,0 +1,81 @@
+---
+title: "yuesolution"
+output: md_document
+date: "2025-01-01"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r pressure,echo=FALSE}
+
+library(ggplot2)
+library(tidyverse)
+library(readr)
+
+# read file
+data <- read.csv("Summer_Sports_Experience__2017_to_2021.csv")
+
+# select needed
+newdata <- data %>%
+  select(Borough.Location, Sports.Played, Sunday.s.Attendance, Saturday.s.Attendance) %>%
+  rename(
+    Region = Borough.Location,
+    Sport = Sports.Played,
+    Sunday_Attendance = Sunday.s.Attendance,
+    Saturday_Attendance = Saturday.s.Attendance
+  ) %>% 
+  #Calculate the sum
+  mutate(
+    Sunday_Attendance = as.numeric(Sunday_Attendance),
+    Saturday_Attendance = as.numeric(Saturday_Attendance),
+    weekends = Sunday_Attendance + Saturday_Attendance
+  ) %>%
+  group_by(Region, Sport) %>%
+  summarize(total_weekends = sum(weekends), .groups = "drop")
+
+# get every sport
+cleandata <- newdata %>%
+  separate_rows(Sport, sep = ",\\s*") %>%
+  mutate(Sport = tolower(trimws(Sport)))
+
+# top4 sports
+top_4_sports <- cleandata %>%
+  count(Sport, sort = TRUE) %>%
+  slice_max(n, n = 4) %>%
+  pull(Sport)
+
+# get top4 data and delete empty data
+top4_data <- cleandata %>%
+  filter(Sport %in% top_4_sports, 
+         !is.na(Region) & Region != "",
+         total_weekends > 0)
+
+#total time
+region_totals <- top4_data %>%
+  group_by(Region) %>%
+  summarize(total_weekends = sum(total_weekends), .groups = "drop")
+
+# mapping
+ggplot(top4_data, aes(x = Region, y = total_weekends, fill = Sport)) +
+  geom_bar(stat = "identity") +
+  theme_minimal() +
+  labs(
+    title = "Most Popular Sports Across Regions",
+    x = "Region",
+    y = "Total Participation Time (in Hours)",
+    fill = "Sport"
+  ) +
+  geom_text(
+    data = region_totals, 
+    aes(x = Region, y = total_weekends, label = total_weekends),
+    position = position_stack(vjust = 1.05),
+    inherit.aes = FALSE
+  )+
+  theme(
+    plot.title = element_text(hjust = 0.5) 
+  )
+
+
+
+```
