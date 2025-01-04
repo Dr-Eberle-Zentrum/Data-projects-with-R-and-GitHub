@@ -57,7 +57,7 @@ data_for2 <- bind_rows(
 ```{r, message=FALSE, warning=FALSE}
 ggplot(data_for2, aes(x = points, y = passing_points, color = type)) +
   geom_point(size = 3) +
-  geom_smooth(method = "lm", se = FALSE, aes(group = type)) +  # 添加回归线
+  geom_smooth(method = "lm", se = FALSE, aes(group = type)) + 
   labs(
     title = "Passing Points vs Points Won and Lost",
     x = "Points",
