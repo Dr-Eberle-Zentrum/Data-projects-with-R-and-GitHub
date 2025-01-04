@@ -7,7 +7,7 @@ the relation between social-media applications use and the personality
 profiles of more than 3000 users. We want to focus on the data regarding
 “young adults” (18 to 34) in particular. The social media platforms
 included are Whatsapp, Facebook and Instagram, and the personality
-profiles are are based the “Big-5” trait-model of personality, which
+profiles are are based on the “Big-5” trait-model of personality, which
 measures Openness, Conscientiousness, Extraversion, Agreeableness and
 Neuroticism by means of a standardized questionnaire.
 
@@ -46,7 +46,9 @@ for instance in Table 5). The aim is to plot a different “web” in the
 diagram for each of these possibilities, so you might want to create
 separate columns to store the values for the combinations, which are not
 explicitly included in “Data sheet 2” (tip: the variables has\_whatsapp,
-has\_facebook, has\_instagram encode the info of each user’s app use).
+has\_facebook, has\_instagram encode the info of each user’s app use), for
+instance, by creating a new column for the combination of each user with a 
+number from 1 to 8, and then using this column to filter the data.
 
 ### Data visualization
 
@@ -65,9 +67,13 @@ Note the illustration below includes Twitter, snapchat and LinkedIn,
 which are not part of the data. Instead, the legend should include the 8
 combinations of social media use mentioned above.
 
-Which conclusions/hypotyhesis can we draw from the resulting graph? Do
-they match some of the resluts of the study (found in “Presentation 1”)?
+Which conclusions/hypothesis can we draw from the resulting graph? Do
+they match some of the results of the study (found in “Presentation 1”)?
 
 Best of luck on your implementation!
 
-<img src="Example spider-web diagram.png" width="500">
+<figure>
+<img src="Example%20spider-web%20diagram.png%20=200x"
+alt="Example spider-web diagram" />
+<figcaption aria-hidden="true">Example spider-web diagram</figcaption>
+</figure>

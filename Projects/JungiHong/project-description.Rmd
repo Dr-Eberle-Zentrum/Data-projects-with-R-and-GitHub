@@ -43,8 +43,19 @@ The primary visualization goal is to create a correlation graph showing the rela
 - **Y-Axis**: Total attempts (stacked into points won and points lost).
 - **Highlight**: This graph would give a clear visual of the proportion of points won vs. points lost for each pass score.
 
-#### 2. Scatter Plot with Trendline: Difficult
-- **Purpose**: To visually show the relationship between passing scores and points won/lost, with the Pearson R value indicating the strength and direction of the correlation.
-- **X-Axis**: Average passing scores (use data from in Directory: “Passing Raw Data” (totals tab)).
-- **Y-Axis**: Points won or points lost
-- **Highlight**: The scatter plot will show individual data points, and the trendline will indicate the correlation, with the Pearson R value represented in the graph's legend. A high Pearson R (close to 1 or -1) will show a clear upward or downward trend, while a low value (closer to 0) will show a more scattered distribution.
+
+### 2. Correlation graph between passing scores and points won or lost : Hard
+
+- **Structure the Data**: 
+   - Passing scores for when points were won and lost.
+   - Points won and points lost.
+
+- **Plot a Scatter Plot**:
+   - X-axis: Passing scores (average passing score when points are won or lost).
+   - Y-axis: Points won or lost.
+   - Use different colors or markers for "Points Won" and "Points Lost."
+
+- **Add Linear Regression Lines** (optional): Fit separate regression lines for "Points Won" and "Points Lost" to observe trends.
+
+The examples for the visualization are in the link: [visualization](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/tree/main/Projects/JungiHong)
+

@@ -1,18 +1,19 @@
 # Project Description
 
 This project will use publicly available behavioral data from Kalbe &
-Schwabe (2022). The original study looked at the memory performance of
-the study participants, operationalised as corrected recognition. The
-unprocessed data can be found [here](https://osf.io/qpm3t/), the
-preprocessed data which you will use, can be found in the folder
+Schwabe (2022), which investigated how emotional experiences influence
+memory. To do so they looked at the memory performance of the
+participants, operationalised as corrected recognition. The unprocessed
+data can be found [here](https://osf.io/qpm3t/), the preprocessed data
+which you will use, can be found in the folder
 [project-data](/Projects/celineony/project-data).
 
 In the study participants were presented with a series of initially
-neutral stimuli. The presented stimuli were images of animals and tools,
-images from one of the two categories were paired with an aversive event
-(electric shock). The item category paired with the aversive event is
-characterized as *C**S*+ (conditioned category, CSm) and the item
-category not associated with the aversive event as *C**S*− (CSm).
+neutral stimuli. The presented stimuli were images of animals and tools.
+One category of images was paired with an aversive event (electric
+shock), while the other category was not. The category associated with
+the electric shock was categorized as *C**S*+ (conditioned category,
+CSm), the other category as *C**S*− (CSm).
 
 The purpose of this pairing was to see if the association with the shock
 would affect the participants’ memory for the images. This kind of
@@ -22,20 +23,22 @@ influence memory.
 ## About the Data
 
 The preprocessed data are saved as .csv files. You can find a .csv file
-for each experiment separately in the above mentioned folder.
+for each experiment separately in the above mentioned folder
+[project-data](/Projects/celineony/project-data).
+
+[Data for experiment
+1](/Projects/celineony/project-data/data_expr1.csv), [Data for
+experiment 2](/Projects/celineony/project-data/data_expr2.csv), [Data
+for experiment 3](/Projects/celineony/project-data/data_expr3.csv),
+[Data for experiment 4](/Projects/celineony/project-data/data_expr4.csv)
 
 **Variables:**
 
--   study\_id
+-   *study\_id* - The number of the experiment
 
-    -   Indicates experiemnts number
+-   *participant\_id* - The ID number of the participant
 
--   participant\_id
-
-    -   The variable indicates the participants ID / number of the
-        participant
-
--   condition -
+-   *condition* - The category of the item
 
     -   Describes the item category
 
@@ -45,7 +48,8 @@ for each experiment separately in the above mentioned folder.
     -   CSp - CS+ category is the conditioned category, item category
         associated with aversive event
 
--   phase - experimental phase items were first presented
+-   *phase* - The phase of the experiment during which the items were
+    first presented
 
     -   conditioning - items that were first presented during
         conditioning phase
@@ -54,45 +58,61 @@ for each experiment separately in the above mentioned folder.
     -   pre-conditioning - items that were first presented during
         pre-conditioning phase
 
--   hit - Hit rate
+-   *hit* - Hit rate
 
-    -   Porportion of previously seen images correctly classified as
+    -   Proportion of previously seen images correctly classified as
         ‘old’
 
--   fa - False alarm rate
+-   *fa* - False alarm rate
 
-    -   Porportion of new images incorrectly classified as ‘old’
+    -   Proportion of new images incorrectly classified as ‘old’
 
 ## Data Manipulation
 
 1.  Read the data into your local R environment
 
+    -   Read the files into R using the `read_csv()` function from the
+        `readr` package, which is part of the `tidyverse` package.
+        **Note:** To avoid reading every file separately you can read
+        them all at once. to do so you have to save the folders
+        directory path as a variable. After that you can list and filter
+        the .csv files.
+    -   If you pool the four experiments into one keep in mind that the
+        participants IDs starts from 1 for each of the four experiments.
+        If you simply merge the files into one, you will e.g. have
+        participant no. 1 four times. To avoid this duplication a
+        continuous count is needed.
+
 2.  Compute corrected recognition scores and save them as a new variable
     (e.g. “cr”)
 
-    -   Corrected recognition is computed by subtraction false alarms
-        from hits
+    -   Corrected recognition is computed by subtracting false alarms
+        from hits. To do so you need the variables ‘hit’ and ‘fa’
 
-    -   The new variable should be part of the data frame, this makes
-        plotting easier
-
-3.  If you decide to plot all four experiments, pool the data
-
-    -   Pooling the data means combining the data from all four
-        experiments, which are currently stored in separate .csv files,
-        into one large file.
-    -   The pooled data then contains all four experiments and you can
-        filter by ‘study\_id’ in order to create the indivudual plots
-        for each experiment.
-    -   Note: If you pool the data keep in mind that the participants id
-        starts from 1 for each experiement. If you simply merge the four
-        file into one, you will have participant no. 1 four times. To
-        avoid this duplication a continuous count is needed. This means
-        that
+    -   Add the computed value as a new variable to the data table
 
 ## Visualization
 
+Your plotting task is to recreate *Figure 3* of the original paper.
+![This is Figure 3 from Kalbe & Schwabe
+(2022)](images/figure03_Kalbe_Schwabe_2022.png "Figure to reproduce (Kalbe & Schwabe, 2022)")
+
+-   Make sure that your data is in long format
+-   Create a grouped bar plot
+-   Map *phase* to the x-axis and *corrected recognition* to the y-axis
+-   The variable *condition* should fill the bars
+-   To create a multiple panel plot (faceting) you can use the
+    `facet_grid` or `facet_wrap` function from the `ggplot2` package.
+    [You can find the documantation
+    here](https://r-charts.com/ggplot2/facets/).
+-   The legend (upper right corner) has superscripts. Try using the
+    argument `expression` to create superscripts.
+-   Add individual data points over the bars
+
+Optional 
+  - add the p-values [here](https://www.sthda.com/english/articles/index.php?url=/24-ggpubr-publication-ready-plots/76-add-p-values-and-significance-levels-to-ggplots/)
+you can find a link briefly explaining how to add p-values to ggplots
+
 [Here you can find the published
-paper](https://www.psy.uni-hamburg.de/arbeitsbereiche/kognitionspsychologie/publikationen/kalbe-2021-journal-experimental-psychology.pdf).
-Have a look at *Figure 3*. Try to recreate the figure using the provided
-data. You can choose which of the four experiments you want to plot.
+paper](https://www.psy.uni-hamburg.de/arbeitsbereiche/kognitionspsychologie/publikationen/kalbe-2021-journal-experimental-psychology.pdf)
+from Kalbe & Schwabe (2022).

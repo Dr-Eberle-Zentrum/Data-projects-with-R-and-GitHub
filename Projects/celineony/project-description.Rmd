@@ -72,4 +72,7 @@ Your plotting task is to recreate *Figure 3* of the original paper. ![This is Fi
 -   The legend (upper right corner) has superscripts. Try using the argument `expression` to create superscripts.
 -   Add individual data points over the bars
 
+Optional
+-   add the p-values [here](https://www.sthda.com/english/articles/index.php?url=/24-ggpubr-publication-ready-plots/76-add-p-values-and-significance-levels-to-ggplots/) you can find a link briefly explaining how to add p-values to ggplots
+
 [Here you can find the published paper](https://www.psy.uni-hamburg.de/arbeitsbereiche/kognitionspsychologie/publikationen/kalbe-2021-journal-experimental-psychology.pdf) from Kalbe & Schwabe (2022).
