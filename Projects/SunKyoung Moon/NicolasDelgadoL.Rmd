@@ -69,11 +69,9 @@ ggplot(filter(processed_data, Gender == "Female"), aes(x = age_group, y = TotalP
   
 
 ggplot(filter(processed_data, Gender == "Male"), aes(x = age_group, y = TotalPurchase)) +
-  geom_bar(stat = "identity", position = "dodge", fill = "blue")
+  geom_bar(stat = "identity", position = "dodge", fill = "blue") +
+labs(y = "Frequency of Purchase", x = "Age Group", title = "Male Consumers’ Frequency of Purchases")
 ```
-
-
-
 
 
 
