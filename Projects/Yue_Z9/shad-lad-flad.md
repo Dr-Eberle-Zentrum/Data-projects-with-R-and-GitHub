@@ -77,6 +77,7 @@
       theme_minimal() +
       scale_color_manual(values = c("Midtown (CD5)" = "red", "Gramercy Park - Murray Hill" = "blue", "Chelsea - Clinton" = "green")) +
       theme(legend.position = "right") +
+      labs(color = "Regions") +
       scale_x_continuous(breaks = seq(2010, 2022, by = 2)) +
       scale_y_continuous(breaks = seq(0, 25, by = 2)) 
 
