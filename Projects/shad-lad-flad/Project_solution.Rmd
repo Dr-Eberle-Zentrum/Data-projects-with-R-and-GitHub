@@ -7,11 +7,7 @@ output: md_document
 
 # First draft of Dennis Project
 
-This is my current progress on the project.
-
-For now, I have used the **standard version** to count points (i.e., a maximum of 3 points per nation in each tier).
-
-However, I would like to implement your suggestions with **"Optional Bonus Points"** and **"Optional Point Modifier"** because, as you can see, in the standard option, there are only three countries that received any points, and two of them even ended up with the same score.
+## 1: Standard version
 
 ```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
 
@@ -111,4 +107,91 @@ ggplot(data, aes(x = reorder(Nation, total_points_sum), y = total_points, fill =
 
 ```
 
-I haven't had any difficulties with the visualization so far. Contrary to your example visualization, I decided against labeling the tiers and instead added a gradual color scale, as I found it clearer. However, I can change it again if needed.
+## 2: With optional point modifier
+```{r setup2, echo = FALSE, warning = FALSE, message = FALSE}
+data2 <- read_csv2(here("Projects", "shad-lad-flad", "wows_playerbase_data.CSV"), na = "-") %>% 
+  select(Nation, Tier, Type, Battles, `Win rate`, `Avg. damage`) %>% 
+  
+  # Leerzeichen und Prozentzeichen entfernen
+  mutate(
+    Battles = as.integer(gsub("\\s+", "", Battles)),  
+    `Win rate` = as.numeric(gsub("\\s+|%", "", `Win rate`)),  
+    `Avg. damage` = as.integer(gsub("\\s+", "", `Avg. damage`)),
+    Type = trimws(Type)
+  ) %>% 
+  
+  # Filtern
+  filter(Tier >= 3 & Tier < 11) %>%  # Nur Tier 3 bis 10
+  filter(Type %in% c("Battleship", "Cruiser", "Destroyer")) %>% 
+  filter(Battles > 200000) %>% 
+  drop_na() %>% 
+  
+  group_by(Tier, Type) %>% 
+  mutate(rank = rank(-Battles, ties.method = "min")) %>%  # Rang basierend auf Battles
+  filter(rank <= 3) %>%  # Nur die Top 3 für jeden Typ und Tier behalten
+  mutate(points = case_when(
+    rank == 1 ~ 3,  # 1. Platz: 3 Punkte
+    rank == 2 ~ 2,  # 2. Platz: 2 Punkte
+    rank == 3 ~ 1   # 3. Platz: 1 Punkt
+  )) %>% 
+  ungroup() %>% 
+  
+  # Punkte pro Nation und Tier summieren
+  group_by(Nation, Tier) %>% 
+  summarize(total_points_tier = sum(points, na.rm = TRUE), .groups = "drop") %>% 
+  
+  # Gesamte Punkte für jede Nation berechnen
+  group_by(Nation) %>% 
+  mutate(total_points_sum = sum(total_points_tier, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  
+  # Definiere die Reihenfolge der Tiers als Faktor
+  mutate(Tier = factor(Tier, levels = 10:3))  # Reihenfolge von Tier 10 bis Tier 3
+
+```
+
+```{r visualisation2, echo = FALSE, warning = FALSE, message = FALSE}
+ggplot(data2, aes(x = reorder(Nation, total_points_sum), y = total_points_tier, fill = factor(Tier))) +
+  geom_bar(stat = "identity", position = "stack", color = "black") +  # Balken mit schwarzem Rand
+  geom_text(aes(label = case_when(
+    total_points_tier == 0 ~ "",  # Wenn 0 Punkte, keinen Text anzeigen
+    total_points_tier == 1 ~ "1", 
+    total_points_tier == 2 ~ "2", 
+    total_points_tier == 3 ~ "3", 
+    total_points_tier == 4 ~ "4", 
+    total_points_tier == 5 ~ "5 points", 
+    total_points_tier == 6 ~ "6 points", 
+    total_points_tier == 7 ~ "7 points", 
+    total_points_tier == 8 ~ "8 points", 
+    total_points_tier == 9 ~ "9 points", 
+    TRUE ~ as.character(total_points_tier)
+  )), position = position_stack(vjust = 0.5), color = "black", size = 3) +  # Text in Balken
+  # Total Points Sum hinter die Balken schreiben
+  geom_text(aes(
+    x = reorder(Nation, total_points_sum),
+    y = total_points_sum + 0.5,  # Position oberhalb der Balken
+    label = total_points_sum
+  ), hjust = 0, color = "black", size = 4, fontface = "bold") + 
+  labs(
+    title = "Points per Nation",
+    subtitle = "Optional Point Modifier Applied",
+    x = "Nation",
+    y = "Points",
+    fill = "Tier"
+  ) +
+  coord_flip() + 
+  theme_minimal() +
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5),  # Titel zentrieren
+    plot.subtitle = element_text(hjust = 0.5), 
+    axis.text.y = element_text(angle = 0, hjust = 1), 
+    panel.grid.minor = element_blank(),
+    panel.grid.major.y = element_blank() 
+  ) +  # Achsenbeschriftung horizontal ausrichten
+  scale_fill_manual(values = c("#b0e0e6", "#a6b9f2", "#d8a1e0", "#f8a2d2", "#ffb3a6", "#ffcd6b", "#ffe28a", "#fff9b0")) +  # Manuelle Farbskala für Tiers
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1)),
+                     breaks = seq(0, 100, by = 5))
+
+
+```
+
