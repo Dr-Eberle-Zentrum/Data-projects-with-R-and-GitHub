@@ -138,7 +138,7 @@ Current projects:
 - Felix (felix-gogollok) [Whisky statistics](Projects/felix-gogollok/whisky-statistics/project-description.md)
 - Manuel (ManuDoerrich) - [Nutrition data](Projects/ManuDoerrich/project-description.md)
 - Nicolas (NicolasDelgadoL) - [social media & personality](Projects/NicolasDelgadoL/Nicolás-project.md)
-- Sun (MoonSunKyung) - [Shopping Trends by Age group and Sex](Projects/SunKyoung Moon/project_description.md)
+- Sun (MoonSunKyung) - [Shopping Trends by Age group and Sex](Projects/SunKyoung%20Moon/project_description.md)
 
 
 #### Goals
