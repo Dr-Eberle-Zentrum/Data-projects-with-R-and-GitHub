@@ -4,9 +4,8 @@ output: md_document
 date: "2025-01-05"
 ---
 
-```{r setup, include=FALSE}
+```{r setup}
 knitr::opts_chunk$set(echo = TRUE)
-```
 # Load necessary libraries
 library(tidyverse)
 library(fmsb)
@@ -79,3 +78,4 @@ radarchart(
 # Add title and legend
 title("The Quality of Scotch Whiskies by Region and the Median Quality of Each Region", cex.main = 1.2)
 legend("topright", legend = colnames(radar_data), col = colors, lty = 1, cex = 0.8)
+```
