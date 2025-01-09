@@ -1,0 +1,148 @@
+---
+title: "Untitled"
+author: "Celine Onyemaechi"
+output: md_document
+---
+
+```{r setup}
+
+# clean environment
+rm(list = ls())
+cat("\014")
+
+# load packages 
+library(tidyverse)
+#install.packages("devtools")
+library(devtools)
+#devtools::install_github("ricardo-bion/ggradar", dependencies = TRUE)
+library(ggradar)
+#install.packages("scales")
+library(scales)
+
+# read file 
+data <- read.csv2("~/Data-projects-with-R-and-GitHub/Projects/felix-gogollok/whisky-statistics/Whisky.csv") #use csv2() cause data is semicolon separated  
+```
+
+Before starting to work on the project I will get a overview of the data I will work with
+```{r summary stats}
+# look at data
+#View(data)
+
+# structure of the data
+str(data)
+#' 1307 objects (rows) and 11 variables (columns)
+#' all variables except for "Punkte" are character, $Punkte is of type integer 
+
+
+```
+
+
+Prepare data for spider plot
+```{r data preparation}
+# check summary stats 
+summary(data)
+#' the column 'Punkte.' (ratings) is the only column with NA's 
+#' summary stats for ratings (Punkte)
+#' min = 55.00 , max = 96.00 -> range of 44
+#' median = 79.00
+#' mean = 79.00
+#' total of 20 NAs
+
+# remove NA's from ratings column
+data <- data %>% filter(!is.na(Punkte.))
+summary(data$Punkte.) # check if NA's are removed
+
+# look at relevant columns 
+
+# check how many distinct regions 
+length(unique(data$Region.)) # there are 5 distinct regions 
+unique(data$Region.) # get names of the regions 
+
+# check number of distinct distilleries
+length(unique(data$Destillerie.))  # 121 distilleries
+unique(data$Destillerie.)
+
+```
+
+
+```{r}
+
+# compute median rating per region and distillery for later plotting
+median_rating_region <- data %>%
+                        group_by(Region.) %>%
+                        summarise(median_rating = median(Punkte.))
+
+# filter high ratings ( > 80)
+dat_high_ratings <- data %>% filter(Punkte. > 80)
+
+# compute median of high ratings per region 
+median_high_ratings_region <- aggregate(Punkte. ~ Region., data = dat_high_ratings, FUN = median)
+
+# count number of high ratings per region
+high_ratings_region  <- dat_high_ratings %>%
+                        group_by(Region.) %>%
+                        summarise(number_top_ratings = n())
+
+```
+
+```{r}
+radar_data <- high_ratings_region %>%
+  pivot_wider(names_from = Region., values_from = number_top_ratings) %>%
+  mutate(Category = "Ratings") %>% 
+  relocate(Category)
+
+ggradar(radar_data,
+        values.radar = c("0", "200", "400"),
+        grid.min = 0, grid.mid = 200, grid.max = 400,
+        grid.label.size = 4, 
+        axis.label.size = 3, 
+        group.line.width = 1, 
+        group.point.size = 3)
+
+```
+
+
+```{r}
+# create spider graph
+# combine df
+data_plot <- merge(median_rating_region, median_high_ratings_region, by = "Region.", all = F)
+colnames(data_plot) <- c("Region", "Median_Rating", "Median_High_Rating")
+
+# convert to long
+data_plot_long <- data_plot %>%
+  gather(key = "Type", value = "Value", -Region)
+
+# data to wide format for ggradar
+data_plot_wide <- data_plot_long %>%
+  spread(key = "Region", value = "Value")
+
+ggradar(data_plot_wide, 
+        values.radar = c("0", "45", "90"),
+        grid.min = 0, grid.mid = 45, grid.max = 90,
+        group.colours = c("#00AFBB", "#E7B800"),
+        legend.position = "bottom")
+
+```
+
+
+```{r}
+median_rating_dist <- data %>%
+                        group_by(Destillerie.) %>%
+                        summarise(median_rating = median(Punkte.))
+
+median_rating_region_destillery <- data %>%
+                        group_by(Destillerie., Region.) %>%
+                        summarise(median_rating = median(Punkte.), .groups = 'drop')
+
+high_median_ratings <- median_rating_region_destillery %>% filter(median_rating > 80)
+
+
+summary(high_median_ratings$median_rating)
+
+
+# count number of high ratings per distillery
+high_ratings_destillery <- dat_high_ratings %>%
+                           group_by(Destillerie.) %>%
+                           summarise(number_top_ratings = n())
+```
+
