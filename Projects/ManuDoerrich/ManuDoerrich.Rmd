@@ -1,0 +1,150 @@
+---
+title: 'First project attempt - Nicolas´ project'
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(dplyr)
+library(fmsb)
+library(ggplot2)
+library(readxl)
+library(tidyr)
+```
+## General project topic
+
+In this project, you are tasked with generating a spider-web diagram on the relation between social-media applications use and the personality profiles of more than 3000 users. We want to focus on the data regarding “young adults” (18 to 34) in particular. The social media platforms included are Whatsapp, Facebook and Instagram, and the personality profiles are based on the “Big-5” trait-model of personality, which measures Openness, Conscientiousness, Extraversion, Agreeableness and Neuroticism by means of a standardized questionnaire.
+
+## The Data Set (processed)
+```{r import data}
+# Define the URL of the raw csv file
+url <- "https://www.frontiersin.org/api/v3/articles/527189/file/Data_Sheet_2.xlsx/527189_supplementary-materials_datasheets_2_xlsx/1"
+
+# Download and import excel file 
+download.file(url, destfile = "Data_Sheet_2.xlsx", mode = "wb")
+data_raw <- read_excel("Data_Sheet_2.xlsx")
+
+# Data processing
+data_pro <- data_raw %>%
+  # Select required/interesting columns from df data_raw
+  select(all_of(c("Age", "has_whatsapp", "has_facebook", "has_instagram", "BFI_Extra", "BFI_Agree", "BFI_Consc", "BFI_Neuro", "BFI_Open"))) %>%
+  filter(Age %in% c(18:34)) %>%
+  # Add multiple and none App users
+  mutate(
+    # has whatsapp and facebook
+    `has_WF` = case_when(
+      has_whatsapp == 1 & has_facebook == 1 ~ 1,
+      TRUE ~ 0),
+    # has facebook and instagram
+    `has_FI` = case_when(
+      has_facebook == 1 & has_instagram == 1 ~ 1,
+      TRUE ~ 0),
+    # has whatsapp and instagram
+    `has_WI` = case_when(
+      has_whatsapp == 1 & has_instagram == 1 ~ 1,
+      TRUE ~ 0),
+    # has all
+    `has_WFI` = case_when(
+      has_whatsapp == 1 & has_facebook == 1 & has_instagram == 1 ~ 1,
+      TRUE ~ 0),
+    # has none
+    `has_none` = case_when(
+      has_whatsapp == 0 & has_facebook == 0 & has_instagram == 0 ~ 1,
+      TRUE ~ 0),
+    # add case number
+    case_num = case_when(
+      has_none == 1 ~ 8,
+      has_WFI == 1 ~ 7,
+      has_WF == 1 & has_instagram == 0 ~ 6,
+      has_FI == 1 & has_whatsapp == 0 ~ 5,
+      has_WI == 1 & has_facebook == 0 ~ 4,
+      has_whatsapp == 1 & has_instagram == 0 & has_facebook == 0 ~3,
+      has_instagram == 1 & has_whatsapp == 0 & has_facebook == 0 ~2,
+      has_facebook == 1 & has_instagram == 0 & has_whatsapp == 0 ~1,
+      TRUE ~ NA_real_
+      )
+    )
+
+# Preview of the data
+head(data_pro)
+
+# Calculate average personality trait values per case
+data_means <- data_pro %>%
+  group_by(case_num) %>%
+  summarise(
+    Extraversion = mean(BFI_Extra, na.rm = TRUE),
+    Agreeableness = mean(BFI_Agree, na.rm = TRUE),
+    Conscientiousness = mean(BFI_Consc, na.rm = TRUE),
+    Neuroticism = mean(BFI_Neuro, na.rm = TRUE),
+    Openess = mean(BFI_Open, na.rm = TRUE),
+  )
+
+# head(data_means)
+# str(data_means)
+
+# Add respective min and max values
+radar_minmax <- data.frame(
+  case_num = c("min", "max"),
+  Extraversion = c(min(data_pro$BFI_Extra), max(data_pro$BFI_Extra)),
+  Agreeableness = c(min(data_pro$BFI_Agree), max(data_pro$BFI_Agree)),
+  Conscientiousness = c(min(data_pro$BFI_Consc), max(data_pro$BFI_Consc)),
+  Neuroticism = c(min(data_pro$BFI_Neuro), max(data_pro$BFI_Neuro)),
+  Openess = c(min(data_pro$BFI_Open), max(data_pro$BFI_Open))
+  )
+
+# Bind rows and remove first column
+data_radar <- rbind(radar_minmax, data_means)
+
+data_radar <- data_radar %>%
+  select(-1)
+
+# data_radar1 <- data_means %>%
+#   select(-1)
+
+# Show df containing all data for plotting
+print(data_radar)
+# print(data_radar1)
+```
+
+## Visualisation
+
+```{r visualisation, fig.width = 17.5, fig.height = 15}
+# Define plot colors
+colors_border <- rainbow(nrow(data_means))
+colors_in <- adjustcolor(colors_border, alpha.f = 0.2)
+
+# Define legend labels
+leglabs <- c("FB", "Insta", "WA", "WA + Insta", "FB + Insta", "WA + FB", "WA + FB + Insta", "None")
+
+#Create spider web diagram
+radarchart(
+  data_radar,
+  axistype = 1,
+  pcol = colors_border,
+  pfcol = colors_in,
+  plwd = 1.5,
+  plty = 1,
+  cglcol = "grey",
+  cglty = 1,
+  caxislabels = c(0, 0.25, 0.5, 0.75, 1),
+  calcex = 1.75,
+  axislabcol = "black",
+  cglwd = 3,
+  vlcex = 2,
+  title = "Big Five Personality Profiles by Social Media Platforms",
+  cex.main = 2.5
+)
+
+# Legende hinzufügen
+legend(
+  x = "topright",
+  legend = leglabs,
+  bty = "n",
+  pch = 20,
+  col = colors_border,
+  text.col = "black",
+  cex = 2,
+  pt.cex = 2
+)
+
+```
