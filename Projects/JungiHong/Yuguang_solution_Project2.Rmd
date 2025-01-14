@@ -1,14 +1,18 @@
+---
+output: md_document
+---
 # This is the initial solution
 
 ```{r, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(readxl)
-file <- "https://dataverse.harvard.edu/api/access/datafile/:persistentId?persistentId=doi:10.7910/DVN/27560/SS9PFS
-"
+file <- "C:/Users/Yugua/Desktop/R2/Volleyball Passing- USA and TU.xlsx"
+#I don't know why the url didn't work
+#'file <- "https://dataverse.harvard.edu/api/access/datafile/:persistentId?persistentId=doi:10.7910/DVN/27560/SS9PFS"
 ```
 
-# Data manipulation for chart one
-```{r, warning=FALSE}
+
+```{r, warning=FALSE, echo=FALSE, message=FALSE}
 
 data_for1 <- read_excel(file, sheet = "TU sort by pass score", range = "F2:J6") |>
   rename(won = "points won", 
@@ -23,7 +27,7 @@ data_for1 <- read_excel(file, sheet = "TU sort by pass score", range = "F2:J6") 
 ```
 
 # Visualization of chart one
-```{r, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
 ggplot(data_for1, aes(x = pass_score, y = count, fill = result))+
   geom_bar(stat = "identity", position = "stack")+
   labs(
@@ -36,8 +40,8 @@ ggplot(data_for1, aes(x = pass_score, y = count, fill = result))+
                     labels = c("won", "lost"))
 ```
 
-# Data manipulation for chart two
-```{r, warning=FALSE}
+
+```{r, warning=FALSE, echo=FALSE, message=FALSE}
 data <- read_excel(file, sheet = "USA and TU", range = "F3:K14")|>
   na.omit()|>
   rename(points_won = "Points Won", 
@@ -54,7 +58,7 @@ data_for2 <- bind_rows(
 ```
 
 # Visualization for chart two
-```{r, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
 ggplot(data_for2, aes(x = points, y = passing_points, color = type)) +
   geom_point(size = 3) +
   geom_smooth(method = "lm", se = FALSE, aes(group = type)) + 
