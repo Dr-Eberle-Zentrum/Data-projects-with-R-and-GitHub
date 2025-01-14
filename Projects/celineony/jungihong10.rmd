@@ -59,13 +59,8 @@ if (any(participant_row_counts$row_count != 6)) {
   stop("Some participants do not have exactly 6 rows. Please check the data.")
 }
 
-# Preview the combined data
-print(head(data_all))
-
 # Optionally, write the combined data to a new CSV
 write_csv(data_all, "combined_experiment_data.csv")
-
-cat("Combined data has been written to 'combined_experiment_data.csv'.\n")
 
 # Assume the combined dataset is already loaded as `data_all`
 # Compute corrected recognition
@@ -114,7 +109,11 @@ ggplot(data_all %>%
     axis.title.x = element_blank(),
     strip.background = element_blank(), # Remove facet header background
     strip.text = element_text(face = "bold"),
-    plot.title = element_textbox_simple(size = 14, halign = 0.0, width = unit(0.95, "npc"))
+    plot.title = element_textbox_simple(size = 14, halign = 0.0, width = unit(0.95, "npc")),
+    # Adjusting margins to make space for the title
+    plot.margin = margin(t = 10, r = 0, b = 0, l = 0), 
+    # Rotate x-axis labels to avoid overlap
+    axis.text.x = element_text(angle = 45, hjust = 1)
   )
 
 
