@@ -2,7 +2,7 @@
 output: md_document
 ---
 # This is the initial solution
-```{r}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 knitr::opts_chunk$set(
   echo = FALSE, 
   warning = FALSE, 
@@ -10,7 +10,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r data1}
+```{r data1, echo=TRUE}
 library(tidyverse)
 library(readxl)
 file <- "C:/Users/Yugua/Desktop/R2/Volleyball Passing- USA and TU.xlsx"

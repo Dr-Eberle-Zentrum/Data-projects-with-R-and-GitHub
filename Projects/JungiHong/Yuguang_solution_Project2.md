@@ -1,10 +1,10 @@
 # This is the initial solution
 
-    knitr::opts_chunk$set(
-      echo = FALSE, 
-      warning = FALSE, 
-      message = FALSE
-    )
+    library(tidyverse)
+    library(readxl)
+    file <- "C:/Users/Yugua/Desktop/R2/Volleyball Passing- USA and TU.xlsx"
+    #I don't know why the url didn't work
+    #'file <- "https://dataverse.harvard.edu/api/access/datafile/:persistentId?persistentId=doi:10.7910/DVN/27560/SS9PFS"
 
 # Visualization of chart one
 
