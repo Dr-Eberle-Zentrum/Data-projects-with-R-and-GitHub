@@ -1,7 +1,7 @@
 ## Introduction
 
-In this analysi, we explore recognition performance expressed as the hit
-rate minus the false alarm rate (corrected recognition) across four
+In this analysis, we explore recognition performance expressed as the
+hit rate minus the false alarm rate (corrected recognition) across four
 experiments. Participants underwent three phases: pre-conditioning,
 conditioning, and post-conditioning. The study contrasts two conditions,
 CS+ (Conditioned Stimulus Positive) and CS− (Conditioned Stimulus
