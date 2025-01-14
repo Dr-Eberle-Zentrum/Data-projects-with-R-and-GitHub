@@ -4,16 +4,25 @@ output: md_document
 date: "2024-12-03"
 ---
 
+# Introduction
+
+This report analyzes foreign language proficiency by country, comparing it with the EU average.
+
+```{r setup, include=FALSE}
+# libraries
 library(ggplot2)
 library(dplyr)
-library(tidyr)
 library(readr)
 library(scales)
 
-# Load the data
+# Set chunk
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+
+
+# Load data
 data <- read_csv("C:/R2_data/lang_known.csv.gz")
 
-## Inspect the data structure
+## checking data structure
 head(data)
 
 ## Checking Unique data of each cols.
@@ -53,22 +62,24 @@ eu_data <- filtered_data %>%
   rename(EU_Percentage = Percentage)
 
 # Calculate mean difference
-country_data_summary <- country_data %>%
+country_data_summary <- filtered_data %>%
+  left_join(eu_data, by = "Number_of_Languages") %>%
+  mutate(Difference = Percentage - EU_Percentage) %>%
   group_by(Country, Number_of_Languages) %>%
   summarize(
-    Difference = mean(Difference, na.rm = TRUE),
-    .groups = "drop" 
+    Mean_Difference = mean(Difference, na.rm = TRUE),
+    .groups = "drop"
   )
 
 #checking
-head(country_data)
-summary(country_data)
+head(country_data_summary)
+summary(country_data_summary)
 
-#Visualization part!
-ggplot(country_data_summary, aes(x = Number_of_Languages, y = Difference, fill = Difference > 0)) +
-  geom_bar(stat = "identity", aes(alpha = abs(Difference)), show.legend = FALSE) +
-  geom_text(aes(label = round(Difference, 1)), 
-            vjust = ifelse(country_data_summary$Difference > 0, -0.5, 1.5),
+#Visualization part!!
+ggplot(country_data_summary, aes(x = Number_of_Languages, y = Mean_Difference, fill = Mean_Difference > 0)) +
+  geom_bar(stat = "identity", aes(alpha = abs(Mean_Difference)), show.legend = FALSE) +
+  geom_text(aes(label = round(Mean_Difference, 1)), 
+            vjust = ifelse(country_data_summary$Mean_Difference > 0, -0.5, 1.5),
             size = 1.5) + 
   scale_fill_manual(values = c("TRUE" = "red", "FALSE" = "blue")) +
   scale_alpha(range = c(0.4, 1)) +
