@@ -3,7 +3,7 @@ output: md_document
 ---
 # This is the initial solution
 
-```{r, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
 library(tidyverse)
 library(readxl)
 file <- "C:/Users/Yugua/Desktop/R2/Volleyball Passing- USA and TU.xlsx"
@@ -12,7 +12,7 @@ file <- "C:/Users/Yugua/Desktop/R2/Volleyball Passing- USA and TU.xlsx"
 ```
 
 
-```{r, warning=FALSE, echo=FALSE, message=FALSE}
+```{r, warning=FALSE, echo=FALSE}
 
 data_for1 <- read_excel(file, sheet = "TU sort by pass score", range = "F2:J6") |>
   rename(won = "points won", 
@@ -27,7 +27,7 @@ data_for1 <- read_excel(file, sheet = "TU sort by pass score", range = "F2:J6") 
 ```
 
 # Visualization of chart one
-```{r, echo=FALSE}
+```{r, echo=TRUE, eval=TRUE, message=FALSE}
 ggplot(data_for1, aes(x = pass_score, y = count, fill = result))+
   geom_bar(stat = "identity", position = "stack")+
   labs(
@@ -41,7 +41,7 @@ ggplot(data_for1, aes(x = pass_score, y = count, fill = result))+
 ```
 
 
-```{r, warning=FALSE, echo=FALSE, message=FALSE}
+```{r, warning=FALSE, echo=FALSE}
 data <- read_excel(file, sheet = "USA and TU", range = "F3:K14")|>
   na.omit()|>
   rename(points_won = "Points Won", 
@@ -58,7 +58,7 @@ data_for2 <- bind_rows(
 ```
 
 # Visualization for chart two
-```{r, echo=FALSE}
+```{r, echo=TRUE, eval=TRUE, message=FALSE}
 ggplot(data_for2, aes(x = points, y = passing_points, color = type)) +
   geom_point(size = 3) +
   geom_smooth(method = "lm", se = FALSE, aes(group = type)) + 
