@@ -12,4 +12,6 @@
 
 # Visualization for chart two
 
+    ## `geom_smooth()` using formula = 'y ~ x'
+
 ![](Yuguang_solution_Project2_files/figure-markdown_strict/unnamed-chunk-5-1.png)
