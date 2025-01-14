@@ -27,7 +27,7 @@ data_for1 <- read_excel(file, sheet = "TU sort by pass score", range = "F2:J6") 
 ```
 
 # Visualization of chart one
-```{r, echo=TRUE, eval=TRUE}
+```{r, echo=TRUE}
 ggplot(data_for1, aes(x = pass_score, y = count, fill = result))+
   geom_bar(stat = "identity", position = "stack")+
   labs(
@@ -58,7 +58,7 @@ data_for2 <- bind_rows(
 ```
 
 # Visualization for chart two
-```{r, echo=TRUE, eval=TRUE}
+```{r, echo=TRUE}
 ggplot(data_for2, aes(x = points, y = passing_points, color = type)) +
   geom_point(size = 3) +
   geom_smooth(method = "lm", se = FALSE, aes(group = type)) + 
