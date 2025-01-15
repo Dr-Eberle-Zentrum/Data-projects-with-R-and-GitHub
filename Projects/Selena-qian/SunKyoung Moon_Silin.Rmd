@@ -8,7 +8,7 @@ date: "2024-12-03"
 
 This report analyzes foreign language proficiency by country, comparing it with the EU average.
 
-```{r setup, include=FALSE}
+```{r setup, echo=FALSE}
 # libraries
 library(ggplot2)
 library(dplyr)
@@ -99,5 +99,5 @@ ggplot(country_data_summary, aes(x = Number_of_Languages, y = Mean_Difference, f
   )
 
 
-  
+```
   
