@@ -18,6 +18,7 @@ All tutorials are summarized within the
 
 -   [Project descriptions](#project-descriptions)
     -   [Phase 1 - Drafting a project description](#phase-1---drafting-a-project-description)
+        -   [List of available projects](#available-projects)
     -   [Phase 2 - Reviewing a project description](#phase-2---reviewing-a-project-description)
     -   [Phase 3 - Finalizing your project description](#phase-3---finalizing-your-project-description)
 -   [Tackling a suggested project](#tackling-a-suggested-project)
@@ -134,10 +135,10 @@ Current projects:
 - Jungi (JungiHong) - [Volleyball Passing](Projects/JungiHong/project-description.md)
 - Beilei (Beilei-Wang) - [Income distributions](Projects/Beilei-Wang/project-description.md)
 - Celine (celineony) - [Behavorial data](Projects/celineony/project-description.md)
-- Felix (felix-gogollok) [Historical data analysis regarding genocides](Projects/felix-gogollok/historical-data-analysis/project-description.md)
+- Felix (felix-gogollok) [Whisky statistics](Projects/felix-gogollok/whisky-statistics/project-description.md)
 - Manuel (ManuDoerrich) - [Nutrition data](Projects/ManuDoerrich/project-description.md)
 - Nicolas (NicolasDelgadoL) - [social media & personality](Projects/NicolasDelgadoL/Nicolás-project.md)
-- Sun (MoonSunKyung) - [Shopping Trends by Age group and Sex](Projects/SunKyoung Moon/project_description.md)
+- Sun (MoonSunKyung) - [Shopping Trends by Age group and Sex](Projects/SunKyoung%20Moon/project_description.md)
 
 
 #### Goals
@@ -227,9 +228,9 @@ Given a project description, you will try to solve the task. In order to practic
 
 This workflow is described and summarized in
 
--   [Section 6.5 Your repo with branching](https://edav.info/github.html#your-repo-with-branching)
--   [Step 4: Branch](https://edav.info/github.html#step-4-branch)
--   [Step 5: Work, commit and push](https://edav.info/github.html#step-5-work-commit-and-push)
+-   [Section 6.5 Your repo with branching](https://edav.info/git_GitHub.html#your-repo-with-branching)
+-   [Step 4: Branch](https://edav.info/git_GitHub.html#step-4-branch)
+-   [Step 5: Work, commit and push](https://edav.info/git_GitHub.html#step-5-work-commit-and-push)
 
 Note: we are still working all on ONE GITHUB REPOSITORY! We do *not create a fork*, i.e. our own copy of the repository on GitHub, which is also detailed in the linked material. The latter (forking) is needed, if you don't have writing permissions to a repository. But the overall workflow is more or less the same.
 
@@ -286,6 +287,8 @@ Now it is time to [open a pull request](https://github.com/Dr-Eberle-Zentrum/Dat
 -   **invite** the project owner as a **reviewer**
     -   suggest him/her as reviewer (upper right in GitHub Pull Request interface)
     -   send him/her a message via a comment "@USERNAME"
+-   make your pull request a **draft**, to highlight it is work in progress (and not ready for merging)
+    -   to this end, click on "Convert to draft" in the upper right below the reviewer list
 
 #### Goal
 
