@@ -6,42 +6,95 @@ output: md_document
 
 ******
 
-## Data Manipulation
+### **1. Step: Install Packages and Read Data**
 ******
 ```{r, message = FALSE, warning = FALSE}
 library(tidyverse)
-
 dt <- read_csv("../adult-depression.csv")
-
-total_frequency <- dt %>%
-  filter(Strata == "Total") %>% 
-  select(Year, Total_Frequency = Frequency)
-
-dt_plot <- dt %>%
-  left_join(total_frequency, by = "Year") %>%    # combine Total Frequency with the original data
-  select(Year, Strata, `Strata Name`, Frequency, Total_Frequency, `Lower 95% CL`, `Upper 95% CL`) %>%
-  rowwise() %>%
-  mutate(`Annual Frequency` = round(Frequency / Total_Frequency * 100, 2)) %>% # Calculate Annual Frequency
-  filter(Strata %in% c("Race-Ethnicity", "Education", "Age")) %>% 
-  select(-Total_Frequency) %>% print()
 ```
-## Plotting
-******
-```{r ggplot, message = FALSE, warning = FALSE}
 
-dt_plot %>% 
+Let's take a first look at the dataset:
+
+```{r, message = FALSE, warning = FALSE, echo = FALSE}
+knitr::kable(head(dt, 25), format = "markdown")
+```
+
+**The current dataset...**
+
+1. has 8 columns and 161 rows.
+
+2. contains one observation per row and one variable per column.
+
+The dataset is already tidy, but it would be more readable if we converted the data into a wide format with each year in a separate column.
+
+
+### **2. Step: Convert Data into Wide Format**
+******
+```{r, message = FALSE, warning = FALSE}
+dt_wide <- dt %>%
+  pivot_longer(cols = c(Frequency, `Weighted Frequency`, Percent, `Lower 95% CL`, `Upper 95% CL`), 
+               names_to = "Metric", 
+               values_to = "Value") %>%
+  pivot_wider(names_from = Year, 
+              values_from = Value)
+```
+The dataset in wide format looks like this:
+```{r, message = FALSE, warning = FALSE, echo = FALSE}
+knitr::kable(head(dt_wide, 25), format = "markdown")
+```
+
+For plotting purposes, the annual percentage of each stratum is needed. However, the given `percent` does not appear to represent the annual percentage. Let's verify this.
+
+
+### **3. Step: Check What the Given Percentage Represents**
+******
+Check if the given percentage matches the `Frequency`.
+```{r, message = FALSE, warning = FALSE}
+dt_total <- dt %>%
+  filter(Strata == "Total") %>%
+  select(Year, Total_Frequency = Frequency) %>% 
+  right_join(dt, by = "Year") 
+
+round(dt_total$`Frequency` / dt_total$Total_Frequency, 2) == dt_total$Percent
+```
+
+Check if the given percentage matches the `Weighted Frequency`.
+```{r, message = FALSE, warning = FALSE}
+dt %>% 
+  group_by(Year) %>%
+  filter(Strata != "Total") %>%
+  summarise(Total_Weighted_Frequency = sum(`Weighted Frequency`)) %>% 
+  right_join(dt %>% 
+               filter(Strata != "Total"), 
+             by = "Year") %>% 
+  mutate(match = round(`Weighted Frequency` / Total_Weighted_Frequency, 2) == Percent) %>% .$match
+```
+
+Conclusion: The given `Percent` matches neither the `Frequency` not the `Weighted Frequency`. Therefore, we need to calculate the annual percentage for each stratum.
+
+
+### **4. Step: Calculate the Annual Percentage and Prepare for Plotting**
+******
+```{r, message = FALSE, warning = FALSE}
+dt_annual <- dt_total %>%
+  select(Year, Strata, `Strata Name`, Frequency, Total_Frequency) %>%
+  mutate(`Annual Frequency` = round(Frequency / Total_Frequency, 2))
+```
+
+
+### **5. Step: Plot the Data**
+******
+```{r, message = FALSE, warning = FALSE}
+dt_annual %>% 
+  filter(Strata %in% c("Race-Ethnicity", "Education", "Age")) %>%
   ggplot(aes(x = Year, y = `Annual Frequency`, color = `Strata Name`, group = `Strata Name`)) +
   geom_line() +
-  # geom_ribbon(aes(ymin = `Lower 95% CL`, ymax = `Upper 95% CL`), alpha = 0.2) +
-  #I assume that the Upper and Lower 95% CL data is not an annual percentage, so it doesn't match the lines drawn by geom_line. And I haven't figured out how that percentage was derived in the original dataframe, so I haven't found out how to calculate the annual data for an Upper and Lower 95% CL either...
   facet_wrap(~Strata, scales = "free_y", ncol = 1) +
   theme_minimal() +
-  scale_y_continuous(
-    labels = function(x) paste0(x, "%")  # add % to y-axis
-  ) +
- labs(
-  y = "Annual Frequency (%)", 
-  title = "Frequency of Depressive Disorder Reports in California",
+  scale_y_continuous( labels = scales::percent) +
+  labs(
+    y = "Annual Frequency (%)", 
+    title = "Frequency of Depressive Disorder Reports in California",
   ) +
   theme(
     legend.position = "right",
