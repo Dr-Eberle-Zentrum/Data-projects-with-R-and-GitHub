@@ -37,7 +37,7 @@ animated to show the development of the total number of guest students
 at the selected universities over time. The resulting animation is saved
 as a GIF file.
 
-![](luis_animation.gif)
+
 
 ## Results
 
