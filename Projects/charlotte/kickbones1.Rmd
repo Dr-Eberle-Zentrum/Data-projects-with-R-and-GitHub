@@ -6,8 +6,11 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 # Luis' solution of Charlotte's project
 
-## The R Code
-```{r}
+## The Task
+The task of this project is to create an animated graph of the total number of guest students at three universities in North Rhine-Westphalia over the course of several years. The data is provided in a CSV file by the website GOVDATA.
+## Data Processing
+The data is read from the provided CSV file and cleaned to ensure consistency and accuracy. We filter the data for the universities of Bielefeld, Bochum, Bonn and and then create a summary row for each year. The resulting data used for visualization looks like the following.
+```{r include=FALSE}
 library(tidyverse)
 library(dplyr)
 
@@ -58,8 +61,13 @@ summary_rows <- dt_proc %>%
 dt_proc <- 
   bind_rows(dt_proc, summary_rows) %>%
   arrange(Semester)
-
-
+```
+```{r}
+dt_proc
+```
+## Data visualization / animation
+The data is visualized using ggplot2 and gganimate. THe graph is animated to show the development of the total number of guest students at the selected universities over time. The resulting animation is saved as a GIF file.
+```{r include=FALSE}
 ###############################
 #      DATA VISUALIZATION
 ###############################
@@ -111,5 +119,6 @@ plot_animate <- dt_plot +
 # Save the animation
 anim_save("animation.gif", animation = plot_animate)
 ```
-
+## Results
+We can see that the total number of guest students at the universitiy of Bochum increases over time and even overtakes the university of Bielefeld in WS 2018. The number of guest students at Bielefeld decreases in the last years, while the number of guest students at Bonn remains relatively constant.
 
