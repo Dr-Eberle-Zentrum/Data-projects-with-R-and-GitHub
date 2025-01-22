@@ -5,25 +5,28 @@ output: md_document
 date: "2025-01-07"
 ---
 
-```{r setup}
+```{r setup, include=FALSE}
+#Setting up packages
 #knitr::opts_chunk$set(echo = TRUE, root.dir = here::here())
 options(repos = c(CRAN = "https://cloud.r-project.org/"))
 library(dplyr)
 library(ggplot2)
 ```
-## Data Loading
 
-```{r setup2}
+
+```{r setup2, include=FALSE}
 # Set working directory to the current file's location
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 ```
-# Load the dataset
-```{r load}
+
+```{r load, include=FALSE}
+## Data Loading
 data <- read.csv("kaggle_dataset.csv")
 ```
 
 # Inspect the dataset
-```{r inspect}
+```{r inspect, include=FALSE}
+
 str(data)
 head(data)
 ```
@@ -34,14 +37,14 @@ Compute median app usage time for each device model.
 Calculate the number of users for each device model.
 
 
+```{r code1, include=FALSE}
 # Convert app usage time to hours/day
-```{r code1}
 data <- data %>%
   mutate(Screen.On.Time..hours.day. = App.Usage.Time..min.day. / 60)
 ```
 
+```{r code2, include=FALSE}
 # Compute median app usage time and number of users per device model
-```{r code2}
 device_summary <- data %>%
   group_by(Device.Model) %>%
   summarise(
@@ -52,7 +55,7 @@ device_summary <- data %>%
 ```
 
 # Create age group categories for visualization
-```{r code3}
+```{r code3, include=FALSE}
 data <- data %>%
   mutate(AgeGroup = case_when(
     Age >= 20 & Age <= 29 ~ "20-29",
@@ -66,7 +69,7 @@ data <- data %>%
 Violin Plot by Device Model and Gender
 
 # Create a violin plot with gender and age group differentiation
-```{r plot1}
+```{r plot1, echo = FALSE}
 ggplot(data, aes(x = Device.Model, y = Screen.On.Time..hours.day., fill = Gender)) +
   geom_violin(alpha = 0.3, color = "black") +  # Transparent violins
   geom_jitter(aes(color = AgeGroup), size = 1, width = 0.2) +  # Add points for age groups
@@ -88,7 +91,7 @@ ggplot(data, aes(x = Device.Model, y = Screen.On.Time..hours.day., fill = Gender
 ```
 
 Adding User Counts to the Plot
-```{r plot2}
+```{r plot2, echo = FALSE}
 # Add user count annotations below the x-axis
 device_summary <- device_summary %>%
   mutate(Label = paste(TotalUsers, "Users"))
