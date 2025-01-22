@@ -37,7 +37,7 @@ The final plot effectively illustrates the proficiency levels of each country co
 ![](Result_imaga_from_Sun.png)
 
 
-```{r setup, include=FALSE}
+```{r setup, include=TRUE}
 
 # Set CRAN mirror
 options(repos = c(CRAN = "https://cran.r-project.org"))
