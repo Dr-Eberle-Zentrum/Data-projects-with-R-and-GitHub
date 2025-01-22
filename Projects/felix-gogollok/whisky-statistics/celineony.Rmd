@@ -4,7 +4,24 @@ author: "Celine Onyemaechi"
 output: md_document
 ---
 
-```{r setup}
+change that markdown output for unique names is not displayed
+
+level 1:
+spider web chart
+items = regions
+value = fraction of whiskies (per region) rated 80 or higher
+damit sind die werte prozentual
+
+level 2:
+mehrere linien im spider web mit unterschiedlichen thresholds:
+rated 50 or higher
+rated 70 or higher
+rated 80 or higher
+damit überlappen die linien nicht, aber geben den die steigerung ganz gut wieder
+
+
+
+```{r setup, echo = FALSE}
 
 # clean environment
 rm(list = ls())
@@ -12,137 +29,182 @@ cat("\014")
 
 # load packages 
 library(tidyverse)
-#install.packages("devtools")
-library(devtools)
-#devtools::install_github("ricardo-bion/ggradar", dependencies = TRUE)
-library(ggradar)
-#install.packages("scales")
-library(scales)
+#install.packages("fmsb")
+library(fmsb)
 
 # read file 
-data <- read.csv2("~/Data-projects-with-R-and-GitHub/Projects/felix-gogollok/whisky-statistics/Whisky.csv") #use csv2() cause data is semicolon separated  
+setwd("~/Data-projects-with-R-and-GitHub/Projects/felix-gogollok/whisky-statistics")
+data <- read.csv2("Whisky.csv") #use csv2() cause data is semicolon separated  
 ```
 
-Before starting to work on the project I will get a overview of the data I will work with
-```{r summary stats}
+
+```{r clean data set, echo = FALSE}
 # look at data
+colnames(data)
 #View(data)
+
+#remove trailing
+data <- data %>%
+  rename_with(~ gsub("\\.$", "", .))
+
+# remove unnecessary columns 
+# to create the spider chart 'Destillerie', 'Region' and 'Punkte' are relevant
+# remaining columns are not needed for visualization 
+data <- data  %>% select(Destillerie, Region, Punkte)
 
 # structure of the data
 str(data)
-#' 1307 objects (rows) and 11 variables (columns)
-#' all variables except for "Punkte" are character, $Punkte is of type integer 
+#' 1307 objects (rows) and 3 variables (columns)
+#' 'Desrillerie' an 'Region' are of type chraracter (strings) 
+#' and 'Punkte is of type integer
 
 
 ```
 
 
 Prepare data for spider plot
-```{r data preparation}
+```{r data preparation, echo = FALSE}
 # check summary stats 
 summary(data)
-#' the column 'Punkte.' (ratings) is the only column with NA's 
+#' the column 'Punkte' (ratings) is the only column with NA's 
 #' summary stats for ratings (Punkte)
 #' min = 55.00 , max = 96.00 -> range of 44
 #' median = 79.00
 #' mean = 79.00
 #' total of 20 NAs
 
+
 # remove NA's from ratings column
-data <- data %>% filter(!is.na(Punkte.))
-summary(data$Punkte.) # check if NA's are removed
+data <- data %>% drop_na(Punkte)
+summary(data$Punkte) # check if NA's are removed
 
 # look at relevant columns 
 
 # check how many distinct regions 
-length(unique(data$Region.)) # there are 5 distinct regions 
-unique(data$Region.) # get names of the regions 
+length(unique(data$Region)) # there are 5 distinct regions 
+unique(data$Region) # get names of the regions 
 
 # check number of distinct distilleries
-length(unique(data$Destillerie.))  # 121 distilleries
-unique(data$Destillerie.)
+length(unique(data$Destillerie))  # 121 distilleries
+unique(data$Destillerie)
 
 ```
 
 
-```{r}
+```{r prepare data level 1 plotting}
 
-# compute median rating per region and distillery for later plotting
-median_rating_region <- data %>%
-                        group_by(Region.) %>%
-                        summarise(median_rating = median(Punkte.))
+# compute percentage of ratings >= 80
 
-# filter high ratings ( > 80)
-dat_high_ratings <- data %>% filter(Punkte. > 80)
+level01_data <- data %>%
+  group_by(Region) %>%
+  summarize(
+    percantage_high_ratings = (sum(Punkte >= 80) / n()) * 100
+  )
 
-# compute median of high ratings per region 
-median_high_ratings_region <- aggregate(Punkte. ~ Region., data = dat_high_ratings, FUN = median)
+# format data to make it compatible with fmsb
+radar_level01 <- as.data.frame(t(level01_data$percantage_high_ratings)) # t() to transpose data 
+colnames(radar_level01) <- level01_data$Region
 
-# count number of high ratings per region
-high_ratings_region  <- dat_high_ratings %>%
-                        group_by(Region.) %>%
-                        summarise(number_top_ratings = n())
-
-```
-
-```{r}
-radar_data <- high_ratings_region %>%
-  pivot_wider(names_from = Region., values_from = number_top_ratings) %>%
-  mutate(Category = "Ratings") %>% 
-  relocate(Category)
-
-ggradar(radar_data,
-        values.radar = c("0", "200", "400"),
-        grid.min = 0, grid.mid = 200, grid.max = 400,
-        grid.label.size = 4, 
-        axis.label.size = 3, 
-        group.line.width = 1, 
-        group.point.size = 3)
-
+# add max and min to df
+radar_level01 <- rbind(rep(100, ncol(radar_level01)), 
+                       rep(0,   ncol(radar_level01)),
+                       radar_level01)
+  
 ```
 
 
-```{r}
-# create spider graph
-# combine df
-data_plot <- merge(median_rating_region, median_high_ratings_region, by = "Region.", all = F)
-colnames(data_plot) <- c("Region", "Median_Rating", "Median_High_Rating")
+```{r create spider chart for ratings >= 80}
 
-# convert to long
-data_plot_long <- data_plot %>%
-  gather(key = "Type", value = "Value", -Region)
+radarchart(
+  radar_level01,
+  axistype = 1,
+  caxislabels = c("0%", "20%", "40%", "60%", "80%", "100%"),
+  #caxislabels = seq(0, 100, 20),  # adjust axis labels for because of percentages
+  title = "Percentage of Whiskies Rated 80 or Higher by Region",
+  pcol = "#EE4000",
+  plwd = 2,
+  cglcol = "darkgrey",
+  cglwd = 1,
+  cglty = 1,
+  axislabcol = "black",
+  maxmin = T,
+  seg = 5,
+  vlcex = 0.8,
+  xlim = c(-1, 1),  
+  ylim = c(-1, 1.2)
+)
 
-# data to wide format for ggradar
-data_plot_wide <- data_plot_long %>%
-  spread(key = "Region", value = "Value")
-
-ggradar(data_plot_wide, 
-        values.radar = c("0", "45", "90"),
-        grid.min = 0, grid.mid = 45, grid.max = 90,
-        group.colours = c("#00AFBB", "#E7B800"),
-        legend.position = "bottom")
+legend("topright", 
+       legend = "Whiskeys rated \n 80 or higher", 
+       col = "#EE4000", 
+       lwd = 2, 
+       bty = "n",
+       cex = 0.8)
 
 ```
 
 
-```{r}
-median_rating_dist <- data %>%
-                        group_by(Destillerie.) %>%
-                        summarise(median_rating = median(Punkte.))
+```{r prepare data level 2 plotting with multiple thresholds}
 
-median_rating_region_destillery <- data %>%
-                        group_by(Destillerie., Region.) %>%
-                        summarise(median_rating = median(Punkte.), .groups = 'drop')
+# compute percentage for thresholds 60, 70 and 90
 
-high_median_ratings <- median_rating_region_destillery %>% filter(median_rating > 80)
+level02_data <- data %>%
+  group_by(Region) %>%
+  summarize(
+    rated_70_more = (sum(Punkte >= 70) / n()) * 100,
+    rated_80_more = (sum(Punkte >= 80) / n()) * 100,
+    rated_90_more = (sum(Punkte >= 90) / n()) * 100,
+  )
+
+# format data to make it compatible with fmsb
+radar_level02 <- as.data.frame(t(select(level02_data, -Region))) 
+colnames(radar_level02) <- level02_data$Region
+
+# add max and min to df
+radar_level02 <- rbind(rep(100, ncol(radar_level02)), 
+                       rep(0,   ncol(radar_level02)),
+                       radar_level02)
+  
+```
 
 
-summary(high_median_ratings$median_rating)
+```{r create spider chart multiple thresholds}
 
+# define colours for each of the three thresholds
+colours <- c("#FFA500", "#4169E1", "#EE4000")
+#colours to fill
+fill_colours <- c(
+  rgb(255, 165, 0, max = 255, alpha = 80),  # Light orange
+  rgb(65, 105, 225, max = 255, alpha = 80), # Light blue
+  rgb(238, 64, 0, max = 255, alpha = 80)    # Light red
+)
 
-# count number of high ratings per distillery
-high_ratings_destillery <- dat_high_ratings %>%
-                           group_by(Destillerie.) %>%
-                           summarise(number_top_ratings = n())
+radarchart(
+  radar_level02,
+  axistype = 1,
+  #caxislabels = c("0%", "20%", "40%", "60%", "80%", "100%"),
+  caxislabels = seq(0, 100, 20),  # adjust axis labels for because of percentages
+  title = "Percentage of Whiskies Rated 80 or Higher by Region",
+  pcol = colours,
+  pfcol = fill_colours,
+  plwd = 2,
+  cglcol = "darkgrey",
+  cglwd = 1,
+  cglty = 1,
+  axislabcol = "black",
+  maxmin = T,
+  seg = 5,
+  vlcex = 0.8,
+  xlim = c(-1, 1),  
+  ylim = c(-1, 1.2)
+)
+
+legend("topright", 
+       legend = c("Rated 70 or higher", "Rated 80 or higher", "Rated 90 or higher"), 
+       col = colours, 
+       lwd = 2, 
+       bty = "n",
+       cex = 0.8)
+
 ```
 
