@@ -6,26 +6,52 @@ date: "2024-12-03"
 
 # Introduction
 
-This report analyzes foreign language proficiency by country, comparing it with the EU average.
+The report analyzes foreign language proficiency across selected European countries (Germany, France, Sweden, and Austria) and compares their performance to the EU average. The primary goal is to evaluate differences in proficiency levels by the number of foreign languages known among adults aged 18 to 69.
+
+# Analysis
+
+The dataset is filtered to include data from 2022 for the relevant countries and age group. Key steps include below
+
+1) Renaming and reorganizing columns for clarity.
+
+2) Calculating the difference between each country's proficiency percentage and the EU average for the same category (number of foreign languages known).
+
+3) Grouping data by country and number of languages for summary statistics, particularly focusing on the mean differences from the EU average.
+
+The results are visualized using a bar chart, where red and blue indicate whether a country's proficiency level is above or below the EU average.
+
+# My Challenge
+
+One of the main challenges was incorporating country flags and the EU flag into the facet labels for enhanced visual clarity.
+
+This was achieved using the ggtext library, which supports HTML rendering in ggplot facet labels. Flags were added as <img> tags in the facet labels, with specific sizes and alignments. The element_markdown() function in theme() allowed rendering these HTML elements correctly.
+
+# Result
+The final plot effectively illustrates the proficiency levels of each country compared to the EU average, with flags for each country and the EU flag enhancing the visualization. You can see my code and Result image below 
+
 
 ```{r setup, include=FALSE}
+
+# Set CRAN mirror
+options(repos = c(CRAN = "https://cran.r-project.org"))
+
 # libraries
-library(ggplot2)
-library(dplyr)
-library(readr)
-library(scales)
+library(tidyverse)
+install.packages("ggtext")
+library(ggtext)
+
 
 # Set chunk
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
-
 # Load data
-data <- read_csv("C:/R2_data/lang_known.csv.gz")
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+data <- read_csv("lang_known.csv.gz")
 
-## checking data structure
+# checking data structure
 head(data)
 
-## Checking Unique data of each cols.
+# Checking unique data of each column
 unique(data$age)          
 unique(data$geo)          
 unique(data$TIME_PERIOD)  
@@ -36,16 +62,16 @@ filtered_data <- data %>%
   filter(
     TIME_PERIOD == 2022,  # year filtering
     age == "From 18 to 69 years",  # age filtering
-    geo %in% c("Germany", "France", "Sweden", "Austria", "European Union - 27 countries (from 2020)"), # country filtering
+    geo %in% c("Germany", "France", "Sweden", "Austria", "European Union - 27 countries (from 2020)"), # Include EU average for comparison
     !is.na(OBS_VALUE)  # remove NA
   ) %>%
   rename(
-    Country = geo,  #change column name
+    Country = geo,  # Change column name
     Number_of_Languages = n_lang,  
     Percentage = OBS_VALUE  
   ) %>%
   mutate(
-    # organize num. of languages
+    # Organize number of languages
     Number_of_Languages = case_when(
       Number_of_Languages == "No languages" ~ "0",
       Number_of_Languages == "1 language" ~ "1",
@@ -61,8 +87,9 @@ eu_data <- filtered_data %>%
   select(Number_of_Languages, Percentage) %>%
   rename(EU_Percentage = Percentage)
 
-# Calculate mean difference
+# Calculate difference from EU average
 country_data_summary <- filtered_data %>%
+  filter(Country != "European Union - 27 countries (from 2020)") %>%
   left_join(eu_data, by = "Number_of_Languages") %>%
   mutate(Difference = Percentage - EU_Percentage) %>%
   group_by(Country, Number_of_Languages) %>%
@@ -71,11 +98,21 @@ country_data_summary <- filtered_data %>%
     .groups = "drop"
   )
 
-#checking
-head(country_data_summary)
-summary(country_data_summary)
+# Add max value for each country for flag positioning
+country_data_summary <- country_data_summary %>%
+  group_by(Country) %>%
+  mutate(Max_Mean_Difference = max(Mean_Difference, na.rm = TRUE)) %>%
+  ungroup()
 
-#Visualization part!!
+# Create a named vector for facet labels with flags
+facet_labels <- c(
+  "Germany" = "<img src='Germany_flag.png' width='20' height='15' /> Germany - <img src='EU_flag.png' width='20' height='15' />",
+  "France" = "<img src='France_flag.png' width='20' height='15' /> France - <img src='EU_flag.png' width='20' height='15' />",
+  "Sweden" = "<img src='Sweden_flag.png' width='20' height='15' /> Sweden - <img src='EU_flag.png' width='20' height='15' />",
+  "Austria" = "<img src='Austria_flag.png' width='20' height='15' /> Austria - <img src='EU_flag.png' width='20' height='15' />"
+)
+
+# Visualization
 ggplot(country_data_summary, aes(x = Number_of_Languages, y = Mean_Difference, fill = Mean_Difference > 0)) +
   geom_bar(stat = "identity", aes(alpha = abs(Mean_Difference)), show.legend = FALSE) +
   geom_text(aes(label = round(Mean_Difference, 1)), 
@@ -84,7 +121,7 @@ ggplot(country_data_summary, aes(x = Number_of_Languages, y = Mean_Difference, f
   scale_fill_manual(values = c("TRUE" = "red", "FALSE" = "blue")) +
   scale_alpha(range = c(0.4, 1)) +
   geom_hline(yintercept = 0, linetype = "dashed") +
-  facet_wrap(~ Country, ncol = 2, scales = "free_y") +
+  facet_wrap(~ Country, ncol = 2, scales = "free_y", labeller = as_labeller(facet_labels)) +
   labs(
     title = "Foreign Language Proficiency by Country: Comparison with EU Average",
     x = "Number of Foreign Languages",
@@ -94,10 +131,11 @@ ggplot(country_data_summary, aes(x = Number_of_Languages, y = Mean_Difference, f
   theme_minimal() +
   theme(
     plot.title = element_text(face = "bold", hjust = 0.5),
-    strip.text = element_text(face = "bold"),
+    strip.text = element_markdown(face = "bold", hjust = 0.5), # HTML rendering in facet labels
     plot.caption = element_text(hjust = 0, face = "italic")
   )
 
 
-  
-  
+
+```
+
