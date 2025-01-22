@@ -84,4 +84,40 @@ above three thresholds of 70, 80 and 90
 
 ## Create the spider chart with multiple thresholds
 
+    # define colours for each of the three thresholds
+    colours <- c("#FFA500", "#4169E1", "#EE4000")
+    #colours to fill
+    fill_colours <- c(
+      rgb(255, 165, 0, max = 255, alpha = 80),  # Light orange
+      rgb(65, 105, 225, max = 255, alpha = 80), # Light blue
+      rgb(238, 64, 0, max = 255, alpha = 80)    # Light red
+    )
+
+    radarchart(
+      radar_level02,
+      axistype = 1,
+      #caxislabels = c("0%", "20%", "40%", "60%", "80%", "100%"),
+      caxislabels = seq(0, 100, 20),  # adjust axis labels for because of percentages
+      title = "Percentage of Whiskies Rated 80 or Higher by Region",
+      pcol = colours,
+      pfcol = fill_colours,
+      plwd = 2,
+      cglcol = "darkgrey",
+      cglwd = 1,
+      cglty = 1,
+      axislabcol = "black",
+      maxmin = T,
+      seg = 5,
+      vlcex = 0.8,
+      xlim = c(-1, 1),  
+      ylim = c(-1, 1.2)
+    )
+
+    legend("topright", 
+           legend = c("Rated 70 or higher", "Rated 80 or higher", "Rated 90 or higher"), 
+           col = colours, 
+           lwd = 2, 
+           bty = "n",
+           cex = 0.8)
+
 ![](celineony_files/figure-markdown_strict/unnamed-chunk-6-1.png)
