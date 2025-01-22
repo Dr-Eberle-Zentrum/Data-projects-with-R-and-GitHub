@@ -2,26 +2,16 @@
 title: "Untitled"
 author: "Celine Onyemaechi"
 output: md_document
+
 ---
 
-change that markdown output for unique names is not displayed
+The task involves creating a spider web chart with two levels:
 
-level 1:
-spider web chart
-items = regions
-value = fraction of whiskies (per region) rated 80 or higher
-damit sind die werte prozentual
+-   Level 1: Display the fraction of whiskies rated 80 or higher for each region.
 
-level 2:
-mehrere linien im spider web mit unterschiedlichen thresholds:
-rated 50 or higher
-rated 70 or higher
-rated 80 or higher
-damit überlappen die linien nicht, aber geben den die steigerung ganz gut wieder
+-   Level 2: Add multiple lines to the spider web chart to represent different rating thresholds (50, 70, and 80 or higher).
 
-
-
-```{r setup, echo = FALSE}
+```{r setup,include=FALSE}
 
 # clean environment
 rm(list = ls())
@@ -37,8 +27,11 @@ setwd("~/Data-projects-with-R-and-GitHub/Projects/felix-gogollok/whisky-statisti
 data <- read.csv2("Whisky.csv") #use csv2() cause data is semicolon separated  
 ```
 
+## Clean the data set
 
-```{r clean data set, echo = FALSE}
+As an initial data set I cleaned the data set to make it easier to read / work with. Therefore I renamed the columns by removing trailing (e.g. Region. to Region)
+
+```{r , include=TRUE}
 # look at data
 colnames(data)
 #View(data)
@@ -52,18 +45,11 @@ data <- data %>%
 # remaining columns are not needed for visualization 
 data <- data  %>% select(Destillerie, Region, Punkte)
 
-# structure of the data
-str(data)
-#' 1307 objects (rows) and 3 variables (columns)
-#' 'Desrillerie' an 'Region' are of type chraracter (strings) 
-#' and 'Punkte is of type integer
-
-
 ```
 
+# Prepare the data for the spider plot
 
-Prepare data for spider plot
-```{r data preparation, echo = FALSE}
+```{r , include = FALSE}
 # check summary stats 
 summary(data)
 #' the column 'Punkte' (ratings) is the only column with NA's 
@@ -72,6 +58,12 @@ summary(data)
 #' median = 79.00
 #' mean = 79.00
 #' total of 20 NAs
+
+# structure of the data
+str(data)
+#' 1307 objects (rows) and 3 variables (columns)
+#' 'Desrillerie' an 'Region' are of type chraracter (strings) 
+#' and 'Punkte is of type integer
 
 
 # remove NA's from ratings column
@@ -90,8 +82,11 @@ unique(data$Destillerie)
 
 ```
 
+## Prepare the data for level 1 plotting
 
-```{r prepare data level 1 plotting}
+I computed the percentage of whiskies rated 80 or higher for each region for level 1 plotting.
+
+```{r}
 
 # compute percentage of ratings >= 80
 
@@ -112,8 +107,9 @@ radar_level01 <- rbind(rep(100, ncol(radar_level01)),
   
 ```
 
+## Create spider chart for ratings \>= 80
 
-```{r create spider chart for ratings >= 80}
+```{r, echo=FALSE }
 
 radarchart(
   radar_level01,
@@ -143,8 +139,11 @@ legend("topright",
 
 ```
 
+## Prepare the data for level 2 plotting with multiple thresholds
 
-```{r prepare data level 2 plotting with multiple thresholds}
+For level 2 plotting I computed the percentage of whiskies rated at or above three thresholds of 70, 80 and 90
+
+```{r }
 
 # compute percentage for thresholds 60, 70 and 90
 
@@ -167,8 +166,9 @@ radar_level02 <- rbind(rep(100, ncol(radar_level02)),
   
 ```
 
+## Create the spider chart with multiple thresholds
 
-```{r create spider chart multiple thresholds}
+```{r, echo = FALSE}
 
 # define colours for each of the three thresholds
 colours <- c("#FFA500", "#4169E1", "#EE4000")
@@ -207,4 +207,3 @@ legend("topright",
        cex = 0.8)
 
 ```
-
