@@ -50,5 +50,6 @@ elements correctly.
 
 The final plot effectively illustrates the proficiency levels of each
 country compared to the EU average, with flags for each country and the
-EU flag enhancing the visualization. You can see my code and Result
-image below
+EU flag enhancing the visualization.
+
+![](Result_imaga_from_Sun.png)
