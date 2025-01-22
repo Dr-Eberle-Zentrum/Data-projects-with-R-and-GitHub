@@ -1,3 +1,13 @@
+---
+title: "Silin project_from Sunkyoung Moon"
+output: 
+  md_document:
+    variant: markdown_strict
+    preserve_yaml: true
+    pandoc_args: ["--standalone"]
+date: "2024-12-03"
+---
+
 # Introduction
 
 The report analyzes foreign language proficiency across selected

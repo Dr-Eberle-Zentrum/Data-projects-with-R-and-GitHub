@@ -1,6 +1,10 @@
 ---
 title: "Silin project_from Sunkyoung Moon"
-output: md_document
+output: 
+  md_document:
+    variant: markdown_strict
+    preserve_yaml: true
+    pandoc_args: ["--standalone"]
 date: "2024-12-03"
 ---
 
@@ -44,7 +48,13 @@ library(ggtext)
 
 
 # Set chunk
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(
+  echo = TRUE,        
+  warning = FALSE,    
+  message = FALSE,    
+  fig.align = "center",
+  out.width = "100%"
+)
 
 # Load data
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
