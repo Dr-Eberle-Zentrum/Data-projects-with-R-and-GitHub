@@ -5,24 +5,25 @@ output: md_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
-library(dplyr)
 library(fmsb)
-library(ggplot2)
 library(readxl)
-library(tidyr)
+library(tidyverse)
 ```
 ## General project topic
 
 In this project, you are tasked with generating a spider-web diagram on the relation between social-media applications use and the personality profiles of more than 3000 users. We want to focus on the data regarding “young adults” (18 to 34) in particular. The social media platforms included are Whatsapp, Facebook and Instagram, and the personality profiles are based on the “Big-5” trait-model of personality, which measures Openness, Conscientiousness, Extraversion, Agreeableness and Neuroticism by means of a standardized questionnaire.
 
 ## The Data Set (processed)
-```{r import data}
+```{r include=FALSE}
 # Define the URL of the raw csv file
 url <- "https://www.frontiersin.org/api/v3/articles/527189/file/Data_Sheet_2.xlsx/527189_supplementary-materials_datasheets_2_xlsx/1"
 
 # Download and import excel file 
 download.file(url, destfile = "Data_Sheet_2.xlsx", mode = "wb")
 data_raw <- read_excel("Data_Sheet_2.xlsx")
+
+# Remove file after data import
+file.remove("Data_Sheet_2.xlsx")
 
 # Data processing
 data_pro <- data_raw %>%
@@ -32,25 +33,15 @@ data_pro <- data_raw %>%
   # Add multiple and none App users
   mutate(
     # has whatsapp and facebook
-    `has_WF` = case_when(
-      has_whatsapp == 1 & has_facebook == 1 ~ 1,
-      TRUE ~ 0),
+    `has_WF` = has_whatsapp & has_facebook,
     # has facebook and instagram
-    `has_FI` = case_when(
-      has_facebook == 1 & has_instagram == 1 ~ 1,
-      TRUE ~ 0),
+    `has_FI` = has_facebook & has_instagram,
     # has whatsapp and instagram
-    `has_WI` = case_when(
-      has_whatsapp == 1 & has_instagram == 1 ~ 1,
-      TRUE ~ 0),
+    `has_WI` = has_whatsapp & has_instagram,
     # has all
-    `has_WFI` = case_when(
-      has_whatsapp == 1 & has_facebook == 1 & has_instagram == 1 ~ 1,
-      TRUE ~ 0),
+    `has_WFI` = has_whatsapp & has_facebook & has_instagram,
     # has none
-    `has_none` = case_when(
-      has_whatsapp == 0 & has_facebook == 0 & has_instagram == 0 ~ 1,
-      TRUE ~ 0),
+    `has_none` = !(has_whatsapp | has_facebook | has_instagram),
     # add case number
     case_num = case_when(
       has_none == 1 ~ 8,
@@ -64,20 +55,20 @@ data_pro <- data_raw %>%
       TRUE ~ NA_real_
       )
     )
-
+```
+Find the filtered data frame below:
+```{r}
 # Preview of the data
 head(data_pro)
 
 # Calculate average personality trait values per case
 data_means <- data_pro %>%
   group_by(case_num) %>%
-  summarise(
-    Extraversion = mean(BFI_Extra, na.rm = TRUE),
-    Agreeableness = mean(BFI_Agree, na.rm = TRUE),
-    Conscientiousness = mean(BFI_Consc, na.rm = TRUE),
-    Neuroticism = mean(BFI_Neuro, na.rm = TRUE),
-    Openess = mean(BFI_Open, na.rm = TRUE),
-  )
+  summarise(across(
+    starts_with("BFI_"),
+    ~ mean(.x, na.rm = TRUE)
+  )) %>%
+  rename_with(~ c("Extraversion", "Agreeableness", "Conscientiousness", "Neuroticism", "Openess"), starts_with("BFI_"))
 
 # head(data_means)
 # str(data_means)
@@ -95,15 +86,8 @@ radar_minmax <- data.frame(
 # Bind rows and remove first column
 data_radar <- rbind(radar_minmax, data_means)
 
-data_radar <- data_radar %>%
-  select(-1)
-
-# data_radar1 <- data_means %>%
-#   select(-1)
-
 # Show df containing all data for plotting
-print(data_radar)
-# print(data_radar1)
+knitr::kable(data_radar, caption = "Here you can find the processed data used for plotting:", format = "markdown", align = "c") 
 ```
 
 ## Visualisation
@@ -116,9 +100,11 @@ colors_in <- adjustcolor(colors_border, alpha.f = 0.2)
 # Define legend labels
 leglabs <- c("FB", "Insta", "WA", "WA + Insta", "FB + Insta", "WA + FB", "WA + FB + Insta", "None")
 
-#Create spider web diagram
+# Create spider web diagram
 radarchart(
-  data_radar,
+  data_radar %>%
+    #mutate(across(-1, ~ . *0.7)) %>%
+    select(-1),
   axistype = 1,
   pcol = colors_border,
   pfcol = colors_in,
@@ -127,6 +113,7 @@ radarchart(
   cglcol = "grey",
   cglty = 1,
   caxislabels = c(0, 0.25, 0.5, 0.75, 1),
+  #caxislabels = c(0, 0.2, 0.4, 0.6, 0.7),
   calcex = 1.75,
   axislabcol = "black",
   cglwd = 3,
@@ -135,7 +122,7 @@ radarchart(
   cex.main = 2.5
 )
 
-# Legende hinzufügen
+# Add legend
 legend(
   x = "topright",
   legend = leglabs,
@@ -146,5 +133,24 @@ legend(
   cex = 2,
   pt.cex = 2
 )
+
+
+# Crate long table format
+data_long <- data_means %>%
+  select(-case_num) %>%
+  mutate(ID = row_number()) %>%
+  gather(key = "Spaltenname", value = "Wert", -ID)
+
+#head(data_long)
+
+# Add barchart
+ggplot(data_long, aes(x = Spaltenname, y = Wert, fill = Spaltenname)) +
+  geom_bar(stat = "identity") +
+  facet_wrap(~ ID, scales = "free_y") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(title = "Barchart by Social Media Platforms",
+       x = "Personality Trait", 
+       y = "Mean")
 
 ```
