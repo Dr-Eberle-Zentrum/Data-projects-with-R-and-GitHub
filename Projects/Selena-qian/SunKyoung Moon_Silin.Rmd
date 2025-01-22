@@ -27,18 +27,16 @@ One of the main challenges was incorporating country flags and the EU flag into 
 This was achieved using the ggtext library, which supports HTML rendering in ggplot facet labels. Flags were added as <img> tags in the facet labels, with specific sizes and alignments. The element_markdown() function in theme() allowed rendering these HTML elements correctly.
 
 # Result
+
 The final plot effectively illustrates the proficiency levels of each country compared to the EU average, with flags for each country and the EU flag enhancing the visualization. You can see my code and Result image below 
 
 
-<<<<<<< HEAD
 ```{r setup, include=FALSE}
 
 # Set CRAN mirror
 options(repos = c(CRAN = "https://cran.r-project.org"))
 
-=======
-```{r setup, echo=FALSE}
->>>>>>> 352cf73ad3913765dbd21795886669156a9269a2
+
 # libraries
 library(tidyverse)
 install.packages("ggtext")
@@ -140,11 +138,5 @@ ggplot(country_data_summary, aes(x = Number_of_Languages, y = Mean_Difference, f
   )
 
 
-<<<<<<< HEAD
-
 ```
 
-=======
-```
-  
->>>>>>> 352cf73ad3913765dbd21795886669156a9269a2
