@@ -61,7 +61,7 @@ head(data_pro)
 
 ## Visualisation
 
-```{r visualisation (All in one), fig.width = 18, fig.height = 10}
+```{r visualisation (All_in_one), fig.width = 18, fig.height = 10}
 data_pro %>%
   summarise(TotalPurchase = sum(Purchase.Amount..USD.),
             FreqPurchase = sum(`Frequency [1/year]`),

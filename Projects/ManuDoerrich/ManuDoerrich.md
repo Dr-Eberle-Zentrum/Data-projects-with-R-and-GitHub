@@ -27,4 +27,4 @@ graphs:
 
 ## Visualisation
 
-![](ManuDoerrich_files/figure-markdown_strict/visualisation%20(All%20in%20one)-1.png)
+![](ManuDoerrich_files/figure-markdown_strict/visualisation%20(All_in_one)-1.png)
