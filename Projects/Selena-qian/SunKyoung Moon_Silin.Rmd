@@ -30,11 +30,15 @@ This was achieved using the ggtext library, which supports HTML rendering in ggp
 The final plot effectively illustrates the proficiency levels of each country compared to the EU average, with flags for each country and the EU flag enhancing the visualization. You can see my code and Result image below 
 
 
+<<<<<<< HEAD
 ```{r setup, include=FALSE}
 
 # Set CRAN mirror
 options(repos = c(CRAN = "https://cran.r-project.org"))
 
+=======
+```{r setup, echo=FALSE}
+>>>>>>> 352cf73ad3913765dbd21795886669156a9269a2
 # libraries
 library(tidyverse)
 install.packages("ggtext")
@@ -136,6 +140,11 @@ ggplot(country_data_summary, aes(x = Number_of_Languages, y = Mean_Difference, f
   )
 
 
+<<<<<<< HEAD
 
 ```
 
+=======
+```
+  
+>>>>>>> 352cf73ad3913765dbd21795886669156a9269a2
