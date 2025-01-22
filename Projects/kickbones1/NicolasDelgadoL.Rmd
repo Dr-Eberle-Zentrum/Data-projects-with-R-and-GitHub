@@ -24,17 +24,16 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 data <- read.csv("kaggle_dataset.csv")
 ```
 
-# Inspect the dataset
-```{r inspect, include=FALSE}
 
+```{r inspect, include=FALSE}
+# Inspect the dataset
 str(data)
 head(data)
 ```
+# Solution to Luis' Data Project by Nicolás
 
-Data Manipulation
-Convert app usage time from minutes/day to hours/day.
-Compute median app usage time for each device model.
-Calculate the number of users for each device model.
+ The aim of this data project was to analyze and visualize mobile device usage
+ patterns based on app usage time, device model, and demographic information.
 
 
 ```{r code1, include=FALSE}
@@ -54,8 +53,8 @@ device_summary <- data %>%
   arrange(desc(TotalUsers))
 ```
 
-# Create age group categories for visualization
 ```{r code3, include=FALSE}
+# Create age group categories for visualization
 data <- data %>%
   mutate(AgeGroup = case_when(
     Age >= 20 & Age <= 29 ~ "20-29",
@@ -68,15 +67,16 @@ data <- data %>%
 
 Violin Plot by Device Model and Gender
 
-# Create a violin plot with gender and age group differentiation
+# Plot 1: App usage time by device model
 ```{r plot1, echo = FALSE}
+# Create a violin plot with gender and age group differentiation
 ggplot(data, aes(x = Device.Model, y = Screen.On.Time..hours.day., fill = Gender)) +
   geom_violin(alpha = 0.3, color = "black") +  # Transparent violins
   geom_jitter(aes(color = AgeGroup), size = 1, width = 0.2) +  # Add points for age groups
   scale_color_manual(values = c("gray", "green", "purple", "blue", "orange")) +  # Custom colors for age groups
   labs(
     title = "Mobile Device Usage for Different Models",
-    subtitle = "Shown is the median app usage time for different mobile devices, differentiated by gender and age group",
+    subtitle = "Shown is the median app usage time for different \n mobile devices, differentiated by gender and age group",
     x = "",
     y = "Median App Usage Time (hours/day)",
     fill = "Gender",
@@ -89,48 +89,5 @@ ggplot(data, aes(x = Device.Model, y = Screen.On.Time..hours.day., fill = Gender
     plot.subtitle = element_text(size = 12)
   )
 ```
-
-Adding User Counts to the Plot
-```{r plot2, echo = FALSE}
-# Add user count annotations below the x-axis
-device_summary <- device_summary %>%
-  mutate(Label = paste(TotalUsers, "Users"))
-
-ggplot(data, aes(x = Device.Model, y = Screen.On.Time..hours.day., fill = Gender)) +
-  geom_violin(alpha = 0.3, color = "black") +
-  geom_jitter(aes(color = AgeGroup), size = 1, width = 0.2) +
-  scale_color_manual(values = c("gray", "green", "purple", "blue", "orange")) +
-  geom_text(
-    data = device_summary,
-    aes(x = Device.Model, y = -0.5, label = Label),
-    inherit.aes = FALSE,
-    size = 3,
-    color = "black"
-  ) +
-  labs(
-    title = "Mobile Device Usage for Different Models",
-    subtitle = "Shown is the median app usage time for different mobile devices, differentiated by gender and age group",
-    x = "",
-    y = "Median App Usage Time (hours/day)",
-    fill = "Gender",
-    color = "Age Group"
-  ) +
-  theme_minimal() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    plot.title = element_text(size = 14, face = "bold"),
-    plot.subtitle = element_text(size = 12),
-    plot.margin = margin(20, 20, 40, 20)
-  )
-```
-
-Conclusion
-This analysis highlights trends in app usage time across device models and demographic groups. Key findings include:
-
-Median app usage time varies significantly by device model.
-Gender and age groups show distinct usage patterns.
-Further exploration could examine differences across operating systems, app categories, or user satisfaction.
-
----
 
 
