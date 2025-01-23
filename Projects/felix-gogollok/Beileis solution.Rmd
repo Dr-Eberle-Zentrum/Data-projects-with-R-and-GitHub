@@ -4,9 +4,9 @@ output: md_document
 date: "2025-01-05"
 ---
 
+## Level 1
+
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 # Load required libraries
 library(tidyverse)
 library(fmsb)
@@ -59,3 +59,79 @@ radarchart(
 
 # Add a title
 title("Fraction of Whiskies Rated 80 or Higher per Region", cex.main = 1.5)
+```
+![](Rplot01.png)
+
+## Level 2
+
+```{r setup, include=FALSE}
+# Load required libraries
+library(tidyverse)
+library(fmsb)
+
+# Load and clean the whisky data
+whisky_data <- read.csv2("Projects/felix-gogollok/whisky-statistics/Whisky.csv", sep = ";", stringsAsFactors = FALSE) %>%
+  rename_with(~ gsub("\\.+$", "", .), everything()) %>%
+  filter(!is.na(Region) & Region != "")
+
+# Convert 'Punkte' to numeric
+whisky_data$Punkte <- as.numeric(whisky_data$Punkte)
+
+# Compute percentage for thresholds 50, 70, and 80
+threshold_data <- whisky_data %>%
+  group_by(Region) %>%
+  summarize(
+    rated_50_more = (sum(Punkte >= 50) / n()) * 100,
+    rated_70_more = (sum(Punkte >= 70) / n()) * 100,
+    rated_80_more = (sum(Punkte >= 80) / n()) * 100,
+    .groups = "drop"
+  )
+
+# Format data for fmsb
+radar_threshold_data <- as.data.frame(t(select(threshold_data, -Region)))
+colnames(radar_threshold_data) <- threshold_data$Region
+
+# Add max and min rows
+radar_threshold_data <- rbind(
+  rep(100, ncol(radar_threshold_data)),  # Maximum values
+  rep(0, ncol(radar_threshold_data)),   # Minimum values
+  radar_threshold_data
+)
+
+# Define colors for the thresholds
+colors <- c("#FFA500", "#4169E1", "#EE4000")  # Orange, Blue, Red
+fill_colors <- c(
+  rgb(255, 165, 0, max = 255, alpha = 80),  # Light orange
+  rgb(65, 105, 225, max = 255, alpha = 80), # Light blue
+  rgb(238, 64, 0, max = 255, alpha = 80)    # Light red
+)
+
+# Create the spider chart with multiple thresholds
+par(mar = c(1, 1, 2, 1))  # Adjust margins
+radarchart(
+  radar_threshold_data,
+  axistype = 1,
+  caxislabels = seq(0, 100, 20),  # Axis labels for percentages
+  pcol = colors,
+  pfcol = fill_colors,
+  plwd = 2,
+  cglcol = "darkgrey",
+  cglwd = 1,
+  cglty = 1,
+  axislabcol = "black",
+  seg = 5,
+  vlcex = 0.8
+)
+
+# Add a legend
+legend("topright",
+       legend = c("Rated 50 or higher", "Rated 70 or higher", "Rated 80 or higher"),
+       col = colors,
+       lwd = 2,
+       bty = "n",
+       cex = 0.8)
+
+# Add a title
+title("Percentage of Whiskies Rated at Different Levels by Region", cex.main = 1.2)
+```
+![](Rplot02.png)
