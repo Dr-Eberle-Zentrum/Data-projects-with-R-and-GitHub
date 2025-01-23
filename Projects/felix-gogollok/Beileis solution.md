@@ -60,6 +60,7 @@ radarchart(
 # Add a title
 title("Fraction of Whiskies Rated 80 or Higher per Region", cex.main = 1.5)
 ```
+
 ![](Rplot01.png)
 
 ## Level 2
@@ -134,4 +135,5 @@ legend("topright",
 # Add a title
 title("Percentage of Whiskies Rated at Different Levels by Region", cex.main = 1.2)
 ```
+
 ![](Rplot2.png)
