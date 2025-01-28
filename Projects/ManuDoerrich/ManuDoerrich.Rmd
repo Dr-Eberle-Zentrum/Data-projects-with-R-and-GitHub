@@ -1,5 +1,5 @@
 ---
-title: 'First project attempt - Nicolas´ project'
+title: 'Second project solution - Nicolas´ project'
 output: md_document
 ---
 
@@ -70,13 +70,13 @@ data_means <- data_pro %>%
   )) %>%
   rename_with(~ c("Extraversion", "Agreeableness", "Conscientiousness", "Neuroticism", "Openess"), starts_with("BFI_"))
 
-# head(data_means)
+#head(data_means)
 # str(data_means)
 
 # Add respective min and max values
 radar_minmax <- data.frame(
   case_num = c("min", "max"),
-  Extraversion = c(min(data_pro$BFI_Extra), max(data_pro$BFI_Extra)),
+  Extraversion = c(min(data_pro$BFI_Extra), max(data_pro$BFI_Extra)), # c(mean(data_means$Extraversion) - 1, mean(data_means$Extraversion) + 1)
   Agreeableness = c(min(data_pro$BFI_Agree), max(data_pro$BFI_Agree)),
   Conscientiousness = c(min(data_pro$BFI_Consc), max(data_pro$BFI_Consc)),
   Neuroticism = c(min(data_pro$BFI_Neuro), max(data_pro$BFI_Neuro)),
@@ -85,6 +85,8 @@ radar_minmax <- data.frame(
 
 # Bind rows and remove first column
 data_radar <- rbind(radar_minmax, data_means)
+
+#head(data_radar)
 
 # Show df containing all data for plotting
 knitr::kable(data_radar, caption = "Here you can find the processed data used for plotting:", format = "markdown", align = "c") 
@@ -97,14 +99,22 @@ knitr::kable(data_radar, caption = "Here you can find the processed data used fo
 colors_border <- rainbow(nrow(data_means))
 colors_in <- adjustcolor(colors_border, alpha.f = 0.2)
 
+
 # Define legend labels
 leglabs <- c("FB", "Insta", "WA", "WA + Insta", "FB + Insta", "WA + FB", "WA + FB + Insta", "None")
 
-# Create spider web diagram
+# Create relative data for radar chart
+data_radar_rel <- data_radar %>%
+  mutate(across(-1, ~ . / max(.))) %>%
+  select(-1)
+
+# Show relative data
+#head(data_radar_rel)
+
+# Create spider web diagram (somehow use relative values here. U need to adjust the data properly)
+# Sorry, I was not able to scale it properly. If you have any ideas on how to do this, let me know and I will implement it.
 radarchart(
-  data_radar %>%
-    #mutate(across(-1, ~ . *0.7)) %>%
-    select(-1),
+  data_radar_rel,
   axistype = 1,
   pcol = colors_border,
   pfcol = colors_in,
@@ -113,6 +123,7 @@ radarchart(
   cglcol = "grey",
   cglty = 1,
   caxislabels = c(0, 0.25, 0.5, 0.75, 1),
+
   #caxislabels = c(0, 0.2, 0.4, 0.6, 0.7),
   calcex = 1.75,
   axislabcol = "black",
@@ -135,22 +146,36 @@ legend(
 )
 
 
+# Add labs to data_mean
+data_means$labs <- leglabs
+
 # Crate long table format
 data_long <- data_means %>%
   select(-case_num) %>%
   mutate(ID = row_number()) %>%
-  gather(key = "Spaltenname", value = "Wert", -ID)
+  gather(key = "Personality Trait", value = "Wert", -ID, -labs)
 
 #head(data_long)
 
 # Add barchart
-ggplot(data_long, aes(x = Spaltenname, y = Wert, fill = Spaltenname)) +
+ggplot(data_long, aes(x = labs, y = Wert, fill = `Personality Trait`)) +
   geom_bar(stat = "identity") +
-  facet_wrap(~ ID, scales = "free_y") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  labs(title = "Barchart by Social Media Platforms",
-       x = "Personality Trait", 
-       y = "Mean")
+  #theme_minimal() +
+  labs(title = "Big Five Personality Profiles  by Social Media Platforms",
+       x = "Social Media Platform",
+       y = "Absolute values of Personality Traits") +
+  theme(
+    panel.background = element_rect(fill = "white", colour = "black"),
+    panel.grid.major = element_line(colour = "black"),
+    panel.grid.minor.y = element_line(colour = "black"),
+    plot.title = element_text(size = 30, face = "bold"),         # Diagrammtitel
+    axis.title.x = element_text(size = 25),                      # Titel der x-Achse
+    axis.title.y = element_text(size = 25),                      # Titel der y-Achse
+    axis.text.x = element_text(size = 20, angle = 45, hjust = 1, colour = "black"),# Beschriftung der x-Achse
+    axis.text.y = element_text(size = 20, colour = "black"),                       # Beschriftung der y-Achse
+    legend.title = element_text(size = 25),                      # Legendentitel
+    legend.text = element_text(size = 20)                        # Legendentext
+  )
+
 
 ```
