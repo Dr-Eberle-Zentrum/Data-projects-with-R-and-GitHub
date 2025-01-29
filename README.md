@@ -127,6 +127,7 @@ Current projects:
 
 - Luis (kickbones1) - [Phone Usage Time](Projects/kickbones1/project-description.md)
 - Silin (Selena-qian) - [Silin's project](Projects/Selena-qian/project-description.md)
+  - solution by [Luis](Projects/Selena-qian/kickbones1.md)
 - Charlotte (janaelodie) - [Charlottes project](Projects/charlotte/project-description.md)
 - Gulmira (GulmiraKairr) - [Gulmira's project](Projects/GulmiraKairr/ProjectDescription.md)
 - Dennis (shad-lad-flad) - [Dennis' project](Projects/shad-lad-flad/project_description.md)
