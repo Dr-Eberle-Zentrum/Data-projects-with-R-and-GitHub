@@ -136,6 +136,7 @@ Current projects:
 - Jungi (JungiHong) - [Volleyball Passing](Projects/JungiHong/project-description.md)
 - Beilei (Beilei-Wang) - [Income distributions](Projects/Beilei-Wang/project-description.md)
 - Celine (celineony) - [Behavorial data](Projects/celineony/project-description.md)
+  - solution by [Beilei](Projects/celineony/beileiwang897.md)
 - Felix (felix-gogollok) [Whisky statistics](Projects/felix-gogollok/whisky-statistics/project-description.md)
 - Manuel (ManuDoerrich) - [Nutrition data](Projects/ManuDoerrich/project-description.md)
 - Nicolas (NicolasDelgadoL) - [social media & personality](Projects/NicolasDelgadoL/Nicolás-project.md)
