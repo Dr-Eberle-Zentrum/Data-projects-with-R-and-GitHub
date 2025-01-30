@@ -138,6 +138,7 @@ Current projects:
 - Celine (celineony) - [Behavorial data](Projects/celineony/project-description.md)
   - solution by [Beilei](Projects/celineony/beileiwang897.md)
 - Felix (felix-gogollok) [Whisky statistics](Projects/felix-gogollok/whisky-statistics/project-description.md)
+  - solution by [Beilei](Projects/felix-gogollok/Beilei.md)
 - Manuel (ManuDoerrich) - [Nutrition data](Projects/ManuDoerrich/project-description.md)
 - Nicolas (NicolasDelgadoL) - [social media & personality](Projects/NicolasDelgadoL/Nicolás-project.md)
 - Sun (MoonSunKyung) - [Shopping Trends by Age group and Sex](Projects/SunKyoung%20Moon/project_description.md)
