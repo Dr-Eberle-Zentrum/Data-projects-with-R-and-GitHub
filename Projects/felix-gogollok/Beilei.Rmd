@@ -6,13 +6,13 @@ date: "2025-01-05"
 
 ## Level 1
 
-```{r setup, include=FALSE}
+```{r l1, echo=FALSE}
 # Load required libraries
 library(tidyverse)
 library(fmsb)
 
 # Load and clean the whisky data
-whisky_data <- read.csv2("Projects/felix-gogollok/whisky-statistics/Whisky.csv", sep = ";", stringsAsFactors = FALSE) %>%
+whisky_data <- read.csv2("C:/Lehre/Data-projects-with-R-and-GitHub/Projects/felix-gogollok/whisky-statistics/Whisky.csv", sep = ";", stringsAsFactors = FALSE) %>%
   rename_with(~ gsub("\\.+$", "", .), everything()) %>%  # Remove trailing dots from column names
   filter(!is.na(Region) & Region != "")  # Remove rows with NA or empty Region
 
@@ -61,17 +61,15 @@ radarchart(
 title("Fraction of Whiskies Rated 80 or Higher per Region", cex.main = 1.5)
 ```
 
-![](Rplot01.png)
-
 ## Level 2
 
-```{r setup, include=FALSE}
+```{r l2, echo=FALSE}
 # Load required libraries
 library(tidyverse)
 library(fmsb)
 
 # Load and clean the whisky data
-whisky_data <- read.csv2("Projects/felix-gogollok/whisky-statistics/Whisky.csv", sep = ";", stringsAsFactors = FALSE) %>%
+whisky_data <- read.csv2("C:/Lehre/Data-projects-with-R-and-GitHub/Projects/felix-gogollok/whisky-statistics/Whisky.csv", sep = ";", stringsAsFactors = FALSE) %>%
   rename_with(~ gsub("\\.+$", "", .), everything()) %>%
   filter(!is.na(Region) & Region != "")
 
@@ -122,7 +120,7 @@ radarchart(
   axislabcol = "black",
   seg = 5,
   vlcex = 0.8
-)
+) 
 
 # Add a legend
 legend("topright",
@@ -135,5 +133,3 @@ legend("topright",
 # Add a title
 title("Percentage of Whiskies Rated at Different Levels by Region", cex.main = 1.2)
 ```
-
-![](Rplot2.png)
