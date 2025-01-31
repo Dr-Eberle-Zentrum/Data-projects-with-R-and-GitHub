@@ -135,7 +135,7 @@ Current projects:
 - Yue (Yue_Z9) - [Yue's project](Projects/Yue_Z9/project-description.md)
   - solution by [Yuguang](Projects/Yue_Z9/Yuguang.md)
 - Jungi (JungiHong) - [Volleyball Passing](Projects/JungiHong/project-description.md)
-  - solution by [Yue](Projects/JungiHong/Yue_Z9.md)
+  - solution by [Yue](Projects/JungiHong/Yue_Z9.md) and [Yuguang](Projects/JungiHong/Yuguang_solution_Project2.md)
 - Beilei (Beilei-Wang) - [Income distributions](Projects/Beilei-Wang/project-description.md)
   - solution by [Yue](Projects/Beilei-Wang/yuesolution/solutions.md)
 - Celine (celineony) - [Behavorial data](Projects/celineony/project-description.md)
