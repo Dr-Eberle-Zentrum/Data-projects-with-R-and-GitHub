@@ -52,7 +52,7 @@ if (any(participant_row_counts$row_count != 6)) {
 print(head(data_all))
 
 # Optionally, write the combined data to a new CSV
-write_csv(data_all, "combined_experiment_data.csv")
+#write_csv(data_all, "combined_experiment_data.csv")
 
 cat("Combined data has been written to 'combined_experiment_data.csv'.\n")
 library(ggplot2)
