@@ -2,15 +2,26 @@
 title: "jungihong10"
 author: "jungihong10"
 output: md_document
+
 ---
 
-```{r visualisation, echo= FALSE}
+
+## Introduction
+
+In this analysis, we explore recognition performance expressed as the hit rate minus the false alarm rate (corrected recognition) across four experiments. Participants underwent three phases: pre-conditioning, conditioning, and post-conditioning. The study contrasts two conditions, CS+ (Conditioned Stimulus Positive) and CS− (Conditioned Stimulus Negative), to evaluate their influence on recognition performance. The visualization provides insights into mean corrected recognition and individual participant variability for each experiment.
+
+## Analysis and Visualization
+
+```{r visualisation, echo=FALSE, message=FALSE, warning=FALSE}
+
 
 # Load necessary libraries
 library(tidyverse)
+library(ggtext)
+
 
 # Define the directory containing the data files
-data_dir <- here("project-data")
+data_dir <- "project-data"
 
 # List all CSV files in the directory
 file_list <- list.files(path = data_dir, pattern = "data_expr\\d+\\.csv", full.names = TRUE)
@@ -48,28 +59,20 @@ if (any(participant_row_counts$row_count != 6)) {
   stop("Some participants do not have exactly 6 rows. Please check the data.")
 }
 
-# Preview the combined data
-print(head(data_all))
-
 # Optionally, write the combined data to a new CSV
 #write_csv(data_all, "combined_experiment_data.csv")
-
-cat("Combined data has been written to 'combined_experiment_data.csv'.\n")
-library(ggplot2)
-library(dplyr)
 
 # Assume the combined dataset is already loaded as `data_all`
 # Compute corrected recognition
 data_all <- data_all %>%
   mutate(corrected_recognition = hit - fa)
-
-# Set the order of the 'phase' factor levels
-data_all$phase <- factor(data_all$phase, levels = c("pre-conditioning", "conditioning", "post-conditioning"))
-data_all$condition <- factor(data_all$condition, levels = c("CSp", "CSm"))
-
-
 # Create the plot
-ggplot(data_all, aes(x = phase, y = corrected_recognition, fill = condition)) +
+ggplot(data_all %>%
+         mutate(
+           corrected_recognition = hit - fa,
+           phase = factor(phase, levels = c("pre-conditioning", "conditioning", "post-conditioning")),
+           condition = factor(condition, levels = c("CSp", "CSm"), labels = c(expression(CS^"+"), expression(CS^"-")))
+         ), aes(x = phase, y = corrected_recognition, fill = condition)) +
   # Bar plot for mean values
   geom_bar(stat = "summary", fun = "mean", position = position_dodge(width = 0.9), color = "black") +
   # Error bars for standard error
@@ -82,24 +85,37 @@ ggplot(data_all, aes(x = phase, y = corrected_recognition, fill = condition)) +
     `2` = "Experiment 2",
     `3` = "Experiment 3",
     `4` = "Experiment 4"
-  ))) +
+  )), scales = "free_y") +  # Added scales="free_y" to allow different y-axis scales, if needed
   # Customize labels and themes
   scale_y_continuous(limits = c(0, 0.75), breaks = seq(0, 0.75, by = 0.25)) +
-  scale_fill_manual(values = c("darkgray" , "white"), name = expression("Condition: " ~ CS^"+" ~ " and " ~ CS^"-")) +
+  scale_fill_manual(
+    values = c("darkgray", "white"), 
+    labels = c(expression(CS^"+"), expression(CS^"-")), # Superscript labels in the legend
+    name = expression("Condition: " ~ CS^"+" ~ " and " ~ CS^"-")) +
   scale_color_manual(values = c("CS+" = "darkgray", "CS-" = "white"), guide = "none") + # Swap grey and white for conditions
   labs(
-    title = "Recognition Performance Expressed as Hit Rate Minus False Alarm Rate in Experiments 1-4",
+    title = "Recognition Performance Expressed as Hit Rate Minus False Alarm Rate in Experiments 1-4 by Encoding Phase and Conditioning Category",
     x = NULL,
     y = "Corrected recognition"
   ) +
   theme_bw(base_size = 14) +
   theme(
     legend.position = "top",
-    panel.grid.major = element_blank(),
-    panel.grid.minor = element_blank(),
+    panel.grid = element_blank(), # Remove all gridlines
+    panel.border = element_blank(), # Remove plot borders
+    axis.line.y = element_line(color = "black"), # Add y-axis line
+    axis.line.x = element_line(color = "black"), # Add x-axis line
+    axis.ticks.x = element_blank(), # Remove x-axis ticks
+    axis.title.x = element_blank(),
+    strip.background = element_blank(), # Remove facet header background
     strip.text = element_text(face = "bold"),
-    axis.title.x = element_blank()
+    plot.title = element_textbox_simple(size = 14, halign = 0.0, width = unit(0.95, "npc")),
+    # Adjusting margins to make space for the title
+    plot.margin = margin(t = 10, r = 0, b = 0, l = 0), 
+    # Rotate x-axis labels to avoid overlap
+    axis.text.x = element_text(angle = 45, hjust = 1)
   )
+
 
 
 ```

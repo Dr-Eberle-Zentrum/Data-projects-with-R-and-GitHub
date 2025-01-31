@@ -1,14 +1,14 @@
-## My solution to Celine’s project
+## Introduction
 
-    ## Warning: Removed 42 rows containing non-finite outside the scale range
-    ## (`stat_summary()`).
-    ## Removed 42 rows containing non-finite outside the scale range
-    ## (`stat_summary()`).
+In this analysis, we explore recognition performance expressed as the
+hit rate minus the false alarm rate (corrected recognition) across four
+experiments. Participants underwent three phases: pre-conditioning,
+conditioning, and post-conditioning. The study contrasts two conditions,
+CS+ (Conditioned Stimulus Positive) and CS− (Conditioned Stimulus
+Negative), to evaluate their influence on recognition performance. The
+visualization provides insights into mean corrected recognition and
+individual participant variability for each experiment.
 
-    ## Warning: No shared levels found between `names(values)` of the manual scale and the
-    ## data's colour values.
+## Analysis and Visualization
 
-    ## Warning: Removed 42 rows containing missing values or values outside the scale range
-    ## (`geom_point()`).
-
-![Plot](plot.png)
+![](jungihong10_files/figure-markdown_strict/visualisation-1.png)
