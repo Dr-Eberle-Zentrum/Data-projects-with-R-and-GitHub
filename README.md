@@ -138,7 +138,7 @@ Current projects:
 - Jungi (JungiHong) - [Volleyball Passing](Projects/JungiHong/project-description.md)
   - solution by [Yue](Projects/JungiHong/Yue_Z9.md) and [Yuguang](Projects/JungiHong/Yuguang_solution_Project2.md)
 - Beilei (Beilei-Wang) - [Income distributions](Projects/Beilei-Wang/project-description.md)
-  - solution by [Yue](Projects/Beilei-Wang/yuesolution/solutions.md)
+  - solution by [Yue](Projects/Beilei-Wang/yuesolution/solutions.md) and [Jungi](Projects/Beilei-Wang/jungihong10.md)
 - Celine (celineony) - [Behavorial data](Projects/celineony/project-description.md)
   - solution by [Beilei](Projects/celineony/beileiwang897.md)
 - Felix (felix-gogollok) [Whisky statistics](Projects/felix-gogollok/whisky-statistics/project-description.md)
