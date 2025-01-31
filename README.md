@@ -129,6 +129,7 @@ Current projects:
 - Silin (Selena-qian) - [Silin's project](Projects/Selena-qian/project-description.md)
   - solution by [Luis](Projects/Selena-qian/kickbones1.md)
 - Charlotte (janaelodie) - [Charlottes project](Projects/charlotte/project-description.md)
+  - solution by [Luis](Projects/charlotte/kickbones1.md)
 - Gulmira (GulmiraKairr) - [Gulmira's project](Projects/GulmiraKairr/ProjectDescription.md)
 - Dennis (shad-lad-flad) - [Dennis' project](Projects/shad-lad-flad/project_description.md)
 - Yuguang (Yuguang Chen) - [Yuguang's project](Projects/yuguang%20Chen/projekt_description.md)
