@@ -140,7 +140,7 @@ Current projects:
 - Beilei (Beilei-Wang) - [Income distributions](Projects/Beilei-Wang/project-description.md)
   - solution by [Yue](Projects/Beilei-Wang/yuesolution/solutions.md) and [Jungi](Projects/Beilei-Wang/jungihong10.md)
 - Celine (celineony) - [Behavorial data](Projects/celineony/project-description.md)
-  - solution by [Beilei](Projects/celineony/beileiwang897.md)
+  - solution by [Beilei](Projects/celineony/beileiwang897.md) and [Jungi](Projects/celineony/jungihong10.md)
 - Felix (felix-gogollok) [Whisky statistics](Projects/felix-gogollok/whisky-statistics/project-description.md)
   - solution by [Beilei](Projects/felix-gogollok/Beilei.md)
 - Manuel (ManuDoerrich) - [Nutrition data](Projects/ManuDoerrich/project-description.md)
