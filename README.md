@@ -127,18 +127,26 @@ Current projects:
 
 - Luis (kickbones1) - [Phone Usage Time](Projects/kickbones1/project-description.md)
 - Silin (Selena-qian) - [Silin's project](Projects/Selena-qian/project-description.md)
+  - solution by [Luis](Projects/Selena-qian/kickbones1.md)
 - Charlotte (janaelodie) - [Charlottes project](Projects/charlotte/project-description.md)
 - Gulmira (GulmiraKairr) - [Gulmira's project](Projects/GulmiraKairr/ProjectDescription.md)
 - Dennis (shad-lad-flad) - [Dennis' project](Projects/shad-lad-flad/project_description.md)
 - Yuguang (Yuguang Chen) - [Yuguang's project](Projects/yuguang%20Chen/projekt_description.md)
+  - solution by [Dennis](Projects/yuguang Chen/shad-lad-flad.md)
 - Yue (Yue_Z9) - [Yue's project](Projects/Yue_Z9/project-description.md)
+  - solution by [Yuguang](Projects/Yue_Z9/Yuguang.md) and [Dennis](Projects/Yue_Z9/shad-lad-flad.md)
 - Jungi (JungiHong) - [Volleyball Passing](Projects/JungiHong/project-description.md)
+  - solution by [Yue](Projects/JungiHong/Yue_Z9.md) and [Yuguang](Projects/JungiHong/Yuguang_solution_Project2.md)
 - Beilei (Beilei-Wang) - [Income distributions](Projects/Beilei-Wang/project-description.md)
+  - solution by [Yue](Projects/Beilei-Wang/yuesolution/solutions.md) and [Jungi](Projects/Beilei-Wang/jungihong10.md)
 - Celine (celineony) - [Behavorial data](Projects/celineony/project-description.md)
+  - solution by [Beilei](Projects/celineony/beileiwang897.md)
 - Felix (felix-gogollok) [Whisky statistics](Projects/felix-gogollok/whisky-statistics/project-description.md)
+  - solution by [Beilei](Projects/felix-gogollok/Beilei.md)
 - Manuel (ManuDoerrich) - [Nutrition data](Projects/ManuDoerrich/project-description.md)
 - Nicolas (NicolasDelgadoL) - [social media & personality](Projects/NicolasDelgadoL/Nicolás-project.md)
 - Sun (MoonSunKyung) - [Shopping Trends by Age group and Sex](Projects/SunKyoung%20Moon/project_description.md)
+  - solution by [Nicolas](Projects/SunKyoung%20Moon/NicolasDelgadoL.md)
 
 
 #### Goals
