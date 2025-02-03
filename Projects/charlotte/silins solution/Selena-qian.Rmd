@@ -1,5 +1,5 @@
 ---
-output: html_document
+output: md_document
 ---
 # **Guest students at universities and other higher education institutions in NRW**
 **Solution for Charlotte's Project from Silin**
@@ -94,15 +94,16 @@ dt_plot %>%
 
 ## Animation
 ******
-```{r animation, results = FALSE, message = FALSE, warning = FALSE}
+```{r animation, message = FALSE, warning = FALSE}
 library(gganimate)
+library(gifski)
 
 #Convert the Semester data on the x-axis to integer format, since the animation requires a numeric variable move along.
 
 dt_year <- dt_plot %>%
   mutate(Year = as.integer(str_extract(Semester, "\\d{4}")))
 
-animation <- ggplot(dt_year, aes(x = Year, y = Total, group = University, color = Type)) +
+animationPlot <- ggplot(dt_year, aes(x = Year, y = Total, group = University, color = Type)) +
   geom_point() +
   geom_line() +
   geom_label(data = . %>% group_by(University) %>% filter(Semester == max(Semester)), 
@@ -124,10 +125,12 @@ animation <- ggplot(dt_year, aes(x = Year, y = Total, group = University, color 
   scale_x_continuous(
   breaks = seq(min(dt_year$Year), max(dt_year$Year), by = 1),
   labels = dt_year$Semester %>% unique()) +
-  transition_reveal(along = Year) +  # Transition along the Semester
-  ease_aes("linear")
+  transition_reveal(along = Year)
+# +  # Transition along the Semester
+#   ease_aes("linear")
 
-anim_save("animation.gif", animation = animation)
+
+anim_save("animation.gif", animation = animationPlot)
 
 ```
 ![](animation.gif)
