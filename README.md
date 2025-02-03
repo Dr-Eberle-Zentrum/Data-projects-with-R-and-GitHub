@@ -134,7 +134,7 @@ Current projects:
 - Gulmira (GulmiraKairr) - [Gulmira's project](Projects/GulmiraKairr/ProjectDescription.md)
   - solution by [Charlotte](Projects/GulmiraKairr/GulmirasProjectByCharlotte.md) and [Silin](Projects/GulmiraKairr/silin&#39;s%20solution/silins_solution.md)
 - Dennis (shad-lad-flad) - [Dennis' project](Projects/shad-lad-flad/project_description.md)
-  - solution by Gulmira and [Charlotte](Projects/shad-lad-flad/Project_solution.md)
+  - solution by [Gulmira](Projects/shad-lad-flad/Solution_for_Dennis_18.12.md) and [Charlotte](Projects/shad-lad-flad/Project_solution.md)
 - Yuguang (Yuguang Chen) - [Yuguang's project](Projects/yuguang%20Chen/projekt_description.md)
   - solution by [Dennis](Projects/yuguang Chen/shad-lad-flad.md)
 - Yue (Yue_Z9) - [Yue's project](Projects/Yue_Z9/project-description.md)
