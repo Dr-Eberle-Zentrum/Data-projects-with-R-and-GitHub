@@ -136,7 +136,7 @@ Current projects:
 - Dennis (shad-lad-flad) - [Dennis' project](Projects/shad-lad-flad/project_description.md)
   - solution by [Gulmira](Projects/shad-lad-flad/Solution_for_Dennis_18.12.md) and [Charlotte](Projects/shad-lad-flad/Project_solution.md)
 - Yuguang (Yuguang Chen) - [Yuguang's project](Projects/yuguang%20Chen/projekt_description.md)
-  - solution by [Dennis](Projects/yuguang Chen/shad-lad-flad.md)
+  - solution by [Dennis](Projects/yuguang%20Chen/shad-lad-flad.md) and [Gulmira](Projects/yuguang%20Chen/ForYuguangChen2.md)
 - Yue (Yue_Z9) - [Yue's project](Projects/Yue_Z9/project-description.md)
   - solution by [Yuguang](Projects/Yue_Z9/Yuguang.md) and [Dennis](Projects/Yue_Z9/shad-lad-flad.md)
 - Jungi (JungiHong) - [Volleyball Passing](Projects/JungiHong/project-description.md)
