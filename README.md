@@ -132,6 +132,7 @@ Current projects:
 - Charlotte (janaelodie) - [Charlottes project](Projects/charlotte/project-description.md)
   - solution by [Silin](Projects/charlotte/silins%20solution/Selena-qian.md) and [Luis](Projects/charlotte/kickbones1.md)
 - Gulmira (GulmiraKairr) - [Gulmira's project](Projects/GulmiraKairr/ProjectDescription.md)
+  - solution by and [Silin](Projects/GulmiraKairr/silin&#39;s%20solution/silins_solution.md)
 - Dennis (shad-lad-flad) - [Dennis' project](Projects/shad-lad-flad/project_description.md)
 - Yuguang (Yuguang Chen) - [Yuguang's project](Projects/yuguang%20Chen/projekt_description.md)
   - solution by [Dennis](Projects/yuguang Chen/shad-lad-flad.md)
