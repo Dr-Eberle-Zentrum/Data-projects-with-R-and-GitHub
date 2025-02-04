@@ -149,6 +149,7 @@ Current projects:
   - solution by [Beilei](Projects/felix-gogollok/Beilei.md)
 - Manuel (ManuDoerrich) - [Nutrition data](Projects/ManuDoerrich/project-description.md)
 - Nicolas (NicolasDelgadoL) - [social media & personality](Projects/NicolasDelgadoL/Nicolás-project.md)
+  - solution by [Manuel](Projects/NicolasDelgadoL/ManuDoerrich.md)
 - Sun (MoonSunKyung) - [Shopping Trends by Age group and Sex](Projects/SunKyoung%20Moon/project_description.md)
   - solution by [Nicolas](Projects/SunKyoung%20Moon/NicolasDelgadoL.md)
 
