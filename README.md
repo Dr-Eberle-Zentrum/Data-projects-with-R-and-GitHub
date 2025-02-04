@@ -121,38 +121,14 @@ In order to submit your project proposal, you have to upload it to GitHub as par
 
 Example:
 
--   Martin (martin-raden) - [Example project](Projects/martin-raden/project-description.md)
+-   Martin (martin-raden) - [Example project about visualization reproduction](Projects/martin-raden/project-description.md)
 
 Current projects:
 
-- Luis (kickbones1) - [Phone Usage Time](Projects/kickbones1/project-description.md)
-  - solution by [Sun](Projects/kickbones1/SunKyoung-Moon_Luis.md) and [Nicolas](Projects/kickbones1/NicolasDelgadoL.md)
-- Silin (Selena-qian) - [Silin's project](Projects/Selena-qian/project-description.md)
-  - solution by [Luis](Projects/Selena-qian/kickbones1.md) and [Sun](Projects/Selena-qian/SunKyoung-Moon_Silin.md)
-- Charlotte (janaelodie) - [Charlottes project](Projects/charlotte/project-description.md)
-  - solution by [Silin](Projects/charlotte/silins%20solution/Selena-qian.md) and [Luis](Projects/charlotte/kickbones1.md)
-- Gulmira (GulmiraKairr) - [Gulmira's project](Projects/GulmiraKairr/ProjectDescription.md)
-  - solution by [Charlotte](Projects/GulmiraKairr/GulmirasProjectByCharlotte.md) and [Silin](Projects/GulmiraKairr/silin&#39;s%20solution/silins_solution.md)
-- Dennis (shad-lad-flad) - [Dennis' project](Projects/shad-lad-flad/project_description.md)
-  - solution by [Gulmira](Projects/shad-lad-flad/Solution_for_Dennis_18.12.md) and [Charlotte](Projects/shad-lad-flad/Project_solution.md)
-- Yuguang (Yuguang Chen) - [Yuguang's project](Projects/yuguang%20Chen/projekt_description.md)
-  - solution by [Dennis](Projects/yuguang%20Chen/shad-lad-flad.md) and [Gulmira](Projects/yuguang%20Chen/ForYuguangChen2.md)
-- Yue (Yue_Z9) - [Yue's project](Projects/Yue_Z9/project-description.md)
-  - solution by [Yuguang](Projects/Yue_Z9/Yuguang.md) and [Dennis](Projects/Yue_Z9/shad-lad-flad.md)
-- Jungi (JungiHong) - [Volleyball Passing](Projects/JungiHong/project-description.md)
-  - solution by [Yue](Projects/JungiHong/Yue_Z9.md) and [Yuguang](Projects/JungiHong/Yuguang_solution_Project2.md)
-- Beilei (Beilei-Wang) - [Income distributions](Projects/Beilei-Wang/project-description.md)
-  - solution by [Yue](Projects/Beilei-Wang/yuesolution/solutions.md) and [Jungi](Projects/Beilei-Wang/jungihong10.md)
-- Celine (celineony) - [Behavorial data](Projects/celineony/project-description.md)
-  - solution by [Beilei](Projects/celineony/beileiwang897.md) and [Jungi](Projects/celineony/jungihong10.md)
-- Felix (felix-gogollok) [Whisky statistics](Projects/felix-gogollok/whisky-statistics/project-description.md)
-  - solution by [Beilei](Projects/felix-gogollok/Beilei.md) and [Celine](Projects/felix-gogollok/whisky-statistics/celineony.md)
-- Manuel (ManuDoerrich) - [Nutrition data](Projects/ManuDoerrich/project-description.md)
-  - solution by [Celine](Projects/ManuDoerrich/celineony.md)
-- Nicolas (NicolasDelgadoL) - [social media & personality](Projects/NicolasDelgadoL/Nicolás-project.md)
-  - solution by [Manuel](Projects/NicolasDelgadoL/ManuDoerrich.md)
-- Sun (MoonSunKyung) - [Shopping Trends by Age group and Sex](Projects/SunKyoung%20Moon/project_description.md)
-  - solution by [Manuel](Projects/SunKyoung%20Moon/ManuDoerrich.md) and [Nicolas](Projects/SunKyoung%20Moon/NicolasDelgadoL.md)
+- ... (githubname) - LinkToProjectDescriptionMarkdownFile
+- ... (githubname) - LinkToProjectDescriptionMarkdownFile
+- ... (githubname) - LinkToProjectDescriptionMarkdownFile
+- ...
 
 
 #### Goals
