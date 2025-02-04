@@ -126,7 +126,7 @@ Example:
 Current projects:
 
 - Luis (kickbones1) - [Phone Usage Time](Projects/kickbones1/project-description.md)
-  - solution by [Sun](Projects/kickbones1/SunKyoung-Moon_Luis.md)
+  - solution by [Sun](Projects/kickbones1/SunKyoung-Moon_Luis.md) and [Nicolas](Projects/kickbones1/NicolasDelgadoL.md)
 - Silin (Selena-qian) - [Silin's project](Projects/Selena-qian/project-description.md)
   - solution by [Luis](Projects/Selena-qian/kickbones1.md) and [Sun](Projects/Selena-qian/SunKyoung-Moon_Silin.md)
 - Charlotte (janaelodie) - [Charlottes project](Projects/charlotte/project-description.md)
