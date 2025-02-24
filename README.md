@@ -128,7 +128,7 @@ Current projects:
 - ... (githubname) - LinkToProjectDescriptionMarkdownFile
 - ... (githubname) - LinkToProjectDescriptionMarkdownFile
 - ... (githubname) - LinkToProjectDescriptionMarkdownFile
-- ...
+- ...(madeleine1806) -[mood and stress project](Projects/madeleine1806/project-description.md
 
 
 #### Goals
