@@ -28,13 +28,13 @@ The dataset also contains information on the menstrual cycle phase of the dOC gr
 - `dOC_cycle_date`: Date of the menstrual cycle phase
 - `dOC_cycle_day`: Day of the menstrual cycle phase (normal would be 1-28 days)
 
-#**Data manipulation goals**
+# **Data manipulation goals**
 - **Data Cleaning**: Check for missing values, duplicates, outliers and for normality of the data
 - **Data Transformation**: Create new variables to analyze the relationship between mood and stress, and how the three groups differ in their ratings, and how the ratings change over time. Also check if the mood and stress ratings are correlated  
 - **Data Aggregation**: Calculate the mean and standard deviation for mood and stress ratings for each participant.
 - reshape data if needed
 
-#**Visualization goals**
+# **Visualization goals**
 
 Our goal is to visualize stress and mood trends over time for each group and explore individual variability. Additionally, it would be great to display a time series plot for the dOC group, highlighting the menstrual cycle phase and their mood and stress ratings accordingly. For that, I have provided an example plot online.
 
