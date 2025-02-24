@@ -59,7 +59,8 @@ Our goal is to visualize stress and mood trends over time for each group
 and explore individual variability. Additionally, it would be great to
 display a time series plot for the dOC group, highlighting the menstrual
 cycle phase and their mood and stress ratings accordingly. For that, I
-have provided an example plot [mean Stress Ratings by cycle phase](./mean Stress Ratings by cycle phase.png) 
+have provided an example plot 
+![mean Stress Ratings by cycle phase](./mean Stress Ratings by cycle phase.png) 
 
 Key visualizations include:
 
@@ -72,7 +73,9 @@ Key visualizations include:
 -   **Smoothed trend lines** for group-level comparisons
 -   display fluctuations in mood and stress ratings over time
 -   check example plots that I have provided 
+
 ![time series fluctuations plot](./time series fluctuations plot.jpg)
+
 ![example time series plot](./example time series plot.jpg)
 
 -   **Correlation matrix**: Heatmap of the correlation matrix between
