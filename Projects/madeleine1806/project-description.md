@@ -1,21 +1,17 @@
 # **Introduction**
 
 This project analyzes self-reported mood items and stress levels in
-three groups: **Women who start taking oral contraception (sOC), Women
-who stop taking oral contraception (dOC) , and Continuous User (OC)**.
+three groups: **Women who start taking medication (sOC), Women who stop
+taking medication (dOC), and continuous medication user (OC)**.
 Participants recorded their mood and stress levels once a day, two to
 three times per week over the course of 90 days using an app. If they
 answered 100%, there are 30 ratings per person. The dataset also
 contains information on the menstrual cycle phase of the dOC (women who
-stop taking oral contraception). A regular cycle is about 28 days long,
-with ovulation occurring around day 14. The cycle lengths for the dOC
-group vary a lot. The dataset contains the date of the menstrual cycle
-phase and the day of the menstrual cycle phase so it should be possible
-to match the cycle day with the mood and stress ratings.
-
-Understanding stress and mood fluctuations over time and their
-relationship with hormonal states can provide insights into the effects
-of oral contraceptives on stress regulation.
+stop taking medication). A regular cycle is about 28 days long, with
+ovulation occurring around day 14. The cycle lengths for the dOC group
+vary a lot. The dataset contains the date of the menstrual cycle phase
+and the day of the menstrual cycle phase so it should be possible to
+match the cycle day with the mood and stress ratings.
 
 # **Dataset Description**
 
@@ -24,8 +20,8 @@ stress ratings recorded 2–3 times per week over 90 days (30 times in
 total). The key variables include:
 
 -   `id`: Participant ID  
--   `group`: **OC Starter (sOC), OC discontinuation (dOC), Continuous
-    User (OC)**  
+-   `group`: **medication starter (sOC), medication discontinuation
+    (dOC), continuous medication user (OC)**  
 -   `timeStamp`: Date & time of the mood/stress rating; scheduled: when
     it was supposed to be filled out, sent: when it reached the
     participants phone, start: when the participant started filling it
@@ -37,8 +33,8 @@ total). The key variables include:
 
 The dataset also contains information on the menstrual cycle phase of
 the dOC group. 
-- `id_dOC`: Participant ID of the dOC group
-- `dOC_cycle_date`: Date of the menstrual cycle phase
+- `id_dOC`: Participant ID of the dOC group 
+-`dOC_cycle_date`: Date of the menstrual cycle phase 
 - `dOC_cycle_day`: Day of the menstrual cycle phase (normal would be 1-28 days)
 
 # **Data manipulation goals**
@@ -59,8 +55,8 @@ Our goal is to visualize stress and mood trends over time for each group
 and explore individual variability. Additionally, it would be great to
 display a time series plot for the dOC group, highlighting the menstrual
 cycle phase and their mood and stress ratings accordingly. For that, I
-have provided an example plot 
-![mean Stress Ratings by cycle phase](./mean Stress Ratings by cycle phase.png) 
+have provided an example plot: ![Mean Stress Ratings by cycle
+phase](./Mean%20Stress%20Ratings%20by%20cycle%20phase.png)
 
 Key visualizations include:
 
@@ -72,14 +68,12 @@ Key visualizations include:
         their cycle for 90 days.
 -   **Smoothed trend lines** for group-level comparisons
 -   display fluctuations in mood and stress ratings over time
--   check example plots that I have provided 
-
-![time series fluctuations plot](./time series fluctuations plot.jpg)
-
-![example time series plot](./example time series plot.jpg)
-
 -   **Correlation matrix**: Heatmap of the correlation matrix between
     mood and stress ratings
+-   check example plots that I have provided:
+
+![Example 1](./example%20time%20series%20plot.png) ![Example
+2](./time%20series%20fluctuations%20plot.jpg)
 
 # **Roadmap**
 
