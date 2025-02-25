@@ -36,9 +36,10 @@ total). The key variables include:
     you feel right now? (1–10 scale)
 
 The dataset also contains information on the menstrual cycle phase of
-the dOC group. - `id_dOC`: Participant ID of the dOC group -
-`dOC_cycle_date`: Date of the menstrual cycle phase - `dOC_cycle_day`:
-Day of the menstrual cycle phase (normal would be 1-28 days)
+the dOC group. 
+- `id_dOC`: Participant ID of the dOC group 
+- `dOC_cycle_date`: Date of the menstrual cycle phase 
+- `dOC_cycle_day`: Day of the menstrual cycle phase (normal would be 1-28 days)
 
 # **Data manipulation goals**
 
@@ -57,8 +58,8 @@ Day of the menstrual cycle phase (normal would be 1-28 days)
 Our goal is to visualize stress and mood trends over time for each group
 and explore individual variability. Additionally, it would be great to
 display a time series plot for the dOC group, highlighting the menstrual
-cycle phase and their mood and stress ratings accordingly. For that, I
-have provided an example plot online.
+cycle phase and their mood and stress ratings accordingly. For that I
+have provided an example plot ![Mean Stress Ratings by cycle phase](./Mean Stress Ratings by cycle phase.png) 
 
 Key visualizations include:
 
@@ -70,7 +71,10 @@ Key visualizations include:
         their cycle for 90 days.
 -   **Smoothed trend lines** for group-level comparisons
 -   display fluctuations in mood and stress ratings over time
--   check example plots that I have provided online
+-   check example plots that I have provided 
+![time series fluctuations plot](./time series fluctuations plot.jpg)
+![example time series plot](./example time series plot.jpg)
+
 -   **Correlation matrix**: Heatmap of the correlation matrix between
     mood and stress ratings
 
