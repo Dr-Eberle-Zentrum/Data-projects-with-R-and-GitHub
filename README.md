@@ -128,7 +128,7 @@ Current projects:
 - ... (githubname) - LinkToProjectDescriptionMarkdownFile
 - ... (githubname) - LinkToProjectDescriptionMarkdownFile
 - ... (githubname) - LinkToProjectDescriptionMarkdownFile
-- ...
+
 
 
 #### Goals
