@@ -32,9 +32,10 @@ total). The key variables include:
     you feel right now? (1–10 scale)
 
 The dataset also contains information on the menstrual cycle phase of
-the dOC group. - `id_dOC`: Participant ID of the dOC group -
-`dOC_cycle_date`: Date of the menstrual cycle phase - `dOC_cycle_day`:
-Day of the menstrual cycle phase (normal would be 1-28 days)
+the dOC group. 
+- `id_dOC`: Participant ID of the dOC group 
+-`dOC_cycle_date`: Date of the menstrual cycle phase 
+- `dOC_cycle_day`: Day of the menstrual cycle phase (normal would be 1-28 days)
 
 # **Data manipulation goals**
 
