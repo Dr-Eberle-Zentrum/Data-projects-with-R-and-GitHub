@@ -128,7 +128,8 @@ Current projects:
 - ... (githubname) - LinkToProjectDescriptionMarkdownFile
 - ... (githubname) - LinkToProjectDescriptionMarkdownFile
 - ... (githubname) - LinkToProjectDescriptionMarkdownFile
-- ...
+- ... (madeleine1806) - [Mood & Stress Project](Projects/madeleine1806/project-description.md)
+- ... (LR-R2) - [Census data exploratory analysis](Projects/LR-R2/project-description.md)
 
 
 #### Goals
