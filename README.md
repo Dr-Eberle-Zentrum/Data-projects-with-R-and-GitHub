@@ -128,6 +128,7 @@ Current projects:
 - ... (Niclas38) - [Dummy-project](Projects/Niclas38/project-description.md)
 - ... (madeleine1806) - [Mood & Stress Project](Projects/madeleine1806/project-description.md)
 - ... (LR-R2) - [Census data exploratory analysis](Projects/LR-R2/project-description.md)
+- (yhykelly) - [Film genre and popularity analysis](Projects/yhykelly/project-description.md)
 
 
 #### Goals
