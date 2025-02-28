@@ -129,6 +129,7 @@ Current projects:
 - ... (madeleine1806) - [Mood & Stress Project](Projects/madeleine1806/project-description.md)
 - ... (LR-R2) - [Census data exploratory analysis](Projects/LR-R2/project-description.md)
 - (yhykelly) - [Film genre and popularity analysis](Projects/yhykelly/project-description.md)
+- ... (hd25viet) - [FIDE Chess Rating Analysis](Projects/hd25viet/project-description.md)
 
 
 #### Goals
