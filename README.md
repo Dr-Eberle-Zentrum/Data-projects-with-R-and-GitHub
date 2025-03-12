@@ -125,11 +125,11 @@ Example:
 
 Current projects:
 
-- ... (Niclas38) - [IMDb Movie Data analysis](Projects/Niclas38/project-description.md)
-- ... (madeleine1806) - [Mood & Stress Project](Projects/madeleine1806/project-description.md)
-- ... (LR-R2) - [Census data exploratory analysis](Projects/LR-R2/project-description.md)
-- (yhykelly) - [Film genre and popularity analysis](Projects/yhykelly/project-description.md)
-- ... (hd25viet) - [FIDE Chess Rating Analysis](Projects/hd25viet/project_description.md)
+- Niclas (Niclas38) - [IMDb Movie Data analysis](Projects/Niclas38/project-description.md)
+- Madeleine (madeleine1806) - [Mood & Stress Project](Projects/madeleine1806/project-description.md)
+- Leonardo (LR-R2) - [Census data exploratory analysis](Projects/LR-R2/project-description.md)
+- Hiu Yan (yhykelly) - [Film genre and popularity analysis](Projects/yhykelly/project-description.md)
+- Viet (hd25viet) - [FIDE Chess Rating Analysis](Projects/hd25viet/project_description.md)
 
 
 #### Goals
