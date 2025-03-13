@@ -130,6 +130,7 @@ Current projects:
 - Leonardo (LR-R2) - [Census data exploratory analysis](Projects/LR-R2/project-description.md)
 - Hiu Yan (yhykelly) - [Film genre and popularity analysis](Projects/yhykelly/project-description.md)
 - Viet (hd25viet) - [FIDE Chess Rating Analysis](Projects/hd25viet/project_description.md)
+- Benedikt (Bene-Klein) - [Wildfires around the world](Projects/Bene-Klein/project_description.md)
 
 
 #### Goals
