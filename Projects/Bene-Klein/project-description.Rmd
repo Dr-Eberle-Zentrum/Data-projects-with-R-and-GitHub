@@ -2,7 +2,7 @@
 title: 'Project: Wild fires across the world'
 author: "B Klein"
 date: "2025-02-26"
-output: html_document
+output: md_document
 ---
 ## Introduction
 
