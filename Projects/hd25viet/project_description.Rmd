@@ -46,8 +46,8 @@ To prepare the data for visualization, the following steps will be taken:\
 
 To analyze rating distributions across age groups and federations, we will use various visualization techniques:
 
--   **Ridgeline Plots** (formerly referred to as density plots):
-    -   We will create **ridgeline plots** (as seen [here](https://r-graph-gallery.com/ridgeline-plot.html)), where the x-axis represents ratings and the y-axis represents different federations: One plot per federation, showing how different age groups compare within a country.\
+-   **Ridgeline Plots**:
+    -   We will create **ridgeline plots** similar to [![this example](https://i.sstatic.net/iqr9f.png)] (more details [here](https://r-graph-gallery.com/ridgeline-plot.html)), where the x-axis represents ratings and the y-axis represents different federations: One plot per federation, showing how different age groups compare within a country.\
     -   **Facetting** will be used to split visualizations into smaller, more readable plots.
 -   **Heatmap Representation**:
     -   We will construct a **mean-rating-colored table** where:
@@ -55,6 +55,6 @@ To analyze rating distributions across age groups and federations, we will use v
         -   The x-axis represents **age groups**.
         -   The color intensity represents the **mean rating** for that age group in that federation.
     -   **Clustering will be applied only to federations**, ensuring that age groups remain in their natural order.
-    - No strict color preferences, but a colorblind-friendly palette (e.g., viridis in R) will be used to improve accessibility.
+    -   No strict color preferences, but a colorblind-friendly palette (e.g., viridis in R) will be used to improve accessibility.
 
 These visualizations will provide insights into whether certain age groups dominate in specific federations, whether younger players outperform older ones consistently, and how the chess landscape differs across regions.

@@ -61,8 +61,9 @@ TBD).
 To analyze rating distributions across age groups and federations, we
 will use various visualization techniques:
 
--   **Ridgeline Plots** (formerly referred to as density plots):
-    -   We will create **ridgeline plots** (as seen
+-   **Ridgeline Plots**:
+    -   We will create **ridgeline plots** similar to \[![this
+        example](https://i.sstatic.net/iqr9f.png)\] (more details
         [here](https://r-graph-gallery.com/ridgeline-plot.html)), where
         the x-axis represents ratings and the y-axis represents
         different federations: One plot per federation, showing how
