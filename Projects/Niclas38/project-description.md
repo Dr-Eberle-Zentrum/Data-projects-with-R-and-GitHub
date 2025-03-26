@@ -14,7 +14,7 @@ data to make the data manipulation more challenging.
 For getting the data:
 
 [Look
-here!](%22C:\Users\steph\Git\Data-projects-with-R-and-GitHub\Projects\Niclas38\movies.csv%22)
+here!](%22https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/Niclas38/movies.csv%22)
 
 [Or download here! (you need to sign up for
 this)](https://www.kaggle.com/datasets/bharatnatrayn/movies-dataset-for-feature-extracion-prediction?resource=download)

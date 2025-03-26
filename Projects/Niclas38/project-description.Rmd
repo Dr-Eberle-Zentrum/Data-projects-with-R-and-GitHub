@@ -18,7 +18,7 @@ It is a dataset about netflix movies and tv-shows around 2020/21 from kaggle. It
 ## Dataset
 For getting the data:
 
-[Look here!]("C:\Users\steph\Git\Data-projects-with-R-and-GitHub\Projects\Niclas38\movies.csv")
+[Look here!]("https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/Niclas38/movies.csv")
 
 [Or download here! (you need to sign up for this)](https://www.kaggle.com/datasets/bharatnatrayn/movies-dataset-for-feature-extracion-prediction?resource=download)
 
