@@ -11,11 +11,13 @@ data to make the data manipulation more challenging.
 
 ## Dataset
 
-[Download
-here!](https://www.kaggle.com/datasets/bharatnatrayn/movies-dataset-for-feature-extracion-prediction?resource=download)
+For getting the data:
 
-[Or look
+[Look
 here!](%22C:\Users\steph\Git\Data-projects-with-R-and-GitHub\Projects\Niclas38\movies.csv%22)
+
+[Or download here! (you need to sign up for
+this)](https://www.kaggle.com/datasets/bharatnatrayn/movies-dataset-for-feature-extracion-prediction?resource=download)
 
 **MOVIES:** The movie names are given under the column
 
