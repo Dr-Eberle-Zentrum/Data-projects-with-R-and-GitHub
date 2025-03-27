@@ -20,10 +20,6 @@ July 2017. Data points include cast, crew, plot keywords, budget,
 revenue, posters, release dates, languages, production companies,
 countries, TMDB vote counts and vote averages.
 
-This dataset also has files containing 26 million ratings from 270,000
-users for all 45,000 movies. Ratings are on a scale of 1-5 and have been
-obtained from the official GroupLens website.
-
 (source:
 <https://www.kaggle.com/datasets/rounakbanik/the-movies-dataset/data?select=movies_metadata.csv>)
 
@@ -51,17 +47,24 @@ regarded.
     analyse the how well the film did (in terms of revenue, ratings
     etc.)
 
--   **Data Transformation**:
+-   Note 1: There are columns in JSON format, so make sure we use a
+    proper json parser package to transform them into normal R data
+    (good if a list column that can be unnested if needed)
 
 ## visualization goals
 
 ------------------------------------------------------------------------
 
--   number of films by year
+-   number of films by year and country (use line chart)
 
--   number of genres through different year
+-   number of genres through different year (use ridgeline plot)
 
 -   correlation between revenue and budget (can also visualize whether
-    it is a profit or loss in the end)
+    it is a profit or loss in the end) (use scatter plot)
 
--   correlation between budget and popularity
+-   expected visualization looks like these:
+
+Note: for the density plot the country needs not to be differentiated by
+line styles, but can also by colors.
+
+![](images/Screenshot%202025-03-27%20at%203.52.44%20PM.png)
