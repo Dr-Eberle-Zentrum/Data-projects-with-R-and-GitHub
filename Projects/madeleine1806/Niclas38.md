@@ -1,3 +1,7 @@
+setwd( \# using RStudio library
+dirname(rstudioapi::getActiveDocumentContext()$path) \# using additional
+library \# this.path::this.dir() )
+
 ## R Markdown
 
 This is an R Markdown document. Markdown is a simple formatting syntax
