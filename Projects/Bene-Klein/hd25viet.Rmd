@@ -145,7 +145,7 @@ r2_labels <- final_data %>%
 
 ## 5) Plot with predictions
 
-```{r Facet plotting of countries}
+```{r Facet plotting of countries, fig.width=10, fig.height=6}
 # Plot: Actual data + model fit + 2050 prediction + R2 label
 
 ggplot(combined_plot_data, aes(x = year, y = loss_ha)) +
@@ -176,7 +176,7 @@ ggplot(combined_plot_data, aes(x = year, y = loss_ha)) +
 
 ## 6) Plot world map
 
-```{r World map heat map}
+```{r World map heat map, fig.width=10, fig.height=6}
 # Get world map canvas
 world <- ne_countries(scale = "medium", returnclass = "sf")
 

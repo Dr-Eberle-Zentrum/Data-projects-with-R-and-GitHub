@@ -1,35 +1,12 @@
     library(readxl)
     library(dplyr)
-
-    ## 
-    ## Attaching package: 'dplyr'
-
-    ## The following objects are masked from 'package:stats':
-    ## 
-    ##     filter, lag
-
-    ## The following objects are masked from 'package:base':
-    ## 
-    ##     intersect, setdiff, setequal, union
-
     library(tidyr)
     library(purrr)
     library(ggplot2)
     library(broom) # For one-row summary of model containing R^2
     library(rnaturalearth) # For World map canvas
     library(rnaturalearthdata) # For World map
-
-    ## 
-    ## Attaching package: 'rnaturalearthdata'
-
-    ## The following object is masked from 'package:rnaturalearth':
-    ## 
-    ##     countries110
-
     library(sf) # For simplified spatial data
-
-    ## Linking to GEOS 3.13.0, GDAL 3.8.5, PROJ 9.5.1; sf_use_s2() is TRUE
-
     library(countrycode)
 
 ## 1) Loading Data
@@ -229,4 +206,4 @@
       ) +
       theme_minimal()
 
-![](hd25viet_files/figure-markdown_strict/Join%20via%20country%20code%20and%20plot-1.png)
+![](hd25viet_files/figure-markdown_strict/World%20map%20heat%20map-1.png)
