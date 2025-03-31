@@ -127,7 +127,7 @@ Current projects:
 
 - Niclas (Niclas38) - [IMDb Movie Data analysis](Projects/Niclas38/project-description.md)
 - Madeleine (madeleine1806) - [Mood & Stress Project](Projects/madeleine1806/project-description.md)
-- Leonardo (LR-R2) - [Census data exploratory analysis](Projects/LR-R2/project-description.md)
+- Leonardo Surname (LR-R2) - [Census data exploratory analysis](Projects/LR-R2/project-description.md)
 - Hiu Yan (yhykelly) - [Film genre and popularity analysis](Projects/yhykelly/project-description.md)
 - Viet (hd25viet) - [FIDE Chess Rating Analysis](Projects/hd25viet/project_description.md)
 - Benedikt (Bene-Klein) - [Wildfires around the world](Projects/Bene-Klein/project-description.md)
