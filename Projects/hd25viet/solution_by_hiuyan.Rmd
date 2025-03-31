@@ -8,11 +8,11 @@ date: "2025-03-31"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## Dataset Manipulation 
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+- TBC: is federation equal to country?
+- TBC: confirm the age bins are correctly set up
+- TBC: if I removed too much columns?
 
 ```{r}
 library(tidyverse)
@@ -48,15 +48,45 @@ by_country <- group_by(df, Fed) %>%
 final_df <- left_join(by_country, by_country_by_age, by="Fed") %>%
   arrange(desc(mean_rating))
 
-knitr::kable(final_df, format = "pipe")
+knitr::kable(final_df, format = "pipe", caption="table sorted by average rating of each federation")
 ```
 
-## Including Plots
+## Data Visualisation
 
-You can also embed plots, for example:
+- Ridgeline Plots
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+library(ggridges)
+df_top10 <- df %>%
+  filter(Fed %in% c("NON", "CUB", "BIH", "MYA","FIN","SRB", "KOS", "NED", "UKR", "GER")) %>%
+  print()
+
+ggplot(df_top10, aes(x = APR25, y = Fed, fill = bin)) +
+  # scale for scaling the graph (the smaller the value the lower the graph is suppressed)
+  # alpha for transparency
+  geom_density_ridges(alpha = 0.5, scale = 8, rel_min_height = 0.01) +
+  facet_wrap(~ Fed) +
+  labs(title = "Rating Distributions of each Top-10 Federation (by age group)",
+       x = "APR25 rating",
+       y = "Federation",
+       fill = "age category") 
+```
+
+- Heatmap
+```{r}
+df_heatmap <- by_country_by_age %>%
+  filter(Fed %in% c("NON", "CUB", "BIH", "MYA","FIN","SRB", "KOS", "NED", "UKR", "GER")) %>%
+  print()
+
+matrix_heatmap <- as.matrix(df_heatmap[,-1]) # remove "Fed" column in the matrix
+rownames(matrix_heatmap) <- df_heatmap$Fed # extract Fed as list of rownames for the matrix
+
+heatmap(matrix_heatmap, 
+        scale = "row",          
+        col = heat.colors(10),  # heatmap color scheme
+        margins = c(6, 10),
+        main = "mean-rating-colored table by federation and age categories")
+
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

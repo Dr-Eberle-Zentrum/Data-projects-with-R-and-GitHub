@@ -1,12 +1,10 @@
-## R Markdown
+## Dataset Manipulation
 
-This is an R Markdown document. Markdown is a simple formatting syntax
-for authoring HTML, PDF, and MS Word documents. For more details on
-using R Markdown see <http://rmarkdown.rstudio.com>.
+-   TBC: is federation equal to country?
+-   TBC: confirm the age bins are correctly set up
+-   TBC: if I removed too much columns?
 
-When you click the **Knit** button a document will be generated that
-includes both content as well as the output of any embedded R code
-chunks within the document. You can embed an R code chunk like this:
+<!-- -->
 
     library(tidyverse)
 
@@ -63,9 +61,10 @@ chunks within the document. You can embed an R code chunk like this:
     final_df <- left_join(by_country, by_country_by_age, by="Fed") %>%
       arrange(desc(mean_rating))
 
-    knitr::kable(final_df, format = "pipe")
+    knitr::kable(final_df, format = "pipe", caption="table sorted by average rating of each federation")
 
 <table>
+<caption>table sorted by average rating of each federation</caption>
 <thead>
 <tr>
 <th style="text-align: left;">Fed</th>
@@ -1926,11 +1925,98 @@ chunks within the document. You can embed an R code chunk like this:
 </tbody>
 </table>
 
-## Including Plots
+## Data Visualisation
 
-You can also embed plots, for example:
+-   Ridgeline Plots
 
-![](solution_by_hiuyan_files/figure-markdown_strict/pressure-1.png)
+<!-- -->
+
+    library(ggridges)
+    df_top10 <- df %>%
+      filter(Fed %in% c("NON", "CUB", "BIH", "MYA","FIN","SRB", "KOS", "NED", "UKR", "GER")) %>%
+      print()
+
+    ## # A tibble: 57,990 × 9
+    ##          ID Name             Fed   Sex   APR25     K Birthday Flag  bin     
+    ##       <dbl> <chr>            <chr> <chr> <dbl> <dbl>    <dbl> <chr> <fct>   
+    ##  1 24663832 Aab, Manfred     GER   M      1802    20     1963 i     above 45
+    ##  2  1017942 Aagaard, Michael NED   M      2005    20     1960 <NA>  above 45
+    ##  3   504599 Aakio, Seppo     FIN   M      2013    20     1954 <NA>  above 45
+    ##  4  1024388 Aalbers, Klaas   NED   M      1940    20     1955 <NA>  above 45
+    ##  5  1050141 Aalbers, Thijs   NED   M      1936    40     1974 i     above 45
+    ##  6  1093541 Aalberts, Jos    NED   M      1811    40     1994 <NA>  25-34   
+    ##  7  1033948 Aalders, Peter   NED   M      1937    40     1964 i     above 45
+    ##  8  1070657 Aalten, Evert    NED   M      2000    40     1951 i     above 45
+    ##  9   510726 Aalto, Patrik    FIN   M      2313    20     2004 <NA>  16-24   
+    ## 10   511803 Aalto, Seppo     FIN   M      1908    40     1937 i     above 45
+    ## # ℹ 57,980 more rows
+
+    ggplot(df_top10, aes(x = APR25, y = Fed, fill = bin)) +
+      # scale for scaling the graph (the smaller the value the lower the graph is suppressed)
+      # alpha for transparency
+      geom_density_ridges(alpha = 0.5, scale = 8, rel_min_height = 0.01) +
+      facet_wrap(~ Fed) +
+      labs(title = "Rating Distributions of each Top-10 Federation (by age group)",
+           x = "APR25 rating",
+           y = "Federation",
+           fill = "age category") 
+
+    ## Picking joint bandwidth of 51.5
+
+    ## Picking joint bandwidth of 38.8
+
+    ## Picking joint bandwidth of 52.4
+
+    ## Picking joint bandwidth of 26.7
+
+    ## Picking joint bandwidth of 62
+
+    ## Picking joint bandwidth of 38.7
+
+    ## Picking joint bandwidth of 41.7
+
+    ## Picking joint bandwidth of 3.8
+
+    ## Picking joint bandwidth of 37.5
+
+    ## Picking joint bandwidth of 41.9
+
+    ## Warning in FUN(X[[i]], ...): no non-missing arguments to max; returning -Inf
+
+![](solution_by_hiuyan_files/figure-markdown_strict/unnamed-chunk-2-1.png)
+
+-   Heatmap
+
+<!-- -->
+
+    df_heatmap <- by_country_by_age %>%
+      filter(Fed %in% c("NON", "CUB", "BIH", "MYA","FIN","SRB", "KOS", "NED", "UKR", "GER")) %>%
+      print()
+
+    ## # A tibble: 10 × 6
+    ##    Fed   `below 16` `16-24` `25-34` `35-45` `above 45`
+    ##    <chr>      <dbl>   <dbl>   <dbl>   <dbl>      <dbl>
+    ##  1 BIH        1700.   1812.   1924.   1999.      1982.
+    ##  2 CUB        1666.   1885.   2009.   2039.      2010.
+    ##  3 FIN        1707.   1787.   1911.   1992.      1955.
+    ##  4 GER        1684.   1792.   1891.   1944.      1930.
+    ##  5 KOS        1607.   1854.   1869.   1955.      1940.
+    ##  6 MYA        1653.   1772    1894.   1955.      1964.
+    ##  7 NED        1762.   1840.   1938.   1977.      1903.
+    ##  8 NON          NA      NA      NA    2564.        NA 
+    ##  9 SRB        1658.   1776.   1899.   1976.      1970.
+    ## 10 UKR        1665.   1772.   1977.   2063.      1994.
+
+    matrix_heatmap <- as.matrix(df_heatmap[,-1]) # remove "Fed" column in the matrix
+    rownames(matrix_heatmap) <- df_heatmap$Fed # extract Fed as list of rownames for the matrix
+
+    heatmap(matrix_heatmap, 
+            scale = "row",          
+            col = heat.colors(10),  # heatmap color scheme
+            margins = c(6, 10),
+            main = "mean-rating-colored table by federation and age categories")
+
+![](solution_by_hiuyan_files/figure-markdown_strict/unnamed-chunk-3-1.png)
 
 Note that the `echo = FALSE` parameter was added to the code chunk to
 prevent printing of the R code that generated the plot.
