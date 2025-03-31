@@ -14,8 +14,41 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
-summary(cars)
+```{r}
+library(tidyverse)
+file <- "standard_rating_list.txt"
+
+df <- read_fwf(file=file, 
+               fwf_empty(file, 
+                        col_names=c("ID", "Name", "Fed", "Sex", "Tit", "WTit", "OTit", "FOA", "APR25", "Gms", "K", "Birthday", "Flag")),
+                        skip=1)
+df <- df %>%
+  drop_na(Birthday, APR25) %>% # remove rows without birthday or rating
+  # filter out rows with invalid birthday year
+  filter(Birthday > 1900) %>%
+  # remove irrelevant columns
+  mutate(Tit=NULL,
+         WTit=NULL,
+         OTit=NULL,
+         Gms=NULL,
+         FOA=NULL,
+         # using cut already create factor-typed column
+         bin = cut(2024-Birthday, breaks=c(1,16,25,35,46,Inf), labels=c("below 16", "16-24", "25-34", "35-45", "above 45"))
+         ) %>%
+  filter(!is.na(bin)) 
+
+by_country_by_age <- group_by(df, Fed, bin) %>%
+  summarise(mean_rating=mean(APR25, na.rm=TRUE), .groups="drop") %>%
+  pivot_wider(names_from=bin, values_from=mean_rating) %>%
+  select("Fed", "below 16", "16-24", "25-34", "35-45", "above 45") 
+
+by_country <- group_by(df, Fed) %>%
+  summarise(mean_rating=mean(APR25, na.rm=TRUE)) 
+
+final_df <- left_join(by_country, by_country_by_age, by="Fed") %>%
+  arrange(desc(mean_rating))
+
+knitr::kable(final_df, format = "pipe")
 ```
 
 ## Including Plots
