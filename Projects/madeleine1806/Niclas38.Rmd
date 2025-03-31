@@ -3,6 +3,12 @@ title: "Niclas38"
 output: md_document
 date: "2025-03-31"
 ---
+setwd(
+  # using RStudio library
+  dirname(rstudioapi::getActiveDocumentContext()$path)
+  # using additional library
+  # this.path::this.dir()
+)
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
