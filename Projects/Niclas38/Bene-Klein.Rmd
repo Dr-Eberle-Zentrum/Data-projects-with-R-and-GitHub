@@ -1,0 +1,44 @@
+---
+title: "Bene-Klein"
+output: md_document
+---
+```{r include = FALSE}
+#Here packages
+library(dplyr)
+library(stringr)
+library(ggplot2)
+```
+
+# Data manipulation
+Make the data set clean and tidy -> 1 column = one variable, 1 row = one observation, if there is no data -> NA, always use the same delimiter, watch out for commas that should not be read as a delimiter, watch for spaces and Quotation marks etc.
+
+```{r}
+df<-read.csv('movies.csv')
+df[df==""]<-NA
+df$ONE.LINE<-gsub("\n","",as.character(df$ONE.LINE))
+df$STARS<-gsub(".*Stars:","",as.character(df$STARS))
+df$STARS<-gsub("\n","",as.character(df$STARS))
+df$GENRE<-gsub("\n","",as.character(df$GENRE))
+df$GENRE <- lapply(df$GENRE, function(x) strsplit(x, ",\\s*")[[1]])
+df$STARS <- lapply(df$STARS, function(x) strsplit(x, ",\\s*")[[1]])
+
+df <- df %>%
+  mutate(
+    Start = as.numeric(str_extract(YEAR, "\\d{4}")),
+    End = as.numeric(str_extract(YEAR, "(?<=-)\\d{4}")),
+    End = ifelse(grepl("-\\)", YEAR), 2022, End),  # If the end is missing, set it to 2022
+    End = ifelse(is.na(End), Start, End),  # If there's no end year, use start year
+    Year_List = mapply(function(s, e) if (!is.na(s) & !is.na(e)) seq(s, e) else NA, Start, End, SIMPLIFY = FALSE)
+    )
+final_table <- df %>% select(YEAR, Start, End, Year_List)
+head(df)
+```
+
+```{r}
+#generate a simple dummy plot
+ggplot(df, aes(x = Start, y = RATING),color=GENRE) +
+  geom_point(size = 1) +
+  theme_minimal() +
+  labs(title = "Media ratings over time", x = "time", y = "IMDb score")
+```
+
