@@ -10,45 +10,40 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Dataset Manipulation 
 
-- TBC: is federation equal to country?
-- TBC: confirm the age bins are correctly set up
-- TBC: if I removed too much columns?
 
 ```{r}
 library(tidyverse)
 file <- "standard_rating_list.txt"
-
 df <- read_fwf(file=file, 
                fwf_empty(file, 
                         col_names=c("ID", "Name", "Fed", "Sex", "Tit", "WTit", "OTit", "FOA", "APR25", "Gms", "K", "Birthday", "Flag")),
-                        skip=1)
-df <- df %>%
-  drop_na(Birthday, APR25) %>% # remove rows without birthday or rating
-  # filter out rows with invalid birthday year
-  filter(Birthday > 1900) %>%
-  # remove irrelevant columns
-  mutate(Tit=NULL,
-         WTit=NULL,
-         OTit=NULL,
-         Gms=NULL,
-         FOA=NULL,
-         # using cut already create factor-typed column
-         bin = cut(2024-Birthday, breaks=c(1,16,25,35,46,Inf), labels=c("below 16", "16-24", "25-34", "35-45", "above 45"))
-         ) %>%
-  filter(!is.na(bin)) 
+                        skip=1) %>%
+      mutate(Fed = na_if(Fed, "NON")) %>%
+      drop_na(Birthday, APR25, Fed) %>% # remove rows without birthday or rating
+      # filter out rows with invalid birthday year
+      filter(Birthday > 1900) %>%
+      select(Name, Fed, APR25, Birthday) %>%
+      # remove irrelevant columns
+      mutate(# using cut already create factor-typed column
+             bin = cut(2024-Birthday, breaks=c(1,16,25,35,46,Inf), labels=c("below 16", "16-24", "25-34", "35-45", "above 45"))
+             ) %>%
+      drop_na(bin) %>% 
+      print(n=20)
 
 by_country_by_age <- group_by(df, Fed, bin) %>%
   summarise(mean_rating=mean(APR25, na.rm=TRUE), .groups="drop") %>%
   pivot_wider(names_from=bin, values_from=mean_rating) %>%
-  select("Fed", "below 16", "16-24", "25-34", "35-45", "above 45") 
+  select("Fed", "below 16", "16-24", "25-34", "35-45", "above 45")
 
 by_country <- group_by(df, Fed) %>%
-  summarise(mean_rating=mean(APR25, na.rm=TRUE)) 
+  summarise(mean_rating=mean(APR25, na.rm=TRUE)) %>%
+  arrange(desc(mean_rating)) 
 
 final_df <- left_join(by_country, by_country_by_age, by="Fed") %>%
-  arrange(desc(mean_rating))
+  arrange(desc(mean_rating)) %>%
+  slice_head(n=10)
 
-knitr::kable(final_df, format = "pipe", caption="table sorted by average rating of each federation")
+knitr::kable(final_df, format = "pipe", caption="table sorted by average rating of each federation (Top 10)")
 ```
 
 ## Data Visualisation
@@ -57,36 +52,46 @@ knitr::kable(final_df, format = "pipe", caption="table sorted by average rating 
 
 ```{r}
 library(ggridges)
-df_top10 <- df %>%
-  filter(Fed %in% c("NON", "CUB", "BIH", "MYA","FIN","SRB", "KOS", "NED", "UKR", "GER")) %>%
-  print()
+ridgePlot <- df %>%
+  filter(Fed %in% c("CUB", "BIH", "MYA","FIN","SRB")) %>%
+  ggplot(aes(x = APR25, y = as.factor(bin), fill = ..x..)) +  # Gradient fill based on APR25 rating
+  geom_density_ridges_gradient(scale = 1, rel_min_height = 0.01) +  
+  facet_wrap(~ Fed, scales = "free_y") +  # One plot per federation
+  scale_fill_viridis_c(name = "Rating", option = "C") +  # Apply viridis color scale
+  labs(title = "Rating distributions of each Top 5 Federation (by Age category)",
+       x = "APR25 Rating",
+       y = "Age Group",
+       fill = "Rating Intensity") +
+  theme(legend.position = "right",
+        panel.spacing = unit(2, "lines"))
 
-ggplot(df_top10, aes(x = APR25, y = Fed, fill = bin)) +
-  # scale for scaling the graph (the smaller the value the lower the graph is suppressed)
-  # alpha for transparency
-  geom_density_ridges(alpha = 0.5, scale = 8, rel_min_height = 0.01) +
-  facet_wrap(~ Fed) +
-  labs(title = "Rating Distributions of each Top-10 Federation (by age group)",
-       x = "APR25 rating",
-       y = "Federation",
-       fill = "age category") 
+ridgePlot
 ```
 
 - Heatmap
 ```{r}
-df_heatmap <- by_country_by_age %>%
+library(reshape2)
+
+age_groups <- c("below 16", "16-24", "25-34", "35-45", "above 45") # for strict ordering
+
+df_heatmap_pivot <- by_country_by_age %>%
   filter(Fed %in% c("NON", "CUB", "BIH", "MYA","FIN","SRB", "KOS", "NED", "UKR", "GER")) %>%
-  print()
+  select(Fed, all_of(age_groups)) %>%
+  pivot_longer(cols = all_of(age_groups), 
+               names_to = "Age", 
+               values_to = "APR25")
 
-matrix_heatmap <- as.matrix(df_heatmap[,-1]) # remove "Fed" column in the matrix
-rownames(matrix_heatmap) <- df_heatmap$Fed # extract Fed as list of rownames for the matrix
+df_heatmap_pivot$Age <- factor(df_heatmap_pivot$Age, levels = age_groups) # to fix the age order
 
-heatmap(matrix_heatmap, 
-        scale = "row",          
-        col = heat.colors(10),  # heatmap color scheme
-        margins = c(6, 10),
-        main = "mean-rating-colored table by federation and age categories")
+ggplot(df_heatmap_pivot, aes(x = Age, y = Fed, fill = APR25)) +
+  geom_tile() +  # heatmap needs tiles
+  scale_fill_gradientn(colors = colorRampPalette(c("deepskyblue","deepskyblue2", "deepskyblue4"))(4), 
+                       name = "Mean Rating") + # more fine-grained palette
+  labs(title = "Mean rating by Federation and Age categories", 
+       x = "Age category", 
+       y = "Federation") + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # rotate x-axis and align with plot)
 
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
