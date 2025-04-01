@@ -12,42 +12,18 @@ against the time -&gt; which genre is the most liked by the judges, is
 there a trend over the years? -&gt; Make a lineplot for each genre and
 plot them all in the same graphic. Give every genre a different color,
 make a legend. Sort the genres in the legend according to their current
-imdb-score (-&gt; score for year 2022 -&gt; use factors for that!)
-
-    ## Warning: Removed 3894 rows containing missing values or values outside the scale range
-    ## (`geom_point()`).
+imdb-score.
 
 ![](Bene-Klein_files/figure-markdown_strict/unnamed-chunk-3-1.png)
-
-    ## Saving 7 x 5 in image
-
-    ## Warning: Removed 3894 rows containing missing values or values outside the scale range
-    ## (`geom_point()`).
-
-Do the same for “votes” (=audience opinion) and compare the results of
-the two graphics (discrepancy between “professional” and “laymen”
-taste).
-
-    ## Warning: Removed 3894 rows containing missing values or values outside the scale range
-    ## (`geom_point()`).
-
+[Critic feedback](critic_feedback.pdf) \\ Do the same for “votes”
+(=audience opinion) and compare the results of the two graphics
+(discrepancy between “professional” and “laymen” taste).
 ![](Bene-Klein_files/figure-markdown_strict/unnamed-chunk-4-1.png)
 
-    ## Saving 7 x 5 in image
-
-    ## Warning: Removed 3894 rows containing missing values or values outside the scale range
-    ## (`geom_point()`).
-
-    ## Warning: Removed 1820 rows containing non-finite outside the scale range
-    ## (`stat_bin()`).
-
+[audience feedback](audience_feedback.pdf) \\
 ![](Bene-Klein_files/figure-markdown_strict/unnamed-chunk-5-1.png)
 
-    ## Saving 7 x 5 in image
-
-    ## Warning: Removed 1820 rows containing non-finite outside the scale range
-    ## (`stat_bin()`).
-
+[discrepancy of feedback](discrepancy_of_feedback.pdf) \\
 ![](Bene-Klein_files/figure-markdown_strict/unnamed-chunk-6-1.png)
 
-    ## Saving 7 x 5 in image
+[Top 50 stars rating](Top_50_stars_rating.pdf)

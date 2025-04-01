@@ -2,6 +2,9 @@
 title: "Bene-Klein"
 output: md_document
 ---
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
 ```{r include = FALSE}
 #Here packages
 library(dplyr)
@@ -45,7 +48,8 @@ final_table <- df %>% select(YEAR, Start, End, Year_List)
 ```
 #Visualization
 
-Plot the average imdb-score of each genre (group observation by genre) against the time -> which genre is the most liked by the judges, is there a trend over the years? -> Make a lineplot for each genre and plot them all in the same graphic. Give every genre a different color, make a legend. Sort the genres in the legend according to their current imdb-score (-> score for year 2022 -> use factors for that!)
+Plot the average imdb-score of each genre (group observation by genre) against the time -> which genre is the most liked by the judges, is there a trend over the years? -> Make a lineplot for each genre and plot them all in the same graphic. Give every genre a different color, make a legend. Sort the genres in the legend according to their current imdb-score.
+
 ```{r echo=FALSE}
 #generate a simple dummy plot
 data_expanded <- df %>%
@@ -62,6 +66,8 @@ ggplot(data_expanded, aes(x = Start, y = RATING, fill = GENRE,color = GENRE))+
 ggsave("critic_feedback.pdf")
 #TODO: sort LEGEND
 ```
+[Critic feedback](critic_feedback.pdf)
+\\
 Do the same for “votes” (=audience opinion) and compare the results of the two graphics (discrepancy between “professional” and “laymen” taste).
 ```{r echo=FALSE}
 #generate a simple dummy plot
@@ -77,7 +83,8 @@ ggplot(data_expanded, aes(x = Start, y = VOTES, fill = GENRE,color = GENRE))+
 ggsave("audience_feedback.pdf")
 ```
 
-
+[audience feedback](audience_feedback.pdf)
+\\
 ```{r echo=FALSE}
 #generate discrepancy data
 df_sorted_desc <- df[order(df$VOTES, decreasing = TRUE), ]
@@ -93,8 +100,8 @@ ggplot(df, aes(x = discr)) +
 ggsave("discrepancy_of_feedback.pdf")
 ```
 
-
-
+[discrepancy of feedback](discrepancy_of_feedback.pdf)
+\\
 ```{r echo=FALSE}
 data_expanded_stars <- df %>%
   unnest(STARS)
@@ -115,3 +122,5 @@ ggplot(mean_RATINGS, aes(x = reorder(STARS, RATING), y = RATING)) +
 ggsave("Top_50_stars_rating.pdf")
 #temp plot
 ```
+
+[Top 50 stars rating](Top_50_stars_rating.pdf)
