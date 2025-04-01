@@ -46,7 +46,8 @@ df <- df %>%
 df[df==""]<-NA
 final_table <- df %>% select(YEAR, Start, End, Year_List)
 ```
-#Visualization
+
+# Visualization
 
 Plot the average imdb-score of each genre (group observation by genre) against the time -> which genre is the most liked by the judges, is there a trend over the years? -> Make a lineplot for each genre and plot them all in the same graphic. Give every genre a different color, make a legend. Sort the genres in the legend according to their current imdb-score.
 
@@ -66,8 +67,9 @@ ggplot(data_expanded, aes(x = Start, y = RATING, fill = GENRE,color = GENRE))+
 ggsave("critic_feedback.pdf")
 #TODO: sort LEGEND
 ```
+
 [Critic feedback](critic_feedback.pdf)
-\\
+
 Do the same for “votes” (=audience opinion) and compare the results of the two graphics (discrepancy between “professional” and “laymen” taste).
 ```{r echo=FALSE}
 #generate a simple dummy plot
@@ -84,7 +86,7 @@ ggsave("audience_feedback.pdf")
 ```
 
 [audience feedback](audience_feedback.pdf)
-\\
+
 ```{r echo=FALSE}
 #generate discrepancy data
 df_sorted_desc <- df[order(df$VOTES, decreasing = TRUE), ]
@@ -101,7 +103,9 @@ ggsave("discrepancy_of_feedback.pdf")
 ```
 
 [discrepancy of feedback](discrepancy_of_feedback.pdf)
-\\
+
+Rank the actors based on how often they appear and how good their Movies scored. For that rank them by mean imdb-score and select only the top 50 actors 
+
 ```{r echo=FALSE}
 data_expanded_stars <- df %>%
   unnest(STARS)
