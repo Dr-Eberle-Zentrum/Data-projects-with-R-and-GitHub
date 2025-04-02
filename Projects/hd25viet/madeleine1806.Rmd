@@ -18,7 +18,11 @@ suppressPackageStartupMessages({
 setwd("~/Git/Data-projects-with-R-and-GitHub/Projects/hd25viet")
 
 ```
-
+# Creating an RMarkdown table where: 
+# - Rows represent federations. 
+# - Columns represent age groups. 
+# - An additional column shows the overall mean rating for each federation. 
+# - The table is sorted by federation or by overall mean rating
 ```{r preparation, echo = FALSE}
 file <- "standard_rating_list.txt"
 data <- read_fwf(file = file, 

@@ -1,3 +1,13 @@
+# Creating an RMarkdown table where:
+
+# - Rows represent federations.
+
+# - Columns represent age groups.
+
+# - An additional column shows the overall mean rating for each federation.
+
+# - The table is sorted by federation or by overall mean rating
+
 <table>
 <caption>Federation Mean Ratings by Age Category with Overall Mean
 Rating</caption>
