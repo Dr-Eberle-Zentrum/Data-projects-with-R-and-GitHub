@@ -1,0 +1,157 @@
+---
+title: "solution_by_hiuyan"
+output: md_document
+date: "2025-04-02"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## data wrangling and manipulation
+
+```{r}
+library(readxl)
+library(tidyverse)
+
+# ensure file is in the working dir
+file = "gfw_2023_statistics_summary_v30102024.xlsx"
+                  
+# import the 2ns sheet from the .xlsx file
+df <- read_xlsx(file, sheet=2) |>
+  as_tibble() %>%
+  # re-arranging the data 
+  filter(threshold==30) %>% # only considering the 30% threshold data %>%
+  filter(rowSums(select(., starts_with("tc_loss_ha_"))) > 0) %>%
+  select(
+    country,
+    area_ha,
+    starts_with("tc_loss_ha_")
+  ) 
+
+
+year_to_predict <- 2050
+  
+# pivot the table to long side 
+df_pivot <- pivot_longer(df,
+                         cols=starts_with("tc_loss_ha_"),
+                         names_to = "year",
+                         names_prefix = "tc_loss_ha_", # removes the prefix from column name
+                         values_to = "tc_loss_ha") %>%
+            mutate(year = as.numeric(year)) %>% # make sure x-axis has numeric data type
+            group_by(country) 
+
+predictions <- df_pivot %>%
+  do({
+    model <- lm(tc_loss_ha ~ poly(year, 2, raw = TRUE), data = .)  # fit a model by "year", for each country 
+    data.frame(country = unique(.$country), 
+               expected_tc_ha_2050 = predict(model, data.frame(year = year_to_predict)), # create a data frame that contains the predictor from the model
+               var_expected_tc_ha_2050 = mean((resid(model))^2),
+               R_squared = summary(model)$r.squared)
+  }) %>%
+  ungroup() 
+
+# join the predicted column data to the original data sheet
+final_df <- left_join(df, predictions, by="country") 
+
+view(final_df)
+
+sample_final_df <- final_df %>% filter(row_number() %% 10 == 1) 
+
+knitr::kable(sample_final_df, format = "pipe", caption="ountry tree cover loss and prediction for year 2050")
+```
+
+## Data Visualisation
+
+### Prediction 2050 - model fit 
+
+```{r}
+# boil down the final_df to pivot-scale for 2050 predictions
+prediction_pivot <- final_df %>%
+  mutate(year=2050) %>%
+  select(country, year, expected_tc_ha_2050) %>%
+  rename(tc_loss_ha = expected_tc_ha_2050) %>% view()
+
+# prepare the pivot table including the predicted value of 2050
+df_pivot_to_2050 <- df_pivot %>%
+  select(country, year, tc_loss_ha) %>%
+  bind_rows(prediction_pivot) %>% 
+  arrange(country, year) %>% view()
+
+# set labels for r2 values for plotting
+r_squared_values <- setNames(final_df$R_squared, final_df$country)
+
+# Function to update facet labels with R² values
+update_labels <- function(country) {
+  r2 <- r_squared_values[country]
+  paste0(country, " (R² = ", round(r2, 2), ")")
+}
+
+countries_selected <- c("Laos", "Norway", "India", "United States")
+
+# extract only the wanted countries from prediction table
+selected_prediction_pivot <- prediction_pivot %>% filter(country %in% countries_selected)
+  
+specific_country_plot <- df_pivot_to_2050 %>%
+  filter(country %in% countries_selected) %>%
+  ggplot(aes(x = year, y = tc_loss_ha)) + 
+  geom_point() + 
+  geom_smooth(method = "lm", formula = y ~ poly(x, 2), alpha=.5) +
+  geom_point(data = selected_prediction_pivot,
+             aes(x = year, y = tc_loss_ha),
+             color = "red") +
+  geom_hline(data = selected_prediction_pivot,
+             aes(yintercept = tc_loss_ha), 
+             linetype = "dashed", 
+             color = "blue") +
+  facet_wrap(~ country, scales = "free", ncol=1, labeller = as_labeller(update_labels)) +
+  labs(
+    title = "Country Tree Cover Loss and Prediction for 2050",
+    x = "year",
+    y = "tree cover loss (in hectres)",
+    subtitle = str_wrap("the graphs show country tree coverage loss from 2001-2023 data. Additionally, based on the data, an estimated figure for 2050 is modeled.")
+  ) +
+  theme(
+    strip.text = element_text(size = 10, face = "bold"),
+    plot.subtitle=element_text(size=9)
+  )
+
+specific_country_plot
+```
+
+### World map
+
+```{r}
+# world map visualisation
+library(rworldmap)
+
+color_palette <- colorRampPalette(c("yellow", "brown"))(20)
+
+df_world <- df %>%
+  mutate(tc_loss_ha_2023 = as.numeric(tc_loss_ha_2023)) %>%
+  mutate(loss_percentage = 100 * tc_loss_ha_2023 / area_ha) %>%
+  joinCountryData2Map( df,
+                       joinCode = "NAME",
+                       nameJoinColumn = "country" )
+
+breaks_seq <- seq(min(df_world$loss_percentage, na.rm = TRUE), 
+                  max(df_world$loss_percentage, na.rm = TRUE), 
+                  length.out = 20)
+
+par(mai=c(0,0,0.2,0),xaxs="i",yaxs="i")
+mapParams<- mapCountryData(df_world,
+               nameColumnToPlot="loss_percentage",
+               mapTitle="Tree loss percentage",
+               colourPalette=color_palette,
+               numCats=100,
+               catMethod=breaks_seq,
+               addLegend=FALSE)
+
+do.call(addMapLegend , c( mapParams,
+                          legendLabels="all",
+                          legendWidth=0.5,
+                          legendMar = 2 ))
+text(x = -10, y = -130, labels = "percentage", cex = 1, font = .5)
+text(x = 130, y = -130, labels = str_wrap("Note: countries with no data is shown with white color", width=30), font = 0.04)
+
+```
