@@ -4,4 +4,188 @@ output: md_document
 date: "2025-04-02"
 ---
 
-# This is my solution!
+# Solution for "Film genre and popularity analysis-Project" by @yhykelly
+
+In this File I propose my solution for the "Film genre and popularity analysis-Project" by yhykelly.
+It is about a movie data set and the task is to further analyse the data to find trends in the popularity and sucsess of a movie based on statistics and measuarable variables.
+
+## Loading packages and R-setup
+```{r, echo=FALSE}
+library(tidyverse)
+library(rstudioapi)
+library(jsonlite)
+library(lubridate)
+library(ggridges)
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+```
+## Loading data
+```{r, echo=FALSE}
+Data <- read_csv("movies_metadata.csv")
+```
+# Data manipulation
+
+## Data tidying:
+- Select only needed columns
+- Extract information from JSON Format
+- Filter for duplicates & invalid values
+- extracting the year from the release-date
+```{r, echo=FALSE}
+CleanData <- Data %>%
+  select(id, title,release_date, production_countries,original_language,genres,vote_average,popularity,budget,revenue,runtime) %>% # select columns
+  filter(runtime > 0,
+         revenue > 0,
+         budget > 0) %>% # filter for invalid values
+  distinct() %>% #filter for duplicates
+  mutate(genres = map(genres, ~fromJSON(str_replace_all(.x,"'", "\""))),
+         genres = map(genres, ~pluck(.,"name"))) %>% 
+  mutate(production_countries = map(production_countries, ~fromJSON(str_replace_all(.x,"'", "\""))),
+         production_countries = map(production_countries, ~pluck(.,"name"))) %>% 
+  unnest(genres) %>%
+  unnest(production_countries) %>% #convert JSON formats in list formats and unnest the lists
+  mutate(release_date = year(release_date)) # extract year from release date
+
+
+```
+
+## Data wrangling
+- group by genres, year and language
+- calculate mean budget, revenue, profit (= revenue - budget), vote_average and popularity for each
+```{r, echo=FALSE}
+#grouped by genre:
+CleanData %>% 
+  group_by(genres) %>% 
+  summarise(Amount_Of_Movies = n_distinct(title),
+            AvgBudget = mean(budget),
+            AvgRevenue = mean(revenue),
+            AvgProfit = mean(revenue - budget),
+            AvgVote = mean(vote_average),
+            AvgPopularity = mean(popularity)) %>% 
+  knitr::kable()
+
+#grouped by year:
+CleanData %>% 
+  group_by(release_date) %>% 
+  summarise(Amount_Of_Movies = n_distinct(title),
+            AvgBudget = mean(budget),
+            AvgRevenue = mean(revenue),
+            AvgProfit = mean(revenue - budget),
+            AvgVote = mean(vote_average),
+            AvgPopularity = mean(popularity)) %>% 
+  knitr::kable()
+
+
+#grouped by language:
+CleanData %>% 
+  group_by(original_language) %>% 
+  summarise(Amount_Of_Movies = n_distinct(title),
+            AvgBudget = mean(budget),
+            AvgRevenue = mean(revenue),
+            AvgProfit = mean(revenue - budget),
+            AvgVote = mean(vote_average),
+            AvgPopularity = mean(popularity)) %>% 
+  knitr::kable()
+
+```
+
+
+# Visualization
+
+## Line chart:
+To make it less messy I only took the top 10 countries with the overall most movies and compared their amount of movies over the time.
+```{r, echo=FALSE}
+#Select top 10 countries
+Top10Countries <- CleanData %>% 
+  group_by(production_countries) %>% 
+  summarise(amount = n_distinct(title)) %>% 
+  arrange(desc(amount)) %>% 
+  slice_head(n=10) %>% 
+  ungroup()
+
+#group data by year and genre and generate a lineplot for each (of the top 10) genre
+CleanData %>%
+  group_by(release_date,production_countries) %>% 
+  summarise(amount = n_distinct(title)) %>%
+  filter(production_countries %in% Top10Countries) %>% 
+  ggplot(aes(x=release_date,y=amount,colour = production_countries))+
+  geom_line()+
+  labs(
+    title = "Number of films by yer and country",
+    x = "Year",
+    y = "Amount of movies"
+  )+
+  theme_minimal()
+
+```
+
+## Ridgeline plot
+- I used the "ggridges" package and geom_density_ridges to create the ridgeline plot
+- I did the same again only for the top 10 genres to make it cleaner but it didn't change a lot 
+```{r, echo=FALSE}
+# Plot the amount of movies of each genre against the time in a ridgelineplot
+CleanData %>%
+  ggplot(aes(x = release_date, y=genres, fill = genres))+
+  geom_density_ridges(scale=1, bandwidth = 7.5,na.rm=T)+
+  labs(
+    title = "number of genres through diffrent year",
+    x = "Year",
+    y = "Genre"
+  )+
+  theme_minimal()
+
+# Trying the same for the top 10 genres -> maybe this looks a bit better?
+# Define Top 10 Genres
+Top10Genres <- CleanData %>% 
+  group_by(genres) %>% 
+  summarise(amount = n_distinct(title)) %>% 
+  arrange(desc(amount)) %>% 
+  slice_head(n=10) %>% 
+  ungroup()
+
+#Plot it
+CleanData %>%
+  filter(genres %in% Top10Genres$genres) %>% 
+  ggplot(aes(x = release_date, y=genres, fill = genres))+
+  geom_density_ridges(scale=1, bandwidth = 7.5,na.rm=T)+
+  labs(
+    title = "number of genres through diffrent year",
+    x = "Year",
+    y = "Genre"
+  )+
+  theme_minimal()
+```
+
+## Scatter plot
+- Created a "WinLoss" column that shows if the movie was proftiable or lost money.
+- Created a Scatterplot of budget and revenue and colorize the datapoints depending if the movie made profit or lost money
+- Added a trendline -> All movies above it are more profitable than the average movie, all below it are less profitable
+- Added the same plot again with same axis scaling -> shows the real ratio but looks a bit ugly (I was curious how it would look :))
+```{r, echo =FALSE}
+CleanData %>% 
+  mutate(WinLoss = ifelse(revenue>budget, "Movie was profitable", "Movie lost money")) %>% #Create WinLoss column
+  ggplot(aes(x=budget,y=revenue, colour = WinLoss))+ #plot scatterplot
+  geom_point(size=0.75)+
+  geom_smooth(method = "lm",col= "#480355")+ #add trendline
+  labs(
+    title="Correlation between revenue and budget",
+    x = "Budget",
+    y = "Revenue"
+  )+
+  theme_minimal()
+
+#second plot with even axis scaling -> shows the real ratio between budget and revenue but is ugly -> just because i was curious :)
+
+CleanData %>% 
+  mutate(WinLoss = ifelse(revenue>budget, "Movie was profitable", "Movie lost money")) %>% #Create WinLoss column
+  ggplot(aes(x=budget,y=revenue, colour = WinLoss))+ #plot scatterplot
+  geom_point(size=0.75)+
+  geom_smooth(method = "lm",col= "#480355")+ #add trendline
+  labs(
+    title="Correlation between revenue and budget",
+    x = "Budget",
+    y = "Revenue"
+  )+
+  coord_fixed()+
+  theme_minimal()
+
+```
+
