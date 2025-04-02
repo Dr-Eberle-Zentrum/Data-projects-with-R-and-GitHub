@@ -1,0 +1,7 @@
+---
+title: "Niclas38"
+output: md_document
+date: "2025-04-02"
+---
+
+# This is my solution!
