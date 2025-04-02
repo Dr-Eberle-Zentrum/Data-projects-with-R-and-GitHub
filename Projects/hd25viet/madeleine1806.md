@@ -7,8 +7,6 @@
 -   The table is sorted by federation or by overall mean rating
 
 <table>
-<caption>Federation Mean Ratings by Age Category with Overall Mean
-Rating</caption>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Fed</th>
@@ -95,8 +93,6 @@ Rating</caption>
 </tr>
 </tbody>
 </table>
-
-Federation Mean Ratings by Age Category with Overall Mean Rating
 
 # Ridgeline Plots
 

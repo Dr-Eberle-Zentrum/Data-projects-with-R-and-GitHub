@@ -73,7 +73,7 @@ data_pivoted <- data_mean_ratings %>%
   drop_na() # Drop rows with missing values
 
 # Print the table
-knitr::kable(data_pivoted, format = "pipe", caption = "Federation Mean Ratings by Age Category with Overall Mean Rating")
+knitr::kable(data_pivoted, format = "pipe")
 ```
 # Ridgeline Plots
 ```{r ridgeline plot, echo=FALSE, fig.show="hold"}
