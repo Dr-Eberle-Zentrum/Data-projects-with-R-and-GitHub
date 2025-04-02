@@ -18,6 +18,7 @@ library(lubridate)
 library(ggridges)
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 ```
+
 ## Loading data
 ```{r, echo=FALSE}
 Data <- read_csv("movies_metadata.csv")
