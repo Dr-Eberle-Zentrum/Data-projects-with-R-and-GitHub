@@ -106,11 +106,11 @@ Top10Countries <- CleanData %>%
 CleanData %>%
   group_by(release_date,production_countries) %>% 
   summarise(amount = n_distinct(title)) %>%
-  filter(production_countries %in% Top10Countries) %>% 
+  filter(production_countries %in% Top10Countries$production_countries) %>% 
   ggplot(aes(x=release_date,y=amount,colour = production_countries))+
   geom_line()+
   labs(
-    title = "Number of films by yer and country",
+    title = "Number of films by year and country",
     x = "Year",
     y = "Amount of movies"
   )+
