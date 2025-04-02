@@ -1,56 +1,3 @@
-    ## Warning: Paket 'ggridges' wurde unter R Version 4.3.3 erstellt
-
-    file <- "standard_rating_list.txt"
-    data <- read_fwf(file = file, 
-                             fwf_empty(file, 
-                                       col_names = c("ID", "Name", "Fed", "Sex", "Tit", "WTit", 
-                                                     "OTit", "FOA", "APR25", "Gms", "K", "Birthday", "Flag")),
-                             skip = 1,
-                             show_col_types = FALSE) %>%
-      # Keep only Name, Fed, APR25, and Birthday columns
-      select(Name, Fed, APR25, Birthday) %>%
-      # Remove rows with missing Birthday or ratings (APR25)
-      filter(!is.na(Birthday) & !is.na(APR25)) %>%
-      # Calculate age based on the current year and the Birthday column
-      mutate(Age = 2025 - Birthday) %>%
-      # Create age categories
-      mutate(AgeCategory = case_when(
-        Age < 16 ~ "Under 16",
-        Age >= 16 & Age < 24 ~ "16–24",
-        Age >= 24 & Age < 34 ~ "24–34",
-        Age >= 34 & Age < 45 ~ "35–45",
-        Age >= 45 ~ "45+"
-      )) %>%
-      # Convert AgeCategory to a factor
-      mutate(AgeCategory = factor(AgeCategory, levels = c("Under 16", "16–24", "24–34", "35–45", "45+")))
-
-    # Compute mean ratings for each Federation (Fed) within each age category
-    data_mean_ratings <- data %>%
-      group_by(Fed, AgeCategory) %>%
-      summarize(
-        mean_APR25 = mean(APR25, na.rm = TRUE),
-        .groups = "drop"  # To ungroup the data after summarizing
-      )
-
-    # Calculate the overall mean rating for each Federation
-    data_overall <- data_mean_ratings %>%
-      group_by(Fed) %>%
-      summarize(
-        overall_mean = mean(mean_APR25, na.rm = TRUE),
-        .groups = "drop"
-      )
-
-    # Pivot the table: federations as rows and age categories as columns
-    data_pivoted <- data_mean_ratings %>%
-      pivot_wider(names_from = AgeCategory, values_from = mean_APR25) %>%
-      left_join(data_overall, by = "Fed") %>%
-      arrange(desc(overall_mean)) %>%  # Sort by overall mean rating in descending order
-      slice_head(n = 10) %>%  # Keep only the top 10 federations
-      drop_na() # Drop rows with missing values
-
-    # Print the table
-    knitr::kable(data_pivoted, format = "pipe", caption = "Federation Mean Ratings by Age Category with Overall Mean Rating")
-
 <table>
 <caption>Federation Mean Ratings by Age Category with Overall Mean
 Rating</caption>
@@ -154,8 +101,5 @@ Federation Mean Ratings by Age Category with Overall Mean Rating
     ## Picking joint bandwidth of 39.7
 
 ![](madeleine1806_files/figure-markdown_strict/ridgeline%20plot-1.png)
-
-    ## `summarise()` has grouped output by 'Fed'. You can override using the `.groups`
-    ## argument.
 
 ![](madeleine1806_files/figure-markdown_strict/heatmap%20plot-1.png)

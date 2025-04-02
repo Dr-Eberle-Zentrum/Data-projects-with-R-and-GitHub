@@ -9,6 +9,7 @@ output: md_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 ```{r packages, echo=FALSE}
+options(warn = -1)  # Suppress warnings globally for the current session
 suppressPackageStartupMessages({
   library(tidyverse)
   library(ggridges)
@@ -18,7 +19,7 @@ setwd("~/Git/Data-projects-with-R-and-GitHub/Projects/hd25viet")
 
 ```
 
-```{r}
+```{r preparation, echo = FALSE}
 file <- "standard_rating_list.txt"
 data <- read_fwf(file = file, 
                          fwf_empty(file, 
@@ -42,10 +43,6 @@ data <- read_fwf(file = file,
   )) %>%
   # Convert AgeCategory to a factor
   mutate(AgeCategory = factor(AgeCategory, levels = c("Under 16", "16–24", "24–34", "35–45", "45+")))
-
-```
-
-```{r}
 
 # Compute mean ratings for each Federation (Fed) within each age category
 data_mean_ratings <- data %>%
@@ -77,38 +74,38 @@ knitr::kable(data_pivoted, format = "pipe", caption = "Federation Mean Ratings b
 
 ```{r ridgeline plot, echo=FALSE, fig.show="hold"}
 # Step 1: Calculate mean APR25 per Federation and filter top 10 federations
-top_federations <- data %>%
-  group_by(Fed) %>%
-  summarise(mean_rating = mean(APR25, na.rm = TRUE)) %>%
-  arrange(desc(mean_rating)) %>%
-  slice_head(n = 10)   # Keep only the top 10 federations
-  
+  top_federations <- data %>%
+    group_by(Fed) %>%
+    summarise(mean_rating = mean(APR25, na.rm = TRUE)) %>%
+    arrange(desc(mean_rating)) %>%
+    slice_head(n = 10)   # Keep only the top 10 federations
 
-# Step 2: Filter original dataset to include only the top 10 federations
-data_top_10 <- data %>%
-  filter(Fed %in% top_federations$Fed)
+  # Step 2: Filter original dataset to include only the top 10 federations
+  data_top_10 <- data %>%
+    filter(Fed %in% top_federations$Fed)
 
-# Step 3: Create the ridgeline plot
-ggplot(data_top_10, aes(x = APR25, y = Fed, fill = AgeCategory)) +
-  geom_density_ridges(alpha = 0.7, scale = 1.5) +
-  facet_wrap(~ AgeCategory, scales = "free_y") +  # Create a separate plot per age category
-  theme_minimal() +
-  labs(
-    title = "Ridgeline Plot of Ratings by Federation and Age Group (Top 10 Federations)",
-    x = "Ratings (APR25)",
-    y = "Federation",
-    fill = "Age Group"
-  ) +
-  theme(
-    strip.text = element_text(size = 10),  # Adjust facet labels size
-    axis.text.y = element_text(size = 8)   # Adjust y-axis label size
-  )
+  # Step 3: Create the ridgeline plot
+  ggplot(data_top_10, aes(x = APR25, y = Fed, fill = AgeCategory)) +
+    geom_density_ridges(alpha = 0.7, scale = 1.5) +
+    facet_wrap(~ AgeCategory, scales = "free_y") +  # Create a separate plot per age category
+    theme_minimal() +
+    labs(
+      title = "Ridgeline Plot of Ratings by Federation and Age Group (Top 10 Federations)",
+      x = "Ratings (APR25)",
+      y = "Federation",
+      fill = "Age Group"
+    ) +
+    theme(
+      strip.text = element_text(size = 10),  # Adjust facet labels size
+      axis.text.y = element_text(size = 8)   # Adjust y-axis label size
+    )
 ```
+
 ```{r heatmap plot, echo=FALSE, fig.show="hold"}
 # Step 1: Calculate mean ratings for each federation and age category
 mean_ratings <- data %>%
   group_by(Fed, AgeCategory) %>%
-  summarise(mean_rating = mean(APR25, na.rm = TRUE)) %>%
+  summarise(mean_rating = mean(APR25, na.rm = TRUE), .groups = "drop") %>%  # Drops grouping after summarising
   ungroup()
 
 # Step 2: Get top 10 federations by overall mean rating (across all players)
@@ -126,9 +123,6 @@ filtered_ratings <- mean_ratings %>%
 # Step 3: Remove rows with missing data
 filtered_ratings <- filtered_ratings %>%
   filter(!is.na(mean_rating))
-
-# Step 4: Create heatmap using ggplot
-library(ggplot2)
 
 ggplot(filtered_ratings, aes(x = AgeCategory, y = Fed, fill = mean_rating)) +
   geom_tile() +
