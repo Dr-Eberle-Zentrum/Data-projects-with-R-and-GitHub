@@ -110,10 +110,14 @@
 
 ## Data transformation:
 
+    # Define custom colors for the datapoints of each group
+    custom_cols <- c("sOC" = "#E15A97", "dOC" = "#07A0C3", "OC" = "#0A2463")
+
     # Scatterplots for association between self reportet stress and mood
     # Negative mood: x = stressed_24h, y = depressed, confidence interval = 99%
-    ggplot(CleanData, aes(x= stressed_24h, y= depressed))+
-      geom_point(col = "#7699D4", size=0.8)+
+    ggplot(CleanData, aes(x= stressed_24h, y= depressed, col = group))+
+      geom_point(size=0.8)+
+      scale_color_manual(values = custom_cols)+
       geom_smooth(method= "lm",col = "#480355", se = TRUE, level= 0.99, fill = "#9448BC")+
       labs(
         title= "How stress influences negative mood",
@@ -121,15 +125,17 @@
         x = "How stressed did you feel today? (stressed_24h)",
         y = "How depressed did you feel today? (depressed)"
       )+
-      theme(panel.background = element_blank())
+      theme(panel.background = element_blank(),
+            axis.line = element_line(color="black"))
 
     ## `geom_smooth()` using formula = 'y ~ x'
 
 ![](Niclas38_files/figure-markdown_strict/data%20transformation-1.png)
 
     #Positive mood: x = stressed_24h, y = satisfied, confidence interval = 99%
-    ggplot(CleanData, aes(x= stressed_24h, y= satisfied))+
-      geom_point(col = "#7699D4", size=0.8)+
+    ggplot(CleanData, aes(x= stressed_24h, y= satisfied, col =group))+
+      geom_point(size=0.8)+
+      scale_color_manual(values = custom_cols)+
       geom_smooth(method= "lm",col = "#480355", se = TRUE, level= 0.99, fill = "#9448BC")+
       labs(
         title= "How stress influences positive mood",
@@ -137,7 +143,8 @@
         x = "How stressed did you feel today? (stressed_24h)",
         y = "How satisfied did you feel today? (satisfied)"
       )+
-      theme(panel.background = element_blank())
+      theme(panel.background = element_blank(),
+            axis.line = element_line(color="black"))
 
     ## `geom_smooth()` using formula = 'y ~ x'
 
@@ -159,11 +166,14 @@
     # Plot for depressed: (confidence interval =75%)
     ggplot(WeekdayData,aes(x=weekday, y=depressed, col = group, group = group))+
       geom_smooth(method = "loess", se = TRUE, level =0.75)+
+      scale_color_manual(values = custom_cols)+
       labs(
         title="Average level of depression per Weekday in dependency of the medication group",
         x="Weekday",
         y="Average depression (self-reported on a scale from 1 to 100)")+
-      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+      theme(axis.text.x = element_text(angle = 45, hjust= 1),
+            panel.background = element_blank(),
+            axis.line = element_line(color="black"))
 
     ## `geom_smooth()` using formula = 'y ~ x'
 
@@ -172,11 +182,14 @@
     # Plot for satisfied: (confidence interval =75%)
     ggplot(WeekdayData,aes(x=weekday, y=satisfied, col = group, group = group))+
       geom_smooth(method = "loess", se = TRUE, level =0.75)+
+      scale_color_manual(values = custom_cols)+
       labs(
         title="Average level of satisfaction per Weekday in dependency of the medication group",
         x="Weekday",
         y="Average satisfaction (self-reported on a scale from 1 to 100)")+
-      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+      theme(axis.text.x = element_text(angle = 45, hjust= 1),
+            panel.background = element_blank(),
+            axis.line = element_line(color="black"))
 
     ## `geom_smooth()` using formula = 'y ~ x'
 
@@ -185,11 +198,14 @@
     # Plot for motivated: (confidence interval =75%)
     ggplot(WeekdayData,aes(x=weekday, y=motivated, col = group, group = group))+
       geom_smooth(method = "loess", se = TRUE, level =0.75)+
+       scale_color_manual(values = custom_cols)+
       labs(
         title="Average level of motivation per Weekday in dependency of the medication group",
         x="Weekday",
         y="Average motivation (self-reported on a scale from 1 to 100)")+
-      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+      theme(axis.text.x = element_text(angle = 45, hjust= 1),
+            panel.background = element_blank(),
+            axis.line = element_line(color="black"))
 
     ## `geom_smooth()` using formula = 'y ~ x'
 
@@ -198,11 +214,14 @@
     # Plot for aroused: (confidence interval =75%)
     ggplot(WeekdayData,aes(x=weekday, y=aroused, col = group, group = group))+
       geom_smooth(method = "loess", se = TRUE, level =0.75)+
+       scale_color_manual(values = custom_cols)+
       labs(
         title="Average level of arousation per Weekday in dependency of the medication group",
         x="Weekday",
         y="Average arousation (self-reported on a scale from 1 to 100)")+
-      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+      theme(axis.text.x = element_text(angle = 45, hjust= 1),
+            panel.background = element_blank(),
+            axis.line = element_line(color="black"))
 
     ## `geom_smooth()` using formula = 'y ~ x'
 
