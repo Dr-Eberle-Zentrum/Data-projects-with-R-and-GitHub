@@ -1,12 +1,10 @@
 # Creating an RMarkdown table where:
 
-# - Rows represent federations.
-
-# - Columns represent age groups.
-
-# - An additional column shows the overall mean rating for each federation.
-
-# - The table is sorted by federation or by overall mean rating
+-   Rows represent federations.
+-   Columns represent age groups.
+-   An additional column shows the overall mean rating for each
+    federation.
+-   The table is sorted by federation or by overall mean rating
 
 <table>
 <caption>Federation Mean Ratings by Age Category with Overall Mean
@@ -100,6 +98,8 @@ Rating</caption>
 
 Federation Mean Ratings by Age Category with Overall Mean Rating
 
+# Ridgeline Plots
+
     ## Picking joint bandwidth of 47.2
 
     ## Picking joint bandwidth of 57.2
@@ -111,5 +111,5 @@ Federation Mean Ratings by Age Category with Overall Mean Rating
     ## Picking joint bandwidth of 39.7
 
 ![](madeleine1806_files/figure-markdown_strict/ridgeline%20plot-1.png)
-
+\# Heatmap
 ![](madeleine1806_files/figure-markdown_strict/heatmap%20plot-1.png)

@@ -19,10 +19,10 @@ setwd("~/Git/Data-projects-with-R-and-GitHub/Projects/hd25viet")
 
 ```
 # Creating an RMarkdown table where: 
-# - Rows represent federations. 
-# - Columns represent age groups. 
-# - An additional column shows the overall mean rating for each federation. 
-# - The table is sorted by federation or by overall mean rating
+- Rows represent federations. 
+- Columns represent age groups. 
+- An additional column shows the overall mean rating for each federation. 
+- The table is sorted by federation or by overall mean rating
 ```{r preparation, echo = FALSE}
 file <- "standard_rating_list.txt"
 data <- read_fwf(file = file, 
@@ -75,7 +75,7 @@ data_pivoted <- data_mean_ratings %>%
 # Print the table
 knitr::kable(data_pivoted, format = "pipe", caption = "Federation Mean Ratings by Age Category with Overall Mean Rating")
 ```
-
+# Ridgeline Plots
 ```{r ridgeline plot, echo=FALSE, fig.show="hold"}
 # Step 1: Calculate mean APR25 per Federation and filter top 10 federations
   top_federations <- data %>%
@@ -104,7 +104,7 @@ knitr::kable(data_pivoted, format = "pipe", caption = "Federation Mean Ratings b
       axis.text.y = element_text(size = 8)   # Adjust y-axis label size
     )
 ```
-
+# Heatmap
 ```{r heatmap plot, echo=FALSE, fig.show="hold"}
 # Step 1: Calculate mean ratings for each federation and age category
 mean_ratings <- data %>%
