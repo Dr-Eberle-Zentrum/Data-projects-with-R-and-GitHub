@@ -1,0 +1,32 @@
+---
+title: "madeleine1806"
+author: "Madeleine"
+date: "`r Sys.Date()`"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r packages, echo=FALSE}
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(jsonlite)
+  library(ggridges)
+  library(lubridate)
+  library(stringi)
+})
+
+setwd("~/Git/Data-projects-with-R-and-GitHub/Projects/hd25viet")
+
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
