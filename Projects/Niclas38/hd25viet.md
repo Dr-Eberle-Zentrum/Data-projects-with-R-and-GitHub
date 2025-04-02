@@ -132,7 +132,8 @@ genre.
 
     # Plot with facets and no legend
     ggplot(genre_long, aes(x = YEAR, y = value, color = metric)) +
-      geom_line(linewidth = 0.8) +
+      geom_line(alpha=0.5, linewidth = 0.8) +
+      geom_point(size=0.3)+
       facet_wrap(~ GENRE, scales = "fixed", ncol = 4) + 
       labs(
         title = "IMDb Rating vs Normalized Audience Votes by Genre",
@@ -158,6 +159,8 @@ genre.
     ## generated.
 
 ![](hd25viet_files/figure-markdown_strict/Plot%20of%20votes%20and%20rating-1.png)
+I emphasize that this plot using facetting gives much more insights
+about trends then the suggested plot containing all genres.
 
     actor_stats <- data_cleaned %>%
       filter(!is.na(RATING)) %>%

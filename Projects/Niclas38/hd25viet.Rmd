@@ -85,7 +85,8 @@ It is not quite clear how to interprete "votes" as laymen ratings since "votes" 
 ```{r Plot of votes and rating, fig.width=10, fig.height=8}
 # Plot with facets and no legend
 ggplot(genre_long, aes(x = YEAR, y = value, color = metric)) +
-  geom_line(linewidth = 0.8) +
+  geom_line(alpha=0.5, linewidth = 0.8) +
+  geom_point(size=0.3)+
   facet_wrap(~ GENRE, scales = "fixed", ncol = 4) + 
   labs(
     title = "IMDb Rating vs Normalized Audience Votes by Genre",
@@ -103,6 +104,8 @@ ggplot(genre_long, aes(x = YEAR, y = value, color = metric)) +
     legend.key.size = unit(0.5, "cm")
   )
 ```
+I emphasize that this plot using facetting gives much more insights about trends then the suggested plot containing all genres.
+
 ```{r Prepare actor stats}
 actor_stats <- data_cleaned %>%
   filter(!is.na(RATING)) %>%
