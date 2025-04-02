@@ -1,38 +1,86 @@
 # Data manipulation
 
-Make the data set clean and tidy -&gt; 1 column = one variable, 1 row =
-one observation, if there is no data -&gt; NA, always use the same
-delimiter, watch out for commas that should not be read as a delimiter,
-watch for spaces and Quotation marks etc.
+    df<-read.csv('movies.csv')
+    df$ONE.LINE<-gsub("\n","",as.character(df$ONE.LINE))
+    df$STARS<-gsub(".*Stars:","",as.character(df$STARS))
+    df$STARS<-gsub("\n","",as.character(df$STARS))
+    df$STARS<-gsub(".*Star:","",as.character(df$STARS))
+    df$STARS<-gsub(".*Director:","",as.character(df$STARS))
+    df$STARS<-gsub(".*Directors:","",as.character(df$STARS))
+    df$GENRE<-gsub("\n","",as.character(df$GENRE))
+    df$GENRE <- lapply(df$GENRE, function(x) strsplit(x, ",\\s*")[[1]])
+    df$STARS <- lapply(df$STARS, function(x) strsplit(x, ",\\s*")[[1]])
+    df$VOTES <- as.numeric(gsub(",", "", df$VOTES))
+    df <- df %>%
+      mutate(
+        Start = as.numeric(str_extract(YEAR, "\\d{4}")),
+        End = as.numeric(str_extract(YEAR, "(?<=-)\\d{4}")),
+        End = ifelse(grepl("-\\)", YEAR), 2022, End),  # If the end is missing, set it to 2022
+        End = ifelse(is.na(End), Start, End),  # If there's no end year, use start year
+        Year_List = mapply(function(s, e) if (!is.na(s) & !is.na(e)) seq(s, e) else NA, Start, End, SIMPLIFY = FALSE)
+        )
+    df[df==""]<-NA
+    final_table <- df %>% select(YEAR, Start, End, Year_List)
 
 # Visualization
 
-Plot the average imdb-score of each genre (group observation by genre)
-against the time -&gt; which genre is the most liked by the judges, is
-there a trend over the years? -&gt; Make a lineplot for each genre and
-plot them all in the same graphic. Give every genre a different color,
-make a legend. Sort the genres in the legend according to their current
-imdb-score.
+    #generate a simple dummy plot
+    data_expanded <- df %>%
+      unnest(GENRE) %>%                 # Expand list-column into multiple rows
+      mutate(GENRE = trimws(GENRE)) %>%  # Remove extra spaces (if any)
+      mutate(GENRE = as.factor(GENRE)) 
+    # Create grouped bar plot
+    g<-ggplot(data_expanded, aes(x = Start, y = RATING, fill = GENRE,color = GENRE))+
+      geom_point(size = 1) + 
+      labs(title = "Critic Feedback of media over the years",
+           x = "Year",
+           y = "IMDb Rating") +
+      theme_minimal()
+    #TODO: sort LEGEND
+    show(g)
 
-![](Bene-Klein_files/figure-markdown_strict/unnamed-chunk-3-1.png)
+![](Bene-Klein_files/figure-markdown_strict/critic%20Feedback-1.png)
 
-[Critic feedback](critic_feedback.pdf)
+    data_expanded$VOTES <- as.numeric(data_expanded$VOTES)
+    ggplot(data_expanded, aes(x = Start, y = VOTES, fill = GENRE,color = GENRE))+
+      geom_point(size = 1) + 
+      labs(title = "Audience Feedback of media over the years",
+           x = "Year",
+           y = "audience votes") +
+      scale_y_continuous(breaks = NULL)+
+        theme_minimal()
 
-Do the same for “votes” (=audience opinion) and compare the results of
-the two graphics (discrepancy between “professional” and “laymen”
-taste).
-![](Bene-Klein_files/figure-markdown_strict/unnamed-chunk-4-1.png)
+![](Bene-Klein_files/figure-markdown_strict/Audience%20Feedback-1.png)
 
-[audience feedback](audience_feedback.pdf)
+    #generate discrepancy data
+    df_sorted_desc <- df[order(df$VOTES, decreasing = TRUE), ]
+    max_votes<-df_sorted_desc$VOTES[1]
+    discr <- ifelse(is.na(df$RATING) | is.na(df$VOTES), NA, df$RATING - (df$VOTES*10 / max_votes))
+    # Create grouped bar plot
+    ggplot(df, aes(x = discr)) +
+      geom_histogram(binwidth = 0.1, fill = "steelblue", color = "black", alpha = 0.7) +
+      labs(title = "discrepancy of Ratings",
+           x = "discrepancy of rating (<-audence only, critic only ->)",
+           y = "Count") +
+      theme_minimal()
 
-![](Bene-Klein_files/figure-markdown_strict/unnamed-chunk-5-1.png)
+![](Bene-Klein_files/figure-markdown_strict/rating%20discrepancy%20-1.png)
 
-[discrepancy of feedback](discrepancy_of_feedback.pdf)
+    data_expanded_stars <- df %>%
+      unnest(STARS)
+    mean_RATINGS <- aggregate(RATING ~ STARS, data = data_expanded_stars, FUN = mean)
+    mean_RATINGS <- mean_RATINGS[order(mean_RATINGS$RATING, decreasing = TRUE), ]
+    mean_RATINGS <- mean_RATINGS %>%
+      arrange(desc(RATING)) %>%  # Sorting by rating (optional)
+      head(50)  # Take the first 50 stars
 
-Rank the actors based on how often they appear and how good their Movies
-scored. For that rank them by mean imdb-score and select only the top 50
-actors
+    # Plot the data
+    ggplot(mean_RATINGS, aes(x = reorder(STARS, RATING), y = RATING)) +
+      geom_bar(stat = "identity", fill = "steelblue") +
+      coord_flip() +  # Flip to make names readable
+      labs(title = "Top 50 Stars by Mean Rating",
+           x = "Star Name",
+           y = "Mean Rating") +
+      theme_minimal()
 
-![](Bene-Klein_files/figure-markdown_strict/unnamed-chunk-6-1.png)
-
-[Top 50 stars rating](Top_50_stars_rating.pdf)
+![](Bene-Klein_files/figure-markdown_strict/Actor%20movie%20rating-1.png)
