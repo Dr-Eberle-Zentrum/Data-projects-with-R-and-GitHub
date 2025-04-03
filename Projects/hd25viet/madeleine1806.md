@@ -96,6 +96,13 @@
 
 # Ridgeline Plots
 
+-   x-axis represents ratings
+-   y-axis represents different federations
+-   One plot per federation, showing how different age groups compare
+    within a country
+
 ![](madeleine1806_files/figure-markdown_strict/ridgeline%20plot-1.png)
-\# Heatmap
+\# Heatmap - as mean-rating-colored table - y-axis represents
+federations. - x-axis represents age groups. - color intensity
+represents the mean rating for that age group in that federation.
 ![](madeleine1806_files/figure-markdown_strict/heatmap%20plot-1.png)
