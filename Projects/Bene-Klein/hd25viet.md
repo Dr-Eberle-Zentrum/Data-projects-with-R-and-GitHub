@@ -1,12 +1,42 @@
     library(readxl)
-    library(dplyr)
-    library(tidyr)
+    library(tidyverse)
+
+    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+    ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
+    ## ✔ forcats   1.0.0     ✔ stringr   1.5.1
+    ## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+    ## ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+    ## ✔ purrr     1.0.4     
+    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ✖ dplyr::filter() masks stats::filter()
+    ## ✖ dplyr::lag()    masks stats::lag()
+    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+
     library(purrr)
-    library(ggplot2)
     library(broom) # For one-row summary of model containing R^2
+    library(janitor)
+
+    ## 
+    ## Attaching package: 'janitor'
+    ## 
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     chisq.test, fisher.test
+
     library(rnaturalearth) # For World map canvas
     library(rnaturalearthdata) # For World map
+
+    ## 
+    ## Attaching package: 'rnaturalearthdata'
+    ## 
+    ## The following object is masked from 'package:rnaturalearth':
+    ## 
+    ##     countries110
+
     library(sf) # For simplified spatial data
+
+    ## Linking to GEOS 3.13.0, GDAL 3.8.5, PROJ 9.5.1; sf_use_s2() is TRUE
+
     library(countrycode)
 
 ## 1) Loading Data
@@ -23,7 +53,10 @@
     data_raw <- read_excel(
       path = tempfile_path,
       sheet = "Country tree cover loss"
-    ) %>% janitor::clean_names()
+    ) %>% clean_names()
+
+    # clean up tmpfile
+    unlink(tempfile_path)
 
 ## 2) Data Wrangling
 
@@ -54,14 +87,11 @@
 
 ## 3) Fitting and Predicting
 
-    # Fitting with map()
+    # Fitting and predict 2050 values via predict()
     nested <- nested %>%
       mutate(
         model = map(data, ~ lm(loss_ha ~ poly(year, 2), data = .x))
-      )
-
-    # Predict 2050 values via predict()
-    nested <- nested %>%
+      ) %>%
       mutate(
         prediction_2050 = map(model, ~ predict(.x, newdata = data.frame(year = 2050), se.fit = TRUE)),
         expected_tc_ha_2050 = map_dbl(prediction_2050, ~ .x$fit),
@@ -194,11 +224,15 @@
       geom_sf(aes(fill = tc_loss_pct_2023)) +
       scale_fill_viridis_c(
         name = "Tree Loss in 2023\n(% of country area)",
-        begin = 0.25,
-        end = 1,
+        begin = 0.95,
+        end = 0,
         labels = scales::percent_format(accuracy = 0.01),
+        trans= scales::pseudo_log_trans(sigma = 0.001),
         na.value = "grey90"
       ) +
+      guides(fill = guide_colorbar(
+      barheight = unit(8, "cm")  # ← increase length here
+    ))+
       labs(
         title = "Global Tree Cover Loss in 2023",
         subtitle = "Tree cover loss in hectares relative to total land area per country",

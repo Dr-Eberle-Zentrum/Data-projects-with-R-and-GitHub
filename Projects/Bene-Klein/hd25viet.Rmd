@@ -204,6 +204,9 @@ ggplot(map_data) +
     trans= scales::pseudo_log_trans(sigma = 0.001),
     na.value = "grey90"
   ) +
+  guides(fill = guide_colorbar(
+  barheight = unit(8, "cm")  # ← increase length here
+))+
   labs(
     title = "Global Tree Cover Loss in 2023",
     subtitle = "Tree cover loss in hectares relative to total land area per country",
