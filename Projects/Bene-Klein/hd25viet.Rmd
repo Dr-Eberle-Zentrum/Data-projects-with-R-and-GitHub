@@ -7,11 +7,10 @@ output: md_document
 
 ```{r libraries }
 library(readxl)
-library(dplyr)
-library(tidyr)
+library(tidyverse)
 library(purrr)
-library(ggplot2)
 library(broom) # For one-row summary of model containing R^2
+library(janitor)
 library(rnaturalearth) # For World map canvas
 library(rnaturalearthdata) # For World map
 library(sf) # For simplified spatial data
@@ -33,7 +32,10 @@ download.file(
 data_raw <- read_excel(
   path = tempfile_path,
   sheet = "Country tree cover loss"
-) %>% janitor::clean_names()
+) %>% clean_names()
+
+# clean up tmpfile
+unlink(tempfile_path)
 ```
 
 ## 2) Data Wrangling
@@ -69,14 +71,12 @@ nested <- data_long %>%
 ## 3) Fitting and Predicting
 
 ```{r Fit and predict}
-# Fitting with map()
+
+# Fitting and predict 2050 values via predict()
 nested <- nested %>%
   mutate(
     model = map(data, ~ lm(loss_ha ~ poly(year, 2), data = .x))
-  )
-
-# Predict 2050 values via predict()
-nested <- nested %>%
+  ) %>%
   mutate(
     prediction_2050 = map(model, ~ predict(.x, newdata = data.frame(year = 2050), se.fit = TRUE)),
     expected_tc_ha_2050 = map_dbl(prediction_2050, ~ .x$fit),
@@ -198,9 +198,10 @@ ggplot(map_data) +
   geom_sf(aes(fill = tc_loss_pct_2023)) +
   scale_fill_viridis_c(
     name = "Tree Loss in 2023\n(% of country area)",
-    begin = 0.25,
-    end = 1,
+    begin = 0.95,
+    end = 0,
     labels = scales::percent_format(accuracy = 0.01),
+    trans= scales::pseudo_log_trans(sigma = 0.001),
     na.value = "grey90"
   ) +
   labs(
