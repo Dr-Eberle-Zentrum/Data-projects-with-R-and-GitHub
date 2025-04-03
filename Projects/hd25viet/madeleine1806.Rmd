@@ -13,9 +13,10 @@ options(warn = -1)  # Suppress warnings globally for the current session
 suppressPackageStartupMessages({
   library(tidyverse)
   library(ggridges)
+  library(viridis)
 })
-
-setwd("~/Git/Data-projects-with-R-and-GitHub/Projects/hd25viet")
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 
 ```
 # Creating an RMarkdown table where: 
@@ -34,7 +35,7 @@ data <- read_fwf(file = file,
   # Keep only Name, Fed, APR25, and Birthday columns
   select(Name, Fed, APR25, Birthday) %>%
   # Remove rows with missing Birthday or ratings (APR25)
-  filter(!is.na(Birthday) & !is.na(APR25)) %>%
+  drop_na(Birthday, APR25) %>%
   # Calculate age based on the current year and the Birthday column
   mutate(Age = 2025 - Birthday) %>%
   # Create age categories
@@ -48,92 +49,70 @@ data <- read_fwf(file = file,
   # Convert AgeCategory to a factor
   mutate(AgeCategory = factor(AgeCategory, levels = c("Under 16", "16–24", "24–34", "35–45", "45+")))
 
-# Compute mean ratings for each Federation (Fed) within each age category
-data_mean_ratings <- data %>%
+# Compute mean ratings by Federation and AgeCategory, and calculate overall mean
+data_pivoted <- data %>%
   group_by(Fed, AgeCategory) %>%
-  summarize(
-    mean_APR25 = mean(APR25, na.rm = TRUE),
-    .groups = "drop"  # To ungroup the data after summarizing
-  )
-
-# Calculate the overall mean rating for each Federation
-data_overall <- data_mean_ratings %>%
+  summarize(mean_APR25 = mean(APR25, na.rm = TRUE), .groups = "drop") %>%
   group_by(Fed) %>%
-  summarize(
-    overall_mean = mean(mean_APR25, na.rm = TRUE),
-    .groups = "drop"
-  )
+  summarize(overall_mean = mean(mean_APR25, na.rm = TRUE), .groups = "drop") %>%
+  left_join(
+    data %>%
+      group_by(Fed, AgeCategory) %>%
+      summarize(mean_APR25 = mean(APR25, na.rm = TRUE), .groups = "drop") %>%
+      pivot_wider(names_from = AgeCategory, values_from = mean_APR25),
+    by = "Fed"
+  ) %>%
+  slice_max(order_by = overall_mean, n = 10) %>% # Top 10 federations
+  drop_na()
 
-# Pivot the table: federations as rows and age categories as columns
-data_pivoted <- data_mean_ratings %>%
-  pivot_wider(names_from = AgeCategory, values_from = mean_APR25) %>%
-  left_join(data_overall, by = "Fed") %>%
-  arrange(desc(overall_mean)) %>%  # Sort by overall mean rating in descending order
-  slice_head(n = 10) %>%  # Keep only the top 10 federations
-  drop_na() # Drop rows with missing values
-
-# Print the table
+# Display the table
 knitr::kable(data_pivoted, format = "pipe")
 ```
 # Ridgeline Plots
-```{r ridgeline plot, echo=FALSE, fig.show="hold"}
-# Step 1: Calculate mean APR25 per Federation and filter top 10 federations
-  top_federations <- data %>%
-    group_by(Fed) %>%
-    summarise(mean_rating = mean(APR25, na.rm = TRUE)) %>%
-    arrange(desc(mean_rating)) %>%
-    slice_head(n = 10)   # Keep only the top 10 federations
+```{r ridgeline plot, echo=FALSE, fig.show="hold", message=FALSE}
 
-  # Step 2: Filter original dataset to include only the top 10 federations
-  data_top_10 <- data %>%
-    filter(Fed %in% top_federations$Fed)
-
-  # Step 3: Create the ridgeline plot
-  ggplot(data_top_10, aes(x = APR25, y = Fed, fill = AgeCategory)) +
-    geom_density_ridges(alpha = 0.7, scale = 1.5) +
-    facet_wrap(~ AgeCategory, scales = "free_y") +  # Create a separate plot per age category
-    theme_minimal() +
+data %>%
+  filter(Fed %in% data_pivoted$Fed & Fed != "NON") %>%
+    left_join(data_pivoted %>% select(Fed, overall_mean), by = "Fed") %>%
+    ggplot(aes(x = APR25, y = Fed, fill = overall_mean)) +
+    geom_density_ridges_gradient(scale = 1.5, rel_min_height = 0.01) +
+    facet_wrap(~ AgeCategory, scales = "free_y", ncol = 5) +
+    scale_fill_viridis(name = "Mean Rating", option = "C", direction = -1) +
+    scale_x_continuous(breaks = scales::pretty_breaks(n = 6), labels = scales::label_number()) +
+  theme_minimal() +
     labs(
-      title = "Ridgeline Plot of Ratings by Federation and Age Group (Top 10 Federations)",
-      x = "Ratings (APR25)",
-      y = "Federation",
-      fill = "Age Group"
-    ) +
-    theme(
-      strip.text = element_text(size = 10),  # Adjust facet labels size
-      axis.text.y = element_text(size = 8)   # Adjust y-axis label size
-    )
+    title = "Ridgeline Plot of Ratings by Federation and Age Group (Top 10 Federations)",
+    x = "Ratings (APR25)",
+    y = "Federation") +
+  theme(
+    legend.position = "right",
+    strip.text = element_text(size = 10),
+    axis.text.y = element_text(size = 8),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+)
+  
 ```
 # Heatmap
 ```{r heatmap plot, echo=FALSE, fig.show="hold"}
-# Step 1: Calculate mean ratings for each federation and age category
-mean_ratings <- data %>%
-  group_by(Fed, AgeCategory) %>%
-  summarise(mean_rating = mean(APR25, na.rm = TRUE), .groups = "drop") %>%  # Drops grouping after summarising
-  ungroup()
+# Extract the same top 10 federations from the table and filter the mean APR25 ratings for the top federations
+filtered_ratings <- data %>%
+  filter(Fed %in% data_pivoted$Fed) %>%  # Filter for federations in top 10 list
+  group_by(Fed, AgeCategory) %>%  # Group by Federation and Age Category
+  summarize(mean_APR25 = mean(APR25, na.rm = TRUE), .groups = "drop") %>%  # Calculate mean APR25 per group
+  drop_na(mean_APR25)  # Drop NAs 
 
-# Step 2: Get top 10 federations by overall mean rating (across all players)
-top_feds <- mean_ratings %>%
-  group_by(Fed) %>%
-  summarise(mean_fed_rating = mean(mean_rating, na.rm = TRUE)) %>%
-  arrange(desc(mean_fed_rating)) %>%
-  slice_head(n = 10) %>%
-  pull(Fed)
-
-# Filter mean ratings for top federations
-filtered_ratings <- mean_ratings %>%
-  filter(Fed %in% top_feds)
-
-# Step 3: Remove rows with missing data
-filtered_ratings <- filtered_ratings %>%
-  filter(!is.na(mean_rating))
-
-ggplot(filtered_ratings, aes(x = AgeCategory, y = Fed, fill = mean_rating)) +
-  geom_tile() +
-  scale_fill_viridis_c() +  # Use viridis color scale
-  theme_minimal() +
-  labs(title = "Heatmap of Mean Ratings by Federation and Age Group",
-       x = "Age Category",
-       y = "Federation") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+# Create the heatmap with viridis color scale
+filtered_ratings %>%
+  ggplot(aes(x = AgeCategory, y = reorder(Fed, -mean_APR25), fill = mean_APR25)) +
+  geom_tile() +  # Use geom_tile to create heatmap
+  scale_fill_viridis_c(name = "Mean Rating", option = "C", direction = -1) +  # Color scale
+  theme_classic() +  # Apply classic theme
+  labs(
+    title = "Heatmap of Mean Ratings by Federation and Age Group",
+    x = "Age Category",
+    y = "Federation"
+  ) + 
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)  # Rotate x-axis labels
+  )
 ``` 
