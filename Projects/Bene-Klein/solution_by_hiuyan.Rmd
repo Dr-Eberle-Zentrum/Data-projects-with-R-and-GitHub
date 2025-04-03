@@ -5,7 +5,7 @@ date: "2025-04-02"
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message = FALSE)
 ```
 
 ## data wrangling and manipulation
@@ -13,6 +13,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(readxl)
 library(tidyverse)
+
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # ensure file is in the working dir
 file = "gfw_2023_statistics_summary_v30102024.xlsx"
@@ -38,10 +40,10 @@ df_pivot <- pivot_longer(df,
                          names_to = "year",
                          names_prefix = "tc_loss_ha_", # removes the prefix from column name
                          values_to = "tc_loss_ha") %>%
-            mutate(year = as.numeric(year)) %>% # make sure x-axis has numeric data type
-            group_by(country) 
+            mutate(year = as.numeric(year)) # make sure x-axis has numeric data type
 
 predictions <- df_pivot %>%
+  group_by(country) %>%
   do({
     model <- lm(tc_loss_ha ~ poly(year, 2, raw = TRUE), data = .)  # fit a model by "year", for each country 
     data.frame(country = unique(.$country), 
@@ -56,9 +58,9 @@ final_df <- left_join(df, predictions, by="country")
 
 view(final_df)
 
-sample_final_df <- final_df %>% filter(row_number() %% 10 == 1) 
+sample_final_df <- final_df %>% slice_sample(n=10) 
 
-knitr::kable(sample_final_df, format = "pipe", caption="ountry tree cover loss and prediction for year 2050")
+knitr::kable(sample_final_df, format = "pipe", caption="country tree cover loss and prediction for year 2050")
 ```
 
 ## Data Visualisation
@@ -104,19 +106,22 @@ specific_country_plot <- df_pivot_to_2050 %>%
              aes(yintercept = tc_loss_ha), 
              linetype = "dashed", 
              color = "blue") +
-  facet_wrap(~ country, scales = "free", ncol=1, labeller = as_labeller(update_labels)) +
+  facet_wrap(~ country, scales = "free", nrow=2, labeller = as_labeller(update_labels)) +
   labs(
     title = "Country Tree Cover Loss and Prediction for 2050",
     x = "year",
     y = "tree cover loss (in hectres)",
-    subtitle = str_wrap("the graphs show country tree coverage loss from 2001-2023 data. Additionally, based on the data, an estimated figure for 2050 is modeled.")
+    subtitle = str_wrap("the graphs show country tree coverage loss from 2001-2023 data. Additionally, based on the data, an estimated figure for 2050 is modeled.", width=100)
   ) +
   theme(
-    strip.text = element_text(size = 10, face = "bold"),
-    plot.subtitle=element_text(size=9)
+    strip.text = element_text(size = 20),
+    plot.subtitle=element_text(size=12),
+    plot.title=element_text(size=25, face="bold"),
+    axis.title.x = element_text(size=14),
+    axis.title.y = element_text(size=14),
+    axis.text.x = element_text(size=11),
+    axis.text.y = element_text(size=11)
   )
-
-specific_country_plot
 ```
 
 ### World map
