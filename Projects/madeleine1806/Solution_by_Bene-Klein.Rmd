@@ -1,0 +1,131 @@
+---
+title: "Bene-Klein"
+output: md_document
+---
+
+
+```{r setup,include=FALSE}
+library(tidyverse)
+library(readxl)
+library(rstudioapi)
+library(lubridate)
+library(patchwork)
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+```{r data loading,echo=FALSE} 
+data <- read_xlsx("stress_ratings_anonymized.xlsx")
+```
+# data manipulation
+After the necessary packages an the dataset were loaded the dataset was cleaned up by removing all Na's and datasets that contain Na's.\n
+After that the data will be summarized by the 'id' of the patient with mean and deviation of 'stressed_24h','stressed_moment', 'depressed', 'satisfied', 'motivated' and 'aroused'.
+Then the same is made by grouping the data by 'group'.
+```{r data cleaning,echo=FALSE}
+data <- data %>%  
+  select(-17) %>% 
+  filter(if_all(-c(id_dOC, dOC_cycle_date, dOC_cycle_day), ~ !is.na(.)))
+```
+```{r data aggregation,include=FALSE}
+# Give out a tibble containing the mean and standard deviation for each mood and stress item for each participant
+data %>% 
+  group_by(id) %>% 
+  summarise(mean_stressed_24h = mean(stressed_24h),
+            SD_stressed_24h = sd(stressed_24h),
+            mean_stressed_moment = mean(stressed_moment),
+            SD_stressed_moment = sd(stressed_moment),
+            mean_depressed = mean(depressed),
+            SD_depressed = sd(depressed),
+            mean_satisfied = mean(satisfied),
+            SD_satisfied = sd(satisfied),
+            mean_motivated = mean(motivated),
+            SD_motivated = sd(motivated),
+            mean_aroused = mean(aroused),
+            SD_aroused = sd(aroused))
+
+# Give out a tibble containing the mean and standard deviation for each mood and stress item for each group
+data %>% 
+  group_by(group) %>% 
+  summarise(mean_stressed_24h = mean(stressed_24h),
+            SD_stressed_24h = sd(stressed_24h),
+            mean_stressed_moment = mean(stressed_moment),
+            SD_stressed_moment = sd(stressed_moment),
+            mean_depressed = mean(depressed),
+            SD_depressed = sd(depressed),
+            mean_satisfied = mean(satisfied),
+            SD_satisfied = sd(satisfied),
+            mean_motivated = mean(motivated),
+            SD_motivated = sd(motivated),
+            mean_aroused = mean(aroused),
+            SD_aroused = sd(aroused))
+```
+Then the  correlation between a stress moment and the a positive and negative mood is created with the stress moment beeing 'stressed_moment' and the positive/negative mood beeing 'motivated'/'tense'.
+```{r data transformation plots,echo=FALSE}
+# Define custom colors for the datapoints of each group
+custom_cols <- c("sOC" = "red", "dOC" = "darkgreen", "OC" = "lightblue")
+
+plot_function <- function(X, Y) {
+  ggplot(data, aes(x = .data[[X]], y = .data[[Y]], col = group)) +
+    geom_point(size = 0.8) +
+    scale_color_manual(values = custom_cols) +
+    geom_smooth(method = "lm", col = "#480355", se = TRUE, level = 0.99, fill = "#9448BC") +
+    labs(
+      title = "How stress influences negative mood",
+      subtitle = "(Self-reported perception, scores from 0 to 100)",
+      x = paste0("How stressed did you feel today? (", X, ")"),
+      y = paste0("How was your mood today? (", Y, ")")
+    ) +
+    theme(
+      panel.background = element_blank(),
+      axis.line = element_line(color = "black")
+    )
+}
+plot_function("stressed_moment","tense")
+
+plot_function("stressed_moment","motivated")
+```
+# Visualization
+The visualization of the participants mood and stress are shown during weekdays.\n
+The result shows that the majority of all medication starter **sOC** is feeling most depressed at the middle of the week (Th). \n
+For the **dOC** group the mood varies much more during the week.
+For the **OC** group the mood varies even less and is even is better in comparison to **doc**.  
+```{r visualization, echo=FALSE}
+# Convert timestamps to weekdays 
+Weekdaydata <- data %>% 
+  mutate(
+    date = as_datetime(timeStampStop),
+    days_since_start = as.integer(difftime(date, min(date), units = "days")),
+    weekday = factor((days_since_start%%7)+1,
+                     levels = 1:7,
+                     labels= c("Mo","Tu","We","Th","Fr","Sa","Su"))
+  )
+
+my_second_plot <- function(X, Y) {
+  ggplot(Weekdaydata, aes(x = .data[[X]], y = .data[[Y]], col = group, group = group)) +
+    geom_smooth(method = "loess", se = TRUE, level = 0.75) +
+    scale_color_manual(values = custom_cols) +
+    labs(
+      title = paste0(Y, " per Weekday in dependency of the medication group"),
+      x = "Weekday",
+      y = paste0("mean ", Y, " (1 to 100)")
+    ) +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1),
+      panel.background = element_blank(),
+      axis.line = element_line(color = "black")
+    )
+}
+p1 <- my_second_plot("weekday", "depressed")
+p2 <- my_second_plot("weekday", "satisfied")
+p3 <- my_second_plot("weekday", "motivated")
+p4 <- my_second_plot("weekday", "aroused")
+
+# Print the plots
+p1
+p2
+p3
+p4
+```
+
+# Level 2
+## Kommentar:
+Sorry that I couldn't add the Tier 2 plots yet.
