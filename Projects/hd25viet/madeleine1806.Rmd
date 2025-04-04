@@ -97,7 +97,8 @@ data %>%
   )
   
 ```
-# Heatmap 
+# Heatmap
+
 - as mean-rating-colored table
 - y-axis represents federations.
 - x-axis represents age groups.
