@@ -85,7 +85,7 @@ data %>%
   scale_x_continuous(breaks = scales::pretty_breaks(n = 6), labels = scales::label_number()) +
   theme_minimal() +
   labs(
-    title = "Ridgeline Plot of Ratings by Federation and Age Group (Top 10 Federations)",
+    title = "Ridgeline plot of ratings by federation and age group (top 10 federations)",
     x = "Ratings",
     y = "Federation"
   ) +
@@ -119,8 +119,8 @@ filtered_ratings %>%
   scale_fill_viridis_c(name = "Mean Rating", option = "C", direction = -1) +  # Color scale
   theme_classic() +  # Apply classic theme
   labs(
-    title = "Heatmap of Mean Ratings by Federation and Age Group",
-    x = "Age Category",
+    title = "Heatmap of mean ratings by federation and age group",
+    x = "Age category",
     y = "Federation"
   ) + 
   theme(
