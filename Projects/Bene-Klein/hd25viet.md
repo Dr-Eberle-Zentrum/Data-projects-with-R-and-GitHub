@@ -1,44 +1,3 @@
-    library(readxl)
-    library(tidyverse)
-
-    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
-    ## ✔ forcats   1.0.0     ✔ stringr   1.5.1
-    ## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
-    ## ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
-    ## ✔ purrr     1.0.4     
-    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ## ✖ dplyr::filter() masks stats::filter()
-    ## ✖ dplyr::lag()    masks stats::lag()
-    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-
-    library(purrr)
-    library(broom) # For one-row summary of model containing R^2
-    library(janitor)
-
-    ## 
-    ## Attaching package: 'janitor'
-    ## 
-    ## The following objects are masked from 'package:stats':
-    ## 
-    ##     chisq.test, fisher.test
-
-    library(rnaturalearth) # For World map canvas
-    library(rnaturalearthdata) # For World map
-
-    ## 
-    ## Attaching package: 'rnaturalearthdata'
-    ## 
-    ## The following object is masked from 'package:rnaturalearth':
-    ## 
-    ##     countries110
-
-    library(sf) # For simplified spatial data
-
-    ## Linking to GEOS 3.13.0, GDAL 3.8.5, PROJ 9.5.1; sf_use_s2() is TRUE
-
-    library(countrycode)
-
 ## 1) Loading Data
 
     tempfile_path <- tempfile(fileext = ".xlsx")
@@ -154,8 +113,6 @@
         label = paste0("R² = ", round(r_squared, 3))
       )
 
-    ## Adding missing grouping variables: `area_ha`
-
 ## 5) Plot with predictions
 
     # Plot: Actual data + model fit + 2050 prediction + R2 label
@@ -186,6 +143,11 @@
       theme_minimal()
 
 ![](hd25viet_files/figure-markdown_strict/Facet%20plotting%20of%20countries-1.png)
+
+The predictive power of this polynomial model is heavily restricted
+which can be seen by the outcomes for the United States (heavily
+declining), Camboda (even negative), Russia (stagnating) and Canada
+(heavily influenced by an outlier).
 
 ## 6) Plot world map
 
@@ -241,3 +203,6 @@
       theme_minimal()
 
 ![](hd25viet_files/figure-markdown_strict/World%20map%20heat%20map-1.png)
+
+Countries close to the equator seem to suffer from slightly stronger
+tree loss.
