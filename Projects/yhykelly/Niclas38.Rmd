@@ -10,17 +10,18 @@ In this File I propose my solution for the "Film genre and popularity analysis-P
 It is about a movie data set and the task is to further analyse the data to find trends in the popularity and sucsess of a movie based on statistics and measuarable variables.
 
 ## Loading packages and R-setup
-```{r, echo=FALSE}
+```{r, warning=FALSE, error=FALSE, message=FALSE}
 library(tidyverse)
 library(rstudioapi)
 library(jsonlite)
 library(lubridate)
 library(ggridges)
+library(dplyr)
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 ```
 
 ## Loading data
-```{r, echo=FALSE}
+```{r, warning=FALSE, error=FALSE, message=FALSE}
 Data <- read_csv("movies_metadata.csv")
 ```
 # Data manipulation
@@ -30,9 +31,9 @@ Data <- read_csv("movies_metadata.csv")
 - Extract information from JSON Format
 - Filter for duplicates & invalid values
 - extracting the year from the release-date
-```{r, echo=FALSE}
+```{r, warning=FALSE, error=FALSE}
 CleanData <- Data %>%
-  select(id, title,release_date, production_countries,original_language,genres,vote_average,popularity,budget,revenue,runtime) %>% # select columns
+  select(id, title,release_date, production_countries,original_language,genres,vote_average,popularity,budget,revenue,runtime)%>% # select columns
   filter(runtime > 0,
          revenue > 0,
          budget > 0) %>% # filter for invalid values
@@ -45,13 +46,12 @@ CleanData <- Data %>%
   unnest(production_countries) %>% #convert JSON formats in list formats and unnest the lists
   mutate(release_date = year(release_date)) # extract year from release date
 
-
 ```
 
 ## Data wrangling
 - group by genres, year and language
 - calculate mean budget, revenue, profit (= revenue - budget), vote_average and popularity for each
-```{r, echo=FALSE}
+```{r, warning=FALSE, error=FALSE}
 #grouped by genre:
 CleanData %>% 
   group_by(genres) %>% 
@@ -93,7 +93,7 @@ CleanData %>%
 
 ## Line chart:
 To make it less messy I only took the top 10 countries with the overall most movies and compared their amount of movies over the time.
-```{r, echo=FALSE}
+```{r, warning=FALSE, error=FALSE}
 #Select top 10 countries
 Top10Countries <- CleanData %>% 
   group_by(production_countries) %>% 
@@ -121,7 +121,7 @@ CleanData %>%
 ## Ridgeline plot
 - I used the "ggridges" package and geom_density_ridges to create the ridgeline plot
 - I did the same again only for the top 10 genres to make it cleaner but it didn't change a lot 
-```{r, echo=FALSE}
+```{r, warning=FALSE, error=FALSE}
 # Plot the amount of movies of each genre against the time in a ridgelineplot
 CleanData %>%
   ggplot(aes(x = release_date, y=genres, fill = genres))+
@@ -160,7 +160,7 @@ CleanData %>%
 - Created a Scatterplot of budget and revenue and colorize the datapoints depending if the movie made profit or lost money
 - Added a trendline -> All movies above it are more profitable than the average movie, all below it are less profitable
 - Added the same plot again with same axis scaling -> shows the real ratio but looks a bit ugly (I was curious how it would look :))
-```{r, echo =FALSE}
+```{r, warning=FALSE, error=FALSE}
 CleanData %>% 
   mutate(WinLoss = ifelse(revenue>budget, "Movie was profitable", "Movie lost money")) %>% #Create WinLoss column
   ggplot(aes(x=budget,y=revenue, colour = WinLoss))+ #plot scatterplot

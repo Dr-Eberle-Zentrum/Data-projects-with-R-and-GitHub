@@ -7,51 +7,17 @@ sucsess of a movie based on statistics and measuarable variables.
 
 ## Loading packages and R-setup
 
-    ## Warning: Paket 'tidyverse' wurde unter R Version 4.4.3 erstellt
-
-    ## Warning: Paket 'lubridate' wurde unter R Version 4.4.3 erstellt
-
-    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
-    ## ✔ forcats   1.0.0     ✔ stringr   1.5.1
-    ## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
-    ## ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
-    ## ✔ purrr     1.0.2     
-    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ## ✖ dplyr::filter() masks stats::filter()
-    ## ✖ dplyr::lag()    masks stats::lag()
-    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-
-    ## Warning: Paket 'rstudioapi' wurde unter R Version 4.4.3 erstellt
-
-    ## Warning: Paket 'jsonlite' wurde unter R Version 4.4.3 erstellt
-
-    ## 
-    ## Attache Paket: 'jsonlite'
-    ## 
-    ## Das folgende Objekt ist maskiert 'package:purrr':
-    ## 
-    ##     flatten
-
-    ## Warning: Paket 'ggridges' wurde unter R Version 4.4.3 erstellt
+    library(tidyverse)
+    library(rstudioapi)
+    library(jsonlite)
+    library(lubridate)
+    library(ggridges)
+    library(dplyr)
+    setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 ## Loading data
 
-    ## Warning: One or more parsing issues, call `problems()` on your data frame for details,
-    ## e.g.:
-    ##   dat <- vroom(...)
-    ##   problems(dat)
-
-    ## Rows: 45466 Columns: 24
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ","
-    ## chr  (14): belongs_to_collection, genres, homepage, imdb_id, original_langua...
-    ## dbl   (7): budget, id, popularity, revenue, runtime, vote_average, vote_count
-    ## lgl   (2): adult, video
-    ## date  (1): release_date
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+    Data <- read_csv("movies_metadata.csv")
 
 # Data manipulation
 
@@ -62,11 +28,40 @@ sucsess of a movie based on statistics and measuarable variables.
 -   Filter for duplicates & invalid values
 -   extracting the year from the release-date
 
+<!-- -->
+
+    CleanData <- Data %>%
+      select(id, title,release_date, production_countries,original_language,genres,vote_average,popularity,budget,revenue,runtime)%>% # select columns
+      filter(runtime > 0,
+             revenue > 0,
+             budget > 0) %>% # filter for invalid values
+      distinct() %>% #filter for duplicates
+      mutate(genres = map(genres, ~fromJSON(str_replace_all(.x,"'", "\""))),
+             genres = map(genres, ~pluck(.,"name"))) %>% 
+      mutate(production_countries = map(production_countries, ~fromJSON(str_replace_all(.x,"'", "\""))),
+             production_countries = map(production_countries, ~pluck(.,"name"))) %>% 
+      unnest(genres) %>%
+      unnest(production_countries) %>% #convert JSON formats in list formats and unnest the lists
+      mutate(release_date = year(release_date)) # extract year from release date
+
 ## Data wrangling
 
 -   group by genres, year and language
 -   calculate mean budget, revenue, profit (= revenue - budget),
     vote\_average and popularity for each
+
+<!-- -->
+
+    #grouped by genre:
+    CleanData %>% 
+      group_by(genres) %>% 
+      summarise(Amount_Of_Movies = n_distinct(title),
+                AvgBudget = mean(budget),
+                AvgRevenue = mean(revenue),
+                AvgProfit = mean(revenue - budget),
+                AvgVote = mean(vote_average),
+                AvgPopularity = mean(popularity)) %>% 
+      knitr::kable()
 
 <table>
 <colgroup>
@@ -272,6 +267,17 @@ sucsess of a movie based on statistics and measuarable variables.
 </tr>
 </tbody>
 </table>
+
+    #grouped by year:
+    CleanData %>% 
+      group_by(release_date) %>% 
+      summarise(Amount_Of_Movies = n_distinct(title),
+                AvgBudget = mean(budget),
+                AvgRevenue = mean(revenue),
+                AvgProfit = mean(revenue - budget),
+                AvgVote = mean(vote_average),
+                AvgPopularity = mean(popularity)) %>% 
+      knitr::kable()
 
 <table>
 <colgroup>
@@ -1189,6 +1195,17 @@ sucsess of a movie based on statistics and measuarable variables.
 </tbody>
 </table>
 
+    #grouped by language:
+    CleanData %>% 
+      group_by(original_language) %>% 
+      summarise(Amount_Of_Movies = n_distinct(title),
+                AvgBudget = mean(budget),
+                AvgRevenue = mean(revenue),
+                AvgProfit = mean(revenue - budget),
+                AvgVote = mean(vote_average),
+                AvgPopularity = mean(popularity)) %>% 
+      knitr::kable()
+
 <table>
 <colgroup>
 <col style="width: 19%" />
@@ -1572,6 +1589,28 @@ sucsess of a movie based on statistics and measuarable variables.
 To make it less messy I only took the top 10 countries with the overall
 most movies and compared their amount of movies over the time.
 
+    #Select top 10 countries
+    Top10Countries <- CleanData %>% 
+      group_by(production_countries) %>% 
+      summarise(amount = n_distinct(title)) %>% 
+      arrange(desc(amount)) %>% 
+      slice_head(n=10) %>% 
+      ungroup()
+
+    #group data by year and genre and generate a lineplot for each (of the top 10) genre
+    CleanData %>%
+      group_by(release_date,production_countries) %>% 
+      summarise(amount = n_distinct(title)) %>%
+      filter(production_countries %in% Top10Countries$production_countries) %>% 
+      ggplot(aes(x=release_date,y=amount,colour = production_countries))+
+      geom_line()+
+      labs(
+        title = "Number of films by year and country",
+        x = "Year",
+        y = "Amount of movies"
+      )+
+      theme_minimal()
+
     ## `summarise()` has grouped output by 'release_date'. You can override using the
     ## `.groups` argument.
 
@@ -1583,7 +1622,44 @@ most movies and compared their amount of movies over the time.
     the ridgeline plot
 -   I did the same again only for the top 10 genres to make it cleaner
     but it didn’t change a lot
-    ![](Niclas38_files/figure-markdown_strict/unnamed-chunk-6-1.png)![](Niclas38_files/figure-markdown_strict/unnamed-chunk-6-2.png)
+
+<!-- -->
+
+    # Plot the amount of movies of each genre against the time in a ridgelineplot
+    CleanData %>%
+      ggplot(aes(x = release_date, y=genres, fill = genres))+
+      geom_density_ridges(scale=1, bandwidth = 7.5,na.rm=T)+
+      labs(
+        title = "number of genres through diffrent year",
+        x = "Year",
+        y = "Genre"
+      )+
+      theme_minimal()
+
+![](Niclas38_files/figure-markdown_strict/unnamed-chunk-6-1.png)
+
+    # Trying the same for the top 10 genres -> maybe this looks a bit better?
+    # Define Top 10 Genres
+    Top10Genres <- CleanData %>% 
+      group_by(genres) %>% 
+      summarise(amount = n_distinct(title)) %>% 
+      arrange(desc(amount)) %>% 
+      slice_head(n=10) %>% 
+      ungroup()
+
+    #Plot it
+    CleanData %>%
+      filter(genres %in% Top10Genres$genres) %>% 
+      ggplot(aes(x = release_date, y=genres, fill = genres))+
+      geom_density_ridges(scale=1, bandwidth = 7.5,na.rm=T)+
+      labs(
+        title = "number of genres through diffrent year",
+        x = "Year",
+        y = "Genre"
+      )+
+      theme_minimal()
+
+![](Niclas38_files/figure-markdown_strict/unnamed-chunk-6-2.png)
 
 ## Scatter plot
 
@@ -1598,9 +1674,36 @@ most movies and compared their amount of movies over the time.
 
 <!-- -->
 
+    CleanData %>% 
+      mutate(WinLoss = ifelse(revenue>budget, "Movie was profitable", "Movie lost money")) %>% #Create WinLoss column
+      ggplot(aes(x=budget,y=revenue, colour = WinLoss))+ #plot scatterplot
+      geom_point(size=0.75)+
+      geom_smooth(method = "lm",col= "#480355")+ #add trendline
+      labs(
+        title="Correlation between revenue and budget",
+        x = "Budget",
+        y = "Revenue"
+      )+
+      theme_minimal()
+
     ## `geom_smooth()` using formula = 'y ~ x'
 
 ![](Niclas38_files/figure-markdown_strict/unnamed-chunk-7-1.png)
+
+    #second plot with even axis scaling -> shows the real ratio between budget and revenue but is ugly -> just because i was curious :)
+
+    CleanData %>% 
+      mutate(WinLoss = ifelse(revenue>budget, "Movie was profitable", "Movie lost money")) %>% #Create WinLoss column
+      ggplot(aes(x=budget,y=revenue, colour = WinLoss))+ #plot scatterplot
+      geom_point(size=0.75)+
+      geom_smooth(method = "lm",col= "#480355")+ #add trendline
+      labs(
+        title="Correlation between revenue and budget",
+        x = "Budget",
+        y = "Revenue"
+      )+
+      coord_fixed()+
+      theme_minimal()
 
     ## `geom_smooth()` using formula = 'y ~ x'
 
