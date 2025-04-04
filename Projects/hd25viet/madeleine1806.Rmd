@@ -98,11 +98,10 @@ data %>%
   
 ```
 # Heatmap
-
 - as mean-rating-colored table
-- y-axis represents federations.
-- x-axis represents age groups.
-- color intensity represents the mean rating for that age group in that federation.
+- y-axis represents federations
+- x-axis represents age groups
+- color intensity represents the mean rating for that age group in that federation
 
 ```{r heatmap plot, echo=FALSE, fig.show="hold"}
 
