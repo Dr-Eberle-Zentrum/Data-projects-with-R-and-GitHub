@@ -1,35 +1,10 @@
 # Load Packages
 
-    library(tidyverse)
-
-    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
-    ## ✔ forcats   1.0.0     ✔ stringr   1.5.1
-    ## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
-    ## ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
-    ## ✔ purrr     1.0.4     
-    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ## ✖ dplyr::filter() masks stats::filter()
-    ## ✖ dplyr::lag()    masks stats::lag()
-    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-
-    library(readxl)
-    library(purrr)
-    library(ggrepel)
-
 # Load Data and Data Wrangling
 
-    data_raw <- read_csv("movies.csv")
+    setwd( this.path::this.dir() )
 
-    ## Rows: 9999 Columns: 9
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ","
-    ## chr (6): MOVIES, YEAR, GENRE, ONE-LINE, STARS, Gross
-    ## dbl (2): RATING, RunTime
-    ## num (1): VOTES
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+    data_raw <- read_csv("movies.csv")
 
     # Data Wrangling
     data_cleaned <- data_raw %>% 
@@ -38,6 +13,7 @@
         across(where(is.character), ~ str_squish(str_remove_all(., "^\\n"))),
 
         # Clean year column
+        MOVIES = as.factor(MOVIES),
         YEAR = str_squish(str_remove_all(YEAR, "[()]")),
 
         # Extract start and end years
@@ -52,10 +28,6 @@
         # Expand years as list-column (Start:End)
         Year_List = map2(Start, End, ~ if (!is.na(.x)) .x:.y else NA_integer_),
 
-        # Clean and split STARS and GENRE into list-columns
-        STARS = str_split(str_extract(STARS, "(?<=Stars: ).*"), ",\\s*"),
-        GENRE = str_split(as.factor(GENRE), ",\\s*"),
-
         # Parse votes and gross
         VOTES = as.numeric(VOTES),
         Gross = parse_number(Gross)
@@ -64,38 +36,21 @@
       select(-YEAR, -Start, -End) %>% 
       rename(YEAR = Year_List) %>% 
       select(MOVIES, GENRE, RATING, STARS, VOTES, Gross,YEAR) %>% 
-      glimpse()
-
-    ## Rows: 25,827
-    ## Columns: 7
-    ## $ MOVIES <chr> "Blood Red Sky", "Masters of the Universe: Revelation", "Master…
-    ## $ GENRE  <list> <"Action", "Horror", "Thriller">, <"Animation", "Action", "Adv…
-    ## $ RATING <dbl> 6.1, 5.0, 5.0, 8.2, 8.2, 8.2, 8.2, 8.2, 8.2, 8.2, 8.2, 8.2, 8.2…
-    ## $ STARS  <list> <"Peri Baumeister", "Carl Anton Koch", "Alexander Scheer", "Ka…
-    ## $ VOTES  <dbl> 21062, 17870, 17870, 885805, 885805, 885805, 885805, 885805, 88…
-    ## $ Gross  <dbl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
-    ## $ YEAR   <int> 2021, 2021, 2022, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 201…
-
-    # Consistency Check
-    data_cleaned %>% 
-      filter(MOVIES=="The Walking Dead")
-
-    ## # A tibble: 13 × 7
-    ##    MOVIES           GENRE     RATING STARS      VOTES Gross  YEAR
-    ##    <chr>            <list>     <dbl> <list>     <dbl> <dbl> <int>
-    ##  1 The Walking Dead <chr [3]>    8.2 <chr [4]> 885805    NA  2010
-    ##  2 The Walking Dead <chr [3]>    8.2 <chr [4]> 885805    NA  2011
-    ##  3 The Walking Dead <chr [3]>    8.2 <chr [4]> 885805    NA  2012
-    ##  4 The Walking Dead <chr [3]>    8.2 <chr [4]> 885805    NA  2013
-    ##  5 The Walking Dead <chr [3]>    8.2 <chr [4]> 885805    NA  2014
-    ##  6 The Walking Dead <chr [3]>    8.2 <chr [4]> 885805    NA  2015
-    ##  7 The Walking Dead <chr [3]>    8.2 <chr [4]> 885805    NA  2016
-    ##  8 The Walking Dead <chr [3]>    8.2 <chr [4]> 885805    NA  2017
-    ##  9 The Walking Dead <chr [3]>    8.2 <chr [4]> 885805    NA  2018
-    ## 10 The Walking Dead <chr [3]>    8.2 <chr [4]> 885805    NA  2019
-    ## 11 The Walking Dead <chr [3]>    8.2 <chr [4]> 885805    NA  2020
-    ## 12 The Walking Dead <chr [3]>    8.2 <chr [4]> 885805    NA  2021
-    ## 13 The Walking Dead <chr [3]>    8.2 <chr [4]> 885805    NA  2022
+      group_by(MOVIES, YEAR) %>%
+      # Merge duplicated movie entries
+      summarize(
+        RATING = mean(RATING, na.rm = TRUE),
+        VOTES = sum(VOTES, na.rm = TRUE),
+        GENRE = first(GENRE),           # assuming Genre is same for all
+        STARS = first(STARS),           # same logic
+        Gross = sum(Gross, na.rm = TRUE), # often NA, but sum in case
+        .groups = "drop"
+      ) %>%
+      mutate(
+            # Clean and split STARS and GENRE into list-columns
+        STARS = str_split(str_extract(STARS, "(?<=Stars: ).*"), ",\\s*"),
+        GENRE = str_split(as.factor(GENRE), ",\\s*"),
+      )
 
 # Visualization
 
@@ -179,26 +134,26 @@ about trends then the suggested plot containing all genres.
     ## # A tibble: 20 × 3
     ##    STARS                    appearances avg_rating
     ##    <chr>                          <int>      <dbl>
-    ##  1 Dietrich Hollinderbäumer          12       9.43
-    ##  2 Ian James Corlett                 15       9.3 
-    ##  3 Louis Hofmann                     44       9.24
-    ##  4 Maja Schöne                       12       9.23
-    ##  5 Andreas Pietschmann               16       9.2 
-    ##  6 Lisa Vicari                       33       9.2 
-    ##  7 Amybeth McNulty                   30       9.18
-    ##  8 Geraldine James                   30       9.18
-    ##  9 R.H. Thomson                      30       9.18
-    ## 10 Cavan Clerkin                     16       9.15
-    ## 11 Ahmet Mümtaz Taylan               11       9.1 
-    ## 12 Finn Elliot                       32       9.05
-    ## 13 Ali Atay                          12       9.04
-    ## 14 Rena Anakwe                       25       9.04
-    ## 15 Alexander Dreymon                 56       9.01
-    ## 16 Emily Cox                         16       9   
-    ## 17 Ewan Mitchell                     16       9   
-    ## 18 Jakob Diehl                       12       9   
-    ## 19 Mark Rowley                       24       9   
-    ## 20 Arnas Fedaravicius                32       8.98
+    ##  1 Ahmet Mümtaz Taylan               11       9.1 
+    ##  2 Ali Atay                          12       9.04
+    ##  3 Serkan Keskin                     12       8.96
+    ##  4 Courteney Cox                     11       8.9 
+    ##  5 Beatrice Robertson-Jones          12       8.8 
+    ##  6 Curt Morgan                       11       8.8 
+    ##  7 Daniel Lapaine                    12       8.8 
+    ##  8 Ford Kiernan                      18       8.8 
+    ##  9 Gavin Mitchell                    18       8.8 
+    ## 10 Greg Hemphill                     18       8.8 
+    ## 11 Mark Landvik                      11       8.8 
+    ## 12 Paul Riley                        18       8.8 
+    ## 13 Scotty Lago                       11       8.8 
+    ## 14 Travis Rice                       11       8.8 
+    ## 15 Martin Freeman                    19       8.79
+    ## 16 Lisa Kudrow                       12       8.72
+    ## 17 Adrian Dunbar                     11       8.7 
+    ## 18 Isaac Hayes                       26       8.7 
+    ## 19 Luca De Castro                    13       8.7 
+    ## 20 Maira Kesten                      13       8.7
 
     top_actors <- actor_stats %>%
       slice_max(appearances, n = 100)
@@ -208,9 +163,6 @@ about trends then the suggested plot containing all genres.
     top5 <- top_actors %>%
       mutate(score = avg_rating * log1p(appearances)) %>%
       slice_max(score, n = 5)
-
-Funnily, the guy from the ZDF heute-Show representing “Ulrich von
-Heesen” has the highest rating if restricted to &gt;10 appearences.
 
     ggplot(top_actors, aes(x = appearances, y = avg_rating)) +
       geom_point(color = "steelblue", alpha = 0.7) +
@@ -231,5 +183,11 @@ Heesen” has the highest rating if restricted to &gt;10 appearences.
       ) +
       theme_minimal()
 
-![](hd25viet_files/figure-markdown_strict/Plot%20top%20actors-1.png) The
-upper cluster are all “Dexter” actors.
+![](hd25viet_files/figure-markdown_strict/Plot%20top%20actors-1.png)
+
+Note: In the previous version, several duplicated entries were present
+coming from redundant entries at IMDB. They are now merged. As a
+consistency check the threshold of 95 appearances seems to be reasonable
+for one actor. In particular, note that [Johnny Yong
+Bosch](https://en.wikipedia.org/wiki/Johnny_Yong_Bosch) works also as a
+voice actor.

@@ -3,7 +3,7 @@ title: "hd25viet"
 output: md_document
 ---
 # Load Packages
-```{r Packages here}
+```{r Packages here, include=FALSE}
 library(tidyverse)
 library(readxl)
 library(purrr)
@@ -11,7 +11,9 @@ library(ggrepel)
 ```
 
 # Load Data and Data Wrangling
-```{r Data Wrangeling}
+```{r Data Wrangeling, message=FALSE, warning=FALSE}
+setwd( this.path::this.dir() )
+
 data_raw <- read_csv("movies.csv")
 
 # Data Wrangling
@@ -21,6 +23,7 @@ data_cleaned <- data_raw %>%
     across(where(is.character), ~ str_squish(str_remove_all(., "^\\n"))),
 
     # Clean year column
+    MOVIES = as.factor(MOVIES),
     YEAR = str_squish(str_remove_all(YEAR, "[()]")),
 
     # Extract start and end years
@@ -35,10 +38,6 @@ data_cleaned <- data_raw %>%
     # Expand years as list-column (Start:End)
     Year_List = map2(Start, End, ~ if (!is.na(.x)) .x:.y else NA_integer_),
 
-    # Clean and split STARS and GENRE into list-columns
-    STARS = str_split(str_extract(STARS, "(?<=Stars: ).*"), ",\\s*"),
-    GENRE = str_split(as.factor(GENRE), ",\\s*"),
-
     # Parse votes and gross
     VOTES = as.numeric(VOTES),
     Gross = parse_number(Gross)
@@ -47,14 +46,24 @@ data_cleaned <- data_raw %>%
   select(-YEAR, -Start, -End) %>% 
   rename(YEAR = Year_List) %>% 
   select(MOVIES, GENRE, RATING, STARS, VOTES, Gross,YEAR) %>% 
-  glimpse()
-
-# Consistency Check
-data_cleaned %>% 
-  filter(MOVIES=="The Walking Dead")
+  group_by(MOVIES, YEAR) %>%
+  # Merge duplicated movie entries
+  summarize(
+    RATING = mean(RATING, na.rm = TRUE),
+    VOTES = sum(VOTES, na.rm = TRUE),
+    GENRE = first(GENRE),           # assuming Genre is same for all
+    STARS = first(STARS),           # same logic
+    Gross = sum(Gross, na.rm = TRUE), # often NA, but sum in case
+    .groups = "drop"
+  ) %>%
+  mutate(
+        # Clean and split STARS and GENRE into list-columns
+    STARS = str_split(str_extract(STARS, "(?<=Stars: ).*"), ",\\s*"),
+    GENRE = str_split(as.factor(GENRE), ",\\s*"),
+  )
 ```
 # Visualization
-```{r Prepare for viz}
+```{r Prepare for viz, message=FALSE, warning=FALSE}
 # Combine RATING and VOTES
 genre_scores <- data_cleaned %>%
   filter(!is.na(RATING), !is.na(VOTES)) %>%
@@ -106,7 +115,7 @@ ggplot(genre_long, aes(x = YEAR, y = value, color = metric)) +
 ```
 I emphasize that this plot using facetting gives much more insights about trends then the suggested plot containing all genres.
 
-```{r Prepare actor stats}
+```{r Prepare actor stats, message=FALSE, warning=FALSE}
 actor_stats <- data_cleaned %>%
   filter(!is.na(RATING)) %>%
   unnest(STARS) %>%
@@ -130,7 +139,7 @@ top5 <- top_actors %>%
   mutate(score = avg_rating * log1p(appearances)) %>%
   slice_max(score, n = 5)
 ```
-Funnily, the guy from the ZDF heute-Show representing "Ulrich von Heesen" has the highest rating if restricted to >10 appearences.
+
 
 ```{r Plot top actors, fig.width=10, fig.height=8}
 ggplot(top_actors, aes(x = appearances, y = avg_rating)) +
@@ -152,4 +161,5 @@ ggplot(top_actors, aes(x = appearances, y = avg_rating)) +
   ) +
   theme_minimal()
 ```
-The upper cluster are all "Dexter" actors.
+
+Note: In the previous version, several duplicated entries were present coming from redundant entries at IMDB. They are now merged. As a consistency check the threshold of 95 appearances seems to be reasonable for one actor. In particular, note that [Johnny Yong Bosch](https://en.wikipedia.org/wiki/Johnny_Yong_Bosch) works also as a voice actor.
