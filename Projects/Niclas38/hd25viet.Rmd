@@ -74,10 +74,8 @@ genre_scores <- data_cleaned %>%
     mean_votes = sum(VOTES, na.rm = TRUE),
     .groups = "drop"
   ) %>%
-  drop_na(GENRE)
-
+  drop_na(GENRE) %>% 
 # Normalize votes within each year to [0, 1] scale
-genre_scores <- genre_scores %>%
   group_by(GENRE) %>%
   mutate(norm_votes = 10*mean_votes/max(mean_votes)) %>%
   ungroup()
@@ -91,7 +89,7 @@ genre_long <- genre_scores %>%
 
 It is not quite clear how to interprete "votes" as laymen ratings since "votes" reflect the amount of IMDb voting submissions by the users. Thus, "votes" rather reflects the general popularity of a genre of a specfic year. I normalized by the maximal amount of voting submission per year and genre with 10 corresponding to the most popular year of the genre.
 
-```{r Plot of votes and rating, fig.width=10, fig.height=8}
+```{r Plot of votes and rating, fig.width=10, fig.height=8, warning=FALSE}
 # Plot with facets and no legend
 ggplot(genre_long, aes(x = YEAR, y = value, color = metric)) +
   geom_line(alpha=0.5, linewidth = 0.8) +
@@ -129,18 +127,19 @@ actor_stats <- data_cleaned %>%
   ) %>%
   arrange(desc(avg_rating))
 
-actor_stats %>% filter(appearances>40) %>% arrange(avg_rating) %>%  head(20)
+actor_stats %>% 
+  slice_max(avg_rating, n=10) %>% 
+  knitr::kable()
 
 top_actors <- actor_stats %>%
   slice_max(appearances, n = 100)
-
 
 
 top5 <- top_actors %>%
   mutate(score = avg_rating * log(appearances)) %>%
   slice_max(score, n = 5)
 ```
-
+[Anna Gunn](https://en.wikipedia.org/wiki/Anna_Gunn) as top actoress with more then 5 appearances is known for the role of Skyler White in Breaking Bad.
 
 ```{r Plot top actors, fig.width=10, fig.height=8}
 ggplot(top_actors, aes(x = appearances, y = avg_rating)) +

@@ -63,10 +63,8 @@
         mean_votes = sum(VOTES, na.rm = TRUE),
         .groups = "drop"
       ) %>%
-      drop_na(GENRE)
-
+      drop_na(GENRE) %>% 
     # Normalize votes within each year to [0, 1] scale
-    genre_scores <- genre_scores %>%
       group_by(GENRE) %>%
       mutate(norm_votes = 10*mean_votes/max(mean_votes)) %>%
       ungroup()
@@ -105,13 +103,6 @@ genre.
         legend.key.size = unit(0.5, "cm")
       )
 
-    ## Warning: A numeric `legend.position` argument in `theme()` was deprecated in ggplot2
-    ## 3.5.0.
-    ## ℹ Please use the `legend.position.inside` argument of `theme()` instead.
-    ## This warning is displayed once every 8 hours.
-    ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-    ## generated.
-
 ![](hd25viet_files/figure-markdown_strict/Plot%20of%20votes%20and%20rating-1.png)
 I emphasize that this plot using facetting gives much more insights
 about trends then the suggested plot containing all genres.
@@ -128,38 +119,208 @@ about trends then the suggested plot containing all genres.
       ) %>%
       arrange(desc(avg_rating))
 
-    actor_stats %>% filter(appearances>40) %>% arrange(avg_rating) %>%  head(20)
+    actor_stats %>% 
+      slice_max(avg_rating, n=10) %>% 
+      knitr::kable()
 
-    ## # A tibble: 18 × 3
-    ##    STARS              appearances avg_rating
-    ##    <chr>                    <int>      <dbl>
-    ##  1 Lee Tockar                  41       6.22
-    ##  2 Vanna White                 43       6.73
-    ##  3 Ray Chase                   47       6.75
-    ##  4 Keith Wickham               51       6.85
-    ##  5 Kerry Shale                 47       6.91
-    ##  6 John Paul Tremblay          46       6.99
-    ##  7 Robb Wells                  46       6.99
-    ##  8 Kira Buckland               44       7.03
-    ##  9 Ashleigh Ball               71       7.04
-    ## 10 Amber Lee Connors           47       7.08
-    ## 11 Kana Hanazawa               50       7.30
-    ## 12 Johnny Yong Bosch           91       7.30
-    ## 13 Cherami Leigh               58       7.52
-    ## 14 Alec Baldwin                45       7.78
-    ## 15 Martin Clunes               46       7.90
-    ## 16 Yumiko Kobayashi            43       7.96
-    ## 17 Mila Kunis                  51       7.96
-    ## 18 Will Arnett                 41       8.20
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">STARS</th>
+<th style="text-align: right;">appearances</th>
+<th style="text-align: right;">avg_rating</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Anna Gunn</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">9.40000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Betsy Brandt</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">9.40000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">André Sogliuzzo</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">9.30000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Neil deGrasse Tyson</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">9.30000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Piotr Michael</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">9.30000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Stoney Emshwiller</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">9.30000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Andreas Pietschmann</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9.25625</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Anne Ratte-Polle</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9.25625</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Antje Traue</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9.25625</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Arnd Klawitter</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9.25625</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Axel Werner</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9.25625</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Barbara Nüsse</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9.25625</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Carlotta von Falkenhayn</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9.25625</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Claude Heinrich</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9.25625</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Daan Lennard Liebrenz</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9.25625</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Dietrich Hollinderbäumer</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9.25625</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Hans Diehl</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9.25625</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Helena Pieske</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9.25625</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Jakob Diehl</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9.25625</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Joshio Marlon</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9.25625</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Julika Jenkins</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9.25625</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Jördis Triebel</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9.25625</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Karoline Eichhorn</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9.25625</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Lisa Kreuzer</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9.25625</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Louis Hofmann</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9.25625</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Luise Heyer</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9.25625</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Maja Schöne</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9.25625</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Mark Waschke</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9.25625</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Moritz Jahn</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9.25625</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Nina Kronjäger</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9.25625</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Paul Lux</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9.25625</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Sandra Borgmann</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9.25625</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Sebastian Rudolph</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9.25625</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Stephan Kampwirth</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9.25625</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Tom Philipp</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9.25625</td>
+</tr>
+</tbody>
+</table>
 
     top_actors <- actor_stats %>%
       slice_max(appearances, n = 100)
 
 
-
     top5 <- top_actors %>%
       mutate(score = avg_rating * log(appearances)) %>%
       slice_max(score, n = 5)
+
+[Anna Gunn](https://en.wikipedia.org/wiki/Anna_Gunn) as top actoress
+with more then 5 appearances is known for the role of Skyler White in
+Breaking Bad.
 
     ggplot(top_actors, aes(x = appearances, y = avg_rating)) +
       geom_point(color = "steelblue", alpha = 0.7) +
