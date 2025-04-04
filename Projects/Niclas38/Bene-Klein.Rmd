@@ -25,7 +25,7 @@ df<-read.csv('movies.csv',na.strings=c("","NA"),encoding="UTF-8") |>
   
   ONE.LINE = str_remove_all(ONE.LINE, "\n"),
   GENRE = str_remove_all(GENRE, "\n"),
-  STARS = STARS |> str_remove_all("\n") |> str_remove_all(".*(Stars|Star|Director|Directors....):"),
+  STARS = STARS |> str_remove_all("\n") |> str_remove_all("(?<=Stars:).*?(?=,?\\s*Director:)"),
   GENRE = str_split(GENRE,",\\s*"[[1]]),
   STARS = str_split(STARS,",\\s*"[[1]]),
   VOTES = str_replace_all(VOTES,",",""),
@@ -33,66 +33,95 @@ df<-read.csv('movies.csv',na.strings=c("","NA"),encoding="UTF-8") |>
   YEAR = str_remove_all(YEAR,"[A-Z]"),
   YEAR = str_replace_all(YEAR, "\\((.*?)\\)","\\1"),
     Start = as.numeric(str_extract(YEAR, "\\d{4}")),
-    End = as.numeric(ifelse(str_detect("--", YEAR),ifelse(grepl("^\\d{4}--", x),2022,as.numeric(str_extract(x, "\\d{4}$"))),Start)),
-    #End = ifelse(str_extract(YEAR, "-\\)"), 2022, End),  # If the end is missing, set it to 2022
-    #End = ifelse(is.na(End), Start, End),  # If there's no end year, use start year
-    Year_List = mapply(function(s, e) if (!is.na(s) & !is.na(e)) seq(s, e) else NA, Start, End, SIMPLIFY = FALSE)
+    End = as.numeric(str_extract(YEAR, "(?<=[–-])\\d{4}")),
+    End = case_when(
+      str_detect(YEAR, "[-–]\\s*$") ~ 2022L,  # TV show still running
+      is.na(End) ~ Start,                    # single-year entries
+      TRUE ~ End
+    ),
+  Year_List = mapply(function(s, e) if (!is.na(s) & !is.na(e)) seq(s, e) else NA, Start, End, SIMPLIFY = FALSE)
 )
-final_table <- df %>% select(YEAR, Start, End, Year_List)
-final_table
 ```
 
 # Visualization
 ```{r Feedback, fig.width=10, fig.height=6}
-data_expanded <- df %>%
+long_data <- df %>%
   unnest(GENRE) %>%
   mutate(
     GENRE = trimws(GENRE),
     GENRE = as.factor(GENRE),
     VOTES = as.numeric(VOTES),
-    GENRE = fct_reorder(GENRE, RATING, .fun = mean, .desc = TRUE)  # Sort by mean RATING (descending)
-  )
-
-long_data <- data_expanded %>%
-  pivot_longer(cols = c(RATING, VOTES), 
+    Start = as.numeric(Start)  # Convert Start to Date type if it's not already
+  ) %>%
+  # Remove rows where GENRE is NA
+  filter(!is.na(GENRE)) %>%
+  group_by(Start, GENRE) %>%
+  summarise(
+    avg_rating = mean(RATING, na.rm = TRUE),
+    avg_votes = mean(VOTES, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    avg_votes = scales::rescale(avg_votes, to = c(1, 10))  # Normalize to 1-10 range
+  ) %>%
+  pivot_longer(cols = c(avg_rating, avg_votes), 
                names_to = "SOURCE", 
                values_to = "VALUE") %>%
   mutate(
-    SOURCE = recode(SOURCE, RATING = "Critic", VOTES = "Audience"),
-    GENRE = fct_reorder(GENRE, VALUE, .fun = mean, .desc = TRUE)
+    SOURCE = recode(SOURCE, avg_rating = "Critic", avg_votes = "Audience"),
+    GENRE = fct_reorder(GENRE, VALUE, .fun = mean, .desc = TRUE, .na_rm = TRUE)
   )
-ggplot(long_data, aes(x = Start, y = VALUE, fill = GENRE, color = GENRE)) +
-  geom_point(size = 1) +
-  facet_wrap(~ SOURCE, scales = "free_y") +
+ggplot(long_data, aes(x = Start, y = VALUE, fill = SOURCE, color = SOURCE)) +
+  geom_line(size = 1) +
+  facet_wrap(~ GENRE, scales = "free_y", ncol = 5) +
   labs(
-    title = "Media Feedback Over the Years",
+    title = "Critic vs Audience Feedback Over the Years by Genre",
     x = "Year",
-    y = NULL,
-    fill = "Genre (sorted by mean Rating)",
-    color = "Genre (sorted by mean Rating)"
+    y = "Rating",
+    fill = "Feedback Source",
+    color = "Feedback Source"
   ) +
-  theme_minimal()
-
+  theme_minimal() +
+  theme(
+    strip.text = element_text(size = 10),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    panel.spacing = unit(1, "lines")
+  )
 ```
 
 ```{r rating discrepancy , fig.width=10, fig.height=6}
-df %>%
+discrepancy_2022 <- df %>%
+  unnest(GENRE) %>%
   mutate(
-    VOTES = as.numeric(VOTES)  # Convert VOTES to numeric, ensuring it's numeric
+    GENRE = trimws(GENRE),
+    GENRE = as.factor(GENRE),
+    VOTES = as.numeric(VOTES),
+    End = as.numeric(End)
   ) %>%
-  arrange(desc(VOTES)) %>%               # Sort by VOTES in descending order
+  filter(!is.na(GENRE), End == 2022) %>%
+  group_by(GENRE) %>%
+  summarise(
+    avg_rating = mean(RATING, na.rm = TRUE),
+    avg_votes = mean(VOTES, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
   mutate(
-    max_votes = VOTES[1],                 # Get the max VOTES value
-    discr = ifelse(is.na(RATING) | is.na(VOTES), NA, RATING - (VOTES * 10 / max_votes))  # Calculate discrepancy
-  ) %>%
-  ggplot(aes(x = discr)) +
-  geom_histogram(binwidth = 0.1, fill = "steelblue", color = "black", alpha = 0.7) +
+    avg_votes = scales::rescale(avg_votes, to = c(1, 10)),
+    discrepancy = avg_rating - avg_votes,
+    GENRE = fct_reorder(GENRE, discrepancy)
+  )%>%
+  drop_na()
+ggplot(discrepancy_2022, aes(x = GENRE, y = discrepancy, fill = discrepancy>0)) +
+  geom_col() +
+  coord_flip() +
   labs(
-    title = "Discrepancy of Ratings",
-    x = "IMDb rating minus normalized audience votes (<- Audience only, Critic only ->)",
-    y = "count"
+    title = "Discrepancy Between Critic and Audience Ratings in 2022 by Genre",
+    x = "Genre",
+    y = "Discrepancy (Critic - Audience)"
   ) +
+  scale_fill_manual(values = c("TRUE" = "steelblue", "FALSE" = "tomato"), guide = "none") +
   theme_minimal()
+
 ```
 
 
@@ -100,16 +129,28 @@ df %>%
 data_expanded_stars <- df %>%
   unnest(STARS) %>%
   group_by(STARS) %>%
-  summarise(mean_RATING = mean(RATING, na.rm = TRUE)) %>%
+  summarise(
+    mean_RATING = mean(RATING, na.rm = TRUE),  # Average rating
+    count = n(),  # Count the number of occurrences of each star
+    .groups = "drop"
+  ) %>%
   arrange(desc(mean_RATING)) %>%  # Sorting by rating
-  head(50)   # Take the first 50 stars
-
+  filter(count>=10)%>%
+  head(50)     # Take the first 50 stars
+top_right <- data_expanded_stars %>%
+  arrange(desc(mean_RATING + scale(count))) %>% 
+  head(5)
 # Plot the data
-ggplot(data_expanded_stars, aes(x = reorder(STARS, mean_RATING), y = mean_RATING)) +
-  geom_bar(stat = "identity", fill = "steelblue") +
-  coord_flip() +  # Flip to make names readable
-  labs(title = "Top 50 Stars by Mean Rating",
-       x = "Star Name",
+ggplot(data_expanded_stars, aes(x = count, y = mean_RATING)) +
+  geom_point(point=1) +
+    ggrepel::geom_text_repel(
+    data = top_right,
+    aes(label = STARS),
+    size = 3.5,
+    max.overlaps = Inf
+  ) +
+  labs(title = "Top 100 Stars by Mean Rating with atleast 10 movies",
+       x = "Amount of Movies",
        y = "Mean Rating") +
   theme_minimal()
 ```
