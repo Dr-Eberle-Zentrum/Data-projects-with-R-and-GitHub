@@ -77,23 +77,24 @@ knitr::kable(data_pivoted, format = "pipe")
 
 data %>%
   filter(Fed %in% data_pivoted$Fed & Fed != "NON") %>%
-    left_join(data_pivoted %>% select(Fed, overall_mean), by = "Fed") %>%
-    ggplot(aes(x = APR25, y = Fed, fill = overall_mean)) +
-    geom_density_ridges_gradient(scale = 1.5, rel_min_height = 0.01) +
-    facet_wrap(~ AgeCategory, scales = "free_y", ncol = 5) +
-    scale_fill_viridis(name = "Mean Rating", option = "C", direction = -1) +
-    scale_x_continuous(breaks = scales::pretty_breaks(n = 6), labels = scales::label_number()) +
+  left_join(data_pivoted %>% select(Fed, overall_mean), by = "Fed") %>%
+  ggplot(aes(x = APR25, y = Fed, fill = after_stat(x))) + # Use after_stat to fill based on x
+  geom_density_ridges_gradient(scale = 1.5, rel_min_height = 0.01) +
+  facet_wrap(~ AgeCategory, scales = "free_y", ncol = 5) +
+  scale_fill_viridis(name = "Ratings Gradient", option = "C", direction = -1) +  # Adjust legend name
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 6), labels = scales::label_number()) +
   theme_minimal() +
-    labs(
+  labs(
     title = "Ridgeline Plot of Ratings by Federation and Age Group (Top 10 Federations)",
-    x = "Ratings (APR25)",
-    y = "Federation") +
+    x = "Ratings",
+    y = "Federation"
+  ) +
   theme(
     legend.position = "right",
     strip.text = element_text(size = 10),
     axis.text.y = element_text(size = 8),
     axis.text.x = element_text(angle = 45, hjust = 1)
-)
+  )
   
 ```
 # Heatmap 

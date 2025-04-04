@@ -102,12 +102,8 @@
     within a country
 
 ![](madeleine1806_files/figure-markdown_strict/ridgeline%20plot-1.png)
-
-# Heatmap 
-
-- as mean-rating-colored table 
-- y-axis represents federations
-- x-axis represents age groups
-- color intensity represents the mean rating for that age group in that federation
+\# Heatmap - as mean-rating-colored table - y-axis represents
+federations. - x-axis represents age groups. - color intensity
+represents the mean rating for that age group in that federation.
 
 ![](madeleine1806_files/figure-markdown_strict/heatmap%20plot-1.png)
