@@ -37,20 +37,19 @@
       rename(YEAR = Year_List) %>% 
       select(MOVIES, GENRE, RATING, STARS, VOTES, Gross,YEAR) %>% 
       group_by(MOVIES, YEAR) %>%
-      # Merge duplicated movie entries
-      summarize(
-        RATING = mean(RATING, na.rm = TRUE),
-        VOTES = sum(VOTES, na.rm = TRUE),
-        GENRE = first(GENRE),           # assuming Genre is same for all
-        STARS = first(STARS),           # same logic
-        Gross = sum(Gross, na.rm = TRUE), # often NA, but sum in case
-        .groups = "drop"
-      ) %>%
       mutate(
             # Clean and split STARS and GENRE into list-columns
         STARS = str_split(str_extract(STARS, "(?<=Stars: ).*"), ",\\s*"),
-        GENRE = str_split(as.factor(GENRE), ",\\s*"),
-      )
+        GENRE = str_split(as.factor(GENRE), ",\\s*")) %>% 
+      # Merge duplicated movie entries
+      summarize(
+        STARS = list(unique(unlist(STARS))),  # take all stars from duplicates
+        RATING = mean(RATING, na.rm = TRUE),
+        VOTES = sum(VOTES, na.rm = TRUE),
+        GENRE = list(unique(unlist(GENRE))),  # take all genres from duplicates
+        Gross = sum(Gross, na.rm = TRUE), # often NA, but sum in case
+        .groups = "drop"
+      ) 
 
 # Visualization
 
@@ -64,7 +63,7 @@
         mean_votes = sum(VOTES, na.rm = TRUE),
         .groups = "drop"
       ) %>%
-      filter(!is.na(GENRE))
+      drop_na(GENRE)
 
     # Normalize votes within each year to [0, 1] scale
     genre_scores <- genre_scores %>%
@@ -118,9 +117,9 @@ I emphasize that this plot using facetting gives much more insights
 about trends then the suggested plot containing all genres.
 
     actor_stats <- data_cleaned %>%
-      filter(!is.na(RATING)) %>%
+      drop_na(RATING) %>%
       unnest(STARS) %>%
-      filter(!is.na(STARS)) %>%
+      drop_na(STARS) %>%
       group_by(STARS) %>%
       summarise(
         appearances = n(),
@@ -129,31 +128,29 @@ about trends then the suggested plot containing all genres.
       ) %>%
       arrange(desc(avg_rating))
 
-    actor_stats %>% filter(appearances>10) %>% head(20)
+    actor_stats %>% filter(appearances>40) %>% arrange(avg_rating) %>%  head(20)
 
-    ## # A tibble: 20 × 3
-    ##    STARS                    appearances avg_rating
-    ##    <chr>                          <int>      <dbl>
-    ##  1 Ahmet Mümtaz Taylan               11       9.1 
-    ##  2 Ali Atay                          12       9.04
-    ##  3 Serkan Keskin                     12       8.96
-    ##  4 Courteney Cox                     11       8.9 
-    ##  5 Beatrice Robertson-Jones          12       8.8 
-    ##  6 Curt Morgan                       11       8.8 
-    ##  7 Daniel Lapaine                    12       8.8 
-    ##  8 Ford Kiernan                      18       8.8 
-    ##  9 Gavin Mitchell                    18       8.8 
-    ## 10 Greg Hemphill                     18       8.8 
-    ## 11 Mark Landvik                      11       8.8 
-    ## 12 Paul Riley                        18       8.8 
-    ## 13 Scotty Lago                       11       8.8 
-    ## 14 Travis Rice                       11       8.8 
-    ## 15 Martin Freeman                    19       8.79
-    ## 16 Lisa Kudrow                       12       8.72
-    ## 17 Adrian Dunbar                     11       8.7 
-    ## 18 Isaac Hayes                       26       8.7 
-    ## 19 Luca De Castro                    13       8.7 
-    ## 20 Maira Kesten                      13       8.7
+    ## # A tibble: 18 × 3
+    ##    STARS              appearances avg_rating
+    ##    <chr>                    <int>      <dbl>
+    ##  1 Lee Tockar                  41       6.22
+    ##  2 Vanna White                 43       6.73
+    ##  3 Ray Chase                   47       6.75
+    ##  4 Keith Wickham               51       6.85
+    ##  5 Kerry Shale                 47       6.91
+    ##  6 John Paul Tremblay          46       6.99
+    ##  7 Robb Wells                  46       6.99
+    ##  8 Kira Buckland               44       7.03
+    ##  9 Ashleigh Ball               71       7.04
+    ## 10 Amber Lee Connors           47       7.08
+    ## 11 Kana Hanazawa               50       7.30
+    ## 12 Johnny Yong Bosch           91       7.30
+    ## 13 Cherami Leigh               58       7.52
+    ## 14 Alec Baldwin                45       7.78
+    ## 15 Martin Clunes               46       7.90
+    ## 16 Yumiko Kobayashi            43       7.96
+    ## 17 Mila Kunis                  51       7.96
+    ## 18 Will Arnett                 41       8.20
 
     top_actors <- actor_stats %>%
       slice_max(appearances, n = 100)
@@ -161,7 +158,7 @@ about trends then the suggested plot containing all genres.
 
 
     top5 <- top_actors %>%
-      mutate(score = avg_rating * log1p(appearances)) %>%
+      mutate(score = avg_rating * log(appearances)) %>%
       slice_max(score, n = 5)
 
     ggplot(top_actors, aes(x = appearances, y = avg_rating)) +
