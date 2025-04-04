@@ -103,6 +103,7 @@ data %>%
 - color intensity represents the mean rating for that age group in that federation.
 
 ```{r heatmap plot, echo=FALSE, fig.show="hold"}
+
 # Extract the same top 10 federations from the table and filter the mean APR25 ratings for the top federations
 filtered_ratings <- data %>%
   filter(Fed %in% data_pivoted$Fed) %>%  # Filter for federations in top 10 list
