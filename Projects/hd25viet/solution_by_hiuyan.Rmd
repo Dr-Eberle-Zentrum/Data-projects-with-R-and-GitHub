@@ -5,7 +5,7 @@ date: "2025-03-31"
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message = FALSE)
 ```
 
 ## Dataset Manipulation 
@@ -27,8 +27,7 @@ df <- read_fwf(file=file,
       mutate(# using cut already create factor-typed column
              bin = cut(2024-Birthday, breaks=c(1,16,25,35,46,Inf), labels=c("below 16", "16-24", "25-34", "35-45", "above 45"))
              ) %>%
-      drop_na(bin) %>% 
-      print(n=20)
+      drop_na(bin)
 
 by_country_by_age <- group_by(df, Fed, bin) %>%
   summarise(mean_rating=mean(APR25, na.rm=TRUE), .groups="drop") %>%
@@ -85,7 +84,7 @@ df_heatmap_pivot$Age <- factor(df_heatmap_pivot$Age, levels = age_groups) # to f
 
 ggplot(df_heatmap_pivot, aes(x = Age, y = Fed, fill = APR25)) +
   geom_tile() +  # heatmap needs tiles
-  scale_fill_gradientn(colors = colorRampPalette(c("deepskyblue","deepskyblue2", "deepskyblue4"))(4), 
+  scale_fill_gradientn(colors = colorRampPalette(c("yellow","deepskyblue2", "deepskyblue4"))(20),
                        name = "Mean Rating") + # more fine-grained palette
   labs(title = "Mean rating by Federation and Age categories", 
        x = "Age category", 

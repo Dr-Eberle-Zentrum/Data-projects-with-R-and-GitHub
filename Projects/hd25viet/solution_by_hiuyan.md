@@ -1,18 +1,6 @@
 ## Dataset Manipulation
 
     library(tidyverse)
-
-    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
-    ## ✔ forcats   1.0.0     ✔ stringr   1.5.1
-    ## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
-    ## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
-    ## ✔ purrr     1.0.2     
-    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ## ✖ dplyr::filter() masks stats::filter()
-    ## ✖ dplyr::lag()    masks stats::lag()
-    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-
     file <- "standard_rating_list.txt"
     df <- read_fwf(file=file, 
                    fwf_empty(file, 
@@ -27,42 +15,7 @@
           mutate(# using cut already create factor-typed column
                  bin = cut(2024-Birthday, breaks=c(1,16,25,35,46,Inf), labels=c("below 16", "16-24", "25-34", "35-45", "above 45"))
                  ) %>%
-          drop_na(bin) %>% 
-          print(n=20)
-
-    ## Rows: 498022 Columns: 13
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## 
-    ## chr (8): Name, Fed, Sex, Tit, WTit, OTit, FOA, Flag
-    ## dbl (5): ID, APR25, Gms, K, Birthday
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-
-    ## # A tibble: 489,590 × 5
-    ##    Name                           Fed   APR25 Birthday bin     
-    ##    <chr>                          <chr> <dbl>    <dbl> <fct>   
-    ##  1 A B M Jobair, Hossain          BAN    1750     1998 25-34   
-    ##  2 A C J John                     IND    1438     1987 35-45   
-    ##  3 A Chakravarthy                 IND    1491     1986 35-45   
-    ##  4 A Darshil                      IND    1427     2013 below 16
-    ##  5 A E M, Doshtagir               BAN    1904     1974 above 45
-    ##  6 A F M Ehteshamul, Hoque (tuhin BAN    1796     1977 above 45
-    ##  7 A hamed Ashraf, Abdallah       EGY    1837     2001 16-24   
-    ##  8 A Hamid, Harman                MAS    1552     1970 above 45
-    ##  9 A I Sabbir                     BAN    1607     1995 25-34   
-    ## 10 A K, Kalshyan                  IND    1803     1964 above 45
-    ## 11 A La, Teng Hua                 CHN    1949     1993 25-34   
-    ## 12 A Q M Salahuddin, Khan         BAN    1695     1977 above 45
-    ## 13 A S M Khalid, Hasan            BAN    1751     1988 35-45   
-    ## 14 A S M Mashrur, Zaman           BAN    1614     2008 below 16
-    ## 15 A S M Soyaeb, Reza             BAN    1592     2006 16-24   
-    ## 16 A, L M Wayes Faruki            BAN    1714     2015 below 16
-    ## 17 A, N M Ziaul Islam Mithu       BAN    1653     1974 above 45
-    ## 18 A, Sohita                      IND    1668     1995 25-34   
-    ## 19 A. HUDSON                      IND    1644     2013 below 16
-    ## 20 A. K. Azad, Akhond             BAN    1779     1971 above 45
-    ## # ℹ 489,570 more rows
+          drop_na(bin)
 
     by_country_by_age <- group_by(df, Fed, bin) %>%
       summarise(mean_rating=mean(APR25, na.rm=TRUE), .groups="drop") %>%
@@ -209,22 +162,6 @@
 
     ridgePlot
 
-    ## Warning: The dot-dot notation (`..x..`) was deprecated in ggplot2 3.4.0.
-    ## ℹ Please use `after_stat(x)` instead.
-    ## This warning is displayed once every 8 hours.
-    ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-    ## generated.
-
-    ## Picking joint bandwidth of 51.5
-
-    ## Picking joint bandwidth of 38.8
-
-    ## Picking joint bandwidth of 52.4
-
-    ## Picking joint bandwidth of 38.7
-
-    ## Picking joint bandwidth of 37.5
-
 ![](solution_by_hiuyan_files/figure-markdown_strict/unnamed-chunk-2-1.png)
 
 -   Heatmap
@@ -232,13 +169,6 @@
 <!-- -->
 
     library(reshape2)
-
-    ## 
-    ## Attaching package: 'reshape2'
-
-    ## The following object is masked from 'package:tidyr':
-    ## 
-    ##     smiths
 
     age_groups <- c("below 16", "16-24", "25-34", "35-45", "above 45") # for strict ordering
 
@@ -253,7 +183,7 @@
 
     ggplot(df_heatmap_pivot, aes(x = Age, y = Fed, fill = APR25)) +
       geom_tile() +  # heatmap needs tiles
-      scale_fill_gradientn(colors = colorRampPalette(c("deepskyblue","deepskyblue2", "deepskyblue4"))(4), 
+      scale_fill_gradientn(colors = colorRampPalette(c("yellow","deepskyblue2", "deepskyblue4"))(20),
                            name = "Mean Rating") + # more fine-grained palette
       labs(title = "Mean rating by Federation and Age categories", 
            x = "Age category", 
