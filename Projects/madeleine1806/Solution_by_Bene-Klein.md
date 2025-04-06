@@ -13,8 +13,11 @@ negative mood is created with the stress moment beeing
 ‘stressed\_moment’ and the positive/negative mood beeing
 ‘motivated’/‘tense’.
 ![](Solution_by_Bene-Klein_files/figure-markdown_strict/data%20transformation%20plots-1.png)![](Solution_by_Bene-Klein_files/figure-markdown_strict/data%20transformation%20plots-2.png)
-\# Visualization The visualization of the participants mood and stress
-are shown during weekdays.
+
+# Visualization
+
+The visualization of the participants mood and stress are shown during
+weekdays.
 
 The result shows that the majority of all medication starter **sOC** is
 feeling most depressed at the middle of the week (Th).

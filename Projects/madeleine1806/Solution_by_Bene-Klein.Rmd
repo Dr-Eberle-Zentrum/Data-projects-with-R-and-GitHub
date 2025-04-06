@@ -73,6 +73,7 @@ plot_function("stressed_moment","tense")
 
 plot_function("stressed_moment","motivated")
 ```
+
 # Visualization
 The visualization of the participants mood and stress are shown during weekdays.
 
