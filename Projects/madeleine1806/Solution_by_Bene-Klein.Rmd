@@ -1,0 +1,118 @@
+---
+title: "Bene-Klein"
+output: md_document
+---
+
+```{r setup,include=FALSE}
+library(tidyverse)
+library(readxl)
+library(rstudioapi)
+library(lubridate)
+library(patchwork)
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
+# data manipulation
+After the necessary packages an the dataset were loaded the dataset was cleaned up by removing all Na's and datasets that contain Na's.
+
+After that the data will be summarized by the 'id' of the patient with mean and deviation of 'stressed_24h','stressed_moment', 'depressed', 'satisfied', 'motivated' and 'aroused'.
+Then the same is made by grouping the data by 'group'.
+```{r data cleaning,echo=FALSE}
+data <- read_xlsx("stress_ratings_anonymized.xlsx") %>%  
+  select(-17) %>% 
+  drop_na(-c(id_dOC, dOC_cycle_date, dOC_cycle_day))
+```
+```{r data aggregation,include=FALSE}
+# Give out a tibble containing the mean and standard deviation for each mood and stress item for each participant
+data %>% 
+  group_by(id) %>% 
+  summarise(
+    across(
+      c(stressed_24h, stressed_moment, depressed, satisfied, motivated, aroused),
+      list(mean = mean, SD = sd),
+      .names = "{.fn}_{.col}"
+    )
+  )
+
+# Give out a tibble containing the mean and standard deviation for each mood and stress item for each group
+data %>% 
+  group_by(group) %>% 
+  summarise(
+    across(
+      c(stressed_24h, stressed_moment, depressed, satisfied, motivated, aroused),
+      list(mean = mean, SD = sd),
+      .names = "{.fn}_{.col}"
+    )
+  )
+```
+Then the  correlation between a stress moment and the a positive and negative mood is created with the stress moment beeing 'stressed_moment' and the positive/negative mood beeing 'motivated'/'tense'.
+```{r data transformation plots,echo=FALSE}
+# Define custom colors for the datapoints of each group
+custom_cols <- c("sOC" = "red", "dOC" = "darkgreen", "OC" = "lightblue")
+
+plot_function <- function(X, Y) {
+  ggplot(data, aes(x = .data[[X]], y = .data[[Y]], col = group)) +
+    geom_count(size = 0.8) +
+    scale_color_manual(values = custom_cols) +
+    geom_smooth(method = "lm", col = "#480355", se = TRUE, level = 0.99, fill = "#9448BC") +
+    expand_limits(x = c(0, max(data[[X]], na.rm = TRUE)), y = c(0, max(data[[X]], na.rm = TRUE))) +
+    labs(
+      title = "How stress influences negative mood",
+      subtitle = "(Self-reported perception, scores from 0 to 100)",
+      x = paste0("How stressed did you feel today? (", X, ")"),
+      y = paste0("How was your mood today? (", Y, ")")
+    ) +
+    theme(
+      panel.background = element_blank(),
+      axis.line = element_line(color = "black")
+    )
+}
+plot_function("stressed_moment","tense")
+
+plot_function("stressed_moment","motivated")
+```
+
+# Visualization
+The visualization of the participants mood and stress are shown during weekdays.
+
+The result shows that the majority of all medication starter **sOC** is feeling most depressed at the middle of the week (Th). 
+
+For the **dOC** group the mood varies much more during the week.
+For the **OC** group the mood varies even less and is even is better in comparison to **doc**. 
+
+```{r visualization, echo=FALSE}
+# Convert timestamps to weekdays 
+Weekdaydata <- data %>% 
+  mutate(
+    date = as_datetime(timeStampStop),
+    days_since_start = as.integer(difftime(date, min(date), units = "days")),
+    weekday = factor((days_since_start%%7)+1,
+                     levels = 1:7,
+                     labels= c("Mo","Tu","We","Th","Fr","Sa","Su"))
+  )
+
+long_data <- Weekdaydata %>%
+  pivot_longer(cols = c(depressed, satisfied, motivated, aroused),
+               names_to = "mood",
+               values_to = "value")
+
+# Combined plot function
+combined_plot <- ggplot(long_data, aes(x = weekday, y = value, color = group, group = group)) +
+  geom_smooth(method = "loess", se = TRUE, level = 0.75) +
+  scale_color_manual(values = custom_cols) +
+  facet_wrap(~ mood, ncol = 2, scales = "free_y") +
+  labs(
+    title = "Mood per Weekday by Medication Group",
+    x = "Weekday",
+    y = "Mood score (1 to 100)"
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    panel.background = element_blank(),
+    axis.line = element_line(color = "black")
+  )
+
+# Show the plot
+combined_plot
+```
