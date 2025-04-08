@@ -126,11 +126,16 @@ Example:
 Current projects:
 
 - Niclas (Niclas38) - [IMDb Movie Data analysis](Projects/Niclas38/project-description.md)
+  - solutions by [Benedikt](Projects/Niclas38/Bene-Klein.md) and [Viet](Projects/Niclas38/hd25viet.md)
 - Madeleine (madeleine1806) - [Mood & Stress Project](Projects/madeleine1806/project-description.md)
+  - solutions by [Niclas](Projects/madeleine1806/Niclas38.md) and [Benedikt](Projects/madeleine1806/Solution_by_Bene-Klein.md)
 - Hiu Yan (yhykelly) - [Film genre and popularity analysis](Projects/yhykelly/project-description.md)
+  - solutions by [Madeleine](Projects/yhykelly/solution_by_madeleine1806.md) and [Niclas](Projects/yhykelly/Niclas38.md)
 - Viet (hd25viet) - [FIDE Chess Rating Analysis](Projects/hd25viet/project_description.md)
+  - solutions by [Hui Yan](Projects/hd25viet/solution_by_hiuyan.md) and [Madeleine](Projects/hd25viet/madeleine1806.md)
 - Benedikt (Bene-Klein) - [Wildfires around the world](Projects/Bene-Klein/project-description.md)
-
+  - solutions by [Viet](Projects/Bene-Klein/hd25viet.md) and [Hui Yan](Projects/Bene-Klein/solution_by_hiuyan.md)
+  
 
 #### Goals
 
