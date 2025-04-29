@@ -110,6 +110,249 @@ comma(percentage_large)
 ## exercises 28
 
 
+Create one plot on the fuel economy data with customised title, subtitle, 
+caption, x, y, and colour labels.
+
+```{r}
+mpg %>%
+  ggplot(aes(x = displ, y = cty)) +
+  geom_point(aes(colour = class)) +
+  geom_smooth(se = FALSE) +
+  labs(title = "Fuel Economy by Engine Size",
+       subtitle = "A scatter plot of highway miles per gallon vs. engine displacement",
+       x = "Engine Displacement (L)",
+       y = "Highway Miles per Gallon",
+       colour = "Car Class",
+       caption = "Data source: mpg dataset from ggplot2") +
+  theme_minimal()
+```
+
+
+The geom_smooth() is somewhat misleading because the hwy for large engines is skewed upwards due to the inclusion of lightweight sports cars with big engines. Use your modelling tools to fit and display a better model.
+
+
+```{r}
+mpg %>%
+  ggplot(aes(x = displ, y = cty)) +
+  geom_point(aes(colour = class)) +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(title = "Fuel Economy by Engine Size",
+       subtitle = "A scatter plot of highway miles per gallon vs. engine displacement",
+       x = "Engine Displacement (L)",
+       y = "Highway Miles per Gallon",
+       colour = "Car Class",
+       caption = "Data source: mpg dataset from ggplot2") +
+  theme_minimal()
+```
+
+
+Take an exploratory graphic that you’ve created in the last month, and add informative titles to make it easier for others to understand.
+
+
+how to add new column ?
+```{r}
+mt <- rownames(mtcars)
+mtcars <- cbind(mtcars, mt)
+```
+
+
+```{r}
+ggplot(mtcars, aes(x = reorder(mt, mpg), y = mpg)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  coord_flip() +
+  labs(title = "Fuel Economy by Car Model",
+       subtitle = "A bar plot of miles per gallon for different car models",
+       x = "Car Model",
+       y = "Miles per Gallon",
+       caption = "Data source: mtcars dataset") +
+  theme_minimal()
+```
+## exercises28.3
+Use geom_text() with infinite positions to place text at the four corners of the plot.
+
+```{r}
+label <- tibble(
+  displ = Inf,
+  hwy = Inf,
+  label = "Increasing engine size is \nrelated to decreasing fuel economy."
+)
+
+plot <- ggplot(mpg, aes(displ, hwy)) +
+  geom_point() 
+plot +
+  geom_text(aes(label = label), data = label, vjust = "top", hjust = "right")
+```
+
+
+```{r}
+label <- tibble(
+  displ = -Inf,
+  hwy = -Inf,
+  label = "Increasing engine size is \nrelated to decreasing fuel economy."
+)
+
+plot <- ggplot(mpg, aes(displ, hwy)) +
+  geom_point() 
+plot +
+  geom_text(aes(label = label), data = label, vjust = "bottom", hjust = "right")
+```
+
+
+```{r}
+label <- tibble(
+  displ = -Inf,
+  hwy = Inf,
+  label = "Increasing engine size is \nrelated to decreasing fuel economy."
+)
+
+plot <- ggplot(mpg, aes(displ, hwy)) +
+  geom_point() 
+plot +
+  geom_text(aes(label = label), data = label, vjust = "top", hjust = "left")
+```
+
+
+```{r}
+label <- tibble(
+  displ = Inf,
+  hwy = -Inf,
+  label = "Increasing engine size is \nrelated to decreasing fuel economy."
+)
+
+plot <- ggplot(mpg, aes(displ, hwy)) +
+  geom_point() 
+plot +
+  geom_text(aes(label = label), data = label, vjust = "bottom", hjust = "right")
+```
+
+
+
+Read the documentation for annotate(). How can you use it to add a text label to a plot without having to create a tibble?
+
+```{r}
+ggplot(mpg, aes(displ, hwy)) +
+  geom_point() +
+  annotate("text", x = Inf, y = Inf,
+           label = "Increasing engine size is \nrelated to decreasing fuel economy.",
+           vjust = "top", hjust = "right")
+```
+
+
+How do labels with geom_text() interact with faceting? How can you add a label to a single facet? How can you put a different label in each facet? (Hint: think about the underlying data.)
+
+If  label's data matches a facet, the label shows up in that facet.
+
+If you want labels in specific facets, your label data must include the same variables used for faceting.
+
+
+```{r}
+label_data <- tibble(
+  class = "suv",      # must match facet variable exactly
+  displ = 4,
+  hwy = 20,
+  label = "SUV Special!"
+)
+
+ggplot(mpg, aes(displ, hwy)) +
+  geom_point(aes(color = class)) +
+  facet_wrap(~class) +
+  geom_text(data = label_data, aes(x = displ, y = hwy, label = label))
+
+```
+
+
+
+```{r}
+label_data <- tibble(
+  class = c("suv", "compact", "pickup"),
+  displ = c(4, 2, 5),
+  hwy = c(20, 35, 17),
+  label = c("SUV Label", "Compact Label", "Pickup Label")
+)
+
+ggplot(mpg, aes(displ, hwy)) +
+  geom_point() +
+  facet_wrap(~class) +
+  geom_text(data = label_data, aes(x = displ, y = hwy, label = label), color = "blue")
+
+```
+
+What arguments to geom_label() control the appearance of the background box?
+
+
+
+| Argument         | What it controls                        |
+|------------------|------------------------------------------|
+| `fill`           | Color **inside** the box (background color) |
+| `color` or `colour` | Color of the **text** (NOT the box)         |
+| `label.size`     | Thickness of the **box border** (outline)  |
+| `label.r`        | How **rounded** the box corners are        |
+| `label.padding`  | Space **between text and box edges**       |
+
+```{r}
+ggplot(mpg, aes(displ, hwy)) +
+  geom_point() +
+  geom_label(
+    aes(label = class),
+    fill = "lightblue",        # Box background color
+    color = "black",            # Text color
+    label.size = 0.5,           # Border thickness
+    label.r = unit(0.25, "lines"), # Round the corners
+    label.padding = unit(0.5, "lines") # Padding inside box
+  )
+
+```
+
+
+
+
+The question is
+What are the four main arguments of arrow()?
+How do those arguments control how the arrow looks?
+Can you show examples of plots using different arrow settings?
+
+| Argument       | What it controls                          |
+|----------------|-------------------------------------------|
+| `angle`        | The **angle (sharpness)** of the arrowhead |
+| `length`       | The **length** of the arrowhead            |
+| `ends`         | Where the arrows are drawn (start, end, both) |
+| `type`         | Shape of the arrowhead (open or closed)    |
+
+
+
+```{r}
+library(ggplot2)
+library(grid)  # for arrow()
+
+ggplot() +
+  geom_segment(aes(x = 1, y = 1, xend = 2, yend = 2),
+               arrow = arrow(angle = 30, length = unit(0.25, "inches"),
+                             ends = "last", type = "open")) +
+  xlim(0, 3) + ylim(0, 3)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

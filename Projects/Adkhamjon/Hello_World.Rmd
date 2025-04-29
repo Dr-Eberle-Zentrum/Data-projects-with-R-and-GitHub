@@ -82,3 +82,149 @@ knitr::opts_chunk$set(
 | `message = FALSE` / `warning = FALSE` | Hide messages/warnings from packages | You want cleaner output (but debug later) |
 | `comment = "#>"` | Customize the symbol before printed output | For stylish code examples |
 | `collapse = TRUE` | Keeps code and output close together | Makes examples cleaner in tutorials |
+
+
+### 28  graphics for communication
+subtitle adds additional detail in a smaller font beneath the title.
+
+caption adds text at the bottom right of the plot, often used to describe the source of the data.
+
+```{r}
+ggplot(mpg, aes(displ, hwy)) +
+  geom_point(aes(color = class)) +
+  geom_smooth(se = FALSE) +
+  labs(
+    title = "Fuel efficiency generally decreases with engine size",
+    subtitle = "Two seaters (sports cars) are an exception because of their light weight",
+    caption = "Data from fueleconomy.gov"
+  )
+```
+
+----
+
+It’s possible to use mathematical equations instead of text strings. Just switch "" out for quote() and read about the available options in ?plotmath:
+
+```{r}
+df <- tibble(
+  x = runif(10),
+  y = runif(10)
+)
+ggplot(df, aes(x, y)) +
+  geom_point() +
+  labs(
+    x = quote(sum(x[i] ^ 2, i == 1, n)),
+    y = quote(alpha + beta + frac(delta, theta))
+  )
+```
+
+
+
+
+In addition to labelling major components of your plot, it’s often useful to label individual observations or groups of observations. The first tool you have at your disposal is geom_text(). geom_text() is similar to geom_point(), but it has an additional aesthetic: label. This makes it possible to add textual labels to your plots.
+
+```{r}
+best_in_class <- mpg %>%
+  group_by(class) %>%
+  filter(row_number(desc(hwy)) == 1)
+
+ggplot(mpg, aes(displ, hwy)) +
+  geom_point(aes(colour = class)) +
+  geom_text(aes(label = model), data = best_in_class)
+```
+
+
+We can make things a little better by switching to geom_label() which draws a rectangle behind the text. We also use the nudge_y parameter to move the labels slightly above the corresponding points
+
+
+```{r}
+ggplot(mpg, aes(displ, hwy)) +
+  geom_point(aes(colour = class)) +
+  geom_label(aes(label = model), data = best_in_class, nudge_y = 2, alpha = 0.5)
+```
+
+we can use the ggrepel package by Kamil Slowikowski. This useful package will automatically adjust labels so that they don’t overlap:
+
+```{r}
+library(ggrepel)
+ggplot(mpg, aes(displ, hwy)) +
+  geom_point(aes(colour = class)) +
+  geom_point(size = 3, shape = 1, data = best_in_class) +
+  geom_label_repel(aes(label = model), data = best_in_class)
+```
+
+----
+You can sometimes use the same idea to replace the legend with labels placed directly on the plot. (theme(legend.position = "none") turns the legend off — we’ll talk about it more shortly.)
+
+
+```{r}
+class_avg <- mpg %>%
+  group_by(class) %>%
+  summarise(
+    displ = median(displ),
+    hwy = median(hwy)
+  )
+
+ggplot(mpg, aes(displ, hwy, colour = class)) +
+  ggrepel::geom_label_repel(aes(label = class),
+    data = class_avg,
+    size = 6,
+    label.size = 0,
+    segment.color = NA
+  ) +
+  geom_point() +
+  theme(legend.position = "none")
+```
+----
+you might just want to add a single label to the plot, but you’ll still need to create a data frame. Often, you want the label in the corner of the plot, 
+```{r}
+label <- mpg %>%
+  summarise(
+    displ = max(displ),
+    hwy = max(hwy),
+    label = "Increasing engine size is \nrelated to decreasing fuel economy."
+  )
+
+ggplot(mpg, aes(displ, hwy)) +
+  geom_point() +
+  geom_text(aes(label = label), data = label, vjust = "top", hjust = "right")
+```
+----
+If you want to place the text exactly on the borders of the plot, you can use +Inf and -Inf. Since we’re no longer computing the positions from mpg, we can use tibble() to create the data frame:
+
+```{r}
+label <- tibble(
+  displ = Inf,
+  hwy = Inf,
+  label = "Increasing engine size is \nrelated to decreasing fuel economy."
+)
+
+ggplot(mpg, aes(displ, hwy)) +
+  geom_point() +
+  geom_text(aes(label = label), data = label, vjust = "top", hjust = "right")
+```
+
+
+
+Transiently, by calling rmarkdown::render() by hand:
+
+rmarkdown::render("diamond-sizes.Rmd", output_format = "word_document")
+
+----
+29.5 Presentations
+You can also use R Markdown to produce presentations. You get less visual control than with a tool like Keynote or PowerPoint, but automatically inserting the results of your R code into a presentation can save a huge amount of time. Presentations work by dividing your content into slides, with a new slide beginning at each first (#) or second (##) level header. You can also insert a horizontal rule (***) to create a new slide without a header.
+
+R Markdown comes with three presentation formats built-in:
+
+ioslides_presentation - HTML presentation with ioslides
+
+slidy_presentation - HTML presentation with W3C Slidy
+
+beamer_presentation - PDF presentation with LaTeX Beamer.
+
+Two other popular formats are provided by packages:
+
+revealjs::revealjs_presentation - HTML presentation with reveal.js. Requires the revealjs package.
+
+rmdshower, https://github.com/MangoTheCat/rmdshower, provides a wrapper around the shower, https://github.com/shower/shower, presentation engine
+
+
