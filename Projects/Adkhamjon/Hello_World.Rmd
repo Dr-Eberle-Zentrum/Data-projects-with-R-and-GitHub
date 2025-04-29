@@ -20,29 +20,21 @@ library(ggplot2)
 ```{r headers, evaluate=FALSE}
 # I can write many examples codes but this  won't be evaluated
 # just show don't run
-ggplot(mtcars, aes(x=mpg, y=disp)) +
-  geom_point() +
-  geom_smooth(method="lm", se=FALSE) +
-  labs(title="Scatterplot with regression line",
-       x="Miles per gallon",
-       y="Displacement (cu.in.)") +
-  theme_minimal()
+
 ```
 
 ```{r inlude=FALSE}
 # this code does not show up in the final document
 # run but dont show
-ggplot(mtcars, aes(x=mpg, y=disp)) +
-  geom_line()
+# ggplot(mtcars, aes(x=mpg, y=disp)) +
+#   geom_line()
 ```
 
 ```{r echo=FALSE}
 # just show the result not the code 
-ggplot(mtcars, aes(x=mpg, y=disp)) +
-  geom_density_2d()
+# ggplot(mtcars, aes(x=mpg, y=disp)) +
+#   geom_density_2d()
 ```
-
-
 
 ```{r message=FALSE, warning=FALSE}
 # prevents messages or warnings from appearing in the finished file.
@@ -55,3 +47,38 @@ ggplot(mtcars, aes(x=mpg)) +
 
 ```
 
+```{r}
+#mtcars[1:5,]
+```
+
+```{r}
+#If you prefer that data be displayed with additional formatting you can use the knitr::kable function.
+
+#knitr::kable(mtcars[1:5,],
+#             caption = "A knitr table")
+```
+
+| Option | What it does |
+|-------------------|-----------------------------------------------------|
+| `cache = TRUE` | Saves chunk results to speed up future knitting |
+| `dependson` | Makes sure a cached chunk reruns if another chunk it depends on changes |
+| `cache.extra` | Triggers cache reset if an external file or value (e.g., CSV) changes |
+| `clean_cache()` | Clears all caches manually |
+
+you can set global options that apply to all chunks in the document using: knitr::opts_chunk\$set()
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+
+```
+
+| Setting | What it controls | Use it when... |
+|----------------------|---------------------------|-----------------------|
+| `echo = FALSE` | Hide code but show output | Making clean reports for non-coders |
+| `message = FALSE` / `warning = FALSE` | Hide messages/warnings from packages | You want cleaner output (but debug later) |
+| `comment = "#>"` | Customize the symbol before printed output | For stylish code examples |
+| `collapse = TRUE` | Keeps code and output close together | Makes examples cleaner in tutorials |
