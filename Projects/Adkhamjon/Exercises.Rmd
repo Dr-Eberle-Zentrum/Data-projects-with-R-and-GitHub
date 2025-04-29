@@ -1,0 +1,128 @@
+---
+title: "Exercises"
+author: "Adkhamjon"
+date: "2025-04-29"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      message = FALSE,
+                      warning = FALSE)
+```
+## exercises 27
+### How Diamond Sizes Vary by Cut, Color, and Clarity
+
+27.4.7 Exercises 1. Add a section that explores how diamond sizes vary by cut, colour, and clarity. Assume you’re writing a report for someone who doesn’t know R, and instead of setting echo = FALSE on each chunk, set a global option.
+
+```{r}
+library(ggplot2)
+library(dplyr)
+
+```
+
+```{r}
+diamonds %>% 
+  group_by(cut, color, clarity) %>%
+  summarise(mean_carat = mean(carat)) %>%
+  ungroup() %>%
+  ggplot(aes(x = cut, y = mean_carat, fill = color)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  facet_wrap(~clarity) +
+  labs(title = "Mean Carat Size by Cut, Color, and Clarity",
+       x = "Cut",
+       y = "Mean Carat Size") +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_fill_brewer(palette = "Set3")
+```
+
+
+
+
+
+### Largest 20 Diamonds
+
+
+2.Add a section that describes the largest 20 diamonds, including a table that displays their most important attributes.
+
+```{r}
+diamonds %>% 
+  arrange(desc(carat)) %>%
+  head(20) %>%
+  select(cut, color, clarity, carat, price) %>%
+  knitr::kable(caption = "Largest 20 Diamonds by Carat Size")
+```
+
+
+### Diamonds Larger Than 2.5 Carats
+
+Modify diamonds-sizes.Rmd to use comma() to produce nicely formatted output. Also include the percentage of diamonds that are larger than 2.5 carats.
+
+
+```{r}
+library(dplyr)
+large_diamonds <- diamonds %>%
+  filter(carat > 2.5)
+
+percentage_large <- nrow(large_diamonds) / nrow(diamonds) * 100
+percentage_large
+```
+```{r}
+comma <- function(x) format(x, digits = 2, big.mark = ",")
+```
+
+
+Out of `r comma(nrow(diamonds))` diamonds, there are `r comma(nrow(large_diamonds))` diamonds larger than 2.5 carats. 
+
+That is approximately `r comma(percentage_large)` of all diamonds.
+
+
+
+Set up a network of chunks where d depends on c and b, and both b and c depend on a. Have each chunk print lubridate::now(), set cache = TRUE, then verify your understanding of caching.
+
+
+```{r a,  cache = TRUE}
+library(lubridate)
+large_diamonds <- diamonds %>%
+  filter(carat > 2.5)
+
+```
+
+
+```{r b, cache = TRUE, depends = "a"}
+large <- nrow(large_diamonds) / nrow(diamonds)* 10000000
+large
+```
+
+```{r c,  cache = TRUE, depends = "a"}
+percentage_large <- nrow(large_diamonds) / nrow(diamonds) * 100
+```
+
+
+```{r d,  cache = TRUE, depends = c("b", "c")}
+comma <- function(x) format(x, digits = 2, big.mark = ",")
+comma(large)
+comma(percentage_large)
+```
+
+
+## exercises 28
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
