@@ -9,12 +9,49 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+| Hello | World |
+|-------|-------|
+| line1 | line2 |
 
-|Hello    |World|
-|---------|-----|
-|         |     |
+```{r hello }
+library(ggplot2)
+```
+
+```{r headers, evaluate=FALSE}
+# I can write many examples codes but this  won't be evaluated
+# just show don't run
+ggplot(mtcars, aes(x=mpg, y=disp)) +
+  geom_point() +
+  geom_smooth(method="lm", se=FALSE) +
+  labs(title="Scatterplot with regression line",
+       x="Miles per gallon",
+       y="Displacement (cu.in.)") +
+  theme_minimal()
+```
+
+```{r inlude=FALSE}
+# this code does not show up in the final document
+# run but dont show
+ggplot(mtcars, aes(x=mpg, y=disp)) +
+  geom_line()
+```
+
+```{r echo=FALSE}
+# just show the result not the code 
+ggplot(mtcars, aes(x=mpg, y=disp)) +
+  geom_density_2d()
+```
 
 
 
+```{r message=FALSE, warning=FALSE}
+# prevents messages or warnings from appearing in the finished file.
+```
 
+```{r error=TRUE}
+# causes the render to continue even if code returns an error
+ggplot(mtcars, aes(x=mpg)) +
+  geom_bar(stat="identity")
+
+```
 
