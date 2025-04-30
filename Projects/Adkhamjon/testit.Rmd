@@ -1,0 +1,67 @@
+---
+title: "test.it"
+author: "Adkhamjon"
+date: "`r Sys.time()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+#####################################
+#' Create an RMD file which
+#' - renders to Markdown output
+#' - uses the current time within the YAML header
+#' - contains a single code chunk that
+#'   - loads tidyverse libraries
+#'   - uses read_csv to read the file shown on the following website
+#'     https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/martin-raden/Mammal-comeback-in-Europe-data-OWID-download.csv
+#' - tune the code chunk such that
+#'   - the code chunks name is ""
+#'   - the code itself is shown, BUT
+#'   - no loading information from the tidyverse library is shown
+#'   - no loading details from the read_csv() call are shown
+#'   consult https://yihui.org/knitr/options/ for details
+#####################################
+
+
+```{r test.it, echo=TRUE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(readr)
+data <- read_csv("https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/martin-raden/Mammal-comeback-in-Europe-data-OWID-download.csv")
+
+head(data, 5)
+```
+
+```{r}
+library(tidyverse)
+?ToothGrowth
+```
+
+
+####################################################################
+#' Let's practice our ggplot plotting skills. To this end, we use the
+#' "ToothGrowth" data set directly available within R (check help).
+#' We want to plot for the different dose levels (X) the respective
+#' tooth length. The dose levels should be represented as follows:
+#' - 0.5 = non-filled circle in a dark green
+#' - 1 = orange filled triangles
+#' - 2 = filled circles in a light bluedos
+#' Use jittering to avoid overplotting of data points.
+#' We don't want to have any background decorations etc. and useful
+#' labels for axes and legend.
+#' Ensure there is only ONE legend (showing both color and shape).
+####################################################################
+
+
+```{r}
+ggplot(ToothGrowth, aes(x = dose, y = len)) +
+  geom_jitter(aes(shape = factor(dose), color = factor(dose)), size = 3) +
+  scale_shape_manual(values = c(0.5, 1, 2)) +
+  scale_color_manual(values = c("darkgreen", "orange", "lightblue")) +
+  labs(x = "Dose levels", y = "Tooth length") +
+  theme_minimal() +
+  theme(legend.position = "right")
+```
+
+
