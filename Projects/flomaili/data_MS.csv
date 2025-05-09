@@ -1,0 +1,40 @@
+No.;Patient Name;Age;Sex;Abslang Test;Smoking;Alcohol;Other Diseases;Medication;MS Duration;NO test result;Cortisol Test Result;BAI Score;Severity of BAI test
+1;Samira Abduli;24;Female;0;0;0;-;0;2Years;212,839;1,369;19;Moderate
+2;Maryam Beghali;40;Female;0;0;0;Heart palpitations, mitral valve prolapse;Chlordiazepoxide, Propranolol, Cinnarizine, Actosercol 8;3 Months;333,802;1,455;41;Severe
+3;Leila Teimouri Khabazi;46;Female;0;0;0;Tachycardia, migraine;Corticosteroid, Sertraline, Rizatriptan;18Years;328,256;0,356;19;Moderate
+4;Roya Mohammad Hosseini;37;Female;0;0;0;-;Avonex, Rituximab, Corticosteroid, Ocrelizumab;18 Years;99,494;4,316;3;None or Minimal
+7;Shadi Mousavi;21;Female;0;0;0;Polycystic ovary syndrome;Rituximab, Corticosteroid, Tizanidine;1Years;816,624;7,816;5;None or Minimal
+9;Yasaman Sadat Razavi Modarresi;28;Female;0;0;0;Gastrointestinal disease;Midazolam, Metronidazole, and Amoxicillin, Texifoma;2Years;74,088;4,649;5;None or Minimal
+10;Leila Kermani;39;Female;0;0;0;Hypothyroidism;Texifoma, Nisopred; 6 Months;512,655;5,356;7;None or Minimal
+12;Seyed Ehsan Mousavi;40;Male ;0;0;0;-;Fampridine; 4 Months;157,238;1,923;27;Severe
+13;Hassan Dodman Tabari;56;Male;0;0;0;-;Corticosteroid, Baclofen, Dalpiram;4Years;86,879;6,47;12;Mild
+17;Zahra Salimi;21;Female;0;0;0;-;Corticosteroid, Sertraline, Venlafaxine, Rituximab;7Years;102,485;6,663;17;Moderate
+19;Nasrin Ghiasi;61;Female;0;0;0;-;Corticosteroid;8Years;607;3,357;9;Mild
+21;Omid Khodadoost;26;Male ;0;0;0;-;Rituximab, Corticosteroid, Methylprednisolone, Terazosin;2Years;70,808;7,041;27;Severe
+22;Milad Zeidifar;31;Male ;0;0;0;-;Corticosteroid;6 Months ;48,658;7,603;8;Mild
+23;Maryam Zamani;41;Female ;0;0;0;-;Levothyroxine, Pentoxifylline, Atorvastatin, Corticosteroid, Losartan;1Years;67,218;4,004;6;None or Minimal
+25;Bahareh Iravani;13;Female;0;0;0;-;Corticosteroid;2 Years ;317,87;6,673;8;Mild
+27;Sultan Zalighi;53;Male;0;0;0;-;Baclofen;25Years ;108,12;8,8781;10;Moderate
+31;Javidan Mohammadi;29;Male;0;0;0;-;Resigen injection;6Months ;79,861;5,802;9;Mild
+32;Azam Akbari;39;Female;0;0;0;-;Corticosteroid, Gabapentin;2Years ;93,19;4,044;14;Mild
+34;Maryam Sogholi;31;Female;0;0;0;-;CinnoVex, Escitalopram;2Years ;114,6648;4,558;6;None or Minimal
+35;Hamidreza Teimouri;20;Male;0;0;0;-;Rituximab;2 Years ;118,569;3,686;5;Mild
+36;Masoumeh Falah Nejad;30;Female;0;0;0;-;Difusel, Zadiwa;10 Years ;86,052;4,211;14;Mild
+38;Maryam Mohammadi;25;Female;0;0;0;-;Dalpiram, Fingolimod, Primidone;6Months ;74,255;5,501;4;None or Minimal
+39;Mohammadreza Nasrollah Abadi;43;Male;0;0;0;-;Aspirin, Actovox;10Years;317,048;4,374;4;None or Minimal
+5;Shaleh Changiz;51;Female;1;0;0;-;Baclofen;6 Months;74,996;5,977;9;Mild
+6;Mohsen Azimi;19;Male;1;0;0;-;Baclofen, Tizanidine, Escitalopram;5Years;63,262;5,697;4;None or Minimal
+8;Zahra Bayatani;39;Female;1;0;0;-;Corticosteroid, Levothyroxine;5Years;102,781;6,966;14;Mild
+11;Zahra Yazdanmehr;46;Female;1;0;0;-;Corticosteroid; 6 Months;73,318;3,89;6;None or Minimal
+14;Zahra Karimi;31;Female;1;0;0;-;Gabapentin, Sertraline, Corticosteroid;6 Months;65,738;18,951;10;Mild
+15;Farzaneh Baghbanzadeh;45;Female;1;0;0;-;Gabapentin, Citalopram, Zolpidem, Fluoxetine, Corticosteroid, Dimethyl fumarate;8 Years;79,787;3,905;28;Severe
+16;Mahshid Soltani;30;Female;1;0;0;Hemorrhoids;Corticosteroid, CinnoVex;7Years;47,868;8,694;29;Severe
+18;Zahra Nemati;28;Female;1;0;0;-;Gabapentin, Corticosteroid;3Years;104,607;5,196;29;Severe
+20;Abdolmajid Rokni;46;Male;1;0;0;-;Fampridine, Doxepin, Levothyroxine;5Years;53,457;35,824;5;None or Minimal
+24;Akram Sabouhi;40;Female;1;0;0;Hypothyroidism;Rituximab, Corticosteroid, Melatonin, Pregabalin;2 Years ;64,149;5,99;7;None or Minimal
+26;Mojgan Negahban;47;Female;1;0;0;-;Pantoprazole;10Years;119,251;6,045;28;Severe
+28;Sigheh Rezaei;60;Female;1;0;0;-;Corticosteroid, Pentomid;3Years;269,859;6,724;37;Severe
+29;Hadi Noei;24;Male;1;0;0;-;Gabapentin, Asentra, Nortriptyline, Bisoprolol;6Months ;145,955;2,256;17;Moderate
+30;Leila Hosseini;50;Female;1;0;0;Severe anemia, lumbar disc herniation;Corticosteroid, Teriflunomide;3Years;71,063;7,832;15;Mild
+33;Ghorban Ali Momen Kiaei;53;Male ;1;0;0;-;Fingolimod;1Years;401,819;4,542;27;Severe
+37;Saeed Malekpour;31;Male ;1;0;0;-;Fingolimod;2Years ;59,968;8,8;31;Severe
