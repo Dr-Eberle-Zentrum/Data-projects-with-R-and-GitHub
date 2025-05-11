@@ -126,6 +126,7 @@ Example:
 Current projects:
 
 - name (github name) - descriptive title with link to MD file (see example above)
+- Pauline (paula0013) - [When dragonflies fly](Projects/paula0013/project-description.md) 
   
 
 #### Goals
