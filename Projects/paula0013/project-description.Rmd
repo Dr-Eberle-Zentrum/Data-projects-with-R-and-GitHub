@@ -1,0 +1,63 @@
+---
+title: "Project_1"
+author: "paula0013"
+date: "`r Sys.Date()`"
+output: md_document
+---
+# Project 1 R2 Course - Pauline Röhner 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(readxl)
+library(readr)
+library(dplyr)
+```
+# Topic of the project  
+Dragonflies are flight-active insects whose behavior is strongly influenced by environmental conditions. In this project, the flight activity of the autumn mosaic dragonfly (*Aeshna mixta*) is linked to meteorological data to find out **under which weather conditions this species prefers to fly**.
+
+# Data sets for the project 
+The two data sets were provided directly by the operators of the fishing station in Bukowo, Poland.
+
+## Weather data from the weather station at the fishing station in Bukowo in Poland
+
+🔗 [Weather_Data_Poland.csv](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/paula0013/Weather_Data_Poland.csv)
+
+```{r echo=FALSE, message=FALSE, warning=FALSE,fig.width=12, fig.height=10}
+weatherdaten <- read.csv(
+  "https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/refs/heads/main/Projects/paula0013/Weather_Data_Poland.csv",
+  row.names = NULL,
+  check.names = TRUE
+)
+head(weatherdaten, n = 10)
+```
+
+# Catch data for the dragonflies
+
+🔗 [Fangdaten_Poland.csv](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/paula0013/Fangdaten_Poland.csv)
+
+```{r echo=FALSE, message=FALSE, warning=FALSE,fig.width=12, fig.height=10}
+Fangdaten <- read_csv(
+  "https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/refs/heads/main/Projects/paula0013/Fangdaten_Poland.csv",
+)
+head(Fangdaten, n = 10)
+```
+
+# Goals for data manipulation of weather data 
+1. Cleaning up the weather data:
+
+1.1 Remove the row with the unit declaration 
+
+1.2 Renaming the columns with clear names and units
+
+1.3 Separation of the time column into two columns (date and time)
+
+1.4. Summarizing the data per day with the mean values  
+
+1.5. Creation of a new column based on the wind direction in degrees (True Dir.) with the wind direction in compass direction (e.g. NW, SSO)
+ 
+2. Merging the data from the revised weather file with the dragonfly catch data 
+
+# Goals of the visual representation of the data
+- Display temperature values as a line over the entire catch period 
+- Display the number of catches of dragonflies as stacked bars by sex over the entire catch period
+- Display the wind direction as compass direction with arrow and designation below the diagram as well as the wind speed in m/s
