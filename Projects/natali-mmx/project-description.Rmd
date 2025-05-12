@@ -17,7 +17,7 @@ Climate change is a huge challenge for farmers worldwide. It is causing extreme 
 
 **Source**: [Duden et al. (2023). *Crop yields and area in Germany from 1979 to 2021 at a harmonized district-level.*](https://doi.org/10.3220/DATA20231117103252-0)
 
-**Description**: This dataset contains information on crop yields and area in Germany from 1979 to 2021 at a harmonized district-level. It includes data on various crops, such as wheat, barley, and maize, as well as the yield and area harvested. We are interested in the crop yields in the district of Tübingen, (nuts_id = DE142).
+**Description**: This dataset contains information on crop yields and area in Germany from 1979 to 2021 at a harmonized district-level. It includes data on various crops, such as wheat, barley, and maize, including their yield (in tons per hectare) and the harvested area (in hectares). We are interested in the crop yields in the district of Tübingen.
 
 ![](crops_data.png)
 
