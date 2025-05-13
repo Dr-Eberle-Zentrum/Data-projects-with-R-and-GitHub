@@ -128,6 +128,7 @@ Current projects:
 - name (github name) - descriptive title with link to MD file (see example above)
 - Pauline (paula0013) - [When dragonflies fly](Projects/paula0013/project-description.md)
 - Natali (natali-mmx) - [Crops vs. Climate](Projects/natali-mmx/project-description.md)
+- Supti (Supti7) - [Salary Comparison](Projects/Supti7/project_description.md)
   
 
 #### Goals
