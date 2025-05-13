@@ -30,24 +30,40 @@ name: Car name (manufacturer and model)
 
 
 ### Data preparation  
-Ensure each variable has its own column and each observation its own row.
-Convert categorical variables into factors with descriptive labels.
-Identify and report any duplicate rows in the data set.
-Discuss whether duplicates are meaningful or should be removed.
-Identify columns with missing values
-Summarize the number and percentage of missing values.
-Decide on how to handle missing values.
-create a new variable Compute power to weight ratio and store it in the new column.
+
+*Ensure each variable has its own column and each observation its own row.
+
+*Convert categorical variables into factors with descriptive labels.
+
+*Identify and report any duplicate rows in the data set.
+
+*Discuss whether duplicates are meaningful or should be removed.
+
+*Identify columns with missing values
+
+*Summarize the number and percentage of missing values.
+
+*Decide on how to handle missing values.
+
+*create a new variable Compute power to weight ratio and store it in the new column.
 
 
 ### Data visualization
-investigate the relation of mpg vs horsepower and  weight vs acceleration
-do some trend analysis with respect to mpg, horsepower and acceleration over years Highlight changes in car characteristics over time  
-what is the correlation between numerical variables ? show it in a suitable plot 
 
-### results
-Report a general overview and results answer these question 
-Which origin has the most powerful or fastest cars?
-What is the relationship between number of cylinders and acceleration?
-What is the fastest car each year? 
-feel free to add more information in your report based on your analysis 
+*investigate the relation of mpg vs horsepower and  weight vs acceleration
+
+*do some trend analysis with respect to mpg, horsepower and acceleration over years Highlight changes in car characteristics over time  
+
+*what is the correlation between numerical variables ? show it in a suitable plot 
+
+### Results
+
+*Report a general overview and results answer these question:
+
+*Which origin has the most powerful or fastest cars?
+
+*What is the relationship between number of cylinders and acceleration?
+
+*What is the fastest car each year? 
+
+*Feel free to add more information in your report based on your analysis 
