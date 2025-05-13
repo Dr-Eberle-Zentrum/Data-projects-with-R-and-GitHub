@@ -1,10 +1,12 @@
+# Crops vs. Climate
+
 Climate change is a huge challenge for farmers worldwide. It is causing
 extreme weather events, such as droughts and floods, which can have
 devastating effects on crops and livestock. This project focuses on
 **crop production in the region of Tübingen and how it has been affected
 by climate change**.
 
-# Data Sets
+## Data Sets
 
 ### Crop Production Data
 
@@ -14,11 +16,12 @@ district-level.*](https://doi.org/10.3220/DATA20231117103252-0)
 
 **Description**: This dataset contains information on crop yields and
 area in Germany from 1979 to 2021 at a harmonized district-level. It
-includes data on various crops, such as wheat, barley, and maize, as
-well as the yield and area harvested. We are interested in the crop
-yields in the district of Tübingen, (nuts\_id = DE142).
+includes data on various crops, such as wheat, barley, and maize,
+including their yield (in tons per hectare) and the harvested area (in
+hectares). We are interested in the crop yields in the district of
+Tübingen.
 
-![](crops_data.png)
+![](Crops_data.png)
 
 ### Climate Data
 
@@ -38,9 +41,9 @@ year and each column representing the value of the variable (e.g. mean
 temperature) in each federal state. We are interested in the climate
 data for the state of Baden-Württemberg.
 
-![](climate_data.png)
+![](Climate_data.png)
 
-# Data Manipulation Goals
+## Data Manipulation Goals
 
 -   **Select crop yield data:** pick three crops (e.g. wheat, barley,
     maize) and extract their annual yield data for Tübingen (nuts\_id =
@@ -51,7 +54,7 @@ data for the state of Baden-Württemberg.
 -   **Merge the datasets:** create a tidy tibble (each row is one
     observation).
 
-# Visualization Goals
+## Visualization Goals
 
 **Plot the crop yields against the climate variable:**
 

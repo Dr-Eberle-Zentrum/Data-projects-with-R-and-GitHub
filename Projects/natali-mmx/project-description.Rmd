@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Climate change is a huge challenge for farmers worldwide. It is causing extreme weather events, such as droughts and floods, which can have devastating effects on crops and livestock. This project focuses on **crop production in the region of Tübingen and how it has been affected by climate change**.
 
-# Data Sets
+## Data Sets
 
 ### Crop Production Data
 
@@ -35,13 +35,13 @@ The data is presented in a table format, with each row representing a year and e
 
 ![](Climate_data.png)
 
-# Data Manipulation Goals
+## Data Manipulation Goals
 
 -   **Select crop yield data:** pick three crops (e.g. wheat, barley, maize) and extract their annual yield data for Tübingen (nuts_id = DE142).
 -   **Select climate data:** pick a climate variable (e.g. mean temperature, precipitation, hot days) and extract the data for Baden-Württemberg.
 -   **Merge the datasets:** create a tidy tibble (each row is one observation).
 
-# Visualization Goals
+## Visualization Goals
 
 **Plot the crop yields against the climate variable:**
 
