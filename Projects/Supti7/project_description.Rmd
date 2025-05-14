@@ -19,9 +19,6 @@ Here is a first look at the data:
 
 ```{r, data}
 data <- read.csv("Salaries_data_scientists.csv")
-#head(data)
-#install.packages("knitr")
-library(knitr)
 knitr::kable(head(data))
 ```
 
