@@ -128,8 +128,8 @@ Current projects:
 - Pauline (paula0013) - [When dragonflies fly](Projects/paula0013/project-description.md)
 - Natali (natali-mmx) - [Crops vs. Climate](Projects/natali-mmx/project-description.md)
 - Supti (Supti7) - [Salary Comparison](Projects/Supti7/project_description.md)
-- Florian (flomaili) - [Salivatory Cortisol levels](Projects/flomaili/project-description.md)
-  
+- Svenja (Svenja) - [Erasmus mobility](Projects/Svenja/project-description.md)
+
 
 #### Goals
 
