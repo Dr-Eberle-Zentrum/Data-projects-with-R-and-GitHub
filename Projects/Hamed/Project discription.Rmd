@@ -4,7 +4,7 @@ output: md_document
 date: "`Auto`"
 ---
 ## Data
-The Auto dataset is a collection of various automobile models and their characteristics. It contains quantitative and qualitative variables describing different aspects of cars such as fuel efficiency, engine size, weight, acceleration, and more. The dataset is useful for exploring regression modeling, correlation analysis, and data visualization.
+The [Auto]("https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/Hamed/Auto_data.csv") dataset is a collection of various automobile models and their characteristics. It contains quantitative and qualitative variables describing different aspects of cars such as fuel efficiency, engine size, weight, acceleration, and more. The dataset is useful for exploring regression modeling, correlation analysis, and data visualization.
 
 Observations: 396 cars
 
