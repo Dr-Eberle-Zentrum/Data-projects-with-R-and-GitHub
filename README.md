@@ -135,6 +135,7 @@ Current projects:
 - Elisabeth (lizzola) - [Immune responce](project-description.md)
 - Tim (t1mge) - TODO
 
+
 #### Goals
 
 At the end of Phase 1 you will have a better understanding of
