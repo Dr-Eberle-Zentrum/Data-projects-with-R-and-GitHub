@@ -6,14 +6,21 @@ output: md_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
 # Comparison of salaries of global remote data scientists!
 
-Remote working became a norm during covid-19. And with remote work came more concern about salary. Let's see using the data from
+Remote working became a norm during covid-19. And with remote work came more concern about salary. Let's see using the [data](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/Supti7/Salaries_data_scientists.csv) from
 [kaggle](https://www.kaggle.com/datasets/abhinavshaw09/data-science-job-salaries-2024?resource=download) 
 whether there is any difference in salary of remote data scientists in different countries.
+
+Here is a first look at the data:
+
+```{r, data}
+data <- read.csv("Salaries_data_scientists.csv")
+head(data)
+```
 
 ## Visualization Goal of the project
 
