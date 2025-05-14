@@ -10,27 +10,116 @@ different countries.
 
 Here is a first look at the data:
 
-    ##   work_year experience_level employment_type                       job_title
-    ## 1      2024               SE              FT                     AI Engineer
-    ## 2      2024               SE              FT       Machine Learning Engineer
-    ## 3      2024               SE              FT       Machine Learning Engineer
-    ## 4      2024               SE              FT       Machine Learning Engineer
-    ## 5      2024               SE              FT       Machine Learning Engineer
-    ## 6      2024               MI              FT Business Intelligence Developer
-    ##   salary salary_currency salary_in_usd employee_residence remote_ratio
-    ## 1  90000             USD         90000                 AE            0
-    ## 2 180500             USD        180500                 US            0
-    ## 3  96200             USD         96200                 US            0
-    ## 4 235000             USD        235000                 AU            0
-    ## 5 175000             USD        175000                 AU            0
-    ## 6  95413             USD         95413                 US          100
-    ##   company_location company_size
-    ## 1               AE            L
-    ## 2               US            M
-    ## 3               US            M
-    ## 4               AU            M
-    ## 5               AU            M
-    ## 6               US            M
+<table>
+<colgroup>
+<col style="width: 5%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 18%" />
+<col style="width: 4%" />
+<col style="width: 9%" />
+<col style="width: 8%" />
+<col style="width: 10%" />
+<col style="width: 7%" />
+<col style="width: 9%" />
+<col style="width: 7%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">work_year</th>
+<th style="text-align: left;">experience_level</th>
+<th style="text-align: left;">employment_type</th>
+<th style="text-align: left;">job_title</th>
+<th style="text-align: right;">salary</th>
+<th style="text-align: left;">salary_currency</th>
+<th style="text-align: right;">salary_in_usd</th>
+<th style="text-align: left;">employee_residence</th>
+<th style="text-align: right;">remote_ratio</th>
+<th style="text-align: left;">company_location</th>
+<th style="text-align: left;">company_size</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">2024</td>
+<td style="text-align: left;">SE</td>
+<td style="text-align: left;">FT</td>
+<td style="text-align: left;">AI Engineer</td>
+<td style="text-align: right;">90000</td>
+<td style="text-align: left;">USD</td>
+<td style="text-align: right;">90000</td>
+<td style="text-align: left;">AE</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">AE</td>
+<td style="text-align: left;">L</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2024</td>
+<td style="text-align: left;">SE</td>
+<td style="text-align: left;">FT</td>
+<td style="text-align: left;">Machine Learning Engineer</td>
+<td style="text-align: right;">180500</td>
+<td style="text-align: left;">USD</td>
+<td style="text-align: right;">180500</td>
+<td style="text-align: left;">US</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">US</td>
+<td style="text-align: left;">M</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2024</td>
+<td style="text-align: left;">SE</td>
+<td style="text-align: left;">FT</td>
+<td style="text-align: left;">Machine Learning Engineer</td>
+<td style="text-align: right;">96200</td>
+<td style="text-align: left;">USD</td>
+<td style="text-align: right;">96200</td>
+<td style="text-align: left;">US</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">US</td>
+<td style="text-align: left;">M</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2024</td>
+<td style="text-align: left;">SE</td>
+<td style="text-align: left;">FT</td>
+<td style="text-align: left;">Machine Learning Engineer</td>
+<td style="text-align: right;">235000</td>
+<td style="text-align: left;">USD</td>
+<td style="text-align: right;">235000</td>
+<td style="text-align: left;">AU</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">AU</td>
+<td style="text-align: left;">M</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2024</td>
+<td style="text-align: left;">SE</td>
+<td style="text-align: left;">FT</td>
+<td style="text-align: left;">Machine Learning Engineer</td>
+<td style="text-align: right;">175000</td>
+<td style="text-align: left;">USD</td>
+<td style="text-align: right;">175000</td>
+<td style="text-align: left;">AU</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">AU</td>
+<td style="text-align: left;">M</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2024</td>
+<td style="text-align: left;">MI</td>
+<td style="text-align: left;">FT</td>
+<td style="text-align: left;">Business Intelligence Developer</td>
+<td style="text-align: right;">95413</td>
+<td style="text-align: left;">USD</td>
+<td style="text-align: right;">95413</td>
+<td style="text-align: left;">US</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: left;">US</td>
+<td style="text-align: left;">M</td>
+</tr>
+</tbody>
+</table>
 
 ## Visualization Goal of the project
 
