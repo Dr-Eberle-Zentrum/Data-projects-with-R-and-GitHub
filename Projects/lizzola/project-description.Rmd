@@ -14,7 +14,7 @@ Single-cell RNA sequencing (scRNA-seq) is a method that allows scientists to stu
 
 ## Data
 
-The data is publicly available on the Gene Expression Omnibus (GEO) under the accession number GSE224123. Der voranalysierte Datensatz mmc4.xlsx ist unter dem Link in Excel files gespeichert <https://www.cell.com/neuron/fulltext/S0896-6273(23)00296-9?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS0896627323002969%3Fshowall%3Dtrue#mmc2>.
+The data is publicly available on the Gene Expression Omnibus (GEO) under the accession number GSE224123. The pre-analyzed data set mmc4.xlsx is saved under the link in Excel files <https://www.cell.com/neuron/fulltext/S0896-6273(23)00296-9?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS0896627323002969%3Fshowall%3Dtrue#mmc2>.
 The dataset includes information about the gene expression levels in individual cells, as well as metadata about the samples, such as the age of the mice and the time points after injury.
 
 
