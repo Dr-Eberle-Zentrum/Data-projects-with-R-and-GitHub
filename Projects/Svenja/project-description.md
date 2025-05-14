@@ -1,10 +1,4 @@
----
-title: "Erasmus Mobility Heatmap"
-author: "Svenja Pörstel"
-output: 
-  md_document:
-    variant: markdown
----
+
 
 ## Project Background
 
@@ -33,4 +27,4 @@ The dataset contains information on individual Erasmus+ mobilities, including th
 
 ## The visualization could look like this
 
-![example visualization (not based on real data)](./Svenja/heatmap_example_datadraft_SvenjaPoerstel.PNG)
+![example visualization (not based on real data)](./heatmap_example_datadraft_SvenjaPoerstel.PNG)
