@@ -129,6 +129,7 @@ Current projects:
 - Natali (natali-mmx) - [Crops vs. Climate](Projects/natali-mmx/project-description.md)
 - Supti (Supti7) - [Salary Comparison](Projects/Supti7/project_description.md)
 - Svenja (Svenja) - [Erasmus mobility](Projects/Svenja/project-description.md)
+- Hamed - [Auto](Projects/Hamed/project description.md)
 
 #### Goals
 
