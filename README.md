@@ -131,8 +131,8 @@ Current projects:
 - Svenja (Svenja) - [Erasmus mobility](Projects/Svenja/project-description.md)
 - Hamed (Hamed) - [Auto](Projects/Hamed/Project-discription.md)
 - Florian (flomaili) - [MS study](Projects/flomaili/SalivatoryCortisol_in_MSPAtients.md)
-- Ann-Kathrin (Anni) - [Wild flower blooming](project-description.md)
-- Elisabeth (lizzola) - [Immune responce](project-description.md)
+- Ann-Kathrin (Anni) - [Wild flower blooming](Projects/Anni/project-description.md)
+- Elisabeth (lizzola) - [Immune responce](Projects/lizzola/project-description.md)
 - Tim (t1mge) - [RNAseq in preqnancy](Projects/t1mge/project-description.md)
 
 
