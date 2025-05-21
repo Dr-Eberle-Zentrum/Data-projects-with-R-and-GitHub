@@ -30,7 +30,7 @@ Abduli;24;Female;0;0;0;-;0;2Years;212,839;1,369;19;Moderate</td>
 </tbody>
 </table>
 
-The [dataset](Projects/flomaili/data_MS.csv) is taken from [Harvard
+The [dataset](data_MS.csv) is taken from [Harvard
 Dataverse](https://doi.org/10.7910/DVN/APVJSO) and is publicly
 available. There is just data from MS patients in there and therfore no
 control group.

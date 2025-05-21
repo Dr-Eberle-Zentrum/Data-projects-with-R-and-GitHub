@@ -24,7 +24,7 @@ This dataset accompanies a study examining the relationship between xerostomia (
 kable(head(data, 1))
 ```
 
-The [dataset](Projects/flomaili/data_MS.csv) is taken from [Harvard Dataverse]( https://doi.org/10.7910/DVN/APVJSO) and is publicly available. There is just data from MS patients in there and therfore no control group.
+The [dataset](data_MS.csv) is taken from [Harvard Dataverse]( https://doi.org/10.7910/DVN/APVJSO) and is publicly available. There is just data from MS patients in there and therfore no control group.
 
 
 ### Data Manipulation
