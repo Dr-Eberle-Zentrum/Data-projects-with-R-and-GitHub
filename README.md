@@ -129,7 +129,7 @@ Current projects:
 - Natali (natali-mmx) - [Crops vs. Climate](Projects/natali-mmx/project-description.md)
 - Supti (Supti7) - [Salary Comparison](Projects/Supti7/project_description.md)
 - Svenja (Svenja) - [Erasmus mobility](Projects/Svenja/project-description.md)
-- Hamed (Hamed) - [Auto](Projects/Hamed/project-description.md)
+- Hamed (Hamed) - [Auto](Projects/Hamed/Project-discription.md)
 - Florian (flomaili) - [MS study](Projects/flomaili/SalivatoryCortisol_in_MSPAtients.md)
 - Ann-Kathrin (Anni) - [Wild flower blooming](project-description.md)
 - Elisabeth (lizzola) - [Immune responce](project-description.md)
