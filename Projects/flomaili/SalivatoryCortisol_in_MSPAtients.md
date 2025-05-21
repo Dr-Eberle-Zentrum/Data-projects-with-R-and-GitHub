@@ -16,23 +16,24 @@ MS patients.
 <col style="width: 100%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: left;">No.;Patient Name;Age;Sex;Abslang
 Test;Smoking;Alcohol;Other Diseases;Medication;MS Duration;NO test
 result;Cortisol Test Result;BAI Score;Severity of BAI test</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">1;Samira
 Abduli;24;Female;0;0;0;-;0;2Years;212,839;1,369;19;Moderate</td>
 </tr>
 </tbody>
 </table>
 
-The data is taken from Harvard Dataverse and is publicly available.
-There is just data from MS patients in there and therfore no control
-group.
+The [dataset](Projects/flomaili/data_MS.csv) is taken from [Harvard
+Dataverse](https://doi.org/10.7910/DVN/APVJSO) and is publicly
+available. There is just data from MS patients in there and therfore no
+control group.
 
 ### Data Manipulation
 

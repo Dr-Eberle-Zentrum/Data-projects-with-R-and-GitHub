@@ -1,0 +1,40 @@
+---
+title: "project-description"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(knitr)
+library(tidyverse)
+library(kableExtra)
+
+data <- read_csv("data_MS.csv")
+```
+
+## Description
+
+This dataset accompanies a study examining the relationship between xerostomia (dry mouth) and salivary cortisol levels in Multiple Sclerosis (MS) patients. Data were collected from MS patients diagnosed according to the McDonald Criteria, with saliva samples taken at 10:00 AM to measure cortisol levels using an ELISA kit. The dataset includes xerostomia assessments, medication use, anxiety scores, and statistical analyses to explore cortisol as a potential biomarker for xerostomia in MS patients.
+
+
+
+## Dataset
+
+```{r goal}
+kable(head(data, 1))
+```
+
+The [dataset](Projects/flomaili/data_MS.csv) is taken from [Harvard Dataverse]( https://doi.org/10.7910/DVN/APVJSO) and is publicly available. There is just data from MS patients in there and therfore no control group.
+
+
+### Data Manipulation
+* MS Duration should be given in months as an integer
+* Create a new column whether the patient has other conditions encoded with the number of the diseases, so no other diseases means 0 ...
+* Create a new column whether the Patient is treated with a Corticosteroid and another whether the patient is treated with a B-cell depleting therapy (Rituximab)
+* Delete the Patient name column
+
+
+### Visualisation goals
+* Plot the BAI Score against the Cortisol Test Result as a scatter plot, color-coded by sex and using different shapes to indicate corticosteroid intake.
+* Determine the correlation value for all subgroups and plot the corresponding lines on the diagram
+* Divide the patients into age groups with an interval of 15 years and create a bar chart showing the average NO test value with standard deviation for each subgroup.
