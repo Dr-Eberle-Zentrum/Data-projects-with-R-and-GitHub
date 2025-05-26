@@ -76,8 +76,10 @@ class="uri">GO:0045766</a></td>
     “logFC”, “p.adjust”. The GO terms data frame should contain the
     columns “ID”, Description”, “GeneRatio”, “BgRAtio”, “pvalue”,
     “p.adjust”. (Be careful with the column names, two columns have the
-    same name! Rename the columns if necessary.) \### Now let’s take a
-    look at the DEGs:
+    same name! Rename the columns if necessary.)
+
+#### Now let’s take a look at the DEGs:
+
 -   Create a new column called logFC\_high that is TRUE if logFC &gt; 2
     for a gene of “naïve aged macrophages vs. naïve young macrophages” ,
     and FALSE otherwise.
@@ -85,7 +87,7 @@ class="uri">GO:0045766</a></td>
     return the top 10 genes with the highest logFC. Please display the
     top 10 genes in a nice table.
 
-### Now, we will focus on the GO terms to get on rough idea what biological processes, but not individual genes, are upregulated.
+#### Now, we will focus on the GO terms to get on rough idea what biological processes, but not individual genes, are upregulated.
 
 -   Filter the upregulated GO terms to include only those whose
     description contains keywords such as “angiogenesis”, “immune
