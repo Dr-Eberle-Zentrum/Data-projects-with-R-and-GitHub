@@ -66,34 +66,34 @@ class="uri">GO:0045766</a></td>
 -   The excel data file contains multiple sheets, so the first task is
     to get familiar with the data file. Find the sheet “Aged vs Young
     Macrophages”.
-
 -   Extract the sheet “Aged vs Young Macrophages” so that you can load
     it into R. It contains the differentially expressed genes (DEGs) and
     the GO terms for different time points (naïve, 3dpi, 7dpi, 14dpi).
     We are only interested in the naïve aged macrophages vs. naïve young
     macrophages comparison.
-
+-   Seperate the data into two data frames: one for the DEGs and one for
+    the GO terms. The DEGs data frame should contain the columns “gene”,
+    “logFC”, “p.adjust”. The GO terms data frame should contain the
+    columns “ID”, Description”, “GeneRatio”, “BgRAtio”, “pvalue”,
+    “p.adjust”. (Be careful with the column names, two columns have the
+    same name! Rename the columns if necessary.) Now let’s take a look
+    at the DEGs:
 -   Create a new column called logFC\_high that is TRUE if logFC &gt; 2
     for a gene of “naïve aged macrophages vs. naïve young macrophages” ,
     and FALSE otherwise.
-
 -   Filter the DEGs to include only those with p.adjust &lt; 0.05, and
     return the top 10 genes with the highest logFC. Please display the
     top 10 genes in a nice table.
 
--   Now, we will focus on the GO terms to get on rough idea what
-    biological processes, but not single genes are upregulated. Filter
-    the upregulated GO terms to include only those whose description
-    contains keywords such as “angiogenesis”, “immune response”,
-    “immunity”, “cytokine”, “vasculature”, “wound”, “inflammatory
-    response”, “chemokine”, “lymphatic”, “lymphocyte”, “macrophage”,
-    “monocyte”.
-
--   Remove the columns “BG\_Ratio”, “pvalue” and “ID”.
-
--   After the two steps you end up with the three columns “Description”,
-    “GeneRatio”, and “p\_adjust\_2” that are of interest for the second
-    visualization task.
+Now, we will focus on the GO terms to get on rough idea what biological
+processes, but not individual genes, are upregulated. - Filter the
+upregulated GO terms to include only those whose description contains
+keywords such as “angiogenesis”, “immune response”, “immunity”,
+“cytokine”, “vasculature”, “wound”, “inflammatory response”,
+“chemokine”, “lymphatic”, “lymphocyte”, “macrophage”, “monocyte”. -
+Remove the columns “BG\_Ratio”, “pvalue” and “ID”. - After the two steps
+you end up with the three columns “Description”, “GeneRatio”, and
+“p\_adjust\_2” that are of interest for the second visualization task.
 
 ## Data visualization
 
