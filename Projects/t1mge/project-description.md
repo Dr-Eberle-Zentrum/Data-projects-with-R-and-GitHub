@@ -5,36 +5,135 @@ with normal weight (NW, BMI 18.5-24.9) and one slightly overweight (OW,
 BMI 25-29.9). the researchers looked at the mothers immune cells to find
 out how the difference in BMI affect those cells during pregnancy and
 how those changes can link back to the diet, microbiome or baby
-microbiome
+microbiome.
 
-Data <https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE273780>
+Source of the Data:
+<https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE273780>
+
+[RNA\_seq\_data.csv](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/t1mge/GSE273780_EukmRNAseq_counts.csv)
+
+The columns of the data set each correspond to one sample, so G92 could
+be pregnant woman at week 36 normal weight rep 2 or similar. For later
+we are only interested in some of these observations.
+
+To find out which conditions correspond to which columns go to the
+source of the data and go to the “Samples (59)” section there you can
+find all conditions and by clicking on one you can find the
+corresponding column names under the Description tab. For example
+pregnant woman at week 12 normal weight rep 1 is G25.
+
+    ##     X       Row.names  G58   G52  G25   G84    G2  G60   G41   G36   G73   G79
+    ## 1   1 ENSG00000000003   23     0   23     7    14   18    15     3     0    12
+    ## 2   2 ENSG00000000005    0     0    0     0     0    0     0     0     0     0
+    ## 3   3 ENSG00000000419  469   348  494   334   567  616   342   383   363   409
+    ## 4   4 ENSG00000000457  196   198  403   202   382  166   240   168   124   244
+    ## 5   5 ENSG00000000460   40    45   82    38    70   36    40    26    33    52
+    ## 6   6 ENSG00000000938 9567 14297 8058 13908 10128 6291 14438 10547 10985 15057
+    ## 7   7 ENSG00000000971   20     3    5     4    31   22     1    22    14    12
+    ## 8   8 ENSG00000001036  392   714  297   469   408  354   545   370   442   589
+    ## 9   9 ENSG00000001084  330   337  490   320   489  374   421   402   279   416
+    ## 10 10 ENSG00000001167  466   491  724   433   660  647   641   556   502   443
+    ##      G74   G90   G31   G46   G83   G89   G67   G28   G55   G26   G63   G69
+    ## 1      5     4    11    19     8     3     8    16    24    10    27    16
+    ## 2      0     0     0     0     0     0     0     0     0     0     0     0
+    ## 3    402   317   382   387   443   424   444   632   813   373  1247   375
+    ## 4    245   137   205   193   313   236   297   270   559   295   455   179
+    ## 5     73    21    29    29    66    68    68    54   119    60   107    40
+    ## 6  17799 13046 11323 11466 12620 23353 15412 13253 15210 12301 19379 17768
+    ## 7      8     8    29    10    11    21    24    13    34    19    33    14
+    ## 8    559   555   476   631   489   790   557   576   616   386  1174   642
+    ## 9    500   240   334   357   426   370   464   490   867   460   852   334
+    ## 10   540   394   421   494   596   454   503   495  1237   629   808   357
+    ##      G87   G48  G35   G42   G77   G38  G45   G32   G64   G80   G88   G11  G66
+    ## 1      3    16   23     4     5    16    6    14     4     7     3    34   15
+    ## 2      0     0    0     0     0     0    0     0     0     0     0     0    0
+    ## 3    290   387  443   345   470   555  399   480   557   418   298  1024  386
+    ## 4    191   187  165   213   340   356  326   388   261   297   165   633  190
+    ## 5     60    28   23    40    71    78   90    84    65    37    33   132   22
+    ## 6  19190 11581 7793 13080 29079 14459 9630 14931 12419 17088 18538 52130 9577
+    ## 7     11    15    9    21    11     5    6    31     2    15     4    43   25
+    ## 8    617   630  342   563  1107   638  494   558   498   760   668  2263  347
+    ## 9    340   385  380   308   538   429  536   650   463   321   298  1195  351
+    ## 10   441   548  550   563   648   678  860  1111   646   466   448  1110  496
+    ##      G54   G75   G30   G40  G78   G72   G59   G61   G9   G85   G81   G65  G12
+    ## 1     15     1     3    24    8     7    16    27   13     0    18    11    6
+    ## 2      0     0     0     0    0     0     0     0    0     0     0     0    0
+    ## 3    530   359   450   422  362   417   468   589  631   319   426   473  372
+    ## 4    306   265   278   385  290   195   253   309  400   133   253   306  192
+    ## 5     65    84    61    69   75    35    82    53   99    24    49    96   54
+    ## 6  15986 15436 13094 14061 9874 12515 11256 12136 8428 15919 14224 13083 8108
+    ## 7     24    14    48     3    2    16    26    18   33     6    14    10   11
+    ## 8    563   565   436   486  383   410   505   504  474   623   556   573  390
+    ## 9    551   451   309   571  444   365   418   451  577   261   356   561  331
+    ## 10   668   568   435   712  712   555   617   539  653   485   463   668  463
+    ##      G57   G76  G44   G43   G34   G49   G50   G27   G68  G86   G62 hgnc_symbol
+    ## 1      1     4   21    18     2    15     0     7     4   12    13      TSPAN6
+    ## 2      0     0    0     0     0     0     0     0     0    0     0        TNMD
+    ## 3    374   390  518   426   389   483   375   525   435  460   514        DPM1
+    ## 4    271   251  327   309   153   317   246   281   329  194   272       SCYL3
+    ## 5     37    38  110    92    26    47    64    58    47   48    53    C1orf112
+    ## 6  12489 16111 9555 11428 12809 10459 19620 13108 15107 7133 12090         FGR
+    ## 7     45    10   13    19    15     7     5    17    26    9    31         CFH
+    ## 8    527   535  398   456   646   316   746   524   641  383   464       FUCA2
+    ## 9    400   338  496   533   408   367   535   394   298  428   406        GCLC
+    ## 10   545   387  736   714   613   407   616   422   427  515   396        NFYA
+    ##                                                                                       description
+    ## 1                                               tetraspanin 6 [Source:HGNC Symbol;Acc:HGNC:11858]
+    ## 2                                                 tenomodulin [Source:HGNC Symbol;Acc:HGNC:17757]
+    ## 3  dolichyl-phosphate mannosyltransferase subunit 1, catalytic [Source:HGNC Symbol;Acc:HGNC:3005]
+    ## 4                                    SCY1 like pseudokinase 3 [Source:HGNC Symbol;Acc:HGNC:19285]
+    ## 5                         chromosome 1 open reading frame 112 [Source:HGNC Symbol;Acc:HGNC:25565]
+    ## 6               FGR proto-oncogene, Src family tyrosine kinase [Source:HGNC Symbol;Acc:HGNC:3697]
+    ## 7                                          complement factor H [Source:HGNC Symbol;Acc:HGNC:4883]
+    ## 8                                         alpha-L-fucosidase 2 [Source:HGNC Symbol;Acc:HGNC:4008]
+    ## 9                  glutamate-cysteine ligase catalytic subunit [Source:HGNC Symbol;Acc:HGNC:4311]
+    ## 10                nuclear transcription factor Y subunit alpha [Source:HGNC Symbol;Acc:HGNC:7804]
+    ##    chromosome_name strand external_gene_name
+    ## 1                X     -1             TSPAN6
+    ## 2                X      1               TNMD
+    ## 3               20     -1               DPM1
+    ## 4                1     -1              SCYL3
+    ## 5                1      1           C1orf112
+    ## 6                1     -1                FGR
+    ## 7                1      1                CFH
+    ## 8                6     -1              FUCA2
+    ## 9                6     -1               GCLC
+    ## 10               6      1               NFYA
 
 ## Wrangling goals
 
 1.  Import the data
 2.  Figure out what you are looking
-3.  Filter out the everything except 2 replicates of normal weight and
-    overweight woman at week12 (columns are the samples and rows are the
-    specific genes) so that you have the rows left for Normal‑1,
-    Normal‑2, Overweight‑1, Overweight‑2
-4.  Drop any rows with blank names and no data
-5.  Normalize the data from counts to counts per million (add up all the
+3.  Filter out the count data of 2 replicates each of normal weight and
+    overweight woman at week12 and at week 36 (columns are the samples
+    and rows are the specific genes) so that you have the rows left for
+    week12(Normal‑1, Normal‑2, Overweight‑1, Overweight‑2) and for
+    week36 the same ones
+4.  Keep the column, external gene names
+5.  rename the columns with more sensical names
+6.  Normalize the data from counts to counts per million (add up all the
     counts per sample and divide each sample by this, then multiply by
     1.000.000)
-6.  log10 transformation to make the data more symmetric
+7.  log2 transformation of the counts per million to make the data more
+    symmetric
+8.  Drop any rows with blank names and count values between 0 and 2
+9.  Calculate the z-Value of each count in new columns by subtracting
+    the normalized count value by the mean of the column and divide by
+    the columns standard deviation
+10. Calculate the variance of the log2 transformed counts
+
+With these steps you should end-up with the z-values and the varaince
+which are used in the heatmap
 
 ## Visualization Goals
 
 ### Produce a clustered heatmap of the top50 genes
 
-1.  Calculate the statistical variance of each gene (remember rows are
-    the individual genes, so 4 log values should be compared)
-2.  Rank all genes descendingly by variance
-3.  keep only top 50 highest-variance genes for the heat map
-4.  Rows should be the gene symbols; columns the four samples
-5.  produce a heat map looking something like this:
+1.  Rank all genes descendingly by variance
+2.  keep only top 50 highest-variance genes for the heat map
+3.  Rows should be the gene symbols; columns the four samples
+4.  produce a heat map looking something like this:
 
-![](data:image/png;base64,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)
+![](https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/refs/heads/main/Projects/t1mge/Heatmap%20beispiel.png)
 
-I think this could be very challening at first, but I tried to explain
-what you should mostly do. So I hope it is going to work out for you!
+I hope it is going to work out for you!
