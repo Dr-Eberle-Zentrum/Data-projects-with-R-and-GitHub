@@ -38,20 +38,30 @@ kable(data)
 
 ```
 
-### Data manipulation
+## Data manipulation
 
 - The excel data file contains multiple sheets, so the first task is to get familiar with the data file. Find the sheet "Aged vs Young Macrophages". 
 - Extract the sheet "Aged vs Young Macrophages" so that you can load it into R. It contains the differentially expressed genes (DEGs) and the GO terms for different time points (naïve, 3dpi, 7dpi, 14dpi). We are only interested in the naïve aged macrophages vs. naïve young macrophages comparison.
 - Create a new column called logFC_high that is TRUE if logFC > 2 for a gene of "naïve aged macrophages vs. naïve young macrophages" , and FALSE otherwise.
 - Filter the DEGs to include only those with p.adjust < 0.05, and return the top 10 genes with the highest logFC. Please display the top 10 genes in a nice table.
-- Now, we will focus on the GO terms to get on rough idea what biological processes are upregulated and downregulated. Filter the up- and downregulated GO terms to include only those whose description contains keywords such as "angiogenesis", "immune response", or "cytokine".
+
+- Now, we will focus on the GO terms to get on rough idea what biological processes, but not single genes are upregulated. Filter the upregulated GO terms to include only those whose description contains keywords such as "angiogenesis", "immune response", "immunity", "cytokine", "vasculature", "wound", "inflammatory response", "chemokine", "lymphatic", "lymphocyte", "macrophage", "monocyte".
+- Remove the columns "BG_Ratio", "pvalue" and "ID".
+- After the two steps you end up with the three columns "Description", "GeneRatio", and "p_adjust_2" that are of interest for the second visualization task.
 
 
-### Data visualization
+## Data visualization
 
 - Create a volcano plot for all DEG genes. On the x-axis display log2FC for all genes and on the y-axis display –log10(adjusted p-value) (the negative log10 of the adjusted p-value) for all genes. Add a horizontal line at -log10(0.05) and a vertical line at logFC = 2 and logFC = -2. 
 - Color the points based on the logFC_high status (TRUE or FALSE) and label the points with the gene names.
 - Label the axes accordingly and add a title.
 I added a picture to make it easier to understand what a volcano plot is:
 ![](https://www.bioinformatics.com.cn/static/img/onlineplots_img/086_basic_3_color_volcano_plot.png)
-- Assign each gene a corresponding GO term (e.g., from a previous analysis) and display it as an additional label on the plot (e.g., as text above or beside the bars). Group the genes by their corresponding GO term and use different colors for each group.
+- Create a dot plot with GO terms on the y-axis sorted by descending GeneRatio on the x-axis. 
+- Use a single-color gradient to indicate significance based on the adjusted p-value (non-significant terms in a lighter shade and vice versa).
+- Include a clear legend explaining the color intensity (significance).
+- If you can find the time: Present the GeneRatio as the size of the dots in the dotplot.
+
+The data wrangling and the volcano plot will certainly take up a lot of time. That's why the dot plot is more for when you still have time to spare. 
+
+I'm looking forward to your solutions! Good luck!
