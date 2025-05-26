@@ -48,9 +48,7 @@ With these steps you should end-up with the z-values and the varaince which are 
 1. Rank all genes  descendingly by variance
 2. keep only top 50 highest-variance genes for the heat map
 3. Rows should be the external gene names; columns the samples
-4. produce a heat map looking something like this:
- 
-![](https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/refs/heads/main/Projects/t1mge/Heatmap%20beispiel.png)
+4. produce a heat map looking something like blow.
 
 You can use this resource to get more information on how to create heatmaps: https://r-graph-gallery.com/heatmap
 
@@ -59,4 +57,7 @@ If you get a simple heatmap with just the annotations, that would already be ama
 Further if you have a lot of time you can create an interactive heatmap. In which you can hover over the tiles and get information on the z-value, the gene name and the sample description. An example is also shown on the resource for heatmaps  form above. 
  
 I hope it is going to work out for you!
+ 
 Good Luck!
+
+![](https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/refs/heads/main/Projects/t1mge/Heatmap%20beispiel.png)
