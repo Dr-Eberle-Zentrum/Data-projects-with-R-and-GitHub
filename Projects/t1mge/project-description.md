@@ -18,9 +18,9 @@ we are only interested in some of these observations.
 
 To find out which conditions correspond to which columns go to the
 source of the data and go to the “Samples (59)” section there you can
-find all conditions and by clicking on one you can find the
-corresponding column names under the Description tab. For example
-pregnant woman at week 12 normal weight rep 1 is G25.
+find all conditions and by clicking, you get redirectd to a new window
+were you can find the corresponding column names under the Description
+tab. For example pregnant woman at week 12 normal weight rep 1 is G25.
 
     ##     X       Row.names  G58   G52  G25   G84    G2  G60   G41   G36   G73   G79
     ## 1   1 ENSG00000000003   23     0   23     7    14   18    15     3     0    12
@@ -110,7 +110,7 @@ pregnant woman at week 12 normal weight rep 1 is G25.
     week12(Normal‑1, Normal‑2, Overweight‑1, Overweight‑2) and for
     week36 the same ones
 4.  Keep the column, external gene names
-5.  rename the columns with more sensical names
+5.  rename the columns with more readable names
 6.  Normalize the data from counts to counts per million (add up all the
     counts per sample and divide each sample by this, then multiply by
     1.000.000)
@@ -120,7 +120,8 @@ pregnant woman at week 12 normal weight rep 1 is G25.
 9.  Calculate the z-Value of each count in new columns by subtracting
     the normalized count value by the mean of the column and divide by
     the columns standard deviation
-10. Calculate the variance of the log2 transformed counts
+10. Calculate the variance of the log2 transformed counts by rows and
+    put it in a new column.
 
 With these steps you should end-up with the z-values and the varaince
 which are used in the heatmap
@@ -131,9 +132,22 @@ which are used in the heatmap
 
 1.  Rank all genes descendingly by variance
 2.  keep only top 50 highest-variance genes for the heat map
-3.  Rows should be the gene symbols; columns the four samples
-4.  produce a heat map looking something like this:
+3.  Rows should be the external gene names; columns the samples
+4.  produce a heat map looking something like blow.
 
-![](https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/refs/heads/main/Projects/t1mge/Heatmap%20beispiel.png)
+You can use this resource to get more information on how to create
+heatmaps: <https://r-graph-gallery.com/heatmap>
+
+If you get a simple heatmap with just the annotations, that would
+already be amazing.
+
+Further if you have a lot of time you can create an interactive heatmap.
+In which you can hover over the tiles and get information on the
+z-value, the gene name and the sample description. An example is also
+shown on the resource for heatmaps form above.
 
 I hope it is going to work out for you!
+
+Good Luck!
+
+![](https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/refs/heads/main/Projects/t1mge/Heatmap%20beispiel.png)
