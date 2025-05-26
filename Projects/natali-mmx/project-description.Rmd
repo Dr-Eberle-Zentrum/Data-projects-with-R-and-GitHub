@@ -27,7 +27,7 @@ Climate change is a huge challenge for farmers worldwide. It is causing extreme 
 
 **Source**: [Deutscher Wetterdienst (2023):](https://www.dwd.de/EN/ourservices/cdc/cdc_ueberblick-klimadaten_en.html) *Average values for the individual federal states and for Germany as a whole.*
 
-**Description**: The Deutscher Wetterdienst (DWD) provides a wide range of climate data, including temperature, precipitation, and sunshine duration:
+**Description**: The Deutscher Wetterdienst (DWD) provides a wide range of annual climate data, including temperature, precipitation, and sunshine duration:
 
 ![](index.png)
 

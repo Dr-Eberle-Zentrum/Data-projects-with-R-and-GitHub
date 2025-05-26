@@ -31,8 +31,8 @@ Tübingen.
 whole.*
 
 **Description**: The Deutscher Wetterdienst (DWD) provides a wide range
-of climate data, including temperature, precipitation, and sunshine
-duration:
+of annual climate data, including temperature, precipitation, and
+sunshine duration:
 
 ![](index.png)
 
