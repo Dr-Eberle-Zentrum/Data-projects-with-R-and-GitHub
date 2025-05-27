@@ -44,6 +44,6 @@ The Abslang test is a quick, simple test where a patient bites down on a tongue 
 
 ### Visualisation goals 
 * Plot the BAI Score against the Cortisol Test Result as a scatter plot, color-coded by sex and using different shapes to indicate corticosteroid intake. (+++)
-* Determine the correlation value for all subgroups and plot the corresponding lines on the diagram (+)
-* Divide the patients into MS duration groups with an interval of 6 months and create a bar chart showing the average NO test value with standard deviation for each of these duration groups.(++)
-* Divide the patients into age groups with an interval of 15 years and crate a bar chart showing the mean number of diseases for each of these age groups. Keep in mind that MS is also counted as a disease.(++)
+* Determine the correlation value for all subgroups (4: female(f)Corticosteroid intake+(+);f-,male(m)+,m- ) and plot the linear regression lines on the graph (+)
+* Divide the patients into MS duration groups with 6-month intervals and create a chart showing the average NO test value as a point and the standard deviation as an error bar for each group.(++)
+* Divide the patients into age groups with an interval of 15 years and crate a bar chart showing the median number of diseases for each of these age groups. Keep in mind that MS is also counted as a disease.(++)
