@@ -132,7 +132,7 @@ Current projects:
 - Hamed (Hamed) - [Auto](Projects/Hamed/Project-discription.md)
 - Florian (flomaili) - [MS study](Projects/flomaili/SalivatoryCortisol_in_MSPAtients.md)
 - Ann-Kathrin (Anni) - [Wild flower blooming](Projects/Anni/project-decription.md)
-- Elisabeth (lizzola) - [Immune responce](Projects/lizzola/project-description.md)
+- Elisabeth (lizzola) - [Immune responce](Projects/lizzola/RNASeqImmuno.md)
 - Tim (t1mge) - [RNAseq in preqnancy](Projects/t1mge/project-description.md)
 
 

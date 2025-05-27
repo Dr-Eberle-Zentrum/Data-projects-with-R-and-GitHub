@@ -26,15 +26,24 @@ kable(head(data, 1))
 
 The [dataset](data_MS.csv) is taken from [Harvard Dataverse]( https://doi.org/10.7910/DVN/APVJSO) and is publicly available. There is just data from MS patients in there and therfore no control group.
 
+BAI stands for Beck-Anxiety-Inventory and it is a widely used self-report questionnaire designed to measure the severity of anxiety symptoms in adults and adolescents.
+
+The Abslang test is a quick, simple test where a patient bites down on a tongue depressor; the inability to hold the blade or pain during the bite suggests a possible mandible (jawbone) fracture (0-negative, 1-positive).
+
+
+### Priority for the tasks is indicated by  the number of "+".
+* (+++) -> very important
+* (++) -> important
+* (+) -> less important
 
 ### Data Manipulation
-* MS Duration should be given in months as an integer
-* Create a new column whether the patient has other conditions encoded with the number of the diseases, so no other diseases means 0 ...
-* Create a new column whether the Patient is treated with a Corticosteroid and another whether the patient is treated with a B-cell depleting therapy (Rituximab)
-* Delete the Patient name column
+* MS Duration should be given in months as an integer. (+++)
+* Create a new column whether the patient has other conditions encoded with the number of the diseases, so no other diseases means 0 ... (++)
+* Create a new column whether the Patient is treated with a Corticosteroid (+++) and another whether the patient is treated with a B-cell depleting therapy (Rituximab). (+)
+* Replace the column with clear names with a column where patients are coded according to the scheme MS_XS_0xx.(+)
 
-
-### Visualisation goals
-* Plot the BAI Score against the Cortisol Test Result as a scatter plot, color-coded by sex and using different shapes to indicate corticosteroid intake.
-* Determine the correlation value for all subgroups and plot the corresponding lines on the diagram
-* Divide the patients into age groups with an interval of 15 years and create a bar chart showing the average NO test value with standard deviation for each subgroup.
+### Visualisation goals 
+* Plot the BAI Score against the Cortisol Test Result as a scatter plot, color-coded by sex and using different shapes to indicate corticosteroid intake. (+++)
+* Determine the correlation value for all subgroups and plot the corresponding lines on the diagram (+)
+* Divide the patients into MS duration groups with an interval of 6 months and create a bar chart showing the average NO test value with standard deviation for each of these duration groups.(++)
+* Divide the patients into age groups with an interval of 15 years and crate a bar chart showing the mean number of diseases for each of these age groups. Keep in mind that MS is also counted as a disease.(++)
