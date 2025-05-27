@@ -112,10 +112,10 @@ that you can match column name and sample type
 1.  Import the data
 2.  Figure out what you are looking
 3.  Filter out the count data of 2 replicates each of normal weight and
-    overweight woman at week12 and at week 36 (columns are the samples
-    and rows are the specific genes) so that you have the rows left for
-    week12(Normal‑1, Normal‑2, Overweight‑1, Overweight‑2) and for
-    week36 the same ones
+    overweight woman at week12 and at week 36 (G columns with number are
+    the counts, and rows are the specific genes) so that you have the
+    rows left for week12(Normal‑1, Normal‑2, Overweight‑1, Overweight‑2)
+    and for week36 the same ones
 4.  Keep the column, external gene names
 5.  rename the columns with more readable names
 6.  Normalize the data from counts to counts per million (add up all the
