@@ -77,11 +77,14 @@ station in Bukowo, Poland.
 
 1.1 Remove the row with the unit declaration
 
-1.2 Renaming the columns with clear names and units
+1.2 Extraction and renaming of the following columns: - Time -&gt; Time
+in yyyy-MM-dd hh:mm:ss - Temp. -&gt; Temperature in Celsius - Wind Speed
+-&gt; Wind speed in m/s - True Dir. -&gt; Wind direction in degrees
 
 1.3 Separation of the time column into two columns (date and time)
 
-1.4. Summarizing the data per day with the mean values
+1.4. Form mean values from the extracted and revised weather data for
+the morning (10 a.m. to 2 p.m.) and midday (2 p.m. to 4 p.m.) periods
 
 1.5. Creation of a new column based on the wind direction in degrees
 (True Dir.) with the wind direction in compass direction (e.g. NW, SSO)
@@ -91,8 +94,14 @@ station in Bukowo, Poland.
 
 # Goals of the visual representation of the data
 
--   Display temperature values as a line over the entire catch period
+-   Display the temperature values for the two daily periods as a trend
+    line with an error corridor over the entire catch period.
+-   Display the temperature values of the individual catches with the ID
+    of the dragonflies to order in a small extrapolation over the entire
+    catch period.
 -   Display the number of catches of dragonflies as stacked bars by sex
     over the entire catch period
 -   Display the wind direction as compass direction with arrow and
     designation below the diagram as well as the wind speed in m/s
+
+![](https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/main/Projects/paula0013/Visualization_dragonflies.jpeg)
