@@ -163,6 +163,6 @@ further experiments.
 
 I hope it is going to work out for you!
 
-Good Luck!
+Good Luck!!
 
 ![](https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/refs/heads/main/Projects/t1mge/Heatmap%20beispiel.png)
