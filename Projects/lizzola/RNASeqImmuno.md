@@ -4,7 +4,7 @@ Salvador et al. (2023) published a research article on age-dependent
 immune and lymphatic responses following spinal cord injury to better
 understand the lifelong disabling effects that can result from such
 severe injuries
-[Publication](https://www.cell.com/neuron/fulltext/S0896-6273(23)00296-9?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS0896627323002969%3Fshowall%3Dtrue#mmc2).
+[Publication](https://www.sciencedirect.com/science/article/pii/S0896627323002969?via%3Dihub).
 
 The study investigates how the immune and lymphatic systems respond to
 spinal cord injuries in young and old mice. The researchers used a
@@ -60,6 +60,17 @@ class="uri">GO:0045766</a></td>
 </tr>
 </tbody>
 </table>
+
+-   logFC: log2 fold change in gene expression between experimental and
+    control conditions (positive values indicate upregulation and
+    negative values indicate downregulation)
+-   ID: identifier of the associated gene ontology (GO) term or pathway
+-   Description: a description of the biological process associated with
+    the GO term.
+-   GeneRatio: the ratio of genes in the GO term to the total number of
+    genes in the analysis.
+-   BgRatio: not relevant for the data manipulation & visualization
+    tasks
 
 ## Data manipulation
 
