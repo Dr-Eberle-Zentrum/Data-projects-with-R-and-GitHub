@@ -95,8 +95,8 @@ the morning (10 a.m. to 2 p.m.) and midday (2 p.m. to 4 p.m.) periods
 1.5. Creation of a new column based on the wind direction in degrees
 (True Dir.) with the wind direction in compass direction (e.g. NW, SSO)
 
-1.  Merging the data from the revised weather file with the dragonfly
-    catch data
+1.6. Merging the data from the revised weather file with the dragonfly
+catch data
 
 # Goals of the visual representation of the data
 

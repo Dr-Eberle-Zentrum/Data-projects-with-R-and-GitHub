@@ -63,7 +63,7 @@ head(Fangdaten, n = 10)
 
 1.5. Creation of a new column based on the wind direction in degrees (True Dir.) with the wind direction in compass direction (e.g. NW, SSO)
  
-2. Merging the data from the revised weather file with the dragonfly catch data 
+1.6. Merging the data from the revised weather file with the dragonfly catch data 
 
 # Goals of the visual representation of the data
 - Display the temperature values for the two daily periods as a trend line with an error corridor over the entire catch period. 
