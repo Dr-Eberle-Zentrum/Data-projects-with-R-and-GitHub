@@ -7,6 +7,10 @@ out how the difference in BMI affect those cells during pregnancy and
 how those changes can link back to the diet, microbiome or baby
 microbiome.
 
+“Rep” means: “biological replication” = Repeating an experiment using
+different biological specimens under the same conditions to account for
+natural variability
+
 Source of the Data:
 <https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE273780>
 
@@ -17,10 +21,13 @@ be pregnant woman at week 36 normal weight rep 2 or similar. For later
 we are only interested in some of these observations.
 
 To find out which conditions correspond to which columns go to the
-source of the data and go to the “Samples (59)” section there you can
-find all conditions and by clicking, you get redirectd to a new window
-were you can find the corresponding column names under the Description
-tab. For example pregnant woman at week 12 normal weight rep 1 is G25.
+source of the data.  
+If you are on the site which I linked under “Source of Data” you have to
+scroll down until you see Samples (59) there you can press more and you
+will see all the sample. Choose the sample you are interested in. You
+will be redirected to a new page, where you just have to look for the
+description. The description will tell you the name of the column by
+that you can match column name and sample type
 
     ##     X       Row.names  G58   G52  G25   G84    G2  G60   G41   G36   G73   G79
     ## 1   1 ENSG00000000003   23     0   23     7    14   18    15     3     0    12
@@ -105,10 +112,10 @@ tab. For example pregnant woman at week 12 normal weight rep 1 is G25.
 1.  Import the data
 2.  Figure out what you are looking
 3.  Filter out the count data of 2 replicates each of normal weight and
-    overweight woman at week12 and at week 36 (columns are the samples
-    and rows are the specific genes) so that you have the rows left for
-    week12(Normal‑1, Normal‑2, Overweight‑1, Overweight‑2) and for
-    week36 the same ones
+    overweight woman at week12 and at week 36 (G columns with number are
+    the counts, and rows are the specific genes) so that you have the
+    rows left for week12(Normal‑1, Normal‑2, Overweight‑1, Overweight‑2)
+    and for week36 the same ones
 4.  Keep the column, external gene names
 5.  rename the columns with more readable names
 6.  Normalize the data from counts to counts per million (add up all the
@@ -146,8 +153,16 @@ In which you can hover over the tiles and get information on the
 z-value, the gene name and the sample description. An example is also
 shown on the resource for heatmaps form above.
 
+### Why do such a data analysis?
+
+At the end you could theoretically tell the difference between both
+groups and see if certain genes are enriched. For example inflammatory
+genes could be enriched but it is also possible that no difference or
+only slight differences will be reveal. These can be starting points for
+further experiments.
+
 I hope it is going to work out for you!
 
-Good Luck!
+Good Luck!!
 
 ![](https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/refs/heads/main/Projects/t1mge/Heatmap%20beispiel.png)
