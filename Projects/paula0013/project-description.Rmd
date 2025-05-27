@@ -48,9 +48,13 @@ head(Fangdaten, n = 10)
 1.1 Remove the row with the unit declaration 
 
 1.2 Extraction and renaming of the following columns: 
+
 - Time -> Time in yyyy-MM-dd hh:mm:ss
+
 - Temp. -> Temperature in Celsius 
+
 - Wind Speed -> Wind speed in m/s
+
 - True Dir. -> Wind direction in degrees
 
 1.3 Separation of the time column into two columns (date and time)

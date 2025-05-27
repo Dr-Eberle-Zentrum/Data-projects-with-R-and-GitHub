@@ -77,9 +77,15 @@ station in Bukowo, Poland.
 
 1.1 Remove the row with the unit declaration
 
-1.2 Extraction and renaming of the following columns: - Time -&gt; Time
-in yyyy-MM-dd hh:mm:ss - Temp. -&gt; Temperature in Celsius - Wind Speed
--&gt; Wind speed in m/s - True Dir. -&gt; Wind direction in degrees
+1.2 Extraction and renaming of the following columns:
+
+-   Time -&gt; Time in yyyy-MM-dd hh:mm:ss
+
+-   Temp. -&gt; Temperature in Celsius
+
+-   Wind Speed -&gt; Wind speed in m/s
+
+-   True Dir. -&gt; Wind direction in degrees
 
 1.3 Separation of the time column into two columns (date and time)
 
