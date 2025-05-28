@@ -133,6 +133,8 @@ A short description of some of the variables are given below:
     the values are as follows: 0 no remote work (less than 20%), 50
     partially remote, 100 fully remote (more than 80%).
 -   **company\_location** : The country of the employer’s main office
+    [as an ISO 3166 country
+    code](https://www.iso.org/iso-3166-country-codes.html)
 
 ## Data Peperation tips
 
@@ -165,10 +167,10 @@ and salaries.Use **choropleth** maps to visualize the data.
 
     -   Show the average salary of top 5 jobs with entry level and/or
         mid level.
-    -   Generate two more plots for North America (NA) and Europe (EU)
-        with the percentage you have chosen for the first graph. If you
-        have confusion regarding countries like Russia, please exclude
-        them.
+    -   Generate two more choropleth or violin plots for North America
+        (NA) and Europe (EU) with the percentage you have chosen for the
+        first graph. If you have confusion regarding countries like
+        Russia, please exclude them.
 
 ## Ideas for further work
 
