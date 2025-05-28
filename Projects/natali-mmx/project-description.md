@@ -75,59 +75,47 @@ federal state of Baden-Württemberg.
 We want to investigate potential correlations between the crop yields
 and climate variables. The goal is to visualize how changes in climate
 variables such as mean air temperature, precipitation, and frost days
-may have influenced crop yields over the years.
-
-**Create time plots of crop yields and mean air temperature:**
-
-Firstly we want to investigate whether there is a change in crop yields
-over time and how they relate to changes in mean air temperature.
-
--   Create a combined scatter plot for all three crops, with **crop
-    yields** (t/ha) on the y-axis and **years** on the x-axis.
--   Use different colors for each crop to distinguish them.
--   In the same plot, add a secondary y-axis for the **mean air
-    temperature** (°C) and use a unique symbol to represent the
-    temperature data.
--   Add labels for the axes, including the units of measurement if
-    necessary.
--   Add a legend to indicate which color corresponds to which crop and
-    which symbol corresponds to the temperature data.
--   Can you see changes in crop yields over time? How do they relate to
-    changes in mean air temperature?
+may have influenced crop yields over the years. The tasks are arranged
+from highest to lowest priority, top to bottom.
 
 **Plot the crop yields against the climate variable:**
 
-Next we want to explore the relationship between crop yields and
+Firstly, we want to explore the relationship between crop yields and
 specific climate variables to identify any potential correlations.
 
 -   Use
     [faceting](https://r-graph-gallery.com/223-faceting-with-ggplot2.html)
     to create separate plots for each climate variable, arranged in
     vertical panels.
--   Create scatter plots with the **yields** of the three crops on the
-    y-axis and the respective **climate variable** on the x-axis.
+-   Create scatter plots with the **yields** (t/ha) of the three crops
+    on the y-axis and the respective **climate variable** on the x-axis.
 -   Include **regression lines** for each crop to show a trend.
 -   Add titles to each plot indicating the climate variable being
     analyzed.
--   Color the points and lines by crop type.
+-   Color the points and regression lines by crop type.
 -   Include labels for the axes, including the units of measurement.
 -   Add a legend to indicate the crop type.
 -   Can you see any correlations between crop yields and the climate
     variables? Do the crops respond differently to changes in the
-    climate variables?
+    climate variables? Are some crops more sensitive or better adapted
+    to particular extreme conditions?
 
-**Optional:**
+**Create time plots of crop yields and climate variables:**
 
-We want to visualize potential correlations between crop yields and
-average air temperature over time.
+Next, we want to visualize potential correlations between crop yields
+and climate variables over time.
 
--   Use faceting again to create separate **timeline** scatter plots for
-    each variable: one for the **mean air temperature** and one for the
+-   Use faceting again to create separate timeline scatter plots for
+    each variable: one for each **climate variable** and one for the
     **yield** of each crop type, arranged in vertical panels.
+-   For each panel, plot the **years** on the x-axis and the respective
+    **climate variable** or **crop yield** on the y-axis.
 -   Standardize the y-axis of each plot using the scale() function.
 -   Connect the scatter points with smooth, curved lines.
 -   Color the lines and dots green for positive values (above average)
     and orange for negative values (below average).
 -   Add titles and axis labels to each plot.
--   Do you notice any patterns or correlations over time between
-    temperature and crop yield fluctuations?
+-   Do you notice any patterns or correlations over time between climate
+    variable and crop yield fluctuations? Do the crops behave
+    differently in response to changes in the climate variables? Are the
+    findings consistent with the first visualization?
