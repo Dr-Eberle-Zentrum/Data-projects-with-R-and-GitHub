@@ -121,40 +121,18 @@ Here is a first look at the data:
 </tbody>
 </table>
 
-    ##   work_year experience_level employment_type                       job_title
-    ## 1      2024               SE              FT                     AI Engineer
-    ## 2      2024               SE              FT       Machine Learning Engineer
-    ## 3      2024               SE              FT       Machine Learning Engineer
-    ## 4      2024               SE              FT       Machine Learning Engineer
-    ## 5      2024               SE              FT       Machine Learning Engineer
-    ## 6      2024               MI              FT Business Intelligence Developer
-    ##   salary salary_currency salary_in_usd employee_residence remote_ratio
-    ## 1  90000             USD         90000                 AE            0
-    ## 2 180500             USD        180500                 US            0
-    ## 3  96200             USD         96200                 US            0
-    ## 4 235000             USD        235000                 AU            0
-    ## 5 175000             USD        175000                 AU            0
-    ## 6  95413             USD         95413                 US          100
-    ##   company_location company_size
-    ## 1               AE            L
-    ## 2               US            M
-    ## 3               US            M
-    ## 4               AU            M
-    ## 5               AU            M
-    ## 6               US            M
-
 A short description of some of the variables are given below:
 
--   work\_year : The year the salary was paid.
--   experience\_level : The experience level in the job during the year
-    with the following possible values: EN Entry-level / Junior MI
-    Mid-level / Intermediate SE Senior-level / Expert EX Executive-level
-    / Director -job\_title : The role worked in during the year. -salary
-    : The total gross salary amount paid. -remote\_ratio : The overall
-    amount of work done remotely, where the values are as follows: 0 no
-    remote work (less than 20%), 50 partially remote, 100 fully remote
-    (more than 80%).
--   company\_location : The country of the employer’s main office
+-   **work\_year** : The year the salary was paid.
+-   **experience\_level** : The experience level in the job during the
+    year: EN - Entry-level / MI - Mid-level / SE - Senior-level / EX -
+    Executive-level / Director.
+-   **job\_title** : The role worked in during the year.
+-   **salary** : The total gross salary amount paid.
+-   **remote\_ratio** : The overall amount of work done remotely, where
+    the values are as follows: 0 no remote work (less than 20%), 50
+    partially remote, 100 fully remote (more than 80%).
+-   **company\_location** : The country of the employer’s main office
 
 ## Data Peperation tips
 
@@ -171,11 +149,53 @@ A short description of some of the variables are given below:
 
 The goal of this project is to summarize the visual information
 primarily.The purpose is to see the regional differences in remote ratio
-and salaries.Use choropleth maps to visualize the data.
+and salaries.Use **choropleth** maps to visualize the data.
 
--   Show first the percentage of the remote worl ratio.
--   Generate two plots in one figure showing the percentage of remote
-    work between Europe and America.
+-   Show first the percentage of the remote work ratio. Choose one type
+    e.g. 100% or 50% remote work ratio and generate a graph that shows
+    the the total number of jobs among different countries globally
+    using that ratio. It might be helpful to use the percentage for
+    which you have the most available data.
+
+-   For this first plot, use all types of job title as the focus is on
+    the remote work ratio.
+
+-   The second visualization task you can choose either of the two
+    tasks:
+
+    -   Show the average salary of top 5 jobs with entry level and/or
+        mid level.
+    -   Generate two more plots for North America (NA) and Europe (EU)
+        with the percentage you have chosen for the first graph. If you
+        have confusion regarding countries like Russia, please exclude
+        them.
+
+## Ideas for further work
+
+-   Do a hypothesis test to compare the average salary difference
+    between USA and Non-USA region. In order to do that, first you need
+    to sample jobs with same title but different salary from this two
+    regions.Here, you can choose the jobs that have a significant number
+    of jobs in both regions, e.g. Data Scientist, Data/ML Engineer, etc.
+-   The statistical test to do so, I will leave it to you.
+
+## Quesitons of interest with this project
+
+-   With the first task, we want to see, globally what is the number of
+    jobs among different countries that have a certain remote work
+    ratio. This will help us understand the **global trend of remote
+    work**.
+
+-   The second task will help us understand the **salary differences
+    among different job titles and experience levels**.
+
+-   The plots for **NA** and **EU** will help us understand the
+    **regional differences in remote work ratio** as the number of jobs
+    is quite large in these regions.
+
+-   The hypothesis test will help us understand if there is a
+    **significant difference in salary between USA and Non-USA regions**
+    for the same job title.
 
 Have fun and looking forward to seeing your work!
 
