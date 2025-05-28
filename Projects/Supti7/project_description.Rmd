@@ -2,7 +2,7 @@
 title: "Project_description"
 author: "Raseswari Mondal Supti"
 date: "2025-05-13"
-output: html_document
+output: md_document
 ---
 
 ```{r setup, include=FALSE}
