@@ -48,8 +48,7 @@ exploring regression modeling, trend analysis, and data visualization.
 -   Perform trend analysis over the years for **mpg**, **horsepower**,
     and **acceleration**. Use appropriate line plots or smoothed curves
     to highlight how car characteristics have changed over time.
--   Highlight interesting patterns, anomalies, or clusters in the
-    visualizations.
+-   Highlight interesting patterns, anomalies in the visualizations.
 
 ------------------------------------------------------------------------
 
@@ -63,5 +62,6 @@ exploring regression modeling, trend analysis, and data visualization.
     -   What is the relationship between the number of **cylinders** and
         **acceleration**?
     -   What is the **fastest car** for each model year?
+    -   which **origin** has the most fuel-efficient cars on average?
 -   Feel free to include additional observations or insights from your
     analysis that may be relevant or interesting.
