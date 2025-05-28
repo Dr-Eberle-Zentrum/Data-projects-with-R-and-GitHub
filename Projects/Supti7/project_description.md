@@ -132,8 +132,8 @@ A short description of some of the variables are given below:
 -   **remote\_ratio** : The overall amount of work done remotely, where
     the values are as follows: 0 no remote work (less than 20%), 50
     partially remote, 100 fully remote (more than 80%).
--   **company\_location** : The country of the employer’s main office
-    [as an ISO 3166 country
+-   **company\_location** : The country of the employer’s main office or
+    contracting branch [as an ISO 3166 country
     code](https://www.iso.org/iso-3166-country-codes.html)
 
 ## Data Peperation tips
