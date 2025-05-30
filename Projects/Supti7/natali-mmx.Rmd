@@ -5,6 +5,7 @@ output: md_document
 
 ```{r setup, include=FALSE}
 library(tidyverse)
+# install packages on first run:
 # install.packages(c("sf", "rnaturalearth", "rnaturalearthdata", "viridis"))
 library(sf)
 library(rnaturalearth)
@@ -23,6 +24,10 @@ data2024 <- data %>%
 # view(data2024)
 ```
 
+# Remote Work Ratio by Country
+
+We want to investigate the number of fully remote employees globally in 2024:
+
 ```{r jobNumbers, include = FALSE}
 employeeLocations <- data2024 %>%
   filter(remote_ratio == 100) %>%
@@ -30,12 +35,11 @@ employeeLocations <- data2024 %>%
   summarise(total_jobs = n()) %>%
   arrange(desc(total_jobs)) %>%
   rename(iso_a2 = employee_residence)
-view(employeeLocations)
+# view(employeeLocations)
 ```
 
-```{r plotJobNumbers}
+```{r plotJobNumbers, echo = FALSE}
 world <- ne_countries(scale = "medium", returnclass = "sf")
-# view(world)
 
 joinedData <- world %>%
   left_join(employeeLocations, by = "iso_a2")
@@ -49,4 +53,50 @@ ggplot(data = joinedData) +
   theme_minimal() +
   theme(legend.position = "bottom")
 
+US <- employeeLocations %>%
+  filter(iso_a2 == "US") %>%
+  pull(total_jobs)
+
 ```
+
+We can see that the USA has the highest number of fully remote jobs, followed by Canada and Great Britain, with a big gap between the USA and the rest of the countries. This indicates that the USA is the leading country with `r US` fully remote data science jobs in 2024.
+
+# Salary Distribution in North America and Europe
+
+Next, we visualize the salary distribution in North America and Europe for positions with a 100% remote work ratio. The data is grouped by experience level, with a particular focus on entry-level (EN) and mid-level (MI) roles.
+
+```{r salaryDistribution, include = FALSE}
+salaryDistribution <- data2024 %>%
+  filter(remote_ratio == 100) %>%
+  filter(experience_level %in% c("EN", "MI")) %>%
+  group_by(company_location, experience_level) %>%
+  select(experience_level, salary_in_usd, employee_residence)
+# view(salaryDistribution)
+
+countries <- unique(salaryDistribution$employee_residence)
+# view(countries)
+A <- c("US", "CA")
+EU <- c("GB", "DE", "ES", "HR", "RO", "IE")
+
+salaryDistributionContinent <- salaryDistribution %>%
+  mutate(continent = case_when(
+    employee_residence %in% A ~ "North America",
+    employee_residence %in% EU ~ "Europe",
+    TRUE ~ "Other"
+  )) %>% filter(continent != "Other")
+```
+
+```{r plotSalaryDistribution, echo = FALSE}
+ggplot(salaryDistributionContinent, aes(x = continent, y = salary_in_usd, fill = experience_level)) +
+  geom_violin() +
+  scale_y_continuous(labels = scales::comma) +
+  scale_fill_manual(values = c("EN" = "darkblue", "MI" = "yellow")) +
+  labs(title = "Salary Distribution by Continent and Experience Level",
+       x = "Continent",
+       y = "Salary (USD)",
+       fill = "Experience Level") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+```
+
+We observe that the salary distribution for entry-level (EN) and mid-level (MI) positions in North America is generally higher than in Europe. This indicates that data scientists in North America, particularly in the USA and Canada, tend to earn more than their European counterparts in comparable roles. However, it is important to note that the European dataset is smaller, which may affect the reliability of these results.
