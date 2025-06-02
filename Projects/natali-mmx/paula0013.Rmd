@@ -1,0 +1,104 @@
+---
+title: "paula0013"
+output: md_document
+---
+
+# Project 1: crop vs climate 
+## solution by paula0013 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(readxl)
+library(readr)
+library(magrittr)
+library(tidyverse)
+```
+
+Climate change is a huge challenge for farmers worldwide. It is causing extreme weather events, such as droughts and floods, which can have devastating effects on crops and livestock. This project focuses on *crop production in the region of Tübingen and how it has been affected by climate change.*
+
+# Read and transform the data set of the weather data from 1976 to 2021
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# Read and transform the crop data for Tübingen
+crop_data <- read.csv("https://www.openagrar.de/servlets/MCRFileNodeServlet/openagrar_derivate_00056476/Final_data.csv") %>% 
+  #mutate the species 'ww' to 'winter wheat', 'sb' to 'spring barley' and 'grain_maize' to 'grain maize'
+  mutate(
+    var = case_when(
+      var == "ww" ~ "winter wheat",
+      var == "sb" ~ "spring barley",
+      var == "grain_maize" ~ "grain maize",
+      TRUE ~ var
+    ))%>%
+  # Filter the columns for 'Tübingen', the species 'winter wheat', 'spring barley' and 'grain maize' and the measure in 'yield'
+  filter(
+    district_no == '8416' & 
+    (var == 'winter wheat' | var == 'spring barley' | var == 'grain maize') & 
+    (measure == 'yield'))%>%
+  select(2,4,5,7)%>%
+   # Rename the column measure into measure in yield
+  rename('measure in yield' = 'value')%>%
+  # Rename the column var into species 
+  rename('species' = 'var')
+
+# Read and transform the precipitation data for regions in Germany
+precipitation_BW <- read.table(
+  "https://opendata.dwd.de/climate_environment/CDC/regional_averages_DE/annual/precipitation/regional_averages_rr_year.txt",
+  header = TRUE,
+  sep = ";",
+  skip = 1,
+  check.names = FALSE
+)%>%
+  # Select the column 1 with the years and column 5 with the BW data 
+  select(1,5)%>%
+  # Rename the column Jahr into year 
+  rename('year'= 'Jahr')%>%
+  # Rename the column Baden-Württemberg into Precipitation in mm
+  rename('Precipitation in mm'= 'Baden-Wuerttemberg')%>%
+  # Filter the Year from 1979 to 2021, becouse I have only for this years crop data
+  filter(year >= '1979', year <= '2021')
+
+# Read and transform the temperature data for regions in Germany
+temperature_BW <- read.table(
+  "https://opendata.dwd.de/climate_environment/CDC/regional_averages_DE/annual/air_temperature_mean/regional_averages_tm_year.txt",
+  header = TRUE,
+  sep = ";",
+  skip = 1,
+  check.names = FALSE
+)%>%
+  # Select the column 1 with the years and column 5 with the BW data 
+  select(1,5)%>%
+  # Rename the column Jahr into year 
+  rename('year'= 'Jahr')%>%
+  # Rename the column Baden-Württemberg into air temperature in °C
+  rename('air temperature in °C'= 'Baden-Wuerttemberg')%>%
+  # Filter the Year from 1979 to 2021, because I have only for this years crop data
+  filter(year >= '1979', year <= '2021')
+
+# Read and transform the frost days data for regions in Germany
+frost_days_BW <- read.table(
+  "https://opendata.dwd.de/climate_environment/CDC/regional_averages_DE/annual/ice_days/regional_averages_txcs_year.txt", 
+  header = TRUE,
+  sep = ";",
+  skip = 1,
+  check.names = FALSE
+)%>%
+  # Select the column 1 with the years and column 5 with the BW data 
+  select(1,5)%>%
+  # Rename the column Jahr into year 
+  rename('year'= 'Jahr')%>%
+  # Rename the column Baden-Württemberg into frost days in number of days 
+  rename('frost days in number of days'= 'Baden-Wuerttemberg')%>%
+  # Filter the Year from 1979 to 2021, because I have only for this years crop data
+  filter(year >= '1979', year <= '2021')
+
+# 
+weather_data <- reduce(
+  list(precipitation_BW, temperature_BW, frost_days_BW),
+  left_join,
+  by = "year"
+)
+
+data <- left_join(crop_data, weather_data, by = 'year')%>%
+  as_tibble()
+
+head(data, 15)
+```
