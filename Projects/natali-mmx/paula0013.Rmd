@@ -100,5 +100,5 @@ weather_data <- reduce(
 data <- left_join(crop_data, weather_data, by = 'year')%>%
   as_tibble()
 
-head(data, 15)
+knitr::kable(data, caption = "Wetter- und Ertragsdaten Tübingen (1976–2021)")
 ```

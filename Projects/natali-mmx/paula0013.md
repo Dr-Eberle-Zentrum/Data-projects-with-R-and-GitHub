@@ -10,23 +10,162 @@ by climate change.*
 
 # Read and transform the data set of the weather data from 1976 to 2021
 
-    ## # A tibble: 15 × 7
-    ##    district             year species    `measure in yield` `Precipitation in mm`
-    ##    <chr>               <int> <chr>                   <dbl>                 <dbl>
-    ##  1 Tübingen, Landkreis  1979 grain mai…               6.47                 1016.
-    ##  2 Tübingen, Landkreis  1979 spring ba…               3.77                 1016.
-    ##  3 Tübingen, Landkreis  1979 winter wh…               4.78                 1016.
-    ##  4 Tübingen, Landkreis  1980 grain mai…               5.5                   987.
-    ##  5 Tübingen, Landkreis  1980 spring ba…               3.73                  987.
-    ##  6 Tübingen, Landkreis  1980 winter wh…               4.84                  987.
-    ##  7 Tübingen, Landkreis  1981 grain mai…               5.49                 1169.
-    ##  8 Tübingen, Landkreis  1981 spring ba…               4.1                  1169.
-    ##  9 Tübingen, Landkreis  1981 winter wh…               5.47                 1169.
-    ## 10 Tübingen, Landkreis  1982 grain mai…               5.96                 1066.
-    ## 11 Tübingen, Landkreis  1982 spring ba…               4.01                 1066.
-    ## 12 Tübingen, Landkreis  1982 winter wh…               4.91                 1066.
-    ## 13 Tübingen, Landkreis  1983 grain mai…               3.84                  972.
-    ## 14 Tübingen, Landkreis  1983 spring ba…               3.35                  972.
-    ## 15 Tübingen, Landkreis  1983 winter wh…               4.61                  972.
-    ## # ℹ 2 more variables: `air temperature in °C` <dbl>,
-    ## #   `frost days in number of days` <dbl>
+<table>
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 3%" />
+<col style="width: 11%" />
+<col style="width: 13%" />
+<col style="width: 15%" />
+<col style="width: 17%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">district</th>
+<th style="text-align: right;">year</th>
+<th style="text-align: left;">species</th>
+<th style="text-align: right;">measure in yield</th>
+<th style="text-align: right;">Precipitation in mm</th>
+<th style="text-align: right;">air temperature in °C</th>
+<th style="text-align: right;">frost days in number of days</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Tübingen, Landkreis</td>
+<td style="text-align: right;">1979</td>
+<td style="text-align: left;">grain maize</td>
+<td style="text-align: right;">6.47</td>
+<td style="text-align: right;">1016.5</td>
+<td style="text-align: right;">8.01</td>
+<td style="text-align: right;">24.36</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Tübingen, Landkreis</td>
+<td style="text-align: right;">1979</td>
+<td style="text-align: left;">spring barley</td>
+<td style="text-align: right;">3.77</td>
+<td style="text-align: right;">1016.5</td>
+<td style="text-align: right;">8.01</td>
+<td style="text-align: right;">24.36</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Tübingen, Landkreis</td>
+<td style="text-align: right;">1979</td>
+<td style="text-align: left;">winter wheat</td>
+<td style="text-align: right;">4.78</td>
+<td style="text-align: right;">1016.5</td>
+<td style="text-align: right;">8.01</td>
+<td style="text-align: right;">24.36</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Tübingen, Landkreis</td>
+<td style="text-align: right;">1980</td>
+<td style="text-align: left;">grain maize</td>
+<td style="text-align: right;">5.50</td>
+<td style="text-align: right;">987.2</td>
+<td style="text-align: right;">7.52</td>
+<td style="text-align: right;">30.65</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Tübingen, Landkreis</td>
+<td style="text-align: right;">1980</td>
+<td style="text-align: left;">spring barley</td>
+<td style="text-align: right;">3.73</td>
+<td style="text-align: right;">987.2</td>
+<td style="text-align: right;">7.52</td>
+<td style="text-align: right;">30.65</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Tübingen, Landkreis</td>
+<td style="text-align: right;">1980</td>
+<td style="text-align: left;">winter wheat</td>
+<td style="text-align: right;">4.84</td>
+<td style="text-align: right;">987.2</td>
+<td style="text-align: right;">7.52</td>
+<td style="text-align: right;">30.65</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Tübingen, Landkreis</td>
+<td style="text-align: right;">1981</td>
+<td style="text-align: left;">grain maize</td>
+<td style="text-align: right;">5.49</td>
+<td style="text-align: right;">1169.1</td>
+<td style="text-align: right;">8.10</td>
+<td style="text-align: right;">29.01</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Tübingen, Landkreis</td>
+<td style="text-align: right;">1981</td>
+<td style="text-align: left;">spring barley</td>
+<td style="text-align: right;">4.10</td>
+<td style="text-align: right;">1169.1</td>
+<td style="text-align: right;">8.10</td>
+<td style="text-align: right;">29.01</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Tübingen, Landkreis</td>
+<td style="text-align: right;">1981</td>
+<td style="text-align: left;">winter wheat</td>
+<td style="text-align: right;">5.47</td>
+<td style="text-align: right;">1169.1</td>
+<td style="text-align: right;">8.10</td>
+<td style="text-align: right;">29.01</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Tübingen, Landkreis</td>
+<td style="text-align: right;">1982</td>
+<td style="text-align: left;">grain maize</td>
+<td style="text-align: right;">5.96</td>
+<td style="text-align: right;">1066.3</td>
+<td style="text-align: right;">8.64</td>
+<td style="text-align: right;">19.83</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Tübingen, Landkreis</td>
+<td style="text-align: right;">1982</td>
+<td style="text-align: left;">spring barley</td>
+<td style="text-align: right;">4.01</td>
+<td style="text-align: right;">1066.3</td>
+<td style="text-align: right;">8.64</td>
+<td style="text-align: right;">19.83</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Tübingen, Landkreis</td>
+<td style="text-align: right;">1982</td>
+<td style="text-align: left;">winter wheat</td>
+<td style="text-align: right;">4.91</td>
+<td style="text-align: right;">1066.3</td>
+<td style="text-align: right;">8.64</td>
+<td style="text-align: right;">19.83</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Tübingen, Landkreis</td>
+<td style="text-align: right;">1983</td>
+<td style="text-align: left;">grain maize</td>
+<td style="text-align: right;">3.84</td>
+<td style="text-align: right;">972.2</td>
+<td style="text-align: right;">8.78</td>
+<td style="text-align: right;">25.75</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Tübingen, Landkreis</td>
+<td style="text-align: right;">1983</td>
+<td style="text-align: left;">spring barley</td>
+<td style="text-align: right;">3.35</td>
+<td style="text-align: right;">972.2</td>
+<td style="text-align: right;">8.78</td>
+<td style="text-align: right;">25.75</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Tübingen, Landkreis</td>
+<td style="text-align: right;">1983</td>
+<td style="text-align: left;">winter wheat</td>
+<td style="text-align: right;">4.61</td>
+<td style="text-align: right;">972.2</td>
+<td style="text-align: right;">8.78</td>
+<td style="text-align: right;">25.75</td>
+</tr>
+</tbody>
+</table>
