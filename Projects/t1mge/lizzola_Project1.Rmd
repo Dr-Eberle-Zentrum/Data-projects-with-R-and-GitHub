@@ -4,10 +4,14 @@ output: md_document
 date: "`r Sys.Date()`"
 ---
 
+## Data manipulation
+
 Import the data
-```{r, echo=FALSE, results = 'asis', message=FALSE}
+```{r data set, echo=FALSE, message=FALSE, warning=FALSE}
 library(dplyr)
 library(tidyverse)
+library(kableExtra)
+
 data <- read.csv("GSE273780_EukmRNAseq_counts.csv")
 head(data)
 ```
@@ -20,7 +24,7 @@ Filter out the count data of the following columns (G25, G26, G27, G30, G9, G12,
  week 12 | G26| G30
  week 36 | G9 | G32
  week 36 | G12 | G45
-```{r}
+```{r data, echo = FALSE}
 filtered_data <- data %>%
   select(Row.names, G25, G26, G27, G30, G9, G12, G32, G45) %>%
   rename(Gene = Row.names, 
@@ -31,64 +35,94 @@ filtered_data <- data %>%
          Week36_NW = G9, 
          Week36_OW = G12, 
          Week36_NW2 = G32, 
-         Week36_OW2 = G45) %>%
-  head()
+         Week36_OW2 = G45)
+
+head(filtered_data,10)
 ```
 
-Normalize the data from counts to counts per million (add up all the counts per sample and divide each sample by this, then multiply by 1.000.000)
-```{r}
-total_counts_per_sample <- colSums(filtered_data[, c("Week12_NW", "Week12_OW", "Week12_NW2", "Week12_OW2", "Week36_NW", "Week36_OW", "Week36_NW2", "Week36_OW2")], na.rm = TRUE)
-
-normalized_data <- filtered_data %>%
-  mutate(
-    Week12_NW_CPM = Week12_NW / total_counts_per_sample["Week12_NW"] * 1e6,
-    Week12_OW_CPM = Week12_OW / total_counts_per_sample["Week12_OW"] * 1e6,
-    Week12_NW2_CPM = Week12_NW2 / total_counts_per_sample["Week12_NW2"] * 1e6,
-    Week12_OW2_CPM = Week12_OW2 / total_counts_per_sample["Week12_OW2"] * 1e6,
-    Week36_NW_CPM = Week36_NW / total_counts_per_sample["Week36_NW"] * 1e6,
-    Week36_OW_CPM = Week36_OW / total_counts_per_sample["Week36_OW"] * 1e6,
-    Week36_NW2_CPM = Week36_NW2 / total_counts_per_sample["Week36_NW2"] * 1e6,
-    Week36_OW2_CPM = Week36_OW2 / total_counts_per_sample["Week36_OW2"] * 1e6) %>%
-  select(Gene,
-    starts_with("Week12_") & ends_with("_CPM"),
-    starts_with("Week36_") & ends_with("_CPM")) %>%
-  head()
-```
-
+Normalize the data from counts to counts per million (add up all the counts per sample and divide each sample by this, then multiply by 1.000.000).
 log2 transformation of the counts per million to make the data more symmetric.
-```{r}
-normalized_data %>%
-  mutate(across(
-    starts_with("Week"), 
-    ~ log2(. + 1), 
-    .names = "{.col}_log2"
-  )) %>%
-  head()
+```{r transformation, echo = FALSE}
+total_counts_per_replicate <- colSums(filtered_data[, c("Week12_NW", "Week12_OW", "Week12_NW2", "Week12_OW2", "Week36_NW", "Week36_OW", "Week36_NW2", "Week36_OW2")], na.rm = TRUE)
+
+normalized_log2_data <- filtered_data %>%
+  mutate(
+    Week12_NW_CPM = Week12_NW / total_counts_per_replicate["Week12_NW"] * 1e6,
+    Week12_OW_CPM = Week12_OW / total_counts_per_replicate["Week12_OW"] * 1e6,
+    Week12_NW2_CPM = Week12_NW2 / total_counts_per_replicate["Week12_NW2"] * 1e6,
+    Week12_OW2_CPM = Week12_OW2 / total_counts_per_replicate["Week12_OW2"] * 1e6,
+    Week36_NW_CPM = Week36_NW / total_counts_per_replicate["Week36_NW"] * 1e6,
+    Week36_OW_CPM = Week36_OW / total_counts_per_replicate["Week36_OW"] * 1e6,
+    Week36_NW2_CPM = Week36_NW2 / total_counts_per_replicate["Week36_NW2"] * 1e6,
+    Week36_OW2_CPM = Week36_OW2 / total_counts_per_replicate["Week36_OW2"] * 1e6) %>%
+  mutate(across(ends_with("_CPM"), ~ log2(. + 1), .names = "{.col}_log2"))
+
+head(normalized_log2_data,10)
 ```
 
 Drop any rows with blank names and count values between 0 and 2.
-```{r}
-normalized_data <- normalized_data %>%
-  mutate(across(ends_with("_log2"), ~ ifelse(. < 2, NA, .)))
+```{r Filter, echo = FALSE}
+normalized_log2_data <- normalized_log2_data %>%
+  filter(!is.na(Gene) & Gene != "") %>%
+  rowwise() %>%
+  filter(all(c_across(ends_with("_log2")) >= 2)) %>%
+  ungroup()
 
-normalized_data
+head(normalized_log2_data, 10)
 ```
 
 Calculate the z-Value of each count in new columns by subtracting the normalized count value by the mean of the column and divide by the columns standard deviation.
-```{r}
-z_normalized_data <- normalized_data %>%
-  mutate(across(ends_with("_CPM"), 
-                 ~ (.-mean(., na.rm = TRUE)) / sd(., na.rm = TRUE), 
-                 .names = "{.col}_z")) %>%
+```{r z-value, echo = FALSE}
+heatmap_data <- normalized_log2_data %>%
+  mutate(across(
+    ends_with("_CPM"),
+    ~ (. - mean(., na.rm = TRUE)) / sd(., na.rm = TRUE),
+    .names = "{.col}_z"
+  ))
+
+heatmap_data %>%
   select(Gene, ends_with("_CPM_z")) %>%
-  head()
+  head(10)
 ```
 
 Calculate the variance of the log2 transformed counts by rows and put it in a new column.
-```{r}
-#variance_data <- normalized_data %>%
-#  rowwise() %>%
-#  mutate(Variance = var(c_across(ends_with("_log2")))) %>%
-#  ungroup() %>%
-#  select(Gene, Variance)
+```{r variance, echo = FALSE}
+heatmap_data <- heatmap_data %>%
+  rowwise() %>%
+  mutate(log2_CPM_variance = var(c_across(ends_with("_log2")), na.rm = TRUE)) %>%
+  ungroup()
+
+heatmap_data %>%
+  select(Gene, log2_CPM_variance, ends_with("_CPM_z")) %>%
+  head(10)
+
 ```
+
+## Data visualization
+
+```{r heatmap, echo = FALSE}
+
+heatmap_data <- heatmap_data %>%
+  select(Gene, log2_CPM_variance, ends_with("_CPM_z")) %>%
+  arrange(desc(log2_CPM_variance)) %>%
+  slice_head(n = 50)
+
+heatmap_matrix <- heatmap_data %>%
+  column_to_rownames("Gene") %>%
+  select(-log2_CPM_variance) %>%
+  as.matrix()
+
+heatmap(heatmap_matrix,
+  scale = "column",
+  Rowv = NA,
+  Colv = NA,
+  col = colorRampPalette(c("blue", "white", "red"))(100),
+  margins = c(10, 10),
+  main = "Heatmap of Top 50 Genes by Variance"
+)
+
+```  
+
+
+#### Conclusion
+Even though the heatmap is still very simple, it is interesting to see that some genes have different expressions between the groups, which also have a temporal component.
