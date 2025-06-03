@@ -103,13 +103,13 @@ data <- reduce(
     names_to = "climate_variable",
     values_to = "climate_value"
   )
-knitr::kable(data, caption = "Wetter- und Ertragsdaten Tübingen (1976–2021)")
+knitr::kable(head(data,15), caption = "Wetter- und Ertragsdaten Tübingen (1976–2021)")
 ```
 
 #Visulisation 
 # 1. Relationship Between Crop Yields and Climate Variables
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
-data %>%
+p1 <- data %>%
   ggplot(
     aes(x= climate_value, y= yield, color = species)) +
     geom_point(size = 3) + 
@@ -135,11 +135,13 @@ data %>%
                                 "spring barley" = "steelblue",
                                 "winter wheat" = "forestgreen")) +
   scale_y_continuous(limits = c(0, 12), breaks = seq(0, 12, by = 2))
+ggsave("plot_relationship_yield_vs_climate.png", p1, width=8, height=10)
 ```
+![Relationship Between Crop Yields and Climate Variables](plot_relationship_yield_vs_climate.png)
 
 #2."Crop yields over the time [in year] 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
-data %>%
+p2 <-data %>%
   ggplot(
     aes(x= year, y= yield, color = species)) +
     geom_point(size = 3) + 
@@ -157,11 +159,14 @@ data %>%
     ) +
   theme_minimal()+ 
   scale_y_continuous(limits = c(0, 12), breaks = seq(0, 12, by = 2))
+
+ggsave("plot_crop_yield_over_time.png", p2, width=8, height=6)
 ```
+![Crop yields over the time](plot_crop_yield_over_time.png)
 
 #3.Climate variables over the time [in year]
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
-data %>%
+p3 <- data %>%
   ggplot(
     aes(x= year, y= climate_value, color = climate_variable)) +
     geom_point(size = 3) + 
@@ -178,4 +183,7 @@ data %>%
       color = "Climate Variables",
     )+
   theme_minimal() 
+
+ggsave("plot_climate_vars_over_time.png", p3, width=8, height=8)
 ```
+![Climate variables over the time](plot_climate_vars_over_time.png)
