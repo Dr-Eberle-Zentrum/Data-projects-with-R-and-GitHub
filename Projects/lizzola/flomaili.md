@@ -145,6 +145,22 @@ Gene names to the plot as the plot would be too cluttered.
     GO_data_up %>%
       mutate(ID=fct_reorder(ID, GeneRatio)) %>%
       ggplot(aes(GeneRatio, y=ID)) +
-      geom_point()
+      geom_point(aes(color=p_adjust_2, size= GeneRatio)) +
+       scale_color_gradient(
+        low = "red", high = "lightgrey",
+        name = "Adjusted p-value",
+        guide = guide_colorbar(reverse = TRUE)  # darker = more significant
+      ) +
+      scale_size_continuous(name = "Gene Ratio") +
+      labs(
+        x = "Gene Ratio",
+        y = "GO Term",
+        title = "GO Term - Gene Ratio"
+      ) +
+      theme_minimal() +
+      theme(
+        legend.position = "right",
+        axis.text.y = element_text(size = 10)
+      )
 
 ![](flomaili_files/figure-markdown_strict/Plot%202-1.png)
