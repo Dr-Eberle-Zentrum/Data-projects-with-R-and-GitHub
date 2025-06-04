@@ -2,6 +2,13 @@
 
 Import the data
 
+    library(dplyr)
+    library(tidyverse)
+    library(kableExtra)
+
+    data <- read.csv("GSE273780_EukmRNAseq_counts.csv")
+    head(data)
+
     ##   X       Row.names  G58   G52  G25   G84    G2  G60   G41   G36   G73   G79
     ## 1 1 ENSG00000000003   23     0   23     7    14   18    15     3     0    12
     ## 2 2 ENSG00000000005    0     0    0     0     0    0     0     0     0     0
@@ -87,127 +94,59 @@ G9, G12, G32, G45). Rename the columns.
 </tbody>
 </table>
 
-    ##               Gene Week12_NW Week12_OW Week12_NW2 Week12_OW2 Week36_NW
-    ## 1  ENSG00000000003        23        10          7          3        13
-    ## 2  ENSG00000000005         0         0          0          0         0
-    ## 3  ENSG00000000419       494       373        525        450       631
-    ## 4  ENSG00000000457       403       295        281        278       400
-    ## 5  ENSG00000000460        82        60         58         61        99
-    ## 6  ENSG00000000938      8058     12301      13108      13094      8428
-    ## 7  ENSG00000000971         5        19         17         48        33
-    ## 8  ENSG00000001036       297       386        524        436       474
-    ## 9  ENSG00000001084       490       460        394        309       577
-    ## 10 ENSG00000001167       724       629        422        435       653
-    ##    Week36_OW Week36_NW2 Week36_OW2
-    ## 1          6         14          6
-    ## 2          0          0          0
-    ## 3        372        480        399
-    ## 4        192        388        326
-    ## 5         54         84         90
-    ## 6       8108      14931       9630
-    ## 7         11         31          6
-    ## 8        390        558        494
-    ## 9        331        650        536
-    ## 10       463       1111        860
+    filtered_data <- data %>%
+      select(Row.names, G25, G26, G27, G30, G9, G12, G32, G45) %>%
+      rename(Gene = Row.names, 
+             Week12_NW = G25, 
+             Week12_OW = G26, 
+             Week12_NW2 = G27, 
+             Week12_OW2 = G30, 
+             Week36_NW = G9, 
+             Week36_OW = G12, 
+             Week36_NW2 = G32, 
+             Week36_OW2 = G45)
 
 Normalize the data from counts to counts per million (add up all the
 counts per sample and divide each sample by this, then multiply by
 1.000.000). log2 transformation of the counts per million to make the
 data more symmetric.
 
-    ##               Gene Week12_NW Week12_OW Week12_NW2 Week12_OW2 Week36_NW
-    ## 1  ENSG00000000003        23        10          7          3        13
-    ## 2  ENSG00000000005         0         0          0          0         0
-    ## 3  ENSG00000000419       494       373        525        450       631
-    ## 4  ENSG00000000457       403       295        281        278       400
-    ## 5  ENSG00000000460        82        60         58         61        99
-    ## 6  ENSG00000000938      8058     12301      13108      13094      8428
-    ## 7  ENSG00000000971         5        19         17         48        33
-    ## 8  ENSG00000001036       297       386        524        436       474
-    ## 9  ENSG00000001084       490       460        394        309       577
-    ## 10 ENSG00000001167       724       629        422        435       653
-    ##    Week36_OW Week36_NW2 Week36_OW2 Week12_NW_CPM Week12_OW_CPM Week12_NW2_CPM
-    ## 1          6         14          6     1.2817448     0.5800985      0.3800353
-    ## 2          0          0          0     0.0000000     0.0000000      0.0000000
-    ## 3        372        480        399    27.5296502    21.6376725     28.5026453
-    ## 4        192        388        326    22.4583989    17.1129045     15.2557016
-    ## 5         54         84         90     4.5696990     3.4805907      3.1488637
-    ## 6       8108      14931       9630   449.0565215   713.5791129    711.6431894
-    ## 7         11         31          6     0.2786402     1.1021871      0.9229428
-    ## 8        390        558        494    16.5512270    22.3918005     28.4483545
-    ## 9        331        650        536    27.3067381    26.6845291     21.3905567
-    ## 10       463       1111        860    40.3470987    36.4881930     22.9106977
-    ##    Week12_OW2_CPM Week36_NW_CPM Week36_OW_CPM Week36_NW2_CPM Week36_OW2_CPM
-    ## 1       0.1758106      0.857013     0.3820446      0.6326233      0.3219167
-    ## 2       0.0000000      0.000000     0.0000000      0.0000000      0.0000000
-    ## 3      26.3715893     41.598095    23.6867647     21.6899420     21.4074594
-    ## 4      16.2917818     26.369632    12.2254269     17.5327031     17.4908065
-    ## 5       3.5748154      6.526484     3.4384013      3.7957399      4.8287503
-    ## 6     767.3546448    555.608148   516.2695918    674.6927586    516.6762768
-    ## 7       2.8129695      2.175495     0.7004151      1.4008088      0.3219167
-    ## 8      25.5511398     31.248014    24.8328985     25.2145576     26.5044736
-    ## 9      18.1084913     38.038194    21.0761267     29.3717965     28.7578904
-    ## 10     25.4925363     43.048424    29.4811077     50.2031783     46.1413913
-    ##    Week12_NW_CPM_log2 Week12_OW_CPM_log2 Week12_NW2_CPM_log2
-    ## 1           1.1901375          0.6600145           0.4647051
-    ## 2           0.0000000          0.0000000           0.0000000
-    ## 3           4.8343902          4.5006537           4.8827724
-    ## 4           4.5520326          4.1789460           4.0228739
-    ## 5           2.4775994          2.1636890           2.0527163
-    ## 6           8.8139624          9.4809499           9.4770361
-    ## 7           0.3546103          1.0718911           0.9433158
-    ## 8           4.1335000          4.5479310           4.8801151
-    ## 9           4.8230736          4.7910081           4.4848185
-    ## 10          5.3697142          5.2283644           4.5795843
-    ##    Week12_OW2_CPM_log2 Week36_NW_CPM_log2 Week36_OW_CPM_log2
-    ## 1            0.2336557          0.8929839          0.4668042
-    ## 2            0.0000000          0.0000000          0.0000000
-    ## 3            4.7746073          5.4127170          4.6256659
-    ## 4            4.1120146          4.7745041          3.7252424
-    ## 5            2.1937135          2.9119761          2.1500401
-    ## 6            9.5856286          9.1205182          9.0147726
-    ## 7            1.9309150          1.6669813          0.7658870
-    ## 8            4.7307019          5.0111384          4.6911376
-    ## 9            4.2561420          5.2868144          4.4644152
-    ## 10           4.7275141          5.4610185          4.9298434
-    ##    Week36_NW2_CPM_log2 Week36_OW2_CPM_log2
-    ## 1             0.707192           0.4026313
-    ## 2             0.000000           0.0000000
-    ## 3             4.503981           4.4859072
-    ## 4             4.212001           4.2087362
-    ## 5             2.261753           2.5431866
-    ## 6             9.400224           9.0159064
-    ## 7             1.263520           0.4026313
-    ## 8             4.712296           4.7815944
-    ## 9             4.924660           4.8952003
-    ## 10            5.678161           5.5589224
+    total_counts_per_replicate <- colSums(filtered_data[, c("Week12_NW", "Week12_OW", "Week12_NW2", "Week12_OW2", "Week36_NW", "Week36_OW", "Week36_NW2", "Week36_OW2")], na.rm = TRUE)
+
+    normalized_log2_data <- filtered_data %>%
+      mutate(
+        Week12_NW_CPM = Week12_NW / total_counts_per_replicate["Week12_NW"] * 1e6,
+        Week12_OW_CPM = Week12_OW / total_counts_per_replicate["Week12_OW"] * 1e6,
+        Week12_NW2_CPM = Week12_NW2 / total_counts_per_replicate["Week12_NW2"] * 1e6,
+        Week12_OW2_CPM = Week12_OW2 / total_counts_per_replicate["Week12_OW2"] * 1e6,
+        Week36_NW_CPM = Week36_NW / total_counts_per_replicate["Week36_NW"] * 1e6,
+        Week36_OW_CPM = Week36_OW / total_counts_per_replicate["Week36_OW"] * 1e6,
+        Week36_NW2_CPM = Week36_NW2 / total_counts_per_replicate["Week36_NW2"] * 1e6,
+        Week36_OW2_CPM = Week36_OW2 / total_counts_per_replicate["Week36_OW2"] * 1e6) %>%
+      mutate(across(ends_with("_CPM"), ~ log2(. + 1), .names = "{.col}_log2"))
 
 Drop any rows with blank names and count values between 0 and 2.
 
-    ## # A tibble: 10 × 25
-    ##    Gene            Week12_NW Week12_OW Week12_NW2 Week12_OW2 Week36_NW Week36_OW
-    ##    <chr>               <int>     <int>      <int>      <int>     <int>     <int>
-    ##  1 ENSG00000000419       494       373        525        450       631       372
-    ##  2 ENSG00000000457       403       295        281        278       400       192
-    ##  3 ENSG00000000460        82        60         58         61        99        54
-    ##  4 ENSG00000000938      8058     12301      13108      13094      8428      8108
-    ##  5 ENSG00000001036       297       386        524        436       474       390
-    ##  6 ENSG00000001084       490       460        394        309       577       331
-    ##  7 ENSG00000001167       724       629        422        435       653       463
-    ##  8 ENSG00000001461      1301       588        423        430       536       444
-    ##  9 ENSG00000001497      1001       720        913        801       797       755
-    ## 10 ENSG00000001561       599       234        201        279       269        99
-    ## # ℹ 18 more variables: Week36_NW2 <int>, Week36_OW2 <int>, Week12_NW_CPM <dbl>,
-    ## #   Week12_OW_CPM <dbl>, Week12_NW2_CPM <dbl>, Week12_OW2_CPM <dbl>,
-    ## #   Week36_NW_CPM <dbl>, Week36_OW_CPM <dbl>, Week36_NW2_CPM <dbl>,
-    ## #   Week36_OW2_CPM <dbl>, Week12_NW_CPM_log2 <dbl>, Week12_OW_CPM_log2 <dbl>,
-    ## #   Week12_NW2_CPM_log2 <dbl>, Week12_OW2_CPM_log2 <dbl>,
-    ## #   Week36_NW_CPM_log2 <dbl>, Week36_OW_CPM_log2 <dbl>,
-    ## #   Week36_NW2_CPM_log2 <dbl>, Week36_OW2_CPM_log2 <dbl>
+    normalized_log2_data <- normalized_log2_data %>%
+      filter(!is.na(Gene) & Gene != "") %>%
+      rowwise() %>%
+      filter(all(c_across(ends_with("_log2")) >= 2)) %>%
+      ungroup()
 
 Calculate the z-Value of each count in new columns by subtracting the
 normalized count value by the mean of the column and divide by the
 columns standard deviation.
+
+    heatmap_data <- normalized_log2_data %>%
+      mutate(across(
+        ends_with("_CPM"),
+        ~ (. - mean(., na.rm = TRUE)) / sd(., na.rm = TRUE),
+        .names = "{.col}_z"
+      ))
+
+    heatmap_data %>%
+      select(Gene, ends_with("_CPM_z")) %>%
+      head(10)
 
     ## # A tibble: 10 × 9
     ##    Gene        Week12_NW_CPM_z Week12_OW_CPM_z Week12_NW2_CPM_z Week12_OW2_CPM_z
@@ -228,6 +167,15 @@ columns standard deviation.
 Calculate the variance of the log2 transformed counts by rows and put it
 in a new column.
 
+    heatmap_data <- heatmap_data %>%
+      rowwise() %>%
+      mutate(log2_CPM_variance = var(c_across(ends_with("_log2")), na.rm = TRUE)) %>%
+      ungroup()
+
+    heatmap_data %>%
+      select(Gene, log2_CPM_variance, ends_with("_CPM_z")) %>%
+      head(10)
+
     ## # A tibble: 10 × 10
     ##    Gene       log2_CPM_variance Week12_NW_CPM_z Week12_OW_CPM_z Week12_NW2_CPM_z
     ##    <chr>                  <dbl>           <dbl>           <dbl>            <dbl>
@@ -245,6 +193,25 @@ in a new column.
     ## #   Week36_OW_CPM_z <dbl>, Week36_NW2_CPM_z <dbl>, Week36_OW2_CPM_z <dbl>
 
 ## Data visualization
+
+    heatmap_data <- heatmap_data %>%
+      select(Gene, log2_CPM_variance, ends_with("_CPM_z")) %>%
+      arrange(desc(log2_CPM_variance)) %>%
+      slice_head(n = 50)
+
+    heatmap_matrix <- heatmap_data %>%
+      column_to_rownames("Gene") %>%
+      select(-log2_CPM_variance) %>%
+      as.matrix()
+
+    heatmap(heatmap_matrix,
+      scale = "column",
+      Rowv = NA,
+      Colv = NA,
+      col = colorRampPalette(c("pink", "white", "red3"))(100),
+      margins = c(10, 10),
+      main = "Heatmap of Top 50 Genes by Variance"
+    )
 
 ![](lizzola_Project1_files/figure-markdown_strict/heatmap-1.png)
 
