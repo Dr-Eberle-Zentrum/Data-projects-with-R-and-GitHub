@@ -111,18 +111,16 @@ counts per sample and divide each sample by this, then multiply by
 1.000.000). log2 transformation of the counts per million to make the
 data more symmetric.
 
-    total_counts_per_replicate <- colSums(filtered_data[, c("Week12_NW", "Week12_OW", "Week12_NW2", "Week12_OW2", "Week36_NW", "Week36_OW", "Week36_NW2", "Week36_OW2")], na.rm = TRUE)
+    count_columns <- names(filtered_data)[startsWith(names(filtered_data), "Week")]
+
+    total_counts_per_replicate <- colSums(filtered_data[, count_columns], na.rm = TRUE)
+
+    for (i in count_columns) {
+      new_col <- paste0(i, "_cpm")
+      filtered_data[[new_col]] <- filtered_data[[i]] / total_counts_per_replicate[i] * 1e6
+    }
 
     normalized_log2_data <- filtered_data %>%
-      mutate(
-        Week12_NW_CPM = Week12_NW / total_counts_per_replicate["Week12_NW"] * 1e6,
-        Week12_OW_CPM = Week12_OW / total_counts_per_replicate["Week12_OW"] * 1e6,
-        Week12_NW2_CPM = Week12_NW2 / total_counts_per_replicate["Week12_NW2"] * 1e6,
-        Week12_OW2_CPM = Week12_OW2 / total_counts_per_replicate["Week12_OW2"] * 1e6,
-        Week36_NW_CPM = Week36_NW / total_counts_per_replicate["Week36_NW"] * 1e6,
-        Week36_OW_CPM = Week36_OW / total_counts_per_replicate["Week36_OW"] * 1e6,
-        Week36_NW2_CPM = Week36_NW2 / total_counts_per_replicate["Week36_NW2"] * 1e6,
-        Week36_OW2_CPM = Week36_OW2 / total_counts_per_replicate["Week36_OW2"] * 1e6) %>%
       mutate(across(ends_with("_CPM"), ~ log2(. + 1), .names = "{.col}_log2"))
 
 Drop any rows with blank names and count values between 0 and 2.
@@ -149,7 +147,7 @@ columns standard deviation.
       head(10)
 
     ## # A tibble: 10 × 9
-    ##    Gene        Week12_NW_CPM_z Week12_OW_CPM_z Week12_NW2_CPM_z Week12_OW2_CPM_z
+    ##    Gene        Week12_NW_cpm_z Week12_OW_cpm_z Week12_NW2_cpm_z Week12_OW2_cpm_z
     ##    <chr>                 <dbl>           <dbl>            <dbl>            <dbl>
     ##  1 ENSG000000…         -0.196          -0.124            -0.150          -0.134 
     ##  2 ENSG000000…         -0.211          -0.132            -0.180          -0.154 
@@ -161,8 +159,8 @@ columns standard deviation.
     ##  8 ENSG000000…         -0.0648         -0.103            -0.162          -0.136 
     ##  9 ENSG000000…         -0.114          -0.0902           -0.102          -0.0935
     ## 10 ENSG000000…         -0.179          -0.138            -0.190          -0.153 
-    ## # ℹ 4 more variables: Week36_NW_CPM_z <dbl>, Week36_OW_CPM_z <dbl>,
-    ## #   Week36_NW2_CPM_z <dbl>, Week36_OW2_CPM_z <dbl>
+    ## # ℹ 4 more variables: Week36_NW_cpm_z <dbl>, Week36_OW_cpm_z <dbl>,
+    ## #   Week36_NW2_cpm_z <dbl>, Week36_OW2_cpm_z <dbl>
 
 Calculate the variance of the log2 transformed counts by rows and put it
 in a new column.
@@ -177,7 +175,7 @@ in a new column.
       head(10)
 
     ## # A tibble: 10 × 10
-    ##    Gene       log2_CPM_variance Week12_NW_CPM_z Week12_OW_CPM_z Week12_NW2_CPM_z
+    ##    Gene       log2_CPM_variance Week12_NW_cpm_z Week12_OW_cpm_z Week12_NW2_cpm_z
     ##    <chr>                  <dbl>           <dbl>           <dbl>            <dbl>
     ##  1 ENSG00000…            0.0961         -0.196          -0.124            -0.150
     ##  2 ENSG00000…            0.102          -0.211          -0.132            -0.180
@@ -189,8 +187,8 @@ in a new column.
     ##  8 ENSG00000…            0.296          -0.0648         -0.103            -0.162
     ##  9 ENSG00000…            0.0331         -0.114          -0.0902           -0.102
     ## 10 ENSG00000…            0.428          -0.179          -0.138            -0.190
-    ## # ℹ 5 more variables: Week12_OW2_CPM_z <dbl>, Week36_NW_CPM_z <dbl>,
-    ## #   Week36_OW_CPM_z <dbl>, Week36_NW2_CPM_z <dbl>, Week36_OW2_CPM_z <dbl>
+    ## # ℹ 5 more variables: Week12_OW2_cpm_z <dbl>, Week36_NW_cpm_z <dbl>,
+    ## #   Week36_OW_cpm_z <dbl>, Week36_NW2_cpm_z <dbl>, Week36_OW2_cpm_z <dbl>
 
 ## Data visualization
 
