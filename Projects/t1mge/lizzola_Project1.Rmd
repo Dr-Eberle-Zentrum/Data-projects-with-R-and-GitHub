@@ -1,0 +1,128 @@
+---
+title: "RNAseq in pregnancy - Solution lizzola"
+output: md_document
+date: "`r Sys.Date()`"
+---
+
+## Data manipulation
+
+Import the data
+
+```{r data set, echo=TRUE, message=FALSE, warning=FALSE}
+library(dplyr)
+library(tidyverse)
+library(kableExtra)
+
+data <- read.csv("GSE273780_EukmRNAseq_counts.csv")
+head(data)
+```
+
+Filter out the count data of the following columns (G25, G26, G27, G30, G9, G12, G32, G45). Rename the columns.
+
+| Time point | Normal weight | Overweight |
+|------------|---------------|------------|
+| week 12    | G25           | G27        |
+| week 12    | G26           | G30        |
+| week 36    | G9            | G32        |
+| week 36    | G12           | G45        |
+
+```{r data, echo = TRUE}
+filtered_data <- data %>%
+  select(Row.names, G25, G26, G27, G30, G9, G12, G32, G45) %>%
+  rename(Gene = Row.names, 
+         Week12_NW = G25, 
+         Week12_OW = G26, 
+         Week12_NW2 = G27, 
+         Week12_OW2 = G30, 
+         Week36_NW = G9, 
+         Week36_OW = G12, 
+         Week36_NW2 = G32, 
+         Week36_OW2 = G45)
+
+```
+
+Normalize the data from counts to counts per million (add up all the counts per sample and divide each sample by this, then multiply by 1.000.000). log2 transformation of the counts per million to make the data more symmetric.
+
+```{r transformation, echo = TRUE}
+count_columns <- names(filtered_data)[startsWith(names(filtered_data), "Week")]
+
+total_counts_per_replicate <- colSums(filtered_data[, count_columns], na.rm = TRUE)
+
+for (i in count_columns) {
+  new_col <- paste0(i, "_cpm")
+  filtered_data[[new_col]] <- filtered_data[[i]] / total_counts_per_replicate[i] * 1e6
+}
+
+normalized_log2_data <- filtered_data %>%
+  mutate(across(ends_with("_CPM"), ~ log2(. + 1), .names = "{.col}_log2"))
+
+```
+
+Drop any rows with blank names and count values between 0 and 2.
+
+```{r Filter, echo = TRUE}
+normalized_log2_data <- normalized_log2_data %>%
+  filter(!is.na(Gene) & Gene != "") %>%
+  rowwise() %>%
+  filter(all(c_across(ends_with("_log2")) >= 2)) %>%
+  ungroup()
+
+```
+
+Calculate the z-Value of each count in new columns by subtracting the normalized count value by the mean of the column and divide by the columns standard deviation.
+
+```{r z-value, echo = TRUE}
+heatmap_data <- normalized_log2_data %>%
+  mutate(across(
+    ends_with("_CPM"),
+    ~ (. - mean(., na.rm = TRUE)) / sd(., na.rm = TRUE),
+    .names = "{.col}_z"
+  ))
+
+heatmap_data %>%
+  select(Gene, ends_with("_CPM_z")) %>%
+  head(10)
+```
+
+Calculate the variance of the log2 transformed counts by rows and put it in a new column.
+
+```{r variance, echo = TRUE}
+heatmap_data <- heatmap_data %>%
+  rowwise() %>%
+  mutate(log2_CPM_variance = var(c_across(ends_with("_log2")), na.rm = TRUE)) %>%
+  ungroup()
+
+heatmap_data %>%
+  select(Gene, log2_CPM_variance, ends_with("_CPM_z")) %>%
+  head(10)
+
+```
+
+## Data visualization
+
+```{r heatmap, echo = TRUE}
+
+heatmap_data <- heatmap_data %>%
+  select(Gene, log2_CPM_variance, ends_with("_CPM_z")) %>%
+  arrange(desc(log2_CPM_variance)) %>%
+  slice_head(n = 50)
+
+heatmap_matrix <- heatmap_data %>%
+  column_to_rownames("Gene") %>%
+  select(-log2_CPM_variance) %>%
+  as.matrix()
+
+heatmap(heatmap_matrix,
+  scale = "column",
+  Rowv = NA,
+  Colv = NA,
+  col = colorRampPalette(c("pink", "white", "red3"))(100),
+  margins = c(10, 10),
+  main = "Heatmap of Top 50 Genes by Variance"
+)
+
+```
+
+#### Conclusion
+
+Even though the heatmap is still very simple, it is interesting to see that some genes have different expressions between the groups, which also have a temporal component.
