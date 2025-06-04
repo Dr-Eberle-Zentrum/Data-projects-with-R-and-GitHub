@@ -1,0 +1,117 @@
+|-------------------------------|
+| title: "Svenja_MSproject.Rmd" |
+| author: "SvenjaPoerstel"      |
+| date: "2025-06-03"            |
+| output: md_document           |
+rmarkdown::render("Svenja_MSproject.Rmd", output_format = "md_document")
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse) 
+library(ggplot2) 
+library(readr) 
+library(dplyr) 
+```
+
+
+```{r}
+# read csv
+ms <- read_csv2("data_MS.csv", show_col_types = FALSE)
+```
+
+##Data manipulation
+
+```{r}
+
+# (1) MS duration in months (+++)
+ms$MSDuration_months <- case_when(
+  grepl("Years", ms$`MS Duration`) ~ as.integer(gsub("Years", "", ms$`MS Duration`)) * 12,
+  grepl("Year", ms$`MS Duration`) ~ as.integer(gsub("Year", "", ms$`MS Duration`)) * 12,
+  grepl("Months", ms$`MS Duration`) ~ as.integer(gsub("Months", "", ms$`MS Duration`)),
+  TRUE ~ NA_integer_
+)
+
+# (2) new column related to deseases 
+ms$OtherConditions <- ifelse(ms$`Other Diseases` == "-" | is.na(ms$`Other Diseases`), 0, 
+                             lengths(strsplit(ms$`Other Diseases`, ",")))
+
+
+# (3) new columns (treated with Corticosteroid)
+ms$Corticosteroid <- ifelse(str_detect(ms$Medication, regex("corticosteroid", ignore_case = TRUE)), "Yes", "No")
+
+# (4) new columns (treated with B-cell depleting therapy (+)
+ms$BCellDepletion <- ifelse(str_detect(ms$Medication, regex("rituximab", ignore_case = TRUE)), "Yes", "No")
+
+# use coded names according to the schema instead of clear names and delete column names
+ms$PatientCode <- sprintf("MS_XS_%03d", ms$`No.`)
+
+ms <- ms %>% select(-`Patient Name`)
+```
+
+## Visualization
+
+# Scatterplot
+
+```{r}
+ggplot(ms, aes(x = `Cortisol Test Result`, y = `BAI Score`, color = Sex, shape = Corticosteroid)) +
+  geom_point(size = 3) +
+  geom_smooth(method = "lm", se = FALSE, aes(group = interaction(Sex, Corticosteroid))) +
+  labs(title = "BAI Score vs Cortisol Level",
+       x = "Cortisol (ng/mL)",
+       y = "BAI Score") +
+  theme_minimal()
+  
+# correlation value for four groups f+, f-, m+, m-
+cor_groups <- ms %>%
+  group_by(Sex, Corticosteroid) %>%
+  summarise(Correlation = cor(`Cortisol Test Result`, `BAI Score`, use = "complete.obs"),
+            .groups = "drop")
+            
+```
+
+# chart showing
+
+```{r}
+# Group MS duration into 6-month intervals
+ms$MSDurationGroup <- cut(ms$MSDuration_months, 
+                          breaks = seq(0, max(ms$MSDuration_months, na.rm = TRUE) + 6, by = 6), 
+                          right = FALSE)
+
+# Calculate mean and standard deviation of NO test values for each MS duration group
+ms %>%
+  group_by(MSDurationGroup) %>%
+  summarise(mean_NO = mean(`NO test result`, na.rm = TRUE),
+            sd_NO = sd(`NO test result`, na.rm = TRUE)) %>%
+  ggplot(aes(x = MSDurationGroup, y = mean_NO)) +
+  geom_point(size = 3, color = "darkblue") +
+  geom_errorbar(aes(ymin = mean_NO - sd_NO, ymax = mean_NO + sd_NO), width = 0.2) +
+  labs(title = "NO Test Results by MS Duration (6-Month Groups)",
+       x = "MS Duration Group",
+       y = "Average NO Test Value") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+# Group patients into 15-year age intervals
+
+```{r}
+ms$AgeGroup <- cut(ms$Age, 
+                   breaks = seq(0, max(ms$Age, na.rm = TRUE) + 15, by = 15), 
+                   right = FALSE)
+
+# Count MS as an additional disease
+ms$TotalDiseases <- ms$OtherConditions + 1
+
+# Create bar chart of median number of diseases (incl. MS) per age group
+ms %>%
+  group_by(AgeGroup) %>%
+  summarise(MedianDiseases = median(TotalDiseases, na.rm = TRUE)) %>%
+  ggplot(aes(x = AgeGroup, y = MedianDiseases)) +
+  geom_bar(stat = "identity", fill = "darkgreen") +
+  labs(title = "Median Number of Diseases by Age Group",
+       x = "Age Group",
+       y = "Median Disease Count (incl. MS)") +
+  theme_minimal()
+```
