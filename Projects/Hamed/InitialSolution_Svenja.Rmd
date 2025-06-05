@@ -1,0 +1,136 @@
+---
+title: "initialsolutioncars_Svenja"
+author: "SvenjaPoerstel"
+date: "2025-06-03"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse) 
+library(readr) 
+library(dplyr)
+library(ggplot2)
+```
+
+```{r}
+# read csv
+car <- read_csv("Auto_data.csv", show_col_types = FALSE)
+```
+
+## Data preparation
+
+```{r}
+
+## 1: Ensure each variable has its own column and each observation its own row
+#check structure and summary of the data set 
+
+str(car)
+summary(car)
+glimpse(car)
+
+#check if values are missing
+colSums(is.na(car))
+
+## 2: Convert categorical variables into factors with descriptive labels
+car <- car %>%
+  mutate(origin = factor(origin,
+                         levels = c(1, 2, 3),
+                         labels = c("USA", "Europe", "Japan")))
+#transfer horsepower to numeric
+
+
+## 3: Identify and report any duplicate rows in the dataset
+duplicates <- car[duplicated(car), ]
+n_duplicates <- nrow(duplicates)
+n_duplicates
+duplicates
+
+## 4: Discuss whether duplicates are meaningful or should be removed.
+## 5: Identify columns with missing values.
+colSums(is.na(car))
+
+## 6: Summarize the number and percentage of missing values.
+missing_summary <- car%>%
+  summarise_all(~sum(is.na(.))) %>%
+  pivot_longer(everything(), names_to = "variable", values_to = "missing_count") %>%
+  mutate(percent_missing = round((missing_count / nrow(car)) * 100, 2))
+
+missing_summary
+
+## 7: Decide how to handle the missing values (e.g., remove, impute, or analyze separately).
+## 8: Create a new variable for the **power-to-weight ratio** and store it in a new column.
+
+car <- car %>%
+  mutate(power_to_weight = horsepower / weight)
+
+```
+
+##Data visualization 
+#Scatterplot: relationship between mpg and horsepower
+
+```{r}
+
+p1 <- ggplot(car, aes(x = horsepower, y = mpg)) +
+  geom_point(alpha = 0.6, color = "blue") +
+  geom_smooth(method = "lm", se = TRUE, color = "darkblue") +
+  labs(title = "Relationship between MPG and Horsepower",
+       x = "Horsepower (PS)",
+       y = "Miles per Gallon (mpg)") +
+  theme_minimal()
+print(p1)
+
+```
+
+#Scatterplot: relationship between weight and acceleration
+
+```{r}
+p2 <- ggplot(car, aes(x = weight, y = acceleration)) +
+  geom_point(alpha = 0.6, color = "red") +
+  geom_smooth(method = "lm", se = TRUE, color = "darkred") +
+  labs(title = "Relationship between Weight and Acceleration",
+       x = "Weight (lbs)",
+       y = "Acceleration (0-60 mph in seconds)") +
+  theme_minimal()
+print(p2)
+```
+
+#trend analysis
+
+```{r}
+
+car_yearly <- car %>%
+  group_by(year) %>%
+  summarise(
+    avg_mpg = mean(mpg, na.rm = TRUE),
+    avg_hp = mean(horsepower, na.rm = TRUE),
+    avg_acc = mean(acceleration, na.rm = TRUE)
+  )
+
+p3 <- ggplot(car_yearly, aes(x = year)) +
+  geom_line(aes(y = avg_mpg, color = "mpg"), size = 1) +
+  geom_smooth(aes(y = avg_mpg, color = "mpg"), method = "loess", se = FALSE, linetype = "dashed") +
+  geom_line(aes(y = avg_hp, color = "horsepower"), linewidth = 1) +
+  geom_smooth(aes(y = avg_hp, color = "horsepower"), method = "loess", se = FALSE, linetype = "dashed") +
+  geom_line(aes(y = avg_acc, color = "acceleration"), size = 1) +
+  geom_smooth(aes(y = avg_acc, color = "acceleration"), method = "loess", se = FALSE, linetype = "dashed") +
+  scale_color_manual(
+    name = "Variable",
+    values = c("mpg" = "blue", "horsepower" = "red", "acceleration" = "green")
+  ) +
+  labs(title = "Trend Analysis of Car Characteristics over Years",
+       x = "Year",
+       y = "Average Value") +
+  theme_minimal()
+
+print(p3)
+
+```
+## Results 
+
+-Negative Relationship between MPG and Horsepower and weight and acceleration, but both data are fluctuating
+-Acceleration is mostly stable over the time, there is a small increase in mpg over time. Horsepower decreased a lot 
+
