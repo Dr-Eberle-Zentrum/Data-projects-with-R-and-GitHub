@@ -3,7 +3,7 @@
 | author: "SvenjaPoerstel"      |
 | date: "2025-06-03"            |
 | output: md_document           |
-rmarkdown::render("Svenja_MSproject.Rmd", output_format = "md_document")
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
