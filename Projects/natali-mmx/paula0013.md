@@ -8,10 +8,10 @@ devastating effects on crops and livestock. This project focuses on
 *crop production in the region of Tübingen and how it has been affected
 by climate change.*
 
-# Read and transform the data set of the weather data from 1976 to 2021
+# Read and transform of the data
 
 <table>
-<caption>Wetter- und Ertragsdaten Tübingen (1976–2021)</caption>
+<caption>weather and crop data from tuebingen (1976–2021)</caption>
 <colgroup>
 <col style="width: 6%" />
 <col style="width: 26%" />
@@ -154,31 +154,18 @@ by climate change.*
 </tbody>
 </table>
 
-Wetter- und Ertragsdaten Tübingen (1976–2021)
+weather and crop data from tuebingen (1976–2021)
 
-\#Visulisation \# 1. Relationship Between Crop Yields and Climate
-Variables
+# Visulisation
 
-<figure>
-<img src="plot_relationship_yield_vs_climate.png"
-alt="Relationship Between Crop Yields and Climate Variables" />
-<figcaption aria-hidden="true">Relationship Between Crop Yields and
-Climate Variables</figcaption>
-</figure>
+## 1. Relationship between crop yields and climate variables
 
-\#2.”Crop yields over the time \[in year\]
+![](plot_relationship_yield_vs_climate.png)
 
-<figure>
-<img src="plot_crop_yield_over_time.png"
-alt="Crop yields over the time" />
-<figcaption aria-hidden="true">Crop yields over the time</figcaption>
-</figure>
+## 2.Crop yields over the time \[in year\]
 
-\#3.Climate variables over the time \[in year\]
+![](plot_crop_yield_over_time.png)
 
-<figure>
-<img src="plot_climate_vars_over_time.png"
-alt="Climate variables over the time" />
-<figcaption aria-hidden="true">Climate variables over the
-time</figcaption>
-</figure>
+## 3.Climate variables over the time \[in year\]
+
+![](plot_climate_vars_over_time.png)

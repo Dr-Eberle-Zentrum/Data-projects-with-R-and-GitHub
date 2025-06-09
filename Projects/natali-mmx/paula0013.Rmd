@@ -17,7 +17,7 @@ library(ggplot2)
 
 Climate change is a huge challenge for farmers worldwide. It is causing extreme weather events, such as droughts and floods, which can have devastating effects on crops and livestock. This project focuses on *crop production in the region of Tübingen and how it has been affected by climate change.*
 
-# Read and transform the data set of the weather data from 1976 to 2021
+# Read and transform of the data
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # Read and transform the crop data for Tübingen
 crop_data <- read.csv("https://www.openagrar.de/servlets/MCRFileNodeServlet/openagrar_derivate_00056476/Final_data.csv") %>% 
@@ -52,9 +52,9 @@ precipitation_BW <- read.table(
   select(1,5)%>%
   # Rename the column Jahr into year 
   rename('year'= 'Jahr')%>%
-  # Rename the column Baden-Württemberg into Precipitation in mm
+  # Rename the column Baden-Württemberg into precipitation
   rename('precipitation'= 'Baden-Wuerttemberg')%>%
-  # Filter the Year from 1979 to 2021, becouse I have only for this years crop data
+  # Filter the Year from 1979 to 2021, because I have only for this years crop data
   filter(year >= '1979', year <= '2021')
 
 # Read and transform the temperature data for regions in Germany
@@ -69,7 +69,7 @@ temperature_BW <- read.table(
   select(1,5)%>%
   # Rename the column Jahr into year 
   rename('year'= 'Jahr')%>%
-  # Rename the column Baden-Württemberg into air temperature in °C
+  # Rename the column Baden-Württemberg into air_temperature
   rename('air_temperature'= 'Baden-Wuerttemberg')%>%
   # Filter the Year from 1979 to 2021, because I have only for this years crop data
   filter(year >= '1979', year <= '2021')
@@ -86,11 +86,12 @@ frost_days_BW <- read.table(
   select(1,5)%>%
   # Rename the column Jahr into year 
   rename('year'= 'Jahr')%>%
-  # Rename the column Baden-Württemberg into frost days in number of days 
+  # Rename the column Baden-Württemberg into frost days 
   rename('frost_days'= 'Baden-Wuerttemberg')%>%
   # Filter the Year from 1979 to 2021, because I have only for this years crop data
   filter(year >= '1979', year <= '2021')
 
+# Merge the datasets crop, precipitation, temperature, frost days 
 data <- reduce(
   list(precipitation_BW, temperature_BW, frost_days_BW),
   left_join,
@@ -103,12 +104,13 @@ data <- reduce(
     names_to = "climate_variable",
     values_to = "climate_value"
   )
-knitr::kable(head(data,15), caption = "Wetter- und Ertragsdaten Tübingen (1976–2021)")
+knitr::kable(head(data,15), caption = "weather and crop data from tuebingen (1976–2021)")
 ```
 
-#Visulisation 
-# 1. Relationship Between Crop Yields and Climate Variables
+# Visulisation 
+## 1. Relationship between crop yields and climate variables
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
+# Plot of the relationship between crop yields and climate varaibles 
 p1 <- data %>%
   ggplot(
     aes(x= climate_value, y= yield, color = species)) +
@@ -119,9 +121,9 @@ p1 <- data %>%
                   scales = "free_x", 
                   ncol = 1, 
                   labeller = labeller(climate_variable = c(
-      precipitation = "Precipitation (mm)",
-      air_temperature = "Air Temperature (°C)",
-      frost_days = "Frost Days (days)"
+      precipitation = "Relationsship betweeen crop [Yield/ha] and precipitation [mm]",
+      air_temperature = "Relationsship betweeen crop [Yield/ha] and air temperature [°C]",
+      frost_days = "Relationsship betweeen crop [Yield/ha] and frost days [days]"
     ))) + 
     labs(
       title = "Relationship Between Crop Yields and Climate Variables", 
@@ -130,60 +132,86 @@ p1 <- data %>%
       color = "Crop Type"
     ) +
   theme_minimal() +
-    theme(legend.position="right")+
+    theme(legend.position="right",
+          plot.title = element_text(size = 18, face = "bold", hjust = 0.5),
+          strip.text = element_text(size = 14, face = "bold"),
+          panel.spacing = unit(1.5, "lines"
+          ))+
   scale_color_manual(values = c("grain maize" = "darkorange",
                                 "spring barley" = "steelblue",
                                 "winter wheat" = "forestgreen")) +
   scale_y_continuous(limits = c(0, 12), breaks = seq(0, 12, by = 2))
 ggsave("plot_relationship_yield_vs_climate.png", p1, width=8, height=10)
 ```
-![Relationship Between Crop Yields and Climate Variables](plot_relationship_yield_vs_climate.png)
+![](plot_relationship_yield_vs_climate.png)
 
-#2."Crop yields over the time [in year] 
+## 2.Crop yields over the time [in year] 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 p2 <-data %>%
+  mutate(
+    yield_average = mean(yield, na.rm = TRUE),
+    yield_above_average = if_else(yield >= yield_average, "above", "below")
+  )%>%
   ggplot(
-    aes(x= year, y= yield, color = species)) +
+    aes(x= year, y= yield, color = yield_above_average)) +
     geom_point(size = 3) + 
-  geom_smooth(method = "loess", se = FALSE)+
+  geom_smooth(method = "loess", se = FALSE, color = "black")+
       facet_wrap(
                   ~species, 
                   scales = "free_y", 
-                  ncol = 1, 
-    )+ 
+                  ncol = 1,
+                  labeller = labeller(species = c(
+      'grain maize' = "crop yield of grain maize over the time [in year]",
+      'spring barley' = "crop yield of spring barley over the time [in year]",
+      'winter wheat' = "crop yield of winter wheat over the time [in year]"
+    )))+ 
     labs(
       title = "Crop yields over the time [in year]", 
       x = 'Year', 
       y = 'Yield (t/ha)', 
-      color = "Crop Type"
+      color = "above/below the average"
     ) +
   theme_minimal()+ 
-  scale_y_continuous(limits = c(0, 12), breaks = seq(0, 12, by = 2))
+  scale_y_continuous(limits = c(0, 12), breaks = seq(0, 12, by = 2))+ 
+  scale_color_manual(values = c("above" = "forestgreen", "below" = "darkorange"),
+                     labels = c("above"="values above the average", "below" = "values below the average"))
 
 ggsave("plot_crop_yield_over_time.png", p2, width=8, height=6)
 ```
-![Crop yields over the time](plot_crop_yield_over_time.png)
+![](plot_crop_yield_over_time.png)
 
-#3.Climate variables over the time [in year]
+## 3.Climate variables over the time [in year]
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 p3 <- data %>%
+  group_by(climate_variable) %>%
+  mutate(
+    average_value = mean(climate_value, na.rm = TRUE),
+    above_average = if_else(climate_value >= average_value, "above", "below")
+  ) %>%
+  ungroup() %>%
   ggplot(
-    aes(x= year, y= climate_value, color = climate_variable)) +
+    aes(x= year, y= climate_value, color = above_average)) +
     geom_point(size = 3) + 
-  geom_smooth(method = "loess", se = FALSE)+
+  geom_smooth(method = "loess", se = FALSE, color = "black")+
       facet_wrap(
                   ~climate_variable, 
                   scales = "free_y", 
                   ncol = 1, 
-    )+ 
+                  labeller = labeller(climate_variable = c(
+      precipitation = "precipitation [mm] over the time [in year]",
+      air_temperature = "air temperature [°C] over the time [in year]",
+      frost_days = "frost days [days] over the time [in year]"
+    )))+ 
     labs(
       title = "Climate variables over the time [in year]", 
       x = 'Year', 
       y = 'Climate Variables', 
       color = "Climate Variables",
     )+
-  theme_minimal() 
+  theme_minimal()+
+    scale_color_manual(values = c("above" = "forestgreen", "below" = "darkorange"),
+                     labels = c("above"="values above the average", "below" = "values below the average")) 
 
 ggsave("plot_climate_vars_over_time.png", p3, width=8, height=8)
 ```
-![Climate variables over the time](plot_climate_vars_over_time.png)
+![](plot_climate_vars_over_time.png)
