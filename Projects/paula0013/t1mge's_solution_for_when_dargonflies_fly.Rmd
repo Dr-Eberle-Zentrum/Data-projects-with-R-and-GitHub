@@ -96,7 +96,7 @@ view(weather_fang_data2)
 ylim.prim <- c(0, 2)
 ylim.sec  <- c(0, 40)
 b <- diff(ylim.prim) / diff(ylim.sec)
-a <- ylim.prim[1] - b * ylim.sec[1]
+a <- ylim.prim[1] - b * ylim.sec[1] #I found this while searching for how to implement a 2nd y-aixs on stack-overfolw. I think it scales the axis but if you want to know how it is working please look it up here: https://stackoverflow.com/questions/3099219/ggplot-with-2-y-axes-on-each-side-and-different-scales
 
 # 2) Choose 8 evenly spaced dates across your range
 all_dates    <- sort(unique(weather_fang_data2$date))
