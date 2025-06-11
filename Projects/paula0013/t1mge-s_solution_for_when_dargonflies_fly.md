@@ -14,6 +14,8 @@ to fly”
     ## ✖ dplyr::lag()    masks stats::lag()
     ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
 
+# Data manipulation of the weather data
+
     weather_data <- read_delim("https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/refs/heads/main/Projects/paula0013/Weather_Data_Poland.csv"
                                , delim = ",")
 
@@ -85,7 +87,7 @@ to fly”
           mean_winddir >= 303.75 & mean_winddir <= 326.24 ~ "NW",
           mean_winddir >= 326.25 & mean_winddir <= 348.74 ~ "NNW",
         )
-      ) %>% view()
+      )
 
     ## Warning: There was 1 warning in `mutate()`.
     ## ℹ In argument: `True Dir. = as.numeric(`True Dir.`)`.
@@ -94,6 +96,8 @@ to fly”
 
     ## `summarise()` has grouped output by 'date'. You can override using the
     ## `.groups` argument.
+
+# Data manipulation of the catch data
 
     fang_data <- read_delim("https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/refs/heads/main/Projects/paula0013/Fangdaten_Poland.csv") 
 
@@ -126,6 +130,8 @@ to fly”
 
 
     view(weather_fang_data2)
+
+# Plotting of the data
 
     view(weather_fang_data2)
 
@@ -194,7 +200,7 @@ to fly”
     ## Warning: Removed 97 rows containing missing values or values outside the scale range
     ## (`geom_col()`).
 
-![](t1mge-s_solution_for_when_dargonflies_fly_files/figure-markdown_strict/unnamed-chunk-2-1.png)
+![](t1mge-s_solution_for_when_dargonflies_fly_files/figure-markdown_strict/unnamed-chunk-3-1.png)
 
       '# This is how you would rename the columns I choose not to do it because the long name are very cluncky and dont provide any value during the creation the plots
       rename("Date in yyyy-MM-dd" = date,

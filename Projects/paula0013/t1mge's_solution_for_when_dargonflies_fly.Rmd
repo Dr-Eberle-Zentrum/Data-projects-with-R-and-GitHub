@@ -11,6 +11,7 @@ Goal: "To find out under which weather conditions Aeshna mixta prefers to fly"
 library(tidyverse)
 ```
 
+# Data manipulation of the weather data
 ```{r}
 weather_data <- read_delim("https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/refs/heads/main/Projects/paula0013/Weather_Data_Poland.csv"
                            , delim = ",")
@@ -65,8 +66,13 @@ filter(date >= as.Date("2024-08-01") & date <= as.Date("2024-10-01")) %>% # Here
       mean_winddir >= 303.75 & mean_winddir <= 326.24 ~ "NW",
       mean_winddir >= 326.25 & mean_winddir <= 348.74 ~ "NNW",
     )
-  ) %>% view()
-  
+  )
+```
+
+
+# Data manipulation of the catch data
+```{r}
+
 fang_data <- read_delim("https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/refs/heads/main/Projects/paula0013/Fangdaten_Poland.csv") 
 rev_fang_data <- fang_data %>% 
   na.omit() %>% 
@@ -89,6 +95,8 @@ view(weather_fang_data2)
 
 ```
 
+
+# Plotting of the data
 ```{r}
 view(weather_fang_data2)
 
