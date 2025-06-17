@@ -108,11 +108,12 @@ DEG_data %>%
   geom_hline(yintercept = -log10(0.05), linetype = "solid", color = "black") +
   geom_vline(xintercept = c(-2, 2), linetype = "solid", color = "black") +
   labs(title = title_plot1, x="log2FC") +
+  scale_color_manual(values = c("TRUE" = "red", "FALSE" = "blue"),labels = c("TRUE" = "log2FC>2", "FALSE" = "log2FC<=2"),name = "logFC Status")+
   scale_x_continuous(limits=c(-5, 5), breaks = c(-4, -2, 0, 2, 4))
 
 ```
 I didn't add all Gene names to the plot as the plot would be too cluttered.
-```{r Plot 2}
+```{r Plot 2, fig.width=12, fig.height=8}
 
 GO_data_up %>%
   mutate(ID=fct_reorder(ID, GeneRatio)) %>%
@@ -132,8 +133,9 @@ GO_data_up %>%
   theme_minimal() +
   theme(
     legend.position = "right",
-    axis.text.y = element_text(size = 10)
-  )
+    axis.text.y = element_text(size = 10), axis.text.x = element_text(size = 4,angle = 90, vjust = 0.5, hjust = 1), plot.title = element_text(size = 20)
+  )+
+  coord_flip()
   
 
 ```

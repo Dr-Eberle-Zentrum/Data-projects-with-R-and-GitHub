@@ -137,6 +137,7 @@ one for the second data visualisation task.
       geom_hline(yintercept = -log10(0.05), linetype = "solid", color = "black") +
       geom_vline(xintercept = c(-2, 2), linetype = "solid", color = "black") +
       labs(title = title_plot1, x="log2FC") +
+      scale_color_manual(values = c("TRUE" = "red", "FALSE" = "blue"),labels = c("TRUE" = "log2FC>2", "FALSE" = "log2FC<=2"),name = "logFC Status")+
       scale_x_continuous(limits=c(-5, 5), breaks = c(-4, -2, 0, 2, 4))
 
 ![](flomaili_files/figure-markdown_strict/Plot1-1.png) I didn’t add all
@@ -160,7 +161,8 @@ Gene names to the plot as the plot would be too cluttered.
       theme_minimal() +
       theme(
         legend.position = "right",
-        axis.text.y = element_text(size = 10)
-      )
+        axis.text.y = element_text(size = 10), axis.text.x = element_text(size = 4,angle = 90, vjust = 0.5, hjust = 1), plot.title = element_text(size = 20)
+      )+
+      coord_flip()
 
 ![](flomaili_files/figure-markdown_strict/Plot%202-1.png)
