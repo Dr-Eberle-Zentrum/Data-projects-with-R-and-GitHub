@@ -20,9 +20,9 @@ mid-level (MI) roles.
 ![](natali-mmx_files/figure-markdown_strict/plotSalaryDistribution-1.png)
 
 We observe that the salary distribution for entry-level (EN) and
-mid-level (MI) positions in North America is generally higher than in
-Europe. This indicates that data scientists in North America,
-particularly in the USA and Canada, tend to earn more than their
-European counterparts in comparable roles. However, it is important to
-note that the European dataset is smaller, which may affect the
-reliability of these results.
+mid-level (MI) positions in North America is significantly higher (p ≤
+0.05) than in Europe based on the Wilcoxon test. This indicates that
+data scientists in North America, particularly in the USA and Canada,
+tend to earn more than their European counterparts in comparable roles.
+However, it is important to note that the European dataset (n) is
+smaller, which may affect the reliability of these results.

@@ -6,15 +6,16 @@ output: md_document
 ```{r setup, include=FALSE}
 library(tidyverse)
 # install packages on first run:
-# install.packages(c("sf", "rnaturalearth", "rnaturalearthdata", "viridis"))
+# install.packages(c("sf", "rnaturalearth", "rnaturalearthdata", "viridis", "ggpubr"))
 library(sf)
 library(rnaturalearth)
 library(rnaturalearthdata)
 library(viridis)
-
+library(ggpubr)
 ```
 
 ```{r dataImport, include = FALSE}
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 data <- read.csv("Salaries_data_scientists.csv")
 ```
 
@@ -38,7 +39,7 @@ employeeLocations <- data2024 %>%
 # view(employeeLocations)
 ```
 
-```{r plotJobNumbers, echo = FALSE}
+```{r plotJobNumbers, echo = FALSE, warning=FALSE}
 world <- ne_countries(scale = "medium", returnclass = "sf")
 
 joinedData <- world %>%
@@ -46,12 +47,13 @@ joinedData <- world %>%
 
 ggplot(data = joinedData) +
   geom_sf(aes(fill = total_jobs), color = "white") +
-  scale_fill_viridis(option = "C", na.value = "grey90", name = "Total Jobs") +
-  labs(title = "Total Number of Fully Remote Employees by Country)",
+  geom_sf_text(aes(label = total_jobs), size = 3, color = "black", na.rm = TRUE) +
+  scale_fill_gradient(low = "lightsalmon", high = "lightskyblue", na.value = "grey90", name = "Total Jobs") +
+  labs(title = "Total Number of Fully Remote Employees by Country",
        subtitle = "Data Scientists in 2024",
        caption = "Source: Salaries_data_scientists.csv") +
   theme_minimal() +
-  theme(legend.position = "bottom")
+  theme(axis.title = element_blank(), legend.position = "bottom")
 
 US <- employeeLocations %>%
   filter(iso_a2 == "US") %>%
@@ -78,25 +80,52 @@ countries <- unique(salaryDistribution$employee_residence)
 A <- c("US", "CA")
 EU <- c("GB", "DE", "ES", "HR", "RO", "IE")
 
+makeCountryList <- function(continentName, countryList) {
+  paste0(continentName, ": ", paste(countryList, collapse = ", "))
+}
+
 salaryDistributionContinent <- salaryDistribution %>%
   mutate(continent = case_when(
     employee_residence %in% A ~ "North America",
     employee_residence %in% EU ~ "Europe",
     TRUE ~ "Other"
   )) %>% filter(continent != "Other")
+
+counts <- salaryDistributionContinent %>%
+  group_by(experience_level, continent) %>%
+  summarise(n = n(), .groups = "drop")
 ```
 
 ```{r plotSalaryDistribution, echo = FALSE}
-ggplot(salaryDistributionContinent, aes(x = continent, y = salary_in_usd, fill = experience_level)) +
+subtitleText <- paste(
+  makeCountryList("Europe", EU),
+  makeCountryList("North America", A),
+  sep = " | "
+)
+
+ggplot(salaryDistributionContinent, aes(x = experience_level, y = salary_in_usd, fill = continent)) +
   geom_violin() +
+  geom_text(data = counts, aes(x = experience_level, y = 0, label = n, group = continent),
+            position = position_dodge(width = 0.9),
+            vjust = 1.5, size = 3) +
   scale_y_continuous(labels = scales::comma) +
-  scale_fill_manual(values = c("EN" = "darkblue", "MI" = "yellow")) +
+  scale_fill_manual(values = c("Europe" = "lightsalmon", "North America" = "lightskyblue")) +
+  annotate("text", x = 0.4, y = -20000, label = " n =", 
+        hjust = 0, size = 3) +
   labs(title = "Salary Distribution by Continent and Experience Level",
-       x = "Continent",
+       x = "Experience Level",
        y = "Salary (USD)",
-       fill = "Experience Level") +
+       fill = "Continent", subtitle = subtitleText) +
   theme_minimal() +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom") +
+  stat_compare_means(
+    aes(group = continent),
+    method = "wilcox.test",
+    label = "p.format",
+    label.y = c(250000, 250000, 250000, 250000),
+    size = 4,
+    ref.group = NULL
+  )
 ```
 
-We observe that the salary distribution for entry-level (EN) and mid-level (MI) positions in North America is generally higher than in Europe. This indicates that data scientists in North America, particularly in the USA and Canada, tend to earn more than their European counterparts in comparable roles. However, it is important to note that the European dataset is smaller, which may affect the reliability of these results.
+We observe that the salary distribution for entry-level (EN) and mid-level (MI) positions in North America is significantly higher (p ≤ 0.05) than in Europe based on the Wilcoxon test. This indicates that data scientists in North America, particularly in the USA and Canada, tend to earn more than their European counterparts in comparable roles. However, it is important to note that the European dataset (n) is smaller, which may affect the reliability of these results.
