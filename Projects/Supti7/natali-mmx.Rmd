@@ -47,7 +47,7 @@ joinedData <- world %>%
 
 ggplot(data = joinedData) +
   geom_sf(aes(fill = total_jobs), color = "white") +
-  geom_sf_text(aes(label = total_jobs), size = 3, color = "black", na.rm = TRUE) +
+  geom_sf_text(aes(label = total_jobs), size = 2.5, color = "black", na.rm = TRUE) +
   scale_fill_gradient(low = "lightsalmon", high = "lightskyblue", na.value = "grey90", name = "Total Jobs") +
   labs(title = "Total Number of Fully Remote Employees by Country",
        subtitle = "Data Scientists in 2024",
@@ -123,7 +123,7 @@ ggplot(salaryDistributionContinent, aes(x = experience_level, y = salary_in_usd,
     method = "wilcox.test",
     label = "p.format",
     label.y = c(250000, 250000, 250000, 250000),
-    size = 4,
+    size = 3,
     ref.group = NULL
   )
 ```
