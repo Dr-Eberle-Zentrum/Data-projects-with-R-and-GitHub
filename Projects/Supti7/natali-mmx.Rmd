@@ -123,7 +123,7 @@ ggplot(salaryDistributionContinent, aes(x = experience_level, y = salary_in_usd,
     method = "wilcox.test",
     label = "p.format",
     label.y = c(250000, 250000, 250000, 250000),
-    size = 4,
+    size = 3,
     ref.group = NULL
   )
 ```
