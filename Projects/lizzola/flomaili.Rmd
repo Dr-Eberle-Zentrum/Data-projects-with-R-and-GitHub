@@ -21,7 +21,6 @@ library(fs)
 if (!is.null(current_input())) {
   rmd_dir <- path_dir(current_input())
 } else {
-  dirname(this.path::this.file())
   rmd_dir <- getwd()
 }
 
@@ -38,14 +37,18 @@ transcript_data <- read_excel(excel_path, col_names = FALSE, sheet = "Aged vs Yo
 
 ```{r DEG, warning=FALSE, message=FALSE}
 
-transcript_data %>%
-  select(1:3) -> DEG_data
+clean_transcript_data <- function(data, col_indices) {
+  data %>%
+    select(all_of(col_indices)) %>%
+    {
+      colnames(.) <- as.character(unlist(.[2, ]))
+      .[-c(1, 2), ]
+    }
+}
 
-header_row2 <- as.character(DEG_data[2, ])
-colnames(DEG_data) <- header_row2
-DEG_data <- DEG_data[-c(1, 2), ]
 
-DEG_data %>% 
+transcript_data  %>% 
+  clean_transcript_data(1:3) %>%
   rename(p_adjust = p.adjust) %>%
   mutate(p_adjust = as.double(p_adjust)) %>%
   mutate(logFC = as.numeric(logFC)) %>%
@@ -57,45 +60,54 @@ DEG_data_t10 <- DEG_data %>%
   filter(p_adjust < 0.05) %>%      
   arrange(desc(logFC)) %>%        
   head(10) 
-
+### kableExtra is for HTML output
+#DEG_data_t10 %>%
+ # select(1:3) %>%
+  #kable(
+   # caption = "Top 10 Differentially Expressed Genes (p.adjust < 0.05)",
+    #col.names = c("Gene Name", "LogFC", "P-value"),
+#    align = "lcc" 
+ # ) %>%
+#  kable_styling(
+#    bootstrap_options = c("striped", "hover", "condensed"),
+#    full_width = FALSE
+#  ) %>%
+ # add_header_above(c("Gene Information" = 1, "Expression Changes" = 2)) %>% 
+ # footnote(
+  #  general = "Filtered for p.adjust < 0.05 and ranked by highest logFC. LogFC > 0 indicates upregulation.",
+   # footnote_as_chunk = TRUE
+  #) 
+#####
 
 DEG_data_t10 %>%
   select(1:3) %>%
   kable(
     caption = "Top 10 Differentially Expressed Genes (p.adjust < 0.05)",
     col.names = c("Gene Name", "LogFC", "P-value"),
-    align = "lcc" 
-  ) %>%
-  kable_styling(
-    bootstrap_options = c("striped", "hover", "condensed"),
-    full_width = FALSE
-  ) %>%
-  add_header_above(c("Gene Information" = 1, "Expression Changes" = 2)) %>% 
-  footnote(
-    general = "Filtered for p.adjust < 0.05 and ranked by highest logFC. LogFC > 0 indicates upregulation.",
-    footnote_as_chunk = TRUE
+    align = "lcc"
   ) %>%
   print()
 ```
 ```{r OG}
-transcript_data %>%
-  select(6:11) -> GO_data_up
-
-header_row2 <- as.character(GO_data_up[2, ])
-colnames(GO_data_up) <- header_row2
-GO_data_up <- GO_data_up[-c(1, 2), ]
-
-terms <- c("angiogenesis", "immune response", "immunity", "cytokine", "vasculature", "wound", "inflammatory response", "chemokine", "lymphatic", "lymphocyte", "macrophage", "monocyte")
-pattern <- str_c(terms, collapse = "|")
 
 
-GO_data_up <- GO_data_up %>%
+terms_pattern <- c(
+  "angiogenesis", "immune response", "immunity", "cytokine",
+  "vasculature", "wound", "inflammatory response", "chemokine",
+  "lymphatic", "lymphocyte", "macrophage", "monocyte"
+) %>% 
+  str_c(collapse = "|")
+
+
+
+GO_data_up <- transcript_data %>%
+  clean_transcript_data(6:11) %>%
   rename(p_adjust_2 =p.adjust) %>%
   mutate(p_adjust_2 = as.double(p_adjust_2)) %>%
   separate(GeneRatio, into = c("num", "den"), sep = "/", convert = TRUE) %>%
   mutate(GeneRatio = as.double(num) / as.double(den)) %>%
   select( ID, Description,GeneRatio,p_adjust_2) %>%
-  filter(!is.na(Description) & str_detect(Description, regex(pattern, ignore_case = TRUE)))
+  filter(!is.na(Description) & str_detect(Description, regex(terms_pattern, ignore_case = TRUE)))
 ```
 It didn' make sense to me to delete the ID column, because I need this one for the second data visualisation task.
 ```{r Plot1, warning=FALSE}
@@ -104,7 +116,7 @@ title_plot1 <-"Differentially Expressed Genes in Young vs. Aged Macrophages"
 DEG_data %>%
   ggplot(aes(x=logFC, y=-log10(p_adjust))) +
   geom_point(aes(colour = logFC_high)) +
-    geom_text_repel(aes(label = gene), max.overlaps = 40) +
+    geom_text_repel(aes(label = gene), max.overlaps = 30) +
   geom_hline(yintercept = -log10(0.05), linetype = "solid", color = "black") +
   geom_vline(xintercept = c(-2, 2), linetype = "solid", color = "black") +
   labs(title = title_plot1, x="log2FC") +
@@ -133,7 +145,7 @@ GO_data_up %>%
   theme_minimal() +
   theme(
     legend.position = "right",
-    axis.text.y = element_text(size = 10), axis.text.x = element_text(size = 4,angle = 90, vjust = 0.5, hjust = 1), plot.title = element_text(size = 20)
+    axis.text.y = element_text(size = 10), axis.text.x = element_text(size = 10,angle = 90, vjust = 0.5, hjust = 1), plot.title = element_text(size = 20)
   )+
   coord_flip()
   

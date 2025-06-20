@@ -1,11 +1,15 @@
-    transcript_data %>%
-      select(1:3) -> DEG_data
+    clean_transcript_data <- function(data, col_indices) {
+      data %>%
+        select(all_of(col_indices)) %>%
+        {
+          colnames(.) <- as.character(unlist(.[2, ]))
+          .[-c(1, 2), ]
+        }
+    }
 
-    header_row2 <- as.character(DEG_data[2, ])
-    colnames(DEG_data) <- header_row2
-    DEG_data <- DEG_data[-c(1, 2), ]
 
-    DEG_data %>% 
+    transcript_data  %>% 
+      clean_transcript_data(1:3) %>%
       rename(p_adjust = p.adjust) %>%
       mutate(p_adjust = as.double(p_adjust)) %>%
       mutate(logFC = as.numeric(logFC)) %>%
@@ -17,113 +21,68 @@
       filter(p_adjust < 0.05) %>%      
       arrange(desc(logFC)) %>%        
       head(10) 
-
+    ### kableExtra is for HTML output
+    #DEG_data_t10 %>%
+     # select(1:3) %>%
+      #kable(
+       # caption = "Top 10 Differentially Expressed Genes (p.adjust < 0.05)",
+        #col.names = c("Gene Name", "LogFC", "P-value"),
+    #    align = "lcc" 
+     # ) %>%
+    #  kable_styling(
+    #    bootstrap_options = c("striped", "hover", "condensed"),
+    #    full_width = FALSE
+    #  ) %>%
+     # add_header_above(c("Gene Information" = 1, "Expression Changes" = 2)) %>% 
+     # footnote(
+      #  general = "Filtered for p.adjust < 0.05 and ranked by highest logFC. LogFC > 0 indicates upregulation.",
+       # footnote_as_chunk = TRUE
+      #) 
+    #####
 
     DEG_data_t10 %>%
       select(1:3) %>%
       kable(
         caption = "Top 10 Differentially Expressed Genes (p.adjust < 0.05)",
         col.names = c("Gene Name", "LogFC", "P-value"),
-        align = "lcc" 
-      ) %>%
-      kable_styling(
-        bootstrap_options = c("striped", "hover", "condensed"),
-        full_width = FALSE
-      ) %>%
-      add_header_above(c("Gene Information" = 1, "Expression Changes" = 2)) %>% 
-      footnote(
-        general = "Filtered for p.adjust < 0.05 and ranked by highest logFC. LogFC > 0 indicates upregulation.",
-        footnote_as_chunk = TRUE
+        align = "lcc"
       ) %>%
       print()
 
-    ## <table class="table table-striped table-hover table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;border-bottom: 0;">
-    ## <caption>Top 10 Differentially Expressed Genes (p.adjust &lt; 0.05)</caption>
-    ##  <thead>
-    ## <tr>
-    ## <th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="1"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">Gene Information</div></th>
-    ## <th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">Expression Changes</div></th>
-    ## </tr>
-    ##   <tr>
-    ##    <th style="text-align:left;"> Gene Name </th>
-    ##    <th style="text-align:center;"> LogFC </th>
-    ##    <th style="text-align:center;"> P-value </th>
-    ##   </tr>
-    ##  </thead>
-    ## <tbody>
-    ##   <tr>
-    ##    <td style="text-align:left;"> Acod1 </td>
-    ##    <td style="text-align:center;"> 4.919507 </td>
-    ##    <td style="text-align:center;"> 0.0041432 </td>
-    ##   </tr>
-    ##   <tr>
-    ##    <td style="text-align:left;"> Vegfa </td>
-    ##    <td style="text-align:center;"> 3.464017 </td>
-    ##    <td style="text-align:center;"> 0.0000000 </td>
-    ##   </tr>
-    ##   <tr>
-    ##    <td style="text-align:left;"> Thbs1 </td>
-    ##    <td style="text-align:center;"> 3.369642 </td>
-    ##    <td style="text-align:center;"> 0.0039819 </td>
-    ##   </tr>
-    ##   <tr>
-    ##    <td style="text-align:left;"> Serpine1 </td>
-    ##    <td style="text-align:center;"> 3.197021 </td>
-    ##    <td style="text-align:center;"> 0.0000000 </td>
-    ##   </tr>
-    ##   <tr>
-    ##    <td style="text-align:left;"> AA467197 </td>
-    ##    <td style="text-align:center;"> 3.112409 </td>
-    ##    <td style="text-align:center;"> 0.0000005 </td>
-    ##   </tr>
-    ##   <tr>
-    ##    <td style="text-align:left;"> Cst7 </td>
-    ##    <td style="text-align:center;"> 2.847473 </td>
-    ##    <td style="text-align:center;"> 0.0000000 </td>
-    ##   </tr>
-    ##   <tr>
-    ##    <td style="text-align:left;"> Flt1 </td>
-    ##    <td style="text-align:center;"> 2.698421 </td>
-    ##    <td style="text-align:center;"> 0.0000350 </td>
-    ##   </tr>
-    ##   <tr>
-    ##    <td style="text-align:left;"> C3 </td>
-    ##    <td style="text-align:center;"> 2.566213 </td>
-    ##    <td style="text-align:center;"> 0.0000280 </td>
-    ##   </tr>
-    ##   <tr>
-    ##    <td style="text-align:left;"> Slc7a11 </td>
-    ##    <td style="text-align:center;"> 2.457346 </td>
-    ##    <td style="text-align:center;"> 0.0458777 </td>
-    ##   </tr>
-    ##   <tr>
-    ##    <td style="text-align:left;"> Acp5 </td>
-    ##    <td style="text-align:center;"> 2.441797 </td>
-    ##    <td style="text-align:center;"> 0.0000066 </td>
-    ##   </tr>
-    ## </tbody>
-    ## <tfoot><tr><td style="padding: 0; " colspan="100%">
-    ## <span style="font-style: italic;">Note: </span> <sup></sup> Filtered for p.adjust &lt; 0.05 and ranked by highest logFC. LogFC &gt; 0 indicates upregulation.</td></tr></tfoot>
-    ## </table>
+    ## 
+    ## 
+    ## Table: Top 10 Differentially Expressed Genes (p.adjust < 0.05)
+    ## 
+    ## |Gene Name |  LogFC   |  P-value  |
+    ## |:---------|:--------:|:---------:|
+    ## |Acod1     | 4.919507 | 0.0041432 |
+    ## |Vegfa     | 3.464017 | 0.0000000 |
+    ## |Thbs1     | 3.369642 | 0.0039819 |
+    ## |Serpine1  | 3.197021 | 0.0000000 |
+    ## |AA467197  | 3.112409 | 0.0000005 |
+    ## |Cst7      | 2.847473 | 0.0000000 |
+    ## |Flt1      | 2.698421 | 0.0000350 |
+    ## |C3        | 2.566213 | 0.0000280 |
+    ## |Slc7a11   | 2.457346 | 0.0458777 |
+    ## |Acp5      | 2.441797 | 0.0000066 |
 
-    transcript_data %>%
-      select(6:11) -> GO_data_up
-
-    header_row2 <- as.character(GO_data_up[2, ])
-    colnames(GO_data_up) <- header_row2
-    GO_data_up <- GO_data_up[-c(1, 2), ]
-
-    terms <- c("angiogenesis", "immune response", "immunity", "cytokine", "vasculature", "wound", "inflammatory response", "chemokine", "lymphatic", "lymphocyte", "macrophage", "monocyte")
-    pattern <- str_c(terms, collapse = "|")
+    terms_pattern <- c(
+      "angiogenesis", "immune response", "immunity", "cytokine",
+      "vasculature", "wound", "inflammatory response", "chemokine",
+      "lymphatic", "lymphocyte", "macrophage", "monocyte"
+    ) %>% 
+      str_c(collapse = "|")
 
 
-    GO_data_up <- GO_data_up %>%
+
+    GO_data_up <- transcript_data %>%
+      clean_transcript_data(6:11) %>%
       rename(p_adjust_2 =p.adjust) %>%
       mutate(p_adjust_2 = as.double(p_adjust_2)) %>%
       separate(GeneRatio, into = c("num", "den"), sep = "/", convert = TRUE) %>%
       mutate(GeneRatio = as.double(num) / as.double(den)) %>%
       select( ID, Description,GeneRatio,p_adjust_2) %>%
-      filter(!is.na(Description) & str_detect(Description, regex(pattern, ignore_case = TRUE)))
+      filter(!is.na(Description) & str_detect(Description, regex(terms_pattern, ignore_case = TRUE)))
 
 It didn’ make sense to me to delete the ID column, because I need this
 one for the second data visualisation task.
@@ -133,7 +92,7 @@ one for the second data visualisation task.
     DEG_data %>%
       ggplot(aes(x=logFC, y=-log10(p_adjust))) +
       geom_point(aes(colour = logFC_high)) +
-        geom_text_repel(aes(label = gene), max.overlaps = 40) +
+        geom_text_repel(aes(label = gene), max.overlaps = 30) +
       geom_hline(yintercept = -log10(0.05), linetype = "solid", color = "black") +
       geom_vline(xintercept = c(-2, 2), linetype = "solid", color = "black") +
       labs(title = title_plot1, x="log2FC") +
@@ -161,7 +120,7 @@ Gene names to the plot as the plot would be too cluttered.
       theme_minimal() +
       theme(
         legend.position = "right",
-        axis.text.y = element_text(size = 10), axis.text.x = element_text(size = 4,angle = 90, vjust = 0.5, hjust = 1), plot.title = element_text(size = 20)
+        axis.text.y = element_text(size = 10), axis.text.x = element_text(size = 10,angle = 90, vjust = 0.5, hjust = 1), plot.title = element_text(size = 20)
       )+
       coord_flip()
 
