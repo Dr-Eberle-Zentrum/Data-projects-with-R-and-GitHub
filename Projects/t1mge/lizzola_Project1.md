@@ -3,19 +3,28 @@
 Import the data
 
     library(dplyr)
+    library(tidyr)
     library(tidyverse)
     library(kableExtra)
+    library(knitr)
+    library(fs)
 
-    data <- read.csv("GSE273780_EukmRNAseq_counts.csv")
+
+    if (!is.null(current_input())) {
+      rmd_dir <- path_dir(current_input())
+    } else {
+      rmd_dir <- getwd()
+    }
+    data <- read.csv(file.path(rmd_dir, "GSE273780_EukmRNAseq_counts.csv"), row.names = 1)
     head(data)
 
-    ##   X       Row.names  G58   G52  G25   G84    G2  G60   G41   G36   G73   G79
-    ## 1 1 ENSG00000000003   23     0   23     7    14   18    15     3     0    12
-    ## 2 2 ENSG00000000005    0     0    0     0     0    0     0     0     0     0
-    ## 3 3 ENSG00000000419  469   348  494   334   567  616   342   383   363   409
-    ## 4 4 ENSG00000000457  196   198  403   202   382  166   240   168   124   244
-    ## 5 5 ENSG00000000460   40    45   82    38    70   36    40    26    33    52
-    ## 6 6 ENSG00000000938 9567 14297 8058 13908 10128 6291 14438 10547 10985 15057
+    ##         Row.names  G58   G52  G25   G84    G2  G60   G41   G36   G73   G79
+    ## 1 ENSG00000000003   23     0   23     7    14   18    15     3     0    12
+    ## 2 ENSG00000000005    0     0    0     0     0    0     0     0     0     0
+    ## 3 ENSG00000000419  469   348  494   334   567  616   342   383   363   409
+    ## 4 ENSG00000000457  196   198  403   202   382  166   240   168   124   244
+    ## 5 ENSG00000000460   40    45   82    38    70   36    40    26    33    52
+    ## 6 ENSG00000000938 9567 14297 8058 13908 10128 6291 14438 10547 10985 15057
     ##     G74   G90   G31   G46   G83   G89   G67   G28   G55   G26   G63   G69   G87
     ## 1     5     4    11    19     8     3     8    16    24    10    27    16     3
     ## 2     0     0     0     0     0     0     0     0     0     0     0     0     0
@@ -65,31 +74,60 @@ G9, G12, G32, G45). Rename the columns.
 <table>
 <thead>
 <tr class="header">
-<th>Time point</th>
-<th>Normal weight</th>
-<th>Overweight</th>
+<th>Sample</th>
+<th>Week</th>
+<th>Type</th>
+<th>Replicate</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>week 12</td>
 <td>G25</td>
-<td>G27</td>
+<td>Week12</td>
+<td>NW</td>
+<td>1</td>
 </tr>
 <tr class="even">
-<td>week 12</td>
 <td>G26</td>
-<td>G30</td>
+<td>Week12</td>
+<td>NW</td>
+<td>2</td>
 </tr>
 <tr class="odd">
-<td>week 36</td>
-<td>G9</td>
-<td>G32</td>
+<td>G27</td>
+<td>Week12</td>
+<td>OW</td>
+<td>1</td>
 </tr>
 <tr class="even">
-<td>week 36</td>
+<td>G30</td>
+<td>Week12</td>
+<td>OW</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td>G9</td>
+<td>Week36</td>
+<td>NW</td>
+<td>1</td>
+</tr>
+<tr class="even">
 <td>G12</td>
+<td>Week36</td>
+<td>NW</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td>G32</td>
+<td>Week36</td>
+<td>OW</td>
+<td>1</td>
+</tr>
+<tr class="even">
 <td>G45</td>
+<td>Week36</td>
+<td>OW</td>
+<td>2</td>
 </tr>
 </tbody>
 </table>
@@ -97,111 +135,79 @@ G9, G12, G32, G45). Rename the columns.
     filtered_data <- data %>%
       select(Row.names, G25, G26, G27, G30, G9, G12, G32, G45) %>%
       rename(Gene = Row.names, 
-             Week12_NW = G25, 
-             Week12_OW = G26, 
-             Week12_NW2 = G27, 
-             Week12_OW2 = G30, 
-             Week36_NW = G9, 
-             Week36_OW = G12, 
-             Week36_NW2 = G32, 
-             Week36_OW2 = G45)
+             Week12_NW_1 = G25, 
+             Week12_OW_1 = G26, 
+             Week12_NW_2 = G27, 
+             Week12_OW_2 = G30, 
+             Week36_NW_1 = G9, 
+             Week36_OW_1 = G12, 
+             Week36_NW_2 = G32, 
+             Week36_OW_2 = G45)
+
+    long_data <- filtered_data %>%
+      pivot_longer(-Gene, names_to = "Condition", values_to = "Count") %>%
+      separate(Condition, into = c("Week", "Type", "Replicate"), sep = "_")
 
 Normalize the data from counts to counts per million (add up all the
 counts per sample and divide each sample by this, then multiply by
 1.000.000). log2 transformation of the counts per million to make the
 data more symmetric.
 
-    count_columns <- names(filtered_data)[startsWith(names(filtered_data), "Week")]
-
-    total_counts_per_replicate <- colSums(filtered_data[, count_columns], na.rm = TRUE)
-
-    for (i in count_columns) {
-      new_col <- paste0(i, "_cpm")
-      filtered_data[[new_col]] <- filtered_data[[i]] / total_counts_per_replicate[i] * 1e6
-    }
-
-    normalized_log2_data <- filtered_data %>%
-      mutate(across(ends_with("_CPM"), ~ log2(. + 1), .names = "{.col}_log2"))
+    log2_data <- long_data %>%
+      group_by(Week, Type, Replicate) %>%
+      mutate(
+        Total = sum(Count, na.rm = TRUE),
+        CPM = Count / Total * 1e6,
+        CPM_log2 = log2(CPM + 1)
+      ) %>%
+      ungroup()
 
 Drop any rows with blank names and count values between 0 and 2.
 
-    normalized_log2_data <- normalized_log2_data %>%
+    log2_data_under_2 <- log2_data %>%
       filter(!is.na(Gene) & Gene != "") %>%
       rowwise() %>%
-      filter(all(c_across(ends_with("_log2")) >= 2)) %>%
+      filter(CPM_log2 >= 2) %>%
       ungroup()
 
 Calculate the z-Value of each count in new columns by subtracting the
 normalized count value by the mean of the column and divide by the
-columns standard deviation.
+columns standard deviation. Calculate the variance of the log2
+transformed counts by rows and put it in a new column.
 
-    heatmap_data <- normalized_log2_data %>%
-      mutate(across(
-        ends_with("_CPM"),
-        ~ (. - mean(., na.rm = TRUE)) / sd(., na.rm = TRUE),
-        .names = "{.col}_z"
-      ))
-
-    heatmap_data %>%
-      select(Gene, ends_with("_CPM_z")) %>%
-      head(10)
-
-    ## # A tibble: 10 × 9
-    ##    Gene        Week12_NW_cpm_z Week12_OW_cpm_z Week12_NW2_cpm_z Week12_OW2_cpm_z
-    ##    <chr>                 <dbl>           <dbl>            <dbl>            <dbl>
-    ##  1 ENSG000000…         -0.196          -0.124            -0.150          -0.134 
-    ##  2 ENSG000000…         -0.211          -0.132            -0.180          -0.154 
-    ##  3 ENSG000000…         -0.263          -0.155            -0.207          -0.178 
-    ##  4 ENSG000000…          1.04            1.05              1.39            1.32  
-    ##  5 ENSG000000…         -0.228          -0.123            -0.150          -0.135 
-    ##  6 ENSG000000…         -0.197          -0.116            -0.166          -0.150 
-    ##  7 ENSG000000…         -0.159          -0.0992           -0.163          -0.136 
-    ##  8 ENSG000000…         -0.0648         -0.103            -0.162          -0.136 
-    ##  9 ENSG000000…         -0.114          -0.0902           -0.102          -0.0935
-    ## 10 ENSG000000…         -0.179          -0.138            -0.190          -0.153 
-    ## # ℹ 4 more variables: Week36_NW_cpm_z <dbl>, Week36_OW_cpm_z <dbl>,
-    ## #   Week36_NW2_cpm_z <dbl>, Week36_OW2_cpm_z <dbl>
-
-Calculate the variance of the log2 transformed counts by rows and put it
-in a new column.
-
-    heatmap_data <- heatmap_data %>%
-      rowwise() %>%
-      mutate(log2_CPM_variance = var(c_across(ends_with("_log2")), na.rm = TRUE)) %>%
+    heatmap_data <- log2_data_under_2 %>%
+      group_by(Week, Type, Replicate) %>%
+      mutate(CPM_z = (CPM - mean(CPM, na.rm = TRUE)) / sd(CPM, na.rm = TRUE)) %>%
+      ungroup() %>%
+      group_by(Gene) %>%
+      mutate(log2_CPM_variance = var(CPM_log2, na.rm = TRUE)) %>%
       ungroup()
-
-    heatmap_data %>%
-      select(Gene, log2_CPM_variance, ends_with("_CPM_z")) %>%
-      head(10)
-
-    ## # A tibble: 10 × 10
-    ##    Gene       log2_CPM_variance Week12_NW_cpm_z Week12_OW_cpm_z Week12_NW2_cpm_z
-    ##    <chr>                  <dbl>           <dbl>           <dbl>            <dbl>
-    ##  1 ENSG00000…            0.0961         -0.196          -0.124            -0.150
-    ##  2 ENSG00000…            0.102          -0.211          -0.132            -0.180
-    ##  3 ENSG00000…            0.0806         -0.263          -0.155            -0.207
-    ##  4 ENSG00000…            0.0794          1.04            1.05              1.39 
-    ##  5 ENSG00000…            0.0685         -0.228          -0.123            -0.150
-    ##  6 ENSG00000…            0.106          -0.197          -0.116            -0.166
-    ##  7 ENSG00000…            0.162          -0.159          -0.0992           -0.163
-    ##  8 ENSG00000…            0.296          -0.0648         -0.103            -0.162
-    ##  9 ENSG00000…            0.0331         -0.114          -0.0902           -0.102
-    ## 10 ENSG00000…            0.428          -0.179          -0.138            -0.190
-    ## # ℹ 5 more variables: Week12_OW2_cpm_z <dbl>, Week36_NW_cpm_z <dbl>,
-    ## #   Week36_OW_cpm_z <dbl>, Week36_NW2_cpm_z <dbl>, Week36_OW2_cpm_z <dbl>
 
 ## Data visualization
 
-    heatmap_data <- heatmap_data %>%
-      select(Gene, log2_CPM_variance, ends_with("_CPM_z")) %>%
-      arrange(desc(log2_CPM_variance)) %>%
-      slice_head(n = 50)
+    top50_genes <- heatmap_data %>%
+      distinct(Gene, log2_CPM_variance) %>%
+      slice_max(log2_CPM_variance, n = 50) %>%
+      pull(Gene)
 
     heatmap_matrix <- heatmap_data %>%
+      filter(Gene %in% top50_genes) %>%
+      select(Gene, Week, Type, Replicate, CPM_log2) %>%
+      unite("Sample", Week, Type, Replicate, sep = "_") %>%
+      pivot_wider(names_from = Sample, values_from = CPM_log2) %>%
       column_to_rownames("Gene") %>%
-      select(-log2_CPM_variance) %>%
       as.matrix()
 
+    desired_order <- c(
+      "Week12_NW_1", "Week12_NW_2", "Week12_OW_1", "Week12_OW_2",
+      "Week36_NW_1", "Week36_NW_2", "Week36_OW_1", "Week36_OW_2"
+    )
+
+    heatmap_matrix <- heatmap_matrix[, desired_order]
+
+    colnames(heatmap_matrix) <- gsub("_", " ", colnames(heatmap_matrix))
+
+    png("heatmap.png", width = 800, height = 1200)
     heatmap(heatmap_matrix,
       scale = "column",
       Rowv = NA,
@@ -211,10 +217,23 @@ in a new column.
       main = "Heatmap of Top 50 Genes by Variance"
     )
 
-![](lizzola_Project1_files/figure-markdown_strict/heatmap-1.png)
+    dev.off()
+
+    ## png 
+    ##   2
+
+<figure>
+<img src="heatmap.png" alt="Heatmap Top 50 Genes" />
+<figcaption aria-hidden="true">Heatmap Top 50 Genes</figcaption>
+</figure>
 
 #### Conclusion
 
-Even though the heatmap is still very simple, it is interesting to see
-that some genes have different expressions between the groups, which
-also have a temporal component.
+The heatmap shows that gene expression of individual genes differs
+between the two weight groups (Normal Weight and Overweight). The
+variability within the replicates is also interesting. The expression
+pattern change between weeks (Week 12 and Week 36) indicates that the
+gene expression landscape is dynamic during pregnancy, although at first
+glance the changes in gene expression between the two weight groups
+appear to be similar. To conclude, gene expression is influenced by both
+gestational age and maternal weight status.
