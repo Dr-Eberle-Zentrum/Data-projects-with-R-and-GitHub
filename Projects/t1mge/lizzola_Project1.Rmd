@@ -15,6 +15,7 @@ library(tidyverse)
 library(kableExtra)
 library(knitr)
 library(fs)
+library(pheatmap)
 
 
 if (!is.null(current_input())) {
@@ -102,6 +103,7 @@ heatmap_data <- log2_data_under_2 %>%
 
 ## Data visualization
 
+Rank all genes descendingly by variance. Keep only top 50 highest-variance genes for the heat map.
 ```{r heatmap plot, echo = TRUE}
 
 top50_genes <- heatmap_data %>%
@@ -117,23 +119,41 @@ heatmap_matrix <- heatmap_data %>%
   column_to_rownames("Gene") %>%
   as.matrix()
 
-desired_order <- c(
+heatmap_matrix <- heatmap_matrix[, c(
   "Week12_NW_1", "Week12_NW_2", "Week12_OW_1", "Week12_OW_2",
   "Week36_NW_1", "Week36_NW_2", "Week36_OW_1", "Week36_OW_2"
-)
-
-heatmap_matrix <- heatmap_matrix[, desired_order]
+)]
 
 colnames(heatmap_matrix) <- gsub("_", " ", colnames(heatmap_matrix))
 
-png("heatmap.png", width = 800, height = 1200)
-heatmap(heatmap_matrix,
+gaps <- seq(2, ncol(heatmap_matrix) - 1, by = 2)
+
+annotation_colors <- list(
+  Week = c("Week12" = "coral", "Week36" = "lightgreen"),
+  Type = c("NW" = "lightgoldenrod", "OW" = "lightyellow")
+)
+
+heatmap_matrix[is.na(heatmap_matrix)] <- 0
+
+png("heatmap.png", width = 1200, height = 1200)
+pheatmap(
+  heatmap_matrix,
+  cluster_rows = TRUE,
+  cluster_cols = FALSE,
+  annotation_colors = annotation_colors,
+  annotation_col = data.frame(
+    Week = factor(rep(c("Week12", "Week36"), each = 4)),
+    Type = factor(rep(c("NW", "OW"), times = 4)),
+    row.names = colnames(heatmap_matrix)
+  ),
   scale = "column",
-  Rowv = NA,
-  Colv = NA,
-  col = colorRampPalette(c("pink", "white", "red3"))(100),
-  margins = c(10, 10),
-  main = "Heatmap of Top 50 Genes by Variance"
+  color = colorRampPalette(c("royalblue1", "white", "pink3"))(100),
+  main = "Heatmap of Top 50 Genes by Variance",
+  fontsize_row = 5,
+  fontsize_col = 10,
+  angle_col = 45,
+  border_color = "grey70",
+  gaps_col = gaps
 )
 
 dev.off()
