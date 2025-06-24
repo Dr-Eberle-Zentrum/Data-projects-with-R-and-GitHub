@@ -17,26 +17,31 @@ library(ggplot2)
 ```
 
 ```{r}
+# to make it work always work (
+if (interactive()) {
+  setwd(dirname(rstudioapi::getSourceEditorContext()$path))
+} else if (!is.null(knitr::current_input())) {
+  setwd(dirname(knitr::current_input()))
+}
 # read csv
 car <- read_csv("Auto_data.csv", show_col_types = FALSE)
 ```
 
 ## Data preparation
-
 ```{r}
-
 ## 1: Ensure each variable has its own column and each observation its own row
-#check structure and summary of the data set 
+# check structure and summary of the data set 
 
 str(car)
 summary(car)
 glimpse(car)
 
-#check if values are missing
+# check if values are missing
 colSums(is.na(car))
 
 ## 2: Convert categorical variables into factors with descriptive labels
-car <- car %>%
+car_edited <- car %>%
+  #convert origin codes to labeled factor
   mutate(origin = factor(origin,
                          levels = c(1, 2, 3),
                          labels = c("USA", "Europe", "Japan")))
@@ -44,10 +49,7 @@ car <- car %>%
 
 
 ## 3: Identify and report any duplicate rows in the dataset
-duplicates <- car[duplicated(car), ]
-n_duplicates <- nrow(duplicates)
-n_duplicates
-duplicates
+(n_duplicates <- nrow(car[duplicated(car), ]))
 
 ## 4: Discuss whether duplicates are meaningful or should be removed.
 ## 5: Identify columns with missing values.
@@ -66,14 +68,11 @@ missing_summary
 
 car <- car %>%
   mutate(power_to_weight = horsepower / weight)
-
 ```
 
-##Data visualization 
-#Scatterplot: relationship between mpg and horsepower
-
+## Data visualization 
+# Scatterplot: relationship between mpg and horsepower
 ```{r}
-
 ggplot(car, aes(x = horsepower, y = mpg)) +
   geom_point(alpha = 0.6, color = "blue") +
   geom_smooth(method = "lm", se = TRUE, color = "darkblue") +
@@ -83,8 +82,7 @@ ggplot(car, aes(x = horsepower, y = mpg)) +
   theme_minimal()
 ```
 
-#Scatterplot: relationship between weight and acceleration
-
+# Scatterplot: relationship between weight and acceleration
 ```{r}
 ggplot(car, aes(x = weight, y = acceleration)) +
   geom_point(alpha = 0.6, color = "red") +
@@ -93,31 +91,33 @@ ggplot(car, aes(x = weight, y = acceleration)) +
        x = "Weight (lbs)",
        y = "Acceleration (0-60 mph in seconds)") +
   theme_minimal()
-
 ```
 
-#trend analysis
-
+# trend analysis
 ```{r}
-
 car_yearly <- car %>%
   group_by(year) %>%
   summarise(
     avg_mpg = mean(mpg, na.rm = TRUE),
     avg_hp = mean(horsepower, na.rm = TRUE),
     avg_acc = mean(acceleration, na.rm = TRUE)
-  )
+  ) %>%                                          
+  pivot_longer(
+    cols      = starts_with("avg_"),             
+    names_to  = "variable",                      
+    values_to = "value"                           
+  ) %>%                                           
+  mutate(variable = recode(variable,
+                           avg_mpg = "mpg",
+                           avg_hp  = "horsepower",
+                           avg_acc = "acceleration"))
 
-ggplot(car_yearly, aes(x = year)) +
-  geom_line(aes(y = avg_mpg, color = "mpg"), size = 1) +
-  geom_smooth(aes(y = avg_mpg, color = "mpg"), method = "loess", se = FALSE, linetype = "dashed") +
-  geom_line(aes(y = avg_hp, color = "horsepower"), linewidth = 1) +
-  geom_smooth(aes(y = avg_hp, color = "horsepower"), method = "loess", se = FALSE, linetype = "dashed") +
-  geom_line(aes(y = avg_acc, color = "acceleration"), size = 1) +
-  geom_smooth(aes(y = avg_acc, color = "acceleration"), method = "loess", se = FALSE, linetype = "dashed") +
+ggplot(car_yearly, aes(x = year, y = value, color = variable)) +
+  geom_line(linewidth = 1) +
+  geom_smooth(method = "loess", se = FALSE, linetype = "dashed") +
   scale_color_manual(
-    name = "Variable",
-    values = c("mpg" = "blue", "horsepower" = "red", "acceleration" = "green")
+    name   = "Variable",
+    values = c(mpg = "blue", horsepower = "red", acceleration = "green")
   ) +
   labs(title = "Trend Analysis of Car Characteristics over Years",
        x = "Year",
@@ -151,7 +151,6 @@ fastest_cars <- car %>%
   group_by(year) %>%
   slice_min(acceleration, with_ties = FALSE) %>%
   select(year, name, acceleration)
-
 print(fastest_cars)
 ```
 
@@ -166,9 +165,6 @@ car %>%
   labs(title = "Average Fuel Efficiency by Origin", y = "MPG") +
   theme_minimal()
 ```
-
-
-
 ## Results 
 
 -Negative Relationship between MPG and horsepower:
