@@ -144,9 +144,9 @@ p2 <-data %>%
                   scales = "free_y", 
                   ncol = 3,
                   labeller = labeller(species = c(
-      'grain maize' = "crop yield of grain maize over the time",
-      'spring barley' = "crop yield of spring barley over the time",
-      'winter wheat' = "crop yield of winter wheat over the time"
+      'grain maize' = "grain maize",
+      'spring barley' = "spring barley",
+      'winter wheat' = "winter wheat"
     )))+ 
     labs(
       title = "Crop yields over the time", 
@@ -177,7 +177,6 @@ plot_for_variable <- function(variable_name, y_label) {
     geom_point(size = 1.5) +
     geom_smooth(method = "loess", se = FALSE, color = "black") +
     labs(
-      title = paste(variable_name, "over time"),
       x = "Year",
       y = y_label,
       color = "Climate Variables"
