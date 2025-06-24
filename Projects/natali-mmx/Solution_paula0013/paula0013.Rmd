@@ -105,9 +105,9 @@ p1 <- data %>%
             scales = "free_x", 
             ncol = 3, 
             labeller = labeller(climate_variable = c(
-            "precipitation" = "Relationship between crop and precipitation [mm]",
-            "air_temperature" = "Relationship between crop and air temperature [°C]",
-            "frost_days" = "Relationship between crop and frost days [days]"
+            "precipitation" = "crop vs precipitation [mm]",
+            "air_temperature" = "crop vs air temperature [°C]",
+            "frost_days" = "crop vs frost days [days]"
       ))) + 
     labs(
       title = "Relationship Between Crop Yields and Climate Variables", 
