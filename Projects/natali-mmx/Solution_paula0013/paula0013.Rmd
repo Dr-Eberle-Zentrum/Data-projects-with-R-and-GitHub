@@ -110,7 +110,6 @@ p1 <- data %>%
             "frost_days" = "crop vs frost days [days]"
       ))) + 
     labs(
-      title = "Relationship Between Crop Yields and Climate Variables", 
       x = NULL, 
       color = "Crop Type"
     ) +
@@ -149,7 +148,6 @@ p2 <-data %>%
       'winter wheat' = "winter wheat"
     )))+ 
     labs(
-      title = "Crop yields over the time", 
       x = 'Year', 
       y = 'Yield (t/ha)', 
       color = "above/below the average"
