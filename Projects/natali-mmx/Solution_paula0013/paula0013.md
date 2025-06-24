@@ -11,6 +11,7 @@ by climate change.*
 # Read and transform of the data
 
 <table>
+<caption>weather and crop data from tuebingen (1976–2021)</caption>
 <colgroup>
 <col style="width: 6%" />
 <col style="width: 26%" />
@@ -20,7 +21,7 @@ by climate change.*
 <col style="width: 18%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: right;">year</th>
 <th style="text-align: left;">district</th>
 <th style="text-align: left;">species</th>
@@ -30,7 +31,7 @@ by climate change.*
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: right;">1979</td>
 <td style="text-align: left;">Tübingen, Landkreis</td>
 <td style="text-align: left;">grain maize</td>
@@ -38,7 +39,7 @@ by climate change.*
 <td style="text-align: left;">precipitation</td>
 <td style="text-align: right;">1016.50</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: right;">1979</td>
 <td style="text-align: left;">Tübingen, Landkreis</td>
 <td style="text-align: left;">grain maize</td>
@@ -46,7 +47,7 @@ by climate change.*
 <td style="text-align: left;">air_temperature</td>
 <td style="text-align: right;">8.01</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: right;">1979</td>
 <td style="text-align: left;">Tübingen, Landkreis</td>
 <td style="text-align: left;">grain maize</td>
@@ -54,7 +55,7 @@ by climate change.*
 <td style="text-align: left;">frost_days</td>
 <td style="text-align: right;">24.36</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: right;">1979</td>
 <td style="text-align: left;">Tübingen, Landkreis</td>
 <td style="text-align: left;">spring barley</td>
@@ -62,7 +63,7 @@ by climate change.*
 <td style="text-align: left;">precipitation</td>
 <td style="text-align: right;">1016.50</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: right;">1979</td>
 <td style="text-align: left;">Tübingen, Landkreis</td>
 <td style="text-align: left;">spring barley</td>
@@ -70,7 +71,7 @@ by climate change.*
 <td style="text-align: left;">air_temperature</td>
 <td style="text-align: right;">8.01</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: right;">1979</td>
 <td style="text-align: left;">Tübingen, Landkreis</td>
 <td style="text-align: left;">spring barley</td>
@@ -78,7 +79,7 @@ by climate change.*
 <td style="text-align: left;">frost_days</td>
 <td style="text-align: right;">24.36</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: right;">1979</td>
 <td style="text-align: left;">Tübingen, Landkreis</td>
 <td style="text-align: left;">winter wheat</td>
@@ -86,7 +87,7 @@ by climate change.*
 <td style="text-align: left;">precipitation</td>
 <td style="text-align: right;">1016.50</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: right;">1979</td>
 <td style="text-align: left;">Tübingen, Landkreis</td>
 <td style="text-align: left;">winter wheat</td>
@@ -94,7 +95,7 @@ by climate change.*
 <td style="text-align: left;">air_temperature</td>
 <td style="text-align: right;">8.01</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: right;">1979</td>
 <td style="text-align: left;">Tübingen, Landkreis</td>
 <td style="text-align: left;">winter wheat</td>
@@ -102,7 +103,7 @@ by climate change.*
 <td style="text-align: left;">frost_days</td>
 <td style="text-align: right;">24.36</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: right;">1980</td>
 <td style="text-align: left;">Tübingen, Landkreis</td>
 <td style="text-align: left;">grain maize</td>
@@ -110,7 +111,7 @@ by climate change.*
 <td style="text-align: left;">precipitation</td>
 <td style="text-align: right;">987.20</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: right;">1980</td>
 <td style="text-align: left;">Tübingen, Landkreis</td>
 <td style="text-align: left;">grain maize</td>
@@ -118,7 +119,7 @@ by climate change.*
 <td style="text-align: left;">air_temperature</td>
 <td style="text-align: right;">7.52</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: right;">1980</td>
 <td style="text-align: left;">Tübingen, Landkreis</td>
 <td style="text-align: left;">grain maize</td>
@@ -126,7 +127,7 @@ by climate change.*
 <td style="text-align: left;">frost_days</td>
 <td style="text-align: right;">30.65</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: right;">1980</td>
 <td style="text-align: left;">Tübingen, Landkreis</td>
 <td style="text-align: left;">spring barley</td>
@@ -134,7 +135,7 @@ by climate change.*
 <td style="text-align: left;">precipitation</td>
 <td style="text-align: right;">987.20</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: right;">1980</td>
 <td style="text-align: left;">Tübingen, Landkreis</td>
 <td style="text-align: left;">spring barley</td>
@@ -142,7 +143,7 @@ by climate change.*
 <td style="text-align: left;">air_temperature</td>
 <td style="text-align: right;">7.52</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: right;">1980</td>
 <td style="text-align: left;">Tübingen, Landkreis</td>
 <td style="text-align: left;">spring barley</td>
@@ -153,7 +154,7 @@ by climate change.*
 </tbody>
 </table>
 
-# Visualisation
+# Visulisation
 
 ## 1. Relationship between crop yields and climate variables
 
@@ -165,4 +166,5 @@ by climate change.*
 
 ## 3.Climate variables over the time \[in year\]
 
-![](plot_climate_vars_over_time.png)
+![](plot_precipitation.png) ![](plot_air_temperature.png)
+![](plot_frost_days.png)
