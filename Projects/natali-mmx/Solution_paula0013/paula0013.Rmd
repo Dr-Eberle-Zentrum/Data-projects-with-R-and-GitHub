@@ -111,11 +111,11 @@ p1 <- data %>%
       ))) + 
     labs(
       x = NULL, 
-      color = "Crop Type"
+      color = "Crop Type",
+      y = "yield"
     ) +
   theme_minimal() +
     theme(legend.position="right",
-          plot.title = element_text(size = 18, face = "bold", hjust = 0.5),
           strip.text = element_text(size = 14, face = "bold"),
           panel.spacing = unit(1.5, "lines"
           ))+
@@ -149,7 +149,7 @@ p2 <-data %>%
     )))+ 
     labs(
       x = 'Year', 
-      y = 'Yield (t/ha)', 
+      y = 'Yield', 
       color = "above/below the average"
     ) +
   theme_minimal()+ 
