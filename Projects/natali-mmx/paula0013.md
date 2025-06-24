@@ -11,7 +11,6 @@ by climate change.*
 # Read and transform of the data
 
 <table>
-<caption>weather and crop data from tuebingen (1976–2021)</caption>
 <colgroup>
 <col style="width: 6%" />
 <col style="width: 26%" />
@@ -154,9 +153,7 @@ by climate change.*
 </tbody>
 </table>
 
-weather and crop data from tuebingen (1976–2021)
-
-# Visulisation
+# Visualisation
 
 ## 1. Relationship between crop yields and climate variables
 

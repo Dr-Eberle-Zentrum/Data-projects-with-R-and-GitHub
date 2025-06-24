@@ -104,10 +104,10 @@ data <- reduce(
     names_to = "climate_variable",
     values_to = "climate_value"
   )
-knitr::kable(head(data,15), caption = "weather and crop data from tuebingen (1976–2021)")
+knitr::kable(head(data,15))
 ```
 
-# Visulisation 
+# Visualisation 
 ## 1. Relationship between crop yields and climate variables
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # Plot of the relationship between crop yields and climate varaibles 
