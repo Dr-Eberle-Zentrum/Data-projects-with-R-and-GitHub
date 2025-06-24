@@ -1,3 +1,18 @@
+    if (!is.null(current_input())) {
+      rmd_dir <- path_dir(current_input())
+    } else {
+      rmd_dir <- getwd()
+    }
+
+
+    excel_path <- path(rmd_dir, "mmc4.xlsx")
+
+
+
+
+
+    transcript_data <- read_excel(excel_path, col_names = FALSE, sheet = "Aged vs Young Macrophages")
+
     clean_transcript_data <- function(data, col_indices) {
       data %>%
         select(all_of(col_indices)) %>%
@@ -99,8 +114,8 @@ one for the second data visualisation task.
       scale_color_manual(values = c("TRUE" = "red", "FALSE" = "blue"),labels = c("TRUE" = "log2FC>2", "FALSE" = "log2FC<=2"),name = "logFC Status")+
       scale_x_continuous(limits=c(-5, 5), breaks = c(-4, -2, 0, 2, 4))
 
-![](flomaili_files/figure-markdown_strict/Plot1-1.png) I didn’t add all
-Gene names to the plot as the plot would be too cluttered.
+![](flomaili_files/figure-markdown_strict/Plot1-1.png) <br> I didn’t add
+all Gene names to the plot as the plot would be too cluttered.
 
     GO_data_up %>%
       mutate(ID=fct_reorder(ID, GeneRatio)) %>%

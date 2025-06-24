@@ -18,6 +18,11 @@ library(grid)
 library(ggrepel)
 library(fs)
 
+
+```
+
+
+```{r Excel, warning=FALSE, message=FALSE}
 if (!is.null(current_input())) {
   rmd_dir <- path_dir(current_input())
 } else {
@@ -32,7 +37,6 @@ excel_path <- path(rmd_dir, "mmc4.xlsx")
 
 
 transcript_data <- read_excel(excel_path, col_names = FALSE, sheet = "Aged vs Young Macrophages")
-
 ```
 
 ```{r DEG, warning=FALSE, message=FALSE}
@@ -124,6 +128,7 @@ DEG_data %>%
   scale_x_continuous(limits=c(-5, 5), breaks = c(-4, -2, 0, 2, 4))
 
 ```
+<br>
 I didn't add all Gene names to the plot as the plot would be too cluttered.
 ```{r Plot 2, fig.width=12, fig.height=8}
 
