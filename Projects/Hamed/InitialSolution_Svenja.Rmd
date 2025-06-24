@@ -74,28 +74,26 @@ car <- car %>%
 
 ```{r}
 
-p1 <- ggplot(car, aes(x = horsepower, y = mpg)) +
+ggplot(car, aes(x = horsepower, y = mpg)) +
   geom_point(alpha = 0.6, color = "blue") +
   geom_smooth(method = "lm", se = TRUE, color = "darkblue") +
   labs(title = "Relationship between MPG and Horsepower",
        x = "Horsepower (PS)",
        y = "Miles per Gallon (mpg)") +
   theme_minimal()
-print(p1)
-
 ```
 
 #Scatterplot: relationship between weight and acceleration
 
 ```{r}
-p2 <- ggplot(car, aes(x = weight, y = acceleration)) +
+ggplot(car, aes(x = weight, y = acceleration)) +
   geom_point(alpha = 0.6, color = "red") +
   geom_smooth(method = "lm", se = TRUE, color = "darkred") +
   labs(title = "Relationship between Weight and Acceleration",
        x = "Weight (lbs)",
        y = "Acceleration (0-60 mph in seconds)") +
   theme_minimal()
-print(p2)
+
 ```
 
 #trend analysis
@@ -110,7 +108,7 @@ car_yearly <- car %>%
     avg_acc = mean(acceleration, na.rm = TRUE)
   )
 
-p3 <- ggplot(car_yearly, aes(x = year)) +
+ggplot(car_yearly, aes(x = year)) +
   geom_line(aes(y = avg_mpg, color = "mpg"), size = 1) +
   geom_smooth(aes(y = avg_mpg, color = "mpg"), method = "loess", se = FALSE, linetype = "dashed") +
   geom_line(aes(y = avg_hp, color = "horsepower"), linewidth = 1) +
@@ -125,12 +123,63 @@ p3 <- ggplot(car_yearly, aes(x = year)) +
        x = "Year",
        y = "Average Value") +
   theme_minimal()
-
-print(p3)
-
 ```
+# further data visualisation to answer your questions 
+# origins that tend to have the most powerful/fastest cars 
+
+```{r}
+ggplot(car, aes(x = origin, y = horsepower, fill = origin)) +
+  geom_boxplot() +
+  labs(title = "Horsepower by Car Origin", y = "Horsepower") +
+  theme_minimal()
+```
+
+# relationship between cylinders and acceleration
+
+```{r}
+ggplot(car, aes(x = factor(cylinders), y = acceleration)) +
+  geom_jitter(width = 0.2, color = "steelblue", alpha = 0.7) +
+  labs(title = "Acceleration by Number of Cylinders",
+       x = "Cylinders", y = "Acceleration (sec)") +
+  theme_minimal()
+```
+
+# fastest car for each model
+
+```{r}
+fastest_cars <- car %>%
+  group_by(year) %>%
+  slice_min(acceleration, with_ties = FALSE) %>%
+  select(year, name, acceleration)
+
+print(fastest_cars)
+```
+
+# origin that has the most fuel-efficient cars on average 
+
+```{r}
+car %>%
+  group_by(origin) %>%
+  summarise(avg_mpg = mean(mpg, na.rm = TRUE)) %>%
+  ggplot(aes(x = origin, y = avg_mpg, fill = origin)) +
+  geom_col() +
+  labs(title = "Average Fuel Efficiency by Origin", y = "MPG") +
+  theme_minimal()
+```
+
+
+
 ## Results 
 
--Negative Relationship between MPG and Horsepower and weight and acceleration, but both data are fluctuating
+-Negative Relationship between MPG and horsepower:
+the more horsepower, the lower the MGP
+-Negative Relationship between weight and acceleration, heavier cars tend to take less time to 
+accelerate, but the data is fluctuating
+-> doesn't seem intuitive
 -Acceleration is mostly stable over the time, there is a small increase in mpg over time. Horsepower decreased a lot 
+-> the sharp drop in horsepower around 1980 is remarkable
 
+-cars from the US have the highest horsepower 
+-the more cylinder the lower the acceleration 
+-the table shows for each year the fastest car (lowest acceleration)
+-japan seems to have the most average fuel efficient cars 
