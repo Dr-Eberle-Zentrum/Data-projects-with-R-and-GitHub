@@ -17,7 +17,7 @@ library(ggplot2)
 ```
 
 ```{r}
-# to make it work always work (
+# to make it work always work
 if (interactive()) {
   setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 } else if (!is.null(knitr::current_input())) {
@@ -101,7 +101,8 @@ car_yearly <- car %>%
     avg_mpg = mean(mpg, na.rm = TRUE),
     avg_hp = mean(horsepower, na.rm = TRUE),
     avg_acc = mean(acceleration, na.rm = TRUE)
-  ) %>%                                          
+  ) %>% 
+  # make data tidy
   pivot_longer(
     cols      = starts_with("avg_"),             
     names_to  = "variable",                      
@@ -144,7 +145,7 @@ ggplot(car, aes(x = factor(cylinders), y = acceleration)) +
   theme_minimal()
 ```
 
-# fastest car for each model
+# fastest car for each model year
 
 ```{r}
 fastest_cars <- car %>%
