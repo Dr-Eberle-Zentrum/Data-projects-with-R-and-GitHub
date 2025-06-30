@@ -85,45 +85,95 @@ data
 
     merged_data$Date <- as.Date(merged_data$Date)
 
+    # Create a new variable for the number of individuals caught that I use as the right y-axis
     scaling_factor <- max(merged_data$Anzahl, na.rm = TRUE) / max(merged_data$`Mean Temperature in Celsius`, na.rm = TRUE)
 
-    # 3. Neue Variable mit skalierter Temperatur
+    # New variable with scaled temperature for right y-axis
     merged_data <- merged_data %>%
       mutate(Temp_scaled = `Mean Temperature in Celsius` * scaling_factor)
 
-    # 4. Plot mit zwei Y-Achsen (überlagert)
+    # Wind direction in degrees to compass direction
+    compass <- function(deg) {
+      dirs <- c("N", "NE", "E", "SE", "S", "SW", "W", "NW", "N")
+      idx <- round(deg / 45) + 1
+      return(dirs[idx])
+    }
+
+    #compass direction in merged_data
+    merged_data <- merged_data %>%
+      mutate(
+        WindDirection_compass = compass(`Mean Wind Direction in degrees`),
+        WindDir_rad = (`Mean Wind Direction in degrees` - 90) * pi / 180
+      )
+
+    # Create a sequence of dates for the x-axis
+    sequence_dates <- merged_data %>%
+      distinct(Date) %>%
+      arrange(Date) %>%
+      pull(Date) %>%
+      { seq(min(.), max(.), length.out = 8) %>%
+          as.Date(round(.), origin = "1970-01-01") }
+
+
+    wind_arrows <- merged_data %>%
+      filter(Date %in% sequence_dates,
+             period %in% c("Morning", "Afternoon")) %>%
+      group_by(Date) %>%
+      summarise(
+        WindDir_rad = first(WindDir_rad),
+        WindSpeed = round(first(`Mean Wind Speed in m/s`), 1),
+        WindDirection_compass = first(WindDirection_compass),
+        .groups = "drop"
+      ) %>%
+      mutate(
+        arrow_len = 1,
+        y_base = -1.5,
+        xend = Date + arrow_len * cos(WindDir_rad),
+        yend = y_base + arrow_len * sin(WindDir_rad)
+      )
+
+    # plot with two y axis
     ggplot(merged_data %>%
              arrange(Date) %>%
              filter(Date >= as.Date("2024-08-01") & Date <= as.Date("2024-11-01"),
                     period %in% c("Morning", "Afternoon")), 
            aes(x = Date)) +
       
-      # Balken für Anzahl, gefärbt nach Geschlecht
       geom_col(aes(y = Anzahl, fill = Geschlecht), position = "stack") +
       
       scale_fill_manual(values = c("f" = "orange", "m" = "lightgreen")) +
       
-      # Temperaturkurve mit skalierter Temperatur
       #geom_line(aes(y = Temp_scaled, color = period), size = 1) +
       geom_smooth(aes(y = Temp_scaled, color = period), se = TRUE) +
 
-      # Y-Achsen: links = Anzahl, rechts = Temperatur (rücktransformiert)
       scale_y_continuous(
         name = "Number of Individuals",
+        breaks = c(0, 2, 4),
         sec.axis = sec_axis(~ . / scaling_factor, name = "Temperature")
       ) +
 
       labs(x = "Catchperiod") +
-      scale_x_date(breaks = as.Date(c("2024-08-01", "2024-09-01", "2024-10-01", "2024-11-01"))) +
-      theme_minimal() +
+      scale_x_date(breaks = sequence_dates) +
+      theme_classic() +
       theme(
         axis.title.x = element_text(size = 12),
         axis.title.y = element_text(size = 12),
         axis.title.y.right = element_text(size = 12),
-        axis.text.x = element_text(size = 10),
+        axis.text.x = element_text(size = 8),
         axis.text.y = element_text(size = 10),
         axis.text.y.right = element_text(size = 10)
-      )
+      ) +
+      geom_segment(data = wind_arrows,
+                   aes(x = Date, y = y_base, xend = xend, yend = yend),
+                   arrow = arrow(length = unit(0.4, "cm")), color = "black") +
+
+      geom_text(data = wind_arrows,
+                aes(x = Date, y = y_base - 1, label = WindDirection_compass),
+                size = 3, color = "black") +
+
+      geom_text(data = wind_arrows,
+                aes(x = Date, y = y_base - 2, label = paste0(WindSpeed, " m/s")),
+                size = 3.5, color = "black")
 
 ![](Lizzola_Project_Solution_files/figure-markdown_strict/visualization-1.png)
 
@@ -136,6 +186,7 @@ data
            x = "Catchperiod",
            y = "Temperature (°C)") +
       theme_minimal() +
+      scale_x_date(breaks = as.Date(c("2024-08-01", "2024-09-01", "2024-10-01"))) +
       theme(
         axis.title = element_text(size = 12),
         axis.text = element_text(size = 10)
