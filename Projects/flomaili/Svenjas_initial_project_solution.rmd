@@ -1,12 +1,9 @@
-|-------------------------------|
-| title: "Svenja_MSproject.Rmd" |
-| author: "SvenjaPoerstel"      |
-| date: "2025-06-03"            |
-| output: md_document           |
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+---
+title: "Svenjas_initial_project solution.rmd"
+author: "SvenjaPoerstel"
+date: "2025-06-30"
+output: md_document
+---
 
 ```{r}
 library(tidyverse) 
