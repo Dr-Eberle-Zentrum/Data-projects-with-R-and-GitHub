@@ -1,5 +1,3 @@
-
-
 ---
 title: "Svenjasinitialprojectsolution.rmd"
 author: "SvenjaPoerstel"
@@ -58,9 +56,11 @@ ms$Corticosteroid <- ifelse(str_detect(ms$Medication, regex("corticosteroid", ig
 ms$BCellDepletion <- ifelse(str_detect(ms$Medication, regex("rituximab", ignore_case = TRUE)), "Yes", "No")
 
 # (5) use coded names according to the schema instead of clear names and delete column names
-ms$PatientCode <- sprintf("MS_XS_%03d", ms$`No.`)
-ms <- ms %>% select(-`Patient Name`)
-
+ms <- ms %>% 
+  mutate(
+    PatientCode = sprintf("MS_XS_%03d", as.integer(as.character(`No.`)))
+  ) %>% 
+  select(-`Patient Name`)
 print(ms)
 ```
 
@@ -111,24 +111,24 @@ ms %>%
 
 # Group patients into 15-year age intervals
 
+
 ```{r}
-ms$AgeGroup <- cut(ms$Age, 
-                   breaks = seq(0, max(ms$Age, na.rm = TRUE) + 15, by = 15), 
-                   right = FALSE)
+ms_summary <- ms %>%
+  mutate(
+    Total_Diseases = Other_Diseases_Count + 1,
+    Age_Group = cut(Age, breaks = seq(0, 100, by = 15), right = FALSE)
+  ) %>%
+  filter(!is.na(Age_Group)) %>%
+  group_by(Age_Group) %>%
+  summarise(MedianDiseases = median(Total_Diseases, na.rm = TRUE))
 
-table(ms$total_diseases)
 
-# Count MS as an additional disease
-ms$TotalDiseases <- ms$OtherConditions + 1
-
-# Create bar chart of median number of diseases (incl. MS) per age group
-ms %>%
-  group_by(AgeGroup) %>%
-  summarise(MedianDiseases = median(TotalDiseases, na.rm = TRUE)) %>%
-  ggplot(aes(x = AgeGroup, y = MedianDiseases)) +
+ggplot(ms_summary, aes(x = Age_Group, y = MedianDiseases)) +
   geom_bar(stat = "identity", fill = "darkgreen") +
-  labs(title = "Median Number of Diseases by Age Group",
-       x = "Age Group",
-       y = "Median Disease Count (incl. MS)") +
+  labs(
+    title = "Median Number of Diseases by Age Group",
+    x = "Age Group (15-year intervals)",
+    y = "Median Disease Count (incl. MS)"
+  ) +
   theme_minimal()
 ```
