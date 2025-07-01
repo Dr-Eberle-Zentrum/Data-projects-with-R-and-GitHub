@@ -1,5 +1,7 @@
+
+
 ---
-title: "Svenjas_initial_project solution.rmd"
+title: "Svenjasinitialprojectsolution.rmd"
 author: "SvenjaPoerstel"
 date: "2025-06-30"
 output: md_document
@@ -12,7 +14,6 @@ library(readr)
 library(dplyr) 
 ```
 
-
 ```{r}
 # read csv
 ms <- read_csv2("data_MS.csv", show_col_types = FALSE)
@@ -22,18 +23,33 @@ ms <- read_csv2("data_MS.csv", show_col_types = FALSE)
 
 ```{r}
 
-# (1) MS duration in months (+++)
+# (1) MS duration in months (+++), created a new column but didn't delete the old one
 ms$MSDuration_months <- case_when(
   grepl("Years", ms$`MS Duration`) ~ as.integer(gsub("Years", "", ms$`MS Duration`)) * 12,
   grepl("Year", ms$`MS Duration`) ~ as.integer(gsub("Year", "", ms$`MS Duration`)) * 12,
-  grepl("Months", ms$`MS Duration`) ~ as.integer(gsub("Months", "", ms$`MS Duration`)),
+  grepl("Months?", ms$`MS Duration`) ~ as.integer(gsub("Months", "", ms$`MS Duration`)),
   TRUE ~ NA_integer_
 )
 
-# (2) new column related to deseases 
-ms$OtherConditions <- ifelse(ms$`Other Diseases` == "-" | is.na(ms$`Other Diseases`), 0, 
-                             lengths(strsplit(ms$`Other Diseases`, ",")))
+# (2) new column related to diseases 
 
+ms$Other_Diseases_Count <- ifelse(
+  ms$`Other Diseases` == "-" | is.na(ms$`Other Diseases`) | trimws(ms$`Other Diseases`) == "",
+  0,
+  sapply(ms$`Other Diseases`, function(x) {
+    # Anzahl Kommas zählen
+    n_commas <- lengths(regmatches(x, gregexpr(",", x)))
+    # Anzahl Krankheiten = Kommas + 1
+    n_commas + 1
+  })
+)
+
+# ms$`Other Diseases` <- as.character(ms$`Other Diseases`)
+
+# ms$Other_Diseases_Count <- ifelse(
+ # ms$`Other Diseases` == "-" | is.na(ms$`Other Diseases`),
+ # 0,
+ # sapply(strsplit(ms$`Other Diseases`, ","), length)
 
 # (3) new columns (treated with Corticosteroid)
 ms$Corticosteroid <- ifelse(str_detect(ms$Medication, regex("corticosteroid", ignore_case = TRUE)), "Yes", "No")
@@ -41,10 +57,11 @@ ms$Corticosteroid <- ifelse(str_detect(ms$Medication, regex("corticosteroid", ig
 # (4) new columns (treated with B-cell depleting therapy (+)
 ms$BCellDepletion <- ifelse(str_detect(ms$Medication, regex("rituximab", ignore_case = TRUE)), "Yes", "No")
 
-# use coded names according to the schema instead of clear names and delete column names
+# (5) use coded names according to the schema instead of clear names and delete column names
 ms$PatientCode <- sprintf("MS_XS_%03d", ms$`No.`)
-
 ms <- ms %>% select(-`Patient Name`)
+
+print(ms)
 ```
 
 ## Visualization
@@ -65,6 +82,7 @@ cor_groups <- ms %>%
   group_by(Sex, Corticosteroid) %>%
   summarise(Correlation = cor(`Cortisol Test Result`, `BAI Score`, use = "complete.obs"),
             .groups = "drop")
+print(cor_groups)
             
 ```
 
@@ -97,6 +115,8 @@ ms %>%
 ms$AgeGroup <- cut(ms$Age, 
                    breaks = seq(0, max(ms$Age, na.rm = TRUE) + 15, by = 15), 
                    right = FALSE)
+
+table(ms$total_diseases)
 
 # Count MS as an additional disease
 ms$TotalDiseases <- ms$OtherConditions + 1
