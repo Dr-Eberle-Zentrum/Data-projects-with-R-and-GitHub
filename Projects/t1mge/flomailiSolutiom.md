@@ -118,5 +118,5 @@
     webshot::webshot("heatmap_interactive.html", "heatmap_static.png", vwidth = 1200, vheight = 1000)
 
 ![](flomailiSolutiom_files/figure-markdown_strict/Heatmap-1.png)
-![](flomailiSolutiom_files/figure-markdown_strict/Heatmap-1.png) <br>
-For the interactive heatmap, click [here](heatmap_interactive.html).
+![](heatmap_static.png) <br> For the interactive heatmap, click
+[here](heatmap_interactive.html).
