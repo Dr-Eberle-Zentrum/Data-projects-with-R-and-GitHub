@@ -1,0 +1,131 @@
+---
+title: "natali-mmx"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(readxl)
+library(httr)
+library(ggalluvial)
+library(circlize)
+```
+
+```{r dataImport, include = FALSE, cache = TRUE}
+
+url <- "https://ec.europa.eu/assets/eac/erasmus-plus/statistics/mobility/Erasmus-KA2-Mobility-Data.xlsx"
+
+temp_file <- tempfile(fileext = ".xlsx")
+
+GET(url, write_disk(temp_file, overwrite = TRUE))
+
+data <- read_excel(temp_file)
+
+unlink(temp_file)
+```
+
+```{r dataManipulation, include = FALSE}
+relevantData <- data %>% select(
+  activity = `Activity (mob)`,
+  origin = `Sending Country`,
+  destination = `Receiving Country`,
+  participants = `Actual Participants (Contracted Projects)`) %>% filter(activity == "Long-term study mobility of pupils")
+
+aggregatedData <- relevantData %>%
+  group_by(origin, destination) %>%
+  summarise(totalParticipants = sum(participants, na.rm = TRUE)) %>%
+  ungroup() %>%
+  mutate(origin = str_extract(origin, "^[A-Z]{2}"), destination = str_extract(destination, "^[A-Z]{2}"))
+
+# view(aggregatedData)
+```
+
+# Erasmus Mobility Study
+
+We want to investigate the student mobility within the Erasmus+ programme, focusing on long-term study mobility of pupils. The dataset contains information about the sending and receiving countries along with the number of participants:
+
+```{r dataSummary, echo=FALSE}
+head(aggregatedData, 15)
+```
+
+# Visualization
+
+## Heatmap
+
+```{r heatmap, echo=FALSE}
+
+getTop <- function(data, group_col, n = 5) {
+  data %>%
+    group_by({{ group_col }}) %>%
+    summarise(total = sum(totalParticipants, na.rm = TRUE)) %>%
+    slice_max(total, n = n) %>%
+    ungroup() %>%
+    pull({{ group_col }})
+}
+
+topOrigins <- getTop(aggregatedData, origin, 5)
+topDestinations <- getTop(aggregatedData, destination, 5)
+
+heatmapData <- aggregatedData %>%
+  filter(origin %in% topOrigins & destination %in% topDestinations)
+
+ggplot(heatmapData, aes(x = origin, y = destination, fill = totalParticipants)) +
+  geom_tile() +
+  scale_fill_gradient(low = "white", high = "darkgreen") +
+  labs(title = "Heatmap of Erasmus+ Student Mobility",
+       x = "Sending Country",
+       y = "Receiving Country",
+       fill = "Total Participants") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+The heatmap visualizes the intensity of student mobility between the top 5 sending and receiving countries in the Erasmus+ programme. The color intensity indicates the number of participants, with darker shades of representing higher mobility. The 5 countries with the highest intensity of student exchange are:
+
+```{r topPairs, echo=FALSE}
+pairedData <- aggregatedData %>%
+  mutate(pair = map2_chr(origin, destination, ~ paste(sort(c(.x, .y)), collapse = " - "))) %>%
+  group_by(pair) %>%
+  summarise(combinedParticipants = sum(totalParticipants, na.rm = TRUE)) %>%
+  arrange(desc(combinedParticipants)) %>%
+  slice(1:5) %>% 
+  print()
+```
+
+## Sankey Flow Diagram
+
+```{r sankeyDiagram, echo=FALSE, warning=FALSE, error=FALSE}
+
+ggplot(aggregatedData,
+       aes(axis1 = origin, axis2 = destination, y = totalParticipants)) +
+  geom_alluvium(aes(fill = origin), width = 1/12) +
+  geom_stratum(width = 1/12) +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum))) +
+  scale_x_discrete(limits = c("Origin", "Destination"), expand = c(0.15, 0.05)) +
+  labs(title = "Erasmus+ Student Mobility") +
+  theme_minimal()
+```
+
+## Barplot
+
+```{r barplot, echo=FALSE}
+
+TopTenDestinations <- getTop(aggregatedData, destination, 10)
+
+barplotData <- aggregatedData %>%
+  filter(destination %in% TopTenDestinations) %>%
+  group_by(destination) %>%
+  summarise(totalVisitors = sum(totalParticipants, na.rm = TRUE)) %>%
+  arrange(desc(totalVisitors))
+
+ggplot(barplotData, aes(fct_reorder(destination, totalVisitors), y = totalVisitors)) +
+  geom_col(fill = "darkgreen") +
+  coord_flip() +  # horizontal bars
+  labs(
+    title = "Top 10 Most Popular Receiving Countries",
+    x = "Receiving Country",
+    y = "Number of Incoming Participants"
+  ) +
+  theme_minimal()
+
+```
