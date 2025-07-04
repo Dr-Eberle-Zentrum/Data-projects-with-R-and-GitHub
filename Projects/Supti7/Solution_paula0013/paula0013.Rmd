@@ -3,9 +3,9 @@ title: "paula0013"
 output: md_document
 ---
 
-#Project 2: Comparison of salaries of global remote data scientists!
-## Solution by paula0013
+# Project 2: Comparison of salaries of global remote data scientists!
 
+## Solution by paula0013
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(dplyr)
@@ -49,10 +49,11 @@ data <- read.csv("https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Data-proje
       TRUE ~ job_title
     ))
 
+knitr::kable(head(data,15))
 ```
 
 
-#Visualisation of the percentage of the remote work ratio in worldwide comparsion
+# Visualisation of the percentage of the remote work ratio in worldwide comparsion
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # Calculate total number of jobs worldwide
 total_jobs_worldwide <- nrow(data)
@@ -98,6 +99,7 @@ p1 <- ggplot(world_remote) +
 ggsave("plot_procent_remote_Work_Worlwide.png", p1, width=15, height=10)
 ``` 
 ![](plot_procent_remote_Work_Worlwide.png)
+
 # Visualisation of average salary of the top 5 entry and mid-level jobs
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 
