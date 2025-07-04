@@ -1,0 +1,135 @@
+---
+title: "paula0013"
+output: md_document
+---
+
+#Project 2: Comparison of salaries of global remote data scientists!
+## Solution by paula0013
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(readxl)
+library(readr)
+library(magrittr)
+library(tidyverse)
+library(ggplot2)
+library(countrycode)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(sf)
+```
+
+Remote working became a norm during covid-19. And with remote work came more concern about salary. Let’s see using the data from kaggle whether there is any difference in salary of remote data scientists in different countries.
+
+# Read and transform of the data
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# Read and transform the data  
+data <- read.csv("https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/refs/heads/main/Projects/Supti7/Salaries_data_scientists.csv") %>%
+  filter(
+    work_year == 2024,
+    !is.na(remote_ratio),
+    remote_ratio !="",
+    !is.na(company_location),
+    company_location != ""
+  )%>%
+  mutate(
+    job_title = case_when(
+      job_title %in% c("ML Engineer", "Machine Learning Engineer") ~ "Machine Learning Engineer",
+      job_title %in% c("ML Ops Engineer", "MLOps Engineer", "Machine Learning Operations Engineer") ~ "MLOps Engineer",
+      job_title %in% c("Data Science", "Data Scientist", "Data Science Practitioner") ~ "Data Scientist",
+      job_title %in% c("BI Analyst", "Business Intelligence Analyst") ~ "Business Intelligence Analyst",
+      job_title %in% c("BI Developer", "Business Intelligence Developer") ~ "Business Intelligence Developer",
+      job_title %in% c("Business Intelligence Lead", "Business Intelligence Manager") ~ "Business Intelligence Manager",
+      job_title %in% c("AI Scientist", "AI Research Scientist", "AI Research Engineer") ~ "AI Researcher",
+      job_title %in% c("ETL Developer", "ETL Engineer") ~ "ETL Engineer",
+      job_title %in% c("Data Analytics Consultant", "Data Analytics Lead", "Data Analytics Manager", "Data Analytics Specialist") ~ "Data Analytics Specialist",
+      job_title %in% c("Head of Data", "Data Lead", "Data Manager") ~ "Head of Data",
+      job_title %in% c("Director of Data Science", "Managing Director Data Science") ~ "Director of Data Science",
+      TRUE ~ job_title
+    ))
+
+```
+
+
+#Visualisation of the percentage of the remote work ratio in worldwide comparsion
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# Calculate total number of jobs worldwide
+total_jobs_worldwide <- nrow(data)
+
+#Percentage of remote working in global comparison
+remote_share <- data%>%
+  group_by(company_location) %>%
+  summarise(
+    jobs_per_location = n(),
+    remote_100 = sum(remote_ratio == 100),
+    procent_100_remote = (remote_100 / total_jobs_worldwide) * 100
+  ) %>%
+  filter(procent_100_remote > 0) %>%
+  mutate(
+    land_name = countrycode(company_location, 
+                            origin = "iso2c", 
+                            destination = "country.name")
+  ) %>% 
+  select(land_name, procent_100_remote, jobs_per_location) %>%
+  arrange(desc(procent_100_remote))
+
+#Connection of the world map with the Percentage of remote working in global comparison
+world_remote <- ne_countries(scale = "medium", returnclass = "sf") %>%
+  left_join(remote_share, by = c("name" = "land_name"))
+
+# Plot of the Percentage of remote working in global comparison in a world map
+p1 <- ggplot(world_remote) +
+  geom_sf(aes(fill = procent_100_remote), color = "white", size = 0.1) +
+  scale_fill_continuous(
+    name = "Share of all 100% remote jobs worldwide (%)",
+    low = "#deebf7", high = "#08306b", na.value = "gray90", 
+    guide = guide_colourbar(title.position = "top")
+  ) +
+  labs(
+    title = "Proportion of 100% remote jobs per country (in relation to all global jobs)",
+  ) +
+  theme_minimal()+
+  theme(
+    legend.position = "bottom",
+    legend.direction = "horizontal", 
+    legend.title.align = 0.5
+  )
+ggsave("plot_procent_remote_Work_Worlwide.png", p1, width=15, height=10)
+``` 
+![](plot_procent_remote_Work_Worlwide.png)
+# Visualisation of average salary of the top 5 entry and mid-level jobs
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+top5_jobs <- data %>%
+  filter(experience_level %in% c("EN", "MI")) %>%
+  count(job_title, sort = TRUE) %>%
+  slice_max(n, n = 5) %>%
+  pull(job_title)
+
+
+avg_salary <- data %>%
+  filter(experience_level %in% c("EN", "MI"),
+         job_title %in% top5_jobs) %>%
+  group_by(job_title, experience_level) %>%
+  summarise(avg_salary = mean(salary_in_usd, na.rm = TRUE), .groups = "drop") %>%
+  mutate(experience_level = recode(experience_level,
+                                   EN = "Entry Level",
+                                   MI = "Mid Level"))
+
+p2 <-ggplot(avg_salary, aes(x = reorder(job_title, avg_salary), y = avg_salary, fill = experience_level)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  labs(
+    title = "Average Salary of Top 5 Jobs by Experience Level (Entry & Mid)",
+    x = "Job Title",
+    y = "Average Salary (USD)",
+    fill = "Experience Level"
+  ) +
+  theme_minimal() +
+  scale_fill_manual(values = c("Entry Level" = "#1f78b4", "Mid Level" = "#33a02c"))
+
+ggsave("plot_top_5_jobs_Average_Salary.png", p2, width=15, height=10)
+
+```
+![](plot_top_5_jobs_Average_Salary.png)
