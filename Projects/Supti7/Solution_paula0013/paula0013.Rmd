@@ -1,3 +1,4 @@
+
 ---
 title: "paula0013"
 output: md_document
@@ -8,12 +9,8 @@ output: md_document
 ## Solution by paula0013
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(dplyr)
-library(readxl)
-library(readr)
 library(magrittr)
 library(tidyverse)
-library(ggplot2)
 library(countrycode)
 library(rnaturalearth)
 library(rnaturalearthdata)
@@ -48,10 +45,9 @@ data <- read.csv("https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Data-proje
       job_title %in% c("Director of Data Science", "Managing Director Data Science") ~ "Director of Data Science",
       TRUE ~ job_title
     ))
-
+# Output of the table
 knitr::kable(head(data,15))
 ```
-
 
 # Visualisation of the percentage of the remote work ratio in worldwide comparsion
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
@@ -96,6 +92,8 @@ p1 <- ggplot(world_remote) +
     legend.direction = "horizontal", 
     legend.title.align = 0.5
   )
+
+# Save of the plot 1 
 ggsave("plot_procent_remote_Work_Worlwide.png", p1, width=15, height=10)
 ``` 
 ![](plot_procent_remote_Work_Worlwide.png)
@@ -103,13 +101,14 @@ ggsave("plot_procent_remote_Work_Worlwide.png", p1, width=15, height=10)
 # Visualisation of average salary of the top 5 entry and mid-level jobs
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 
+#Filter the data according to the top 5 jobs 
 top5_jobs <- data %>%
   filter(experience_level %in% c("EN", "MI")) %>%
   count(job_title, sort = TRUE) %>%
   slice_max(n, n = 5) %>%
   pull(job_title)
 
-
+#The salary of the top 5 entry and mid-level jobs
 avg_salary <- data %>%
   filter(experience_level %in% c("EN", "MI"),
          job_title %in% top5_jobs) %>%
@@ -118,7 +117,7 @@ avg_salary <- data %>%
   mutate(experience_level = recode(experience_level,
                                    EN = "Entry Level",
                                    MI = "Mid Level"))
-
+# Plot of the top 5 jobs and there salarz in the ehtry and mid-level
 p2 <-ggplot(avg_salary, aes(x = reorder(job_title, avg_salary), y = avg_salary, fill = experience_level)) +
   geom_col(position = "dodge") +
   coord_flip() +
@@ -131,6 +130,7 @@ p2 <-ggplot(avg_salary, aes(x = reorder(job_title, avg_salary), y = avg_salary, 
   theme_minimal() +
   scale_fill_manual(values = c("Entry Level" = "#1f78b4", "Mid Level" = "#33a02c"))
 
+# Save the plot
 ggsave("plot_top_5_jobs_Average_Salary.png", p2, width=15, height=10)
 
 ```
