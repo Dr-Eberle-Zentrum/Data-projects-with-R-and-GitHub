@@ -42,13 +42,6 @@ ms$Other_Diseases_Count <- ifelse(
   })
 )
 
-# ms$`Other Diseases` <- as.character(ms$`Other Diseases`)
-
-# ms$Other_Diseases_Count <- ifelse(
- # ms$`Other Diseases` == "-" | is.na(ms$`Other Diseases`),
- # 0,
- # sapply(strsplit(ms$`Other Diseases`, ","), length)
-
 # (3) new columns (treated with Corticosteroid)
 ms$Corticosteroid <- ifelse(str_detect(ms$Medication, regex("corticosteroid", ignore_case = TRUE)), "Yes", "No")
 
@@ -71,19 +64,21 @@ print(ms)
 ```{r}
 ggplot(ms, aes(x = `Cortisol Test Result`, y = `BAI Score`, color = Sex, shape = Corticosteroid)) +
   geom_point(size = 3) +
-  geom_smooth(method = "lm", se = FALSE, aes(group = interaction(Sex, Corticosteroid))) +
+  geom_smooth(method = "lm", se = FALSE,
+              aes(color = Sex, linetype = Corticosteroid, group = interaction(Sex, Corticosteroid))) +
   labs(title = "BAI Score vs Cortisol Level",
        x = "Cortisol (ng/mL)",
        y = "BAI Score") +
   theme_minimal()
+```  
   
+```{r}
 # correlation value for four groups f+, f-, m+, m-
 cor_groups <- ms %>%
   group_by(Sex, Corticosteroid) %>%
   summarise(Correlation = cor(`Cortisol Test Result`, `BAI Score`, use = "complete.obs"),
             .groups = "drop")
 print(cor_groups)
-            
 ```
 
 # chart showing
@@ -94,12 +89,14 @@ ms$MSDurationGroup <- cut(ms$MSDuration_months,
                           breaks = seq(0, max(ms$MSDuration_months, na.rm = TRUE) + 6, by = 6), 
                           right = FALSE)
 
+```
+
 # Calculate mean and standard deviation of NO test values for each MS duration group
 ms %>%
   group_by(MSDurationGroup) %>%
   summarise(mean_NO = mean(`NO test result`, na.rm = TRUE),
             sd_NO = sd(`NO test result`, na.rm = TRUE)) %>%
-  ggplot(aes(x = MSDurationGroup, y = mean_NO)) +
+  ggplot(aes(x = `MS Duration`, y = mean_NO)) +
   geom_point(size = 3, color = "darkblue") +
   geom_errorbar(aes(ymin = mean_NO - sd_NO, ymax = mean_NO + sd_NO), width = 0.2) +
   labs(title = "NO Test Results by MS Duration (6-Month Groups)",
@@ -109,26 +106,28 @@ ms %>%
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-# Group patients into 15-year age intervals
-
-
 ```{r}
-ms_summary <- ms %>%
-  mutate(
-    Total_Diseases = Other_Diseases_Count + 1,
-    Age_Group = cut(Age, breaks = seq(0, 100, by = 15), right = FALSE)
+all_groups <- c("0–6", "6–12", "12–18", "18–24", "24–30", "30–36", "36–42", "42–48", "48–54", "54–60")
+
+# 2. Mittelwerte und SD berechnen
+summary_data <- ms %>%
+  group_by(MSDurationGroup) %>%
+  summarise(
+    mean_NO = mean(`NO test result`, na.rm = TRUE),
+    sd_NO = sd(`NO test result`, na.rm = TRUE),
+    .groups = "drop"
   ) %>%
-  filter(!is.na(Age_Group)) %>%
-  group_by(Age_Group) %>%
-  summarise(MedianDiseases = median(Total_Diseases, na.rm = TRUE))
+  # 3. Fehlende Gruppen auffüllen
+  complete(MSDurationGroup = all_groups)
 
-
-ggplot(ms_summary, aes(x = Age_Group, y = MedianDiseases)) +
-  geom_bar(stat = "identity", fill = "darkgreen") +
-  labs(
-    title = "Median Number of Diseases by Age Group",
-    x = "Age Group (15-year intervals)",
-    y = "Median Disease Count (incl. MS)"
-  ) +
-  theme_minimal()
+# 4. Plot
+ggplot(summary_data, aes(x = MSDurationGroup, y = mean_NO)) +
+  geom_point(size = 3, color = "darkblue", na.rm = TRUE) +
+  geom_errorbar(aes(ymin = mean_NO - sd_NO, ymax = mean_NO + sd_NO),
+                width = 0.2, color = "darkblue", na.rm = TRUE) +
+  labs(title = "NO Test Results by MS Duration (6-Month Groups)",
+       x = "MS Duration Group",
+       y = "Average NO Test Value") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
