@@ -14,59 +14,59 @@
     library(ggplot2) 
     library(readr) 
     library(dplyr) 
+    library(tidyr)
 
     # read csv
+    if (interactive()) {
+      setwd(dirname(rstudioapi::getSourceEditorContext()$path))
+    } else if (!is.null(knitr::current_input())) {
+      setwd(dirname(knitr::current_input()))
+    }
     ms <- read_csv2("data_MS.csv", show_col_types = FALSE)
 
     ## ℹ Using "','" as decimal and "'.'" as grouping mark. Use `read_delim()` for more control.
 
-\##Data manipulation
+## Data manipulation
 
-    # (1) MS duration in months (+++), created a new column but didn't delete the old one
-    ms$MSDuration_months <- case_when(
-      grepl("Years", ms$`MS Duration`) ~ as.integer(gsub("Years", "", ms$`MS Duration`)) * 12,
-      grepl("Year", ms$`MS Duration`) ~ as.integer(gsub("Year", "", ms$`MS Duration`)) * 12,
-      grepl("Months?", ms$`MS Duration`) ~ as.integer(gsub("Months", "", ms$`MS Duration`)),
-      TRUE ~ NA_integer_
-    )
-
-    ## Warning in eval_tidy(pair$rhs, env = default_env): NAs durch Umwandlung erzeugt
-    ## Warning in eval_tidy(pair$rhs, env = default_env): NAs durch Umwandlung erzeugt
-    ## Warning in eval_tidy(pair$rhs, env = default_env): NAs durch Umwandlung erzeugt
-
-    # (2) new column related to diseases 
-
-    ms$Other_Diseases_Count <- ifelse(
-      ms$`Other Diseases` == "-" | is.na(ms$`Other Diseases`) | trimws(ms$`Other Diseases`) == "",
-      0,
-      sapply(ms$`Other Diseases`, function(x) {
-        # Anzahl Kommas zählen
-        n_commas <- lengths(regmatches(x, gregexpr(",", x)))
-        # Anzahl Krankheiten = Kommas + 1
-        n_commas + 1
-      })
-    )
-
-    # ms$`Other Diseases` <- as.character(ms$`Other Diseases`)
-
-    # ms$Other_Diseases_Count <- ifelse(
-     # ms$`Other Diseases` == "-" | is.na(ms$`Other Diseases`),
-     # 0,
-     # sapply(strsplit(ms$`Other Diseases`, ","), length)
-
-    # (3) new columns (treated with Corticosteroid)
-    ms$Corticosteroid <- ifelse(str_detect(ms$Medication, regex("corticosteroid", ignore_case = TRUE)), "Yes", "No")
-
-    # (4) new columns (treated with B-cell depleting therapy (+)
-    ms$BCellDepletion <- ifelse(str_detect(ms$Medication, regex("rituximab", ignore_case = TRUE)), "Yes", "No")
-
-    # (5) use coded names according to the schema instead of clear names and delete column names
-    ms <- ms %>% 
+    ms_cleaned <- ms %>%
+      # (1) MS duration in months, created a new column but didn't delete the old one
       mutate(
+        MSDuration_months = case_when(
+          grepl("Years", `MS Duration`) ~ as.integer(gsub("Years", "", `MS Duration`)) * 12,
+          grepl("Year", `MS Duration`) ~ as.integer(gsub("Year", "", `MS Duration`)) * 12,
+          grepl("Month?", `MS Duration`) ~ as.integer(gsub("Months", "", `MS Duration`)),
+          TRUE ~ NA_integer_
+        ),
+        
+      # (2) new column related to diseases
+        Other_Diseases_Count = ifelse(
+          `Other Diseases` == "-" | is.na(`Other Diseases`) | trimws(`Other Diseases`) == "",
+          0,
+          sapply(`Other Diseases`, function(x) {
+            n_commas <- lengths(regmatches(x, gregexpr(",", x)))
+            n_commas + 1
+          })
+        ),
+        
+        # (3) new columns (treated with Corticosteroid)
+        Corticosteroid = ifelse(str_detect(Medication, regex("corticosteroid", ignore_case = TRUE)), "Yes", "No"),
+        
+        # (4) new columns (treated with B-cell depleting therapy
+        BCellDepletion = ifelse(str_detect(Medication, regex("rituximab", ignore_case = TRUE)), "Yes", "No"),
+        
+        # (5) use coded names according to the schema instead of clear names and delete column names
         PatientCode = sprintf("MS_XS_%03d", as.integer(as.character(`No.`)))
-      ) %>% 
+      ) %>%
       select(-`Patient Name`)
-    print(ms)
+
+    ## Warning: There were 3 warnings in `mutate()`.
+    ## The first warning was:
+    ## ℹ In argument: `MSDuration_months = case_when(...)`.
+    ## Caused by warning:
+    ## ! NAs durch Umwandlung erzeugt
+    ## ℹ Run `dplyr::last_dplyr_warnings()` to see the 2 remaining warnings.
+
+    print(ms_cleaned)
 
     ## # A tibble: 39 × 18
     ##      No.   Age Sex    `Abslang Test` Smoking Alcohol `Other Diseases` Medication
@@ -90,44 +90,73 @@
 
 ## Visualization
 
-# Scatterplot
+# Graph 1: Scatterplot
 
-    ggplot(ms, aes(x = `Cortisol Test Result`, y = `BAI Score`, color = Sex, shape = Corticosteroid)) +
+    ggplot(ms_cleaned, aes(x = `Cortisol Test Result`, y = `BAI Score`, color = Sex, shape = Corticosteroid)) +
       geom_point(size = 3) +
-      geom_smooth(method = "lm", se = FALSE, aes(group = interaction(Sex, Corticosteroid))) +
+      geom_smooth(method = "lm", se = FALSE,
+                  aes(color = Sex, linetype = Corticosteroid, group = interaction(Sex, Corticosteroid))) +
       labs(title = "BAI Score vs Cortisol Level",
            x = "Cortisol (ng/mL)",
-           y = "BAI Score") +
-      theme_minimal()
+           y = "BAI Score")
 
     ## `geom_smooth()` using formula = 'y ~ x'
 
 ![](Svenjas_initial_project_solution_files/figure-markdown_strict/unnamed-chunk-4-1.png)
 
-    # correlation value for four groups f+, f-, m+, m-
-    cor_groups <- ms %>%
+The plot displays the relationship between BAI Score and Cortisol Test
+Result, with data points differentiated by shape.
+
+# correlation value for four groups f+, f-, m+, m-
+
+    cor_groups <- ms_cleaned %>%
       group_by(Sex, Corticosteroid) %>%
       summarise(Correlation = cor(`Cortisol Test Result`, `BAI Score`, use = "complete.obs"),
                 .groups = "drop")
     print(cor_groups)
 
-    ## # A tibble: 4 × 3
-    ##   Sex    Corticosteroid Correlation
-    ##   <chr>  <chr>                <dbl>
-    ## 1 Female No                 -0.562 
-    ## 2 Female Yes                -0.0314
-    ## 3 Male   No                 -0.282 
-    ## 4 Male   Yes                -0.195
+<table>
+<thead>
+<tr class="header">
+<th>Sex</th>
+<th>Corticosteroid</th>
+<th>Correlation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Female</td>
+<td>No</td>
+<td>-0.5616</td>
+</tr>
+<tr class="even">
+<td>Female</td>
+<td>Yes</td>
+<td>-0.0314</td>
+</tr>
+<tr class="odd">
+<td>Male</td>
+<td>No</td>
+<td>-0.2817</td>
+</tr>
+<tr class="even">
+<td>Male</td>
+<td>Yes</td>
+<td>-0.1952</td>
+</tr>
+</tbody>
+</table>
 
-# chart showing
+# Graph 2: chart showing average NO test value
 
     # Group MS duration into 6-month intervals
-    ms$MSDurationGroup <- cut(ms$MSDuration_months, 
-                              breaks = seq(0, max(ms$MSDuration_months, na.rm = TRUE) + 6, by = 6), 
+    ms_cleaned$MSDurationGroup <- cut(ms_cleaned$MSDuration_months, 
+                              breaks = seq(0, max(ms_cleaned$MSDuration_months, na.rm = TRUE) + 6, by = 6), 
                               right = FALSE)
 
+
     # Calculate mean and standard deviation of NO test values for each MS duration group
-    ms %>%
+    ms_cleaned %>%
       group_by(MSDurationGroup) %>%
       summarise(mean_NO = mean(`NO test result`, na.rm = TRUE),
                 sd_NO = sd(`NO test result`, na.rm = TRUE)) %>%
@@ -136,31 +165,59 @@
       geom_errorbar(aes(ymin = mean_NO - sd_NO, ymax = mean_NO + sd_NO), width = 0.2) +
       labs(title = "NO Test Results by MS Duration (6-Month Groups)",
            x = "MS Duration Group",
-           y = "Average NO Test Value") +
-      theme_minimal() +
-      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+           y = "Average NO Test Value") 
 
-![](Svenjas_initial_project_solution_files/figure-markdown_strict/unnamed-chunk-5-1.png)
+![](Svenjas_initial_project_solution_files/figure-markdown_strict/unnamed-chunk-6-1.png)
 
-# Group patients into 15-year age intervals
+The graph shows the average NO test values as points and the standard
+deviation as an error bar for each group.
 
-    ms_summary <- ms %>%
+# Graph 3: bar chart showing the median number of diseases for each of these age groups
+
+    ms_adjusted <- ms_cleaned %>%
       mutate(
         Total_Diseases = Other_Diseases_Count + 1,
         Age_Group = cut(Age, breaks = seq(0, 100, by = 15), right = FALSE)
       ) %>%
-      filter(!is.na(Age_Group)) %>%
+      drop_na(Age_Group)
+
+
+    ms_summary <- ms_adjusted %>%
       group_by(Age_Group) %>%
-      summarise(MedianDiseases = median(Total_Diseases, na.rm = TRUE))
+      summarise(
+        MeanDiseases = mean(Total_Diseases, na.rm = TRUE),
+        SDDiseases = sd(Total_Diseases, na.rm = TRUE),
+        .groups = "drop"
+      )
 
-
-    ggplot(ms_summary, aes(x = Age_Group, y = MedianDiseases)) +
-      geom_bar(stat = "identity", fill = "darkgreen") +
-      labs(
-        title = "Median Number of Diseases by Age Group",
-        x = "Age Group (15-year intervals)",
-        y = "Median Disease Count (incl. MS)"
+    #graph
+    ggplot() +
+      geom_count(
+        data = ms_adjusted,
+        aes(x = Age_Group, y = Total_Diseases),
+        color = "gray50",
+        alpha = 0.5
       ) +
-      theme_minimal()
+      geom_bar(
+        data = ms_summary,
+        aes(x = Age_Group, y = MeanDiseases),
+        stat = "identity", fill = "darkgreen", width = 0.6
+      ) +
+      geom_errorbar(
+        data = ms_summary,
+        aes(x = Age_Group,
+            ymin = MeanDiseases - SDDiseases,
+            ymax = MeanDiseases + SDDiseases),
+        width = 0.2, color = "black"
+      ) +
+      labs(
+        title = "Average Number of Diseases by Age Group",
+        x = "Age Group (15-year intervals)",
+        y = "Mean Disease Count (incl. MS)"
+      ) +
+      guides(size = "none")
 
-![](Svenjas_initial_project_solution_files/figure-markdown_strict/unnamed-chunk-6-1.png)
+![](Svenjas_initial_project_solution_files/figure-markdown_strict/unnamed-chunk-7-1.png)
+
+The bar chart displays the average number of diseases, including MS,
+across different age groups divided into 15-year intervals.
