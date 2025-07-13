@@ -9,6 +9,8 @@ library(readxl)
 library(httr)
 library(ggalluvial)
 library(circlize)
+library(knitr)
+library(forcats)
 ```
 
 ```{r dataImport, include = FALSE, cache = TRUE}
@@ -35,43 +37,39 @@ aggregatedData <- relevantData %>%
   group_by(origin, destination) %>%
   summarise(totalParticipants = sum(participants, na.rm = TRUE)) %>%
   ungroup() %>%
-  mutate(origin = str_extract(origin, "^[A-Z]{2}"), destination = str_extract(destination, "^[A-Z]{2}"))
+  mutate(origin = str_extract(origin, "^[A-Z]{2}"), destination = str_extract(destination, "^[A-Z]{2}"))  %>%
+  filter(origin != destination)
 
 # view(aggregatedData)
 ```
 
 # Erasmus Mobility Study
 
-We want to investigate the student mobility within the Erasmus+ programme, focusing on long-term study mobility of pupils. The dataset contains information about the sending and receiving countries along with the number of participants:
+We want to investigate the student mobility within the Erasmus+ programme, focusing on long-term study mobility of pupils. The dataset contains information about the sending and receiving countries along with the number of participants. In this dataset, the rows in which the sending and receiving countries are the same have been removed, as they do not represent mobility. The data has been aggregated to show the total number of participants for each pair of sending and receiving countries:
 
 ```{r dataSummary, echo=FALSE}
-head(aggregatedData, 15)
+kable(head(aggregatedData, 15), caption = "Erasmus+ Student Mobility Data", align = "c")
 ```
 
 # Visualization
 
 ## Heatmap
 
+We want to visualize the intensity of student mobility between the top sending and receiving countries using a heatmap:
+
 ```{r heatmap, echo=FALSE}
-
-getTop <- function(data, group_col, n = 5) {
-  data %>%
-    group_by({{ group_col }}) %>%
-    summarise(total = sum(totalParticipants, na.rm = TRUE)) %>%
-    slice_max(total, n = n) %>%
-    ungroup() %>%
-    pull({{ group_col }})
-}
-
-topOrigins <- getTop(aggregatedData, origin, 5)
-topDestinations <- getTop(aggregatedData, destination, 5)
-
 heatmapData <- aggregatedData %>%
-  filter(origin %in% topOrigins & destination %in% topDestinations)
+  mutate(
+    origin = fct_lump_n(factor(origin), n = 5, other_level = "Oth."),
+    destination = fct_lump_n(factor(destination), n = 5, other_level = "Oth.")
+  ) %>%
+  filter(origin != "Oth." & destination != "Oth.") %>%
+  group_by(origin, destination) %>%
+  summarise(totalParticipants = sum(totalParticipants), .groups = "drop")
 
 ggplot(heatmapData, aes(x = origin, y = destination, fill = totalParticipants)) +
   geom_tile() +
-  scale_fill_gradient(low = "white", high = "darkgreen") +
+  scale_fill_gradient(low = "lightyellow", high = "darkgreen") +
   labs(title = "Heatmap of Erasmus+ Student Mobility",
        x = "Sending Country",
        y = "Receiving Country",
@@ -88,44 +86,85 @@ pairedData <- aggregatedData %>%
   group_by(pair) %>%
   summarise(combinedParticipants = sum(totalParticipants, na.rm = TRUE)) %>%
   arrange(desc(combinedParticipants)) %>%
-  slice(1:5) %>% 
-  print()
+  slice(1:5)
+
+kable(pairedData, caption = "Top 5 Sending and Receiving Country Pairs", align = "c")
 ```
 
 ## Sankey Flow Diagram
 
+To visualize the flow of students between sending and receiving countries, we can use a Sankey diagram. This will show the connections between the top 5 sending and receiving countries, highlighting the flow of participants. Participants from countries not in the top 5 will be grouped into an "Other" category for both origins and destinations.
+
 ```{r sankeyDiagram, echo=FALSE, warning=FALSE, error=FALSE}
 
-ggplot(aggregatedData,
-       aes(axis1 = origin, axis2 = destination, y = totalParticipants)) +
-  geom_alluvium(aes(fill = origin), width = 1/12) +
-  geom_stratum(width = 1/12) +
+sankeyData <- aggregatedData %>%
+  mutate(
+    origin_mod = fct_lump(factor(origin), n = 5, other_level = "Oth."),
+    destination_mod = fct_lump(factor(destination), n = 5, other_level = "Oth.")
+  ) %>%
+  group_by(origin_mod, destination_mod) %>%
+  summarise(totalParticipants = sum(totalParticipants), .groups = "drop")
+
+ggplot(sankeyData,
+       aes(axis1 = origin_mod, axis2 = destination_mod, y = totalParticipants)) +
+  geom_alluvium(aes(fill = origin_mod), width = 1/12, alpha = 0.6) +
+  scale_fill_brewer(type = "qual", palette = "Set1") +
+  geom_stratum(aes(fill = after_stat(stratum)), width = 1/12, alpha = 0.6) +
   geom_text(stat = "stratum", aes(label = after_stat(stratum))) +
   scale_x_discrete(limits = c("Origin", "Destination"), expand = c(0.15, 0.05)) +
-  labs(title = "Erasmus+ Student Mobility") +
+  labs(title = "Erasmus+ Student Mobility", fill = "Origin") +
   theme_minimal()
 ```
 
+The Sankey diagram offers an alternative visualization of the heatmap results, highlighting the largest student flows, primarily between Spain and Italy, followed by Spain and France, and then France and Italy.
+
 ## Barplot
+
+To further analyze the data, we can create a bar plot that shows the top 10 origins and destinations of participants. This will help us understand which countries are the most popular for sending and receiving students in the Erasmus+ programme.
 
 ```{r barplot, echo=FALSE}
 
+getTop <- function(data, group_col, n = 5) {
+  data %>%
+    group_by({{ group_col }}) %>%
+    summarise(total = sum(totalParticipants, na.rm = TRUE)) %>%
+    slice_max(total, n = n) %>%
+    ungroup() %>%
+    pull({{ group_col }})
+}
+    
 TopTenDestinations <- getTop(aggregatedData, destination, 10)
+TopTenOrigins <- getTop(aggregatedData, origin, 10)
 
-barplotData <- aggregatedData %>%
+destData <- aggregatedData %>%
   filter(destination %in% TopTenDestinations) %>%
   group_by(destination) %>%
-  summarise(totalVisitors = sum(totalParticipants, na.rm = TRUE)) %>%
-  arrange(desc(totalVisitors))
+  summarise(totalParticipants = sum(totalParticipants, na.rm = TRUE)) %>%
+  mutate(type = "Destination", country = destination) %>%
+  select(country, totalParticipants, type)
 
-ggplot(barplotData, aes(fct_reorder(destination, totalVisitors), y = totalVisitors)) +
-  geom_col(fill = "darkgreen") +
-  coord_flip() +  # horizontal bars
+originData <- aggregatedData %>%
+  filter(origin %in% TopTenOrigins) %>%
+  group_by(origin) %>%
+  summarise(totalParticipants = sum(totalParticipants, na.rm = TRUE)) %>%
+  mutate(type = "Origin", country = origin, totalParticipants = -totalParticipants) %>%
+  select(country, totalParticipants, type)
+
+barplotData <- bind_rows(destData, originData) %>%
+  mutate(country = fct_reorder(country, abs(totalParticipants)))
+
+ggplot(barplotData, aes(x = country, y = totalParticipants, fill = type)) +
+  geom_col() +
+  coord_flip() +
+  scale_y_continuous(labels = abs) +
+  scale_fill_manual(values = c("Origin" = "firebrick", "Destination" = "forestgreen")) +
   labs(
-    title = "Top 10 Most Popular Receiving Countries",
-    x = "Receiving Country",
-    y = "Number of Incoming Participants"
+    title = "Top 10 Origins and Destinations of Participants",
+    x = "Country",
+    y = "Number of Participants",
+    fill = ""
   ) +
   theme_minimal()
 
 ```
+The bar plot shows highest number of participants in the Erasmus+ programme, with Spain being the top sending and recieving country followed by Italy and France.
