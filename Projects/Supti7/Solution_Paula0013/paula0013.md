@@ -9,18 +9,18 @@ countries.
 
 # Read and transform of the data
 
-<table>
+<table style="width:100%;">
 <colgroup>
 <col style="width: 5%" />
+<col style="width: 10%" />
 <col style="width: 9%" />
-<col style="width: 9%" />
-<col style="width: 18%" />
+<col style="width: 15%" />
 <col style="width: 4%" />
 <col style="width: 9%" />
 <col style="width: 8%" />
-<col style="width: 10%" />
+<col style="width: 11%" />
 <col style="width: 7%" />
-<col style="width: 9%" />
+<col style="width: 10%" />
 <col style="width: 7%" />
 </colgroup>
 <thead>
@@ -104,143 +104,21 @@ countries.
 <td style="text-align: left;">AU</td>
 <td style="text-align: left;">M</td>
 </tr>
-<tr>
-<td style="text-align: right;">2024</td>
-<td style="text-align: left;">MI</td>
-<td style="text-align: left;">FT</td>
-<td style="text-align: left;">Business Intelligence Developer</td>
-<td style="text-align: right;">95413</td>
-<td style="text-align: left;">USD</td>
-<td style="text-align: right;">95413</td>
-<td style="text-align: left;">US</td>
-<td style="text-align: right;">100</td>
-<td style="text-align: left;">US</td>
-<td style="text-align: left;">M</td>
-</tr>
-<tr>
-<td style="text-align: right;">2024</td>
-<td style="text-align: left;">MI</td>
-<td style="text-align: left;">FT</td>
-<td style="text-align: left;">Business Intelligence Developer</td>
-<td style="text-align: right;">70692</td>
-<td style="text-align: left;">USD</td>
-<td style="text-align: right;">70692</td>
-<td style="text-align: left;">US</td>
-<td style="text-align: right;">100</td>
-<td style="text-align: left;">US</td>
-<td style="text-align: left;">M</td>
-</tr>
-<tr>
-<td style="text-align: right;">2024</td>
-<td style="text-align: left;">SE</td>
-<td style="text-align: left;">FT</td>
-<td style="text-align: left;">Data Engineer</td>
-<td style="text-align: right;">110000</td>
-<td style="text-align: left;">USD</td>
-<td style="text-align: right;">110000</td>
-<td style="text-align: left;">UA</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">UA</td>
-<td style="text-align: left;">M</td>
-</tr>
-<tr>
-<td style="text-align: right;">2024</td>
-<td style="text-align: left;">SE</td>
-<td style="text-align: left;">FT</td>
-<td style="text-align: left;">Data Engineer</td>
-<td style="text-align: right;">48000</td>
-<td style="text-align: left;">USD</td>
-<td style="text-align: right;">48000</td>
-<td style="text-align: left;">UA</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">UA</td>
-<td style="text-align: left;">M</td>
-</tr>
-<tr>
-<td style="text-align: right;">2024</td>
-<td style="text-align: left;">SE</td>
-<td style="text-align: left;">FT</td>
-<td style="text-align: left;">Data Scientist</td>
-<td style="text-align: right;">222300</td>
-<td style="text-align: left;">USD</td>
-<td style="text-align: right;">222300</td>
-<td style="text-align: left;">US</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">US</td>
-<td style="text-align: left;">M</td>
-</tr>
-<tr>
-<td style="text-align: right;">2024</td>
-<td style="text-align: left;">SE</td>
-<td style="text-align: left;">FT</td>
-<td style="text-align: left;">Data Scientist</td>
-<td style="text-align: right;">119700</td>
-<td style="text-align: left;">USD</td>
-<td style="text-align: right;">119700</td>
-<td style="text-align: left;">US</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">US</td>
-<td style="text-align: left;">M</td>
-</tr>
-<tr>
-<td style="text-align: right;">2024</td>
-<td style="text-align: left;">SE</td>
-<td style="text-align: left;">FT</td>
-<td style="text-align: left;">Cloud Database Engineer</td>
-<td style="text-align: right;">170375</td>
-<td style="text-align: left;">USD</td>
-<td style="text-align: right;">170375</td>
-<td style="text-align: left;">US</td>
-<td style="text-align: right;">100</td>
-<td style="text-align: left;">US</td>
-<td style="text-align: left;">M</td>
-</tr>
-<tr>
-<td style="text-align: right;">2024</td>
-<td style="text-align: left;">SE</td>
-<td style="text-align: left;">FT</td>
-<td style="text-align: left;">Cloud Database Engineer</td>
-<td style="text-align: right;">102500</td>
-<td style="text-align: left;">USD</td>
-<td style="text-align: right;">102500</td>
-<td style="text-align: left;">US</td>
-<td style="text-align: right;">100</td>
-<td style="text-align: left;">US</td>
-<td style="text-align: left;">M</td>
-</tr>
-<tr>
-<td style="text-align: right;">2024</td>
-<td style="text-align: left;">SE</td>
-<td style="text-align: left;">FT</td>
-<td style="text-align: left;">Data Engineer</td>
-<td style="text-align: right;">270000</td>
-<td style="text-align: left;">USD</td>
-<td style="text-align: right;">270000</td>
-<td style="text-align: left;">AU</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">AU</td>
-<td style="text-align: left;">M</td>
-</tr>
-<tr>
-<td style="text-align: right;">2024</td>
-<td style="text-align: left;">SE</td>
-<td style="text-align: left;">FT</td>
-<td style="text-align: left;">Data Engineer</td>
-<td style="text-align: right;">190000</td>
-<td style="text-align: left;">USD</td>
-<td style="text-align: right;">190000</td>
-<td style="text-align: left;">AU</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">AU</td>
-<td style="text-align: left;">M</td>
-</tr>
 </tbody>
 </table>
 
-# Visualisation of the percentage of the remote work ratio in worldwide comparsion
+# Visualisation of the percentage of the remote work ratio in comparsion to other countries
+
+This map shows the share of fully remote jobs (100% remote) compared to
+the total number of jobs per country for the year 2024. Countries
+without relevant data are shown in gray.
 
 ![](plot_procent_remote_Work_Worlwide.png)
 
 # Visualisation of average salary of the top 5 entry and mid-level jobs
+
+This chart shows the average salaries of the five most common job titles
+at entry and mid-level. The error bars show the standard deviation
+within the respective group.
 
 ![](plot_top_5_jobs_Average_Salary.png)
