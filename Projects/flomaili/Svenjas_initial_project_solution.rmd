@@ -5,7 +5,7 @@ date: "2025-06-30"
 output: md_document
 ---
 
-```{r, echo = TRUE, results = 'hide'}
+```{r, echo = TRUE, results = 'hide', message = FALSE, warning = FALSE}
 library(tidyverse) 
 library(ggplot2) 
 library(readr) 
@@ -13,7 +13,7 @@ library(dplyr)
 library(tidyr)
 ```
 
-```{r,, echo = TRUE, results = 'hide'}
+```{r,, echo = TRUE, results = 'hide', message = FALSE, warning = FALSE}
 # read csv
 if (interactive()) {
   setwd(dirname(rstudioapi::getSourceEditorContext()$path))
