@@ -5,7 +5,7 @@ output: md_document
 
 ```{r setup, include=FALSE}
 
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 library(readxl)
 library(knitr)
 library(tidyverse)
@@ -34,17 +34,17 @@ count_data_all  <- read_csv("GSE273780_EukmRNAseq_counts.csv")
 ```
 
 
-
+These are the samples, I have chosen for this task.
 
 
 ```{r samples, warning=FALSE, message=FALSE}
 
 
 sample_selection <- tibble(
-  sample = c("G38", "G34", "G49", "G41", "G83", "G90", "G61", "G84"),
-  week = rep(c(12,36), times = 4), 
-  replicate = rep(c(3,5,9,7), each = 2),
-  weight_status = rep(c("NW", "OW"), each = 4)
+  sample = c("G38", "G49", "G83", "G61", "G34", "G41", "G90", "G84"),
+  week = rep(c("12","36"), each = 4), 
+  replicate = rep(c(3,5,9,7), times = 2),
+  weight_status = rep(c("NW", "NW", "OW", "OW"), times = 2)
 )
 
 
@@ -54,7 +54,9 @@ print(sample_table)
 
 ```
 
-```{r data_adjustment, warning=FALSE, message=FALSE}
+
+
+```{r data_sample, warning=FALSE, message=FALSE}
 rename_cols <- setNames(
   paste0(
     "R", sample_selection$replicate, "_",
@@ -63,7 +65,11 @@ rename_cols <- setNames(
   ),
   sample_selection$sample
 )
+```
 
+## Code for the data adjustment
+
+```{r data_adjustment, warning=FALSE, message=FALSE, echo=TRUE}
 count_data_sel <- count_data_all %>% 
   select(all_of(c("Row.names", sample_selection$sample))) %>%
   rename(gene_code = "Row.names") %>%
@@ -118,6 +124,15 @@ annotation_colors <- list(
 )
 
 
+#vline_pos <- length(sample_selection$sample[sample_selection$week == "12"]) + 0.5
+```
+
+## Code for the Visualisation
+
+
+```{r Heatmap_ceation, warning=FALSE, message=FALSE, echo=TRUE}
+
+
 p <- heatmaply(
   heatmap_data,
   dendrogram = "row",                      
@@ -129,15 +144,60 @@ p <- heatmaply(
   titleX = FALSE,
   branches_lwd = 0.3,
   label_names = c("Gene", "Sample", "Z-value"),
-  fontsize_row = 5, fontsize_col = 8,
+  fontsize_row = 11, fontsize_col = 15,
   labCol = colnames(heatmap_data),
   labRow = rownames(heatmap_data),
   colors = colorRampPalette(c("red", "white", "blue"))(256),
   limits = c(-max_abs, max_abs),
   col_side_colors = sample_info[colnames(heatmap_data), , drop = FALSE],
   #col_side_palette = annotation_colors,  ## i don't know, why this does not work
-  heatmap_layers = theme(axis.line = element_blank())
+  heatmap_layers = list(
+      theme(
+      legend.text = element_text(size = 20),      
+      legend.title = element_text(size = 22),
+      legend.position = "bottom"
+    )),
+  plot_method = "plotly"
 )
+```
+
+## Visualisation
+
+```{r Heatmap_storage, warning=FALSE, message=FALSE}
+#vline_pos <- sum(sample_selection$week == "12") + 0.5
+
+# Add vertical line using plotly::layout()
+p <- plotly::layout(p, shapes = list(
+   list(type="line",
+    x0 = 0.4,
+    x1 = 0.4,
+    y0 = 0,
+    y1 = 0.99,
+    xref = "paper",
+    yref = "paper",
+    xsizemode="pixel",
+    ysizemode="pixel",
+    yanchor="top",
+    xanchor="center"
+  )
+))
+#p <- plotly::layout(p, legend = list(
+ # font = list(
+   # size = 20 , color="red"       
+  #),
+ # title = list(
+ #   font = list(size = 22)  #  Legend title size
+ # )
+#))
+
+p <- plotly::layout(p, title = list(
+  text = "Gene Expression Z-scores",
+  x = 0.4,               
+  xanchor = "center",   
+  y=1,
+  yanchor = "top",
+  font = list(size = 25) 
+))
 
 saveWidget(p, "heatmap_interactive.html", selfcontained = TRUE)
 
@@ -149,3 +209,4 @@ webshot::webshot("heatmap_interactive.html", "heatmap_static.png", vwidth = 1200
 ![](heatmap_static.png)
 <br>
 For the interactive heatmap, click [here](heatmap_interactive.html).
+!HTML isnot rendered, so you won't see an interactive Map!
