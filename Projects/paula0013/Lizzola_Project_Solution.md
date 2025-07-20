@@ -10,7 +10,8 @@
     library(fs)
     library(lubridate)
     library(ggplot2)
-
+    library(ggrepel)
+    library(hms)
 
     if (!is.null(current_input())) {
       rmd_dir <- path_dir(current_input())
@@ -32,14 +33,26 @@ Dir.) with the wind direction in compass direction (e.g. NW, SSO)
              "Wind speed in m/s" = Wind.Speed, 
              "Wind direction in degrees" = True.Dir.) %>%
       separate("Time in yyyy-MM-dd hh:mm:ss", into = c("Date", "Time"), sep = " ") %>%
-      mutate( 
+      mutate(Date = as.Date(Date, format = "%Y-%m-%d")) %>%
+      mutate(Time = as_hms(Time)) %>%
+      mutate(
         period = case_when(
-        Time %in% c("10:00:00", "11:00:00", "12:00:00", "13:00:00") ~ "Morning",
-        Time %in% c("14:00:00", "15:00:00") ~ "Afternoon",
-        TRUE ~ NA_character_)
-        ) %>%
+          between(Time, as_hms("10:00:00"), as_hms("13:00:00")) ~ "Morning",
+          between(Time, as_hms("13:00:00"), as_hms("16:00:00")) ~ "Afternoon",
+          TRUE ~ "Other"
+        )
+      ) %>%
+      #mutate( 
+      #  period = case_when(
+      #  Time %in% c("10:00:00", "11:00:00", "12:00:00", "13:00:00") ~ "Morning",
+      #  Time %in% c("13:00:00", "14:00:00", "15:00:00", "16:00:00") ~ "Afternoon",
+      #  TRUE ~ NA_character_)
+      #  ) %>%
       filter(period %in% c("Morning", "Afternoon")) %>%
-      group_by(Date, period) %>% # here I changed Midday to Afternoon that both dfs can be merged
+      group_by(Date, period) %>%
+      #summarise(across(c(`Temperature in Celsius`, `Wind speed in m/s`, `Wind direction in degrees`), # did not work
+      #                   ~ mean(as.numeric(.), na.rm = TRUE)), .groups = "drop") %>%
+      #rename_with(~ paste0("Mean ", .), everything()) %>%
       summarise(
         `Mean Temperature in Celsius` = mean(as.numeric(`Temperature in Celsius`), na.rm = TRUE),
         `Mean Wind Speed in m/s` = mean(as.numeric(`Wind speed in m/s`), na.rm = TRUE),
@@ -56,7 +69,7 @@ Dir.) with the wind direction in compass direction (e.g. NW, SSO)
           `Mean Wind Direction in degrees` >= 202.5 & `Mean Wind Direction in degrees` < 247.5 ~ "SW",
           `Mean Wind Direction in degrees` >= 247.5 & `Mean Wind Direction in degrees` < 292.5 ~ "W",
           `Mean Wind Direction in degrees` >= 292.5 & `Mean Wind Direction in degrees` < 337.5 ~ "NW",
-          TRUE ~ NA_character_
+          TRUE ~ "Unknown"
         ))
 
 Merging the data from the revised weather file with the dragonfly catch
@@ -67,29 +80,39 @@ data
     } else {
       rmd_dir <- getwd()
     }
-    catch_data <- read.csv(file.path(rmd_dir, "Fangdaten_Poland.csv"), sep = ";")
+    #catch_data <- read.csv(file.path(rmd_dir, "Fangdaten_Poland.csv"), sep = ";")
+    catch_data <- read_delim(file.path(rmd_dir, "Fangdaten_Poland.csv"), delim = ";" ,na = c("", "NA"))
 
+    #revised_catch_data <- catch_data %>%
+    # mutate(across(everything(), ~na_if(.x, ""))) %>%
+    # mutate(across(everything(), ~na_if(.x, "NA"))) %>%
+     # filter(if_any(everything(), ~ !is.na(.))) %>%
+     # mutate(Datum = as.Date(dmy(Datum), format = "%y-%m-%d")) %>% 
+    #  group_by(Datum, Uhrzeit, Geschlecht) %>% 
+    #  mutate(Anzahl = n()) %>% 
+    #  ungroup()
+      
     revised_catch_data <- catch_data %>%
-      mutate(across(everything(), ~na_if(.x, ""))) %>%
-      mutate(across(everything(), ~na_if(.x, "NA"))) %>%
-      filter(if_any(everything(), ~ !is.na(.))) %>%
-      mutate(Datum = format(dmy(Datum), "%Y-%m-%d")) %>%
+      mutate(
+        Datum = dmy(Datum)
+      ) %>%
+      drop_na(Datum, Uhrzeit, Geschlecht) %>% 
       group_by(Datum, Uhrzeit, Geschlecht) %>% 
       mutate(Anzahl = n()) %>% 
       ungroup()
-      
 
     merged_data <- left_join(transformed_weather_data, revised_catch_data, by = c("Date" = "Datum", "period" = "Uhrzeit"))
 
 ## Data visualization
 
-    merged_data$Date <- as.Date(merged_data$Date)
+    #merged_data$Date <- as.Date(merged_data$Date)
 
     # Create a new variable for the number of individuals caught that I use as the right y-axis
     scaling_factor <- max(merged_data$Anzahl, na.rm = TRUE) / max(merged_data$`Mean Temperature in Celsius`, na.rm = TRUE)
 
     # New variable with scaled temperature for right y-axis
     merged_data <- merged_data %>%
+      mutate(Date = as.Date(Date)) %>%
       mutate(Temp_scaled = `Mean Temperature in Celsius` * scaling_factor)
 
     # Wind direction in degrees to compass direction
@@ -126,11 +149,16 @@ data
         .groups = "drop"
       ) %>%
       mutate(
-        arrow_len = 1,
-        y_base = -1.5,
-        xend = Date + arrow_len * cos(WindDir_rad),
+        arrow_len = 0.5,
+        y_base = -1.0,
+        xend = Date + arrow_len * cos(WindDir_rad) ,
         yend = y_base + arrow_len * sin(WindDir_rad)
       )
+
+    merged_data <- merged_data %>%
+      mutate(Geschlecht = ifelse(is.na(Geschlecht), "", Geschlecht))
+
+    png("Dragonflies.png", width = 1200, height = 800)
 
     # plot with two y axis
     ggplot(merged_data %>%
@@ -147,49 +175,65 @@ data
       geom_smooth(aes(y = Temp_scaled, color = period), se = TRUE) +
 
       scale_y_continuous(
-        name = "Number of Individuals",
+        name = "Number of catched individuals",
         breaks = c(0, 2, 4),
-        sec.axis = sec_axis(~ . / scaling_factor, name = "Temperature")
+        sec.axis = sec_axis(
+          ~ . / scaling_factor, 
+          name = "Temperature in Degrees",
+        breaks = c(0, 25, 50, 100), 
+        labels = c("0°C", "25°C", "50°C", "100°C"))
       ) +
 
-      labs(x = "Catchperiod") +
+      labs(x = "Catchperiod",
+           fill = "Gender",
+      color = "Temperature period") +
       scale_x_date(breaks = sequence_dates) +
       theme_classic() +
       theme(
-        axis.title.x = element_text(size = 12),
-        axis.title.y = element_text(size = 12),
-        axis.title.y.right = element_text(size = 12),
-        axis.text.x = element_text(size = 8),
-        axis.text.y = element_text(size = 10),
-        axis.text.y.right = element_text(size = 10)
+        axis.title.x = element_text(size = 18),
+        axis.title.y = element_text(size = 18),
+        axis.title.y.right = element_text(size = 18),
+        axis.text.x = element_text(size = 14, angle = 30, hjust = 1),
+        axis.text.y = element_text(size = 16),
+        axis.text.y.right = element_text(size = 16)
       ) +
       geom_segment(data = wind_arrows,
                    aes(x = Date, y = y_base, xend = xend, yend = yend),
                    arrow = arrow(length = unit(0.4, "cm")), color = "black") +
 
-      geom_text(data = wind_arrows,
-                aes(x = Date, y = y_base - 1, label = WindDirection_compass),
-                size = 3, color = "black") +
+      #geom_text(data = wind_arrows,
+      #          aes(x = Date, y = y_base - 1, label = WindDirection_compass),
+      #          size = 3, color = "black") +
 
       geom_text(data = wind_arrows,
-                aes(x = Date, y = y_base - 2, label = paste0(WindSpeed, " m/s")),
-                size = 3.5, color = "black")
+                aes(x = Date, y = y_base -1, label = paste0(WindSpeed, " m/s")),
+                size = 5, color = "black")
 
-![](Lizzola_Project_Solution_files/figure-markdown_strict/visualization-1.png)
+<figure>
+<img src="Dragonflies.png" alt="Summarized dragonfly catches" />
+<figcaption aria-hidden="true">Summarized dragonfly catches</figcaption>
+</figure>
+
+    png("Temperature_Catch.png", width = 800, height = 600)
 
     ggplot(merged_data %>%
              filter(!is.na(`Mean Temperature in Celsius`), !is.na(ID)),
            aes(x = as.Date(Date), y = `Mean Temperature in Celsius`, label = ID)) +
-      geom_point(aes(color = Geschlecht) , size = 3) +
-      geom_text(aes(label = ID), hjust = -0.1, size = 2, angle = 45, check_overlap = TRUE) +
+      geom_point(aes(color = Geschlecht) , size = 4) +
+      #geom_text(aes(label = ID), vjust = -0.8, hjust = 0.5, size = 4, angle = 0, check_overlap = FALSE) +
+      geom_text_repel(aes(label = ID), size = 4, box.padding = 0.5, max.overlaps = 8) +
       labs(title = "Temperature of Dragonfly Catches Over Time",
            x = "Catchperiod",
            y = "Temperature (°C)") +
       theme_minimal() +
       scale_x_date(breaks = as.Date(c("2024-08-01", "2024-09-01", "2024-10-01"))) +
       theme(
-        axis.title = element_text(size = 12),
-        axis.text = element_text(size = 10)
+        axis.title = element_text(size = 14),
+        axis.text = element_text(size = 12),
+        axis.text.x = element_text(angle = 30, hjust = 1)
       )
 
-![](Lizzola_Project_Solution_files/figure-markdown_strict/temperature_plot-1.png)
+<figure>
+<img src="Temperature_Catch.png" alt="Individual dragonfly catches" />
+<figcaption aria-hidden="true">Individual dragonfly catches</figcaption>
+</figure>
