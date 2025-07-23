@@ -4,6 +4,9 @@
     library(knitr)
     library(ggplot2)
     library(stringr)
+    library(gridExtra)
+    library(tibble)
+    library(dplyr)
 
 ## Data Manipulation
 
@@ -17,7 +20,7 @@
     data <- data[-1, ]
 
     # reset row numbers
-    rownames(data) <- NULL
+    data <- remove_rownames(data)
 
     # Add "(up)" to columns 6 to 11
     colnames(data)[6:11] <- paste0(colnames(data)[6:11], " (up)")
@@ -35,22 +38,28 @@
     DEG <- data[, 1:3]
     GO_terms <- data[, 4:15]
 
-## Filter DEGs
-
     # Convert logFC column to numeric
     DEG$logFC <- as.numeric(DEG$logFC)
 
     # Create new column: TRUE if logFC > 2
-    DEG$logFC_high <- DEG$logFC > 2
+    DEG$logFC_high <- abs(DEG$logFC) > 2
 
     # Ensure p.adjust is numeric
     DEG$p.adjust <- as.numeric(DEG$p.adjust)
 
-    # Filter for significant DEGs
-    DEG_filtered <- DEG[DEG$p.adjust < 0.05, ]
+## Filter DEGs
 
-    # Get top 10 DEGs by logFC
-    top10_DEGs <- DEG_filtered[order(-DEG_filtered$logFC), ][1:10, ]
+    # Filter for significant DEGs
+    top10_DEGs <- DEG %>%
+      mutate(
+        p.adjust = as.numeric(p.adjust),
+        logFC = as.numeric(logFC)
+      ) %>%
+      filter(p.adjust < 0.05) %>%
+      slice_max(order_by = logFC, n = 10)
+
+    # Remove logFC_high column before printing
+    top10_DEGs <- top10_DEGs[, !(colnames(top10_DEGs) == "logFC_high")]
 
     # Show table
     kable(top10_DEGs, caption = "Top 10 Upregulated DEGs (p.adjust < 0.05)", align = "c")
@@ -62,7 +71,6 @@
 <th style="text-align: center;">gene</th>
 <th style="text-align: center;">logFC</th>
 <th style="text-align: center;">p.adjust</th>
-<th style="text-align: center;">logFC_high</th>
 </tr>
 </thead>
 <tbody>
@@ -70,61 +78,51 @@
 <td style="text-align: center;">Acod1</td>
 <td style="text-align: center;">4.919507</td>
 <td style="text-align: center;">0.0041432</td>
-<td style="text-align: center;">TRUE</td>
 </tr>
 <tr>
 <td style="text-align: center;">Vegfa</td>
 <td style="text-align: center;">3.464017</td>
 <td style="text-align: center;">0.0000000</td>
-<td style="text-align: center;">TRUE</td>
 </tr>
 <tr>
 <td style="text-align: center;">Thbs1</td>
 <td style="text-align: center;">3.369642</td>
 <td style="text-align: center;">0.0039819</td>
-<td style="text-align: center;">TRUE</td>
 </tr>
 <tr>
 <td style="text-align: center;">Serpine1</td>
 <td style="text-align: center;">3.197021</td>
 <td style="text-align: center;">0.0000000</td>
-<td style="text-align: center;">TRUE</td>
 </tr>
 <tr>
 <td style="text-align: center;">AA467197</td>
 <td style="text-align: center;">3.112409</td>
 <td style="text-align: center;">0.0000005</td>
-<td style="text-align: center;">TRUE</td>
 </tr>
 <tr>
 <td style="text-align: center;">Cst7</td>
 <td style="text-align: center;">2.847473</td>
 <td style="text-align: center;">0.0000000</td>
-<td style="text-align: center;">TRUE</td>
 </tr>
 <tr>
 <td style="text-align: center;">Flt1</td>
 <td style="text-align: center;">2.698421</td>
 <td style="text-align: center;">0.0000350</td>
-<td style="text-align: center;">TRUE</td>
 </tr>
 <tr>
 <td style="text-align: center;">C3</td>
 <td style="text-align: center;">2.566213</td>
 <td style="text-align: center;">0.0000280</td>
-<td style="text-align: center;">TRUE</td>
 </tr>
 <tr>
 <td style="text-align: center;">Slc7a11</td>
 <td style="text-align: center;">2.457346</td>
 <td style="text-align: center;">0.0458777</td>
-<td style="text-align: center;">TRUE</td>
 </tr>
 <tr>
 <td style="text-align: center;">Acp5</td>
 <td style="text-align: center;">2.441797</td>
 <td style="text-align: center;">0.0000066</td>
-<td style="text-align: center;">TRUE</td>
 </tr>
 </tbody>
 </table>
@@ -140,14 +138,14 @@
     pattern <- paste(keywords, collapse = "|")
 
     # Filter GO terms (upregulated only)
-    GO_up_filtered <- GO_terms[grepl(pattern, GO_terms$`Description (up)`, ignore.case = TRUE), ]
-
-    # Remove "(down)" columns
-    GO_up_filtered <- GO_up_filtered[, !grepl("\\(down\\)", colnames(GO_up_filtered))]
+    GO_up_filtered <- GO_terms %>%
+      filter(grepl(pattern, `Description (up)`, ignore.case = TRUE)) %>%
+      select(-matches("\\(down\\)"))
 
     # Remove unwanted columns
-    cols_to_remove <- c("BgRatio (up)", "pvalue (up)", "ID (up)")
-    GO_up_filtered <- GO_up_filtered[, !(colnames(GO_up_filtered) %in% cols_to_remove)]
+    GO_up_filtered <- GO_up_filtered %>%
+      select(-any_of(c("BgRatio (up)", "pvalue (up)", "ID (up)")))
+
 
     # Rename columns
     colnames(GO_up_filtered) <- c("Description", "GeneRatio", "p.adjust")
@@ -162,6 +160,9 @@
       geom_point(aes(color = logFC_high), alpha = 0.7) +
       geom_vline(xintercept = c(-2, 2), linetype = "dashed", color = "gray40") +
       geom_hline(yintercept = -log10(0.05), linetype = "dashed", color = "gray40") +
+      annotate("text", x = -3, y = max(DEG$neg_log10_padj, na.rm = TRUE)*0.9, label = "logFC < -2", color = "blue", size = 5) +
+      annotate("text", x = 0, y = max(DEG$neg_log10_padj, na.rm = TRUE)*0.9, label = "-2<logFC<2", color = "black", size = 5) +
+      annotate("text", x = 3, y = max(DEG$neg_log10_padj, na.rm = TRUE)*0.9, label = "logFC > 2", color = "blue", size = 5) +
       geom_text(aes(label = gene), check_overlap = TRUE, size = 3, vjust = -0.3) +
       labs(
         title = "Volcano Plot of DEG Genes",
@@ -169,6 +170,7 @@
         y = "-log10 Adjusted p-value",
         color = "logFC > 2"
       ) +
+      scale_color_manual(values = c("FALSE" = "black", "TRUE" = "blue"), guide = "none") +  # <- removes legend
       theme_minimal()
 
 ![](thisishamed_files/figure-markdown_strict/unnamed-chunk-5-1.png)
@@ -186,23 +188,34 @@
     GO_dotplot$p.adjust <- as.numeric(GO_dotplot$p.adjust)
 
     # Sort and select top 15
-    top_n <- 15
-    GO_dotplot_top <- GO_dotplot[order(GO_dotplot$GeneRatio, decreasing = TRUE), ][1:top_n, ]
+    GO_dotplot_top <- GO_dotplot %>%
+      slice_max(order_by = GeneRatio, n = 15)
 
     # Dot plot
-    ggplot(GO_dotplot_top, aes(x = GeneRatio, y = reorder(Description, GeneRatio))) +
+    # Create letter labels
+    GO_dotplot_top$Label <- LETTERS[1:nrow(GO_dotplot_top)]
+
+    # Save a lookup table (if you want to display separately too)
+    label_lookup <- GO_dotplot_top[, c("Label", "Description")]
+
+    # Dot plot using label letters
+    ggplot(GO_dotplot_top, aes(x = Label, y = GeneRatio)) +
       geom_point(aes(size = GeneRatio, color = p.adjust)) +
       scale_color_gradient(low = "red", high = "lightgray", name = "Adjusted p-value") +
       labs(
         title = "Top 15 Upregulated GO Terms Dot Plot",
-        x = "Gene Ratio",
-        y = "GO Term Description"
+        x = "GO Term (Letter Code)",
+        y = "Gene Ratio"
       ) +
       theme_minimal() +
-      coord_flip() +
       theme(
-        axis.text.y = element_text(size = 10),
+        axis.text.x = element_text(size = 12),
         legend.position = "right"
+      ) +
+      # Add table below
+      annotation_custom(
+        gridExtra::tableGrob(label_lookup, rows = NULL),
+        ymin = -0.2, ymax = -0.1, xmin = -Inf, xmax = Inf
       )
 
 ![](thisishamed_files/figure-markdown_strict/unnamed-chunk-6-1.png)
