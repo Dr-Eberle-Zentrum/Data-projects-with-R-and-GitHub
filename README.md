@@ -85,11 +85,19 @@ Double check that you think the data set you picked provides (somehow) all infor
 
 Write an R Markdown file `project-description.Rmd` to
 
--   introduce shortly the general topic of your task (to put it in context)
--   introduce the data set(s), it's origin and important information of what-is-what, etc.
+-   **introduce shortly** the general topic of your task (to put it in context)
+-   define **some questions/hypotheses/ideas** what you want to investigate and solve with this project
+    - this typicially helps to shape the tasks
+-   introduce the **data set(s)**, it's origin and important information of what-is-what, etc.
     - e.g. show the first line of the data set/file and, if needed, explain the column names (or tell where to find such information)
--   define data manipulation goals if needed (also fine if this is the main focus of the project!)
--   define the visualization goal(s) and possible intermediates
+-   define data **manipulation goals** if needed (also fine if this is the main focus of the project!)
+    - if you only own a clean nice data set as a starting point, think about questions/numbers you would like to know
+    - also data validation can be part of this, to check if the data is sane, complete, etc. even when you know it is
+    - you can also manually "uglify" the data before uploading, to make some subsequent data cleaning necessary
+-   define the **visualization goal(s)** and possible intermediates
+    - if you have a thorough and large data processing goal, this might be minor or even "just" a markdown table
+    - but best to have some visualization in the end for motivation and presentation
+-   double check that your tasks and the raised questions/ideas from the beginning are in line with each other
 
 It is fine to be vague at some points but you should formulate a clear goal and roadmap.
 
