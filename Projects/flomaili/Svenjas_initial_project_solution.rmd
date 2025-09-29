@@ -1,0 +1,167 @@
+---
+title: "Svenjasinitialprojectsolution.rmd"
+author: "SvenjaPoerstel"
+date: "2025-06-30"
+output: md_document
+---
+
+```{r, echo = TRUE, results = 'hide', message = FALSE, warning = FALSE}
+library(tidyverse) 
+library(ggplot2) 
+library(readr) 
+library(dplyr) 
+library(tidyr)
+```
+
+```{r,, echo = TRUE, results = 'hide', message = FALSE, warning = FALSE}
+# read csv
+if (interactive()) {
+  setwd(dirname(rstudioapi::getSourceEditorContext()$path))
+} else if (!is.null(knitr::current_input())) {
+  setwd(dirname(knitr::current_input()))
+}
+ms <- read_csv2("data_MS.csv", show_col_types = FALSE)
+```
+
+## Data manipulation
+
+```{r}
+ms_cleaned <- ms %>%
+  # (1) MS duration in months, created a new column but didn't delete the old one
+  mutate(
+    MSDuration_months = case_when(
+      grepl("Years", `MS Duration`) ~ as.integer(gsub("Years", "", `MS Duration`)) * 12,
+      grepl("Year", `MS Duration`) ~ as.integer(gsub("Year", "", `MS Duration`)) * 12,
+      grepl("Month?", `MS Duration`) ~ as.integer(gsub("Months", "", `MS Duration`)),
+      TRUE ~ NA_integer_
+    ),
+    
+  # (2) new column related to diseases
+    Other_Diseases_Count = ifelse(
+      `Other Diseases` == "-" | is.na(`Other Diseases`) | trimws(`Other Diseases`) == "",
+      0,
+      sapply(`Other Diseases`, function(x) {
+        n_commas <- lengths(regmatches(x, gregexpr(",", x)))
+        n_commas + 1
+      })
+    ),
+    
+    # (3) new columns (treated with Corticosteroid)
+    Corticosteroid = ifelse(str_detect(Medication, regex("corticosteroid", ignore_case = TRUE)), "Yes", "No"),
+    
+    # (4) new columns (treated with B-cell depleting therapy
+    BCellDepletion = ifelse(str_detect(Medication, regex("rituximab", ignore_case = TRUE)), "Yes", "No"),
+    
+    # (5) use coded names according to the schema instead of clear names and delete column names
+    PatientCode = sprintf("MS_XS_%03d", as.integer(as.character(`No.`)))
+  ) %>%
+  select(-`Patient Name`)
+
+print(ms_cleaned)
+```
+
+## Visualization
+
+# Graph 1: Scatterplot
+
+```{r}
+ggplot(ms_cleaned, aes(x = `Cortisol Test Result`, y = `BAI Score`, color = Sex, shape = Corticosteroid)) +
+  geom_point(size = 3) +
+  geom_smooth(method = "lm", se = FALSE,
+              aes(color = Sex, linetype = Corticosteroid, group = interaction(Sex, Corticosteroid))) +
+  labs(title = "BAI Score vs Cortisol Level",
+       x = "Cortisol (ng/mL)",
+       y = "BAI Score")
+```
+
+The plot displays the relationship between BAI Score and Cortisol Test Result, with data points differentiated by shape.
+
+# correlation value for four groups f+, f-, m+, m-
+
+```{r, results = "hide"}
+cor_groups <- ms_cleaned %>%
+  group_by(Sex, Corticosteroid) %>%
+  summarise(Correlation = cor(`Cortisol Test Result`, `BAI Score`, use = "complete.obs"),
+            .groups = "drop")
+print(cor_groups)
+```
+
+| Sex    | Corticosteroid | Correlation |
+|--------|----------------|-------------|
+| Female | No             | -0.5616     |
+| Female | Yes            | -0.0314     |
+| Male   | No             | -0.2817     |
+| Male   | Yes            | -0.1952     |
+
+# Graph 2: chart showing average NO test value
+
+```{r}
+# Group MS duration into 6-month intervals
+ms_cleaned$MSDurationGroup <- cut(ms_cleaned$MSDuration_months, 
+                          breaks = seq(0, max(ms_cleaned$MSDuration_months, na.rm = TRUE) + 6, by = 6), 
+                          right = FALSE)
+
+
+# Calculate mean and standard deviation of NO test values for each MS duration group
+ms_cleaned %>%
+  group_by(MSDurationGroup) %>%
+  summarise(mean_NO = mean(`NO test result`, na.rm = TRUE),
+            sd_NO = sd(`NO test result`, na.rm = TRUE)) %>%
+  ggplot(aes(x = MSDurationGroup, y = mean_NO)) +
+  geom_point(size = 3, color = "darkblue") +
+  geom_errorbar(aes(ymin = mean_NO - sd_NO, ymax = mean_NO + sd_NO), width = 0.2) +
+  labs(title = "NO Test Results by MS Duration (6-Month Groups)",
+       x = "MS Duration Group",
+       y = "Average NO Test Value") 
+```
+
+The graph shows the average NO test values as points and the standard deviation as an error bar for each group.
+
+# Graph 3: bar chart showing the median number of diseases for each of these age groups
+
+```{r}
+ms_adjusted <- ms_cleaned %>%
+  mutate(
+    Total_Diseases = Other_Diseases_Count + 1,
+    Age_Group = cut(Age, breaks = seq(0, 100, by = 15), right = FALSE)
+  ) %>%
+  drop_na(Age_Group)
+
+
+ms_summary <- ms_adjusted %>%
+  group_by(Age_Group) %>%
+  summarise(
+    MeanDiseases = mean(Total_Diseases, na.rm = TRUE),
+    SDDiseases = sd(Total_Diseases, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+#graph
+ggplot() +
+  geom_count(
+    data = ms_adjusted,
+    aes(x = Age_Group, y = Total_Diseases),
+    color = "gray50",
+    alpha = 0.5
+  ) +
+  geom_bar(
+    data = ms_summary,
+    aes(x = Age_Group, y = MeanDiseases),
+    stat = "identity", fill = "darkgreen", width = 0.6
+  ) +
+  geom_errorbar(
+    data = ms_summary,
+    aes(x = Age_Group,
+        ymin = MeanDiseases - SDDiseases,
+        ymax = MeanDiseases + SDDiseases),
+    width = 0.2, color = "black"
+  ) +
+  labs(
+    title = "Average Number of Diseases by Age Group",
+    x = "Age Group (15-year intervals)",
+    y = "Mean Disease Count (incl. MS)"
+  ) +
+  guides(size = "none")
+```
+
+The bar chart displays the average number of diseases, including MS, across different age groups divided into 15-year intervals.
