@@ -134,13 +134,26 @@ Example:
 Current projects:
 
 - Pauline (paula0013) - [When dragonflies fly](Projects/paula0013/project-description.md)
+  - solutions by [Tim](Projects/paula0013/t1mge-s_solution_for_when_dargonflies_fly.md)
+    and [Elisabeth](Projects/paula0013/Lizzola_Project_Solution.md)
 - Natali (natali-mmx) - [Crops vs. Climate](Projects/natali-mmx/project-description.md)
+  - solutions by [Pauline](Projects/natali-mmx/Solution_paula0013/paula0013.md)
 - Supti (Supti7) - [Salary Comparison](Projects/Supti7/project_description.md)
+  - solutions by [Natali](Projects/Supti7/natali-mmx.md)
+    and [Pauline](Projects/Supti7/paula0013.md)
 - Svenja (Svenja) - [Erasmus mobility](Projects/Svenja/project-description.md)
+  - solutions by [Natali](Projects/Svenja/natali-mmx.md)
 - Hamed (Hamed) - [Auto](Projects/Hamed/Project-discription.md)
+  - solutions by [Svenja](Projects/Hamed/InitialSolution_Svenja.md)
 - Florian (flomaili) - [MS study](Projects/flomaili/SalivatoryCortisol_in_MSPAtients.md)
+  - solutions by [Hamed](Projects/flomaili/thisishamed.md)
+    and [Svenja](Projects/flomaili/Svenjas_initial_project_solution.md)
 - Elisabeth (lizzola) - [Immune responce](Projects/lizzola/RNASeqImmuno.md)
+  - solutions by [Florian](Projects/lizzola/flomaili.md)
+    and [Hamed](Projects/lizzola/thisishamed.md)
 - Tim (t1mge) - [RNAseq in preqnancy](Projects/t1mge/project-description.md)
+  - solutions by [Elisabeth](Projects/t1mge/lizzola_Project1.md)
+    and [Florian](Projects/t1mge/flomailiSolutiom.md)
 
 
 #### Goals
