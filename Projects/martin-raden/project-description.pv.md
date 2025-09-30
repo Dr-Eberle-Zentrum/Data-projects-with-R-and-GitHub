@@ -18,10 +18,9 @@ Kennzahlen berechnet und visualisiert.
 Die Anlage selbst besteht aus einer 9 kWp Photovoltaikanlage und einem 6
 kWh Batteriespeicher. Hierbei bedeutet “9 kWp” (Kilowatt Peak), dass die
 Anlage unter optimalen Bedingungen eine maximale Leistung von 9 Kilowatt
-erzeugen kann. Der “6 kWh” (Kilowattstunden) Batteriespeicher gibt an,
-dass der Speicher eine Kapazität von 6 Kilowattstunden hat, also 6
-Kilowatt Leistung für eine Stunde bereitstellen kann (oder entsprechend
-weniger Leistung für eine längere Zeit).
+erzeugen kann. Und die “6 kWh” (Kilowattstunden) bedeuten, dass der
+Batteriespeicher 6 Kilowatt Leistung für eine Stunde bereitstellen kann
+(oder entsprechend weniger Leistung für eine längere Zeit).
 
 Zur Orientierung, ein Fön benötigt etwa 1.5 kW Leistung. Wenn man seine
 Haare für 10 Minuten föhnt, verbraucht man somit 0.25 kWh (1.5 kW \* 1/6
