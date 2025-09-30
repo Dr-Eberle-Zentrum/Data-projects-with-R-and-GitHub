@@ -29,14 +29,9 @@ unsere Haare föhnen, wenn der Speicher voll aufgeladen ist.
 
 Die Hersteller solcher Anlagen ermöglichen es, die Daten der Anlage über
 eine Online-Plattform zu überwachen. Hier ein Beispiel der
-Produktionsübersicht einer VARTA Analage.
+Produktionsübersicht einer VARTA Anlage.
 
-<figure>
-<img src="./PV/varta-energy.png"
-alt="Produktionsübersicht einer VARTA Anlage" />
-<figcaption aria-hidden="true">Produktionsübersicht einer VARTA
-Anlage</figcaption>
-</figure>
+![](./PV/varta-energy.png)
 
 Oftmals können die Daten auch als tabellarische Datei heruntergeladen
 werden, was die persönliche Analyse erleichtert.
@@ -237,12 +232,7 @@ werden.
 
 Grob sollte das dann etwa so aussehen:
 
-<figure>
-<img src="./PV/kosten-diagramm.png"
-alt="Balkendiagramm der Kosten und Vergütungen" />
-<figcaption aria-hidden="true">Balkendiagramm der Kosten und
-Vergütungen</figcaption>
-</figure>
+![](./PV/kosten-diagramm.png)
 
 (!) Verwenden Sie hierfür die `ggplot2` Bibliothek.
 
@@ -281,11 +271,6 @@ dar, wobei alle Werte auf zwei Nachkommastellen gerundet sind.
 Anteile der Einsparungen durch Eigenverbrauch und der Einspeisevergütung
 darstellt, wenn die Gesamtinvestition der Anlage 12.000 € beträgt.
 
-<figure>
-<img src="./PV/amortisierung-diagramm.png"
-alt="Tortendiagramm der Amortisierung" />
-<figcaption aria-hidden="true">Tortendiagramm der
-Amortisierung</figcaption>
-</figure>
+![](./PV/amortisierung-diagramm.png)
 
 Versuchen sie das Diagramm hübscher zu gestalten als das Beispielbild.
