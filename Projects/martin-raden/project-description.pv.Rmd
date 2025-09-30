@@ -25,9 +25,9 @@ Wenn man seine Haare für 10 Minuten föhnt, verbraucht man somit 0.25 kWh (1.5 
 Mit dem 6 kWh Speicher könnten wir also 4 Stunden lang unsere Haare föhnen, wenn der Speicher voll aufgeladen ist.
 
 Die Hersteller solcher Anlagen ermöglichen es, die Daten der Anlage über eine Online-Plattform zu überwachen.
-Hier ein Beispiel der Produktionsübersicht einer VARTA Analage.
+Hier ein Beispiel der Produktionsübersicht einer VARTA Anlage.
 
-![Produktionsübersicht einer VARTA Anlage](./PV/varta-energy.png)
+![](./PV/varta-energy.png)
 
 
 Oftmals können die Daten auch als tabellarische Datei heruntergeladen werden, was die persönliche Analyse erleichtert.
@@ -145,7 +145,7 @@ Zudem soll mit einer Linie die Gesamtwirtschaftlichkeit für jeden Monat dargest
 
 Grob sollte das dann etwa so aussehen:
 
-![Balkendiagramm der Kosten und Vergütungen](./PV/kosten-diagramm.png)
+![](./PV/kosten-diagramm.png)
 
 (!) Verwenden Sie hierfür die `ggplot2` Bibliothek.
 
@@ -172,7 +172,7 @@ Nun wollen wir einen Blick auf das gesamte Jahr werfen und haben folgende Fragen
 
 (!) Visualisieren sie die Amortisierung in einem Tortendiagramm, das die Anteile der Einsparungen durch Eigenverbrauch und der Einspeisevergütung darstellt, wenn die Gesamtinvestition der Anlage 12.000 € beträgt.
 
-![Tortendiagramm der Amortisierung](./PV/amortisierung-diagramm.png)
+![](./PV/amortisierung-diagramm.png)
 
 Versuchen sie das Diagramm hübscher zu gestalten als das Beispielbild.
 
