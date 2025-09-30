@@ -1,7 +1,10 @@
 ---
-title: "Analyse der Photovoltaik Hausanlage"
+title: "Analyse einer Photovoltaikanlage"
 output: md_document
 ---
+
+
+# Analyse einer Photovoltaikanlage
 
 Viele Haushalte in Deutschland nutzen Photovoltaikanlagen, um ihren eigenen Strom zu erzeugen. 
 Dies bietet die Möglichkeit, den produzierten Strom selbst zu verbrauchen und somit die Kosten für den Strombezug zu senken.
@@ -22,7 +25,12 @@ Wenn man seine Haare für 10 Minuten föhnt, verbraucht man somit 0.25 kWh (1.5 
 Mit dem 6 kWh Speicher könnten wir also 4 Stunden lang unsere Haare föhnen, wenn der Speicher voll aufgeladen ist.
 
 Die Hersteller solcher Anlagen ermöglichen es, die Daten der Anlage über eine Online-Plattform zu überwachen.
-Oftmals können die Daten auch als CSV-Datei heruntergeladen werden, was die persönliche Analyse erleichtert.
+Hier ein Beispiel der Produktionsübersicht einer VARTA Analage.
+
+![Produktionsübersicht einer VARTA Anlage](./PV/varta-energy.png)
+
+
+Oftmals können die Daten auch als tabellarische Datei heruntergeladen werden, was die persönliche Analyse erleichtert.
 
 ## Daten
 

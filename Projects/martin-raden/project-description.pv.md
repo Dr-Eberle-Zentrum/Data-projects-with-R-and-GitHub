@@ -1,3 +1,5 @@
+# Analyse einer Photovoltaikanlage
+
 Viele Haushalte in Deutschland nutzen Photovoltaikanlagen, um ihren
 eigenen Strom zu erzeugen. Dies bietet die Möglichkeit, den produzierten
 Strom selbst zu verbrauchen und somit die Kosten für den Strombezug zu
@@ -27,9 +29,18 @@ Stunde) Strom. Mit dem 6 kWh Speicher könnten wir also 4 Stunden lang
 unsere Haare föhnen, wenn der Speicher voll aufgeladen ist.
 
 Die Hersteller solcher Anlagen ermöglichen es, die Daten der Anlage über
-eine Online-Plattform zu überwachen. Oftmals können die Daten auch als
-CSV-Datei heruntergeladen werden, was die persönliche Analyse
-erleichtert.
+eine Online-Plattform zu überwachen. Hier ein Beispiel der
+Produktionsübersicht einer VARTA Analage.
+
+<figure>
+<img src="./PV/varta-energy.png"
+alt="Produktionsübersicht einer VARTA Anlage" />
+<figcaption aria-hidden="true">Produktionsübersicht einer VARTA
+Anlage</figcaption>
+</figure>
+
+Oftmals können die Daten auch als tabellarische Datei heruntergeladen
+werden, was die persönliche Analyse erleichtert.
 
 ## Daten
 
