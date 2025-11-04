@@ -39,10 +39,10 @@ werden, was die persönliche Analyse erleichtert.
 ## Daten
 
 Die Daten der Photovoltaikanlage inklusive Speicher wurden von der
-Herstellerseite monatsweise exportiert und stehen im [PV](./PV/)
-Unterordner jeweils als ZIP Datei zur Verfügung. Jeder ZIP-Datei enthält
-eine CSV-Datei mit den Daten des jeweiligen Monats und sind wir folgt
-strukturiert:
+Herstellerseite monatsweise exportiert und stehen im `./PV/` Unterordner
+dieses Projektverzeichnisses jeweils als ZIP Datei zur Verfügung. Jede
+ZIP-Datei enthält eine CSV-Datei mit den Daten des jeweiligen Monats,
+welche wie folgt strukturiert sind:
 
 <table>
 <colgroup>

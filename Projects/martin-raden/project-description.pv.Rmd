@@ -34,8 +34,8 @@ Oftmals können die Daten auch als tabellarische Datei heruntergeladen werden, w
 
 ## Daten
 
-Die Daten der Photovoltaikanlage inklusive Speicher wurden von der Herstellerseite monatsweise exportiert und stehen im [PV](./PV/) Unterordner jeweils als ZIP Datei zur Verfügung.
-Jeder ZIP-Datei enthält eine CSV-Datei mit den Daten des jeweiligen Monats und sind wir folgt strukturiert:
+Die Daten der Photovoltaikanlage inklusive Speicher wurden von der Herstellerseite monatsweise exportiert und stehen im `./PV/` Unterordner dieses Projektverzeichnisses jeweils als ZIP Datei zur Verfügung.
+Jede ZIP-Datei enthält eine CSV-Datei mit den Daten des jeweiligen Monats, welche wie folgt strukturiert sind:
 
 | Datum | Netzeinspeisung [kWh]	| Netzbezug [kWh]	| Speicherung [kWh]	| PV Ertrag [kWh] |
 | --- |--- |--- |--- | --- |
