@@ -83,14 +83,14 @@ Calculate `swc` (Soil Water Content as a fraction) using:    
 
 ### Step 2: Calculate 2025 Nmin in mg/kg
 
-1.s Using the `swc` from Step 1, calculate the dry weight of the *Nmin
+1. Using the `swc` from Step 1, calculate the dry weight of the *Nmin
 extraction sample*:    
 `dry_soil_nmin_g = (Nmin wet soil [g]) / (1 + swc)` 2.  Load the
 `2025_Nmin_Jena.xlsx - Ergebnisse.csv` data. 3.  Handle the negative
 *N**H*<sub>4</sub><sup>+</sup> values (e.g., set them to 0 or `NA`). 4. 
 Convert `mg/l` to `mg/kg` of dry soil. By reverse-engineering the 2024
 data, the conversion factor is 50 (likely representing 50ml of
-extractant). t \* `NO3_mg_kg = (NO3-N [mg/l] * 50) / dry_soil_nmin_g`  
+extractant).  \* `NO3_mg_kg = (NO3-N [mg/l] * 50) / dry_soil_nmin_g`  
   \* `NH4_mg_kg = (NH4-N [mg/l] * 50) / dry_soil_nmin_g`     \*
 `Nmin_mg_kg = NO3_mg_kg + NH4_mg_kg`
 
