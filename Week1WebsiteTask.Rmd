@@ -1,0 +1,52 @@
+---
+title: "<span style = 'color:darkblue;'>Data-projects-with-R-and-GitHub </span>"
+output:
+  html_document: default
+  pdf_document: default
+---
+```{r setup, include = FALSE}
+library(ggplot2)
+library(tidyverse)
+mammal <- read_csv('/Users/tobiastuchel/Documents/Studium/Fachinhalte/5. Semester GB/R Github/Sessions/mammal.csv')
+getwd()
+```
+
+--------------------------------------------------------------------------------
+
+# Reproduce this super nice chart!
+
+--------------------------------------------------------------------------------
+
+It is often that you find a chart that youreally like but have no idea how to do. An exmaple might be to following (click to enlarge):
+
+![](https://ourworldindata.org/uploads/2022/05/Wildlife-comeback-in-Europe-1.png)
+Which is shown and detailed on (https://ourworldindata.org.).
+
+## Goal of the project
+
+--------------------------------------------------------------------------------
+
+The idea of this project is to recreate this plot as close as possible using ggplot and the data available in the provided CSV file with the following content (first lines):
+
+```{r table, echo = FALSE}
+knitr::kable(
+  mammal[1:5,],
+  format = "html",
+  table.attr = "border"
+)
+```
+
+### Visuaziliation priorities (from high to low)
+
+* line style with animal labels
+* percent labels at line ends
+* time range label at line start
+* x-axis marks
+* arrow line-style
+* annotation of brown bear
+* text coloring
+* relative font sizes
+* animal symbol of a bear
+
+Let´s see how close you can get! As a starting point, you might want to have a look at the 
+

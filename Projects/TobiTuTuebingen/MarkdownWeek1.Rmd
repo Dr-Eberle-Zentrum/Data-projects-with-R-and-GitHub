@@ -1,0 +1,53 @@
+---
+title: "Diamondsizes"
+date: "2016-08-25"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+```{r setup, include = FALSE}
+library(ggplot2)
+library(dplyr)
+
+smaller <- diamonds %>%
+  filter(carat <= 2.5)
+```
+We have data about `r nrow(diamonds)` diamonds. Only 
+`r nrow(diamonds) - nrow(smaller)` are larger than
+2.5 carats. The distribution of the remainder is shown
+below:
+```{r, echo = FALSE}
+smaller %>%
+  ggplot(aes(carat))+
+  geom_freqpoly(binwidth=0.01)
+```
+Mit cmd + shift + K -> kriegt man nur den plot ausgespuckt
+
+27.3 Text formatting with R Markdown
+
+----------------------------
+
+# **Tobias Tuchel**
+------------------------
+
+## Emplyoment
+--------------------------
+Work Experience | Duration
+-------------|-------------
+Internship sustainable mobility planing | 02/2025 - 03/2025
+RISE Internship Taiwan | 06/2026-08/2026
+
+## Education
+-----------------------
+Education | Duration
+----------|---------
+FSG | _Die Schwozen_ 
+UT | _Die Rrrrroden_
+
+Um Code auszuführen gibt es mehrere Möglichkeiten: 1. short(i)cut CMD OPT I oder händisch 
+Um Chunks auszuführen braucht man außerdem: CMD SHIFT ENTER
+Jeder Chunk sollte immer eine Aufgabe haben, man kann direkt nach dem r in der geschweiften name immer einen Namen vergeben.
+
+
+

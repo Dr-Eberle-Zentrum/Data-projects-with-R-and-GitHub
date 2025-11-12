@@ -1,0 +1,74 @@
+---
+title: "week4toothgrowth"
+output: html_document
+---
+
+####################################################################
+#' Let's practice our ggplot plotting skills. To this end, we use the
+#' "ToothGrowth" data set directly available within R (check help).
+#' We want to plot for the different dose levels (X) the respective
+#' tooth length. The dose levels should be represented as follows:
+#' - 0.5 = non-filled circle in a dark green
+#' - 1 = orange filled triangles
+#' - 2 = filled circles in a light blue
+#' Use jittering to avoid overplotting of data points.
+#' We don't want to have any background decorations etc. and useful
+#' labels for axes and legend.
+#' Ensure there is only ONE legend (showing both color and shape).
+####################################################################
+
+* jittering ist wenn man Datenpunkte ein wenig verschiebt wenn nur eine Achse skaliert
+
+```{r tooth}
+ggplot(ToothGrowth, aes(x = dose, y = len, shape = factor(dose), color = factor(dose)))+
+  geom_point(size = 2)+
+  scale_shape_manual(values = c(1, 17, 16))+
+  scale_color_manual(values = c("darkgreen", "orange", "lightblue"))+
+  geom_jitter(width= 0.2)+
+  labs(x= "Dose levels",
+        y = "Tooth length")+
+  theme_dark()
+```
+
+* dose ist als dbl gespeichert nicht als Faktor, ggplot macht je nach Datentyp
+verschiedene Sachen
+* numerische Werte produzieren Skalen 
+* bei Faktorisierung wird aus nem Wert ein Text -> keine Skala mehr sondern eine
+Kategorie
+* Kategorien kann man beliebig anordnen
+* man kann die values auch im shape vektor einer kategorie zuweisen
+* Trick für gleiche Legende: wenn dinge den gleichen legenden namen haben, 
+dann werden Legenden zusammengeschoben
+* Jittering explizit benennen
+
+
+
+
+```{r martinlösung}
+ToothGrowth |> 
+  mutate(dose = factor(dose)) |> 
+  
+  ggplot( aes(x = dose, y = len, col=dose, shape=dose ) ) +
+  
+  geom_jitter(width = 0.2) +
+  
+  scale_color_manual(
+    # name = "Dose (mg/day)",
+    values = c(
+                "0.5" = "darkgreen", # Outline color
+                "1"   = "orange",
+                "2"   = "lightblue"
+              )
+  ) +
+  
+  labs(
+    x = "Dose (mg/day)",
+    col = "Dose (mg/day)",
+    shape = "Dose (mg/day)",
+    y = "Tooth length"
+  ) +
+  
+  theme_minimal()
+```
+
+
