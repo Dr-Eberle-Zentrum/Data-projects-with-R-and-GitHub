@@ -1,0 +1,32 @@
+---
+title: "TaskMarkdwonIlias"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+# Hallo Welt
+
+## Welt 1
+
+Berg | Hoehe | Bild
+-----|------ | ------
+Hochvogel | 2599 | [Bild](https://img.fotocommunity.com/hochvogel-e94cd13e-0284-4d18-ba7d-f5111e77d878.jpg?height=1080)
+Hohe Geige | 3393 | [Nordansicht](https://f.hikr.org/files/3627543.jpg)
+Plattenspitze |2489 | [Gipfel](https://d2exd72xrrp1s7.cloudfront.net/www/000/1k6/rl/rlh1w2r75ybazrs59msvyf3h4d2skanq-uhi55934321/0?width=768&height=576&crop=true)
+
+## Welt 2
+
+Hier eine Auflistung mit guten Imbissen in Deutschland:
+* Das X, Tübingen
+* Ratskellergarten, Biergarten, Ludwigsburg
+* Salams
+* Udos Snack
+
+## Answers:
+
+The Limits of normal markdown are advanced designed, like font sizes and colours. There is no interactivity or complex mathematical notation. Its mainly just for the basics. 
+
+Possible with normal markdown is to create text in multiple output data files. You are able to explain your results and thought in data processing to your self and others.
+
+
