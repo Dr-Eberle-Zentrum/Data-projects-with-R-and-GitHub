@@ -129,11 +129,11 @@ In order to submit your project proposal, you have to upload it to GitHub as par
 
 Example:
 
-- Martin (martin-raden) - [Example project about visualization reproduction](Projects/martin-raden/project-description.md)
+- Martin (martin-raden) - [Example project about PV data](Projects/martin-raden/project-description.pv.md)
 
 Current projects:
 
-- .. (..) - DESCRIPTION WITH LINK
+- Dario (dariodemenus) - [Soil analysis and biodiversity](Projects/dariodemenus/project-description.md)
 - .. (..) - DESCRIPTION WITH LINK
 - .. (..) - DESCRIPTION WITH LINK
 
