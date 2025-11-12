@@ -4,8 +4,8 @@ author: "Research Project"
 date: "`r Sys.Date()`"
 output: md_document
 ---
-  
-  ```{r setup, include=FALSE}
+
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
 Sleep is fundamental to physical health, cognitive function, and emotional wellbeing. Despite widespread recognition of sleep's importance, the precise temporal dynamics linking daily sleep patterns to affective states and depressive symptoms remain incompletely understood. While cross-sectional studies have established associations between sleep disturbance and mood disorders, longitudinal intensive measurement approaches are needed to disentangle cause from consequence and identify the timescales over which these relationships unfold.
 
-This project examines the bidirectional relationships between sleep patterns, daily mood fluctuations, and depressive symptoms using intensive longitudinal data collected over approximately 19 months. By leveraging daily sleep monitoring alongside planned assessments of affect and depression screening, we aim to elucidate the temporal precedence and dynamic influences among these key health indicators. Understanding these relationships has implications for both prevention (identifying early warning signs) and intervention (optimizing timing and targets of treatment).
+This project examines the bidirectional relationships between sleep patterns, daily mood fluctuations, and depressive symptoms using intensive longitudinal data collected over approximately 19 months. By leveraging daily sleep monitoring alongside planned assessments of affect and depression screening, we study the temporal precedence and dynamic influences among these key health indicators. Understanding these relationships has implications for both prevention (identifying early warning signs) and intervention (optimizing timing and targets of treatment).
 
 # Research Questions and Hypotheses
 
@@ -22,13 +22,13 @@ This project examines the bidirectional relationships between sleep patterns, da
 **Main hypothesis**: Reduced nocturnal sleep duration on day *t* predicts lower positive affect and higher negative affect on day *t+1*, controlling for day *t* mood (autoregressive effects).
 
 **Research question**: What is the magnitude of the lagged effect of nocturnal sleep duration on next-day positive and negative affect in the early postpartum period?
-  
-  **Operational definitions**:
-  
-  - Sleep loss: Operationalized as total sleep duration (light + deep sleep in seconds) both as a continuous variable and categorically (<6 hours)
-- Primary outcomes: PANAS positive affect (PA) and negative affect (NA) as separate dependent variables
-- Time structure: Test both same-day and next-day lagged effects
-- Covariates: Prior day mood, day of week, time since delivery
+
+**Operational definitions**:
+
+-   Sleep loss: Operationalized as total sleep duration (light + deep sleep in seconds) both as a continuous variable and categorically (\<6 hours)
+-   Primary outcomes: PANAS positive affect (PA) and negative affect (NA) as separate dependent variables
+-   Time structure: Test both same-day and next-day lagged effects
+-   Covariates: Prior day mood, day of week, time since delivery
 
 **Statistical approach**: Multilevel modeling with lagged predictors and AR(1) error structure to account for within-person temporal dependencies.
 
@@ -43,160 +43,152 @@ This project examines the bidirectional relationships between sleep patterns, da
 **H2d**: Daytime sleep partially compensates for nocturnal sleep loss in predicting BDI (test: total 24-hour sleep vs. nocturnal-only sleep models; interaction between day and night sleep).
 
 **Operational definitions**:
-  
-  - Sleep regularity: Measured via within-person standard deviation, coefficient of variation, and potentially Sleep Regularity Index
-- BDI timepoints: Assessed at 2, 4, and 6 weeks postpartum
-- Temporal structure: Test both cumulative effects (week 1 predicting week 6) and proximal effects (concurrent 2-week windows)
+
+-   Sleep regularity: Measured via within-person standard deviation, coefficient of variation, and potentially Sleep Regularity Index
+-   BDI timepoints: Assessed at 2, 4, and 6 weeks
+-   Temporal structure: Test both cumulative effects (week 1 predicting week 6) and proximal effects (concurrent 2-week windows)
 
 **Statistical approach**: Growth curve models or cross-lagged panel models to capture developmental trajectories and bidirectional effects.
-
-
 
 # Dataset Description
 
 ## Data Source and Structure
 
-The dataset consists of sleep monitoring data collected via a wearable device (likely fitness tracker or smartwatch) throughout the postpartum period. The data spans from February 7, 2024 through September 8, 2025, providing nearly continuous daily sleep recordings across approximately 19 months.
+The dataset consists of sleep monitoring data collected via a wearable device (smartwatch) throughout an extended period. The data spans from February 7, 2024 through September 8, 2025, providing nearly continuous daily sleep recordings across approximately 19 months.
+
+Second dataset contains PANAS (Positive and negative affect schedule) daily mood ratings and BDI (Beck Depression Inventory) scores at multiple postpartum timepoints, but these are available in another files and have to be combined.
 
 ## Data Format
 
 The dataset is provided as a CSV file (`sleep.csv`) with the following structure:
-  
-  ```{r preview-data, echo=FALSE}
+
+```{r preview-data, echo=FALSE}
 # Show first few lines of the data structure
 cat('von,bis,"leicht (s)","tief (s)","rem (s)","wach (s)",Aufwachen,"Dauer des Schlafs (s)","Dauer bis zum Wachwerden (s)","Schnarchen (s)",Schnarchepisoden,"Durchschnittliche Herzfrequenz","Herzfrequenz (min)","Herzfrequenz (max)","Night events"
 2024-02-07T00:15:00+01:00,2024-02-07T08:05:00+01:00,6120,21960,0,120,0,120,0,0,0,54,50,64,
 2024-02-08T00:09:00+01:00,2024-02-08T08:01:00+01:00,20400,7800,0,120,0,120,0,0,0,52,48,65,')
 ```
 
+The second dataset is also in a CSV file with columns: participant date PANAS_positive PANAS_negative. Thirds contains BDI scores with columns: participant date BDI_score.
+
 ## Variable Definitions
 
 The dataset contains German-language column headers with the following English translations and descriptions:
-  
-  | German Column Name | English Translation | Description | Units |
-  |-------------------|---------------------|-------------|-------|
-  | von | from | Sleep period start timestamp | ISO 8601 datetime |
-  | bis | to | Sleep period end timestamp | ISO 8601 datetime |
-  | leicht (s) | light (s) | Light sleep duration | seconds |
-  | tief (s) | deep (s) | Deep sleep duration | seconds |
-  | rem (s) | rem (s) | REM sleep duration | seconds |
-  | wach (s) | awake (s) | Time awake during sleep period | seconds |
-  | Aufwachen | Awakenings | Number of awakenings | count |
-  | Dauer des Schlafs (s) | Sleep duration (s) | Total sleep period duration | seconds |
-  | Dauer bis zum Wachwerden (s) | Duration until waking (s) | Time until final awakening | seconds |
-  | Schnarchen (s) | Snoring (s) | Snoring duration | seconds |
-  | Schnarchepisoden | Snoring episodes | Number of snoring episodes | count |
-  | Durchschnittliche Herzfrequenz | Average heart rate | Mean HR during sleep | bpm |
-  | Herzfrequenz (min) | Heart rate (min) | Minimum HR during sleep | bpm |
-  | Herzfrequenz (max) | Heart rate (max) | Maximum HR during sleep | bpm |
-  | Night events | Night events | Recorded nocturnal events | text |
-  
-  ## Data Characteristics and Limitations
-  
-  **Notable features**:
-  
-  - Some nights have missing REM sleep data (recorded as 0)
-- Heart rate data missing for certain periods (recorded as 0)
-- Multiple entries exist for some dates (e.g., 2024-09-04, 2024-11-17), suggesting interrupted sleep or data recording issues
-- Some very short sleep periods recorded (e.g., 40 minutes on 2024-05-24 to 2024-05-25)
-- Extended wake periods during sleep (e.g., nearly 11 hours awake on 2024-07-02)
+
+| German Column Name | English Translation | Description | Units |
+|----|----|----|----|
+| von | from | Sleep period start timestamp | ISO 8601 datetime |
+| bis | to | Sleep period end timestamp | ISO 8601 datetime |
+| leicht (s) | light (s) | Light sleep duration | seconds |
+| tief (s) | deep (s) | Deep sleep duration | seconds |
+| rem (s) | rem (s) | REM sleep duration | seconds |
+| wach (s) | awake (s) | Time awake during sleep period | seconds |
+| Aufwachen | Awakenings | Number of awakenings | count |
+| Dauer des Schlafs (s) | Sleep duration (s) | Total sleep period duration | seconds |
+| Dauer bis zum Wachwerden (s) | Duration until waking (s) | Time until final awakening | seconds |
+| Schnarchen (s) | Snoring (s) | Snoring duration | seconds |
+| Schnarchepisoden | Snoring episodes | Number of snoring episodes | count |
+| Durchschnittliche Herzfrequenz | Average heart rate | Mean HR during sleep | bpm |
+| Herzfrequenz (min) | Heart rate (min) | Minimum HR during sleep | bpm |
+| Herzfrequenz (max) | Heart rate (max) | Maximum HR during sleep | bpm |
+| Night events | Night events | Recorded nocturnal events | text |
+
+\## Data Characteristics and Limitations
+
+**Notable features**:
+
+-   Some nights have missing REM sleep data (recorded as 0)
+-   Heart rate data missing for certain periods (recorded as 0)
+-   Multiple entries exist for some dates (e.g., 2024-09-04, 2024-11-17), suggesting interrupted sleep or data recording issues
+-   Some very short sleep periods recorded (e.g., 40 minutes on 2024-05-24 to 2024-05-25)
+-   Extended wake periods during sleep (e.g., nearly 11 hours awake on 2024-07-02)
 
 **Data quality considerations**:
-  
-  - Wearable device accuracy varies by sleep stage classification
-- Missing REM data may indicate sensor limitations or sleep architecture changes common postpartum
-- Multiple daily entries require aggregation or selection rules
-- Heart rate gaps need investigation (device not worn? technical failure?)
 
-## Missing Components for Complete Analysis
-
-To fully address the stated hypotheses, the following data are required but **not present** in the current dataset:
-  
-  1. **PANAS mood assessments**: Daily ratings of positive and negative affect
-2. **BDI scores**: Beck Depression Inventary at regular intervals (e.g., weeks 2, 4, 6, 8)
-3. **Delivery date**: Required to compute "time since delivery" covariate and align with theoretical postpartum periods
-4. **Demographic covariates**: Maternal age, parity, feeding method, partner support, etc.
-5. **Daytime sleep data**: Naps and daytime rest periods to compute 24-hour sleep totals
-
-**Current analysis scope**: Given data limitations, this project will focus on descriptive analysis and exploratory patterns in sleep architecture over time. The framework established here will be ready to incorporate mood and depression data when available.
+-   Wearable device accuracy varies by sleep stage classification
+-   Missing REM data may indicate sensor limitations or sleep architecture changes common postpartum
+-   Multiple daily entries require aggregation or selection rules
+-   Heart rate gaps need investigation (device not worn? technical failure?)
 
 # Data Manipulation Goals
 
 ## 1. Data Cleaning and Validation
 
 **Tasks**:
-  
-  - Parse and validate datetime formats (ISO 8601 with timezone)
-- Identify and resolve duplicate date entries
-- Flag physiologically implausible values (e.g., total sleep > 16 hours, heart rate < 30 or > 200 bpm)
-- Assess and document missingness patterns for REM sleep and heart rate
-- Create data quality flags for each observation
+
+-   Parse and validate datetime formats
+-   Identify and resolve duplicate date entries
+-   Flag physiologically implausible values (e.g., total sleep \> 16 hours, heart rate \< 30 or \> 200 bpm)
+-   Assess and document missingness patterns for REM sleep and heart rate
+-   Create data quality flags for each observation
 
 **Rationale**: Sleep data from wearable devices often contain artifacts, and multiple entries per date suggest data streaming or synchronization issues that require resolution.
 
 ## 2. Feature Engineering
 
 **Core sleep variables**:
-  
-  - **Total sleep duration**: `light + deep + rem` (in hours)
-- **Sleep efficiency**: `(light + deep + rem) / (light + deep + rem + awake) × 100`
-- **Sleep onset latency**: Time from "von" to first sleep stage (if computable)
-- **Wake after sleep onset (WASO)**: `awake` duration during main sleep period
-- **Sleep stage proportions**: Percentage light, deep, and REM relative to total sleep
+
+-   **Total sleep duration**: `light + deep + rem` (in hours)
+-   **Number of sleep events**: number of entries from each night
 
 **Temporal variables**:
-  
-  - **Date**: Extract date from "von" timestamp
-- **Day of week**: For testing weekly periodicity
-- **Study day**: Sequential numbering (requires known delivery date or study start)
-- **Week**: Grouped into 2-week blocks for H2 analyses
+
+-   **Date**: Extract date from "von" timestamp
+-   **Day of week**: For testing weekly periodicity
+-   **Study day**: Sequential numbering (requires known delivery date or study start)
+-   **Week**: Grouped into 2-week blocks for H2 analyses
 
 **Derived sleep metrics** (for H2):
-  
-  - **14-day rolling means**: Sleep duration, efficiency, deep sleep percentage
-- **14-day rolling SD**: Sleep duration variability
-- **Coefficient of variation**: SD/mean for each 2-week window
-- **Sleep debt accumulation**: Cumulative deviation from 7-hour baseline
+
+-   **14-day rolling means**: Sleep duration, efficiency, deep sleep percentage
+-   **14-day rolling SD**: Sleep duration variability
+-   **Coefficient of variation**: SD/mean for each 2-week window
+-   **Sleep debt accumulation**: Cumulative deviation from 7-hour baseline
 
 **Physiological variables**:
-  
-  - **Heart rate variability proxies**: Range (max - min), standard deviation if beat-by-beat data available
-- **Arousal indicators**: Awakening frequency, snoring episodes
+
+-   **Heart rate variability proxies**: Range (max - min), standard deviation if beat-by-beat data available
+-   **Arousal indicators**: Awakening frequency, snoring episodes
 
 ## 3. Data Aggregation Strategies
 
 **For duplicate date entries**:
-  
-  - **Primary approach**: Select the longest sleep period for each date (assuming this represents the main nocturnal sleep bout)
-- **Alternative approach**: Sum all sleep periods per 24-hour window (but complicates temporal alignment)
-- **Document**: Create flag variable indicating dates with multiple entries
+
+-   **Primary approach**: Select the longest sleep period for each date (assuming this represents the main nocturnal sleep bout)
+-   **Alternative approach**: Sum all sleep periods per 24-hour window (but complicates temporal alignment)
+-   **Document**: Create flag variable indicating dates with multiple entries
 
 **Missing data handling**:
-  
-  - **REM sleep**: If zeros represent true absence vs. missing, validate against device documentation
-- **Heart rate**: Interpolate short gaps (<3 days) using moving average; flag longer gaps
-- **Strategy**: Use multiple imputation for sensitivity analyses if missing-not-at-random suspected
+
+-   **REM sleep**: If zeros represent true absence vs. missing, validate against device documentation
+-   **Heart rate**: Interpolate short gaps (\<3 days) using moving average; flag longer gaps
+-   **Strategy**: Use multiple imputation for sensitivity analyses if missing-not-at-random suspected
 
 ## 4. Data Validation Checks
 
 **Consistency checks**:
-  
-  - Verify `sleep duration` ≈ `light + deep + rem + awake`
-- Confirm timestamps logical (bis > von)
-- Check sleep period duration matches timestamp difference
-- Identify outliers: sleep duration < 3 hours or > 12 hours, sleep efficiency < 60% or > 98%
-  
-  **Temporal continuity**:
-  
-  - Compute inter-observation intervals to detect data gaps
-- Flag sequences with >3 consecutive missing days
-- Assess whether missing patterns correlate with time periods (e.g., device charging, hospital visits)
+
+-   Verify `sleep duration` ≈ `light + deep + rem + awake`
+
+-   Confirm timestamps logical (bis \> von)
+
+-   Check sleep period duration matches timestamp difference
+
+-   Identify outliers: sleep duration \< 3 hours or \> 12 hours, sleep efficiency \< 60% or \> 98%
+
+    **Temporal continuity**:
+
+    -   Compute inter-observation intervals to detect data gaps
+
+-   Flag sequences with \>3 consecutive missing days
+
+-   Assess whether missing patterns correlate with time periods (e.g., device charging, hospital visits)
 
 **Physiological plausibility**:
-  
-  - Deep sleep should not exceed 30-35% of total sleep
-- REM typically 20-25% (though postpartum alterations expected)
-- Heart rate should remain within 40-100 bpm range during sleep for healthy adults
+
+-   Deep sleep should not exceed 30-35% of total sleep
+-   REM typically 20-25% (though postpartum alterations expected)
+-   Heart rate should remain within 40-100 bpm range during sleep for healthy adults
 
 # Visualization Goals
 
@@ -204,131 +196,143 @@ To fully address the stated hypotheses, the following data are required but **no
 
 **1. Sleep Architecture Over Time** (Longitudinal Overview)
 
-- **Type**: Stacked area chart or ribbon plot
-- **X-axis**: Date (full study period)
-- **Y-axis**: Sleep duration (hours)
-- **Layers**: Light sleep (top), deep sleep (middle), REM sleep (bottom), color-coded
-- **Overlay**: Smoothed trend line (LOESS or moving average)
-- **Purpose**: Visualize sleep stage composition evolution, identify periods of disruption
+-   **Type**: Stacked area chart or ribbon plot
+-   **X-axis**: Date (full study period)
+-   **Y-axis**: Sleep duration (hours)
+-   **Layers**: Light sleep (top), deep sleep (middle), REM sleep (bottom), color-coded
+-   **Overlay**: Smoothed trend line (LOESS or moving average)
+-   **Purpose**: Visualize sleep stage composition evolution, identify periods of disruption
 
 **2. Sleep Metrics by Postpartum Week** (Hypothesis 2 foundation)
 
-- **Type**: Multi-panel line plot with confidence ribbons
-- **Panels**: 
-  - Mean sleep duration with SD bands
-- Sleep efficiency percentage
-- Deep sleep percentage
-- Awakening frequency
-- **X-axis**: Week postpartum (or study week)
-- **Y-axis**: Respective metric
-- **Purpose**: Show temporal trends and variability patterns relevant to H2
+-   **Type**: Multi-panel line plot with confidence ribbons
+-   **Panels**:
+    -   Mean sleep duration with SD bands
+-   Sleep efficiency percentage
+-   Deep sleep percentage
+-   Awakening frequency
+-   **X-axis**: Week postpartum (or study week)
+-   **Y-axis**: Respective metric
+-   **Purpose**: Show temporal trends and variability patterns relevant to H2
 
 **3. Sleep Duration Distribution** (Variability assessment)
 
-- **Type**: Violin plot or density ridges by 2-week blocks
-- **X-axis**: Sleep duration (hours)
-- **Y-axis**: Density, grouped by 2-week periods
-- **Purpose**: Assess sleep regularity (H2b) and identify high-variability periods
+-   **Type**: Violin plot or density ridges by 2-week blocks
+-   **X-axis**: Sleep duration (hours)
+-   **Y-axis**: Density, grouped by 2-week periods
+-   **Purpose**: Assess sleep regularity (H2b) and identify high-variability periods
 
 **4. Circadian Pattern Visualization** (Exploratory)
 
-- **Type**: Circular histogram or rose diagram
-- **Dimension**: Sleep onset time (hour of day)
-- **Color**: Total sleep duration
-- **Facets**: By month or 4-week blocks
-- **Purpose**: Detect circadian stability, common in postpartum literature
+-   **Type**: Circular histogram or rose diagram
+-   **Dimension**: Sleep onset time (hour of day)
+-   **Color**: Total sleep duration
+-   **Facets**: By month or 4-week blocks
+-   **Purpose**: Detect circadian stability, common in postpartum literature
 
 ## Intermediate/Supporting Visualizations
 
 **5. Data Quality Dashboard**
-  
-  - **Type**: Multi-panel diagnostic plot
-- **Panels**: 
-  - Missingness heatmap (dates × variables)
-- Outlier detection scatterplots (Mahalanobis distance or isolation forest)
-- Distribution histograms for key variables
-- **Purpose**: Document data cleaning decisions, support transparency
+
+-   **Type**: Multi-panel diagnostic plot
+-   **Panels**:
+    -   Missingness heatmap (dates × variables)
+-   Outlier detection scatterplots (Mahalanobis distance or isolation forest)
+-   Distribution histograms for key variables
+-   **Purpose**: Document data cleaning decisions, support transparency
 
 **6. Heart Rate Dynamics** (If data quality permits)
 
-- **Type**: Dual-axis time series
-- **Primary Y-axis**: Average heart rate (line plot)
-- **Secondary Y-axis**: Sleep duration (bar chart, transparent)
-- **X-axis**: Date
-- **Purpose**: Explore relationship between sleep and autonomic regulation
+-   **Type**: Dual-axis time series
+-   **Primary Y-axis**: Average heart rate (line plot)
+-   **Secondary Y-axis**: Sleep duration (bar chart, transparent)
+-   **X-axis**: Date
+-   **Purpose**: Explore relationship between sleep and autonomic regulation
 
 **7. Summary Statistics Table**
-  
-  - **Type**: Formatted markdown table
-- **Content**:
-  - Overall means and SDs for all sleep variables
-- Statistics by 2-week block (for H2)
-- Missingness percentages
-- Outlier counts before/after cleaning
-- **Purpose**: Provide quantitative summary for reproducibility
+
+-   **Type**: Formatted markdown table
+-   **Content**:
+    -   Overall means and SDs for all sleep variables
+-   Statistics by 2-week block (for H2)
+-   Missingness percentages
+-   Outlier counts before/after cleaning
+-   **Purpose**: Provide quantitative summary for reproducibility
 
 ## Advanced Visualizations (If Mood/BDI Data Become Available)
 
 **8. Cross-Lagged Associations** (Hypothesis 1)
 
-- **Type**: Coefficient plot with error bars
-- **X-axis**: Lag structure (t, t-1, t-2)
-- **Y-axis**: Standardized regression coefficients
-- **Panels**: PA and NA as separate outcomes
-- **Purpose**: Display temporal precedence of sleep → mood effects
+-   **Type**: Coefficient plot with error bars
+-   **X-axis**: Lag structure (t, t-1, t-2)
+-   **Y-axis**: Standardized regression coefficients
+-   **Panels**: PA and NA as separate outcomes
+-   **Purpose**: Display temporal precedence of sleep → mood effects
 
 **9. Growth Trajectory Plot** (Hypothesis 2)
 
-- **Type**: Individual + group trajectory spaghetti plot
-- **X-axis**: Week postpartum
-- **Y-axis**: BDI score
-- **Lines**: Individual trajectories (thin, transparent) and group mean (thick, colored)
-- **Color gradient**: Mean sleep duration for each person
-- **Purpose**: Visualize H2a predictions (sleep × time interaction)
+-   **Type**: Individual + group trajectory spaghetti plot
+-   **X-axis**: Week postpartum
+-   **Y-axis**: BDI score
+-   **Lines**: Individual trajectories (thin, transparent) and group mean (thick, colored)
+-   **Color gradient**: Mean sleep duration for each person
+-   **Purpose**: Visualize H2a predictions (sleep × time interaction)
 
 **10. Network Diagram** (Hypothesis 3d)
 
-- **Type**: Graph visualization of GIMME model
-- **Nodes**: PA, NA, sleep variables
-- **Edges**: Directed arrows for temporal associations, weighted by coefficient magnitude
-- **Layout**: Force-directed or hierarchical
-- **Purpose**: Display person-specific mood dynamics predicting BDI
+-   **Type**: Graph visualization of GIMME model
+-   **Nodes**: PA, NA, sleep variables
+-   **Edges**: Directed arrows for temporal associations, weighted by coefficient magnitude
+-   **Layout**: Force-directed or hierarchical
+-   **Purpose**: Display person-specific mood dynamics predicting BDI
 
 # Alignment Check: Tasks ↔ Research Questions
 
 ## Hypothesis 1: Acute Sleep-Mood Effects
 
-- **Required data**: Daily PANAS (not yet available) ❌
-- **Available data**: Daily sleep (complete) ✓
-- **Preparation**: Sleep features computed (duration, efficiency, stages) ✓
-- **Visualization ready**: Yes (time series framework established) ✓
-- **Status**: **Data infrastructure complete; awaiting mood data**
-  
-  ## Hypothesis 2: Cumulative Sleep → BDI
-  
-  - **Required data**: BDI at weeks 2, 4, 6 (not yet available) ❌
-- **Available data**: Sleep across full postpartum period ✓
-- **Preparation**: 2-week aggregations, variability metrics ✓
-- **Visualization ready**: Yes (longitudinal plots, summary tables) ✓
-- **Status**: **Sleep predictors fully operationalized; awaiting BDI**
-  
-  ## Hypothesis 3: Rolling Mood Window → BDI
-  
-  - **Required data**: Daily PANAS + periodic BDI (not yet available) ❌
-- **Available data**: Sleep duration for 14-day windows ✓
-- **Preparation**: Partial (can model sleep in windows, not mood) ~
-  - **Visualization ready**: Partial (network viz awaits GIMME results) ~
-  - **Status**: **Framework testable with simulated data**
-  
-  # Current Project Deliverables
-  
-  Given data availability, this project will deliver:
-  
-  1. **Comprehensive sleep dataset documentation**: Variables, quality, preprocessing decisions
-2. **Clean, analysis-ready sleep data**: De-duplicated, validated, with engineered features
-3. **Descriptive sleep architecture analysis**: Patterns over postpartum period, variability assessment
-4. **Visualization suite**: Publication-quality plots of sleep trends, distributions, and data quality
-5. **Analytic pipeline**: R Markdown workflow ready to ingest mood and BDI data when available
-6. **Hypothesis-ready framework**: All predictor variables computed, model specifications documented
+-   **Required data**: Daily PANAS (not yet available) ❌
+
+-   **Available data**: Daily sleep (complete) ✓
+
+-   **Preparation**: Sleep features computed (duration, efficiency, stages) ✓
+
+-   **Visualization ready**: Yes (time series framework established) ✓
+
+-   **Status**: **Data infrastructure complete; awaiting mood data**
+
+    ## Hypothesis 2: Cumulative Sleep → BDI
+
+    -   **Required data**: BDI at weeks 2, 4, 6 (not yet available) ❌
+
+-   **Available data**: Sleep across full postpartum period ✓
+
+-   **Preparation**: 2-week aggregations, variability metrics ✓
+
+-   **Visualization ready**: Yes (longitudinal plots, summary tables) ✓
+
+-   **Status**: **Sleep predictors fully operationalized; awaiting BDI**
+
+    ## Hypothesis 3: Rolling Mood Window → BDI
+
+    -   **Required data**: Daily PANAS + periodic BDI (not yet available) ❌
+
+-   **Available data**: Sleep duration for 14-day windows ✓
+
+-   **Preparation**: Partial (can model sleep in windows, not mood) \~
+
+    -   **Visualization ready**: Partial (network viz awaits GIMME results) \~
+    -   **Status**: **Framework testable with simulated data**
+
+    # Current Project Deliverables
+
+    Given data availability, this project will deliver:
+
+    1.  **Comprehensive sleep dataset documentation**: Variables, quality, preprocessing decisions
+
+2.  **Clean, analysis-ready sleep data**: De-duplicated, validated, with engineered features
+3.  **Descriptive sleep architecture analysis**: Patterns over postpartum period, variability assessment
+4.  **Visualization suite**: Publication-quality plots of sleep trends, distributions, and data quality
+5.  **Analytic pipeline**: R Markdown workflow ready to ingest mood and BDI data when available
+6.  **Hypothesis-ready framework**: All predictor variables computed, model specifications documented
 
 This foundation ensures that once PANAS and BDI data are integrated, hypothesis testing can proceed immediately without rework of the sleep data processing pipeline. The current scope focuses on rigorous characterization of sleep patterns, which is substantively interesting for postpartum physiology and essential for validating the predictor side of our causal models.
