@@ -1,6 +1,6 @@
 ---
-title: "Projectdraft"
-output: html_document
+title: "Project-Description"
+output: md_document
 ---
 
 # Projekt Idee
@@ -8,7 +8,7 @@ output: html_document
 Wir möchten uns anschauen, wie der Ausbau der Windkraft in Baden-Württemberg in 
 den letzten Jahren vorangekommen ist.
 
-https://udo.lubw.baden-wuerttemberg.de/public/processingChain?repositoryItemGlobalId=energie_wind.energie%3Aeebw_wind_best_anl.sel&conditionValuesSetHash=3FC3DBC&selector=energie_wind.energie%3Aeebw_wind_best_anl.sel&sourceOrderAsc=false&offset=0&limit=2147483647&orderByColumn=11&orderAsc=false
+[Datenquelle LUBW](https://udo.lubw.baden-wuerttemberg.de/public/processingChain?repositoryItemGlobalId=energie_wind.energie%3Aeebw_wind_best_anl.sel&conditionValuesSetHash=3FC3DBC&selector=energie_wind.energie%3Aeebw_wind_best_anl.sel&sourceOrderAsc=false&offset=0&limit=2147483647&orderByColumn=11&orderAsc=false)
 
 Wichtig: Auf der Website nur downloaden, nicht schon filtern! Das machen wir mit R!
 
