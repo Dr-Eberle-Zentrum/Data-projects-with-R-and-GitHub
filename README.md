@@ -133,7 +133,7 @@ Example:
 
 Current projects:
 
-- .. (..) - DESCRIPTION WITH LINK
+- Dario (dariodemenus) - [Soil analysis and biodiversity](Projects/dariodemenus/project-description.md)
 - .. (..) - DESCRIPTION WITH LINK
 - .. (..) - DESCRIPTION WITH LINK
 
