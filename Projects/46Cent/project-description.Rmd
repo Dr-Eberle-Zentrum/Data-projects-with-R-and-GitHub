@@ -1,0 +1,52 @@
+---
+title: "Data Project"
+author: "Gabriel Mancho"
+date: "`r Sys.Date()`"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## General Topic:
+
+For my data project I would like to analyze the U.S Martial Art's Promotion "UFC"\
+(or perhaps even the sport of MMA as a whole) from a statistical standpoint.\
+As this is a topic which generates vast amounts of data, there are endless possibilities\
+for graphs, analyses and perhaps even predictions.\
+
+Other than some "nice-to-know" hypothesis question like\
+"Is there a negative correlation between the success of a fighter and the GDP of his home country ?" the most interesting question would of course be whether we can successfully predict the winners of future fights.\
+Since this a very "chaotic" sport which is generally considered very unpredictable, but on the other hand generates a ton of data, it is almost like asking:\
+**"Who will win: Chaos or Order ?"**\
+
+## The Data:
+
+The foundation for this project will be provided by [this dataset](https://www.kaggle.com/datasets/aminealibi/ufc-fights-fighters-and-events-dataset/data).\
+Not only does it come with an MIT-License, meaning we are free to do with it as we please,\
+but we also get the option to work with completly raw data, straight from the scraper!\
+There are 5 datasets included in this package:
+
+-   The Events
+
+-   The Fighters
+
+-   The fights
+
+-   Details on the fights
+
+-   Even more details on the fights\
+
+## Manipulation Goals:
+
+Other than the cleaning we have to do, the first step will be to add additional variables of interest,\
+for example `height_reach_ratio` or `homecountry_gdp`.\
+Based on these we could then create plots, which aren't already accessible online.\
+Creating a predictive model might be a too ambitious goal (yet), however we definitely put the fundamental requirements for this into place.\
+
+## Visualization Goals
+
+Not only would it be interesting to visually experience how far the top fighters are from the average (e.g. in terms of W/L-Ratio)\
+but also more demographic insights, like the potential negative correlation between a fighter's home country GDP and his W/L-Ratio.\
+(E.g a Line-/Scatterplot were some outliers are specifically mentioned by name)
