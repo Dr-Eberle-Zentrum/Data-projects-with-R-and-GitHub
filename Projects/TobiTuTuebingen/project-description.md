@@ -12,42 +12,45 @@ wir mit R!
 ------------------------------------------------------------------------
 
 ## Introduction
+Der Windkraftausbau ist entscheidend um die Energie zum Erfolg zu führen. Daher möchten wir uns anschauen, wie der Windkraftausbau in Baden-Württemberg in deine letzten Jahren vorangekommen ist, und wie der aktuelle Genehmigungsstand aussieht.
 
 ------------------------------------------------------------------------
 
 ## Questions
 
+* Welche Gemeinden und Landkreise haben die höchste Anzahl an installierten Windräder und Windradleistung?
+* Wie hoch profitieren diese Gemeinden finanziell?
+* Wie hat sich der Ausbau in den letzten Jahren entwickelt? Wie viele Windräder wurden in welchen Jahr genehmigt und errichtet? 
+
 ------------------------------------------------------------------------
 
 ## Data manipulation goals
 
-- Data cleaning
-  - Daten sind gerade schon recht schön, das könnte ich ja ändern ….
-  - Tabellenspalten umbennen
-  - Typbezeichnung löschen
-  - Herkunft der Daten / stand der Daten löschen
-- Data manipulation
-  - Stillgelegte rausfiltern bzw. über Status
-  - Gemeinden zusammenfassen -&gt; welche sind die Gemeinde mit den
-    meisten windrädern, welche sind die Gemeinden mit der größten
-    Leistung?
-  - auf Landkreisebene ginge das auch
-  - neue Spalten: Berechnen der täglichen Leistung:
-    - neue Spalte mit Betriebsdauer nötig
-    - da braucht man noch grob zusätzliche Werte wie Kapazitätsfaktor (=
-      Auslastung), typischerweise 0.25-0.3 bei durchschnittlichen
-      Standort, Zeitraum ist Tage, Zieleinheit ist dann MW/a
-    - Das ganze in Geld umrechnen: Einspeiseerlös mit etwa 10ct pro kW/a
-      = 100€ pro MW
-    - Bei einer angenommen Steuersatz von 2% wie hoch ist das Einkommen
-      der Gemeinden? welche sind die best verdienenden gemeinden
-    - Bar charts draus machen,
-  - Noch so ein bissle Jahre vergleichen
-    - Jahre mit dem stärksten Zubau / geringsten Zubau
-    - Line Chart, Zubau pro Jahr -&gt; Wachstumstrends
-  - bisschen fieser, man kann ja den Kapazitätsfaktor je nach Standort =
-    Landkreis ändern, weil Windstärke variabel ist, oder je nach
-    Windradhöhe
+* Data cleaning
+  * Daten sind gerade schon recht schön, das könnte ich ja ändern ....
+  * Tabellenspalten umbennen
+  * Typbezeichnung löschen
+  * Herkunft der Daten / stand der Daten löschen
+* Data manipulation
+  * Stillgelegte rausfiltern bspw. über die Status Spalte
+  * Gemeinden zusammenfassen -> welches sind die Gemeinde mit den meisten Windrädern,
+  welches sind die Gemeinden mit der größten Leistung?
+  * auf Landkreisebene ginge das auch
+  * neue Spalten: Berechnen der täglichen Leistung: 
+    * neue Spalte mit Betriebsdauer nötig
+    * da braucht man noch grob zusätzliche Werte wie Kapazitätsfaktor (= Auslastung),
+    typischerweise 0.25-0.3 bei durchschnittlichen Standort, Zeitraum ist Tage,
+    Zieleinheit ist dann MW/a
+    * Das ganze in Geld umrechnen: Einspeiseerlös mit etwa 10ct pro kW/a = 100€ 
+    pro MW
+    * Bei einer angenommen Steuersatz von 2% wie hoch ist das Einkommen der Gemeinden?
+    Welche sind die best verdienenden Gemeinden?
+    * Bar charts draus machen, 
+  * Noch so ein bissle Jahre vergleichen
+    * Jahre mit dem stärksten Zubau / geringsten Zubau
+    * Line Chart, Zubau pro Jahr -> Wachstumstrends
+  * bisschen fieser: Je nach Standort ist auch die Windstärke anders, das wirkt sich auf den Kapazitätsfaktor aus. Abhängig vom jeweiligen Landkreis bzw. von Landkreisklassen lässt sich der Kapazitätsfaktor anpassen. Auch höhere Windräder haben einen höheren Kapazitätsfaktor. Falls das Projekt noch Raum bietet und noch nicht zu ausführlich ist, würde ich hier noch Vorgaben nennen.
+
 
 ------------------------------------------------------------------------
 
