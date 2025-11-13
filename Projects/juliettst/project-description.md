@@ -51,7 +51,7 @@ models; interaction between day and night sleep).
 # Dataset Description
 
 Here is the data folder: [Open data
-folder](/Week4%20Homework-%20Sleep%20synthetic%20project)
+folder](Week4%20Homework-%20Sleep%20synthetic%20project/)
 
 ## Data Source and Structure
 
