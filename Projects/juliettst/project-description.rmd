@@ -1,5 +1,5 @@
 ---
-  title: "Sleep and Mood Dynamics: A Longitudinal Analysis"
+title: "Sleep and Mood Dynamics: A Longitudinal Analysis"
 author: "Research Project"
 date: "`r Sys.Date()`"
 output: md_document
@@ -34,6 +34,8 @@ This project examines the bidirectional relationships between sleep patterns, da
 **H2d**: Daytime sleep partially compensates for nocturnal sleep loss in predicting BDI (test: total 24-hour sleep vs. nocturnal-only sleep models; interaction between day and night sleep).
 
 # Dataset Description
+
+Here is the data folder: [Open data folder](/Week4%20Homework-%20Sleep%20synthetic%20project)
 
 ## Data Source and Structure
 
