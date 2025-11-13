@@ -1,5 +1,5 @@
 ---
-title: "Sleep and Mood Dynamics: A Longitudinal Analysis"
+title: "Sleep and Mood Dynamics"
 author: "Research Project"
 date: "`r Sys.Date()`"
 output: md_document
