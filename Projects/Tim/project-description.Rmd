@@ -1,0 +1,33 @@
+
+
+---
+title: "Klimadaten_Projekt_Tim"
+author: "Tim Clemen"
+date: "2025-11-13"
+output: md_document
+---
+# Klimadaten
+In zeiten des Klimawandels sind große Datenmengen nötig, um die Auswirkungen der Veränderungen auf unsere Landschaft vorherzusagen. besonders in Städten sind Datenreihen notwendig, um die notwendige Klimaanpassungen umzusetzen. Zum Vergleich können Messungen aus der Vergangenheit genutzt werden, um die Veränderungen besser zu dokumentieren und zu verstehen. 
+
+# Daten 
+Die Daten sind frei zugänglich über die LUBW. Die Daten stammen aus den Jahren 1961-2024. Vorliegend sind unterschiedliche Messwerte, die als Mittelwert angegeben sind. Zusätzlich teilen sich die Daten in Jahresmittelwerte, Monate und in unterschiedliche Jahreszeiten. 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+
+```{r, echo=FALSE}
+library(knitr)
+klimadaten <- read.csv("klimadaten_tuebingen.csv", sep = ";", header = TRUE)
+kable(head(klimadaten, 5), caption = "Klimadaten von Tübingen")
+```
+
+# Fragen
+- Wie veränderte sich die Temperatur im zeitlichen Verlauf? 
+- Wie verändert sich die Temperatur im Jahreszeitlichen Verlauf, über den gesamten Messzeitraum? 
+- Wie verhalten sich die Niederschlagsmengen in Kombination mit den Heißen Tagen? 
+- Wie veränderten sich die extrem Ereignisse an Tropennächten, heiße Tage und Frosttage im monatlichen verlauf und im Verlauf des gesamten Messzeitraums?
+- Welche Messwerte korrelieren am meisten miteinander? 
