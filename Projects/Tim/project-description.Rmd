@@ -4,7 +4,7 @@
 title: "Klimadaten_Projekt_Tim"
 author: "Tim Clemen"
 date: "2025-11-13"
-output: html_document
+output: md_document
 ---
 # Klimadaten
 In zeiten des Klimawandels sind große Datenmengen nötig, um die Auswirkungen der Veränderungen auf unsere Landschaft vorherzusagen. besonders in Städten sind Datenreihen notwendig, um die notwendige Klimaanpassungen umzusetzen. Zum Vergleich können Messungen aus der Vergangenheit genutzt werden, um die Veränderungen besser zu dokumentieren und zu verstehen. 
@@ -30,4 +30,5 @@ kable(head(klimadaten, 5), caption = "Klimadaten von Tübingen")
 - Wie verändert sich die Temperatur im Jahreszeitlichen Verlauf, über den gesamten Messzeitraum? 
 - Wie verhalten sich die Niederschlagsmengen in Kombination mit den Heißen Tagen? 
 - Wie veränderten sich die extrem Ereignisse an Tropennächten, heiße Tage und Frosttage im monatlichen verlauf und im Verlauf des gesamten Messzeitraums?
+
 - Welche Messwerte korrelieren am meisten miteinander? 
