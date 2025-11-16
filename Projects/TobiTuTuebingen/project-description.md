@@ -94,7 +94,7 @@ der Windradhöhe und der Gesamtleistung gibt.
 
 Ein kurzer Entwurf, in welche Richtung es gehen soll: 
 
-![Visualisationdraft](Projects/TobiTuTuebingen/draftvisualization.jpg)
+![Visualisationdraft](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/TobiTuTuebingen/draftvisualization.jpg)
 
 
 
