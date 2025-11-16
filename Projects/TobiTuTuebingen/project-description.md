@@ -94,7 +94,7 @@ der Windradhöhe und der Gesamtleistung gibt.
 
 Ein kurzer Entwurf, in welche Richtung es gehen soll: 
 
-![Visualisationdraft][/Users/tobiastuchel/Downloads/draftvisualization.jpg]
+![Visualisationdraft][Projects/TobiTuTuebingen/draftvisualization.jpg]
 
 
 
