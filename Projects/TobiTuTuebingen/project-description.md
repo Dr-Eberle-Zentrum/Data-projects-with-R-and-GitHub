@@ -4,7 +4,7 @@ Wir möchten uns anschauen, wie der Ausbau der Windkraft in
 Baden-Württemberg in den letzten Jahren vorangekommen ist.
 
 [Datenquelle
-LUBW](https://udo.lubw.baden-wuerttemberg.de/public/processingChain?repositoryItemGlobalId=energie_wind.energie%3Aeebw_wind_best_anl.sel&conditionValuesSetHash=3FC3DBC&selector=energie_wind.energie%3Aeebw_wind_best_anl.sel&sourceOrderAsc=false&offset=0&limit=2147483647&orderByColumn=11&orderAsc=false)
+LUBW](Projects/TobiTuTuebingen/Bestand Windenergieanlagen 2025-11-16.csv)
 
 Wichtig: Auf der Website nur downloaden, nicht schon filtern! Das machen
 wir mit R!
@@ -12,7 +12,13 @@ wir mit R!
 ------------------------------------------------------------------------
 
 ## Introduction
-Der Windkraftausbau ist entscheidend um die Energie zum Erfolg zu führen. Daher möchten wir uns anschauen, wie der Windkraftausbau in Baden-Württemberg in deine letzten Jahren vorangekommen ist, und wie der aktuelle Genehmigungsstand aussieht.
+Der Windkraftausbau ist entscheidend um die Energie zum Erfolg zu führen. Daher 
+möchten wir uns anschauen, wie der Windkraftausbau in Baden-Württemberg in deine 
+letzten Jahren vorangekommen ist. Ziel des Projekts ist zum einen die Anzahl der 
+neu in Betrieb genommene Leistung und die Anzahl der neuen Windräder pro Jahr 
+darzustellen. Außerdem möchten wir herausfinden, ob es eine Korrelation zwischen 
+der Höhe des Windrades, der Rotorblattgröße, dem Steueraufkommen im jeweiligen 
+Landkreis, und der Leistung gibt.
 
 ------------------------------------------------------------------------
 
@@ -26,18 +32,19 @@ Der Windkraftausbau ist entscheidend um die Energie zum Erfolg zu führen. Daher
 
 ## Data manipulation goals
 
-* Data cleaning
-  * Daten sind gerade schon recht schön, das könnte ich ja ändern ....
+* Data cleaning: Bitte fürhen Sie folgende Schritte durch, nachdem die CSV in R
+importiert wurde: 
   * Tabellenspalten umbennen
-  * Typbezeichnung löschen
-  * Herkunft der Daten / stand der Daten löschen
+  * Die Spalten "Typbezeichnung", "Stand der Daten" und "Herkunft der Daten"
+  soll gelöscht werden
 * Data manipulation
-  * Stillgelegte rausfiltern bspw. über die Status Spalte
+  * In der Spalte "Status" sind alle stillgelegten Windräder mit "Stillgelegt"
+  gekennzeichnet, die entsprechenden Zeilen sollen gelöscht werden.
   * Gemeinden zusammenfassen -> welches sind die Gemeinde mit den meisten Windrädern,
   welches sind die Gemeinden mit der größten Leistung?
   * auf Landkreisebene ginge das auch
-  * neue Spalten: Berechnen der täglichen Leistung: 
-    * neue Spalte mit Betriebsdauer nötig
+  * Wir möchten folgende neue Spalten anlegen um die täglichen Leistung zu berechnen: 
+    * neue Spalte mit Betriebsdauer. Dazu bedarf es 
     * da braucht man noch grob zusätzliche Werte wie Kapazitätsfaktor (= Auslastung),
     typischerweise 0.25-0.3 bei durchschnittlichen Standort, Zeitraum ist Tage,
     Zieleinheit ist dann MW/a
@@ -56,8 +63,22 @@ Der Windkraftausbau ist entscheidend um die Energie zum Erfolg zu führen. Daher
 
 ## Visualization goals
 
-- Zubau:
-  - Line Chart mit Zubau pro Jahr
+### Hauptziele:
+
+Linechart:
+* x-Achse: Zeit in Jahren
+* 1. y-Achse: jährlich in Betrieb genommene Leistung, diese Linie in blau
+* 2. y-Achse: jährlich in Betrieb genommene Anzahl der Windräder, diese Linie in 
+grün
+* Titel: Jährlicher Zubau an Leistung und Windradanzahl in BW
+
+Korrelogram:
+*
+
+### Wer noch Lust und Laune hat:
+
+Wenn noch Lust und Zeit besteht: 
+
 - Anlagenzahl/Leistunskapazität/Steueraufkommen:
   - pro Landkreis als Bar Chart, nur die 10 größten
 - corrlegram <https://r-graph-gallery.com/correlogram.html>:
