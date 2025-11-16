@@ -17,7 +17,7 @@ möchten wir uns anschauen, wie der Windkraftausbau in Baden-Württemberg in dei
 letzten Jahren vorangekommen ist. Ziel des Projekts ist zum einen die Anzahl der 
 neu in Betrieb genommene Leistung und die Anzahl der neuen Windräder pro Jahr 
 darzustellen. Außerdem möchten wir herausfinden, ob es eine Korrelation zwischen 
-der Höhe des Windrades, der Rotorblattgröße, dem Steueraufkommen pro Landkreis, 
+der Höhe des Windrades, der Rotorblattgröße, dem Steueraufkommen, 
 und der Leistung gibt.
 
 ------------------------------------------------------------------------
@@ -68,6 +68,7 @@ Linechart:
 * x-Achse: Zeit in Jahren
 * y-Achse: jährlich in Betrieb genommene Anzahl der Windräder, diese Linie in 
 grün
+* 2. y Achse: jährlich in Betrieb genommene Leistung
 * Titel: Jährlicher Zubau an Windrädern in BW
 
 Korrelogram:
@@ -85,8 +86,17 @@ der Windradhöhe und der Gesamtleistung gibt.
   * Sichtbarkeit numerische Werte mit du geom_text() in schwarzer Schrift
 
 * Das Ergebnis ist ein übersichtliches Korrelogramm, bei dem:
- * signifikante Korrelationen farbig erscheinen,
- * nicht signifikante Korrelationen grau sind,
- * alle Kacheln mit dem rho-Wert beschriftet werden,
- * positive Zusammenhänge rot und negative blau dargestellt sind,
- * die Darstellung vollständig mit tidyverse und ggplot aufgebaut ist.
+  * signifikante Korrelationen farbig erscheinen,
+  * nicht signifikante Korrelationen grau sind,
+  * alle Kacheln mit dem rho-Wert beschriftet werden,
+  * positive Zusammenhänge rot und negative blau dargestellt sind,
+  * die Darstellung vollständig mit tidyverse und ggplot aufgebaut ist.
+
+Ein kurzer Entwurf, in welche Richtung es gehen soll: 
+
+![Visualisationdraft][/Users/tobiastuchel/Downloads/draftvisualization.jpg]
+
+
+
+
+
