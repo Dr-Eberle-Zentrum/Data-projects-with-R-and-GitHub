@@ -17,8 +17,8 @@ möchten wir uns anschauen, wie der Windkraftausbau in Baden-Württemberg in dei
 letzten Jahren vorangekommen ist. Ziel des Projekts ist zum einen die Anzahl der 
 neu in Betrieb genommene Leistung und die Anzahl der neuen Windräder pro Jahr 
 darzustellen. Außerdem möchten wir herausfinden, ob es eine Korrelation zwischen 
-der Höhe des Windrades, der Rotorblattgröße, dem Steueraufkommen im jeweiligen 
-Landkreis, und der Leistung gibt.
+der Höhe des Windrades, der Rotorblattgröße, dem Steueraufkommen pro Landkreis, 
+und der Leistung gibt.
 
 ------------------------------------------------------------------------
 
@@ -35,28 +35,27 @@ Landkreis, und der Leistung gibt.
 * Data cleaning: Bitte fürhen Sie folgende Schritte durch, nachdem die CSV in R
 importiert wurde: 
   * Tabellenspalten umbennen
-  * Die Spalten "Typbezeichnung", "Stand der Daten" und "Herkunft der Daten"
-  soll gelöscht werden
+  * Die Spalten "Typbezeichnung", "Stand der Daten" und "Herkunft der Daten" sollen gelöscht werden
 * Data manipulation
   * In der Spalte "Status" sind alle stillgelegten Windräder mit "Stillgelegt"
   gekennzeichnet, die entsprechenden Zeilen sollen gelöscht werden.
-  * Gemeinden zusammenfassen -> welches sind die Gemeinde mit den meisten Windrädern,
-  welches sind die Gemeinden mit der größten Leistung?
-  * auf Landkreisebene ginge das auch
-  * Wir möchten folgende neue Spalten anlegen um die täglichen Leistung zu berechnen: 
-    * neue Spalte mit Betriebsdauer. Dazu bedarf es 
-    * da braucht man noch grob zusätzliche Werte wie Kapazitätsfaktor (= Auslastung),
-    typischerweise 0.25-0.3 bei durchschnittlichen Standort, Zeitraum ist Tage,
-    Zieleinheit ist dann MW/a
-    * Das ganze in Geld umrechnen: Einspeiseerlös mit etwa 10ct pro kW/a = 100€ 
-    pro MW
-    * Bei einer angenommen Steuersatz von 2% wie hoch ist das Einkommen der Gemeinden?
-    Welche sind die best verdienenden Gemeinden?
-    * Bar charts draus machen, 
-  * Noch so ein bissle Jahre vergleichen
-    * Jahre mit dem stärksten Zubau / geringsten Zubau
-    * Line Chart, Zubau pro Jahr -> Wachstumstrends
-  * bisschen fieser: Je nach Standort ist auch die Windstärke anders, das wirkt sich auf den Kapazitätsfaktor aus. Abhängig vom jeweiligen Landkreis bzw. von Landkreisklassen lässt sich der Kapazitätsfaktor anpassen. Auch höhere Windräder haben einen höheren Kapazitätsfaktor. Falls das Projekt noch Raum bietet und noch nicht zu ausführlich ist, würde ich hier noch Vorgaben nennen.
+  * Wir möchten folgende neue Spalten anlegen um die jährliche Leistung zu berechnen: 
+    * neue Spalte mit Betriebsdauer: Dazu bedarf es das aktuellen Datum (31.10.2025)
+    sowie aus die Spalte Inbetriebnahmedatum. Die Betriebsdauer ist die Differenz
+    von Aktuellen Datum minus dem Inbetriebnahmedatum geteilt durch 365 um eine
+    jährliche Dauer zu erhalten.
+    * Kapazitätsfaktor (= Auslastung), dieser Wert gibt Auskunft, wie stark der Wind weht
+    und wieviel Strom dadurch wirklich erzeugt werden kann. Wir berechnen diesen Faktor
+    mit der Spalte Nabenhöhe. Windräder unter 100 m kriegen den Kapazitätsfaktor
+    0.2, 100 m bis 150 m den Faktor 0.25 und Windräder über 150 m einen Faktor von 0.3.
+    Diese Faktoren sollen in einer neuen Spalten aufgeführt sein.
+    * Die Gesamtenergie ist eine neue Spalte mit folgender Formel:
+    Gesamtenergie (MWh) = Generatorleistung (MW) * Kapazitätsfaktor * Betriebsdauer (Jahre)
+    * Steueraufkommen mit folgender Formel berechenbar:
+    Steueraufkommen = Gesamtenergie (MWh) * 1ct/MWh die Einheit ist dann Cent
+ * Jährliches Wachstum in Inbetriebnahmen:
+   * Mithilfe der Spalte Inbetriebnahme, gruppieren wir die Windräder, je nach Jahr
+   in denen Sie in Betrieb gegangen sind
 
 
 ------------------------------------------------------------------------
@@ -67,13 +66,22 @@ importiert wurde:
 
 Linechart:
 * x-Achse: Zeit in Jahren
-* 1. y-Achse: jährlich in Betrieb genommene Leistung, diese Linie in blau
-* 2. y-Achse: jährlich in Betrieb genommene Anzahl der Windräder, diese Linie in 
+* y-Achse: jährlich in Betrieb genommene Anzahl der Windräder, diese Linie in 
 grün
-* Titel: Jährlicher Zubau an Leistung und Windradanzahl in BW
+* Titel: Jährlicher Zubau an Windrädern in BW
 
 Korrelogram:
-*
+* Wir möchten die Korrelation zwischen dem Steueraufkommen pro Windrad, der Rotorblattgröße,
+der Windradhöhe und der Gesamtleistung gibt.
+* Wir berechnen erst, ob diese Korrelationen statistische signifikant sind, mit 
+dem Spearman-Index. Erstelle einen neuen Dataframe mit den Steueraufkommen, Rotorblattgröße,
+Windradhöhe und Gesamtleistung. Mit cor.test(dataframe$Spalte, method = "spear")
+kriegen wir heraus, ob die Korrelation signifikant ist. Der p-Wert sollte kleiner als
+0.05 sein, dann ist die Korrelation siginifikant. Der zweite Wert, der spearman's 
+rho schwankt zwischen -1 und +1, Werte nahe null zeigen eine schwache Korrelation, 
+nahe -1 eine stark negative Korrelation, und +1 eine stark positive Korrelation.
+* Wir laden das Package corrplot
+* 
 
 ### Wer noch Lust und Laune hat:
 
