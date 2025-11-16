@@ -73,23 +73,20 @@ grün
 Korrelogram:
 * Wir möchten die Korrelation zwischen dem Steueraufkommen pro Windrad, der Rotorblattgröße,
 der Windradhöhe und der Gesamtleistung gibt.
-* Wir berechnen erst, ob diese Korrelationen statistische signifikant sind, mit 
-dem Spearman-Index. Erstelle einen neuen Dataframe mit den Steueraufkommen, Rotorblattgröße,
-Windradhöhe und Gesamtleistung. Mit cor.test(dataframe$Spalte, method = "spear")
-kriegen wir heraus, ob die Korrelation signifikant ist. Der p-Wert sollte kleiner als
-0.05 sein, dann ist die Korrelation siginifikant. Der zweite Wert, der spearman's 
-rho schwankt zwischen -1 und +1, Werte nahe null zeigen eine schwache Korrelation, 
-nahe -1 eine stark negative Korrelation, und +1 eine stark positive Korrelation.
-* Wir laden das Package corrplot
-* 
+* Erstelle zuerst einen Dataframe, der nur die vier benötigten Variablen enthält. 
+* Als Nächstes erzeugst du alle Variablenpaare mit expand_grid(var1 = names(data_cor), var2 = names(data_cor)) und speicherst dies beispielsweise in pairs. Auf diese Paare wendest du anschließend den Spearman-Test an: pairs$test <- map2(pairs$var1, pairs$var2, ~cor.test(data_cor[[.x]], data_cor[[.y]], method = "spearman")).
+* Aus jedem Testergebnis extrahierst du den Spearman-rho über map_dbl(..., ~.x$estimate) und den p-Wert über map_dbl(..., ~.x$p.value). Danach korrigierst du die p-Werte mit p.adjust(..., method = "BH") und legst fest, welche Korrelationen signifikant sind, indem du prüfst, ob der korrigierte p-Wert unter 0.05 liegt. Für die spätere Plot-Farbcodierung ist es hilfreich, eine Spalte anzulegen, die nur bei signifikanten Korrelationen den rho-Wert enthält, z. B. rho_sig <- ifelse(sig, rho, NA). Die Variablennamen setzt du am besten als Faktoren mit den Original-Spaltennamen als Levels, damit die Achsen im Plot in der gewünschten Reihenfolge erscheinen.
 
-### Wer noch Lust und Laune hat:
+* Für das Korrelogramm verwendest du ggplot. 
+  * Die Grundstruktur besteht aus ggplot(pairs, aes()) + geom_tile("). 
+  * weiße Kachelränder mit geom_tile erstellen. 
+  * Über scale_fill_gradient2() kann man eine bivariate Farbskala mit Blau für negative, Weiß für neutrale und Rot für positive Korrelationen steht
+  * nicht signifikante Zellen werden automatisch grau, weil sie NA enthalten (na.value = "grey90"). 
+  * Sichtbarkeit numerische Werte mit du geom_text() in schwarzer Schrift
 
-Wenn noch Lust und Zeit besteht: 
-
-- Anlagenzahl/Leistunskapazität/Steueraufkommen:
-  - pro Landkreis als Bar Chart, nur die 10 größten
-- corrlegram <https://r-graph-gallery.com/correlogram.html>:
-  - Höhe, Rotorblatt, Steueraufkommen, Windstärke, Ertrag
-- wer weiß, vlt. sogar eine hexbin map:
-  <https://r-graph-gallery.com/hexbin-map.html>
+* Das Ergebnis ist ein übersichtliches Korrelogramm, bei dem:
+ * signifikante Korrelationen farbig erscheinen,
+ * nicht signifikante Korrelationen grau sind,
+ * alle Kacheln mit dem rho-Wert beschriftet werden,
+ * positive Zusammenhänge rot und negative blau dargestellt sind,
+ * die Darstellung vollständig mit tidyverse und ggplot aufgebaut ist.
