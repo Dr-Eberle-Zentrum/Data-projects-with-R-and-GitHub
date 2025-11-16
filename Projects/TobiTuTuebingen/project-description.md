@@ -4,7 +4,7 @@ Wir möchten uns anschauen, wie der Ausbau der Windkraft in
 Baden-Württemberg in den letzten Jahren vorangekommen ist.
 
 [Datenquelle
-LUBW](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/TobiTuTuebingen/Bestand%20Windenergieanlagen%202025-11-16.csv)
+LUBW](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/TobiTuTuebingen/WindenergieBW.csv)
 
 Wichtig: Auf der Website nur downloaden, nicht schon filtern! Das machen
 wir mit R!
