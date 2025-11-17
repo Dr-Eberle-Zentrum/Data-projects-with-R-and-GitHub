@@ -3,7 +3,7 @@ require(this.path)
 
 
 #######################################
-# set workding directory
+# set working directory
 #######################################
 setwd( this.path::this.dir() )
 
@@ -12,23 +12,25 @@ list.files(pattern = "\\.zip$", path = "./PV") |>
   # unzip each file and read the CSV inside without storing the unzipped file on disk
   lapply(function(zipfile) {
     # get the name of the CSV file inside the zip
-    csvfile <- unzip(zipfile, list = TRUE)$Name[1]
+    csvfile <- unzip(str_c("./PV/",zipfile), list = TRUE)$Name[1]
     # read the CSV file directly from the zip
     suppressWarnings( # suppress warnings about parsing of last ";" in each data row
       data <-
-        read_csv2(unz(zipfile, csvfile),
+        read_csv2(unz(str_c("./PV/",zipfile), csvfile),
                   locale = locale(decimal_mark = ",", grouping_mark = "."),
-                  show_col_types = F)
+                  show_col_types = F,
+                  col_types = cols(Datum = col_date("%d.%m.%Y")) # set parsing specifically for Datum
+                  )
     )
     return(data)
   }) |>
   # merge all data frames into one
   bind_rows() |>
-  # cleanup
+  # cleanup last column
   mutate( `PV Ertrag [kWh]` =
             str_remove(`PV Ertrag [kWh]`,";") |>
             parse_double(locale=locale(decimal_mark = ",", grouping_mark = ".")) ) |>
-  mutate( Datum = dmy(Datum) ) |>
+  # mutate( Datum = dmy(Datum) ) |> # done via input column parsing
   # remove duplicates
   distinct() |>
   # filter for dates from 2025-01-01 onwards
@@ -112,7 +114,7 @@ finalSummary |>
   geom_bar(aes(y = -`Stromkosten [€]`, fill = "Stromkosten"), stat = "identity") +
   geom_bar(aes(y = `Einspeisevergütung [€]`+`Einsparungen durch Eigenverbrauch [€]`, fill = "Einspeisevergütung"), stat = "identity") +
   geom_bar(aes(y = `Einsparungen durch Eigenverbrauch [€]`, fill = "Einsparungen durch Eigenverbrauch"), stat = "identity") +
-  geom_line(aes(y = `Gesamtwirtschaftlichkeit [€]`, group = 1, color = "Gesamtwirtschaftlichkeit"), size = 1) +
+  geom_line(aes(y = `Gesamtwirtschaftlichkeit [€]`, group = 1, color = "Gesamtwirtschaftlichkeit"), linewidth = 1) +
   geom_point(aes(y = `Gesamtwirtschaftlichkeit [€]`, color = "Gesamtwirtschaftlichkeit"), size = 2) +
   scale_y_continuous(labels = scales::dollar_format(prefix = "€")) +
   scale_fill_manual(
