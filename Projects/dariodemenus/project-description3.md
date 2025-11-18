@@ -19,14 +19,18 @@ Frage lautet: *Funktionieren Ökosysteme mit vielen Arten besser als
 solche mit wenigen?*
 
 Ein wichtiger Indikator für diese “Funktion” ist der
-**Stickstoffkreislauf** im Boden. \* **Hohe Diversität** führt oft zu
-einer besseren Durchwurzelung und Ressourcennutzung
-(“Komplementarität”). Wir erwarten daher oft, dass in diversen Plots
-weniger ungenutzter Stickstoff (Nmin) im Boden übrig bleibt, da die
-Pflanzen ihn effizienter aufnehmen. \* **Funktionelle Gruppen** spielen
-dabei eine Sonderrolle. Vor allem **Leguminosen** (Hülsenfrüchtler wie
-Klee) können Luftstickstoff fixieren und reichern den Boden eher mit
-Stickstoff an, was dem allgemeinen Trend entgegenwirken kann.
+\*Stickstoffkreislauf\*\* im Boden.
+
+\*Hohe Diversität\*\* führt oft zu einer besseren Durchwurzelung und
+Ressourcennutzung (“Komplementarität”). Wir erwarten daher oft, dass in
+diversen Plots weniger ungenutzter Stickstoff (Nmin) im Boden übrig
+bleibt, da die Pflanzen ihn effizienter aufnehmen.
+
+**Funktionelle Gruppen** spielen dabei eine Sonderrolle.
+
+Vor allem **Leguminosen** (Hülsenfrüchtler wie Klee) können
+Luftstickstoff fixieren und reichern den Boden eher mit Stickstoff an,
+was dem allgemeinen Trend entgegenwirken kann.
 
 ### Unser Projektziel
 
