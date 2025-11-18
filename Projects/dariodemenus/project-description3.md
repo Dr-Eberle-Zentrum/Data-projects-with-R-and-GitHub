@@ -18,10 +18,10 @@ die **Biodiversity-Ecosystem Functioning (BEF)** Beziehung. Die zentrale
 Frage lautet: *Funktionieren Ökosysteme mit vielen Arten besser als
 solche mit wenigen?*
 
-Ein wichtiger Indikator für diese “Funktion” ist der
-\*Stickstoffkreislauf\*\* im Boden.
+Ein wichtiger Indikator für diese “Funktion” ist der Stickstoffkreislauf
+im Boden.
 
-\*Hohe Diversität\*\* führt oft zu einer besseren Durchwurzelung und
+Hohe Diversität führt oft zu einer besseren Durchwurzelung und
 Ressourcennutzung (“Komplementarität”). Wir erwarten daher oft, dass in
 diversen Plots weniger ungenutzter Stickstoff (Nmin) im Boden übrig
 bleibt, da die Pflanzen ihn effizienter aufnehmen.
