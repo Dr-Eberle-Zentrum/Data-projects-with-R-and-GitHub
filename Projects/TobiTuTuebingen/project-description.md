@@ -96,7 +96,26 @@ Ein kurzer Entwurf, in welche Richtung es gehen soll:
 
 ![Visualisationdraft](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/TobiTuTuebingen/draftvisualization.jpg)
 
+### Ein kleines Schmankerl
 
+Als Geograph liebe ich Karten. Wir wollen eine Hexbin Map erstellen, die das Gesamt-
+steueraufkommen pro Landkreis farblich markiert.
+* Vorbereitung: 
+  * Wir aggregieren die Windräder pro Landkreis mit einer pipe und group_by
+  * dann brauchen wir hier den mittleren O / N - Wert pro Landkreis als mean
+  * wir aggregieren das Steueraufkommen, das ja pro Windrad vorliegt ebenfalls
+  mit einer pipe und group_by, hier brauchen wir jedoch die Summe
+  * Vermutlich macht es am meisten Sinn, diese pipe in einer neuen Variable zu
+  speichern.
+* Plotting:
+  * Weitere Infos: [Rgraphgallery][https://r-graph-gallery.com/hexbin-map.html]
+  * wir brauchen ggplot, x = Ost, y = Nordwerte, z = Steraufkommen
+  * mit scalle_fill_viridis_c() kann man die Farbskala festlegen
+  * mit stat_summary_hex() erzeugt man die Hexbinkacheln
+  * mit coord_equal verhindert man Verzerrung
+  
+  
+**Viel Spaß!**
 
 
 
