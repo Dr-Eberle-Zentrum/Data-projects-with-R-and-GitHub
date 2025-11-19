@@ -72,7 +72,7 @@ grün
 * 2. y Achse: jährlich in Betrieb genommene Leistung
 * Titel: Jährlicher Zubau an Windrädern in BW
 * Kleines Zusatzschmankerl:
-  * Laut Zeit [Energiemonitor][https://www.zeit.de/wirtschaft/energiemonitor-strompreis-gaspreis-erneuerbare-energien-ausbau]
+  * Laut Zeit [Energiemonitor](https://www.zeit.de/wirtschaft/energiemonitor-strompreis-gaspreis-erneuerbare-energien-ausbau)
   müsste der jährliche Zubau an Windenergie 1.2 GW in BW betragen. Visualisiere das
   mit einer hline im Linechart, die das Ziel zeigt
 
@@ -113,7 +113,7 @@ steueraufkommen pro Landkreis farblich markiert.
   * Vermutlich macht es am meisten Sinn, diese pipe in einer neuen Variable zu
   speichern.
 * Plotting:
-  * Weitere Infos: [Rgraphgallery][https://r-graph-gallery.com/hexbin-map.html]
+  * Weitere Infos: [Rgraphgallery](https://r-graph-gallery.com/hexbin-map.html)
   * wir brauchen ggplot, x = Ost, y = Nordwerte, z = Steraufkommen
   * mit scalle_fill_viridis_c() kann man die Farbskala festlegen
   * mit stat_summary_hex() erzeugt man die Hexbinkacheln
