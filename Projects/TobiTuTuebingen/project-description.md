@@ -51,7 +51,8 @@ importiert wurde:
     Diese Faktoren sollen in einer neuen Spalten aufgeführt sein.
     * Die Gesamtenergie ist eine neue Spalte mit folgender Formel:
     Gesamtenergie (MWh) = Generatorleistung (MW) * Kapazitätsfaktor * Betriebsdauer (Jahre)
-    * Steueraufkommen mit folgender Formel berechenbar:
+    * Steueraufkommen mit folgender Formel berechenbar: Achtung das ist nur eine 
+    sehr grobe Schätzung, die Zahlen sind im Kern völlig erfunden!
     Steueraufkommen = Gesamtenergie (MWh) * 1ct/MWh die Einheit ist dann Cent
  * Jährliches Wachstum in Inbetriebnahmen:
    * Mithilfe der Spalte Inbetriebnahme, gruppieren wir die Windräder, je nach Jahr
@@ -70,6 +71,10 @@ Linechart:
 grün
 * 2. y Achse: jährlich in Betrieb genommene Leistung
 * Titel: Jährlicher Zubau an Windrädern in BW
+* Kleines Zusatzschmankerl:
+  * Laut Zeit [Energiemonitor][https://www.zeit.de/wirtschaft/energiemonitor-strompreis-gaspreis-erneuerbare-energien-ausbau]
+  müsste der jährliche Zubau an Windenergie 1.2 GW in BW betragen. Visualisiere das
+  mit einer hline im Linechart, die das Ziel zeigt
 
 Korrelogram:
 * Wir möchten die Korrelation zwischen dem Steueraufkommen pro Windrad, der Rotorblattgröße,
