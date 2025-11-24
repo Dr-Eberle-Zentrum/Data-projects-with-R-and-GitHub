@@ -46,7 +46,7 @@ knitr::kable(
 
 -   **The fights**
 
-```{r echo=FALSE}
+```{r echo=FALSE, warning=FALSE}
 library(readr)
 knitr::kable(
   read_csv("https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/refs/heads/main/Projects/46Cent/raw_data_UFC/raw_fights.csv",

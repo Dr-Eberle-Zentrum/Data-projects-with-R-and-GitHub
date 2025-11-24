@@ -1,22 +1,14 @@
 ## General Topic:
 
 For my data project I would like to analyze the U.S Martial Art’s
-Promotion “UFC”  
-(or perhaps even the sport of MMA as a whole) from a statistical
-standpoint.  
+Promotion “UFC” from a statistical standpoint.  
 As this is a topic which generates vast amounts of data, there are
 endless possibilities  
 for graphs, analyses and perhaps even predictions.  
 
-Other than some “nice-to-know” hypothesis question like  
-“Is there a negative correlation between the success of a fighter and
-the GDP of his home country ?” the most interesting question would of
-course be whether we can successfully predict the winners of future
-fights.  
-Since this a very “chaotic” sport which is generally considered very
-unpredictable, but on the other hand generates a ton of data, it is
-almost like asking:  
-**“Who will win: Chaos or Order ?”**  
+Other than honoring the top fighters through visualizing their success
+and capabilities we want to look at the sport as a whole, meaning we
+visualize it’s expansion and most common outcomes.  
 
 ## The Data:
 
@@ -142,13 +134,6 @@ There are 5 datasets included in this package:
 </table>
 
 -   **The fights**
-
-<!-- -->
-
-    ## Warning: One or more parsing issues, call `problems()` on your data frame for details,
-    ## e.g.:
-    ##   dat <- vroom(...)
-    ##   problems(dat)
 
 <table>
 <colgroup>
@@ -461,10 +446,37 @@ There are 5 datasets included in this package:
 
 ## Manipulation Goals:
 
-The first step will lie in merging the dataframes together. You can
-merge “fights” and events via ´event\_id´ Other than the cleaning we
-have to do, the first step will be to add additional variables of
-interest. For the first chart  
+For our first visualization we’ll need to add the `W/L-Ratio` to each
+fighter in the respective dataframe and then aggregate them by
+weightclass. (Information on the weightclasses can be found
+[here](https://www.ufc.com/news/understanding-ufc-weight-classes-and-weigh-ins).
+Then the `weightclass_mean` needs to be calculated.  
+
+The `height_to_reach_ratio` needs to be calculated for each fighter in
+order to create the second visualization. Also note that the data is
+very dirty and you’ll have to handle a lot of NA’s. In this case it’s
+probably best to just remove them.
+
+For the third visualization the Country / State needs to be extracted
+from the “events” data frame and mutated in such a way that they can be
+grouped and implemented into the ggplot.
+
+Something similar needs to happen to `method` in the “fights” dataframe
+in order to create the fourth visualization.
+
+For the fifth graph the `Date` column in “events” will have to be
+formatted so that it can be used for ggplot and the number of entries
+for each year need to be counted.  
+
+(OPTIONAL): For the last visualization you’ll have to merge some
+dataframes. You can merge “fights” and “fights\_detailed” via
+`Fight_Id`. After that you’ll have to extract the names of the fighters
+and their total strikes (`Total Str._2` or `Total Str._1`) from the
+dataframe and merge it onto the “fighters”-frame via their names.
+However, since the value in the cell will be something like “86 of 165”,
+you’ll have to extract the last number (because these are the total
+punches thrown by the fighter), turn them into numerics and then sum
+them up before you can add them.
 
 ## Visualization Goals
 
@@ -476,9 +488,7 @@ interest. For the first chart
     weight division: One for the best fighter in the country and one
     next to it with the mean W/L-Ratio of that weightclass. Choose a
     color for each bar-pair and put the Fighter / weightclass name on
-    the x-Axis. Add a legend if you want. Note:
-    [This](https://www.ufc.com/news/understanding-ufc-weight-classes-and-weigh-ins)
-    might help you.
+    the x-Axis. Add a legend if you want.
 
 **Do long arms really help you win fights ?:**
 
@@ -497,13 +507,22 @@ interest. For the first chart
 
 **How do fights usually end ?:**
 
--   Create a horizontal bar chart which shows how many fight ended in a
+-   Create a horizontal bar chart which shows how many fights ended in a
     certain way, meaning either  
     KO / TKO, Submission, Doctor Stoppage, Decision, Draw or
-    Disqualification
+    Disqualification. (Note: the respective variable name is `method`)
 
 **Expansion of the sport:**
 
 -   Create a simple linechart which shows the number of events on the
     y-Axis and the year on the x-Axis to visualize the growth of the UFC
     and MMA as a sport!
+
+**How much do these guys punch ?** (optional)**:**
+
+-   While the visualization is rather easy, the underlying manipulation
+    is pretty advanced: We want to visualize how many punches a fighter
+    actually throws in his career. For this you’ll create a bar chart
+    which shows the Top 10 fighters with the most punches thrown. Put
+    the number of punches thrown on the y-Axis and their names on the
+    x-Axis. Each fighter should have his own color.
