@@ -140,18 +140,18 @@ Jahresmittelwerte, Monate und in unterschiedliche Jahreszeiten.
     [Daten](https://ftp.inovum-dev.de/publiziert/klimaatlas_lubw/klimadaten/3_kreis/klimadaten_kreis_tuebingen_8416.csv)
     über das Internet Spaltenerklärung der LUBW:
 
-id: Schlüssel für Bundesland, Naturraum, Kreis oder Gemeinde name:
-Bezeichnung typ: Bundesland, Naturraum, Kreis oder Gemeinde saison:
-Kalenderjahr, Jahreszeiten oder Monate jahr: Jahr
-temperatur\_heisse\_tage: Anzahl Heißer Tage (Tmax ≥ 30 °C)
-temperatur\_frosttage: Anzahl Frosttage (Tmin ≤ 0 °C)
-temperatur\_tropennaechte: Anzahl Tropennächte (Tmin ≥ 20 °C)
-temperatur\_mittelwert: Temperatur (°C) temperatur\_heizgradtage:
-Heizgradtage (Kelvin x Tage) temperatur\_kuehlgradtage: Kühlgradtage
-(Kelvin x Tage) niederschlag\_summe: Niederschlagssumme (Millimeter)
-starkniederschlag\_20mm\_tage: Anzahl Tage mit N ≥ 20 mm
-trockenperiode\_tage\_maximum: Dauer der längsten Trockenperiode mit
-Tagen &lt; 1 mm
+- id: Schlüssel für Bundesland, Naturraum, Kreis oder Gemeinde name
+- Bezeichnung typ: Bundesland, Naturraum, Kreis oder Gemeinde
+- Kalenderjahr, Jahreszeiten oder Monate jahr: Jahr
+- temperatur\_heisse\_tage: Anzahl Heißer Tage (Tmax ≥ 30 °C)
+- temperatur\_frosttage: Anzahl Frosttage (Tmin ≤ 0 °C)
+- temperatur\_tropennaechte: Anzahl Tropennächte (Tmin ≥ 20 °C)
+- temperatur\_mittelwert: Temperatur (°C)
+- temperatur\_heizgradtage: Heizgradtage (Kelvin x Tage)
+- temperatur\_kuehlgradtage: Kühlgradtage (Kelvin x Tage)
+- niederschlag\_summe: Niederschlagssumme (Millimeter)
+- starkniederschlag\_20mm\_tage: Anzahl Tage mit N ≥ 20 mm
+- trockenperiode\_tage\_maximum: Dauer der längsten Trockenperiode mit Tagen &lt; 1 mm
 
 # Fragen und Visualisierungsoptionen
 
@@ -187,3 +187,4 @@ Threshold Exceedance Plots
 -   Hat die Anzahl an Starknierderschlägen über die Jahre zugenommen?
     Wenn ja, wie viele Starkniederschläge gab es und wie verteilen sich
     diese über das Jahr?
+
