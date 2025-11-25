@@ -21,13 +21,13 @@ This project examines the bidirectional relationships between sleep patterns, da
 
 **Main hypothesis**: Reduced nocturnal sleep duration on day *t* predicts lower positive affect and higher negative affect on day *t+1*, controlling for day *t* mood (autoregressive effects).
 
-**Research question**: What is the magnitude of the lagged effect of nocturnal sleep duration on next-day positive and negative affect in the early postpartum period?
+**Research question**: What is the magnitude of the lagged effect of nocturnal sleep duration on next-day positive and negative affect?
 
 ## Hypothesis 2: Cumulative Sleep Patterns and Depression Development
 
 **H2a**: Lower mean sleep duration across 2-week blocks (weeks 1-2, 3-4, 5-6) predicts higher BDI scores, with effects strengthening over time (test interaction: time × sleep duration).
 
-**H2b**: Greater sleep irregularity (standard deviation or coefficient of variation of sleep duration within each 2-week block) predicts higher BDI scores beyond mean duration effects.
+**H2b**: Greater sleep irregularity predicts higher BDI scores beyond mean duration effects.
 
 **H2c**: The predictive value of sleep deprivation on BDI increases over time (test: week × sleep interaction), reflecting cumulative burden.
 
@@ -41,7 +41,7 @@ Here is the data folder: [Open data folder](Week4%20Homework-%20Sleep%20syntheti
 
 The dataset consists of sleep monitoring data collected via a wearable device throughout an extended period. The data spans from February 7, 2024 through September 8, 2025, providing nearly continuous daily sleep recordings across approximately 19 months.
 
-Second and third dataset contains PANAS (Positive and negative affect schedule) daily mood ratings and BDI (Beck Depression Inventory) scores at multiple postpartum timepoints, but these are available in another files and have to be combined.
+Second and third dataset contains PANAS (Positive and negative affect schedule) daily mood ratings and BDI (Beck Depression Inventory) scores at multiple timepoints, but these are available in another files and have to be combined.
 
 Participants names differ in the sleep annd PANAS+BDI files, they are named in the following way:
 
@@ -127,9 +127,13 @@ The dataset contains German-language column headers with the following English t
 
 -   Parse and validate datetime formats
 -   Identify and resolve duplicate date entries
+    -   Delete them if they are full duplicates
+    -   If they start on end at the same time leave the longer one
 -   Flag physiologically implausible values (e.g., total sleep \> 16 hours, heart rate \< 30 or \> 200 bpm)
--   Assess and document missingness patterns for REM sleep and heart rate
 -   Create data quality flags for each observation
+    -   How many missing observations
+    -   How many duplicates
+    -   **Document**: Create flag variable indicating dates with multiple entries (summary table in Markdown with corresponding information for each data file)
 
 **Rationale**: Sleep data from wearable devices often contain artifacts, and multiple entries per date suggest data streaming or synchronization issues that require resolution.
 
@@ -137,33 +141,21 @@ The dataset contains German-language column headers with the following English t
 
 **Core sleep variables**:
 
--   **Total sleep duration**: `light + deep + rem` (in hours)
+-   **Total sleep duration**: *waking up time - falling asleep time* (in hours)
 -   **Number of sleep events**: number of entries from each night
--   **Sleep regularity/variability**
+-   **Sleep regularity/variability:** Mean deviation from the average (total and over each week)
 
 **Temporal variables**:
 
 -   **Date**: Extract date from "von" timestamp
--   **Day of week**: For testing weekly periodicity
--   **Study day**: Sequential numbering (requires known delivery date or study start)
--   **Week**: Grouped into 2-week blocks for H2 analyses
 
-**Derived sleep metrics** (for H2):
+-   **Day of week**: For testing weekly periodicity (text weekdays)
 
--   **14-day rolling means**: Sleep duration, efficiency, deep sleep percentage
--   **14-day rolling SD**: Sleep duration variability
--   **Coefficient of variation**: SD/mean for each 2-week window
--   **Sleep debt accumulation**: Cumulative deviation from 7-hour baseline
+-   **Study day**: Sequential numbering, taking the first day of the data collection
 
-## 3. Data Aggregation Strategies
+-   **Week**: as above
 
-**For duplicate date entries**:
-
--   **Primary approach**: Select the longest sleep period for each date (assuming this represents the main nocturnal sleep bout)
--   **Alternative approach**: Sum all sleep periods per 24-hour window (but complicates temporal alignment)
--   **Document**: Create flag variable indicating dates with multiple entries
-
-## 4. Data Validation Checks
+## 3. Data Validation Checks
 
 **Consistency checks**:
 
@@ -173,11 +165,9 @@ The dataset contains German-language column headers with the following English t
 
 -   Check sleep period duration matches timestamp difference
 
--   Identify outliers: sleep duration \< 3 hours or \> 12 hours, sleep efficiency \< 60% or \> 98%
+-   Identify outliers: sleep duration \< 3 hours or \> 12 hours
 
 -   Flag sequences with \>3 consecutive missing days
-
--   Assess whether missing patterns correlate with time periods (e.g., device charging, hospital visits)
 
 **Physiological plausibility**:
 
@@ -190,28 +180,25 @@ The dataset contains German-language column headers with the following English t
 **1. Sleep Architecture Over Time** (Longitudinal Overview)
 
 -   **Type**: Stacked area chart or ribbon plot
--   **X-axis**: Date (full study period)
+-   **X-axis**: Date or Study day/week
 -   **Y-axis**: Sleep duration (hours)
 -   **Overlay**: Smoothed trend line (LOESS or moving average)
 -   **Purpose**: Visualize sleep stage composition evolution, identify periods of disruption
+-   
 
-**2. Sleep Metrics by Study Week** (Hypothesis 2 foundation)
+**2. Sleep Duration Distribution** (Variability assessment)
 
--   **Type**: Multi-panel line plot with confidence ribbons
--   **Panels**:
-    -   Mean sleep duration with SD bands
--   Sleep efficiency percentage
--   Awakening frequency
--   **X-axis**: Study week or date?
--   **Y-axis**: Respective metric (hours/minutes?)
--   **Purpose**: Show temporal trends and variability patterns relevant to H2
+-   **Type**: Density ridges by 2-week blocks
+-   **X-axis**: Density, grouped by 2-week periods
+-   **Y-axis**: Sleep duration (hours)
+-   **Purpose**: Assess sleep regularity and identify high-variability periods
 
-**3. Sleep Duration Distribution** (Variability assessment)
+**3. Overview of BDI Scores**
 
--   **Type**: Violin plot or density ridges by 2-week blocks
--   **X-axis**: Sleep duration (hours)
--   **Y-axis**: Density, grouped by 2-week periods
--   **Purpose**: Assess sleep regularity (H2b) and identify high-variability periods
+-   **Type**: Violin Plot
+-   **X-axis**: Density/Occurence
+-   **Y-axis**: Score on the BDI
+-   **Purpose**: Visual description of the sample
 
 **4. Circadian Pattern Visualization** (Exploratory)
 
@@ -219,21 +206,9 @@ The dataset contains German-language column headers with the following English t
 -   **Dimension**: Sleep onset time (hour of day)
 -   **Color**: Total sleep duration
 -   **Facets**: By month or 4-week blocks
--   **Purpose**: Detect circadian stability, common in postpartum literature
+-   **Purpose**: Detect circadian stability
 
-## Intermediate/Supporting Visualizations
-
-**5. Data Quality Dashboard**
-
--   **Type**: Multi-panel diagnostic plot
--   **Panels**:
-    -   Missingness heatmap (dates × variables)
--   Outlier detection scatterplots (Mahalanobis distance or isolation forest)
--   Distribution histograms for key variables
--   **Purpose**: Document data cleaning decisions, support transparency
--   
-
-**6. Summary Statistics Table**
+**5. Summary Statistics Table**
 
 -   **Type**: Formatted markdown table
 -   **Content**:
@@ -242,27 +217,3 @@ The dataset contains German-language column headers with the following English t
 -   Missingness percentages
 -   Outlier counts before/after cleaning
 -   **Purpose**: Provide quantitative summary for reproducibility
-
-## Advanced Visualizations
-
-**7. Cross-Lagged Associations** (Hypothesis 1)
-
--   **Type**: Coefficient plot with error bars
--   **X-axis**: Lag structure (t, t-1, t-2)
--   **Y-axis**: Standardized regression coefficients
--   **Panels**: PA and NA as separate outcomes
--   **Purpose**: Display temporal precedence of sleep → mood effects
-
-**8. Growth Trajectory Plot** (Hypothesis 2)
-
--   **Type**: Individual + group trajectory spaghetti plot
-
--   **X-axis**: Week postpartum
-
--   **Y-axis**: BDI score
-
--   **Lines**: Individual trajectories (thin, transparent) and group mean (thick, colored)
-
--   **Color gradient**: Mean sleep duration for each person
-
--   **Purpose**: Visualize H2a predictions (sleep × time interaction)
