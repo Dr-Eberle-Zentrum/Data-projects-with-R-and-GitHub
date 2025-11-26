@@ -6,9 +6,6 @@ Baden-Württemberg in den letzten Jahren vorangekommen ist.
 [Datenquelle
 LUBW](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/TobiTuTuebingen/WindenergieBW.csv)
 
-Wichtig: Auf der Website nur downloaden, nicht schon filtern! Das machen
-wir mit R!
-
 ------------------------------------------------------------------------
 
 ## Introduction
@@ -24,9 +21,9 @@ und der Leistung gibt.
 
 ## Questions
 
-* Welche Gemeinden und Landkreise haben die höchste Anzahl an installierten Windräder und Windradleistung?
-* Wie hoch profitieren diese Gemeinden finanziell?
-* Wie hat sich der Ausbau in den letzten Jahren entwickelt? Wie viele Windräder wurden in welchen Jahr genehmigt und errichtet? 
+* Welche Landkreise haben die höchste Anzahl an installierten Windräder und Windradleistung?
+* Wie hoch profitieren diese Landkreise finanziell?
+* Wie hat sich der Ausbau in den letzten Jahren entwickelt? Wie viele Windräder wurden in welchen Jahr in Betrieb genommen? 
 
 ------------------------------------------------------------------------
 
@@ -34,7 +31,7 @@ und der Leistung gibt.
 
 * Data cleaning: Bitte fürhen Sie folgende Schritte durch, nachdem die CSV in R
 importiert wurde: 
-  * Tabellenspalten umbennen
+  * optional: Tabellenspalten umbennen falls man Leerzeichnen raushaben möchte
   * Die Spalten "Typbezeichnung", "Stand der Daten" und "Herkunft der Daten" sollen gelöscht werden
 * Data manipulation
   * In der Spalte "Status" sind alle stillgelegten Windräder mit "Stillgelegt"
@@ -74,7 +71,7 @@ grün
 * Kleines Zusatzschmankerl:
   * Laut Zeit [Energiemonitor](https://www.zeit.de/wirtschaft/energiemonitor-strompreis-gaspreis-erneuerbare-energien-ausbau)
   müsste der jährliche Zubau an Windenergie 1.2 GW in BW betragen. Visualisiere das
-  mit einer hline im Linechart, die das Ziel zeigt
+  mit einer hline im Linechart, die das Ziel zeigt.
 
 Korrelogram:
 * Wir möchten die Korrelation zwischen dem Steueraufkommen pro Windrad, der Rotorblattgröße,
