@@ -35,7 +35,7 @@ This project examines the bidirectional relationships between sleep patterns, da
 
 # Dataset Description
 
-Here is the data folder: [Open data folder](Week4%20Homework-%20Sleep%20synthetic%20project/)
+Here is the data folder: [Open data folder](./Week4%20Homework-%20Sleep%20synthetic%20project/)
 
 ## Data Source and Structure
 
