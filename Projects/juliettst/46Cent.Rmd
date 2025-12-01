@@ -13,14 +13,16 @@ library(ggridges)
 ## Reading in the data
 
 ```{r}
-for (id in list.files("Projects/juliettst/Week4 Homework- Sleep synthetic project", pattern = "^subject_.*\\.csv$")){
-  subjects[[id]]<- read.csv(paste0("Projects/juliettst/Week4 Homework- Sleep synthetic project/",id))
+subjects <- list()
+
+for (id in list.files("Week4 Homework- Sleep synthetic project", pattern = "^subject_.*\\.csv$")){
+  subjects[[id]]<- read.csv(paste0("Week4 Homework- Sleep synthetic project/",id))
 }
 
 all_subjects <- bind_rows(subjects)
 
-PANAS <- read.csv("Projects/juliettst/Week4 Homework- Sleep synthetic project/PANAS_scores.csv")
-BDI<- read.csv("Projects/juliettst/Week4 Homework- Sleep synthetic project/BDI_scores.csv")
+PANAS <- read.csv("Week4 Homework- Sleep synthetic project/PANAS_scores.csv")
+BDI<- read.csv("Week4 Homework- Sleep synthetic project/BDI_scores.csv")
 ```
 
 ## Cleaning and validating the data
@@ -122,26 +124,15 @@ all_subjects %>%
 
 
 # Sleep Duration Distribution:
-install.packages("ggridges")
-library("ggridges")
-
-all_subjects %>% 
-  ggplot(
-    aes(
-      x = factor(floor_date(as_date(von), unit = "1 week"))
-      )
-  )+
-  geom_density_ridges(
-      y = all_subjects$Dauer.des.Schlafs..s.
-  )
-  
-#GPT Lösung (meine funktioniert nicht)
 df <- all_subjects %>%
   mutate(
     date       = as_date(von),
     duration_h = `Dauer.des.Schlafs..s.` / 3600,
-    week       = floor_date(date, unit = "1 weeks") #größere gruppen als 1 woche geht nicht
+    week       = floor_date(date, unit = "week")  # "week" is enough
   )
+
+# sanity check: do these columns exist?
+str(df[, c("duration_h", "week")])
 
 ggplot(df, aes(
   x = duration_h,
@@ -155,9 +146,9 @@ ggplot(df, aes(
     rel_min_height = 0.01
   ) +
   labs(
-    title = "Sleep Duration Distribution by 2-Week Blocks",
+    title = "Sleep Duration Distribution by Week",
     x = "Sleep Duration (hours)",
-    y = "2-Week Period",
+    y = "Week",
     fill = "Block Start"
   ) +
   theme_minimal(base_size = 14) +
