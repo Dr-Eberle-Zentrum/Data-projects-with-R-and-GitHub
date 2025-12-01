@@ -238,7 +238,6 @@ I guess there are…
     summary_blocks <- df %>%
       group_by(block2) %>%
       summarise(
-        n = n(),
         mean_duration_h = mean(duration_h, na.rm = TRUE),
         sd_duration_h   = sd(duration_h, na.rm = TRUE),
         mean_light_h    = mean(`leicht..s.` / 3600, na.rm = TRUE),
@@ -251,18 +250,16 @@ I guess there are…
 <table>
 <caption>Sleep Summary by 2-Week Block</caption>
 <colgroup>
-<col style="width: 13%" />
-<col style="width: 3%" />
+<col style="width: 14%" />
 <col style="width: 20%" />
-<col style="width: 17%" />
+<col style="width: 18%" />
 <col style="width: 16%" />
 <col style="width: 15%" />
-<col style="width: 13%" />
+<col style="width: 14%" />
 </colgroup>
 <thead>
 <tr>
 <th style="text-align: left;">block2</th>
-<th style="text-align: right;">n</th>
 <th style="text-align: right;">mean_duration_h</th>
 <th style="text-align: right;">sd_duration_h</th>
 <th style="text-align: right;">mean_light_h</th>
@@ -273,7 +270,6 @@ I guess there are…
 <tbody>
 <tr>
 <td style="text-align: left;">2023-01-29</td>
-<td style="text-align: right;">1</td>
 <td style="text-align: right;">6.21</td>
 <td style="text-align: right;">NA</td>
 <td style="text-align: right;">4.43</td>
@@ -282,7 +278,6 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2023-02-12</td>
-<td style="text-align: right;">7</td>
 <td style="text-align: right;">6.83</td>
 <td style="text-align: right;">2.82</td>
 <td style="text-align: right;">3.18</td>
@@ -291,7 +286,6 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2023-02-26</td>
-<td style="text-align: right;">7</td>
 <td style="text-align: right;">5.80</td>
 <td style="text-align: right;">3.23</td>
 <td style="text-align: right;">3.06</td>
@@ -300,7 +294,6 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2023-03-12</td>
-<td style="text-align: right;">4</td>
 <td style="text-align: right;">6.48</td>
 <td style="text-align: right;">2.96</td>
 <td style="text-align: right;">2.04</td>
@@ -309,7 +302,6 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2023-03-26</td>
-<td style="text-align: right;">4</td>
 <td style="text-align: right;">6.51</td>
 <td style="text-align: right;">3.70</td>
 <td style="text-align: right;">3.29</td>
@@ -318,7 +310,6 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2023-04-09</td>
-<td style="text-align: right;">13</td>
 <td style="text-align: right;">5.18</td>
 <td style="text-align: right;">2.80</td>
 <td style="text-align: right;">2.69</td>
@@ -327,7 +318,6 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2023-04-23</td>
-<td style="text-align: right;">24</td>
 <td style="text-align: right;">5.77</td>
 <td style="text-align: right;">3.06</td>
 <td style="text-align: right;">2.81</td>
@@ -336,7 +326,6 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2023-05-07</td>
-<td style="text-align: right;">23</td>
 <td style="text-align: right;">4.74</td>
 <td style="text-align: right;">2.89</td>
 <td style="text-align: right;">2.07</td>
@@ -345,7 +334,6 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2023-05-21</td>
-<td style="text-align: right;">29</td>
 <td style="text-align: right;">5.67</td>
 <td style="text-align: right;">2.72</td>
 <td style="text-align: right;">2.90</td>
@@ -354,7 +342,6 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2023-06-04</td>
-<td style="text-align: right;">31</td>
 <td style="text-align: right;">5.56</td>
 <td style="text-align: right;">2.48</td>
 <td style="text-align: right;">2.79</td>
@@ -363,7 +350,6 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2023-06-18</td>
-<td style="text-align: right;">27</td>
 <td style="text-align: right;">5.68</td>
 <td style="text-align: right;">2.54</td>
 <td style="text-align: right;">2.63</td>
@@ -372,7 +358,6 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2023-07-02</td>
-<td style="text-align: right;">24</td>
 <td style="text-align: right;">6.13</td>
 <td style="text-align: right;">2.28</td>
 <td style="text-align: right;">2.80</td>
@@ -381,7 +366,6 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2023-07-16</td>
-<td style="text-align: right;">31</td>
 <td style="text-align: right;">5.90</td>
 <td style="text-align: right;">2.77</td>
 <td style="text-align: right;">2.81</td>
@@ -390,7 +374,6 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2023-07-30</td>
-<td style="text-align: right;">24</td>
 <td style="text-align: right;">5.32</td>
 <td style="text-align: right;">3.11</td>
 <td style="text-align: right;">2.36</td>
@@ -399,7 +382,6 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2023-08-13</td>
-<td style="text-align: right;">18</td>
 <td style="text-align: right;">6.85</td>
 <td style="text-align: right;">2.17</td>
 <td style="text-align: right;">3.38</td>
@@ -408,7 +390,6 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2023-08-27</td>
-<td style="text-align: right;">17</td>
 <td style="text-align: right;">5.55</td>
 <td style="text-align: right;">2.81</td>
 <td style="text-align: right;">2.74</td>
@@ -417,7 +398,6 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2023-09-10</td>
-<td style="text-align: right;">21</td>
 <td style="text-align: right;">5.47</td>
 <td style="text-align: right;">2.79</td>
 <td style="text-align: right;">2.51</td>
@@ -426,7 +406,6 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2023-09-24</td>
-<td style="text-align: right;">10</td>
 <td style="text-align: right;">6.63</td>
 <td style="text-align: right;">2.34</td>
 <td style="text-align: right;">3.66</td>
@@ -435,7 +414,6 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2023-10-08</td>
-<td style="text-align: right;">17</td>
 <td style="text-align: right;">6.42</td>
 <td style="text-align: right;">1.51</td>
 <td style="text-align: right;">2.69</td>
@@ -444,7 +422,6 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2023-10-22</td>
-<td style="text-align: right;">15</td>
 <td style="text-align: right;">5.65</td>
 <td style="text-align: right;">2.56</td>
 <td style="text-align: right;">3.07</td>
@@ -453,7 +430,6 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2023-11-05</td>
-<td style="text-align: right;">13</td>
 <td style="text-align: right;">5.69</td>
 <td style="text-align: right;">3.05</td>
 <td style="text-align: right;">2.70</td>
@@ -462,7 +438,6 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2023-11-19</td>
-<td style="text-align: right;">25</td>
 <td style="text-align: right;">5.02</td>
 <td style="text-align: right;">3.22</td>
 <td style="text-align: right;">2.41</td>
@@ -471,7 +446,6 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2023-12-03</td>
-<td style="text-align: right;">12</td>
 <td style="text-align: right;">5.84</td>
 <td style="text-align: right;">2.77</td>
 <td style="text-align: right;">3.00</td>
@@ -480,7 +454,6 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2023-12-17</td>
-<td style="text-align: right;">25</td>
 <td style="text-align: right;">5.50</td>
 <td style="text-align: right;">2.92</td>
 <td style="text-align: right;">2.69</td>
@@ -489,7 +462,6 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2023-12-31</td>
-<td style="text-align: right;">1</td>
 <td style="text-align: right;">6.98</td>
 <td style="text-align: right;">NA</td>
 <td style="text-align: right;">2.98</td>
@@ -498,7 +470,6 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2024-01-01</td>
-<td style="text-align: right;">24</td>
 <td style="text-align: right;">6.33</td>
 <td style="text-align: right;">2.64</td>
 <td style="text-align: right;">3.15</td>
@@ -507,7 +478,6 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2024-01-15</td>
-<td style="text-align: right;">19</td>
 <td style="text-align: right;">6.38</td>
 <td style="text-align: right;">2.76</td>
 <td style="text-align: right;">3.32</td>
@@ -516,7 +486,6 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2024-01-29</td>
-<td style="text-align: right;">29</td>
 <td style="text-align: right;">5.90</td>
 <td style="text-align: right;">2.95</td>
 <td style="text-align: right;">2.74</td>
@@ -525,7 +494,6 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2024-02-12</td>
-<td style="text-align: right;">23</td>
 <td style="text-align: right;">5.86</td>
 <td style="text-align: right;">2.80</td>
 <td style="text-align: right;">2.43</td>
@@ -534,7 +502,6 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2024-02-26</td>
-<td style="text-align: right;">21</td>
 <td style="text-align: right;">6.02</td>
 <td style="text-align: right;">2.30</td>
 <td style="text-align: right;">2.83</td>
@@ -543,7 +510,6 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2024-03-11</td>
-<td style="text-align: right;">23</td>
 <td style="text-align: right;">5.82</td>
 <td style="text-align: right;">2.78</td>
 <td style="text-align: right;">3.11</td>
@@ -552,7 +518,6 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2024-03-25</td>
-<td style="text-align: right;">13</td>
 <td style="text-align: right;">4.90</td>
 <td style="text-align: right;">2.88</td>
 <td style="text-align: right;">2.77</td>
@@ -561,12 +526,47 @@ I guess there are…
 </tr>
 <tr>
 <td style="text-align: left;">2024-04-08</td>
-<td style="text-align: right;">10</td>
 <td style="text-align: right;">4.96</td>
 <td style="text-align: right;">2.97</td>
 <td style="text-align: right;">2.14</td>
 <td style="text-align: right;">2.29</td>
 <td style="text-align: right;">0.01</td>
+</tr>
+</tbody>
+</table>
+
+    outliers_before <- df %>%
+      summarise(outliers = sum(duration_h < 2 | duration_h > 14))
+
+    df_cleaned <- df %>%
+      filter(duration_h >= 2, duration_h <= 14)
+
+    outliers_after <- df_cleaned %>%
+      summarise(outliers = sum(duration_h < 2 | duration_h > 14))
+
+    outlier_table <- data.frame(
+      Stage = c("Before cleaning", "After cleaning"),
+      Outliers = c(outliers_before$outliers, outliers_after$outliers)
+    )
+
+    kable(outlier_table, caption = "Outlier Counts Before and After Cleaning")
+
+<table>
+<caption>Outlier Counts Before and After Cleaning</caption>
+<thead>
+<tr>
+<th style="text-align: left;">Stage</th>
+<th style="text-align: right;">Outliers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Before cleaning</td>
+<td style="text-align: right;">79</td>
+</tr>
+<tr>
+<td style="text-align: left;">After cleaning</td>
+<td style="text-align: right;">0</td>
 </tr>
 </tbody>
 </table>

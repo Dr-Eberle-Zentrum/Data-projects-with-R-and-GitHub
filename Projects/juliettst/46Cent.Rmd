@@ -223,7 +223,6 @@ df <- all_subjects %>%
 summary_blocks <- df %>%
   group_by(block2) %>%
   summarise(
-    n = n(),
     mean_duration_h = mean(duration_h, na.rm = TRUE),
     sd_duration_h   = sd(duration_h, na.rm = TRUE),
     mean_light_h    = mean(`leicht..s.` / 3600, na.rm = TRUE),
@@ -232,4 +231,20 @@ summary_blocks <- df %>%
   )
 
 kable(summary_blocks, digits = 2, caption = "Sleep Summary by 2-Week Block")
+
+outliers_before <- df %>%
+  summarise(outliers = sum(duration_h < 2 | duration_h > 14))
+
+df_cleaned <- df %>%
+  filter(duration_h >= 2, duration_h <= 14)
+
+outliers_after <- df_cleaned %>%
+  summarise(outliers = sum(duration_h < 2 | duration_h > 14))
+
+outlier_table <- data.frame(
+  Stage = c("Before cleaning", "After cleaning"),
+  Outliers = c(outliers_before$outliers, outliers_after$outliers)
+)
+
+kable(outlier_table, caption = "Outlier Counts Before and After Cleaning")
 ```
