@@ -231,6 +231,5 @@ summary_blocks <- df %>%
     mean_rem_h      = mean(`rem..s.` / 3600, na.rm = TRUE)
   )
 
-kable(summary_blocks, digits = 2, caption = "Sleep Summary by 2-Week Block") %>%
-  kable_styling(full_width = FALSE)
+kable(summary_blocks, digits = 2, caption = "Sleep Summary by 2-Week Block")
 ```
