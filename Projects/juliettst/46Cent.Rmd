@@ -211,11 +211,8 @@ ggplot(
     plot.title = element_text(face = "bold", hjust = 0.5)
   )
 
-<<<<<<< HEAD
+
 # Summary Statistics Table (also made with ChatGPT):
-=======
-# Summary Statistics Table:
->>>>>>> 3f6857cfdf4e66e311635d225366ca5eedcec55c
 df <- all_subjects %>%
   mutate(
     date       = as_date(von),
