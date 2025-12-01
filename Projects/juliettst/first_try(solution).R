@@ -135,9 +135,9 @@ ggplot(df, aes(
     rel_min_height = 0.01
   ) +
   labs(
-    title = "Sleep Duration Distribution by 2-Week Blocks",
+    title = "Sleep Duration Distribution by 1-Week Blocks",
     x = "Sleep Duration (hours)",
-    y = "2-Week Period",
+    y = "1-Week Period",
     fill = "Block Start"
   ) +
   theme_minimal(base_size = 14) +
