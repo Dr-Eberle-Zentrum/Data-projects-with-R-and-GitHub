@@ -8,6 +8,7 @@ date: "`r Sys.Date()`"
 library(tidyverse)
 library(lubridate)
 library(ggridges)
+library(knitr)
 ```
 
 ## Reading in the data
@@ -211,4 +212,24 @@ ggplot(
   )
 
 # Summary Statistics Table:
+df <- all_subjects %>%
+  mutate(
+    date       = as_date(von),
+    duration_h = `Dauer.des.Schlafs..s.` / 3600,
+    week2_idx  = floor((yday(date) - 1) / 14),
+    block2     = as.Date(floor_date(date, "year")) + weeks(2 * week2_idx)
+  )
+summary_blocks <- df %>%
+  group_by(block2) %>%
+  summarise(
+    n = n(),
+    mean_duration_h = mean(duration_h, na.rm = TRUE),
+    sd_duration_h   = sd(duration_h, na.rm = TRUE),
+    mean_light_h    = mean(`leicht..s.` / 3600, na.rm = TRUE),
+    mean_deep_h     = mean(`tief..s.` / 3600, na.rm = TRUE),
+    mean_rem_h      = mean(`rem..s.` / 3600, na.rm = TRUE)
+  )
+
+kable(summary_blocks, digits = 2, caption = "Sleep Summary by 2-Week Block") %>%
+  kable_styling(full_width = FALSE)
 ```
