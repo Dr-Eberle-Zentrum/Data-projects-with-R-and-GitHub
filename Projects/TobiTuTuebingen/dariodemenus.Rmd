@@ -1,0 +1,67 @@
+---
+title: "Windkraftausbau in Baden-Württemberg"
+author: "Dario Demenus"
+date: "`r Sys.Date()`"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(tidyverse)
+library(lubridate)
+library(ggcorrplot) # Optional, helps with correlograms, but we can do it manually with ggplot too
+library(viridis)    # For nice map colors
+```
+
+
+```{r dataimport}
+# Import using readr. 
+# The locale encoding argument helps ensure special characters are read correctly.
+wind_data <- read_delim("WindenergieBW.csv", 
+                        delim = ",", 
+                        locale = locale(encoding = "UTF-8"))
+
+# Inspect column names to ensure no BOM artifacts (like "ï..Zuständige")
+colnames(wind_data)
+
+# Data Cleaning Pipeline
+clean_wind <- wind_data %>%
+  # Rename columns for easier access (CamelCase or English is often easier)
+  rename(
+    Landkreis = `Zuständige Dienststelle`,
+    Gemeinde = Standortgemeinde,
+    Leistung_MW = `Generatorleistung [MW]`,
+    Nabenhoehe_m = `Nabenhöhe [m]`,
+    Rotor_m = `Rotordurchmesser [m]`,
+    Inbetriebnahme = Inbetriebnahmedatum
+  ) %>%
+  # Convert Date from character (German format dd.mm.yyyy) to Date object
+  mutate(Inbetriebnahme = dmy(Inbetriebnahme)) %>%
+  mutate(Jahr = year(Inbetriebnahme)) %>%
+  # Filter out rows that might have missing coordinates if necessary for the map
+  filter(!is.na(Ost), !is.na(Nord))
+
+# Preview
+head(clean_wind)
+```
+
+```{r yearly_wind_capacity}
+# Aggregating new capacity per year
+yearly_stats <- clean_wind %>%
+  group_by(Jahr) %>%
+  summarise(
+    New_Turbines = n(),
+    Total_Power = sum(Leistung_MW, na.rm = TRUE)
+  )
+
+# Plotting
+ggplot(yearly_stats, aes(x = Jahr)) +
+  geom_bar(aes(y = New_Turbines), stat = "identity", fill = "steelblue", alpha = 0.7) +
+  geom_line(aes(y = Total_Power * 10), color = "red", size = 1) + # Scaling for visibility
+  scale_y_continuous(
+    name = "Anzahl neue Windräder",
+    sec.axis = sec_axis(~./10, name = "Neu installierte Leistung [MW]")
+  ) +
+  theme_minimal() +
+  labs(title = "Windkraftausbau pro Jahr (Anzahl vs. Leistung)")
+```
