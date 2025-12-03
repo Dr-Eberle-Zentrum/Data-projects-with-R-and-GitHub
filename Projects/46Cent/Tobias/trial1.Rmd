@@ -13,14 +13,10 @@ library(ggplot2)
 ## Data Import
 
 ```{r dataimport}
-ufcevents <- readr::read_csv(".Projects/46Cent/Tobias/Events.csv")
-View(ufcevents)
-ufcfightersstat <- readr::read_csv(".Projects/46Cent/Tobias/fightersstats.csv")
-View(ufcfightersstat)
-ufcfighters <- readr::read_csv("./Projects/46Cent/Tobias/fighters.csv")
-View(ufcfighters)
-ufcfights <- readr::read_csv("./Projects/46Cent/Tobias/Fights.csv")
-View(ufcfights)
+ufcevents <- readr::read_csv("Events.csv")
+ufcfightersstat <- readr::read_csv("Fighters stats.csv")
+ufcfighters <- readr::read_csv("fighters.csv")
+ufcfights <- readr::read_csv("Fights.csv")
 ```
 
 ## Data Manipulation and Visualization
@@ -72,7 +68,7 @@ ggplot(plotdata, aes(x = Weight_Class, y = Value, fill = Type))+
 
 ### Second Visualization:
 
-```{r graph2}
+```{r graph2, warning = FALSE}
 ufcfigthershtoreach <- ufcfighters %>%
   mutate(
     heighttoreach = Ht. / Reach, na.rm = TRUE
@@ -81,7 +77,6 @@ ufcfigthershtoreach <- ufcfighters %>%
     wlratio = W / (W+L)
   )
   
-View(ufcfigthershtoreach)
 
 ggplot(ufcfigthershtoreach,aes(x = heighttoreach, y = wlratio))+
   geom_point()+
@@ -104,7 +99,6 @@ ufccountry <- ufcevents %>%
            sep = ",\\s*",
            fill = "left",
            extra = "merge")
-View(ufccountry)
 
 ufccountrygroups <- ufccountry %>%
   group_by(Country) %>%
@@ -120,7 +114,7 @@ events_world_map <- world %>%
   left_join(ufccountrygroups, by = c("region" = "Country"))
 # Plotten:
 ggplot(events_world_map, aes(x= long, y = lat, group = group, fill = n))+
-  geom_polygon(color = "black", outline_width= 0.1)+
+  geom_polygon(color = "black")+
   scale_fill_continuous(name = "Number of Events", na.value = "white")+
   theme_minimal()+
   labs(title = "Most UFC events in US")
@@ -129,7 +123,7 @@ ggplot(events_world_map, aes(x= long, y = lat, group = group, fill = n))+
 
 ### Fourth Graph
 
-Problem: Spaltennamen sind nicht vergeben, aus den Abkürzungen werde ich nicht schlau, Feedback ist gegeben.
+Problem: Spaltennamen sind nicht vergeben, aus den Abkürzungen werde ich nicht schlau, Feedback ist gegeben. Der jetzige Graph macht so nämlich keinen Sinn.
 ```{r fourthgraph}
 
 ufcmethod <- ufcfights %>%
@@ -146,7 +140,7 @@ graph <- ufcmethod %>%
   labs(x = "Method",
        y = "Number",
        title = "Most Knock-outs in UFC through ")
-
+print(graph)
 ```
 
 ### Fifth Graph
@@ -158,7 +152,6 @@ ufcyearlydata <- ufcevents %>%
   group_by(year) %>%
   summarise(n = n()) %>%
   arrange(desc(n))
-View(ufcyearlydata)
 
 ggplot(ufcyearlydata, aes(x = year, y = n))+
   geom_line(color = "blue")+
