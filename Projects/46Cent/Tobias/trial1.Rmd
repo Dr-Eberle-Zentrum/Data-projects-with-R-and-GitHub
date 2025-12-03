@@ -1,22 +1,35 @@
+---
+title: "Solution of UFC Statistics from Gabriel"
+output: html_document
+---
+
 # Solution of UFC Statistics from Gabriel
 
+```{r setup, include = FALSE}
 library(tidyverse)
 library(ggplot2)
+```
 
-######### Data import ######################
+## Data Import
 
-ufcevents <- readr::read_csv("./Projects/TobiTuTuebingen/UFCdata/events.csv")
+```{r dataimport}
+ufcevents <- readr::read_csv(".Projects/46Cent/Tobias/Events.csv")
 View(ufcevents)
-ufcfightersstat <- readr::read_csv("./Projects/TobiTuTuebingen/UFCdata/Fighters Stats.csv")
+ufcfightersstat <- readr::read_csv(".Projects/46Cent/Tobias/fightersstats.csv")
 View(ufcfightersstat)
-ufcfighters <- readr::read_csv("./Projects/TobiTuTuebingen/UFCdata/fighters.csv")
+ufcfighters <- readr::read_csv("./Projects/46Cent/Tobias/fighters.csv")
 View(ufcfighters)
-ufcfights <- readr::read_csv("./Projects/TobiTuTuebingen/UFCdata/Fights.csv")
+ufcfights <- readr::read_csv("./Projects/46Cent/Tobias/Fights.csv")
 View(ufcfights)
+```
 
-######### Data manipulation ################
+## Data Manipulation and Visualization
 
-# Firt Graph: 
+It is structure graph centered, so manipulation and plotting are in the same chunk.
+
+### First Visualization:
+
+```{r wlratio}
 # hier haben wir das wlratio berechnet
 ufcfigtherswl <- ufcfightersstat %>%
   mutate(wlratio = W / (W + L) ) %>%
@@ -54,11 +67,12 @@ ggplot(plotdata, aes(x = Weight_Class, y = Value, fill = Type))+
   )+
   theme_minimal()+
   theme(axis.text = element_text(angle = 45, hjust = 1))
+```
 
-View(ufcfigtherswl)
-View(ufc_top_per_class)
 
-# Second Graph: 
+### Second Visualization:
+
+```{r graph2}
 ufcfigthershtoreach <- ufcfighters %>%
   mutate(
     heighttoreach = Ht. / Reach, na.rm = TRUE
@@ -68,8 +82,22 @@ ufcfigthershtoreach <- ufcfighters %>%
   )
   
 View(ufcfigthershtoreach)
-# Third Graph:
 
+ggplot(ufcfigthershtoreach,aes(x = heighttoreach, y = wlratio))+
+  geom_point()+
+  geom_smooth()+
+  labs(
+    title = "Longer arms don't necessarily help figthers to win",
+    caption = "Ploting by Tobias Tuchel. Data from UFC",
+    x = "Win / Loose Ratio",
+    y = "Height to reach Ratio"
+  )
+
+```
+
+### Third Graph
+
+```{r thirdgraph}
 ufccountry <- ufcevents %>%
   separate(Location,
            into = c("City", "State", "Country"),
@@ -83,41 +111,6 @@ ufccountrygroups <- ufccountry %>%
   summarise(n = n()) %>%
   arrange(desc(n)) 
 
-# 4th Visualization:
-ufcmethod <- ufcfights %>%
-  group_by(Method) %>%
-  summarise(n = n()) %>%
-  arrange(desc(n))
-
-# 5th Visualization:
-ufcyearlydata <- ufcevents %>%
-  mutate(year = year(Date)) %>%
-  group_by(year) %>%
-  summarise(n = n()) %>%
-  arrange(desc(n))
-View(ufcyearlydata)
-######### Data visualization goals #########
-
-# W / L ratio for top 10 per weight class: 
-# Datenverarbeitung klappt gerade nicht
-
-
-
-
-# 2nd Long arms help figthers?
-
-ggplot(ufcfigthershtoreach,aes(x = heighttoreach, y = wlratio))+
-  geom_point()+
-  geom_smooth()+
-  labs(
-    title = "Longer arms don't necessarily help figthers to win",
-    caption = "Ploting by Tobias Tuchel. Data from UFC",
-    x = "Win / Loose Ratio",
-    y = "Height to reach Ratio"
-  )
-
-# 3rd Visualization: 
-install.packages("maps")
 library(maps)
 
 # Geometriedaten:
@@ -132,8 +125,18 @@ ggplot(events_world_map, aes(x= long, y = lat, group = group, fill = n))+
   theme_minimal()+
   labs(title = "Most UFC events in US")
 
-# 4th Visualization
-View(ufcmethod)
+```
+
+### Fourth Graph
+
+Problem: Spaltennamen sind nicht vergeben, aus den Abkürzungen werde ich nicht schlau, Feedback ist gegeben.
+```{r fourthgraph}
+
+ufcmethod <- ufcfights %>%
+  group_by(Method) %>%
+  summarise(n = n()) %>%
+  arrange(desc(n))
+
 graph <- ufcmethod %>%
   filter(Method %in% c("KO/TKO Punch", "KO/TKO Punches", "Submission",
                        "Doctor Stoppage", "Decision", "Draw", "Disqualification")) %>%
@@ -143,10 +146,19 @@ graph <- ufcmethod %>%
   labs(x = "Method",
        y = "Number",
        title = "Most Knock-outs in UFC through ")
-# -> Problem: Spaltennamen sind nicht vergeben, aus den Abkürzungen werde ich nicht
-# schlau, Feedback ist gegeben.
 
-# 5th visualization: Expansion of the sport
+```
+
+### Fifth Graph
+
+```{r graphfive}
+
+ufcyearlydata <- ufcevents %>%
+  mutate(year = year(Date)) %>%
+  group_by(year) %>%
+  summarise(n = n()) %>%
+  arrange(desc(n))
+View(ufcyearlydata)
 
 ggplot(ufcyearlydata, aes(x = year, y = n))+
   geom_line(color = "blue")+
@@ -154,3 +166,7 @@ ggplot(ufcyearlydata, aes(x = year, y = n))+
        y = "year",
        title = "Sharp increase in UFC events till Pandemic")+
   theme_minimal()
+```
+
+
+
