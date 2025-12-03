@@ -63,6 +63,8 @@ ggplot(plotdata, aes(x = Weight_Class, y = Value, fill = Type))+
   )+
   theme_minimal()+
   theme(axis.text = element_text(angle = 45, hjust = 1))
+
+ggsave("tobivis1.png", path = "./plots", width = 600, height = 400, units = ("px"), dpi = 300)
 ```
 
 
@@ -88,6 +90,7 @@ ggplot(ufcfigthershtoreach,aes(x = heighttoreach, y = wlratio))+
     y = "Height to reach Ratio"
   )
 
+ggsave("tobivis2.png", path = "./plots", width = 600, height = 400, units = ("px"), dpi = 300)
 ```
 
 ### Third Graph
@@ -119,6 +122,8 @@ ggplot(events_world_map, aes(x= long, y = lat, group = group, fill = n))+
   theme_minimal()+
   labs(title = "Most UFC events in US")
 
+ggsave("tobivis3.png", path = "./plots", width = 600, height = 400, units = ("px"), dpi = 300)
+
 ```
 
 ### Fourth Graph
@@ -141,6 +146,8 @@ graph <- ufcmethod %>%
        y = "Number",
        title = "Most Knock-outs in UFC through ")
 print(graph)
+
+ggsave("tobivis4.png", path = "./plots", width = 600, height = 400, units = ("px"), dpi = 300)
 ```
 
 ### Fifth Graph
@@ -160,7 +167,7 @@ ggplot(ufcyearlydata, aes(x = year, y = n))+
        title = "Sharp increase in UFC events till Pandemic")+
   theme_minimal()
 
-ggsave()
+ggsave("tobivis5.png", path = "./plots", width = 600, height = 400, units = ("px"), dpi = 300)
 
 ```
 
