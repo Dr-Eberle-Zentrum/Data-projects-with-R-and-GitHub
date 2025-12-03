@@ -159,6 +159,9 @@ ggplot(ufcyearlydata, aes(x = year, y = n))+
        y = "year",
        title = "Sharp increase in UFC events till Pandemic")+
   theme_minimal()
+
+ggsave()
+
 ```
 
 
