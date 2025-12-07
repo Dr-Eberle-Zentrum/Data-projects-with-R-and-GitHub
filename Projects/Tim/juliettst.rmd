@@ -1,26 +1,23 @@
 ---
-title: "juliettst"
+title: "Solution for Tim's Project"
 author: "Julia Siodmiak"
 date: "`r Sys.Date()`"
-output: html_document
+output: md_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 ```
-
-# Libraries
 
 ```{r}
 library(ggplot2)
 library(dplyr)
 library(knitr)
 library(tibble)
+library(tidyr)
 
 
 ```
-
-# Data loading
 
 ```{r}
 klimadaten <- read.csv2("klimadaten_tuebingen.csv",  header = TRUE)
@@ -43,7 +40,7 @@ klimadaten_check <- read.csv("klimadaten_tuebingen.csv", sep = ";")
 -   starkniederschlag_20mm_tage: Anzahl Tage mit N ≥ 20 mm
 -   trockenperiode_tage_maximum: Dauer der längsten Trockenperiode mit Tagen \< 1 mm
 
-# Answers
+# Solutions
 
 -   Wie veränderte sich die Temperatur im zeitlichen Verlauf?
 
@@ -53,9 +50,8 @@ ggplot(klimadaten %>%
        aes(x = jahr, y = temperatur_mittelwert)) +  
   geom_line(color = "orange") +
   geom_smooth(method = "lm", se = TRUE, color = "blue", linetype = "dashed") +  # Trendlinie
-  labs(title = "Temperaturentwicklung mit Trend")
   labs(
-    title = "Temperaturentwicklung in Tübingen (1961-2024)",
+    title = "Temperaturentwicklung in Tübingen (1961-2024) mit Trend",
     subtitle = "Jahresmitteltemperatur",
     x = "Jahr",
     y = "Temperatur (°C)"
@@ -64,10 +60,7 @@ scale_y_continuous(breaks = seq(5, 15, by = 0.5)) +
   theme_minimal() +
   theme(
     plot.title = element_text(size = 14, face = "bold"),
-    plot.subtitle = element_text(size = 10)
-  )
-
-
+    plot.subtitle = element_text(size = 10))
 ```
 
 -   Wie verändert sich die Temperatur im Jahreszeitlichen Verlauf, über den gesamten Messzeitraum?
@@ -76,8 +69,8 @@ scale_y_continuous(breaks = seq(5, 15, by = 0.5)) +
 ggplot(klimadaten %>%
          filter(saison ==c("winter_djf", "fruehjahr_mam", "sommer_jja", "herbst_son")),
        aes(x = jahr, y = temperatur_mittelwert, color = saison)) +  
-  geom_line(size = 1) +
-  geom_smooth(method = "lm", se = FALSE, linetype = "dashed", size = 0.5) +
+  geom_line(linewidth = 1) +
+  geom_smooth(method = "lm", se = FALSE, linetype = "dashed", linewidth = 0.5) +
   scale_color_manual(values = c("fruehjahr_mam" = "#2ca02c", "sommer_jja" = "#ff7f0e", 
                                 "herbst_son" = "#d62728", "winter_djf" = "#1f77b4")) +
   labs(
@@ -229,7 +222,7 @@ ggplot(klimadaten %>%
                                                  "31-40", ">40"),
                                        right = TRUE)),
        aes(x = jahr, y = periode_kategorie, fill = trockenperiode_tage_maximum)) +
-  geom_tile(color = "white", size = 1) +
+  geom_tile(color = "white", linewidth = 1) +
   geom_text(aes(label = trockenperiode_tage_maximum), 
             color = "white", size = 3, fontface = "bold") +
   scale_fill_gradient(low = "#fee5d9", high = "#a50f15", 
@@ -286,7 +279,7 @@ ggplot(klimadaten %>%
          ) %>%
          count(tropennaechte_kat, trockenperiode_kat),
        aes(x = tropennaechte_kat, y = trockenperiode_kat, fill = n)) +
-  geom_tile(color = "white", size = 1) +
+  geom_tile(color = "white", linewidth = 1) +
   geom_text(aes(label = n), color = "white", size = 5, fontface = "bold") +
   scale_fill_gradient(low = "#fee5d9", high = "#a50f15", 
                       name = "Anzahl\nJahre") +
