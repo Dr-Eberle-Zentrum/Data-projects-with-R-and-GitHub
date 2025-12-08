@@ -101,7 +101,7 @@
     ## Warning: Removed 8 rows containing missing values or values outside the scale range
     ## (`geom_point()`).
 
-![](Dario_solution_files/unnamed-chunk-2-1.png)
+![](unnamed-chunk-2-1.png)
 
     # Aufgabe 2: 
 
@@ -152,5 +152,6 @@
     ## Warning: Removed 8 rows containing missing values or values outside the scale range
     ## (`geom_point()`).
 
-![](Dario_solution_files/unnamed-chunk-3-1.png)
+![](unnamed-chunk-3-1.png)
+
 
