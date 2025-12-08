@@ -94,7 +94,7 @@ same chunk.
       theme_minimal()+
       theme(axis.text = element_text(angle = 45, hjust = 1))
 
-![](trial1_files/figure-markdown_strict/wlratio-1.png)
+![](plots/tobivis1.png)
 
     ggsave("tobivis1.png", path = "./plots", width = 600, height = 400, units = ("px"), dpi = 300)
 
@@ -121,7 +121,7 @@ same chunk.
 
     ## `geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'
 
-![](trial1_files/figure-markdown_strict/graph2-1.png)
+![](plots/tobivis2.png)
 
     ggsave("tobivis2.png", path = "./plots", width = 600, height = 400, units = ("px"), dpi = 300)
 
@@ -164,7 +164,7 @@ same chunk.
       theme_minimal()+
       labs(title = "Most UFC events in US")
 
-![](trial1_files/figure-markdown_strict/thirdgraph-1.png)
+![](plots/tobivis3.png)
 
     ggsave("tobivis3.png", path = "./plots", width = 600, height = 400, units = ("px"), dpi = 300)
 
@@ -190,7 +190,7 @@ keinen Sinn.
            title = "Most Knock-outs in UFC through ")
     print(graph)
 
-![](trial1_files/figure-markdown_strict/fourthgraph-1.png)
+![](plots/tobivis4.png)
 
     ggsave("tobivis4.png", path = "./plots", width = 600, height = 400, units = ("px"), dpi = 300)
 
@@ -209,6 +209,6 @@ keinen Sinn.
            title = "Sharp increase in UFC events till Pandemic")+
       theme_minimal()
 
-![](trial1_files/figure-markdown_strict/graphfive-1.png)
+![](plots/tobivis5.png)
 
     ggsave("tobivis5.png", path = "./plots", width = 600, height = 400, units = ("px"), dpi = 300)
