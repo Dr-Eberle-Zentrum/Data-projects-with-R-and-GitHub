@@ -1,6 +1,6 @@
 ---
 title: "Solution of UFC Statistics from Gabriel"
-output: html_document
+output: md_document
 ---
 
 # Solution of UFC Statistics from Gabriel
