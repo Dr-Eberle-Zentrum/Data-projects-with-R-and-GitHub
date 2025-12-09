@@ -9,7 +9,7 @@ output: md_document
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 ```
 
-```{r}
+```{r Libraries}
 library(ggplot2)
 library(dplyr)
 library(knitr)
@@ -44,7 +44,7 @@ klimadaten_check <- read.csv("klimadaten_tuebingen.csv", sep = ";")
 
 -   Wie veränderte sich die Temperatur im zeitlichen Verlauf?
 
-```{r}
+```{r Temperaturentwicklung in Tübingen (1961-2024) mit Trend }
 ggplot(klimadaten %>%
          filter(saison == "kalenderjahr"),
        aes(x = jahr, y = temperatur_mittelwert)) +  
@@ -65,7 +65,7 @@ scale_y_continuous(breaks = seq(5, 15, by = 0.5)) +
 
 -   Wie verändert sich die Temperatur im Jahreszeitlichen Verlauf, über den gesamten Messzeitraum?
 
-```{r}
+```{r Saisonale Temperaturentwicklung (1961-2024)}
 ggplot(klimadaten %>%
          filter(saison ==c("winter_djf", "fruehjahr_mam", "sommer_jja", "herbst_son")),
        aes(x = jahr, y = temperatur_mittelwert, color = saison)) +  
@@ -91,7 +91,7 @@ ggplot(klimadaten %>%
 
 -   Wie verhalten sich die Niederschlagsmengen in Kombination mit den Heißen Tagen?
 
-```{r}
+```{r Zusammenhang: Niederschlag und Heiße Tage}
 
 ggplot(klimadaten, aes(x = niederschlag_summe, y = temperatur_heisse_tage)) +
   geom_point(aes(color = jahr), size = 3, alpha = 0.7) +
@@ -118,7 +118,7 @@ cat("\nKorrelation Niederschlag - Heiße Tage:", round(cor_niederschlag_heiss, 3
 
 -   Wie entwickeln sich die Heißtage und Frost im laufe der Zeit und Sasional?
 
-```{r}
+```{r Entwicklung Extrem-Temperaturtage (1961-2024)}
 
 ggplot(klimadaten %>%
          filter(saison == "kalenderjahr") %>%
@@ -148,7 +148,7 @@ ggplot(klimadaten %>%
 
 Saisonale Trenddiagramme, alle Saisons in einem Diagramm
 
-```{r}
+```{r Saisonale Trenddiagramme, alle Saisons in einem Diagramm}
 
 ggplot(klimadaten %>%
          filter(saison ==c("winter_djf", "fruehjahr_mam", "sommer_jja", "herbst_son")) %>%
@@ -179,7 +179,7 @@ ggplot(klimadaten %>%
 
 <!--# Mittelwert von was?  -->
 
-```{r}
+```{r Klimadaten 2023}
 ggplot(klimadaten %>%
          filter(jahr == 2023) %>%
          select(saison, temperatur_mittelwert, niederschlag_summe, 
@@ -213,7 +213,7 @@ Darstellung mithilfe einer Heatmap
 
 -   Wie häufig treten Trockenperioden auf und wie lange dauern diese an?
 
-```{r}
+```{r Häufigkeit und Dauer von Trockenperioden}
 ggplot(klimadaten %>%
          filter(saison == "kalenderjahr") %>%
          mutate(periode_kategorie = cut(trockenperiode_tage_maximum,
