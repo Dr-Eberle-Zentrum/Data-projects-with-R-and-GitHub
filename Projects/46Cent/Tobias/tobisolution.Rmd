@@ -15,9 +15,9 @@ library(here)
 
 ```{r dataimport}
 ufcevents <- readr::read_csv("../Events.csv")
-ufcfightersstat <- readr::read_csv(".../Fighters stat.csv")
-ufcfighters <- readr::read_csv(".../fighters.csv")
-ufcfights <- readr::read_csv(".../Fights.csv")
+ufcfightersstat <- readr::read_csv("../Fighters stats.csv")
+ufcfighters <- readr::read_csv("../fighters.csv")
+ufcfights <- readr::read_csv("../Fights.csv")
 ```
 
 ## Data Manipulation and Visualization
@@ -26,27 +26,30 @@ It is structure graph centered, so manipulation and plotting are in the same chu
 
 ### First Visualization:
 
+Das Problem ist, dass die Namen zu lang sind um im Plot darstellbar zu sein. Daher bediene ich mich einer Tabelle und einer Codierung, um die Namen der in ihrer Gewichtsklasse jeweils besten Kämpfer aufzulisten.
+
 ```{r wlratio}
 # hier haben wir das wlratio berechnet
 ufcfigtherswl <- ufcfightersstat %>%
-  mutate(wlratio = W / (W + L) ) %>%
+  mutate(wlratio = (W+1) / (W + L +2) ) %>%
   group_by(Weight_Class) %>%
   summarise(mean_wlratio = mean(wlratio, na.rm = TRUE))
 # hier haben wir den jeweils stärksten rausgefiltert:
 ufc_top_per_class <- ufcfightersstat %>%
-  mutate(wlratio = W / (W + L)) %>%
+  mutate(wlratio = (W+1) / (W + L +2)) %>%
   group_by(Weight_Class) %>%
   slice_max(wlratio, n = 1, with_ties = FALSE)
 # Zusammenführen der Tabellen:
 ufc_combined <- ufc_top_per_class %>%
-  select(Weight_Class, Fighter = `Full Name`, fighter_wlratio = wlratio) %>%
+  ungroup() %>% 
+  mutate(Fighter_Code = row_number()) %>%
+  select(Weight_Class, Fighter = `Full Name`, fighter_wlratio = wlratio, Fighter_Code) %>%
   left_join(ufcfigtherswl, by = "Weight_Class") %>%
   filter(!Weight_Class%in% c("Women's Bantamweight",
                              "Women's Featherweight",
                              "Women's Flyweight",
-                             "Women's Strawweight"))
-# Daten in long format:
-plotdata <- ufc_combined %>%
+                             "Women's Strawweight",
+                             "Open Weight")) %>%
   pivot_longer(cols = c(fighter_wlratio, mean_wlratio),
                names_to = "Type",
                values_to = "Value") %>%
@@ -54,41 +57,55 @@ plotdata <- ufc_combined %>%
                        "fighter_wlratio" = "Top Fighter",
                        "mean_wlratio" = "Class Mean"))
 
-ggplot(plotdata, aes(x = Weight_Class, y = Value, fill = Type))+
+ggplot(ufc_combined, aes(x = Weight_Class, y = Value, fill = Type))+
   geom_col(position = position_dodge())+
+  geom_text(
+    data = subset(plotdata, Type == "Top Fighter"),
+    aes(label = Fighter_Code),
+    position = position_dodge(width = 0.9), 
+    vjust = 0.5,   # Vertikale Zentrierung
+    color = "black", 
+    fontface = "bold",
+    size = 4
+  )+
   labs(
     title = "W/L Ratio: Top Fighter vs. Class Mean",
     x = "Weight Class",
     y = "W/L Ratio",
-  fill = ""
+    fill = ""
   )+
   theme_minimal()+
-  theme(axis.text = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ggsave("tobivis1.png", path = "./plots", width = 600, height = 400, units = ("px"), dpi = 300)
 ```
+In der folgenden Legende ist der jeweilige Spitzenreiter in seiner Gewichtsklasse aufgelistet:
+```{r legendtabletopfighter}
+fighter_codes_legend <- ufc_combined %>%
+  select(Code = Fighter_Code, Klasse = Weight_Class, Kämpfer = Fighter)
 
+print(fighter_codes_legend)
+```
 
 ### Second Visualization:
 
 ```{r graph2, warning = FALSE}
 ufcfigthershtoreach <- ufcfighters %>%
   mutate(
-    heighttoreach = Ht. / Reach, na.rm = TRUE
+    reachtoheigth = Reach / Ht., na.rm = TRUE
   ) %>%
   mutate(
-    wlratio = W / (W+L)
+    wlratio = (W+1) / (W + L +2)
   )
-  
 
-ggplot(ufcfigthershtoreach,aes(x = heighttoreach, y = wlratio))+
+ggplot(ufcfigthershtoreach,aes(x = reachtoheigth, y = wlratio))+
   geom_point()+
   geom_smooth()+
   labs(
     title = "Longer arms don't necessarily help figthers to win",
     caption = "Ploting by Tobias Tuchel. Data from UFC",
-    x = "Win / Loose Ratio",
-    y = "Height to reach Ratio"
+    x = "Reach to heigth Ratio",
+    y = "Win / Loose Ratio"
   )
 
 ggsave("tobivis2.png", path = "./plots", width = 600, height = 400, units = ("px"), dpi = 300)
@@ -102,9 +119,7 @@ ufccountry <- ufcevents %>%
            into = c("City", "State", "Country"),
            sep = ",\\s*",
            fill = "left",
-           extra = "merge")
-
-ufccountrygroups <- ufccountry %>%
+           extra = "merge") %>%
   group_by(Country) %>%
   summarise(n = n()) %>%
   arrange(desc(n)) 
@@ -115,11 +130,12 @@ library(maps)
 world <- map_data("world")
 # Joining:
 events_world_map <- world %>%
-  left_join(ufccountrygroups, by = c("region" = "Country"))
+  left_join(ufccountry, by = c("region" = "Country"))
 # Plotten:
 ggplot(events_world_map, aes(x= long, y = lat, group = group, fill = n))+
   geom_polygon(color = "black")+
-  scale_fill_continuous(name = "Number of Events", na.value = "white")+
+  scale_fill_gradient(name = "Number of Events", na.value = "white", 
+                      low = "yellow", high = "red")+
   theme_minimal()+
   labs(title = "Most UFC events in US")
 
@@ -133,20 +149,25 @@ Problem: Spaltennamen sind nicht vergeben, aus den Abkürzungen werde ich nicht 
 ```{r fourthgraph}
 
 ufcmethod <- ufcfights %>%
-  group_by(Method) %>%
+  mutate(
+    Aggregated_Method = case_when(
+      grepl("KO/TKO|KO/TKO Punches|KO/TKO Punch", Method) ~ "Knockout (KO/TKO)",
+      grepl("U-DEC|S-DEC|M-DEC", Method) ~ "Decision (U/S/M)",
+      grepl("SUB|Sub", Method) ~ "Submission",
+      TRUE ~ as.character(Method)
+    )
+  ) %>%
+  group_by(Aggregated_Method) %>%
   summarise(n = n()) %>%
-  arrange(desc(n))
-
-graph <- ufcmethod %>%
-  filter(Method %in% c("KO/TKO Punch", "KO/TKO Punches", "Submission",
-                       "Doctor Stoppage", "Decision", "Draw", "Disqualification")) %>%
-  ggplot(aes(x = reorder(Method, n), y = n)) +
-  geom_col(fill = "blue") +
+  slice_max() %>%
+  ggplot(aes(x = reorder(Aggregated_Method, n), y = n)) +
+  geom_col(fill = "darkgreen") + 
+  theme_minimal() + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1))+
-  labs(x = "Method",
-       y = "Number",
-       title = "Most Knock-outs in UFC through ")
-print(graph)
+  labs(x = "Methoden-Kategorie",
+       y = "Anzahl der Kämpfe",
+       title = "Häufigkeit der UFC-Entscheidungsmethoden")
+print(ufcmethod)
 
 ggsave("tobivis4.png", path = "./plots", width = 600, height = 400, units = ("px"), dpi = 300)
 ```
