@@ -83,7 +83,8 @@ In der folgenden Legende ist der jeweilige Spitzenreiter in seiner Gewichtsklass
 ```{r legendtabletopfighter}
 library(knitr)
 fighter_codes_legend <- ufc_combined %>%
-  select(Code = Fighter_Code, Klasse = Weight_Class, Kämpfer = Fighter)
+  select(Code = Fighter_Code, Klasse = Weight_Class, Kämpfer = Fighter) %>%
+  distinct()
 
 kable(fighter_codes_legend)
 ```

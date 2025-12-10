@@ -117,7 +117,8 @@ Gewichtsklasse aufgelistet:
 
     library(knitr)
     fighter_codes_legend <- ufc_combined %>%
-      select(Code = Fighter_Code, Klasse = Weight_Class, Kämpfer = Fighter)
+      select(Code = Fighter_Code, Klasse = Weight_Class, Kämpfer = Fighter) %>%
+      distinct()
 
     kable(fighter_codes_legend)
 
@@ -136,24 +137,9 @@ Gewichtsklasse aufgelistet:
 <td style="text-align: left;">Malcolm Wellmaker</td>
 </tr>
 <tr>
-<td style="text-align: right;">1</td>
-<td style="text-align: left;">Bantamweight</td>
-<td style="text-align: left;">Malcolm Wellmaker</td>
-</tr>
-<tr>
 <td style="text-align: right;">2</td>
 <td style="text-align: left;">Catch Weight</td>
 <td style="text-align: left;">Khamzat Chimaev</td>
-</tr>
-<tr>
-<td style="text-align: right;">2</td>
-<td style="text-align: left;">Catch Weight</td>
-<td style="text-align: left;">Khamzat Chimaev</td>
-</tr>
-<tr>
-<td style="text-align: right;">3</td>
-<td style="text-align: left;">Featherweight</td>
-<td style="text-align: left;">Movsar Evloev</td>
 </tr>
 <tr>
 <td style="text-align: right;">3</td>
@@ -166,24 +152,9 @@ Gewichtsklasse aufgelistet:
 <td style="text-align: left;">Rafael Estevam</td>
 </tr>
 <tr>
-<td style="text-align: right;">4</td>
-<td style="text-align: left;">Flyweight</td>
-<td style="text-align: left;">Rafael Estevam</td>
-</tr>
-<tr>
 <td style="text-align: right;">5</td>
 <td style="text-align: left;">Heavyweight</td>
 <td style="text-align: left;">Jon Jones</td>
-</tr>
-<tr>
-<td style="text-align: right;">5</td>
-<td style="text-align: left;">Heavyweight</td>
-<td style="text-align: left;">Jon Jones</td>
-</tr>
-<tr>
-<td style="text-align: right;">6</td>
-<td style="text-align: left;">Light Heavyweight</td>
-<td style="text-align: left;">Azamat Murzakanov</td>
 </tr>
 <tr>
 <td style="text-align: right;">6</td>
@@ -196,24 +167,9 @@ Gewichtsklasse aufgelistet:
 <td style="text-align: left;">Khabib Nurmagomedov</td>
 </tr>
 <tr>
-<td style="text-align: right;">7</td>
-<td style="text-align: left;">Lightweight</td>
-<td style="text-align: left;">Khabib Nurmagomedov</td>
-</tr>
-<tr>
 <td style="text-align: right;">8</td>
 <td style="text-align: left;">Middleweight</td>
 <td style="text-align: left;">Phillip Miller</td>
-</tr>
-<tr>
-<td style="text-align: right;">8</td>
-<td style="text-align: left;">Middleweight</td>
-<td style="text-align: left;">Phillip Miller</td>
-</tr>
-<tr>
-<td style="text-align: right;">10</td>
-<td style="text-align: left;">Welterweight</td>
-<td style="text-align: left;">Shavkat Rakhmonov</td>
 </tr>
 <tr>
 <td style="text-align: right;">10</td>
