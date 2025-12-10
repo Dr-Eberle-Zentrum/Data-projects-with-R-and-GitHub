@@ -81,10 +81,11 @@ ggsave("tobivis1.png", path = "./plots", width = 600, height = 400, units = ("px
 ```
 In der folgenden Legende ist der jeweilige Spitzenreiter in seiner Gewichtsklasse aufgelistet:
 ```{r legendtabletopfighter}
+library(knitr)
 fighter_codes_legend <- ufc_combined %>%
   select(Code = Fighter_Code, Klasse = Weight_Class, Kämpfer = Fighter)
 
-print(fighter_codes_legend)
+kable(fighter_codes_legend)
 ```
 
 ### Second Visualization:
