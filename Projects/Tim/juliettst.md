@@ -44,7 +44,7 @@ Saisonale Trenddiagramme, alle Saisons in einem Diagramm
 
 -   Wie sieht der Mittelwert im Jahr 2023 aus?
 
-<!--# Mittelwert von was?  -->
+<!--# Mittelwert von was?  Temperatur --> 
 
 ![](juliettst_files/figure-markdown_strict/Klimadaten%202023-1.png)
 
@@ -58,7 +58,7 @@ Heatmap, Barplot
 
 -   Gibt es einen Zusammenhang zwischen Tropennächten und Trockentagen?
 
-<!--# Da es keine Tropennächte gibts, checke ich überhaupt nicht was da gemacht sein sollte -->
+<!--# Da es keine Tropennächte gibts, checke ich überhaupt nicht was da gemacht sein sollte.  Vlt besser, Zusammenhang zwischen Anzahl Troppennächten und Anzahl Hitzetagen, im zeitlichen Verlauf.   -->
 
 ![](juliettst_files/figure-markdown_strict/unnamed-chunk-2-1.png)![](juliettst_files/figure-markdown_strict/unnamed-chunk-2-2.png)
 
