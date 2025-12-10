@@ -106,7 +106,40 @@ ggplot(ufcfigthershtoreach,aes(x = reachtoheigth, y = wlratio))+
     caption = "Ploting by Tobias Tuchel. Data from UFC",
     x = "Reach to heigth Ratio",
     y = "Win / Loose Ratio"
-  )
+  )+
+  geom_text(
+    data = ufcfigthershtoreach %>%
+      slice_max(reachtoheigth, n = 1, with_ties = FALSE),
+                aes(label = `Full Name`),
+    vjust = 0,
+    hjust = 0.8,
+    color = "white"
+  )+
+  geom_text(
+    data = ufcfigthershtoreach %>%
+      slice_min(reachtoheigth, n = 1, with_ties = FALSE),
+    aes(label = `Full Name`),
+    vjust = 0,
+    hjust = 0,
+    color = "white"
+  )+
+  geom_text(
+    data = ufcfigthershtoreach %>%
+      slice_min(wlratio, n = 1, with_ties = FALSE),
+    aes(label = `Full Name`),
+    vjust = 0,
+    hjust = 0,
+    color = "white"
+  )+
+  geom_text(
+    data = ufcfigthershtoreach %>%
+      slice_max(wlratio, n = 1, with_ties = FALSE),
+    aes(label = `Full Name`),
+    vjust = 0,
+    hjust = 0,
+    color = "white"
+  )+
+    theme_dark()
 
 ggsave("tobivis2.png", path = "./plots", width = 600, height = 400, units = ("px"), dpi = 300)
 ```
