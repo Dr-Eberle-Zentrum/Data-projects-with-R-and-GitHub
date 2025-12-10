@@ -159,14 +159,14 @@ ufcmethod <- ufcfights %>%
   ) %>%
   group_by(Aggregated_Method) %>%
   summarise(n = n()) %>%
-  slice_max() %>%
+  slice_max(n, n = 10) %>%
   ggplot(aes(x = reorder(Aggregated_Method, n), y = n)) +
   geom_col(fill = "darkgreen") + 
   theme_minimal() + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1))+
   labs(x = "Methoden-Kategorie",
        y = "Anzahl der Kämpfe",
-       title = "Häufigkeit der UFC-Entscheidungsmethoden")
+       title = "Most UFC fights end decided")
 print(ufcmethod)
 
 ggsave("tobivis4.png", path = "./plots", width = 600, height = 400, units = ("px"), dpi = 300)
