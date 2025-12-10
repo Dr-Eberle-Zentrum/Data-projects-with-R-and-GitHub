@@ -14,10 +14,10 @@ library(here)
 ## Data Import
 
 ```{r dataimport}
-ufcevents <- readr::read_csv("../Events.csv")
-ufcfightersstat <- readr::read_csv("../Fighters stats.csv")
-ufcfighters <- readr::read_csv("../fighters.csv")
-ufcfights <- readr::read_csv("../Fights.csv")
+ufcevents <- read_csv("../Events.csv")
+ufcfightersstat <- read_csv("../Fighters stats.csv")
+ufcfighters <- read_csv("../fighters.csv")
+ufcfights <- read_csv("../Fights.csv")
 ```
 
 ## Data Manipulation and Visualization
@@ -60,7 +60,7 @@ ufc_combined <- ufc_top_per_class %>%
 ggplot(ufc_combined, aes(x = Weight_Class, y = Value, fill = Type))+
   geom_col(position = position_dodge())+
   geom_text(
-    data = subset(plotdata, Type == "Top Fighter"),
+    data = subset(ufc_combined, Type == "Top Fighter"),
     aes(label = Fighter_Code),
     position = position_dodge(width = 0.9), 
     vjust = 0.5,   # Vertikale Zentrierung

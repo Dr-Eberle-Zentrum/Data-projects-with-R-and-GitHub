@@ -2,7 +2,7 @@
 
 ## Data Import
 
-    ufcevents <- readr::read_csv("Events.csv")
+    ufcevents <- read_csv("../Events.csv")
 
     ## Rows: 750 Columns: 4
     ## ── Column specification ────────────────────────────────────────────────────────
@@ -13,7 +13,7 @@
     ## ℹ Use `spec()` to retrieve the full column specification for this data.
     ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
-    ufcfightersstat <- readr::read_csv("Fighters stats.csv")
+    ufcfightersstat <- read_csv("../Fighters stats.csv")
 
     ## Rows: 2586 Columns: 28
     ## ── Column specification ────────────────────────────────────────────────────────
@@ -25,7 +25,7 @@
     ## ℹ Use `spec()` to retrieve the full column specification for this data.
     ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
-    ufcfighters <- readr::read_csv("fighters.csv")
+    ufcfighters <- read_csv("../fighters.csv")
 
     ## Rows: 4443 Columns: 10
     ## ── Column specification ────────────────────────────────────────────────────────
@@ -37,7 +37,7 @@
     ## ℹ Use `spec()` to retrieve the full column specification for this data.
     ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
-    ufcfights <- readr::read_csv("Fights.csv")
+    ufcfights <- read_csv("../Fights.csv")
 
     ## Rows: 8381 Columns: 44
     ## ── Column specification ────────────────────────────────────────────────────────
@@ -56,26 +56,31 @@ same chunk.
 
 ### First Visualization:
 
+Das Problem ist, dass die Namen zu lang sind um im Plot darstellbar zu
+sein. Daher bediene ich mich einer Tabelle und einer Codierung, um die
+Namen der in ihrer Gewichtsklasse jeweils besten Kämpfer aufzulisten.
+
     # hier haben wir das wlratio berechnet
     ufcfigtherswl <- ufcfightersstat %>%
-      mutate(wlratio = W / (W + L) ) %>%
+      mutate(wlratio = (W+1) / (W + L +2) ) %>%
       group_by(Weight_Class) %>%
       summarise(mean_wlratio = mean(wlratio, na.rm = TRUE))
     # hier haben wir den jeweils stärksten rausgefiltert:
     ufc_top_per_class <- ufcfightersstat %>%
-      mutate(wlratio = W / (W + L)) %>%
+      mutate(wlratio = (W+1) / (W + L +2)) %>%
       group_by(Weight_Class) %>%
       slice_max(wlratio, n = 1, with_ties = FALSE)
     # Zusammenführen der Tabellen:
     ufc_combined <- ufc_top_per_class %>%
-      select(Weight_Class, Fighter = `Full Name`, fighter_wlratio = wlratio) %>%
+      ungroup() %>% 
+      mutate(Fighter_Code = row_number()) %>%
+      select(Weight_Class, Fighter = `Full Name`, fighter_wlratio = wlratio, Fighter_Code) %>%
       left_join(ufcfigtherswl, by = "Weight_Class") %>%
       filter(!Weight_Class%in% c("Women's Bantamweight",
                                  "Women's Featherweight",
                                  "Women's Flyweight",
-                                 "Women's Strawweight"))
-    # Daten in long format:
-    plotdata <- ufc_combined %>%
+                                 "Women's Strawweight",
+                                 "Open Weight")) %>%
       pivot_longer(cols = c(fighter_wlratio, mean_wlratio),
                    names_to = "Type",
                    values_to = "Value") %>%
@@ -83,45 +88,116 @@ same chunk.
                            "fighter_wlratio" = "Top Fighter",
                            "mean_wlratio" = "Class Mean"))
 
-    ggplot(plotdata, aes(x = Weight_Class, y = Value, fill = Type))+
+    ggplot(ufc_combined, aes(x = Weight_Class, y = Value, fill = Type))+
       geom_col(position = position_dodge())+
+      geom_text(
+        data = subset(ufc_combined, Type == "Top Fighter"),
+        aes(label = Fighter_Code),
+        position = position_dodge(width = 0.9), 
+        vjust = 0.5,   # Vertikale Zentrierung
+        color = "black", 
+        fontface = "bold",
+        size = 4
+      )+
       labs(
         title = "W/L Ratio: Top Fighter vs. Class Mean",
         x = "Weight Class",
         y = "W/L Ratio",
-      fill = ""
+        fill = ""
       )+
       theme_minimal()+
-      theme(axis.text = element_text(angle = 45, hjust = 1))
+      theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-![](plots/tobivis1.png)
+![](tobisolution_files/figure-markdown_strict/wlratio-1.png)
 
     ggsave("tobivis1.png", path = "./plots", width = 600, height = 400, units = ("px"), dpi = 300)
+
+In der folgenden Legende ist der jeweilige Spitzenreiter in seiner
+Gewichtsklasse aufgelistet:
+
+    fighter_codes_legend <- ufc_combined %>%
+      select(Code = Fighter_Code, Klasse = Weight_Class, Kämpfer = Fighter)
+
+    print(fighter_codes_legend)
+
+    ## # A tibble: 18 × 3
+    ##     Code Klasse            Kämpfer            
+    ##    <int> <chr>             <chr>              
+    ##  1     1 Bantamweight      Malcolm Wellmaker  
+    ##  2     1 Bantamweight      Malcolm Wellmaker  
+    ##  3     2 Catch Weight      Khamzat Chimaev    
+    ##  4     2 Catch Weight      Khamzat Chimaev    
+    ##  5     3 Featherweight     Movsar Evloev      
+    ##  6     3 Featherweight     Movsar Evloev      
+    ##  7     4 Flyweight         Rafael Estevam     
+    ##  8     4 Flyweight         Rafael Estevam     
+    ##  9     5 Heavyweight       Jon Jones          
+    ## 10     5 Heavyweight       Jon Jones          
+    ## 11     6 Light Heavyweight Azamat Murzakanov  
+    ## 12     6 Light Heavyweight Azamat Murzakanov  
+    ## 13     7 Lightweight       Khabib Nurmagomedov
+    ## 14     7 Lightweight       Khabib Nurmagomedov
+    ## 15     8 Middleweight      Phillip Miller     
+    ## 16     8 Middleweight      Phillip Miller     
+    ## 17    10 Welterweight      Shavkat Rakhmonov  
+    ## 18    10 Welterweight      Shavkat Rakhmonov
 
 ### Second Visualization:
 
     ufcfigthershtoreach <- ufcfighters %>%
       mutate(
-        heighttoreach = Ht. / Reach, na.rm = TRUE
+        reachtoheigth = Reach / Ht., na.rm = TRUE
       ) %>%
       mutate(
-        wlratio = W / (W+L)
+        wlratio = (W+1) / (W + L +2)
       )
-      
 
-    ggplot(ufcfigthershtoreach,aes(x = heighttoreach, y = wlratio))+
+    ggplot(ufcfigthershtoreach,aes(x = reachtoheigth, y = wlratio))+
       geom_point()+
       geom_smooth()+
       labs(
         title = "Longer arms don't necessarily help figthers to win",
         caption = "Ploting by Tobias Tuchel. Data from UFC",
-        x = "Win / Loose Ratio",
-        y = "Height to reach Ratio"
-      )
+        x = "Reach to heigth Ratio",
+        y = "Win / Loose Ratio"
+      )+
+      geom_text(
+        data = ufcfigthershtoreach %>%
+          slice_max(reachtoheigth, n = 1, with_ties = FALSE),
+                    aes(label = `Full Name`),
+        vjust = 0,
+        hjust = 0.8,
+        color = "white"
+      )+
+      geom_text(
+        data = ufcfigthershtoreach %>%
+          slice_min(reachtoheigth, n = 1, with_ties = FALSE),
+        aes(label = `Full Name`),
+        vjust = 0,
+        hjust = 0,
+        color = "white"
+      )+
+      geom_text(
+        data = ufcfigthershtoreach %>%
+          slice_min(wlratio, n = 1, with_ties = FALSE),
+        aes(label = `Full Name`),
+        vjust = 0,
+        hjust = 0,
+        color = "white"
+      )+
+      geom_text(
+        data = ufcfigthershtoreach %>%
+          slice_max(wlratio, n = 1, with_ties = FALSE),
+        aes(label = `Full Name`),
+        vjust = 0,
+        hjust = 0,
+        color = "white"
+      )+
+        theme_dark()
 
     ## `geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'
 
-![](plots/tobivis2.png)
+![](tobisolution_files/figure-markdown_strict/graph2-1.png)
 
     ggsave("tobivis2.png", path = "./plots", width = 600, height = 400, units = ("px"), dpi = 300)
 
@@ -134,21 +210,17 @@ same chunk.
                into = c("City", "State", "Country"),
                sep = ",\\s*",
                fill = "left",
-               extra = "merge")
-
-    ufccountrygroups <- ufccountry %>%
+               extra = "merge") %>%
       group_by(Country) %>%
       summarise(n = n()) %>%
       arrange(desc(n)) 
 
     library(maps)
 
-    ## Warning: Paket 'maps' wurde unter R Version 4.5.2 erstellt
-
     ## 
-    ## Attache Paket: 'maps'
+    ## Attaching package: 'maps'
 
-    ## Das folgende Objekt ist maskiert 'package:purrr':
+    ## The following object is masked from 'package:purrr':
     ## 
     ##     map
 
@@ -156,15 +228,16 @@ same chunk.
     world <- map_data("world")
     # Joining:
     events_world_map <- world %>%
-      left_join(ufccountrygroups, by = c("region" = "Country"))
+      left_join(ufccountry, by = c("region" = "Country"))
     # Plotten:
     ggplot(events_world_map, aes(x= long, y = lat, group = group, fill = n))+
       geom_polygon(color = "black")+
-      scale_fill_continuous(name = "Number of Events", na.value = "white")+
+      scale_fill_gradient(name = "Number of Events", na.value = "white", 
+                          low = "yellow", high = "red")+
       theme_minimal()+
       labs(title = "Most UFC events in US")
 
-![](plots/tobivis3.png)
+![](tobisolution_files/figure-markdown_strict/thirdgraph-1.png)
 
     ggsave("tobivis3.png", path = "./plots", width = 600, height = 400, units = ("px"), dpi = 300)
 
@@ -175,22 +248,27 @@ nicht schlau, Feedback ist gegeben. Der jetzige Graph macht so nämlich
 keinen Sinn.
 
     ufcmethod <- ufcfights %>%
-      group_by(Method) %>%
+      mutate(
+        Aggregated_Method = case_when(
+          grepl("KO/TKO|KO/TKO Punches|KO/TKO Punch", Method) ~ "Knockout (KO/TKO)",
+          grepl("U-DEC|S-DEC|M-DEC", Method) ~ "Decision (U/S/M)",
+          grepl("SUB|Sub", Method) ~ "Submission",
+          TRUE ~ as.character(Method)
+        )
+      ) %>%
+      group_by(Aggregated_Method) %>%
       summarise(n = n()) %>%
-      arrange(desc(n))
-
-    graph <- ufcmethod %>%
-      filter(Method %in% c("KO/TKO Punch", "KO/TKO Punches", "Submission",
-                           "Doctor Stoppage", "Decision", "Draw", "Disqualification")) %>%
-      ggplot(aes(x = reorder(Method, n), y = n)) +
-      geom_col(fill = "blue") +
+      slice_max(n, n = 10) %>%
+      ggplot(aes(x = reorder(Aggregated_Method, n), y = n)) +
+      geom_col(fill = "darkgreen") + 
+      theme_minimal() + 
       theme(axis.text.x = element_text(angle = 45, hjust = 1))+
-      labs(x = "Method",
-           y = "Number",
-           title = "Most Knock-outs in UFC through ")
-    print(graph)
+      labs(x = "Methoden-Kategorie",
+           y = "Anzahl der Kämpfe",
+           title = "Most UFC fights end decided")
+    print(ufcmethod)
 
-![](plots/tobivis4.png)
+![](tobisolution_files/figure-markdown_strict/fourthgraph-1.png)
 
     ggsave("tobivis4.png", path = "./plots", width = 600, height = 400, units = ("px"), dpi = 300)
 
@@ -209,6 +287,6 @@ keinen Sinn.
            title = "Sharp increase in UFC events till Pandemic")+
       theme_minimal()
 
-![](plots/tobivis5.png)
+![](tobisolution_files/figure-markdown_strict/graphfive-1.png)
 
     ggsave("tobivis5.png", path = "./plots", width = 600, height = 400, units = ("px"), dpi = 300)
