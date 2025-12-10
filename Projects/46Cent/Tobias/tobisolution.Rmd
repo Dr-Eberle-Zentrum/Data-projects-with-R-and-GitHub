@@ -8,15 +8,16 @@ output: md_document
 ```{r setup, include = FALSE}
 library(tidyverse)
 library(ggplot2)
+library(here)
 ```
 
 ## Data Import
 
 ```{r dataimport}
-ufcevents <- readr::read_csv("Events.csv")
-ufcfightersstat <- readr::read_csv("Fighters stats.csv")
-ufcfighters <- readr::read_csv("fighters.csv")
-ufcfights <- readr::read_csv("Fights.csv")
+ufcevents <- readr::read_csv("../Events.csv")
+ufcfightersstat <- readr::read_csv(".../Fighters stat.csv")
+ufcfighters <- readr::read_csv(".../fighters.csv")
+ufcfights <- readr::read_csv(".../Fights.csv")
 ```
 
 ## Data Manipulation and Visualization
