@@ -1,3 +1,15 @@
+1.  Datenimport und Bereinigung Ziel: Vorbereitung einer sauberen
+    Datenbasis für die Analyse.
+
+Zunächst wurde der Datensatz WindenergieBW.csv importiert. Um die
+Datenverarbeitung zu erleichtern, wurden die Spaltennamen vereinfacht
+(z. B. Umbenennung von ‘Generatorleistung \[MW\]’ zu ‘Leistung\_MW’).
+Ein wesentlicher Schritt war die Umwandlung des Inbetriebnahmedatums von
+einem Textformat in ein Datumsformat, um daraus das Baujahr (‘Jahr’) zu
+extrahieren. Zudem wurden Datensätze ohne gültige Geokoordinaten
+(Ost/Nord) herausgefiltert, um eine fehlerfreie kartografische
+Darstellung zu gewährleisten.
+
     # Import using readr. 
     # The locale encoding argument helps ensure special characters are read correctly.
     wind_data <- read_delim("WindenergieBW.csv", 
@@ -181,6 +193,15 @@
 
 Vorschau der bereinigten Winddaten
 
+1.  Zeitliche Entwicklung: Ausbau vs. Leistung (Dual-Axis Plot) Ziel:
+    Darstellung, wie sich die Anzahl der Neubauten im Verhältnis zur
+    installierten Leistung entwickelt hat.
+
+Diese Visualisierung vergleicht die Anzahl der neu gebauten Windräder
+(blaue Balken) mit der neu installierten Leistung in MW (rote Linie) pro
+Jahr. Dabei wurde ein Skalierungsfaktor von 3 verwendet, um beide
+Metriken in einer Grafik lesbar zu machen.
+
     # 1. Define a scaling factor
     scale_factor <- 3 
     # Das Ziel: 1,2 GW = 1200 MW
@@ -227,7 +248,15 @@ Vorschau der bereinigten Winddaten
         caption = "Datenquelle: LUBW"
       )
 
-![](dariodemenusV2_files/figure-markdown_strict/dual-axis-plot-1.png)
+![](dariodemenusV2_files/figure-markdown_strict/dual-axis-plot-1.png) 3.
+Bestandsentwicklung: Kumulierte Gesamtleistung Ziel: Darstellung der
+verfügbaren Gesamtkapazität in Baden-Württemberg über die Zeit.
+
+Anstatt nur den jährlichen Zubau zu betrachten, zeigt dieses
+Flächendiagramm die Entwicklung der gesamten installierten Leistung
+(Bestand) in Baden-Württemberg. Hierfür wurden die jährlichen
+Leistungswerte kumuliert. Die grüne Fläche visualisiert das wachsende
+Energiepotenzial über die Jahre bis zum aktuellen Gesamtbestand.
 
     # 1. Daten aggregieren und kumulieren
     cumulative_stats <- clean_wind %>%
@@ -266,6 +295,22 @@ Vorschau der bereinigten Winddaten
       )
 
 ![](dariodemenusV2_files/figure-markdown_strict/cumulative_wind_capacity-1.png)
+4. Szenarien bis 2030 Ziel: Prognose, ob die politischen Ziele mit dem
+aktuellen Tempo erreichbar sind.
+
+Um die zukünftige Entwicklung bis 2030 abzuschätzen, wurden drei
+Szenarien berechnet und visualisiert:
+
+Weiter wie bisher (Rot): Eine Fortführung des linearen Trends basierend
+auf dem Durchschnitt der letzten 5 Jahre (Status Quo).
+
+Verdopplung des Tempos (Orange): Ein optimistischeres Szenario, bei dem
+die Ausbaugeschwindigkeit verdoppelt wird.
+
+Zielpfad (Blau/Grün): Der notwendige Pfad, um das politische Ziel von
+6.100 MW Gesamtleistung (bzw. ca. 1.400 Anlagen) bis 2030 zu erreichen.
+Der Vergleich zeigt deutlich die Lücke zwischen dem aktuellen Trend und
+den notwendigen Maßnahmen zur Zielerreichung.
 
     # 1. IST-ZUSTAND BERECHNEN (MW)
     # Wir summieren die Leistung pro Jahr und bilden die kumulierte Summe
@@ -467,7 +512,17 @@ Vorschau der bereinigten Winddaten
       ) +
       theme(legend.position = "bottom")
 
-![](dariodemenusV2_files/figure-markdown_strict/scenarios_2030-1.png)
+![](dariodemenusV2_files/figure-markdown_strict/scenarios_2030-1.png) 5.
+Korrelation technischer Parameter Ziel: Untersuchung des Zusammenhangs
+zwischen Baugröße und Leistung.
+
+Mithilfe einer Korrelationsmatrix wurde der statistische Zusammenhang
+(Pearson-Koeffizient) zwischen der Nabenhöhe, dem Rotordurchmesser und
+der Generatorleistung untersucht. Die Werte nahe 1 (rot) zeigen eine
+sehr starke positive Korrelation. Das bedeutet technisch: Je höher die
+Nabe und je größer der Rotor, desto höher ist die erzielte Leistung der
+Windkraftanlage. Die Signifikanz dieser Zusammenhänge wurde statistisch
+bestätigt.
 
     # --- DEFINITION DER LABELS ---
     my_labels <- c(
@@ -492,7 +547,9 @@ Vorschau der bereinigten Winddaten
       # Plotting
       ggplot(aes(x = Var1, y = Var2, fill = rho)) +
       geom_tile(color = "white") +
-      geom_text(aes(label = round(rho, 2)), color = "black", size = 4) +
+      
+      # --- ÄNDERUNG: paste0 fügt das Sternchen an den gerundeten Wert an ---
+      geom_text(aes(label = paste0(round(rho, 2), "*")), color = "black", size = 4) +
       
       # Adjusted color scale (Sequential since no negative correlations expected)
       scale_fill_gradient(low = "white", high = "red", 
@@ -504,11 +561,23 @@ Vorschau der bereinigten Winddaten
       theme_minimal() +
       coord_fixed() +
       labs(title = "Korrelogramm technischer Parameter",
-           subtitle = "Pearson Korrelationskoeffizient",
+           subtitle = "Pearson Korrelationskoeffizient (* signifikant)",
            x = "", y = "") +
       theme(panel.grid = element_blank())
 
 ![](dariodemenusV2_files/figure-markdown_strict/correlogram-1.png)
+
+1.  Räumliche Verteilung (Hexbin Map) Ziel: Geografische Verortung der
+    Windkraftschwerpunkte in Baden-Württemberg.
+
+Für die räumliche Analyse wurde eine Hexbin-Karte erstellt. Anstatt
+jeden einzelnen Standort als Punkt darzustellen, fasst diese Methode
+benachbarte Anlagen in sechseckigen Kacheln (Hexagons) zusammen und
+summiert deren Leistung. Dies ermöglicht eine bessere Erkennung von
+regionalen Clustern und Schwerpunkten der Windkraftnutzung, ohne durch
+Overplotting (überlappende Punkte) an Übersichtlichkeit zu verlieren.
+Zur besseren Orientierung wurden die Verwaltungsgrenzen der Landkreise
+(NUTS-3) darübergelegt.
 
     # Geodaten zentral vorbereiten (werden für beide Karten benötigt)
     # NUTS 1 = Bundesland (DE1 = BW), NUTS 3 = Landkreise
@@ -605,7 +674,7 @@ Top 10 Landkreise nach Leistung
       
       # 2. Hexbins
       stat_summary_hex(fun = sum, bins = 20, alpha = 0.85) +
-      scale_fill_viridis_c(option = "C", name = "Summe Leistung\n(MW)") +
+      scale_fill_viridis_c(option = "C", name = "Summe der Leistung\npro Kachel\n(MW)") +
       
       theme_void() + 
       coord_sf(datum = NA) +
@@ -613,6 +682,79 @@ Top 10 Landkreise nach Leistung
            subtitle = "Hexbin Map mit Verwaltungs-Grenzen")
 
 ![](dariodemenusV2_files/figure-markdown_strict/map-hexbin-with-boundaries-1.png)
+
+    # 1. Daten vorbereiten (wie zuvor)
+    wind_points <- clean_wind %>%
+      st_as_sf(coords = c("Ost", "Nord"), crs = 25832)
+
+    map_data_agg <- st_join(wind_points, bw_kreise) %>%
+      st_drop_geometry() %>%
+      group_by(NUTS_ID) %>%
+      summarise(
+        Anzahl_Windraeder = n(),
+        Sum_Leistung = sum(Leistung_MW, na.rm = TRUE)
+      )
+
+    # 2. Labels erstellen und Geometrie anfügen
+    map_data <- bw_kreise %>%
+      left_join(map_data_agg, by = "NUTS_ID") %>%
+      mutate(
+        # A) Namen bereinigen: "Tübingen, Landkreis" -> "Tübingen"
+        Clean_Name = str_remove_all(NUTS_NAME, ", Landkreis|, Stadtkreis|Landkreis |Stadtkreis "),
+        
+        # B) Abkürzung erstellen: Erste 3 Buchstaben (z.B. "Tüb")
+        # Falls du lieber den ganzen Namen willst, nutze einfach 'Clean_Name' im Plot unten
+        Label_Kurz = str_sub(Clean_Name, 1, 3) 
+      )
+
+    # 3. Plotten
+    ggplot(map_data) +
+      geom_sf(aes(fill = Sum_Leistung), color = "white", size = 0.2) +
+      
+      # --- NEU: Text-Labels hinzufügen ---
+      geom_sf_text(
+        aes(label = Label_Kurz), # Ändere zu 'Clean_Name' für "Tübingen" statt "Tüb"
+        size = 2.5,              # Textgröße
+        color = "black",         # Textfarbe
+        fontface = "bold",       # Fettdruck für bessere Lesbarkeit
+        check_overlap = TRUE     # Verhindert, dass sich Texte unleserlich überlagern
+      ) +
+      # -----------------------------------
+
+      scale_fill_viridis_c(
+        option = "C", 
+        name = "Leistung (MW)",
+        na.value = "grey90",
+        direction = 1
+      ) +
+      
+      theme_void() +
+      labs(
+        title = "Windkraftleistung pro Landkreis",
+        subtitle = "Mit abgekürzten Landkreis-Namen",
+        caption = "Daten: LUBW | Geodaten: Eurostat"
+      ) +
+      coord_sf(datum = NA)
+
+![](dariodemenusV2_files/figure-markdown_strict/landkreis_map_labels-1.png)
+7. Ökonomische Analyse: Steuerkraft-Proxy Ziel: Schätzung, welche
+Landkreise potenziell am meisten von Gewerbesteuereinnahmen profitieren.
+
+Da die reine Leistung nicht direkt den Steuereinnahmen entspricht, wurde
+ein ‘Steuerkraft-Proxy’ entwickelt. Dieser gewichtet die Leistung einer
+Anlage anhand ihres Alters, um steuerliche Abschreibungszyklen zu
+simulieren:
+
+Neue Anlagen (&lt; 5 Jahre): Gewicht 0,8 (Hohe Abschreibung, aber
+EEG-Umlagen).
+
+Abschreibungsphase (5–12 Jahre): Gewicht 0,3 (Niedriges Steuerpotenzial
+durch Zins/Tilgung).
+
+‘Cash Cows’ (&gt; 12 Jahre): Gewicht 1,0 (Anlage abgeschrieben, hoher
+Ertrag fließt in Gewerbesteuer). Das Ergebnis zeigt ein Ranking der
+Landkreise, die voraussichtlich am stärksten finanziell von den
+Windparks profitieren.
 
     # 1. BERECHNUNG DES STEUER-PROXY
     tax_analysis <- clean_wind %>%
