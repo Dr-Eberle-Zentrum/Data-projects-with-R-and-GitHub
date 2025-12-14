@@ -24,10 +24,15 @@ library(knitr)      # Für schönere Tabellen (kable)
 library(sf)         # Für Geodaten
 library(giscoR)     # Für amtliche Grenzen
 ```
+
+
+
 1. Datenimport und Bereinigung
 Ziel: Vorbereitung einer sauberen Datenbasis für die Analyse.
 
 Zunächst wurde der Datensatz WindenergieBW.csv importiert. Um die Datenverarbeitung zu erleichtern, wurden die Spaltennamen vereinfacht (z. B. Umbenennung von 'Generatorleistung [MW]' zu 'Leistung_MW'). Ein wesentlicher Schritt war die Umwandlung des Inbetriebnahmedatums von einem Textformat in ein Datumsformat, um daraus das Baujahr ('Jahr') zu extrahieren. Zudem wurden Datensätze ohne gültige Geokoordinaten (Ost/Nord) herausgefiltert, um eine fehlerfreie kartografische Darstellung zu gewährleisten.
+
+
 
 
 ```{r data-import-cleaning}
@@ -114,6 +119,10 @@ clean_wind %>%
     caption = "Datenquelle: LUBW"
   )
 ```
+
+
+
+
 3. Bestandsentwicklung: Kumulierte Gesamtleistung
 Ziel: Darstellung der verfügbaren Gesamtkapazität in Baden-Württemberg über die Zeit.
 
@@ -375,6 +384,9 @@ ggplot() +
 
 
 ```
+
+
+
 5. Korrelation technischer Parameter
 Ziel: Untersuchung des Zusammenhangs zwischen Baugröße und Leistung.
 

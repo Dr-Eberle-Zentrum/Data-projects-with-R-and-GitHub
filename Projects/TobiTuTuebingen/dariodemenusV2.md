@@ -248,9 +248,10 @@ Metriken in einer Grafik lesbar zu machen.
         caption = "Datenquelle: LUBW"
       )
 
-![](dariodemenusV2_files/figure-markdown_strict/dual-axis-plot-1.png) 3.
-Bestandsentwicklung: Kumulierte Gesamtleistung Ziel: Darstellung der
-verfügbaren Gesamtkapazität in Baden-Württemberg über die Zeit.
+![](dariodemenusV2_files/figure-markdown_strict/dual-axis-plot-1.png)
+
+1.  Bestandsentwicklung: Kumulierte Gesamtleistung Ziel: Darstellung der
+    verfügbaren Gesamtkapazität in Baden-Württemberg über die Zeit.
 
 Anstatt nur den jährlichen Zubau zu betrachten, zeigt dieses
 Flächendiagramm die Entwicklung der gesamten installierten Leistung
@@ -513,9 +514,10 @@ den notwendigen Maßnahmen zur Zielerreichung.
       ) +
       theme(legend.position = "bottom")
 
-![](dariodemenusV2_files/figure-markdown_strict/scenarios_2030-1.png) 5.
-Korrelation technischer Parameter Ziel: Untersuchung des Zusammenhangs
-zwischen Baugröße und Leistung.
+![](dariodemenusV2_files/figure-markdown_strict/scenarios_2030-1.png)
+
+1.  Korrelation technischer Parameter Ziel: Untersuchung des
+    Zusammenhangs zwischen Baugröße und Leistung.
 
 Mithilfe einer Korrelationsmatrix wurde der statistische Zusammenhang
 (Pearson-Koeffizient) zwischen der Nabenhöhe, dem Rotordurchmesser und
