@@ -27,7 +27,7 @@ library(giscoR)     # Für amtliche Grenzen
 
 
 
-1. Datenimport und Bereinigung
+Datenimport und Bereinigung
 Ziel: Vorbereitung einer sauberen Datenbasis für die Analyse.
 
 Zunächst wurde der Datensatz WindenergieBW.csv importiert. Um die Datenverarbeitung zu erleichtern, wurden die Spaltennamen vereinfacht (z. B. Umbenennung von 'Generatorleistung [MW]' zu 'Leistung_MW'). Ein wesentlicher Schritt war die Umwandlung des Inbetriebnahmedatums von einem Textformat in ein Datumsformat, um daraus das Baujahr ('Jahr') zu extrahieren. Zudem wurden Datensätze ohne gültige Geokoordinaten (Ost/Nord) herausgefiltert, um eine fehlerfreie kartografische Darstellung zu gewährleisten.
@@ -65,7 +65,10 @@ clean_wind <- wind_data %>%
 # Preview with kable for nicer output
 knitr::kable(head(clean_wind), caption = "Vorschau der bereinigten Winddaten")
 ```
-2. Zeitliche Entwicklung: Ausbau vs. Leistung (Dual-Axis Plot)
+
+
+
+Zeitliche Entwicklung: Ausbau vs. Leistung (Dual-Axis Plot)
 Ziel: Darstellung, wie sich die Anzahl der Neubauten im Verhältnis zur installierten Leistung entwickelt hat.
 
 Diese Visualisierung vergleicht die Anzahl der neu gebauten Windräder (blaue Balken) mit der neu installierten Leistung in MW (rote Linie) pro Jahr. Dabei wurde ein Skalierungsfaktor von 3 verwendet, um beide Metriken in einer Grafik lesbar zu machen.
@@ -123,7 +126,7 @@ clean_wind %>%
 
 
 
-3. Bestandsentwicklung: Kumulierte Gesamtleistung
+Bestandsentwicklung: Kumulierte Gesamtleistung
 Ziel: Darstellung der verfügbaren Gesamtkapazität in Baden-Württemberg über die Zeit.
 
 Anstatt nur den jährlichen Zubau zu betrachten, zeigt dieses Flächendiagramm die Entwicklung der gesamten installierten Leistung (Bestand) in Baden-Württemberg. Hierfür wurden die jährlichen Leistungswerte kumuliert. Die grüne Fläche visualisiert das wachsende Energiepotenzial über die Jahre bis zum aktuellen Gesamtbestand.
@@ -169,7 +172,7 @@ ggplot(cumulative_stats, aes(x = Jahr, y = Total_Capacity_MW)) +
 
 ```
 
-4. Szenarien bis 2030
+Szenarien bis 2030
 Ziel: Prognose, ob die politischen Ziele mit dem aktuellen Tempo erreichbar sind.
 
 Um die zukünftige Entwicklung bis 2030 abzuschätzen, wurden drei Szenarien berechnet und visualisiert:
@@ -387,7 +390,7 @@ ggplot() +
 
 
 
-5. Korrelation technischer Parameter
+Korrelation technischer Parameter
 Ziel: Untersuchung des Zusammenhangs zwischen Baugröße und Leistung.
 
 Mithilfe einer Korrelationsmatrix wurde der statistische Zusammenhang (Pearson-Koeffizient) zwischen der Nabenhöhe, dem Rotordurchmesser und der Generatorleistung untersucht. Die Werte nahe 1 (rot) zeigen eine sehr starke positive Korrelation. Das bedeutet technisch: Je höher die Nabe und je größer der Rotor, desto höher ist die erzielte Leistung der Windkraftanlage. Die Signifikanz dieser Zusammenhänge wurde statistisch bestätigt.
@@ -436,7 +439,7 @@ clean_wind %>%
   theme(panel.grid = element_blank())
 ```
 
-6. Räumliche Verteilung (Hexbin Map)
+Räumliche Verteilung (Hexbin Map)
 Ziel: Geografische Verortung der Windkraftschwerpunkte in Baden-Württemberg.
 
 Für die räumliche Analyse wurde eine Hexbin-Karte erstellt. Anstatt jeden einzelnen Standort als Punkt darzustellen, fasst diese Methode benachbarte Anlagen in sechseckigen Kacheln (Hexagons) zusammen und summiert deren Leistung. Dies ermöglicht eine bessere Erkennung von regionalen Clustern und Schwerpunkten der Windkraftnutzung, ohne durch Overplotting (überlappende Punkte) an Übersichtlichkeit zu verlieren. Zur besseren Orientierung wurden die Verwaltungsgrenzen der Landkreise (NUTS-3) darübergelegt.
@@ -540,7 +543,8 @@ ggplot(map_data) +
   coord_sf(datum = NA)
 
 ```
-7. Ökonomische Analyse: Steuerkraft-Proxy
+
+Ökonomische Analyse: Steuerkraft-Proxy
 Ziel: Schätzung, welche Landkreise potenziell am meisten von Gewerbesteuereinnahmen profitieren.
 
 Da die reine Leistung nicht direkt den Steuereinnahmen entspricht, wurde ein 'Steuerkraft-Proxy' entwickelt. Dieser gewichtet die Leistung einer Anlage anhand ihres Alters, um steuerliche Abschreibungszyklen zu simulieren:

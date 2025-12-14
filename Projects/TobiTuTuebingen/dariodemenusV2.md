@@ -1,5 +1,5 @@
-1.  Datenimport und Bereinigung Ziel: Vorbereitung einer sauberen
-    Datenbasis für die Analyse.
+Datenimport und Bereinigung Ziel: Vorbereitung einer sauberen Datenbasis
+für die Analyse.
 
 Zunächst wurde der Datensatz WindenergieBW.csv importiert. Um die
 Datenverarbeitung zu erleichtern, wurden die Spaltennamen vereinfacht
@@ -193,9 +193,9 @@ Darstellung zu gewährleisten.
 
 Vorschau der bereinigten Winddaten
 
-1.  Zeitliche Entwicklung: Ausbau vs. Leistung (Dual-Axis Plot) Ziel:
-    Darstellung, wie sich die Anzahl der Neubauten im Verhältnis zur
-    installierten Leistung entwickelt hat.
+Zeitliche Entwicklung: Ausbau vs. Leistung (Dual-Axis Plot) Ziel:
+Darstellung, wie sich die Anzahl der Neubauten im Verhältnis zur
+installierten Leistung entwickelt hat.
 
 Diese Visualisierung vergleicht die Anzahl der neu gebauten Windräder
 (blaue Balken) mit der neu installierten Leistung in MW (rote Linie) pro
@@ -250,8 +250,8 @@ Metriken in einer Grafik lesbar zu machen.
 
 ![](dariodemenusV2_files/figure-markdown_strict/dual-axis-plot-1.png)
 
-1.  Bestandsentwicklung: Kumulierte Gesamtleistung Ziel: Darstellung der
-    verfügbaren Gesamtkapazität in Baden-Württemberg über die Zeit.
+Bestandsentwicklung: Kumulierte Gesamtleistung Ziel: Darstellung der
+verfügbaren Gesamtkapazität in Baden-Württemberg über die Zeit.
 
 Anstatt nur den jährlichen Zubau zu betrachten, zeigt dieses
 Flächendiagramm die Entwicklung der gesamten installierten Leistung
@@ -297,8 +297,8 @@ Energiepotenzial über die Jahre bis zum aktuellen Gesamtbestand.
 
 ![](dariodemenusV2_files/figure-markdown_strict/cumulative_wind_capacity-1.png)
 
-1.  Szenarien bis 2030 Ziel: Prognose, ob die politischen Ziele mit dem
-    aktuellen Tempo erreichbar sind.
+Szenarien bis 2030 Ziel: Prognose, ob die politischen Ziele mit dem
+aktuellen Tempo erreichbar sind.
 
 Um die zukünftige Entwicklung bis 2030 abzuschätzen, wurden drei
 Szenarien berechnet und visualisiert:
@@ -516,8 +516,8 @@ den notwendigen Maßnahmen zur Zielerreichung.
 
 ![](dariodemenusV2_files/figure-markdown_strict/scenarios_2030-1.png)
 
-1.  Korrelation technischer Parameter Ziel: Untersuchung des
-    Zusammenhangs zwischen Baugröße und Leistung.
+Korrelation technischer Parameter Ziel: Untersuchung des Zusammenhangs
+zwischen Baugröße und Leistung.
 
 Mithilfe einer Korrelationsmatrix wurde der statistische Zusammenhang
 (Pearson-Koeffizient) zwischen der Nabenhöhe, dem Rotordurchmesser und
@@ -570,8 +570,8 @@ bestätigt.
 
 ![](dariodemenusV2_files/figure-markdown_strict/correlogram-1.png)
 
-1.  Räumliche Verteilung (Hexbin Map) Ziel: Geografische Verortung der
-    Windkraftschwerpunkte in Baden-Württemberg.
+Räumliche Verteilung (Hexbin Map) Ziel: Geografische Verortung der
+Windkraftschwerpunkte in Baden-Württemberg.
 
 Für die räumliche Analyse wurde eine Hexbin-Karte erstellt. Anstatt
 jeden einzelnen Standort als Punkt darzustellen, fasst diese Methode
@@ -740,7 +740,8 @@ Top 10 Landkreise nach Leistung
       coord_sf(datum = NA)
 
 ![](dariodemenusV2_files/figure-markdown_strict/landkreis_map_labels-1.png)
-7. Ökonomische Analyse: Steuerkraft-Proxy Ziel: Schätzung, welche
+
+Ökonomische Analyse: Steuerkraft-Proxy Ziel: Schätzung, welche
 Landkreise potenziell am meisten von Gewerbesteuereinnahmen profitieren.
 
 Da die reine Leistung nicht direkt den Steuereinnahmen entspricht, wurde
