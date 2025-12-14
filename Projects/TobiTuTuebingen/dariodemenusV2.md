@@ -295,8 +295,9 @@ Energiepotenzial über die Jahre bis zum aktuellen Gesamtbestand.
       )
 
 ![](dariodemenusV2_files/figure-markdown_strict/cumulative_wind_capacity-1.png)
-4. Szenarien bis 2030 Ziel: Prognose, ob die politischen Ziele mit dem
-aktuellen Tempo erreichbar sind.
+
+1.  Szenarien bis 2030 Ziel: Prognose, ob die politischen Ziele mit dem
+    aktuellen Tempo erreichbar sind.
 
 Um die zukünftige Entwicklung bis 2030 abzuschätzen, wurden drei
 Szenarien berechnet und visualisiert:
