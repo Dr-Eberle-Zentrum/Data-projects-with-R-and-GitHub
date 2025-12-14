@@ -47,9 +47,9 @@ head(clean_wind)
 
 ```{r yearly_wind_capacity}
 # 1. Define a scaling factor
-# This means: 1 unit of height on the chart = 1 Turbine OR 3 MW of Power
-# You can change this number to 2 or 4 if you want the line higher or lower
 scale_factor <- 3 
+# Das Ziel: 1,2 GW = 1200 MW
+ziel_mw <- 1200
 
 # 2. Aggregating
 yearly_stats <- clean_wind %>%
@@ -64,8 +64,16 @@ ggplot(yearly_stats, aes(x = Jahr)) +
   # Primary Data (Bars): The number of turbines
   geom_bar(aes(y = New_Turbines), stat = "identity", fill = "steelblue", alpha = 0.7) +
   
-  # Secondary Data (Line): Power divided by scale factor to fit on the chart
+  # Secondary Data (Line): Actual Power
   geom_line(aes(y = Total_Power / scale_factor), color = "red", linewidth = 1) + 
+  
+  # --- NEU: Horizontale Linie für das Ausbauziel ---
+  # Wir müssen 1200 MW durch den scale_factor teilen, damit es im Graphen an der richtigen Stelle liegt
+  geom_hline(yintercept = ziel_mw / scale_factor, color = "darkgreen", linetype = "dashed", linewidth = 1) +
+  
+  # Optional: Beschriftung für die Linie direkt im Plot
+  annotate("text", x = min(yearly_stats$Jahr), y = (ziel_mw / scale_factor) + 5, 
+           label = "Ziel: 1,2 GW/Jahr", color = "darkgreen", hjust = 0, vjust = 0, fontface = "bold") +
   
   # Axis Configuration
   scale_y_continuous(
@@ -77,35 +85,80 @@ ggplot(yearly_stats, aes(x = Jahr)) +
   theme_minimal() +
   labs(
     title = "Windkraftausbau in Baden-Württemberg",
-    subtitle = "Vergleich von Anzahl (Balken) und Leistung (Linie)"
+    subtitle = "Vergleich von Anzahl, Leistung und politischem Ziel (1,2 GW)",
+    caption = "Datenquelle: LUBW"
   )
 ```
-
-```{r correlogram_technical_params}
-# 1. Prepare data: Select only numeric variables of interest
+```{r correlogram_manual_triangle}
+# 1. Daten vorbereiten
+# (Ich gehe davon aus, dass 'clean_wind' bereits geladen ist)
 corr_data <- clean_wind %>%
   select(Leistung_MW, Nabenhoehe_m, Rotor_m) %>%
   drop_na()
 
-# 2. Calculate Correlation Matrix
+# 2. Berechnungen
 cor_matrix <- cor(corr_data)
+p_matrix <- cor_pmat(corr_data) # Benötigt library(ggcorrplot) oder rstatix
 
-# 3. Transform to long format for ggplot
-cor_melted <- cor_matrix %>%
+# Daten ins Long-Format bringen
+# A: Korrelationen
+df_cor <- cor_matrix %>%
   as.data.frame() %>%
-  rownames_to_column(var = "Var1") %>%
-  pivot_longer(cols = -Var1, names_to = "Var2", values_to = "rho")
+  rownames_to_column("Var1") %>%
+  pivot_longer(-Var1, names_to = "Var2", values_to = "rho")
 
-# 4. Create the Plot (Manual ggplot approach as requested)
-ggplot(cor_melted, aes(x = Var1, y = Var2, fill = rho)) +
+# B: P-Werte
+df_p <- p_matrix %>%
+  as.data.frame() %>%
+  rownames_to_column("Var1") %>%
+  pivot_longer(-Var1, names_to = "Var2", values_to = "p_val")
+
+# C: Zusammenfügen
+plot_data <- df_cor %>%
+  left_join(df_p, by = c("Var1", "Var2"))
+
+# 3. Das untere Dreieck herausfiltern
+plot_data <- plot_data %>%
+  mutate(Var1 = factor(Var1, levels = colnames(cor_matrix)),
+         Var2 = factor(Var2, levels = colnames(cor_matrix))) %>%
+  filter(as.numeric(Var1) > as.numeric(Var2))
+
+# --- DEFINITION DER LABELS ---
+# Hier legen wir fest, welcher technische Name wie angezeigt werden soll
+my_labels <- c(
+  "Leistung_MW"  = "Leistung in Megawatt",
+  "Nabenhoehe_m" = "Nabenhöhe in Meter",
+  "Rotor_m"      = "Rotor in Meter"
+)
+
+# 4. Plotten
+ggplot(plot_data, aes(x = Var1, y = Var2, fill = rho)) +
+  
+  # A. Die Kacheln
   geom_tile(color = "white") +
-  geom_text(aes(label = round(rho, 2)), color = "black") +
+  
+  # B. Die Zahlen
+  geom_text(aes(label = round(rho, 2)), color = "black", size = 4, nudge_x = -0.15) +
+  
+  # C. Die Kreuze (bei Signifikanz)
+  geom_point(data = filter(plot_data, p_val <= 0.05), 
+             shape = 4, size = 4, stroke = 1, nudge_x = 0.15) +
+  
+  # D. Farben
   scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
-                       midpoint = 0, limit = c(-1,1), name = "Correlation\n(Pearson)") +
+                       midpoint = 0, limit = c(-1,1), name = "Corr") +
+  
+  # E. ACHSENBESCHRIFTUNG ANPASSEN (NEU)
+  scale_x_discrete(labels = my_labels) +
+  scale_y_discrete(labels = my_labels) +
+  
+  # F. Design
   theme_minimal() +
   coord_fixed() +
-  labs(title = "Korrelogramm: Technische Parameter",
-       x = "", y = "")
+  labs(title = "Korrelogramm",
+       subtitle = "Zahl = Korrelation | Kreuz = Signifikant (p < 0.05)",
+       x = "", y = "") +
+  theme(panel.grid = element_blank())
 ```
 
 ```{r landkreis_aggregation}
@@ -135,6 +188,70 @@ ggplot(clean_wind, aes(x = Ost, y = Nord, z = Leistung_MW)) +
   labs(title = "Räumliche Verteilung der Windkraftleistung",
        subtitle = "Hexbin Map (Summierte Leistung pro Kachel)")
 ```
+```{r landkreis_aggregation_map}
+# 1. Benötigte Pakete laden
+library(sf)
+library(giscoR)
+library(tidyverse)
+
+# 2. Geodaten für BW laden (NUTS 3 Ebene = Landkreise)
+# Wir laden die offiziellen Verwaltungsgrenzen
+bw_kreise <- gisco_get_nuts(country = "Germany", nuts_level = 3, resolution = "03") %>%
+  filter(startsWith(NUTS_ID, "DE1")) %>% # Nur Baden-Württemberg
+  st_transform(25832) # Transformation in ETRS89 / UTM Zone 32N (passend zu Ihren Daten)
+
+# 3. Winddaten in ein räumliches Format (sf) umwandeln
+# Wir machen aus der Tabelle eine Karte mit Punkten
+wind_points <- clean_wind %>%
+  # Zeilen ohne Koordinaten entfernen
+  filter(!is.na(Ost), !is.na(Nord)) %>% 
+  # Umwandlung in sf-Objekt mit dem Koordinatensystem Ihrer Daten (EPSG: 25832)
+  st_as_sf(coords = c("Ost", "Nord"), crs = 25832)
+
+# 4. Räumlicher Join (Spatial Join)
+# Wir "kleben" an jedes Windrad die Infos des Landkreises, in dem es steht
+wind_in_kreise <- st_join(wind_points, bw_kreise)
+
+# 5. Aggregation pro Landkreis
+# Jetzt summieren wir die Leistung basierend auf den Geodaten-IDs
+map_data <- bw_kreise %>%
+  left_join(
+    wind_in_kreise %>%
+      st_drop_geometry() %>% # Geometrie kurz weglassen für schnelleres Rechnen
+      group_by(NUTS_ID) %>%
+      summarise(
+        Anzahl_Windraeder = n(),
+        Sum_Leistung = sum(Leistung_MW, na.rm = TRUE)
+      ),
+    by = "NUTS_ID"
+  )
+
+# 6. Karte Plotten
+ggplot(map_data) +
+  # Die Landkreise zeichnen, Füllfarbe nach Leistung
+  geom_sf(aes(fill = Sum_Leistung), color = "white", size = 0.2) +
+  
+  # Farbskala anpassen (Viridis "C" = Plasma ist oft gut für Heatmaps)
+  scale_fill_viridis_c(
+    option = "C", 
+    name = "Installierte\nLeistung (MW)",
+    na.value = "grey90", # Landkreise ohne Windkraft grau färben
+    direction = 1
+  ) +
+  
+  # Design
+  theme_void() + # Leeres Design (keine Achsen)
+  labs(
+    title = "Windkraftleistung pro Landkreis in BW",
+    subtitle = "Choropleth-Karte basierend auf Verwaltungs-Grenzen (NUTS 3)",
+    caption = "Datenquelle: LUBW | Geodaten: Eurostat/giscoR"
+  ) +
+  
+  # Optional: Koordinatensystem festzurren (passiert bei geom_sf meist automatisch)
+  coord_sf(datum = NA)
+
+```
+
 Das Konzept für den Proxy
 Wir gewichten die MW-Leistung anhand des Alters der Anlage, um die finanziellen Phasen eines Windparks abzubilden:
 
