@@ -6,7 +6,11 @@ output: md_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
 # Arbeitsverzeichnis setzen:
 # knitr setzt das Arbeitsverzeichnis standardmäßig auf den Speicherort der .Rmd Datei.
 # Falls nötig, kann es hier explizit gesetzt werden:
@@ -155,6 +159,7 @@ ggplot(cumulative_stats, aes(x = Jahr, y = Total_Capacity_MW)) +
   )
 
 ```
+
 4. Szenarien bis 2030
 Ziel: Prognose, ob die politischen Ziele mit dem aktuellen Tempo erreichbar sind.
 
@@ -374,6 +379,8 @@ ggplot() +
 Ziel: Untersuchung des Zusammenhangs zwischen Baugröße und Leistung.
 
 Mithilfe einer Korrelationsmatrix wurde der statistische Zusammenhang (Pearson-Koeffizient) zwischen der Nabenhöhe, dem Rotordurchmesser und der Generatorleistung untersucht. Die Werte nahe 1 (rot) zeigen eine sehr starke positive Korrelation. Das bedeutet technisch: Je höher die Nabe und je größer der Rotor, desto höher ist die erzielte Leistung der Windkraftanlage. Die Signifikanz dieser Zusammenhänge wurde statistisch bestätigt.
+
+
 ```{r correlogram}
 # --- DEFINITION DER LABELS ---
 my_labels <- c(
