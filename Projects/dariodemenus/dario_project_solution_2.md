@@ -136,7 +136,7 @@
     scale_y_continuous(expand = expansion(mult = c(0.1, 0.1))) +
     theme_minimal(base_size = 14)
 
-![](dario_project_solution_2_files/figure-markdown_strict/Aufgabe_1-1.png)
+![](Grafiken/Aufgabe_1-1.png)
 
 # Aufgabe 2
 
@@ -183,4 +183,5 @@
     scale_fill_manual(values = c("2024" = "lightblue", "2025" = "lightpink")) +
     scale_color_manual(values = c("Non-Legume" = "gray50", "Legume" = "forestgreen"))
 
-![](dario_project_solution_2_files/figure-markdown_strict/Aufgabe_2-1.png)
+![](Grafiken/Aufgabe_2-1.png)
+
