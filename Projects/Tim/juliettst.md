@@ -1,4 +1,4 @@
-**Spaltenerklärung der LUBW:**
+## **Spaltenerklärung der LUBW:**
 
 -   id: Schlüssel für Bundesland, Naturraum, Kreis oder Gemeinde name
 -   Bezeichnung typ: Bundesland, Naturraum, Kreis oder Gemeinde
@@ -14,64 +14,56 @@
 -   trockenperiode\_tage\_maximum: Dauer der längsten Trockenperiode mit
     Tagen &lt; 1 mm
 
-# Solutions
+## Solutions
 
--   Wie veränderte sich die Temperatur im zeitlichen Verlauf?
+### Wie veränderte sich die Temperatur im zeitlichen Verlauf?
 
 ![](juliettst_files/figure-markdown_strict/Temperaturentwicklung%20in%20Tübingen%20(1961-2024)%20mit%20Trend-1.png)
 
--   Wie verändert sich die Temperatur im Jahreszeitlichen Verlauf, über
-    den gesamten Messzeitraum?
+### Wie verändert sich die Temperatur im Jahreszeitlichen Verlauf, über den gesamten Messzeitraum?
 
 ![](juliettst_files/figure-markdown_strict/Saisonale%20Temperaturentwicklung%20(1961-2024)-1.png)
 
--   Wie verhalten sich die Niederschlagsmengen in Kombination mit den
-    Heißen Tagen?
+### Wie verhalten sich die Niederschlagsmengen in Kombination mit den Heißen Tagen?
 
 ![](juliettst_files/figure-markdown_strict/Zusammenhang:%20Niederschlag%20und%20Heiße%20Tage-1.png)
 
-    ## 
-    ## Korrelation Niederschlag - Heiße Tage: 0.506
+Die Korrelation zwischen Niederschlag und heißen Tagen beträgt `0.506` .
 
--   Wie entwickeln sich die Heißtage und Frost im laufe der Zeit und
-    Sasional?
+### Wie entwickeln sich die Heißtage und Frost im laufe der Zeit und Sasional?
 
 ![](juliettst_files/figure-markdown_strict/Entwicklung%20Extrem-Temperaturtage%20(1961-2024)-1.png)
 
-Saisonale Trenddiagramme, alle Saisons in einem Diagramm
+### Saisonale Trenddiagramme, alle Saisons in einem Diagramm
 
 ![](juliettst_files/figure-markdown_strict/Saisonale%20Trenddiagramme,%20alle%20Saisons%20in%20einem%20Diagramm-1.png)
 
--   Wie sieht der Mittelwert im Jahr 2023 aus?
+### Wie sieht der Mittelwert im Jahr 2023 aus?
 
-<!--# Mittelwert von was?  Temperatur --> 
+<!--# Mittelwert von was?  -->
 
 ![](juliettst_files/figure-markdown_strict/Klimadaten%202023-1.png)
 
 Darstellung mithilfe einer Heatmap
 
--   Wie häufig treten Trockenperioden auf und wie lange dauern diese an?
+### Wie häufig treten Trockenperioden auf und wie lange dauern diese an?
 
 ![](juliettst_files/figure-markdown_strict/Häufigkeit%20und%20Dauer%20von%20Trockenperioden-1.png)
 
 Heatmap, Barplot
 
--   Gibt es einen Zusammenhang zwischen Tropennächten und Trockentagen?
+### Gibt es einen Zusammenhang zwischen Tropennächten und Trockentagen?
 
-<!--# Da es keine Tropennächte gibts, checke ich überhaupt nicht was da gemacht sein sollte.  Vlt besser, Zusammenhang zwischen Anzahl Troppennächten und Anzahl Hitzetagen, im zeitlichen Verlauf.   -->
+<!--# Da es keine Tropennächte gibts, checke ich überhaupt nicht was da gemacht sein sollte -->
 
 ![](juliettst_files/figure-markdown_strict/unnamed-chunk-2-1.png)![](juliettst_files/figure-markdown_strict/unnamed-chunk-2-2.png)
 
 Korrelationsmatrix und Scatterplot, gerne auch andere Dimensionen
 
--   Wie häufig gab es jährlich mehr als 5 Frosttage/Heißtage im Jahr?
+### Wie häufig gab es jährlich mehr als 5 Frosttage/Heißtage im Jahr?
 
 ![](juliettst_files/figure-markdown_strict/unnamed-chunk-3-1.png)![](juliettst_files/figure-markdown_strict/unnamed-chunk-3-2.png)![](juliettst_files/figure-markdown_strict/unnamed-chunk-3-3.png)
 
-Threshold Exceedance Plots
+### Hat die Anzahl an Starknierderschlägen über die Jahre zugenommen? Wenn ja, wie viele Starkniederschläge gab es und wie verteilen sich diese über das Jahr?
 
--   Hat die Anzahl an Starknierderschlägen über die Jahre zugenommen?
-    Wenn ja, wie viele Starkniederschläge gab es und wie verteilen sich
-    diese über das Jahr?
-
-![](juliettst_files/figure-markdown_strict/unnamed-chunk-4-1.png)![](juliettst_files/figure-markdown_strict/unnamed-chunk-4-2.png)
+![](juliettst_files/figure-markdown_strict/Threshold%20Exceedance%20Plots-1.png)![](juliettst_files/figure-markdown_strict/Threshold%20Exceedance%20Plots-2.png)
