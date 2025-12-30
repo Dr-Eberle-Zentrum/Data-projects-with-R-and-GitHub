@@ -231,7 +231,9 @@ overall_stats <- all_subjects %>%
 final_table <- bind_rows(overall_stats, sumary_stats)
 knitr::kable(final_table)
 ```
+
 | two weeks | Nights | Mean duration |SD duration | Missing Pct |
+|:---- |:---- |:---- |:----- |:---- |:----
 |Overall |	585|	5.758555|	2.712729	|0|
 |2023-02-20	|7	|6.872459|	2.880538	|0|
 |2023-03-06	|6	|5.621787|	2.971915	|0|
