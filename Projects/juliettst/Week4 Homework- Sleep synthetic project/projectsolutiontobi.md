@@ -113,9 +113,8 @@ all_subjects %>%
   geom_area(color = "steelblue", fill = "steelblue") +
   geom_smooth(method = "loess", color = "green") + # Die Trendlinie, die du wolltest
   labs(y = "Durchschnittliche Schlafdauer (h)", x = "Datum")
-  
-![visualization1](/plots/visualization1.png)
 ```
+![visualization1](/plots/visualization1.png)
 
 ```{r vis2, fig.height=8}
 # Sleep duration distribution:
@@ -135,9 +134,8 @@ ggplot(all_subjects, aes(y = two_week, x = duration_hrs, fill = two_week))+
   xlim(0, 14)
 
 ggsave("plots/visualization2.png", width = 10, height = 10, dpi = 300)
-![visualization2](/plots/visualization2.png)
 ```
-
+![visualization2](/plots/visualization2.png)
 
 
 ```{r vis3, warning = FALSE}
@@ -160,8 +158,8 @@ BDI %>%
   scale_x_date(date_breaks = "50 weeks", date_labels = "%b %Y")+
   facet_wrap(~ participant, scales = "free_x")
 ggsave("plots/visualization3.png", width = 10, height = 10, dpi = 300)
-![visualization3](/plots/visualization3.png)
 ```
+![visualization3](/plots/visualization3.png)
 
 Circadian Pattern Visualization
 ```{r vis4, fig.height=10}
@@ -205,9 +203,8 @@ ggplot(
     plot.title = element_text(face = "bold", hjust = 0.5)
   )
 ggsave("plots/visualization4.png", width = 10, height = 10, dpi = 300)
-![visualization4](/plots/visualization4.png)
 ```
-
+![visualization4](/plots/visualization4.png)
 
 ```{r formatedmarkdowntable}
 library(dplyr)
