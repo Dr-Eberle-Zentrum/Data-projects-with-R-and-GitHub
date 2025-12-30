@@ -114,3 +114,118 @@ all_subjects %>%
   geom_smooth(method = "loess", color = "green") + # Die Trendlinie, die du wolltest
   labs(y = "Durchschnittliche Schlafdauer (h)", x = "Datum")
 ```
+
+```{r vis2, fig.height=8}
+# Sleep duration distribution:
+library(ggridges)
+all_subjects <- all_subjects %>%
+  mutate(two_week = cut(study_date, breaks = "2 weeks"))
+
+ggplot(all_subjects, aes(y = two_week, x = duration_hrs, fill = two_week))+
+  geom_density_ridges(alpha = 0.7, scale = 1.5)+
+  theme_ridges()+
+  scale_fill_viridis_d(guide = "none")+
+  labs(
+    title = "Sleept duration distribution per 2 week blocs",
+    x = "Sleep duration (hrs)",
+    y = "Time slots (2-week-blocks)"
+  )+
+  xlim(0, 14)
+
+ggsave("plots/visualization2.png", width = 10, height = 10, dpi = 300)
+```
+
+
+
+```{r vis3, warning = FALSE}
+
+BDI <- BDI %>%
+  mutate(date = ymd(date))
+
+BDI %>% 
+  ggplot(
+    aes(
+      x = date,
+      y = BDI_score
+    )
+  )+
+  geom_violin(
+    aes(
+      fill = participant),
+    alpha = 0.3
+    )+
+  scale_x_date(date_breaks = "50 weeks", date_labels = "%b %Y")+
+  facet_wrap(~ participant, scales = "free_x")
+ggsave("plots/visualization3.png", width = 10, height = 10, dpi = 300)
+```
+
+Circadian Pattern Visualization
+```{r vis4, fig.height=10}
+all_subjects <- all_subjects %>%
+  mutate(
+    onset_hour = hour(von),
+    month_block = floor_date(study_date, "month")
+  ) %>%
+  filter(duration_hrs > 0 & duration_hrs <= 16)
+  
+ggplot(
+  all_subjects,
+  aes(x = hour(von))
+) +
+  stat_summary_bin(
+    aes(y = Dauer.des.Schlafs..s., fill = after_stat(y)),
+    fun = sum,
+    binwidth = 1,
+    geom = "col",
+    color = "white",
+    alpha = 0.9
+  ) +
+  coord_polar(start = -pi/2) +
+  scale_x_continuous(
+    breaks = seq(0, 21, 3),
+    limits = c(0, 24),
+    minor_breaks = NULL,
+    labels = function(x) sprintf("%02d:00", x)
+  ) +
+  scale_fill_viridis_c(option = "C", name = "Total sleep (h)") +
+  facet_wrap(~ floor_date(von, "month")) +
+  labs(
+    title = "Circadian Pattern of Sleep Onset",
+    x = "Sleep onset time (hour of day)",
+    y = "Total sleep duration (hours, per bin)"
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    axis.title.y  = element_blank(),
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = "bold", hjust = 0.5)
+  )
+ggsave("plots/visualization4.png", width = 10, height = 10, dpi = 300)
+```
+
+
+```{r formatedmarkdowntable}
+library(dplyr)
+library(knitr)
+
+sumary_stats <- all_subjects %>%
+  group_by(two_week) %>%
+  summarise(
+    N_Nights = n(),
+    Mean_Duration = mean(duration_hrs, na.rm =TRUE),
+    SD_Duration = sd(duration_hrs, na.rm = TRUE),
+    Missing_Pct = mean(is.na(duration_hrs))*100
+  )
+
+overall_stats <- all_subjects %>%
+  summarise(
+    two_week = "Overall",
+    N_Nights = n(),
+    Mean_Duration = mean(duration_hrs, na.rm = TRUE),
+    SD_Duration = sd(duration_hrs, na.rm = TRUE),
+    Missing_Pct = mean(is.na(duration_hrs)) * 100
+  )
+
+final_table <- bind_rows(overall_stats, sumary_stats)
+knitr::kable(final_table)
+```

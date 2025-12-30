@@ -228,6 +228,6 @@ overall_stats <- all_subjects %>%
   )
 
 final_table <- bind_rows(overall_stats, sumary_stats)
-ggsave("plots/visualization5.png", width = 10, height = 10, dpi = 300)
+knitr::kable(final_table)
 ```
 
