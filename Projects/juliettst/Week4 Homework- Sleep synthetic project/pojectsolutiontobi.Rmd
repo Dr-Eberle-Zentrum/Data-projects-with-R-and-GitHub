@@ -20,8 +20,8 @@ for (id in list.files("Projects/juliettst/Week4 Homework- Sleep synthetic projec
 
 all_subjects <- bind_rows(subjects)
 
-PANAS <- read.csv("Projects/juliettst/Week4 Homework- Sleep synthetic project/PANAS_scores.csv")
-BDI<- read.csv("Projects/juliettst/Week4 Homework- Sleep synthetic project/BDI_scores.csv")
+PANAS <- read.csv("Projects/juliettst/`Week4 Homework- Sleep synthetic project`/PANAS_scores.csv")
+BDI <- read.csv("Projects/juliettst/Week4 Homework- Sleep synthetic project/BDI_scores.csv")
 
 ```
 
