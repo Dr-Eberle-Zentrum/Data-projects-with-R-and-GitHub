@@ -1,0 +1,27 @@
+---
+title: "pojectsolution"
+output: html_document
+---
+Ich war erst mal völlig überfordert und konnte mit den Anweisung gar nichts
+anfangen. Dann habe ich mich von Gabriel inspirieren lassen:
+```{r setup, echo = FALSE}
+library(ggplot2)
+library(lubridate)
+library(tidyverse)
+```
+
+```{r import}
+
+subjects <- list()
+
+for (id in list.files("Projects/juliettst/Week4 Homework- Sleep synthetic project", pattern = "^subject_.*\\.csv$")){
+  subjects[[id]]<- read.csv(paste0("Projects/juliettst/Week4 Homework- Sleep synthetic project/",id))
+}
+
+all_subjects <- bind_rows(subjects)
+
+PANAS <- read.csv("Projects/juliettst/Week4 Homework- Sleep synthetic project/PANAS_scores.csv")
+BDI<- read.csv("Projects/juliettst/Week4 Homework- Sleep synthetic project/BDI_scores.csv")
+
+```
+
