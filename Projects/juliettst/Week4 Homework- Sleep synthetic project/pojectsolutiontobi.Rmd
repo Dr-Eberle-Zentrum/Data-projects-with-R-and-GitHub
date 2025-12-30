@@ -14,14 +14,60 @@ library(tidyverse)
 
 subjects <- list()
 
-for (id in list.files("Projects/juliettst/Week4 Homework- Sleep synthetic project", pattern = "^subject_.*\\.csv$")){
-  subjects[[id]]<- read.csv(paste0("Projects/juliettst/Week4 Homework- Sleep synthetic project/",id))
+for (id in list.files(".", pattern = "^subject_.*\\.csv$")){
+  subjects[[id]] <- read.csv(id)
 }
 
 all_subjects <- bind_rows(subjects)
 
-PANAS <- read.csv("Projects/juliettst/`Week4 Homework- Sleep synthetic project`/PANAS_scores.csv")
-BDI <- read.csv("Projects/juliettst/Week4 Homework- Sleep synthetic project/BDI_scores.csv")
+PANAS <- read.csv("PANAS_scores.csv")
+BDI <- read.csv("BDI_scores.csv")
 
 ```
+Jetzt kommt das Data cleaning:
+
+```{r datacleaning}
+# Spalten umbenennen:
+all_subjects <- all_subjects %>%
+  mutate(
+    von = ymd_hms(von),
+    bis = ymd_hms(bis)
+  )
+# Duplikate entfernen: 
+all_subjects <- all_subjects %>%
+  arrange(von, bis, participant, desc(Dauer.des.Schlafs..s.)) %>%
+  distinct(von, bis, participant, .keep_all = TRUE)
+# 
+only_duplicates <- all_subjects %>%
+  filter(duplicated(across(c(participant, von, bis)))) %>%
+  arrange(von, bis, participant, desc(Dauer.des.Schlafs..s.))
+```
+Da only_duplicates keine Zeilen hat, sind keine Duplikate mehr vorhanden.
+
+```{r datacleaning2}
+
+all_subjects %>% count(is.na(all_subjects))
+all_subjects <- all_subjects %>% 
+  mutate(
+    unplausible =
+      ifelse(Dauer.des.Schlafs..s. > 57600 | Herzfrequenz..min. < 30 | Herzfrequenz..max. > 200, 1, 0) # no implausible values
+  )
+```
+
+```{r datavalidation}
+# Verfiy sleep duration:
+
+all_subjects <- all_subjects %>%
+  mutate(
+    sleep_sum =`leicht..s.` +`tief..s.`+`rem..s.`+`wach..s.`,
+    diff_secs = `Dauer.des.Schlafs..s.` - sleep_sum, 
+    sleep_ok = abs(diff_secs) <= 600
+  )
+
+# Confirm timestamp logical (bis > von):
+all_subjects <- all_subjects %>%
+  
+```
+
+
 
