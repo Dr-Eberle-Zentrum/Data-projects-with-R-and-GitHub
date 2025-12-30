@@ -229,5 +229,5 @@ overall_stats <- all_subjects %>%
   )
 
 final_table <- bind_rows(overall_stats, sumary_stats)
-knitr::kable(final_table)
 ```
+knitr::kable(final_table)
