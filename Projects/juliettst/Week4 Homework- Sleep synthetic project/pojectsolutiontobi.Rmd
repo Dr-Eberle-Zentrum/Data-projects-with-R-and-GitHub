@@ -11,7 +11,6 @@ library(tidyverse)
 ```
 
 ```{r import}
-
 subjects <- list()
 
 for (id in list.files(".", pattern = "^subject_.*\\.csv$")){
@@ -45,7 +44,6 @@ only_duplicates <- all_subjects %>%
 Da only_duplicates keine Zeilen hat, sind keine Duplikate mehr vorhanden.
 
 ```{r datacleaning2}
-
 all_subjects %>% count(is.na(all_subjects))
 all_subjects <- all_subjects %>% 
   mutate(
@@ -64,9 +62,98 @@ all_subjects <- all_subjects %>%
     sleep_ok = abs(diff_secs) <= 600
   )
 
-# Confirm timestamp logical (bis > von):
+# Confirm timestamp logical (bis > von): Wenn bis länger ist als von, dann kommt in die neue Spalte der Eintrag von TRUE!
 all_subjects <- all_subjects %>%
-  
+  mutate(
+    timestamp_ok = bis > von
+  )
+
+# Check sleep period duration matches timestamp difference:
+all_subjects <- all_subjects %>% 
+  mutate(
+    duration_secs_calc = as.numeric(bis - von, units = "secs"),
+    duration_check = abs(duration_secs_calc - `Dauer.des.Schlafs..s.`) <= 60*5 
+  )
+# duration_secs_calc rechnet die Schlafdauer in Sekundendauer aus
+# die Logik oder sinnhaftigkeit prüft die neue Spalte: duration_check, dort steht überall False, sprich die Dauer sind gleich, die differenz ist 0
+
+# Outlier identifier:
+all_subjects <- all_subjects %>% 
+  mutate(
+    sleepduration.over.12 = ifelse(Dauer.des.Schlafs..s. > 12*60*60, 1, 0),
+    sleepduration.under.3 = ifelse(Dauer.des.Schlafs..s. < 3*60*60, 1, 0)
+  )
+# Prüfen auf physiologische Plausibilität:
+all_subjects <- all_subjects %>%
+  mutate(
+    physiologically.plausible= ifelse(Herzfrequenz..min. > 40 & Herzfrequenz..max. < 100, 1, 0)
+  )
+```
+
+Ganz ehrlich, diese ganze Anleitung ist eine Anleitung der Verwirrung. Es ist eine Auflistung an Variablen und nicht an Handlungsanweisungen. Ich kann kaum etwas damit anfangen. 
+
+
+```{r sleeparchitectureovertime}
+
+all_subjects <- all_subjects %>%
+  mutate(
+    study_date = as.Date(`von`),
+    duration_hrs = as.numeric(`Dauer.des.Schlafs..s.`/3600)
+  ) %>%
+  filter(duration_hrs <= 16)
+
+# Variante: Durchschnitt pro Tag plotten
+all_subjects %>%
+  group_by(study_date) %>%
+  summarise(mean_duration = mean(duration_hrs, na.rm = TRUE)) %>%
+  ggplot(aes(x = study_date, y = mean_duration)) +
+  geom_area(color = "steelblue", fill = "steelblue") +
+  geom_smooth(method = "loess", color = "green") + # Die Trendlinie, die du wolltest
+  labs(y = "Durchschnittliche Schlafdauer (h)", x = "Datum")
+
+```
+
+
+```{r vis2, fig.height=8}
+# Sleep duration distribution:
+library(ggridges)
+all_subjects <- all_subjects %>%
+  mutate(two_week = cut(study_date, breaks = "2 weeks"))
+
+ggplot(all_subjects, aes(y = two_week, x = duration_hrs, fill = two_week))+
+  geom_density_ridges(alpha = 0.7, scale = 1.5)+
+  theme_ridges()+
+  scale_fill_viridis_d(guide = "none")+
+  labs(
+    title = "Sleept duration distribution per 2 week blocs",
+    x = "Sleep duration (hrs)",
+    y = "Time slots (2-week-blocks)"
+  )+
+  xlim(0, 14)
+```
+
+
+
+```{r vis3, warning = FALSE}
+
+BDI <- BDI %>%
+  mutate(date = ymd(date))
+
+BDI %>% 
+  ggplot(
+    aes(
+      x = date,
+      y = BDI_score
+    )
+  )+
+  geom_violin(
+    aes(
+      fill = participant),
+    alpha = 0.3
+    )+
+  scale_x_date(date_breaks = "50 weeks", date_labels = "%b %Y")+
+  facet_wrap(~ participant, scales = "free_x")
+
 ```
 
 
