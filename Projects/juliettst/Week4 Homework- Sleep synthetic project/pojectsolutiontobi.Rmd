@@ -111,6 +111,8 @@ all_subjects %>%
   geom_smooth(method = "loess", color = "green") + # Die Trendlinie, die du wolltest
   labs(y = "Durchschnittliche Schlafdauer (h)", x = "Datum")
 
+ggsave("plots/visualization1.png", width = 10, height = 10, dpi = 300)
+
 ```
 
 
@@ -130,6 +132,8 @@ ggplot(all_subjects, aes(y = two_week, x = duration_hrs, fill = two_week))+
     y = "Time slots (2-week-blocks)"
   )+
   xlim(0, 14)
+
+ggsave("plots/visualization2.png", width = 10, height = 10, dpi = 300)
 ```
 
 
@@ -153,7 +157,7 @@ BDI %>%
     )+
   scale_x_date(date_breaks = "50 weeks", date_labels = "%b %Y")+
   facet_wrap(~ participant, scales = "free_x")
-
+ggsave("plots/visualization3.png", width = 10, height = 10, dpi = 300)
 ```
 
 Circadian Pattern Visualization
@@ -197,6 +201,7 @@ ggplot(
     panel.grid.minor = element_blank(),
     plot.title = element_text(face = "bold", hjust = 0.5)
   )
+ggsave("plots/visualization4.png", width = 10, height = 10, dpi = 300)
 ```
 
 
@@ -223,5 +228,6 @@ overall_stats <- all_subjects %>%
   )
 
 final_table <- bind_rows(overall_stats, sumary_stats)
+ggsave("plots/visualization5.png", width = 10, height = 10, dpi = 300)
 ```
 
