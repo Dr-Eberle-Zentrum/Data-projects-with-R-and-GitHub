@@ -206,7 +206,7 @@ ggsave("plots/visualization4.png", width = 10, height = 10, dpi = 300)
 
 
 ```{r formatedmarkdowntable}
-library(dlyr)
+library(dplyr)
 library(knitr)
 
 sumary_stats <- all_subjects %>%
