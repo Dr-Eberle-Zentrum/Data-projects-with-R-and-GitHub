@@ -103,7 +103,7 @@ ggplot(jahres_stats, aes(x = Inbetriebnahme_Jahr)) +
     ## Removed 1 row containing missing values or values outside the scale range
     ## (`geom_line()`).
 
-![](unnamed-chunk-1-1.png)
+![](Plots_Tim/unnamed-chunk-1-1.png)
 
 ## Aufgabe 2
 
@@ -161,5 +161,6 @@ ggplot(pairs, aes(x = var1, y = var2, fill = rho_sig)) +
   )
 ```
 
-![](unnamed-chunk-2-1.png)
+![](Plots_Tim/unnamed-chunk-2-1.png)
+
 
