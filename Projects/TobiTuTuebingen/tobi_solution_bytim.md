@@ -103,7 +103,7 @@ ggplot(jahres_stats, aes(x = Inbetriebnahme_Jahr)) +
     ## Removed 1 row containing missing values or values outside the scale range
     ## (`geom_line()`).
 
-![](tobi_solution_bytim_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
+![](unnamed-chunk-1-1.png)
 
 ## Aufgabe 2
 
@@ -161,4 +161,5 @@ ggplot(pairs, aes(x = var1, y = var2, fill = rho_sig)) +
   )
 ```
 
-![](tobi_solution_bytim_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+![](unnamed-chunk-2-1.png)
+
