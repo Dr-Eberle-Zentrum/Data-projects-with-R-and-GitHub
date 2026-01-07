@@ -1,5 +1,0 @@
----
-title: "UFC Analysis"
-output: md_document
----
-
