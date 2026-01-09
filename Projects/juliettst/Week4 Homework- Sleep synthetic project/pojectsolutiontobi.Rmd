@@ -8,6 +8,7 @@ anfangen. Dann habe ich mich von Gabriel inspirieren lassen:
 library(ggplot2)
 library(lubridate)
 library(tidyverse)
+library(readr)
 ```
 
 ```{r import}
@@ -141,9 +142,7 @@ ggsave("plots/visualization2.png", width = 10, height = 10, dpi = 300)
 ```{r vis3, warning = FALSE}
 
 BDI <- BDI %>%
-  mutate(date = ymd(date))
-
-BDI %>% 
+  mutate(date = ymd(date)) %>% 
   ggplot(
     aes(
       x = date,

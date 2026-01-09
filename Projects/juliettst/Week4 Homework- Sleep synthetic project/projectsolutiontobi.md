@@ -21,10 +21,8 @@ for (id in list.files(".", pattern = "^subject_.*\\.csv$")){
 }
 
 all_subjects <- bind_rows(subjects)
-
 PANAS <- read.csv("PANAS_scores.csv")
 BDI <- read.csv("BDI_scores.csv")
-
 ```
 Jetzt kommt das Data cleaning:
 
@@ -141,9 +139,7 @@ ggsave("plots/visualization2.png", width = 10, height = 10, dpi = 300)
 ```{r vis3, warning = FALSE}
 
 BDI <- BDI %>%
-  mutate(date = ymd(date))
-
-BDI %>% 
+  mutate(date = ymd(date)) %>% 
   ggplot(
     aes(
       x = date,
