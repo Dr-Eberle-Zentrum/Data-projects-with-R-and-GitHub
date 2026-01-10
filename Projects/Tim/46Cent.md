@@ -11,12 +11,16 @@
 
 # Wie entwickeln sich die Heißtage und Frosttage im laufe der Zeit und Saisonal?
 ![](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/solution_Tim_byGabriel/Projects/Tim/46Cent_files/figure-markdown_strict/unnamed-chunk-5-1.png)
+![](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/solution_Tim_byGabriel/Projects/Tim/46Cent_files/figure-markdown_strict/unnamed-chunk-6-1.png)
+![](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/solution_Tim_byGabriel/Projects/Tim/46Cent_files/figure-markdown_strict/unnamed-chunk-7-1.png)
 
 # Saisonale Trenddiagramme, alle Saisons in einem Diagramm (2023)
-![](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/solution_Tim_byGabriel/Projects/Tim/46Cent_files/figure-markdown_strict/unnamed-chunk-6-1.png)
+![](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/solution_Tim_byGabriel/Projects/Tim/46Cent_files/figure-markdown_strict/unnamed-chunk-8-1.png)
+
 
 # Wie häufig treten Trockenperioden auf und wie lange dauern diese an?
-![](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/solution_Tim_byGabriel/Projects/Tim/46Cent_files/figure-markdown_strict/unnamed-chunk-7-1.png)
+![](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/solution_Tim_byGabriel/Projects/Tim/46Cent_files/figure-markdown_strict/unnamed-chunk-9-1.png)
+![](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/solution_Tim_byGabriel/Projects/Tim/46Cent_files/figure-markdown_strict/unnamed-chunk-10-1.png)
 
 # Gibt es einen Zusammenhang zwischen Tropennächten und Trockentagen?
 
