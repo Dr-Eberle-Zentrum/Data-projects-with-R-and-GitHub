@@ -84,7 +84,7 @@ daten %>%
   )
 ```
 
-```{r, echo=FALSE}
+```{r}
 daten %>%
   filter(saison == c("winter_djf", "fruehjahr_mam", "sommer_jja", "herbst_son")) %>%
   ggplot(
