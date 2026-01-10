@@ -5,20 +5,20 @@ date: "`r Sys.Date()`"
 output: md_document
 ---
 
-```{r misc, include=FALSE}
+```{r misc, echo=FALSE}
 library(tidyverse)
 library(this.path)
 library(ggrepel)
 ```
  
 # Reading the data
-```{r, include=FALSE}
+```{r, echo=FALSE}
 setwd(this.path::this.dir())
 daten <- read_csv2("klimadaten_tuebingen.csv")
 ```
 
 # Wie veränderte sich die Temperatur im zeitlichen Verlauf?
-```{r, include=FALSE}
+```{r, echo=FALSE}
 daten %>%
   filter(saison == "kalenderjahr") %>% 
   ggplot(
@@ -33,7 +33,7 @@ daten %>%
 ```
 
 # Wie verändert sich die Temperatur im Jahreszeitlichen Verlauf, über den gesamten Messzeitraum?
-```{r, include=FALSE}
+```{r, echo=FALSE}
 
 #bei dem plot wärs cool vier lineare trendlinien einzubauen und an jede den steigungskoeffizienten dranzuschreiben, damit man sehen kann, ob die #jahreszeiten unterscheidlich schnell wärmer werden, oder ggf. nur die sommer etc... ;)
 
@@ -54,7 +54,7 @@ daten %>%
 ```
 
 # Wie verhalten sich die Niederschlagsmengen in Kombination mit den Heißen Tagen?
-```{r, include=FALSE}
+```{r, echo=FALSE}
 daten %>%
   filter(saison == "kalenderjahr") %>% 
   ggplot(
@@ -69,7 +69,7 @@ daten %>%
 ```
 
 # Wie entwickeln sich die Heißtage und Frosttage im laufe der Zeit und Saisonal?
-```{r, include=FALSE}
+```{r, echo=FALSE}
 daten %>%
   filter(saison == c("winter_djf", "fruehjahr_mam", "sommer_jja", "herbst_son")) %>%
   ggplot(
@@ -84,7 +84,7 @@ daten %>%
   )
 ```
 
-```{r, include=FALSE}
+```{r, echo=FALSE}
 daten %>%
   filter(saison == c("winter_djf", "fruehjahr_mam", "sommer_jja", "herbst_son")) %>%
   ggplot(
@@ -99,7 +99,7 @@ daten %>%
   )
 ```
 
-```{r, include=FALSE}
+```{r, echo=FALSE}
 daten %>% 
   filter(saison == "kalenderjahr") %>%
   pivot_longer(cols = c(temperatur_heisse_tage, temperatur_frosttage),
@@ -121,7 +121,7 @@ daten %>%
 ```
 
 # Saisonale Trenddiagramme, alle Saisons in einem Diagramm (2023)
-```{r, include=FALSE}
+```{r, echo=FALSE}
 daten %>%
   filter(saison %in% c("winter_djf", "fruehjahr_mam", "sommer_jja", "herbst_son") & jahr == 2023) %>%
   ggplot(aes(x = saison, y = temperatur_mittelwert, fill = saison)) +
@@ -136,7 +136,7 @@ daten %>%
 ```
 
 # Wie häufig treten Trockenperioden auf und wie lange dauern diese an?
-```{r, include=FALSE}
+```{r, echo=FALSE}
 daten %>% 
   filter(saison == "kalenderjahr") %>%
   mutate(periode_kategorie = cut(trockenperiode_tage_maximum,
@@ -156,7 +156,7 @@ daten %>%
   )
 ```
 
-```{r, include=FALSE}
+```{r, echo=FALSE}
 daten %>% 
   filter(saison == "kalenderjahr") %>% 
   ggplot(
@@ -174,7 +174,7 @@ daten %>%
 Es gibt keine Tropennächte ?
 
 # Wie häufig gab es jährlich mehr als 5 Frosttage/Heißtage im Jahr?
-```{r, include=FALSE}
+```{r, echo=FALSE}
 daten %>%
   filter(saison == "kalenderjahr") %>%
   select(temperatur_heisse_tage, temperatur_frosttage) %>%
@@ -194,7 +194,7 @@ daten %>%
 ```
 
 # Hat die Anzahl an Starknierderschlägen über die Jahre zugenommen?
-```{r, include=FALSE}
+```{r, echo=FALSE}
 daten %>% 
   filter(saison == "kalenderjahr") %>% 
   ggplot(
