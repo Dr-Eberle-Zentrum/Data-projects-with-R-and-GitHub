@@ -46,8 +46,13 @@ fighters_clean <- fighters %>%
     Weight_lbs = clean_weight(Wt.),
     Reach_in = clean_reach(Reach),
     Total_Fights = W + L + D,
-    # Avoid division by zero
-    WL_Ratio = ifelse(Total_Fights > 0, W / (W + L), 0)
+    # ---------------------------------------------------------
+    # IMPLEMENTATION OF GABRIEL'S SUGGESTION
+    # Laplace Smoothing: (Wins + 1) / (Wins + Losses + 2)
+    # This prevents 1.0 ratios for fighters with few fights 
+    # and handles division by zero automatically.
+    # ---------------------------------------------------------
+    WL_Ratio = (W + 1) / (W + L + 2)
   ) %>%
   filter(!is.na(Weight_lbs))
 
@@ -63,8 +68,8 @@ fighters_clean$Weight_Class_Bin <- sapply(fighters_clean$Weight_lbs, define_clas
 # Calculate Height-to-Reach Ratio
 fighters_clean <- fighters_clean %>%
   mutate(Height_Reach_Ratio = Height_in / Reach_in)
-```
 
+```
 
 ```{r Cleaning_Events_and_Locations}
 
@@ -175,8 +180,17 @@ map_data_joined <- left_join(world_data, country_counts, by = c("region" = "Coun
 
 ggplot(map_data_joined, aes(long, lat, group = group, fill = n)) +
   geom_polygon(color = "white", linewidth = 0.1) +
-  scale_fill_viridis_c(na.value = "grey90", name = "Events") +
-  labs(title = "UFC Events by Country") +
+  # ---------------------------------------------------------
+  # CHANGE: Added trans = "log10" to handle the USA outlier
+  # Added 'breaks' so the legend shows readable numbers (1, 10, 100...)
+  # ---------------------------------------------------------
+  scale_fill_viridis_c(
+    na.value = "grey90", 
+    name = "Events", 
+    trans = "log10", 
+    breaks = c(1, 5, 20, 100, 500)
+  ) +
+  labs(title = "UFC Events by Country (Log Scale)") +
   theme_void()
 
 # US State Map
@@ -190,9 +204,20 @@ us_map_joined <- left_join(us_data, state_counts, by = c("region" = "State"))
 
 ggplot(us_map_joined, aes(long, lat, group = group, fill = n)) +
   geom_polygon(color = "white") +
-  scale_fill_viridis_c(na.value = "grey90", name = "Events") +
-  labs(title = "UFC Events by US State") +
-  theme_void()
+  # ---------------------------------------------------------
+  # CHANGE: Added log10 scale for US States as well.
+  # Adjusted breaks to fit the state-level distribution 
+  # (e.g., 1, 10, 50, 200) to capture low, medium, and high frequency states.
+  # ---------------------------------------------------------
+  scale_fill_viridis_c(
+    na.value = "grey90", 
+    name = "Events", 
+    trans = "log10", 
+    breaks = c(1, 5, 20, 100, 300)
+  ) +
+  labs(title = "UFC Events by US State (Log Scale)") +
+  theme_void() + 
+  coord_fixed(1.3) # Optional: Makes the map projection look less "stretched"
 ```
 ```{r Visualization_4}
 fights_clean %>%

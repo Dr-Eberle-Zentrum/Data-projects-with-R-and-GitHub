@@ -27,8 +27,13 @@
         Weight_lbs = clean_weight(Wt.),
         Reach_in = clean_reach(Reach),
         Total_Fights = W + L + D,
-        # Avoid division by zero
-        WL_Ratio = ifelse(Total_Fights > 0, W / (W + L), 0)
+        # ---------------------------------------------------------
+        # IMPLEMENTATION OF GABRIEL'S SUGGESTION
+        # Laplace Smoothing: (Wins + 1) / (Wins + Losses + 2)
+        # This prevents 1.0 ratios for fighters with few fights 
+        # and handles division by zero automatically.
+        # ---------------------------------------------------------
+        WL_Ratio = (W + 1) / (W + L + 2)
       ) %>%
       filter(!is.na(Weight_lbs))
 
