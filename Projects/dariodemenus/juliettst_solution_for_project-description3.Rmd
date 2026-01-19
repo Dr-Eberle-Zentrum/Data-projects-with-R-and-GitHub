@@ -181,12 +181,11 @@ setwd(this.path::this.dir())
     -   `Nmin_mg_kg = NO3_mg_kg + NH4_mg_kg`
 
 ```{r}
-library(dplyr)
 
 # Load photometer data
 nmin_jena <- read_excel("2025_Nmin_Jena.xlsx", 
-                       skip = 8, 
-                       col_names = FALSE) %>%
+                       skip = 7, 
+                       col_names = TRUE) %>%
   setNames(c("lab_number", "probenbezeichnung", "NO3_N_mg_l", "NH4_N_mg_l")) %>%
   filter(!is.na(lab_number) & !is.na(probenbezeichnung)) %>%  # Beide prüfen
   mutate(across(c(NO3_N_mg_l, NH4_N_mg_l), as.numeric)) %>%
