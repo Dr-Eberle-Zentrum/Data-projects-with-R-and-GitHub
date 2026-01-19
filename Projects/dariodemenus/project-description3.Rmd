@@ -129,12 +129,29 @@ Ziel ist es, die 2025er Rohdaten in einen "Tidy Data Frame" zu
 2.  Berechne den SWC (als Fraktion):
     `swc = (wet soil [g] - dry_soil_swc_g) / dry_soil_swc_g`
 
-    ```{r}
+```{r}
+library(this.path)
+library(readxl)
+library(readr)
+library(readxl)
+library(lubridate)
+library(dplyr)
+library(ggplot2)
+library(tidyverse)
+library(stringr)
+library(purrr)
+library(tidyr)
+library(lme4)
+library(lmerTest)
+library(ggpubr)
+library(rstatix)
+library(stargazer)
+library(ggeffects)
+library(kableExtra)
+```
 
-    library(this.path)
-    library(readxl)
-
-    setwd(this.path::this.dir())
+```{r}
+setwd(this.path::this.dir())
 
     lab_data <- read_xlsx("data_jena_2025 (1).xlsx") %>%
       mutate(
@@ -149,7 +166,7 @@ Ziel ist es, die 2025er Rohdaten in einen "Tidy Data Frame" zu
         swc = (`wet soil [g]` - dry_soil_swc_g) / dry_soil_swc_g,
         dry_soil_nmin_g = `Nmin wet soil [g]` / (1 + swc)
       )
-    ```
+```
 
 ###  Schritt 2: Berechnung Nmin in mg/kg
 

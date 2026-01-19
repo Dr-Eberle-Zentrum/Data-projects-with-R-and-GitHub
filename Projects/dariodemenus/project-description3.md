@@ -106,14 +106,136 @@ Ziel ist es, die 2025er Rohdaten in einen “Tidy Data Frame” zu
 ### Schritt 1: Berechnung des Bodenwassergehalts (SWC) 2025
 
 1.  Lade die Labordaten (`data_jena_2025.xlsx`).
-2.  Behandle fehlende Daten und **Duplikate/Fehler**:
+
+<!-- -->
+
+1.  Behandle fehlende Daten und **Duplikate/Fehler**:
+
     -   *Tipp für B2A22:* Wenn zwei Messwerte für einen Plot vorliegen,
         berechne den Mittelwert, um mit einem einzigen Wert
         weiterzuarbeiten.
-3.  Berechne das Trockengewicht der SWC-Probe (`dry_soil_swc_g`):
+
+<!-- -->
+
+1.  Berechne das Trockengewicht der SWC-Probe (`dry_soil_swc_g`):
     `dry_soil_swc_g = (dry soil + glass [g]) - (glass weight [g])`
-4.  Berechne den SWC (als Fraktion):
+
+2.  Berechne den SWC (als Fraktion):
     `swc = (wet soil [g] - dry_soil_swc_g) / dry_soil_swc_g`
+
+<!-- -->
+
+    library(this.path)
+    library(readxl)
+    library(readr)
+    library(readxl)
+    library(lubridate)
+
+    ## 
+    ## Attaching package: 'lubridate'
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     date, intersect, setdiff, union
+
+    library(dplyr)
+
+    ## 
+    ## Attaching package: 'dplyr'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
+
+    library(ggplot2)
+    library(tidyverse)
+
+    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+    ## ✔ forcats 1.0.1     ✔ tibble  3.3.0
+    ## ✔ purrr   1.2.0     ✔ tidyr   1.3.1
+    ## ✔ stringr 1.6.0
+
+    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ✖ dplyr::filter() masks stats::filter()
+    ## ✖ dplyr::lag()    masks stats::lag()
+    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+
+    library(stringr)
+    library(purrr)
+    library(tidyr)
+    library(lme4)
+
+    ## Loading required package: Matrix
+    ## 
+    ## Attaching package: 'Matrix'
+    ## 
+    ## The following objects are masked from 'package:tidyr':
+    ## 
+    ##     expand, pack, unpack
+
+    library(lmerTest)
+
+    ## 
+    ## Attaching package: 'lmerTest'
+    ## 
+    ## The following object is masked from 'package:lme4':
+    ## 
+    ##     lmer
+    ## 
+    ## The following object is masked from 'package:stats':
+    ## 
+    ##     step
+
+    library(ggpubr)
+    library(rstatix)
+
+    ## 
+    ## Attaching package: 'rstatix'
+    ## 
+    ## The following object is masked from 'package:stats':
+    ## 
+    ##     filter
+
+    library(stargazer)
+
+    ## 
+    ## Please cite as: 
+    ## 
+    ##  Hlavac, Marek (2022). stargazer: Well-Formatted Regression and Summary Statistics Tables.
+    ##  R package version 5.2.3. https://CRAN.R-project.org/package=stargazer
+
+    library(ggeffects)
+    library(kableExtra)
+
+    ## 
+    ## Attaching package: 'kableExtra'
+    ## 
+    ## The following object is masked from 'package:dplyr':
+    ## 
+    ##     group_rows
+
+    setwd(this.path::this.dir())
+
+        lab_data <- read_xlsx("data_jena_2025 (1).xlsx") %>%
+          mutate(
+            `dry soil + glass [g]` = if_else(
+              `plot ID` == "B2A22",  # Nutze plot ID statt row number
+              as.character(mean(c(86.178, 85.864))),
+              `dry soil + glass [g]`
+            ),
+            `dry soil + glass [g]` = as.numeric(`dry soil + glass [g]`), 
+            `glass weight [g]` = as.numeric(`glass weight [g]`),        
+            dry_soil_swc_g = `dry soil + glass [g]` - `glass weight [g]`,
+            swc = (`wet soil [g]` - dry_soil_swc_g) / dry_soil_swc_g,
+            dry_soil_nmin_g = `Nmin wet soil [g]` / (1 + swc)
+          )
+
+    ## New names:
+    ## • `` -> `...6`
 
 ### Schritt 2: Berechnung Nmin in mg/kg
 
@@ -128,20 +250,97 @@ Ziel ist es, die 2025er Rohdaten in einen “Tidy Data Frame” zu
     -   `NH4_mg_kg = (NH4-N [mg/l] * 50) / dry_soil_nmin_g`
     -   `Nmin_mg_kg = NO3_mg_kg + NH4_mg_kg`
 
+<!-- -->
+
+    library(dplyr)
+
+    # Load photometer data
+    nmin_jena <- read_excel("2025_Nmin_Jena.xlsx", 
+                           skip = 8, 
+                           col_names = FALSE) %>%
+      setNames(c("lab_number", "probenbezeichnung", "NO3_N_mg_l", "NH4_N_mg_l")) %>%
+      filter(!is.na(lab_number) & !is.na(probenbezeichnung)) %>%  # Beide prüfen
+      mutate(across(c(NO3_N_mg_l, NH4_N_mg_l), as.numeric)) %>%
+
+    # Nmin Berechnung
+      # Negative NH4-Werte auf 0 setzen
+      mutate(NH4_N_mg_l = if_else(NH4_N_mg_l < 0, 0, NH4_N_mg_l)) %>%
+      # Join mit lab_data
+      left_join(lab_data, by = c("probenbezeichnung" = "plot ID")) %>%
+      mutate(
+        dry_soil_nmin_g = `Nmin wet soil [g]` / (1 + swc),
+        NO3_mg_kg = (NO3_N_mg_l * 50) / dry_soil_nmin_g,
+        NH4_mg_kg = (NH4_N_mg_l * 50) / dry_soil_nmin_g,
+        Nmin_mg_kg = NO3_mg_kg + NH4_mg_kg
+      )
+
+    ## New names:
+    ## • `` -> `...1`
+    ## • `` -> `...2`
+    ## • `` -> `...3`
+    ## • `` -> `...4`
+
 ### Schritt 3: Zusammenfügen und Exportieren
 
 1.  Verbinde (`join`) die berechneten Nmin-Werte mit den Metadaten
     (`Plot information.xlsx`) über den `plotcode`.
-2.  Lade die sauberen 2024er Daten (`Results 2024.xlsx`).
-3.  Kombiniere beide Datensätze (2024 & 2025) in einen langen Data
+
+<!-- -->
+
+    nmin_2025 <- nmin_jena %>%
+      left_join(read_excel("Plot information.xlsx"), 
+                by = c("probenbezeichnung" = "plotcode"))
+
+1.  Lade die sauberen 2024er Daten (`Results 2024.xlsx`).
+
+<!-- -->
+
+    nmin_2024 <- read_excel("Results 2024.xlsx", sheet = 3, skip = 0) %>%
+      rename(
+        NO3_mg_kg = NO3,
+        NH4_mg_kg = NH4,
+        Nmin_mg_kg = Nmin,
+        leg = legume
+      )
+
+1.  Kombiniere beide Datensätze (2024 & 2025) in einen langen Data
     Frame. Füge eine Spalte `Year` hinzu.
-4.  **Export:** Schreibe eine **neue Excel-Datei**
+
+<!-- -->
+
+    nmin_combined <- bind_rows(
+      nmin_2024 %>% mutate(Year = 2024),
+      nmin_2025 %>% 
+        rename(Plot_ID = probenbezeichnung) %>%
+        mutate(Year = 2025)
+    )
+
+    ## New names:
+    ## • `...6` -> `...9`
+
+1.  **Export:** Schreibe eine **neue Excel-Datei**
     `Jena_Nmin_Combined.xlsx`.
     -   Diese soll zwei Tabellenblätter enthalten: eines namens “2024”
         und eines namens “2025”.
     -   Die Spalte `Year` soll in den einzelnen Blättern *nicht*
         enthalten sein (da durch den Blattnamen impliziert), aber im
         R-Objekt für die Analyse vorhanden bleiben.
+
+<!-- -->
+
+    library(readxl)
+    library(dplyr)
+    library(writexl)
+
+
+    # Export
+    write_xlsx(
+      list(
+        "2024" = nmin_combined %>% filter(Year == 2024) %>% select(-Year),
+        "2025" = nmin_combined %>% filter(Year == 2025) %>% select(-Year)
+      ),
+      path = "Jena_Nmin_Combined.xlsx"
+    )
 
 ## 5. Visualisierung
 
