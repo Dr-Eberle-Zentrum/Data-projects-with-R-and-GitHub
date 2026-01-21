@@ -15,13 +15,13 @@ library(readr)
 subjects <- list()
 
 for (id in list.files(".", pattern = "^subject_.*\\.csv$")){
-  subjects[[id]] <- read.csv(id)
+  subjects[[id]] <- readr::read_csv(id, show_col_types = FALSE)
 }
 
 all_subjects <- bind_rows(subjects)
 
-PANAS <- read.csv("PANAS_scores.csv")
-BDI <- read.csv("BDI_scores.csv")
+PANAS <- readr::read_csv("PANAS_scores.csv", show_col_types = FALSE)
+BDI <- readr::read_csv("BDI_scores.csv", show_col_types = FALSE)
 
 ```
 Jetzt kommt das Data cleaning:
@@ -35,12 +35,12 @@ all_subjects <- all_subjects %>%
   )
 # Duplikate entfernen: 
 all_subjects <- all_subjects %>%
-  arrange(von, bis, participant, desc(Dauer.des.Schlafs..s.)) %>%
+  arrange(von, bis, participant, desc(`Dauer.des.Schlafs..s.`)) %>%
   distinct(von, bis, participant, .keep_all = TRUE)
 # 
 only_duplicates <- all_subjects %>%
   filter(duplicated(across(c(participant, von, bis)))) %>%
-  arrange(von, bis, participant, desc(Dauer.des.Schlafs..s.))
+  arrange(von, bis, participant, desc(`Dauer.des.Schlafs..s.`))
 ```
 Da only_duplicates keine Zeilen hat, sind keine Duplikate mehr vorhanden.
 
@@ -49,7 +49,7 @@ all_subjects %>% count(is.na(all_subjects))
 all_subjects <- all_subjects %>% 
   mutate(
     unplausible =
-      ifelse(Dauer.des.Schlafs..s. > 57600 | Herzfrequenz..min. < 30 | Herzfrequenz..max. > 200, 1, 0) # no implausible values
+      ifelse(`Dauer.des.Schlafs..s.` > 57600 | `Herzfrequenz..min.` < 30 | `Herzfrequenz..max.` > 200, 1, 0) # no implausible values
   )
 ```
 
@@ -81,13 +81,13 @@ all_subjects <- all_subjects %>%
 # Outlier identifier:
 all_subjects <- all_subjects %>% 
   mutate(
-    sleepduration.over.12 = ifelse(Dauer.des.Schlafs..s. > 12*60*60, 1, 0),
-    sleepduration.under.3 = ifelse(Dauer.des.Schlafs..s. < 3*60*60, 1, 0)
+    sleepduration.over.12 = ifelse(`Dauer.des.Schlafs..s.` > 12*60*60, 1, 0),
+    sleepduration.under.3 = ifelse(`Dauer.des.Schlafs..s.` < 3*60*60, 1, 0)
   )
 # Prüfen auf physiologische Plausibilität:
 all_subjects <- all_subjects %>%
   mutate(
-    physiologically.plausible= ifelse(Herzfrequenz..min. > 40 & Herzfrequenz..max. < 100, 1, 0)
+    physiologically.plausible= ifelse(`Herzfrequenz..min.` > 40 & `Herzfrequenz..max.` < 100, 1, 0)
   )
 ```
 
@@ -173,7 +173,7 @@ ggplot(
   aes(x = hour(von))
 ) +
   stat_summary_bin(
-    aes(y = Dauer.des.Schlafs..s., fill = after_stat(y)),
+    aes(y = `Dauer.des.Schlafs..s.`, fill = after_stat(y)),
     fun = sum,
     binwidth = 1,
     geom = "col",
