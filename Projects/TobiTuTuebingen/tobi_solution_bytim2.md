@@ -119,7 +119,7 @@ ggplot(jahres_stats, aes(x = Inbetriebnahme_Jahr)) +
     ## Warning: Removed 1 row containing missing values or values outside the scale range
     ## (`geom_line()`).
 
-![](tobi_solution_bytim2_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
+![](Plots_Tim/plot1.png)
 
 ## Aufgabe 2
 
@@ -211,7 +211,7 @@ ggplot(pairs_corr, aes(x = var1, y = var2, fill = rho_sig)) +
     ## Warning: Removed 16 rows containing missing values or values outside the scale range
     ## (`geom_point()`).
 
-![](tobi_solution_bytim2_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+![](Plots_Tim/plot2.png)
 
 Warnung weil \* liegen außerhab der Skala. Signifikanz weniger wichtig,
 da Effektgröße bedeutsamer ist. Große Stichprobe, Korrekturen verändern
@@ -279,4 +279,5 @@ ggplot() +
   )
 ```
 
-![](tobi_solution_bytim2_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+![](Plots_Tim/unnamed-chunk-3-1.png)
+
