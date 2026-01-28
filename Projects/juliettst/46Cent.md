@@ -73,7 +73,7 @@
       ) %>%
       ggplot(aes(
         x = duration_h,
-        y = factor(week),
+        y = week,
         fill = week
       )) +
       geom_density_ridges(
