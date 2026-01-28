@@ -1,4 +1,8 @@
 # Reading the data
+```{r}
+setwd(this.path::this.dir())
+daten <- read_csv2("klimadaten_tuebingen.csv")
+```
 
 # Wie veränderte sich die Temperatur im zeitlichen Verlauf?
 ![](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/solution_Tim_byGabriel/Projects/Tim/46Cent_files/figure-markdown_strict/unnamed-chunk-2-1.png)
