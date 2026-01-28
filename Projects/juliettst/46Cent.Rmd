@@ -83,7 +83,7 @@ subjects_clean %>%
   ) %>%
   ggplot(aes(
     x = duration_h,
-    y = factor(week),
+    y = week,
     fill = week
   )) +
   geom_density_ridges(
@@ -105,7 +105,7 @@ subjects_clean %>%
   )
 ```
 
-```{r}
+```{r fig.width=10, fig.height=11}
 # Overview of BDI Scores
 BDI <- BDI %>%
   mutate(date = ymd(date))
@@ -125,7 +125,7 @@ BDI %>%
   facet_wrap(~ participant, scales = "free_x")
 ```
 
-```{r}
+```{r  fig.width=10, fig.height=11}
 #' Circadian Pattern Visualization
 ggplot(
   subjects_clean,
