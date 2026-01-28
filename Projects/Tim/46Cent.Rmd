@@ -12,7 +12,7 @@ library(ggrepel)
 ```
  
 # Reading the data
-```{r, echo=FALSE}
+```{r}
 setwd(this.path::this.dir())
 daten <- read_csv2("klimadaten_tuebingen.csv")
 ```
