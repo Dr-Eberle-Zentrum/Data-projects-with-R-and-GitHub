@@ -207,7 +207,8 @@ daten %>%
   labs(
     title = "Starkniederschläge über die Jahre",
     y = "Tage mit Starkniederschlägen im Jahr",
-    x = "Jahr" 
-  )
+    x = "Jahr",
+  )+ 
+  annotate("text", x = 1960, y = 4.33, label = "4.33", color = "red", vjust = 1, hjust = 1)
 ```
 
