@@ -14,15 +14,11 @@ library(tidyverse)
 ```
 
 ```{r import}
-subjects <- list()
+files <- list.files(pattern = "^subject_.*\\.csv$")
+all_subjects <- read_csv(files, id = "file_path")
 
-for (id in list.files(".", pattern = "^subject_.*\\.csv$")){
-  subjects[[id]] <- read.csv(id)
-}
-
-all_subjects <- bind_rows(subjects)
-PANAS <- read.csv("PANAS_scores.csv")
-BDI <- read.csv("BDI_scores.csv")
+PANAS <- read_csv("PANAS_scores.csv")
+BDI   <- read_csv("BDI_scores.csv")
 ```
 Jetzt kommt das Data cleaning:
 
