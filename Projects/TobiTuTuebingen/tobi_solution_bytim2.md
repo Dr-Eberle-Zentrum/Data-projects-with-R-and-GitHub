@@ -174,7 +174,7 @@ ggplot(pairs_tri, aes(x = var1, y = var2, fill = rho_sig)) +
   )
 ```
 
-![]Plots_Tim/unnamed-chunk-2-1-1.png)
+![](Plots_Tim/unnamed-chunk-2-1-1.png)
 
 Warnung weil \* liegen außerhab der Skala. Signifikanz weniger wichtig,
 da Effektgröße bedeutsamer ist. Große Stichprobe, Korrekturen verändern
@@ -243,4 +243,5 @@ ggplot() +
 ```
 
 ![](Plots_Tim/unnamed-chunk-3-1.png)
+
 
