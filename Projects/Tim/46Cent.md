@@ -9,8 +9,6 @@
 
 # Wie verändert sich die Temperatur im Jahreszeitlichen Verlauf, über den gesamten Messzeitraum?
 
-    ## `geom_smooth()` using formula = 'y ~ x'
-
 ![](46Cent_files/figure-markdown_strict/unnamed-chunk-3-1.png)
 
 # Wie verhalten sich die Niederschlagsmengen in Kombination mit den Heißen Tagen?
@@ -20,19 +18,6 @@
 # Wie entwickeln sich die Heißtage und Frosttage im laufe der Zeit und Saisonal?
 
 ![](46Cent_files/figure-markdown_strict/unnamed-chunk-5-1.png)
-
-    daten %>%
-      filter(saison == c("winter_djf", "fruehjahr_mam", "sommer_jja", "herbst_son")) %>%
-      ggplot(
-        aes(x = jahr, y = temperatur_frosttage, color = saison)
-      )+
-      geom_line(linewidth = 1)+
-      labs(
-        title = "Frosttage in den verschiedenen Jahreszeiten",
-        y = "Anzahl Frosttage",
-        x = "Jahr",
-        color = "Jahreszeit"
-      )
 
 ![](46Cent_files/figure-markdown_strict/unnamed-chunk-6-1.png)
 
