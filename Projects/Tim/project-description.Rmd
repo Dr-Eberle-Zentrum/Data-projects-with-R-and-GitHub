@@ -71,4 +71,3 @@ Korrelationsmatrix und Scatterplot, gerne auch andere Dimensionen
 Threshold Exceedance Plots
 
 - Hat die Anzahl an Starknierderschlägen über die Jahre zugenommen? Wenn ja, wie viele Starkniederschläge gab es und wie verteilen sich diese über das Jahr? 
-

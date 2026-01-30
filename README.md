@@ -142,7 +142,7 @@ Current projects:
 - Julia (juliettst) - [Sleep and Mood Dynamics](Projects/juliettst/project-description.md)
   - solution by [Gabriel](Projects/juliettst/46Cent.md) and [Tobias](Projects/juliettst/Week4%20Homework-%20Sleep%20synthetic%20project/pojectsolutiontobi.md)
 - Tim (Tim) - [Klimadaten Tübingen](Projects/Tim/project-description.md)
-  - solution by [Tim](Projects/Tim/46Cent.md)
+  - solution by [Julia](Projects/Tim/juliettst.md) and [Gabriel](Projects/Tim/46Cent.md)
 
 
 #### Goals
