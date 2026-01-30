@@ -139,6 +139,7 @@ Current projects:
 - Gabriel (46Cent) - [UFC statistics](Projects/46Cent/project-description.md)
   - solution by [Dario](Projects/46Cent/raw_data_UFC/dariodemenus.md)
 - Julia (juliettst) - [Sleep and Mood Dynamics](Projects/juliettst/project-description.md)
+  - solution by [Gabriel](Projects/juliettst/46Cent.md)
 - Tim (Tim) - [Klimadaten Tübingen](Projects/Tim/project-description.md)
   - solution by [Tim](Projects/Tim/46Cent.md)
 
