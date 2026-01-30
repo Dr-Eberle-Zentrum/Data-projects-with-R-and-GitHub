@@ -134,7 +134,7 @@ Example:
 Current projects:
 
 - Dario (dariodemenus) - [Soil analysis and biodiversity](Projects/dariodemenus/project-description.md)
-  [Tim](Projects/dariodemenus/Dario_solution.md)
+  - solution by [Tim](Projects/dariodemenus/Dario_solution.md)
 - Tobias (TobiTuTuebingen) - [Windkraftausbau in BW](Projects/TobiTuTuebingen/project-description.md)
 - Gabriel (46Cent) - [UFC statistics](Projects/46Cent/project-description.md)
 - Julia (juliettst) - [Sleep and Mood Dynamics](Projects/juliettst/project-description.md)
