@@ -1,3 +1,15 @@
+Datenimport und Bereinigung Ziel: Vorbereitung einer sauberen Datenbasis
+für die Analyse.
+
+Zunächst wurde der Datensatz WindenergieBW.csv importiert. Um die
+Datenverarbeitung zu erleichtern, wurden die Spaltennamen vereinfacht
+(z. B. Umbenennung von ‘Generatorleistung \[MW\]’ zu ‘Leistung\_MW’).
+Ein wesentlicher Schritt war die Umwandlung des Inbetriebnahmedatums von
+einem Textformat in ein Datumsformat, um daraus das Baujahr (‘Jahr’) zu
+extrahieren. Zudem wurden Datensätze ohne gültige Geokoordinaten
+(Ost/Nord) herausgefiltert, um eine fehlerfreie kartografische
+Darstellung zu gewährleisten.
+
     # Import using readr. 
     # The locale encoding argument helps ensure special characters are read correctly.
     wind_data <- read_delim("WindenergieBW.csv", 
@@ -32,284 +44,833 @@
       # Filter out rows that might have missing coordinates if necessary for the map
       filter(!is.na(Ost), !is.na(Nord))
 
-    # Preview
-    head(clean_wind)
+    # Preview with kable for nicer output
+    knitr::kable(head(clean_wind), caption = "Vorschau der bereinigten Winddaten")
 
-    ## # A tibble: 6 × 15
-    ##   Landkreis  Gemeinde Hersteller Typbezeichnung des H…¹ Leistung_MW Nabenhoehe_m
-    ##   <chr>      <chr>    <chr>      <chr>                        <dbl>        <dbl>
-    ## 1 Landratsa… Hardtha… Enercon    E-115                          3           149 
-    ## 2 Landratsa… Widdern  Enercon    E-115                          3           149.
-    ## 3 Landratsa… Obersulm Nordex     N-149                          4.5         164 
-    ## 4 Landratsa… Forchte… Enercon    E-115                          3           149 
-    ## 5 Landratsa… Weißbach Vestas De… V126-3.3 MW                    3.3         137 
-    ## 6 Landratsa… Weißbach Vestas De… V126-3.3 MW                    3.3         137 
-    ## # ℹ abbreviated name: ¹​`Typbezeichnung des Herstellers`
-    ## # ℹ 9 more variables: Rotor_m <dbl>, Status <chr>, Inbetriebnahme <date>,
-    ## #   Stilllegedatum <lgl>, Ost <dbl>, Nord <dbl>, `Herkunft der Daten` <chr>,
-    ## #   `Stand der Daten` <dbl>, Jahr <dbl>
+<table style="width:100%;">
+<caption>Vorschau der bereinigten Winddaten</caption>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 5%" />
+<col style="width: 8%" />
+<col style="width: 14%" />
+<col style="width: 5%" />
+<col style="width: 5%" />
+<col style="width: 3%" />
+<col style="width: 5%" />
+<col style="width: 6%" />
+<col style="width: 6%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 8%" />
+<col style="width: 7%" />
+<col style="width: 2%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Landkreis</th>
+<th style="text-align: left;">Gemeinde</th>
+<th style="text-align: left;">Hersteller</th>
+<th style="text-align: left;">Typbezeichnung des Herstellers</th>
+<th style="text-align: right;">Leistung_MW</th>
+<th style="text-align: right;">Nabenhoehe_m</th>
+<th style="text-align: right;">Rotor_m</th>
+<th style="text-align: left;">Status</th>
+<th style="text-align: left;">Inbetriebnahme</th>
+<th style="text-align: left;">Stilllegedatum</th>
+<th style="text-align: right;">Ost</th>
+<th style="text-align: right;">Nord</th>
+<th style="text-align: left;">Herkunft der Daten</th>
+<th style="text-align: right;">Stand der Daten</th>
+<th style="text-align: right;">Jahr</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Landratsamt Heilbronn</td>
+<td style="text-align: left;">Hardthausen</td>
+<td style="text-align: left;">Enercon</td>
+<td style="text-align: left;">E-115</td>
+<td style="text-align: right;">3.0</td>
+<td style="text-align: right;">149.00</td>
+<td style="text-align: right;">115.70</td>
+<td style="text-align: left;">in Betrieb</td>
+<td style="text-align: left;">2017-09-29</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: right;">529676</td>
+<td style="text-align: right;">5459786</td>
+<td style="text-align: left;">LUBW</td>
+<td style="text-align: right;">2025</td>
+<td style="text-align: right;">2017</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Landratsamt Heilbronn</td>
+<td style="text-align: left;">Widdern</td>
+<td style="text-align: left;">Enercon</td>
+<td style="text-align: left;">E-115</td>
+<td style="text-align: right;">3.0</td>
+<td style="text-align: right;">149.08</td>
+<td style="text-align: right;">115.72</td>
+<td style="text-align: left;">in Betrieb</td>
+<td style="text-align: left;">2017-09-25</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: right;">529390</td>
+<td style="text-align: right;">5460566</td>
+<td style="text-align: left;">LUBW</td>
+<td style="text-align: right;">2025</td>
+<td style="text-align: right;">2017</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Landratsamt Heilbronn</td>
+<td style="text-align: left;">Obersulm</td>
+<td style="text-align: left;">Nordex</td>
+<td style="text-align: left;">N-149</td>
+<td style="text-align: right;">4.5</td>
+<td style="text-align: right;">164.00</td>
+<td style="text-align: right;">149.10</td>
+<td style="text-align: left;">in Betrieb</td>
+<td style="text-align: left;">2022-02-15</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: right;">531447</td>
+<td style="text-align: right;">5439291</td>
+<td style="text-align: left;">LUBW</td>
+<td style="text-align: right;">2025</td>
+<td style="text-align: right;">2022</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Landratsamt Hohenlohekreis</td>
+<td style="text-align: left;">Forchtenberg</td>
+<td style="text-align: left;">Enercon</td>
+<td style="text-align: left;">E-115</td>
+<td style="text-align: right;">3.0</td>
+<td style="text-align: right;">149.00</td>
+<td style="text-align: right;">115.72</td>
+<td style="text-align: left;">in Betrieb</td>
+<td style="text-align: left;">2015-12-11</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: right;">532046</td>
+<td style="text-align: right;">5459634</td>
+<td style="text-align: left;">LUBW</td>
+<td style="text-align: right;">2025</td>
+<td style="text-align: right;">2015</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Landratsamt Hohenlohekreis</td>
+<td style="text-align: left;">Weißbach</td>
+<td style="text-align: left;">Vestas Deutschland</td>
+<td style="text-align: left;">V126-3.3 MW</td>
+<td style="text-align: right;">3.3</td>
+<td style="text-align: right;">137.00</td>
+<td style="text-align: right;">126.00</td>
+<td style="text-align: left;">in Betrieb</td>
+<td style="text-align: left;">2016-06-29</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: right;">542860</td>
+<td style="text-align: right;">5464310</td>
+<td style="text-align: left;">LUBW</td>
+<td style="text-align: right;">2025</td>
+<td style="text-align: right;">2016</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Landratsamt Hohenlohekreis</td>
+<td style="text-align: left;">Weißbach</td>
+<td style="text-align: left;">Vestas Deutschland</td>
+<td style="text-align: left;">V126-3.3 MW</td>
+<td style="text-align: right;">3.3</td>
+<td style="text-align: right;">137.00</td>
+<td style="text-align: right;">126.00</td>
+<td style="text-align: left;">in Betrieb</td>
+<td style="text-align: left;">2016-06-15</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: right;">543657</td>
+<td style="text-align: right;">5464608</td>
+<td style="text-align: left;">LUBW</td>
+<td style="text-align: right;">2025</td>
+<td style="text-align: right;">2016</td>
+</tr>
+</tbody>
+</table>
+
+Vorschau der bereinigten Winddaten
+
+Zeitliche Entwicklung: Ausbau vs. Leistung (Dual-Axis Plot) Ziel:
+Darstellung, wie sich die Anzahl der Neubauten im Verhältnis zur
+installierten Leistung entwickelt hat.
+
+Diese Visualisierung vergleicht die Anzahl der neu gebauten Windräder
+(blaue Balken) mit der neu installierten Leistung in MW (rote Linie) pro
+Jahr. Dabei wurde ein Skalierungsfaktor von 3 verwendet, um beide
+Metriken in einer Grafik lesbar zu machen.
 
     # 1. Define a scaling factor
-    # This means: 1 unit of height on the chart = 1 Turbine OR 3 MW of Power
-    # You can change this number to 2 or 4 if you want the line higher or lower
     scale_factor <- 3 
+    # Das Ziel: 1,2 GW = 1200 MW
+    ziel_mw <- 1200
 
-    # 2. Aggregating
-    yearly_stats <- clean_wind %>%
+    # Aggregating AND Plotting in one pipe
+    clean_wind %>%
       group_by(Jahr) %>%
       summarise(
         New_Turbines = n(),
         Total_Power = sum(Leistung_MW, na.rm = TRUE)
-      )
-
-    # 3. Plotting
-    ggplot(yearly_stats, aes(x = Jahr)) +
+      ) %>%
+      ggplot(aes(x = Jahr)) +
       # Primary Data (Bars): The number of turbines
       geom_bar(aes(y = New_Turbines), stat = "identity", fill = "steelblue", alpha = 0.7) +
       
-      # Secondary Data (Line): Power divided by scale factor to fit on the chart
+      # Secondary Data (Line): Actual Power
       geom_line(aes(y = Total_Power / scale_factor), color = "red", linewidth = 1) + 
+      
+      # --- Horizontale Linie für das Ausbauziel ---
+      geom_hline(yintercept = ziel_mw / scale_factor, color = "darkgreen", linetype = "dashed", linewidth = 1) +
+      
+      annotate("text", x = 2000, y = (ziel_mw / scale_factor) + 5, 
+               label = "Ziel: 1,2 GW/Jahr", color = "darkgreen", hjust = 0, vjust = 0, fontface = "bold") +
       
       # Axis Configuration
       scale_y_continuous(
         name = "Anzahl neue Windräder",
-        # We multiply the labels back by the scale_factor so the numbers are correct
+        # Limit y-axis to remove empty space (approx max turbines 150)
+        limits = c(0, 160), 
+        # Secondary axis in red for better visual connection to the line
         sec.axis = sec_axis(~ . * scale_factor, name = "Neu installierte Leistung [MW]")
       ) +
       
       theme_minimal() +
+      # Theme adjustments: Axis title and text for secondary axis in red
+      theme(
+        axis.title.y.right = element_text(color = "red"),
+        axis.text.y.right = element_text(color = "red")
+      ) +
       labs(
         title = "Windkraftausbau in Baden-Württemberg",
-        subtitle = "Vergleich von Anzahl (Balken) und Leistung (Linie)"
+        subtitle = "Vergleich von Anzahl (blau) und Leistung (rot)",
+        caption = "Datenquelle: LUBW"
       )
 
-![](dariodemenus_files/figure-markdown_strict/yearly_wind_capacity-1.png)
+![](dariodemenus_files/figure-markdown_strict/dual-axis-plot-1.png)
 
-    # 1. Prepare data: Select only numeric variables of interest
-    corr_data <- clean_wind %>%
+Bestandsentwicklung: Kumulierte Gesamtleistung Ziel: Darstellung der
+verfügbaren Gesamtkapazität in Baden-Württemberg über die Zeit.
+
+Anstatt nur den jährlichen Zubau zu betrachten, zeigt dieses
+Flächendiagramm die Entwicklung der gesamten installierten Leistung
+(Bestand) in Baden-Württemberg. Hierfür wurden die jährlichen
+Leistungswerte kumuliert. Die grüne Fläche visualisiert das wachsende
+Energiepotenzial über die Jahre bis zum aktuellen Gesamtbestand.
+
+    # 1. Daten aggregieren und kumulieren
+    cumulative_stats <- clean_wind %>%
+      group_by(Jahr) %>%
+      summarise(
+        Yearly_Added_MW = sum(Leistung_MW, na.rm = TRUE)
+      ) %>%
+      arrange(Jahr) %>%
+      # Hier berechnen wir die laufende Summe (Gesamtbestand)
+      mutate(Total_Capacity_MW = cumsum(Yearly_Added_MW))
+
+    # 2. Plotten als Flächendiagramm
+    ggplot(cumulative_stats, aes(x = Jahr, y = Total_Capacity_MW)) +
+      
+      # Fläche füllen (zeigt das "Volumen" der verfügbaren Energie)
+      geom_area(fill = "forestgreen", alpha = 0.5) +
+      # Linie oben drauf für klare Kante
+      geom_line(color = "darkgreen", linewidth = 1) +
+      
+      # Optional: Aktuellen Gesamtwert als Punkt/Text markieren
+      annotate("point", x = max(cumulative_stats$Jahr), 
+               y = max(cumulative_stats$Total_Capacity_MW), 
+               color = "darkgreen", size = 3) +
+      annotate("text", x = max(cumulative_stats$Jahr) - 5, 
+               y = max(cumulative_stats$Total_Capacity_MW), 
+               label = paste0("Gesamt: ~", round(max(cumulative_stats$Total_Capacity_MW)), " MW"), 
+               color = "darkgreen", fontface = "bold", vjust = -1) +
+
+      theme_minimal() +
+      labs(
+        title = "Verfügbare Windkraftleistung in Baden-Württemberg",
+        subtitle = "Entwicklung der installierten Gesamtleistung (Kumuliert)",
+        y = "Gesamtleistung [MW]",
+        x = "Jahr",
+        caption = "Datenquelle: LUBW"
+      )
+
+![](dariodemenus_files/figure-markdown_strict/cumulative_wind_capacity-1.png)
+
+Szenarien bis 2030 Ziel: Prognose, ob die politischen Ziele mit dem
+aktuellen Tempo erreichbar sind.
+
+Um die zukünftige Entwicklung bis 2030 abzuschätzen, wurden drei
+Szenarien berechnet und visualisiert:
+
+Weiter wie bisher (Rot): Eine Fortführung des linearen Trends basierend
+auf dem Durchschnitt der letzten 5 Jahre (Status Quo).
+
+Verdopplung des Tempos (Orange): Ein optimistischeres Szenario, bei dem
+die Ausbaugeschwindigkeit verdoppelt wird.
+
+Zielpfad (Blau/Grün): Der notwendige Pfad, um das politische Ziel von
+6.100 MW Gesamtleistung (bzw. ca. 1.400 Anlagen) bis 2030 zu erreichen.
+Der Vergleich zeigt deutlich die Lücke zwischen dem aktuellen Trend und
+den notwendigen Maßnahmen zur Zielerreichung.
+
+    # 1. IST-ZUSTAND BERECHNEN (MW)
+    # Wir summieren die Leistung pro Jahr und bilden die kumulierte Summe
+    history_mw <- clean_wind %>%
+      filter(Jahr <= 2024) %>% # Historie bis Ende 2024
+      group_by(Jahr) %>%
+      summarise(Zubau_MW = sum(Leistung_MW, na.rm = TRUE)) %>%
+      arrange(Jahr) %>%
+      mutate(Gesamtleistung_MW = cumsum(Zubau_MW))
+
+    # Aktuelle Werte
+    current_year <- max(history_mw$Jahr)
+    current_mw <- max(history_mw$Gesamtleistung_MW)
+
+    # Durchschnittlicher MW-Zubau der letzten 5 Jahre (2020-2024)
+    # Wir nehmen die letzten 5 Einträge aus der Tabelle
+    avg_zubau_mw_5y <- history_mw %>%
+      tail(5) %>%
+      summarise(mean_zubau = mean(Zubau_MW)) %>%
+      pull(mean_zubau)
+
+    # Zielwerte 2030
+    target_year <- 2030
+    target_mw <- 6100
+
+    # 2. SZENARIEN BERECHNEN (2025 - 2030)
+    years_future <- 2025:2030
+    n_years <- length(years_future)
+
+    # Szenario 1: Status Quo (linearer Anstieg mit Ø der letzten 5 Jahre)
+    szenario1 <- tibble(
+      Jahr = years_future,
+      Szenario = "1. Weiter wie bisher",
+      Gesamtleistung_MW = current_mw + (cumsum(rep(avg_zubau_mw_5y, n_years)))
+    )
+
+    # Szenario 2: Doppeltes Tempo
+    szenario2 <- tibble(
+      Jahr = years_future,
+      Szenario = "2. Verdopplung des Tempos",
+      Gesamtleistung_MW = current_mw + (cumsum(rep(avg_zubau_mw_5y * 2, n_years)))
+    )
+
+    # Szenario 3: Zielpfad (Lineare Verbindung zu 6.100 MW)
+    # Wir interpolieren von current_mw bis target_mw
+    szenario3 <- tibble(
+      Jahr = years_future,
+      Szenario = "3. Zielpfad (6.100 MW)",
+      Gesamtleistung_MW = seq(from = current_mw, to = target_mw, length.out = n_years + 1)[-1] 
+      # [-1] entfernt den Startwert, da wir bei 2025 beginnen
+    )
+
+    # Zusammenfügen für den Plot
+    # Wir brauchen einen Startpunkt für alle Linien (2024), damit sie am Area-Chart "andocken"
+    start_point <- tibble(
+      Jahr = 2024,
+      Szenario = c("1. Weiter wie bisher", "2. Verdopplung des Tempos", "3. Zielpfad (6.100 MW)"),
+      Gesamtleistung_MW = current_mw
+    )
+
+    prognose_daten <- bind_rows(szenario1, szenario2, szenario3, start_point)
+
+    # 3. PLOTTING
+    ggplot() +
+      
+      # A) Historische Fläche (Grün)
+      geom_area(data = history_mw, aes(x = Jahr, y = Gesamtleistung_MW), 
+                fill = "forestgreen", alpha = 0.4) +
+      geom_line(data = history_mw, aes(x = Jahr, y = Gesamtleistung_MW), 
+                color = "darkgreen", linewidth = 1) +
+
+      # B) Die 3 Szenarien (Gestrichelte Linien)
+      geom_line(data = prognose_daten, aes(x = Jahr, y = Gesamtleistung_MW, color = Szenario), 
+                linetype = "dashed", linewidth = 1) +
+      
+      # C) Zielpunkt und Labels (Mit 'annotate' statt geom_*, da es Einzelwerte sind)
+      annotate("point", x = target_year, y = target_mw, color = "blue", size = 3) +
+      annotate("text", x = target_year, y = target_mw, 
+               label = "Ziel 2030:\n6.100 MW\n(~1.400 WKA)", 
+               color = "blue", vjust = -0.5, hjust = 0.8, fontface = "bold", size = 3.5) +
+      
+      # Aktueller Stand
+      annotate("point", x = current_year, y = current_mw, color = "darkgreen", size = 2) +
+      annotate("text", x = current_year, y = current_mw, 
+               label = paste0("2024: ", round(current_mw), " MW"), 
+               color = "darkgreen", vjust = 1.5, hjust = 0.1, fontface = "bold") +
+
+      # Skalen und Design
+      scale_color_manual(values = c("red", "orange", "blue")) +
+      scale_x_continuous(breaks = seq(2000, 2030, 5), limits = c(2000, 2031)) +
+      scale_y_continuous(labels = scales::comma_format(big.mark = ".", decimal.mark = ",")) +
+      
+      theme_minimal() +
+      labs(
+        title = "Szenarien der Windkraftleistung in BW bis 2030",
+        subtitle = paste0("Vergleich: Status Quo (Ø ", round(avg_zubau_mw_5y), " MW/Jahr), Verdopplung und politisches Ziel"),
+        y = "Kumulierte Gesamtleistung [MW]",
+        x = "Jahr",
+        caption = "Datenquelle: LUBW | Berechnung: Eigene Szenarien"
+      ) +
+      theme(legend.position = "bottom", legend.title = element_blank())
+
+![](dariodemenus_files/figure-markdown_strict/scenarios_mw_2030-1.png)
+
+    # 1. IST-ZUSTAND & TREND BERECHNEN
+    # Wir betrachten die Historie bis Ende 2024 als Basis
+    history <- clean_wind %>%
+      filter(Jahr <= 2024) %>%
+      group_by(Jahr) %>%
+      summarise(Zubau = n()) %>%
+      ungroup() %>%
+      arrange(Jahr) %>%
+      mutate(Gesamtbestand = cumsum(Zubau))
+
+    # Durchschnittlicher Zubau der letzten 5 Jahre (2020 - 2024)
+    avg_zubau_5y <- history %>%
+      filter(Jahr >= 2020) %>%
+      summarise(mean_zubau = mean(Zubau)) %>%
+      pull(mean_zubau)
+
+    # Startwert für die Prognose (Bestand Ende 2024)
+    start_bestand <- tail(history$Gesamtbestand, 1)
+    # Der Zielwert für 2030
+    ziel_anzahl <- 1400
+
+    # 2. SZENARIEN ERSTELLEN (2025 - 2030)
+    years_future <- 2025:2030
+    n_years <- length(years_future)
+
+    # Szenario 1: "Weiter so" (Status Quo)
+    szenario1 <- tibble(
+      Jahr = years_future,
+      Szenario = "1. Weiter wie bisher",
+      Zuwachs = avg_zubau_5y
+    )
+
+    # Szenario 2: "Verdopplung"
+    szenario2 <- tibble(
+      Jahr = years_future,
+      Szenario = "2. Verdopplung des Tempos",
+      Zuwachs = avg_zubau_5y * 2
+    )
+
+    # Szenario 3: "Zielerreichung"
+    # Wie viel müssen wir pro Jahr bauen, um 1400 zu erreichen?
+    notwendiger_zubau <- (ziel_anzahl - start_bestand) / n_years
+    szenario3 <- tibble(
+      Jahr = years_future,
+      Szenario = "3. Zielpfad (1400 Anlagen)",
+      Zuwachs = notwendiger_zubau
+    )
+
+    # Alle Szenarien zusammenbinden und kumulieren
+    prognose_daten <- bind_rows(szenario1, szenario2, szenario3) %>%
+      group_by(Szenario) %>%
+      mutate(
+        # Wir addieren den Zuwachs zum Startbestand von 2024
+        Gesamtbestand = start_bestand + cumsum(Zuwachs)
+      ) %>%
+      ungroup()
+
+    # Um Lücken im Plot zu vermeiden: Den Startpunkt 2024 zu jedem Szenario hinzufügen
+    start_point <- tibble(
+      Jahr = 2024,
+      Szenario = unique(prognose_daten$Szenario),
+      Zuwachs = 0,
+      Gesamtbestand = start_bestand
+    )
+    prognose_daten <- bind_rows(start_point, prognose_daten)
+
+    # 3. PLOTTING
+    ggplot() +
+      # A) Historische Daten (Durchgezogene Linie)
+      geom_line(data = history, aes(x = Jahr, y = Gesamtbestand), 
+                color = "black", linewidth = 1.2) +
+      
+      # B) Szenarien (Gestrichelte Linien)
+      geom_line(data = prognose_daten, aes(x = Jahr, y = Gesamtbestand, color = Szenario), 
+                linetype = "dashed", linewidth = 1) +
+      
+      # C) Markierung des Ziels
+      geom_hline(yintercept = ziel_anzahl, color = "grey50", linetype = "dotted") +
+      annotate("text", x = 2020, y = ziel_anzahl + 20, 
+               label = paste0("Politisches Ziel: ", ziel_anzahl, " Anlagen"), 
+               color = "grey50", fontface = "italic") +
+
+      # Styling
+      scale_color_manual(values = c("red", "orange", "darkgreen")) +
+      scale_x_continuous(breaks = seq(2000, 2030, 5)) +
+      scale_y_continuous(limits = c(0, 1500)) +
+      
+      theme_minimal() +
+      labs(
+        title = "Szenarien des Windkraftausbaus bis 2030",
+        subtitle = paste0("Basis: ~", round(avg_zubau_5y), " neue Anlagen/Jahr (Schnitt 2020-2024)"),
+        y = "Kumulierte Anzahl Windräder",
+        x = "Jahr",
+        caption = "Szenario 1: Ø 2020-24 | Szenario 2: Doppeltes Tempo | Szenario 3: Linear zum Ziel"
+      ) +
+      theme(legend.position = "bottom")
+
+![](dariodemenus_files/figure-markdown_strict/scenarios_2030-1.png)
+
+Korrelation technischer Parameter Ziel: Untersuchung des Zusammenhangs
+zwischen Baugröße und Leistung.
+
+Mithilfe einer Korrelationsmatrix wurde der statistische Zusammenhang
+(Pearson-Koeffizient) zwischen der Nabenhöhe, dem Rotordurchmesser und
+der Generatorleistung untersucht. Die Werte nahe 1 (rot) zeigen eine
+sehr starke positive Korrelation. Das bedeutet technisch: Je höher die
+Nabe und je größer der Rotor, desto höher ist die erzielte Leistung der
+Windkraftanlage. Die Signifikanz dieser Zusammenhänge wurde statistisch
+bestätigt.
+
+    # --- DEFINITION DER LABELS ---
+    my_labels <- c(
+      "Leistung_MW"  = "Leistung (MW)",
+      "Nabenhoehe_m" = "Nabenhöhe (m)",
+      "Rotor_m"      = "Rotor (m)"
+    )
+
+    # Pipeline: Data -> Select -> Cor -> Reshape -> Plot
+    clean_wind %>%
       select(Leistung_MW, Nabenhoehe_m, Rotor_m) %>%
-      drop_na()
-
-    # 2. Calculate Correlation Matrix
-    cor_matrix <- cor(corr_data)
-
-    # 3. Transform to long format for ggplot
-    cor_melted <- cor_matrix %>%
+      drop_na() %>%
+      cor() %>%
       as.data.frame() %>%
-      rownames_to_column(var = "Var1") %>%
-      pivot_longer(cols = -Var1, names_to = "Var2", values_to = "rho")
-
-    # 4. Create the Plot (Manual ggplot approach as requested)
-    ggplot(cor_melted, aes(x = Var1, y = Var2, fill = rho)) +
+      rownames_to_column("Var1") %>%
+      pivot_longer(-Var1, names_to = "Var2", values_to = "rho") %>%
+      # Filter lower triangle
+      mutate(Var1 = factor(Var1, levels = c("Leistung_MW", "Nabenhoehe_m", "Rotor_m")),
+             Var2 = factor(Var2, levels = c("Leistung_MW", "Nabenhoehe_m", "Rotor_m"))) %>%
+      filter(as.numeric(Var1) > as.numeric(Var2)) %>%
+      
+      # Plotting
+      ggplot(aes(x = Var1, y = Var2, fill = rho)) +
       geom_tile(color = "white") +
-      geom_text(aes(label = round(rho, 2)), color = "black") +
-      scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
-                           midpoint = 0, limit = c(-1,1), name = "Correlation\n(Pearson)") +
+      
+      # --- ÄNDERUNG: paste0 fügt das Sternchen an den gerundeten Wert an ---
+      geom_text(aes(label = paste0(round(rho, 2), "*")), color = "black", size = 4) +
+      
+      # Adjusted color scale (Sequential since no negative correlations expected)
+      scale_fill_gradient(low = "white", high = "red", 
+                          name = "Corr", limits = c(0.8, 1)) +
+      
+      scale_x_discrete(labels = my_labels) +
+      scale_y_discrete(labels = my_labels) +
+      
       theme_minimal() +
       coord_fixed() +
-      labs(title = "Korrelogramm: Technische Parameter",
-           x = "", y = "")
+      labs(title = "Korrelogramm technischer Parameter",
+           subtitle = "Pearson Korrelationskoeffizient (* signifikant)",
+           x = "", y = "") +
+      theme(panel.grid = element_blank())
 
-![](dariodemenus_files/figure-markdown_strict/correlogram_technical_params-1.png)
+![](dariodemenus_files/figure-markdown_strict/correlogram-1.png)
 
-    # Preparation: Aggregating per Landkreis (as per project description)
-    # We aggregate to find the 'center' of wind power for each district
+Räumliche Verteilung (Hexbin Map) Ziel: Geografische Verortung der
+Windkraftschwerpunkte in Baden-Württemberg.
+
+Für die räumliche Analyse wurde eine Hexbin-Karte erstellt. Anstatt
+jeden einzelnen Standort als Punkt darzustellen, fasst diese Methode
+benachbarte Anlagen in sechseckigen Kacheln (Hexagons) zusammen und
+summiert deren Leistung. Dies ermöglicht eine bessere Erkennung von
+regionalen Clustern und Schwerpunkten der Windkraftnutzung, ohne durch
+Overplotting (überlappende Punkte) an Übersichtlichkeit zu verlieren.
+Zur besseren Orientierung wurden die Verwaltungsgrenzen der Landkreise
+(NUTS-3) darübergelegt.
+
+    # Geodaten zentral vorbereiten (werden für beide Karten benötigt)
+    # NUTS 1 = Bundesland (DE1 = BW), NUTS 3 = Landkreise
+    bw_border <- gisco_get_nuts(nuts_id = "DE1", resolution = "01") %>%
+      st_transform(crs = 25832)
+
+    bw_kreise <- gisco_get_nuts(country = "Germany", nuts_level = 3, resolution = "03") %>%
+      filter(startsWith(NUTS_ID, "DE1")) %>%
+      st_transform(crs = 25832)
+
+    # Aggregating per Landkreis for Table
     landkreis_agg <- clean_wind %>%
       group_by(Landkreis) %>%
       summarise(
         Turbine_Count = n(),
-        Mean_Ost = mean(Ost, na.rm = TRUE),
-        Mean_Nord = mean(Nord, na.rm = TRUE),
-        # Using Power sum
         Sum_Leistung = sum(Leistung_MW, na.rm = TRUE) 
+      ) %>%
+      arrange(desc(Sum_Leistung))
+
+    # Output as nice table
+    knitr::kable(head(landkreis_agg, 10), caption = "Top 10 Landkreise nach Leistung")
+
+<table>
+<caption>Top 10 Landkreise nach Leistung</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Landkreis</th>
+<th style="text-align: right;">Turbine_Count</th>
+<th style="text-align: right;">Sum_Leistung</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Landratsamt Schwäbisch-Hall</td>
+<td style="text-align: right;">125</td>
+<td style="text-align: right;">424.02</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Landratsamt Main-Tauber-Kreis</td>
+<td style="text-align: right;">169</td>
+<td style="text-align: right;">399.13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Landratsamt Ostalbkreis</td>
+<td style="text-align: right;">98</td>
+<td style="text-align: right;">259.19</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Landratsamt Ortenaukreis</td>
+<td style="text-align: right;">62</td>
+<td style="text-align: right;">221.76</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Landratsamt Neckar-Odenwald-Kreis</td>
+<td style="text-align: right;">53</td>
+<td style="text-align: right;">157.30</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Landratsamt Ravensburg</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">144.04</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Landratsamt Heidenheim</td>
+<td style="text-align: right;">41</td>
+<td style="text-align: right;">122.95</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Landratsamt Göppingen</td>
+<td style="text-align: right;">56</td>
+<td style="text-align: right;">122.47</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Landratsamt Alb-Donau-Kreis</td>
+<td style="text-align: right;">51</td>
+<td style="text-align: right;">121.49</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Landratsamt Hohenlohekreis</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">118.30</td>
+</tr>
+</tbody>
+</table>
+
+Top 10 Landkreise nach Leistung
+
+    # Plotting the Map with boundaries directly
+    ggplot(clean_wind, aes(x = Ost, y = Nord, z = Leistung_MW)) +
+      
+      # 1. Boundaries (Layering: Borders first)
+      geom_sf(data = bw_kreise, fill = NA, color = "grey80", size = 0.3, inherit.aes = FALSE) +
+      geom_sf(data = bw_border, fill = NA, color = "black", size = 0.8, inherit.aes = FALSE) +
+      
+      # 2. Hexbins
+      stat_summary_hex(fun = sum, bins = 20, alpha = 0.85) +
+      scale_fill_viridis_c(option = "C", name = "Summe der Leistung\npro Kachel\n(MW)") +
+      
+      theme_void() + 
+      coord_sf(datum = NA) +
+      labs(title = "Räumliche Verteilung der Windkraftleistung",
+           subtitle = "Hexbin Map mit Verwaltungs-Grenzen")
+
+![](dariodemenus_files/figure-markdown_strict/map-hexbin-with-boundaries-1.png)
+
+    # 1. Daten vorbereiten (wie zuvor)
+    wind_points <- clean_wind %>%
+      st_as_sf(coords = c("Ost", "Nord"), crs = 25832)
+
+    map_data_agg <- st_join(wind_points, bw_kreise) %>%
+      st_drop_geometry() %>%
+      group_by(NUTS_ID) %>%
+      summarise(
+        Anzahl_Windraeder = n(),
+        Sum_Leistung = sum(Leistung_MW, na.rm = TRUE)
       )
 
-    head(landkreis_agg)
+    # 2. Labels erstellen und Geometrie anfügen
+    map_data <- bw_kreise %>%
+      left_join(map_data_agg, by = "NUTS_ID") %>%
+      mutate(
+        # A) Namen bereinigen: "Tübingen, Landkreis" -> "Tübingen"
+        Clean_Name = str_remove_all(NUTS_NAME, ", Landkreis|, Stadtkreis|Landkreis |Stadtkreis "),
+        
+        # B) Abkürzung erstellen: Erste 3 Buchstaben (z.B. "Tüb")
+        # Falls du lieber den ganzen Namen willst, nutze einfach 'Clean_Name' im Plot unten
+        Label_Kurz = str_sub(Clean_Name, 1, 3) 
+      )
 
-    ## # A tibble: 6 × 5
-    ##   Landkreis                        Turbine_Count Mean_Ost Mean_Nord Sum_Leistung
-    ##   <chr>                                    <int>    <dbl>     <dbl>        <dbl>
-    ## 1 Landratsamt Alb-Donau-Kreis                 51  558716.  5371338.        121. 
-    ## 2 Landratsamt Biberach                         1  564089   5323386           0.9
-    ## 3 Landratsamt Breisgau-Hochschwar…            14  421544.  5310841.         58.8
-    ## 4 Landratsamt Calw                            17  463235.  5389227.         67.7
-    ## 5 Landratsamt Emmendingen                     19  424462.  5334927.         56.0
-    ## 6 Landratsamt Enzkreis                        14  466143.  5407238.         46.5
+    # 3. Plotten
+    ggplot(map_data) +
+      geom_sf(aes(fill = Sum_Leistung), color = "white", size = 0.2) +
+      
+      # --- NEU: Text-Labels hinzufügen ---
+      geom_sf_text(
+        aes(label = Label_Kurz), # Ändere zu 'Clean_Name' für "Tübingen" statt "Tüb"
+        size = 2.5,              # Textgröße
+        color = "black",         # Textfarbe
+        fontface = "bold",       # Fettdruck für bessere Lesbarkeit
+        check_overlap = TRUE     # Verhindert, dass sich Texte unleserlich überlagern
+      ) +
+      # -----------------------------------
 
-    # Plotting the Map
-    # We use the raw coordinate data (clean_wind) but color the hexagons 
-    # based on the sum of Power (z) in that area.
+      scale_fill_viridis_c(
+        option = "C", 
+        name = "Leistung (MW)",
+        na.value = "grey90",
+        direction = 1
+      ) +
+      
+      theme_void() +
+      labs(
+        title = "Windkraftleistung pro Landkreis",
+        subtitle = "Mit abgekürzten Landkreis-Namen",
+        caption = "Daten: LUBW | Geodaten: Eurostat"
+      ) +
+      coord_sf(datum = NA)
 
-    ggplot(clean_wind, aes(x = Ost, y = Nord, z = Leistung_MW)) +
-      # stat_summary_hex bins the data and applies a function (sum) to the z variable
-      stat_summary_hex(fun = sum, bins = 20) +
-      scale_fill_viridis_c(option = "C", name = "Summe Leistung\n(MW)") +
-      theme_void() + # Clean map theme
-      coord_fixed() +
-      labs(title = "Räumliche Verteilung der Windkraftleistung",
-           subtitle = "Hexbin Map (Summierte Leistung pro Kachel)")
+![](dariodemenus_files/figure-markdown_strict/landkreis_map_labels-1.png)
 
-![](dariodemenus_files/figure-markdown_strict/landkreis_aggregation-1.png)
-Das Konzept für den Proxy Wir gewichten die MW-Leistung anhand des
-Alters der Anlage, um die finanziellen Phasen eines Windparks
-abzubilden:
+Ökonomische Analyse: Steuerkraft-Proxy Ziel: Schätzung, welche
+Landkreise potenziell am meisten von Gewerbesteuereinnahmen profitieren.
 
-Phase 1: “Neuanlagen” (0–4 Jahre):
+Da die reine Leistung nicht direkt den Steuereinnahmen entspricht, wurde
+ein ‘Steuerkraft-Proxy’ entwickelt. Dieser gewichtet die Leistung einer
+Anlage anhand ihres Alters, um steuerliche Abschreibungszyklen zu
+simulieren:
 
-Situation: Hohe Abschreibungen (drücken Gewinn & Gewerbesteuer), aber
-oft Einnahmen aus der §6 EEG-Kommunalabgabe (0,2 Cent/kWh), die sofort
-fließt.
+Neue Anlagen (&lt; 5 Jahre): Gewicht 0,8 (Hohe Abschreibung, aber
+EEG-Umlagen).
 
-Gewicht: 0.8 (Gute Einnahmen, aber noch keine volle Gewerbesteuer).
+Abschreibungsphase (5–12 Jahre): Gewicht 0,3 (Niedriges Steuerpotenzial
+durch Zins/Tilgung).
 
-Phase 2: “Abschreibungsphase” (5–12 Jahre):
-
-Situation: Die “Durststrecke”. Hohe steuerliche Abschreibungen,
-Zinszahlungen an Banken. Oft zahlt der Betreiber hier kaum Gewerbesteuer
-an die Kommune.
-
-Gewicht: 0.3 (Niedrigste Einnahmen für den Landkreis).
-
-Phase 3: “Cash Cow” (&gt; 12 Jahre):
-
-Situation: Anlage ist oft abgeschrieben, Kredite bedient. Der Stromerlös
-ist fast reiner Gewinn = maximale Gewerbesteuer.
-
-Gewicht: 1.0 (Volles Steuerpotenzial).
-
-    # Bibliotheken laden (falls noch nicht geschehen)
-    library(tidyverse)
-    library(lubridate)
+‘Cash Cows’ (&gt; 12 Jahre): Gewicht 1,0 (Anlage abgeschrieben, hoher
+Ertrag fließt in Gewerbesteuer). Das Ergebnis zeigt ein Ranking der
+Landkreise, die voraussichtlich am stärksten finanziell von den
+Windparks profitieren.
 
     # 1. BERECHNUNG DES STEUER-PROXY
-    # Wir gehen davon aus, dass 'clean_wind' bereits existiert (aus Ihrem Snippet)
     tax_analysis <- clean_wind %>%
-      # Nur Anlagen, die wirklich Geld verdienen (keine genehmigten/stillgelegten)
       filter(Status == "in Betrieb") %>%
-      
-      # Alter berechnen (Bezugsjahr 2025)
       mutate(Alter = 2025 - Jahr) %>%
-      
-      # Die Gewichtungs-Logik anwenden
       mutate(Gewichtungsfaktor = case_when(
-        Alter < 5 ~ 0.8,   # Neue Anlagen: EEG-Abgabe fließt, Gewerbesteuer niedrig
-        Alter >= 5 & Alter <= 12 ~ 0.3, # Abschreibungsphase: Kaum Einnahmen
-        Alter > 12 ~ 1.0,  # Cash-Cows: Anlage abgeschrieben, volle Gewerbesteuer
-        TRUE ~ 0 # Fallback
+        Alter < 5 ~ 0.8,
+        Alter >= 5 & Alter <= 12 ~ 0.3,
+        Alter > 12 ~ 1.0, 
+        TRUE ~ 0
       )) %>%
-      
-      # Den Proxy-Wert berechnen: Leistung * Faktor
       mutate(Steuerkraft_Index = Leistung_MW * Gewichtungsfaktor)
 
-    # 2. AGGREGATION NACH LANDKREIS
+    # 2. AGGREGATION & VISUALISIERUNG
     landkreis_ranking <- tax_analysis %>%
       group_by(Landkreis) %>%
       summarise(
-        Anzahl_Windraeder = n(),
-        Installierte_Leistung_MW = sum(Leistung_MW, na.rm = TRUE),
-        # Der gewichtete Index ist unser Proxy für das Steueraufkommen
         Steuerkraft_Proxy = sum(Steuerkraft_Index, na.rm = TRUE)
       ) %>%
-      mutate(Landkreis = str_remove(Landkreis, "Landratsamt ")) %>%
-      arrange(desc(Steuerkraft_Proxy)) # Sortieren nach unserem Index
+      mutate(Landkreis = str_remove(Landkreis, "Landratsamt "))
 
-    # 3. ERGEBNIS ANZEIGEN (Top 10)
-    print(head(landkreis_ranking, 10))
+    # Tabelle
+    knitr::kable(head(arrange(landkreis_ranking, desc(Steuerkraft_Proxy)), 10), 
+                 caption = "Top 10 Landkreise nach geschätztem Steuerpotenzial")
 
-    ## # A tibble: 10 × 4
-    ##    Landkreis          Anzahl_Windraeder Installierte_Leistun…¹ Steuerkraft_Proxy
-    ##    <chr>                          <int>                  <dbl>             <dbl>
-    ##  1 Main-Tauber-Kreis                154                  309.              181. 
-    ##  2 Schwäbisch-Hall                  114                  358.              162. 
-    ##  3 Ostalbkreis                       95                  242.              111. 
-    ##  4 Neckar-Odenwald-K…                48                  130.               87.0
-    ##  5 Heidenheim                        41                  123.               84.3
-    ##  6 Göppingen                         56                  122.               69.3
-    ##  7 Ortenaukreis                      45                  132.               68.7
-    ##  8 Alb-Donau-Kreis                   43                   63.9              50.7
-    ##  9 Ravensburg                         8                   45.8              37.2
-    ## 10 Hohenlohekreis                    18                   53.6              35.6
-    ## # ℹ abbreviated name: ¹​Installierte_Leistung_MW
+<table>
+<caption>Top 10 Landkreise nach geschätztem Steuerpotenzial</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Landkreis</th>
+<th style="text-align: right;">Steuerkraft_Proxy</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Main-Tauber-Kreis</td>
+<td style="text-align: right;">181.309</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Schwäbisch-Hall</td>
+<td style="text-align: right;">162.394</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ostalbkreis</td>
+<td style="text-align: right;">111.161</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Neckar-Odenwald-Kreis</td>
+<td style="text-align: right;">86.980</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Heidenheim</td>
+<td style="text-align: right;">84.345</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Göppingen</td>
+<td style="text-align: right;">69.326</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ortenaukreis</td>
+<td style="text-align: right;">68.686</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Alb-Donau-Kreis</td>
+<td style="text-align: right;">50.690</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ravensburg</td>
+<td style="text-align: right;">37.160</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Hohenlohekreis</td>
+<td style="text-align: right;">35.630</td>
+</tr>
+</tbody>
+</table>
 
-    # 4. VISUALISIERUNG
-    # Ein schöner Plot für die Hausarbeit/Präsentation
-    ggplot(head(landkreis_ranking, 15), aes(x = reorder(Landkreis, Steuerkraft_Proxy), y = Steuerkraft_Proxy)) +
+Top 10 Landkreise nach geschätztem Steuerpotenzial
+
+    # Plot using slice_max for cleaner code
+    landkreis_ranking %>%
+      slice_max(Steuerkraft_Proxy, n = 15) %>%
+      ggplot(aes(x = reorder(Landkreis, Steuerkraft_Proxy), y = Steuerkraft_Proxy)) +
       geom_col(fill = "steelblue") +
-      coord_flip() + # Balken horizontal für bessere Lesbarkeit der Namen
+      coord_flip() +
       labs(
-        title = "Geschätztes Steuerpotenzial durch Windkraft (Top 15 BW)",
-        subtitle = "Basierend auf installierter Leistung gewichtet nach Anlagenalter",
+        title = "Geschätztes Steuerpotenzial (Top 15)",
+        subtitle = "Proxy-Index basierend auf Anlagenalter",
         x = "Landkreis",
-        y = "Steuerkraft-Index (Gewichtete MW)"
+        y = "Steuerkraft-Index"
       ) +
       theme_minimal()
 
-![](dariodemenus_files/figure-markdown_strict/steuer_proxy_berechnung-1.png)
+![](dariodemenus_files/figure-markdown_strict/tax-potential-analysis-1.png)
 
-    # Wir nutzen den Dataframe 'tax_analysis' aus dem vorherigen Schritt,
-    # da dieser die berechnete Spalte 'Steuerkraft_Index' enthält.
-
-    ggplot(tax_analysis, aes(x = Ost, y = Nord, z = Steuerkraft_Index)) +
-      # Wir summieren den Steuer-Index pro Hexagon
-      stat_summary_hex(fun = sum, bins = 20) +
-      # Anderes Farbschema (z.B. "D" oder "A") hilft oft, 
-      # um es visuell von der reinen Leistungskarte zu unterscheiden
-      scale_fill_viridis_c(option = "A", direction = -1, name = "Steuerkraft-Index\n(Gewichtete MW)") +
-      theme_void() + 
-      coord_fixed() +
-      labs(
-        title = "Räumliche Verteilung des Steuerpotenzials (Proxy)",
-        subtitle = "Hexbin Map: Installierte Leistung gewichtet nach Anlagenalter (Abschreibung)"
-      )
-
-![](dariodemenus_files/figure-markdown_strict/steuer_proxy_map-1.png)
-
-    # 1. Notwendige Pakete installieren und laden
-    if(!require("sf")) install.packages("sf")
-    if(!require("giscoR")) install.packages("giscoR") # Amtliche EU-Grenzen
-
-    library(sf)
-    library(giscoR)
-
-    # 2. Geodaten für BW laden (NUTS-Code für BW ist "DE1")
-    # NUTS 1 = Bundesland, NUTS 3 = Landkreise
-    bw_border <- gisco_get_nuts(nuts_id = "DE1", resolution = "01") # Hohe Auflösung
-    bw_kreise <- gisco_get_nuts(country = "Germany", nuts_level = 3, resolution = "03") %>%
-      filter(startsWith(NUTS_ID, "DE1")) # Nur Kreise in BW filtern
-
-    # 3. KOORDINATENTRANSFORMATION (Der Geographen-Schritt)
-    # Ihre Daten (Ost/Nord ~ 500.000 / 5.400.000) sind ETRS89 / UTM Zone 32N (Code 25832).
-    # Wir müssen die Grenzen in dieses System umrechnen ("projizieren").
-    bw_border_utm <- st_transform(bw_border, crs = 25832)
-    bw_kreise_utm <- st_transform(bw_kreise, crs = 25832)
-
-    # 4. Der Plot mit Grenzen
-    ggplot(tax_analysis, aes(x = Ost, y = Nord, z = Steuerkraft_Index)) +
-      
-      # A) Ebene Landkreise (Optional: dünne graue Linien zur Orientierung)
-      geom_sf(data = bw_kreise_utm, 
-              fill = NA, 
-              color = "grey80", 
-              size = 0.3, 
-              inherit.aes = FALSE) + # WICHTIG: inherit.aes = FALSE, sonst sucht er x/y im shapefile
-      
-      # B) Ebene Landesgrenze (Dickerer schwarzer Umriss)
-      geom_sf(data = bw_border_utm, 
-              fill = NA, 
-              color = "black", 
-              size = 0.8, 
-              inherit.aes = FALSE) +
-      
-      # C) Ihre Hexbins (wie gehabt)
-      stat_summary_hex(fun = sum, bins = 25, alpha = 0.9) + # alpha macht sie leicht transparent
-      
-      # Styling
+    # Plot in Variable speichern, um Redundanz zu vermeiden
+    p_tax_map <- ggplot(tax_analysis, aes(x = Ost, y = Nord, z = Steuerkraft_Index)) +
+      stat_summary_hex(fun = sum, bins = 25, alpha = 0.9) +
       scale_fill_viridis_c(option = "A", direction = -1, name = "Steuerkraft-Proxy") +
       theme_void() + 
-      coord_sf(datum = NA) + # Entfernt das Koordinatengitter, behält aber die Projektion bei
+      coord_sf(datum = NA) +
       labs(
         title = "Räumliche Verteilung des Steuerpotenzials",
-        subtitle = "Hexbin Map inkl. Verwaltungs-Grenzen (EPSG: 25832)"
+        subtitle = "Hexbin Map (Gewichtete MW)"
       )
 
-![](dariodemenus_files/figure-markdown_strict/steuer_proxy_map_mit_grenzen-1.png)
+    # 1. Basis-Plot ohne Grenzen (falls gewünscht, sonst diesen Schritt weglassen)
+    # print(p_tax_map)
+
+    # 2. Plot MIT Grenzen erweitern (Wiederverwendung der Variable)
+    p_tax_map +
+      geom_sf(data = bw_kreise, fill = NA, color = "grey80", size = 0.3, inherit.aes = FALSE) +
+      geom_sf(data = bw_border, fill = NA, color = "black", size = 0.8, inherit.aes = FALSE)
+
+![](dariodemenus_files/figure-markdown_strict/tax-hexbin-map-1.png)
