@@ -135,7 +135,7 @@ Current projects:
 
 - Dario (dariodemenus) - [Soil analysis and biodiversity](Projects/dariodemenus/project-description.md)
 - Tobias (TobiTuTuebingen) - [Windkraftausbau in BW](Projects/TobiTuTuebingen/project-description.md)
-  - Solution by [Dario](Projects/TobiTuTuebingen/dariodemenus.md)
+  - Solution by [Dario](Projects/TobiTuTuebingen/dariodemenus.md) and [Tim](Projects/TobiTuTuebingen/tobi_solution_bytim.md)
 - Gabriel (46Cent) - [UFC statistics](Projects/46Cent/project-description.md)
   - solution by [Tobias](Projects/46Cent/Tobias/tobisolution.md) and [Dario](Projects/46Cent/raw_data_UFC/dariodemenus.md)
 - Julia (juliettst) - [Sleep and Mood Dynamics](Projects/juliettst/project-description.md)
