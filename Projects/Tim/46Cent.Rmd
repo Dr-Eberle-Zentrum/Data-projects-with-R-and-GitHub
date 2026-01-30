@@ -37,6 +37,19 @@ daten %>%
 
 #bei dem plot wärs cool vier lineare trendlinien einzubauen und an jede den steigungskoeffizienten dranzuschreiben, damit man sehen kann, ob die #jahreszeiten unterscheidlich schnell wärmer werden, oder ggf. nur die sommer etc... ;)
 
+# compute data for coefficient labels
+daten_coef <-
+  daten |> 
+  filter(saison %in% c("winter_djf", "fruehjahr_mam", "sommer_jja", "herbst_son")) %>% 
+  group_by(saison) |> 
+  # compute linear coefficient for jahr vs temperatur_mittelwert
+  summarize(coef = coef(lm(temperatur_mittelwert ~ jahr))[2],
+            jahrMax = max(jahr),
+            tempMax = max(temperatur_mittelwert)) |> 
+  ungroup() |> 
+  mutate(coef_label = paste0("Steigung: ", round(coef, 4)))
+
+
 daten %>%
   filter(saison %in% c("winter_djf", "fruehjahr_mam", "sommer_jja", "herbst_son")) %>% 
   ggplot(
@@ -49,7 +62,16 @@ daten %>%
       title = "Temperatur in den Jahreszeiten",
       color = "Jahreszeit",
   )+
-  geom_smooth(method = lm, se = FALSE, linewidth = 1, linetype = "dashed", show.legend = TRUE)
+  geom_smooth(method = lm, se = FALSE, linewidth = 1, linetype = "dashed", show.legend = TRUE) +
+  # add text labels for coefficients
+  geom_text_repel(
+    data = daten_coef,
+    aes(x = jahrMax, y = tempMax, label = coef_label, color = saison),
+    nudge_x = 5,
+    nudge_y = 0.5,
+    size = 4,
+    show.legend = FALSE
+  )
 
 ```
 
