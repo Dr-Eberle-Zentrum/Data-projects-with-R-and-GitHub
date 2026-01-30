@@ -1,0 +1,186 @@
+# Code für Datenimport und wrangling
+
+    library(dplyr)
+    library(ggplot2)
+    library(readxl)
+    library(writexl)
+    library(janitor)
+
+    # Datenimport
+    jena_25 <- read_excel("data_jena_2025 (1).xlsx")
+
+    Nmin_jena_25 <- read_excel("2025_Nmin_Jena.xlsx") %>%
+      slice(-c(1:2, 4:6)) %>%
+      select(-1,-2) %>%
+      {                             
+        .[1, ] <- sapply(seq_along(.), function(i) ifelse(is.na(.[1, i]), .[2, i], .[1, i]))
+        .[-2, ]                    
+      } %>%
+      row_to_names(row_number = 1)
+
+    Results_24_1 <- read_excel("Results 2024.xlsx", sheet = 1)
+
+    Results_24_2 <- read_excel("Results 2024.xlsx", sheet = 2) %>%
+      slice(-c(1:2, 4:6)) %>%
+      select(-1,-2) %>%
+      {                             
+        .[1, ] <- sapply(seq_along(.), function(i) ifelse(is.na(.[1, i]), .[2, i], .[1, i]))
+        .[-2, ]                    
+      } %>%
+      row_to_names(row_number = 1)  
+
+    Results_24_3 <- read_excel("Results 2024.xlsx", sheet = 3) %>%
+      mutate(Year = 2024) %>%
+      relocate(Year, .before = 1)
+
+    Plot_information <- read_excel("Plot information.xlsx")
+
+    # Clean up 
+
+    jena_25_clean <- jena_25  %>%
+      mutate(
+        `dry soil + glass [g]` = sapply(`dry soil + glass [g]`, function(x) {
+          if (grepl("/", x)) mean(as.numeric(strsplit(x, "/")[[1]])) else as.numeric(x)
+        }),
+        `glass weight [g]` = as.numeric(`glass weight [g]`),
+        `wet soil [g]` = as.numeric(`wet soil [g]`),
+        `Nmin wet soil [g]` = as.numeric(`Nmin wet soil [g]`)
+      ) %>%
+
+      group_by(`plot ID`) %>%
+      mutate(
+        `dry soil + glass [g]` = mean(`dry soil + glass [g]`, na.rm = TRUE),
+        `glass weight [g]` = mean(`glass weight [g]`, na.rm = TRUE),
+        `wet soil [g]` = mean(`wet soil [g]`, na.rm = TRUE),
+        `Nmin wet soil [g]` = mean(`Nmin wet soil [g]`, na.rm = TRUE)
+      ) %>%
+      distinct(`plot ID`, .keep_all = TRUE) %>%  
+      ungroup() %>%
+
+      mutate(
+        dry_soil_swc_g = `dry soil + glass [g]` - `glass weight [g]`,
+        swc = (`wet soil [g]` - dry_soil_swc_g) / dry_soil_swc_g,
+        dry_soil_nmin_g = `Nmin wet soil [g]` / (1 + swc)
+      ) %>%
+      select(-6)
+
+    # mg/Kg Umrechnung
+
+    Nmin_jena_25_clean <- Nmin_jena_25 %>% 
+      mutate(across(3, ~ ifelse(. < 0, 0, .))) %>%
+      rename(Plot_ID = 1) %>%
+      mutate(
+        `NO3ˉ-N [mg/l]` = as.numeric(`NO3ˉ-N [mg/l]`),
+        `NH4+-N [mg/l]` = as.numeric(`NH4+-N [mg/l]`)
+      ) %>%
+
+      left_join(
+        jena_25_clean %>% 
+        select(`plot ID`, `dry_soil_nmin_g`),
+        by = c("Plot_ID" = "plot ID")
+      ) %>%
+      mutate(
+        `NO3ˉ-N [mg/l]` = pmax(`NO3ˉ-N [mg/l]`, 0),
+        `NH4+-N [mg/l]` = pmax(`NH4+-N [mg/l]`, 0)
+      ) %>%
+      
+      mutate(
+        NO3 = (`NO3ˉ-N [mg/l]` * 50) / dry_soil_nmin_g,
+        NH4 = (`NH4+-N [mg/l]` * 50) / dry_soil_nmin_g,
+        Nmin = NO3 + NH4
+      ) 
+
+    # join der Nmin Daten und Plot_information und für später Year Spalte hinzufügen
+
+    Plot_information_nmin <- Plot_information %>%
+      left_join(
+        Nmin_jena_25_clean %>%
+          select(`Plot_ID`, NO3, NH4, Nmin),
+        by = c("plotcode" = "Plot_ID")
+      ) %>%
+      relocate(NO3, NH4, Nmin, .after = 1) %>%
+      mutate(Year = 2025) %>%
+      relocate(Year, .before = 1) %>% 
+      rename(Plot_ID = plotcode)
+
+
+    Jena_Nmin_Combined <- bind_rows(Results_24_3, Plot_information_nmin)
+
+    write_xlsx(
+      list(
+        "2024" = Results_24_3 %>% select(-Year),
+        "2025" = Plot_information_nmin %>% select(-Year)
+      ),
+      path = "Jena_Nmin_Combined.xlsx"
+    )
+
+# Aufgabe 1
+
+    ##Daten 25
+    knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+
+    Plot_information_nmin %>%
+    mutate(
+    log2_sowndiv = log2(sowndiv),
+    log_Nmin = log(Nmin),
+    legume = factor(leg, levels = c(0, 1), labels = c("Nein", "Ja"))
+    ) %>%
+    ggplot(aes(x = log2_sowndiv, y = log_Nmin, color = legume)) +
+    geom_point(size = 3, alpha = 0.8) +
+    labs(
+    x = "log2(sowndiv)",
+    y = "log(Nmin)",
+    color = "Leguminosen"
+    ) +
+    scale_x_continuous(expand = expansion(mult = c(0.1, 0.1))) +
+    scale_y_continuous(expand = expansion(mult = c(0.1, 0.1))) +
+    theme_minimal(base_size = 14)
+
+![](Dario_solution_files/figure-markdown_strict/Aufgabe_1-1.png)
+
+# Aufgabe 2
+
+    #Daten 2024
+    ggplot() + 
+    geom_boxplot(
+    data = Results_24_3,
+    aes(x = "2024", y = Nmin, fill = "2024", group = factor(p_legume)),
+    outlier.shape = NA, alpha = 0.6
+    ) +
+    geom_jitter(
+    data = Results_24_3,
+    aes(
+    x = "2024",
+    y = Nmin,
+    color = factor(p_legume, levels = c(0,1), labels = c("Non-Legume","Legume"))
+    ),
+    width = 0.2, alpha = 0.6
+    ) +
+
+    #Daten 2025
+
+    geom_boxplot(
+    data = Plot_information_nmin,
+    aes(x = "2025", y = Nmin, fill = "2025", group = factor(leg)),
+    outlier.shape = NA, alpha = 0.6
+    ) +
+    geom_jitter(
+    data = Plot_information_nmin,
+    aes(
+    x = "2025",
+    y = Nmin,
+    color = factor(leg, levels = c(0,1), labels = c("Non-Legume","Legume"))
+    ),
+    width = 0.2, alpha = 0.6
+    ) +
+    labs(
+    title = "Jahresvergleich der Nmin-Werte (2024 vs. 2025)",
+    x = "Jahr",
+    y = "Nmin (mg/kg)",
+    color = "Legume"
+    ) +
+    theme_minimal() +
+    scale_fill_manual(values = c("2024" = "lightblue", "2025" = "lightpink")) +
+    scale_color_manual(values = c("Non-Legume" = "gray50", "Legume" = "forestgreen"))
+
+![](Dario_solution_files/figure-markdown_strict/Aufgabe_2-1.png)
