@@ -6,15 +6,21 @@ Project_Tobi solution by Tim
 ``` r
 knitr::opts_chunk$set(echo = TRUE)
 
-library(tidyverse)
+library(dplyr)
+library(stringr)
+library(lubridate)
+library(purrr)
 library(ggplot2)
-library(readxl)
+library(tidyr)
 
-windenergiebw <- read.csv("WindenergieBW.csv")
+
+windenergiebw <- readr::read_csv("WindenergieBW.csv")
+
+
 
 windenergie_clean <- windenergiebw %>%
-  select(-Typbezeichnung.des.Herstellers, -Stand.der.Daten, -Herkunft.der.Daten) %>%
-  filter(!grepl("Stillgelegt", Status)) %>%
+  select(-'Typbezeichnung des Herstellers', -'Stand der Daten', -'Herkunft der Daten') %>%
+  filter(!str_detect(Status, "Stillgelegt")) %>%
   
   
   mutate(
@@ -26,13 +32,13 @@ windenergie_clean <- windenergiebw %>%
     Betriebsdauer = as.numeric(as.Date("2025-10-31") - Inbetriebnahmedatum) / 365,
     
      Kapazitätsfaktor = case_when(
-      Nabenhöhe..m. < 100 ~ 0.20,
-      Nabenhöhe..m. <= 150 ~ 0.25,
-      Nabenhöhe..m. > 150 ~ 0.30,
+      "Nabenhöhe [m]" < 100 ~ 0.20,
+      "Nabenhöhe [m]" <= 150 ~ 0.25,
+      "Nabenhöhe [m]" > 150 ~ 0.30,
       TRUE ~ NA_real_
     ),
     
-     Gesamtenergie_MWh = Generatorleistung..MW. * Kapazitätsfaktor * Betriebsdauer,
+     Gesamtenergie_MWh = `Generatorleistung [MW]` * Kapazitätsfaktor * Betriebsdauer,
     
      Steueraufkommen_Cent = Gesamtenergie_MWh * 0.01
   ) %>%
@@ -40,16 +46,16 @@ windenergie_clean <- windenergiebw %>%
   # Jahreskennzahlen pro Inbetriebnahmedatum berechnen
   left_join(
     windenergiebw %>%
-      filter(!grepl("Stillgelegt", Status)) %>%
+      filter(!str_detect(Status, "Stillgelegt")) %>%
       mutate(Inbetriebnahmedatum = as.Date(Inbetriebnahmedatum, format = "%d.%m.%Y")) %>%
       group_by(Inbetriebnahmedatum) %>%
       summarise(
-        Anzahl_Anlagen_Jahr = n(),
-        Leistung_Jahr_MW = sum(Generatorleistung..MW., na.rm = TRUE),
+        Anzahl_Anlagen = n(),
+        Leistung_Jahr_MW = sum(`Generatorleistung [MW]`, na.rm = TRUE),
         .groups = "drop"
       ),
     by = "Inbetriebnahmedatum"
-  )
+  ) 
 ```
 
 ## Aufgabe 1
@@ -61,49 +67,59 @@ jahres_stats <- windenergie_clean %>%
   group_by(Inbetriebnahme_Jahr) %>%
   summarise(
     Anzahl_Anlagen_Jahr = n(),
-    Leistung_Jahr_MW = sum(Generatorleistung..MW., na.rm = TRUE),
+    Leistung_Jahr_MW = sum(`Generatorleistung [MW]`, na.rm = TRUE),
     .groups = "drop"
   ) %>%
-  arrange(Inbetriebnahme_Jahr)  # nach Jahr sortieren
-
+  arrange(Inbetriebnahme_Jahr)
 
 faktor <- max(jahres_stats$Leistung_Jahr_MW) / max(jahres_stats$Anzahl_Anlagen_Jahr)
 
-
 ggplot(jahres_stats, aes(x = Inbetriebnahme_Jahr)) +
-  geom_line(aes(y = Anzahl_Anlagen_Jahr, group = 1, color = "Anzahl Windräder"), size = 1.2) +
-  geom_line(aes(y = Leistung_Jahr_MW / faktor, group = 1, color = "Installierte Leistung (MW)"),
-            size = 1.2, linetype = "dashed") +
+  
+  # Balken
+  geom_col(aes(y = Anzahl_Anlagen_Jahr, fill = "Anzahl Windräder"), width = 0.7) +
+  
+  # Linie
+  geom_line(
+    aes(y = Leistung_Jahr_MW / faktor, color = "Installierte Leistung (MW)"),
+    linewidth = 1.3,
+    linetype = "dashed"
+  ) +
+  
+  scale_fill_manual(values = c("Anzahl Windräder" = "grey60")) +
+  scale_color_manual(values = c("Installierte Leistung (MW)" = "blue")) +
+  
   scale_y_continuous(
     name = "Anzahl Windräder",
-    sec.axis = sec_axis(~.*faktor, name = "Installierte Leistung (MW)")
+    sec.axis = sec_axis(~ . * faktor, name = "Installierte Leistung (MW)")
   ) +
-  scale_color_manual(values = c("Anzahl Windräder" = "green", "Installierte Leistung (MW)" = "blue")) +
+  
   labs(
     title = "Jährlicher Zubau an Windrädern in BW",
     x = "Jahr",
+    fill = "",
     color = ""
   ) +
+  
   theme_minimal() +
   theme(
     plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
     axis.title = element_text(size = 12),
-    legend.position = "bottom"
+    legend.position = "bottom",
+    axis.title.y  = element_text(color = "grey60"),
+    axis.text.y   = element_text(color = "grey60"),
+    axis.title.y.right = element_text(color = "blue"),
+    axis.text.y.right  = element_text(color = "blue")
   )
 ```
 
-    ## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-    ## ℹ Please use `linewidth` instead.
-    ## This warning is displayed once every 8 hours.
-    ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-    ## generated.
+    ## Warning: Removed 1 row containing missing values or values outside the scale range
+    ## (`geom_col()`).
 
     ## Warning: Removed 1 row containing missing values or values outside the scale range
     ## (`geom_line()`).
-    ## Removed 1 row containing missing values or values outside the scale range
-    ## (`geom_line()`).
 
-![](Plots_Tim/unnamed-chunk-1-1.png)
+![](Plots_Tim/plot1.png)
 
 ## Aufgabe 2
 
@@ -111,36 +127,33 @@ Korrelationsmatrix
 
 ``` r
 cor_vars <- windenergie_clean %>%
-  select(Steueraufkommen_Cent, Rotordurchmesser..m., Nabenhöhe..m., Gesamtenergie_MWh)
-
-
-pairs <- expand_grid(
-  var1 = names(cor_vars),
-  var2 = names(cor_vars)
-) %>%
-  mutate(
-   
-    test = map2(var1, var2, ~cor.test(cor_vars[[.x]], cor_vars[[.y]], method = "spearman")),
-    rho = map_dbl(test, ~.x$estimate),
-    p = map_dbl(test, ~.x$p.value),
-    p_adj = p.adjust(p, method = "BH"),
-    sig = p_adj < 0.05,
-    rho_sig = ifelse(sig, rho, NA),
-    var1 = factor(var1, levels = names(cor_vars)),
-    var2 = factor(var2, levels = names(cor_vars))
+  select(
+    Steueraufkommen_Cent,
+    `Rotordurchmesser [m]`,
+    `Nabenhöhe [m]`,
+    Gesamtenergie_MWh
   )
-```
 
-    ## Warning: There were 16 warnings in `mutate()`.
-    ## The first warning was:
-    ## ℹ In argument: `test = map2(var1, var2, ~cor.test(cor_vars[[.x]],
-    ##   cor_vars[[.y]], method = "spearman"))`.
-    ## Caused by warning in `cor.test.default()`:
-    ## ! Kann exakten p-Wert bei Bindungen nicht berechnen
-    ## ℹ Run `dplyr::last_dplyr_warnings()` to see the 15 remaining warnings.
+# Spearman-Korrelationen berechnen
+rho_mat <- cor(cor_vars, method = "spearman", use = "pairwise.complete.obs")
 
-``` r
-ggplot(pairs, aes(x = var1, y = var2, fill = rho_sig)) +
+# In tidy Format bringen
+pairs_df <- as.data.frame(as.table(rho_mat)) %>%
+  rename(
+    var1 = Var1,
+    var2 = Var2,
+    rho = Freq
+  ) %>%
+  mutate(
+    rho_sig = rho   # falls du Signifikanz separat berechnest, hier ersetzen
+  )
+pairs_tri <- pairs_df %>%
+  mutate(
+    var1 = factor(var1, levels = unique(var1)),
+    var2 = factor(var2, levels = unique(var2))
+  ) %>%
+  filter(as.numeric(var1) != as.numeric(var2))
+ggplot(pairs_tri, aes(x = var1, y = var2, fill = rho_sig)) +
   geom_tile(color = "white") +
   geom_text(aes(label = round(rho, 2)), color = "black") +
   scale_fill_gradient2(
@@ -161,6 +174,74 @@ ggplot(pairs, aes(x = var1, y = var2, fill = rho_sig)) +
   )
 ```
 
-![](Plots_Tim/unnamed-chunk-2-1.png)
+![](Plots_Tim/unnamed-chunk-2-1-1.png)
+
+Warnung weil \* liegen außerhab der Skala. Signifikanz weniger wichtig,
+da Effektgröße bedeutsamer ist. Große Stichprobe, Korrekturen verändern
+Signifikanz (kann man nicht trauen).
+
+## Hexmap: Windenergie_Leistung pro Landkreis in Baden-Württemberg
+
+``` r
+#Hexmap
+
+library(sf)
+```
+
+    ## Warning: package 'sf' was built under R version 4.5.2
+
+``` r
+library(dplyr)
+library(geodata)
+```
+
+    ## Warning: package 'geodata' was built under R version 4.5.2
+
+    ## Warning: package 'terra' was built under R version 4.5.2
+
+``` r
+# Deutschland Landkreise laden
+landkreise_de <- gadm(country = "DEU", level = 2, path = tempdir()) %>%
+  st_as_sf()
+
+# Nur Baden-Württemberg extrahieren
+landkreise_bw <- landkreise_de %>%
+  filter(NAME_1 == "Baden-Württemberg") %>%
+  st_transform(25832)
+wind_sf <- windenergie_clean %>%
+  filter(!is.na(Ost), !is.na(Nord)) %>%
+  st_as_sf(coords = c("Ost", "Nord"), crs = 25832)
+wind_bw <- st_join(wind_sf, landkreise_bw, join = st_within)
+hex_bw <- st_make_grid(
+  landkreise_bw,
+  cellsize = 15000,   # 15 km Hexgröße
+  square = FALSE
+) %>%
+  st_sf(id = seq_len(length(.))) %>%
+  st_transform(25832)
+wind_hex <- st_join(wind_bw, hex_bw, join = st_within)
+hex_agg <- wind_hex %>%
+  st_drop_geometry() %>%
+  group_by(id) %>%
+  summarise(Leistung_Jahr_MW = sum(Leistung_Jahr_MW, na.rm = TRUE)) %>%
+  left_join(hex_bw, by = "id") %>%
+  st_as_sf()
+
+bw_outline <- landkreise_bw %>%
+  st_union() %>%
+  st_as_sf()
+
+ggplot() +
+  geom_sf(data = hex_agg, aes(fill = Leistung_Jahr_MW), color = NA) +
+  geom_sf(data = bw_outline, fill = NA, color = "black", size = 0.4) +
+  scale_fill_viridis_c(option = "C", direction = -1, na.value = "grey90") +
+  theme_minimal(base_size = 12) +
+  labs(
+    title = "Hexmap: Windenergie-Leistung in Baden-Württemberg",
+    fill = "MW"
+  )
+```
+
+![](Plots_Tim/unnamed-chunk-3-1.png)
 
 
