@@ -48,7 +48,7 @@ klimadaten_check <- read.csv("klimadaten_tuebingen.csv", sep = ";")
 
 ### Wie veränderte sich die Temperatur im zeitlichen Verlauf?
 
-```{r Temperaturentwicklung in Tübingen (1961-2024) mit Trend }
+```{r Temperaturentwicklung }
 
 klimadaten %>%
   filter(saison == "kalenderjahr")%>%
@@ -70,7 +70,7 @@ scale_y_continuous(breaks = seq(5, 15, by = 0.5)) +
 
 ### Wie verändert sich die Temperatur im Jahreszeitlichen Verlauf, über den gesamten Messzeitraum?
 
-```{r Saisonale Temperaturentwicklung (1961-2024)}
+```{r Saisonale-Temperaturentwicklung}
 klimadaten %>%
   filter(saison ==c("winter_djf", "fruehjahr_mam", "sommer_jja", "herbst_son")) %>%
 ggplot( aes(x = jahr, y = temperatur_mittelwert, color = saison)) +  
@@ -96,7 +96,7 @@ ggplot( aes(x = jahr, y = temperatur_mittelwert, color = saison)) +
 
 ### Wie verhalten sich die Niederschlagsmengen in Kombination mit den Heißen Tagen?
 
-```{r Zusammenhang: Niederschlag und Heiße Tage}
+```{r Zusammenhang-Niederschlag-Heisse-Tage}
 
 ggplot(klimadaten, aes(x = niederschlag_summe, y = temperatur_heisse_tage)) +
   geom_point(aes(color = jahr), size = 3, alpha = 0.7) +
@@ -124,7 +124,7 @@ Die Korrelation zwischen Niederschlag und heißen Tagen beträgt `` `r round(cor
 
 ### Wie entwickeln sich die Heißtage und Frost im laufe der Zeit und Sasional?
 
-```{r Entwicklung Extrem-Temperaturtage (1961-2024)}
+```{r Entwicklung-Extrem-Temperaturtage}
 
 klimadaten %>%
          filter(saison == "kalenderjahr") %>%
@@ -154,7 +154,7 @@ ggplot(aes(x = jahr, y = anzahl, color = typ)) +
 
 ### Saisonale Trenddiagramme, alle Saisons in einem Diagramm
 
-```{r Saisonale Trenddiagramme, alle Saisons in einem Diagramm}
+```{r Saisonale-Trenddiagramme}
 
 klimadaten %>%
          filter(saison ==c("winter_djf", "fruehjahr_mam", "sommer_jja", "herbst_son")) %>%
@@ -220,7 +220,7 @@ Darstellung mithilfe einer Heatmap
 
 ### Wie häufig treten Trockenperioden auf und wie lange dauern diese an?
 
-```{r Häufigkeit und Dauer von Trockenperioden}
+```{r Trockenperioden}
 
 klimadaten %>%
          filter(saison == "kalenderjahr") %>%
@@ -255,7 +255,7 @@ Heatmap, Barplot
 
 <!--# Da es keine Tropennächte gibts, checke ich überhaupt nicht was da gemacht sein sollte -->
 
-```{r}
+```{r Tropennaechte}
 
 klimadaten %>%
          filter(saison == "kalenderjahr") %>%
@@ -309,7 +309,7 @@ Korrelationsmatrix und Scatterplot, gerne auch andere Dimensionen
 
 ### Wie häufig gab es jährlich mehr als 5 Frosttage/Heißtage im Jahr?
 
-```{r}
+```{r Korrelationsmatrix-und-Scatterplot}
 klimadaten %>%
          filter(saison == "kalenderjahr") %>%
          select(temperatur_heisse_tage, temperatur_frosttage) %>%
@@ -380,7 +380,7 @@ klimadaten %>%
 
 ### Hat die Anzahl an Starknierderschlägen über die Jahre zugenommen? Wenn ja, wie viele Starkniederschläge gab es und wie verteilen sich diese über das Jahr?
 
-```{r Threshold Exceedance Plots}
+```{r Threshold-Exceedance-Plots}
 
 klimadaten %>%
   filter(saison %in% tolower(month.name)) %>%
