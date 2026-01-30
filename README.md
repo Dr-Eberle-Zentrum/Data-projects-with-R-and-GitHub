@@ -134,10 +134,15 @@ Example:
 Current projects:
 
 - Dario (dariodemenus) - [Soil analysis and biodiversity](Projects/dariodemenus/project-description.md)
+  - solution by [Tim](Projects/dariodemenus/Dario_solution.md)
 - Tobias (TobiTuTuebingen) - [Windkraftausbau in BW](Projects/TobiTuTuebingen/project-description.md)
+  - Solution by [Dario](Projects/TobiTuTuebingen/dariodemenus.md) and [Tim](Projects/TobiTuTuebingen/tobi_solution_bytim.md)
 - Gabriel (46Cent) - [UFC statistics](Projects/46Cent/project-description.md)
+  - solution by [Tobias](Projects/46Cent/Tobias/tobisolution.md) and [Dario](Projects/46Cent/raw_data_UFC/dariodemenus.md)
 - Julia (juliettst) - [Sleep and Mood Dynamics](Projects/juliettst/project-description.md)
+  - solution by [Gabriel](Projects/juliettst/46Cent.md) and [Tobias](Projects/juliettst/Week4%20Homework-%20Sleep%20synthetic%20project/pojectsolutiontobi.md)
 - Tim (Tim) - [Klimadaten Tübingen](Projects/Tim/project-description.md)
+  - solution by [Tim](Projects/Tim/46Cent.md)
 
 
 #### Goals
