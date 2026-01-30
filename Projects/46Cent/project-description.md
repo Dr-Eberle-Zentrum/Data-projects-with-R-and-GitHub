@@ -449,7 +449,7 @@ There are 5 datasets included in this package:
 For our first visualization we’ll need to add the `W/L-Ratio` to each
 fighter in the respective dataframe and then aggregate them by
 weightclass. (Information on the weightclasses can be found
-[here](https://www.ufc.com/news/understanding-ufc-weight-classes-and-weigh-ins).
+[here](https://www.ufc.com/news/understanding-ufc-weight-classes-and-weigh-ins)).
 Then the `weightclass_mean` needs to be calculated.  
 
 The `height_to_reach_ratio` needs to be calculated for each fighter in
