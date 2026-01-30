@@ -110,7 +110,7 @@ Namen der in ihrer Gewichtsklasse jeweils besten Kämpfer aufzulisten.
 
 ![](tobisolution_files/figure-markdown_strict/wlratio-1.png)
 
-    ggsave("tobivis1.png", path = "./plots", width = 600, height = 400, units = ("px"), dpi = 300)
+    # ggsave("tobivis1.png", path = "./plots", width = 600, height = 400, units = ("px"), dpi = 300)
 
 In der folgenden Legende ist der jeweilige Spitzenreiter in seiner
 Gewichtsklasse aufgelistet:
@@ -236,7 +236,7 @@ Gewichtsklasse aufgelistet:
 
 ![](tobisolution_files/figure-markdown_strict/graph2-1.png)
 
-    ggsave("tobivis2.png", path = "./plots", width = 600, height = 400, units = ("px"), dpi = 300)
+    # ggsave("tobivis2.png", path = "./plots", width = 600, height = 400, units = ("px"), dpi = 300)
 
     ## `geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'
 
@@ -276,7 +276,7 @@ Gewichtsklasse aufgelistet:
 
 ![](tobisolution_files/figure-markdown_strict/thirdgraph-1.png)
 
-    ggsave("tobivis3.png", path = "./plots", width = 600, height = 400, units = ("px"), dpi = 300)
+    # ggsave("tobivis3.png", path = "./plots", width = 600, height = 400, units = ("px"), dpi = 300)
 
 ### Fourth Graph
 
@@ -307,7 +307,7 @@ keinen Sinn.
 
 ![](tobisolution_files/figure-markdown_strict/fourthgraph-1.png)
 
-    ggsave("tobivis4.png", path = "./plots", width = 600, height = 400, units = ("px"), dpi = 300)
+    # ggsave("tobivis4.png", path = "./plots", width = 600, height = 400, units = ("px"), dpi = 300)
 
 ### Fifth Graph
 
@@ -326,4 +326,4 @@ keinen Sinn.
 
 ![](tobisolution_files/figure-markdown_strict/graphfive-1.png)
 
-    ggsave("tobivis5.png", path = "./plots", width = 600, height = 400, units = ("px"), dpi = 300)
+    # ggsave("tobivis5.png", path = "./plots", width = 600, height = 400, units = ("px"), dpi = 300)
