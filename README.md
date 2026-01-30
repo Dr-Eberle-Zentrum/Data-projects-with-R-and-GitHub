@@ -137,6 +137,7 @@ Current projects:
 - Tobias (TobiTuTuebingen) - [Windkraftausbau in BW](Projects/TobiTuTuebingen/project-description.md)
 - Gabriel (46Cent) - [UFC statistics](Projects/46Cent/project-description.md)
 - Julia (juliettst) - [Sleep and Mood Dynamics](Projects/juliettst/project-description.md)
+  - solution by [Gabriel](Projects/juliettst/46Cent.md)
 - Tim (Tim) - [Klimadaten Tübingen](Projects/Tim/project-description.md)
 
 
