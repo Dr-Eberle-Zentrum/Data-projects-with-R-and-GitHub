@@ -153,19 +153,20 @@ library(kableExtra)
 ```{r}
 setwd(this.path::this.dir())
 
-    lab_data <- read_xlsx("data_jena_2025 (1).xlsx") %>%
-      mutate(
-        `dry soil + glass [g]` = if_else(
-          `plot ID` == "B2A22",  # Nutze plot ID statt row number
-          as.character(mean(c(86.178, 85.864))),
-          `dry soil + glass [g]`
-        ),
-        `dry soil + glass [g]` = as.numeric(`dry soil + glass [g]`), 
-        `glass weight [g]` = as.numeric(`glass weight [g]`),        
-        dry_soil_swc_g = `dry soil + glass [g]` - `glass weight [g]`,
-        swc = (`wet soil [g]` - dry_soil_swc_g) / dry_soil_swc_g,
-        dry_soil_nmin_g = `Nmin wet soil [g]` / (1 + swc)
-      )
+lab_data <- read_xlsx("data_jena_2025 (1).xlsx") %>%
+  group_by(`plot ID`) %>%
+  summarise(
+    `dry soil + glass [g]` = mean(as.numeric(`dry soil + glass [g]`), na.rm = TRUE),
+    `glass weight [g]` = mean(as.numeric(`glass weight [g]`), na.rm = TRUE),
+    `wet soil [g]` = mean(as.numeric(`wet soil [g]`), na.rm = TRUE),
+    `Nmin wet soil [g]` = mean(as.numeric(`Nmin wet soil [g]`), na.rm = TRUE),
+    .groups = 'drop'
+  ) %>%
+  mutate(
+    dry_soil_swc_g = `dry soil + glass [g]` - `glass weight [g]`,
+    swc = (`wet soil [g]` - dry_soil_swc_g) / dry_soil_swc_g,
+    dry_soil_nmin_g = `Nmin wet soil [g]` / (1 + swc)
+  )
 ```
 
 ###  Schritt 2: Berechnung Nmin in mg/kg
@@ -192,7 +193,7 @@ nmin_jena <- read_excel("2025_Nmin_Jena.xlsx",
 
 # Nmin Berechnung
   # Negative NH4-Werte auf 0 setzen
-  mutate(NH4_N_mg_l = if_else(NH4_N_mg_l < 0, 0, NH4_N_mg_l)) %>%
+  mutate(NH4_N_mg_l = max(NH4_N_mg_l, 0)) %>%
   # Join mit lab_data
   left_join(lab_data, by = c("probenbezeichnung" = "plot ID")) %>%
   mutate(

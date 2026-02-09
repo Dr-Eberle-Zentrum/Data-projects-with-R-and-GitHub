@@ -220,22 +220,30 @@ Ziel ist es, die 2025er Rohdaten in einen “Tidy Data Frame” zu
 
     setwd(this.path::this.dir())
 
-        lab_data <- read_xlsx("data_jena_2025 (1).xlsx") %>%
-          mutate(
-            `dry soil + glass [g]` = if_else(
-              `plot ID` == "B2A22",  # Nutze plot ID statt row number
-              as.character(mean(c(86.178, 85.864))),
-              `dry soil + glass [g]`
-            ),
-            `dry soil + glass [g]` = as.numeric(`dry soil + glass [g]`), 
-            `glass weight [g]` = as.numeric(`glass weight [g]`),        
-            dry_soil_swc_g = `dry soil + glass [g]` - `glass weight [g]`,
-            swc = (`wet soil [g]` - dry_soil_swc_g) / dry_soil_swc_g,
-            dry_soil_nmin_g = `Nmin wet soil [g]` / (1 + swc)
-          )
+    lab_data <- read_xlsx("data_jena_2025 (1).xlsx") %>%
+      group_by(`plot ID`) %>%
+      summarise(
+        `dry soil + glass [g]` = mean(as.numeric(`dry soil + glass [g]`), na.rm = TRUE),
+        `glass weight [g]` = mean(as.numeric(`glass weight [g]`), na.rm = TRUE),
+        `wet soil [g]` = mean(as.numeric(`wet soil [g]`), na.rm = TRUE),
+        `Nmin wet soil [g]` = mean(as.numeric(`Nmin wet soil [g]`), na.rm = TRUE),
+        .groups = 'drop'
+      ) %>%
+      mutate(
+        dry_soil_swc_g = `dry soil + glass [g]` - `glass weight [g]`,
+        swc = (`wet soil [g]` - dry_soil_swc_g) / dry_soil_swc_g,
+        dry_soil_nmin_g = `Nmin wet soil [g]` / (1 + swc)
+      )
 
     ## New names:
     ## • `` -> `...6`
+
+    ## Warning: There was 1 warning in `summarise()`.
+    ## ℹ In argument: `dry soil + glass [g] = mean(as.numeric(`dry soil + glass [g]`),
+    ##   na.rm = TRUE)`.
+    ## ℹ In group 44: `plot ID = "B2A22"`.
+    ## Caused by warning in `mean()`:
+    ## ! NAs introduced by coercion
 
 ### Schritt 2: Berechnung Nmin in mg/kg
 
@@ -252,19 +260,17 @@ Ziel ist es, die 2025er Rohdaten in einen “Tidy Data Frame” zu
 
 <!-- -->
 
-    library(dplyr)
-
     # Load photometer data
     nmin_jena <- read_excel("2025_Nmin_Jena.xlsx", 
-                           skip = 8, 
-                           col_names = FALSE) %>%
+                           skip = 7, 
+                           col_names = TRUE) %>%
       setNames(c("lab_number", "probenbezeichnung", "NO3_N_mg_l", "NH4_N_mg_l")) %>%
       filter(!is.na(lab_number) & !is.na(probenbezeichnung)) %>%  # Beide prüfen
       mutate(across(c(NO3_N_mg_l, NH4_N_mg_l), as.numeric)) %>%
 
     # Nmin Berechnung
       # Negative NH4-Werte auf 0 setzen
-      mutate(NH4_N_mg_l = if_else(NH4_N_mg_l < 0, 0, NH4_N_mg_l)) %>%
+      mutate(NH4_N_mg_l = max(NH4_N_mg_l, 0)) %>%
       # Join mit lab_data
       left_join(lab_data, by = c("probenbezeichnung" = "plot ID")) %>%
       mutate(
@@ -275,8 +281,6 @@ Ziel ist es, die 2025er Rohdaten in einen “Tidy Data Frame” zu
       )
 
     ## New names:
-    ## • `` -> `...1`
-    ## • `` -> `...2`
     ## • `` -> `...3`
     ## • `` -> `...4`
 
@@ -314,9 +318,6 @@ Ziel ist es, die 2025er Rohdaten in einen “Tidy Data Frame” zu
         rename(Plot_ID = probenbezeichnung) %>%
         mutate(Year = 2025)
     )
-
-    ## New names:
-    ## • `...6` -> `...9`
 
 1.  **Export:** Schreibe eine **neue Excel-Datei**
     `Jena_Nmin_Combined.xlsx`.
