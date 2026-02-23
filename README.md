@@ -133,7 +133,7 @@ Example:
 
 Current projects:
 
-- ... (....) - [...](Projects/....md)
+- Armin (ArminBurkhardt) - [Project about stock prices](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/9ffa9c453376e78db78056d1be9639d3a902c083/Projects/ArminBurkhardt/project-description.md)
 - ... (....) - [...](Projects/....md)
 - ... (....) - [...](Projects/....md)
 - ...
