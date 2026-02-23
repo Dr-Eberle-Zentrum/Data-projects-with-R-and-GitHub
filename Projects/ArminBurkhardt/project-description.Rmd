@@ -1,0 +1,114 @@
+---
+title: "Historical_Stock_Data_Analysis"
+output: md_document
+---
+
+
+# Stock and Index data
+Financial markets are highly complex systems that are influenced by many factors. Both stocks (pieces of ownership for individual companies) and indices (a sort of aggregation of multiple stocks/companies) are represented and traded on these markets. Nowadays, some combination of stocks and ETFs (which pretty much are indices) make up the long term investments of many people. In this project, you will take a closer look at the historical data of a few stocks and some indices in which they are included, analyzing their performance and the relationship between them. How closely do you think stock and index prices correlate?
+
+## Data
+The data was downloaded from Yahoo Finance using the following python code:
+
+```{eval=FALSE}
+import yfinance as yf
+
+tickers = ["AAPL", "NVDA", "AMZN", "LMT", "V"]
+
+indices = ["^GSPC", "^IXIC"] # aka S&P 500 and NASDAQ
+
+data = yf.download(tickers + indices, interval="60m", period="2y")
+
+data.to_csv("stock_data.csv")
+```
+
+The following is a sample from `stock_data.csv`:
+
+```{r, echo=FALSE}
+library(knitr)
+data <- read.csv("stock_data.csv")
+
+kable(head(data, 5), caption = "Sample of the stock data")
+```
+
+Effectively, the data is unreadable in this form, as all stocks and indices are combined in this dataset.
+
+### Explanation of the data
+The data contains hourly historical price data over the past 2 years for the following stocks:
+
+- Apple (AAPL)
+- Nvidia (NVDA)
+- Amazon (AMZN)
+- Lockheed Martin (LMT)
+- Visa (V)
+
+And the following indices:
+
+- S&P 500 (^GSPC)
+- NASDAQ (^IXIC)
+
+The columns in the dataset are:
+
+- `Datetime`: the date and time of each price data point
+- For each Symbol (stock or index), there are 5 columns (not in this order):
+  - `Open`: the price at the beginning of the hour
+  - `High`: the highest price during this hour
+  - `Low`: the lowest price during this hour
+  - `Close`: the price at the end of the hour
+  - `Volume`: the trading volume during the hour (how many shares were traded)
+
+For example, the first row says `Price, Close, Close, ...` and the second says `Ticker, AAPL, AMZN, ...` This means that the first `Close` column corresponds to `AAPL`, the second `Close` column corresponds to `AMZN`, and so on. `yfinance` unfortunately exports the data with this multi-row header.
+
+## Tasks, Questions & Visualizations
+1. Obviously, the data is very unreadable. The data should first be split into dataframes per stock/index. 
+   
+   Note, that for many tasks percentage changes in price are more useful than absolute values.
+2. **Visualization** of the data: 
+   - **Aggregation**: For simplicity, the data should be aggregated from hourly to daily data
+   
+     > the new `Open` should be the `Open` of the first hour of the day
+     > 
+     > the new `Close` should be the `Close` of the last hour of the day
+     > 
+     > the new `High` should be the maximum `High` of all hours of the day
+     > 
+     > the new `Low` should be the minimum `Low` of all hours of the day
+     > 
+     > the new `Volume` should be the sum of all hourly volumes of the day
+     
+   - **Price**: plot the price of your favorite stock and index per day over time in two separate plots. 
+   - **Volume**: plot the trading volume of your chosen stock and index over time 
+     This can either be done in the same plots as above or in new plots. 
+   - **Candlesticks**: if possible, represent each day that has price data as a candlestick (see below for an example) 
+   
+     > The top of the body is the open price, the bottom of the body is the close price, and the wicks are the high and low prices. 
+     > 
+     > A candlestick is red if the price decreased during the hour, and green if it increased. 
+     
+   ![](https://cdn.britannica.com/13/237813-050-0CA3E424/candlestick-chart-definition.jpg)
+3. **Pattern analysis**: What usually happens when throughout the day?
+   - **Price Movements/Volatility**: at which hour do prices across all stocks & indices move the most? 
+   
+     > feel free to visualize the average price movement per hour of the day here
+     
+   - **Trading volumes**: when do the trading volumes tend to be the highest?
+   
+     > a similar visualization as above can be used here, but this time for trading volumes per hour of the day
+     
+4. **Correlation**: How closely do the stock and index prices follow each other? Do they have a strong correlation?
+   - *meaning: Do the stock and index prices move together? If the stock price goes up, does the index price do as well?*
+   - here, hourly percentage changes are especially useful, you can look into `dplyr::lag` which can help you here.
+   - **Quantification**: Optional, but very fancy: find a way to quantify their correlation and plot this data per stock/index pair.
+   
+     > eg. by calculating the correlation coefficient
+     > 
+     > R has a built-in function for this called `cor`
+     
+   - **Visualization**: find a way to visualize the correlation 
+   
+     > eg. plotting stock prices against an index price
+     
+   -  which stock correlates the most with the S&P 500?
+
+
+
