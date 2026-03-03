@@ -9,7 +9,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Confidence Ratings in Three Psychological Studies
-For this project we use three datasets from the Confidence database available on the Open Science Framework (OSF). All studies in this database analyse different psychological constructs, but have the same structure concerning their experimental paradigm: Participants are presented with a stimulus and perform some sort of task on it (e.g. determine if they have seen a picture before) for which there performance can be evaluated in a binary fashion (correct/incorrect). Subsequently, they are asked to rate their confidence in their answer.
+For this project we use three datasets from the [Confidence database][https://osf.io/s46pr/files/osfstorage] available on the Open Science Framework (OSF). All studies in this database analyse different psychological constructs, but have the same structure concerning their experimental paradigm: Participants are presented with a stimulus and perform some sort of task on it (e.g. determine if they have seen a picture before) for which there performance can be evaluated in a binary fashion (correct/incorrect). Subsequently, they are asked to rate their confidence in their answer.
 
 In this project you are supposed to (1) compare across three studies how confidence relates to the performance of the participants and (2) compare average performance accuracies between studies.
 
@@ -84,4 +84,5 @@ For this part we will need a new dependent variable that moves away from confide
 The plot should have on the x-Axis the 3 studies and on the y-Axis the performance scores. For the visualization I suggesst violin plots for each study with individual data points and a boxplot within each violin plot. If you have a reasonable other vision that visualizes the data comparably, feel free to pursue that instead.
 
 #### Hand Drawn Plot for Visualization 2
+
 ![Violin Plot as one possibility](Vis_2.jpg)
