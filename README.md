@@ -136,7 +136,7 @@ Current projects:
 - Armin (ArminBurkhardt) - [Project about stock prices](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/9ffa9c453376e78db78056d1be9639d3a902c083/Projects/ArminBurkhardt/project-description.md)
 - Jakob (JakobRaatschen) - [Project about confidence ratings in Psychological studies](Projects/JakobRaatschen/Project_Description_Jakob_Raatschen.md)
 - Karim (KarimMessaoud) - [Project about Global Education Attainment](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/KarimMessaoud/project-description.md)
-- ... (....) - [...](Projects/....md)
+- Ziyi (....) - [to-be-announced](Projects/....md)
 - ...
 
 
