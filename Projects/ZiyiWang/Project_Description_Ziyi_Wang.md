@@ -1,4 +1,4 @@
-# Project Description
+# Ziyi’s Project Description: Surprisal-Based Comparison of Human and LLM Language Generation
 
 ## 1. Background
 
