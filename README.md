@@ -137,6 +137,7 @@ Current projects:
 - Jakob (JakobRaatschen) - [Project about confidence ratings in Psychological studies](Projects/JakobRaatschen/Project_Description_Jakob_Raatschen.md)
 - Karim (KarimMessaoud) - [Project about Global Education Attainment](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/KarimMessaoud/project-description.md)
 - Ziyi (ZiyiWang) - [Project about Language Processing comparsion between LLMs and Humans](Projects/ZiyiWang/Project_Description_Ziyi_Wang.md)
+- Joshua (JoshuaSchlucke) - [Project about GitHub commit message patterns](Projects/JoshuaSchlucke/project-description.md)
 - ...
 
 
