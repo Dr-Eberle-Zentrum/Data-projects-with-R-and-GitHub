@@ -158,14 +158,7 @@ subject and condition** will be calculated.
 This step ensures that the analysis is based on comparable aggregated
 statistics.
 
-Example R workflow:
 
-    library(dplyr)
-
-    data_clean <- data %>%
-      filter(!is.na(surprisal)) %>%
-      group_by(generator, subject, condition) %>%
-      summarise(mean_surprisal = mean(surprisal))
 
 ## 5. Visualization Plan
 
@@ -179,15 +172,6 @@ x-axis: context condition
 y-axis: mean surprisal value
 
 lines: different generators (human vs LLMs)
-
-Example visualization:
-
-    library(ggplot2)
-
-    ggplot(data_clean, aes(x = condition, y = mean_surprisal, color = generator)) +
-      stat_summary(fun = mean, geom = "line") +
-      stat_summary(fun = mean, geom = "point") +
-      theme_minimal()
 
 This plot will allow us to observe whether human-generated language and
 LLM-generated language show similar or different surprisal patterns
