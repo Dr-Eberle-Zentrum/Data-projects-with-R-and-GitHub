@@ -34,11 +34,9 @@ Use one of the smaller subsets provided in `datasets/`:
   zipped) — larger sample that stays under GitHub’s file size limit.
 - `datasets/commits_balanced_3k_per_repo.csv` (~48 MB) — balanced sample
   with 3,000 commits per repo for fair repo comparison.
-- `datasets/commits_3repos_2019_2020_daily.csv` (~51 KB) — daily commit
-  counts for 2019–2020 for three repos (large/medium/small) to build a
+- Raw commit-level files for three repos (large/medium/small) to build a
   GitHub-style “commit calendar” heatmap. The repos are `torvalds/linux`
   (large), `pytorch/pytorch` (medium), and `tidyverse/ggplot2` (small).
-- Raw commit-level files for the same 3 repos and years:
   - `datasets/commits_2019_2020_torvalds_linux.csv.zip` (~42 MB, zipped)
   - `datasets/commits_2019_2020_pytorch_pytorch.csv` (~13 MB)
   - `datasets/commits_2019_2020_tidyverse_ggplot2.csv` (~0.1 MB)
