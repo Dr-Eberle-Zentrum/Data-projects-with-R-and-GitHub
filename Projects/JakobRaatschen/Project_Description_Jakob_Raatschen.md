@@ -68,8 +68,8 @@ add a a variable indicating the analysed construct (e.g. “visual
 perception”)
 
 A variable on the accuracy of the response already exists, so you do not
-need to create one. However, calculate the average performance for each
-participant and add the scores to the data frame.
+need to create one. However, calculate the `average_performance` for each
+participant and add the scores to a separate data frame that also includes a `subj_id` variable as well as the just created `study_id` variable. This data set will be needed for visualization 2.
 
 #### Study 2
 
@@ -92,16 +92,16 @@ perception”).
 Add a variable indicating the performance accuracy of the participants.
 For this, you can compare the participants’ answer with the correct
 answer and assign a value of 1 for correct answers and 0 for incorrect
-answers. Also, calculate the average performance for each participant
-and add the scores to the data frame.
+answers. Also, calculate the `average_performance` for each participant
+and add the scores to a separate data frame that also includes a `subj_id` variable as well as the just created `study_id` variable. This data set will be needed for visualization 2.
 
 #### Study 3
 
 Add a variable indicating the analysed construct (e.g. “memory”)
 
 A variable on the accuracy of the response already exists, so you do not
-need to create one. However, calculate the average performance for each
-participant and add the scores to the data frame.
+need to create one. However, calculate the `average_performance` for each
+participant and add the scores to a separate data frame that also includes a `subj_id` variable as well as the just created `study_id` variable. This data set will be needed for visualization 2.
 
 #### All studies
 
@@ -122,6 +122,8 @@ variable names need to be consistent and an additional variable
 indicating the study is needed. Adjusting the subj_idx variable so there
 is no overlap between participants is also needed. Furthermore, all
 variables that are unique to one of the studies should be removed.
+
+Also concatenate the three data sets you have created including the `average_performance`. Here you have to decide again if you want to keep the `subj_id` again numerical or combine it with `study_id` into a single identifier variable (hint: keep it consistent across both concatenated data sets).
 
 ## Data visualization 1: Confidence ratings and performance accuracy across studies
 
