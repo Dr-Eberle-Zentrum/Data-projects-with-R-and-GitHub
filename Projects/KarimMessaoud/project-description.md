@@ -13,7 +13,7 @@ The data comes from the **Barro-Lee Educational Attainment Dataset
 (v2.2, 2013)**, a widely used dataset in development economics:
 **Source** <http://barrolee.com> (then
 `Education Attainment by Age Group`,`Total population`) or directly via:
-<https://github.com/barrolee/BarroLeeDataSet/blob/master/BLData/BL2013_MF_v2.2.csv>
+<https://raw.githubusercontent.com/barrolee/BarroLeeDataSet/refs/heads/master/BLData/BL2013_MF_v2.2.csv>
 
 ### First lines of the data
 
@@ -198,6 +198,10 @@ columns)</caption>
 -   `region_code`: World region (e.g. “Sub Saharan Africa”, “Latin
     America & Caribbean”, etc.)
 
+Note: The education level variables are mutually exclusive: a person is
+only counted in the variable corresponding to their **highest** attained
+education level
+
 only non-trivial column names are explained, for more information see
 <http://barrolee.com/?p=43>
 
@@ -205,70 +209,101 @@ only non-trivial column names are explained, for more information see
 
 ### Questions & Hypotheses
 
--   Has the global education gap between regions narrowed over time?
-    -   Hypothesis: We expect to see faster increases in average years
+-   **Q1:** Has the global education gap between regions narrowed over
+    time?
+
+    -   *Hypothesis*: We expect to see faster increases in average years
         of schooling in developing regions (e.g. Sub-Saharan Africa,
         South Asia) compared to developed regions
--   Are there countries where average years of schooling have stagnated
-    or even declined?
-    -   Hypothesis: Some countries with political instability or
-        economic crises may show stagnation or decline -How does the
-        share of population with no education (`lu`) correlate with
-        average years of schooling (`yr_sch`)?
--   Which age group benefits most from education expansion?
-    -   Hypothesis: Younger age groups should show higher shares of
-        completed secondary and tertiary education compared to older age
-        groups, reflecting educational expansion over time
+
+-   **Q2:** Are there countries where average years of schooling have
+    stagnated or even declined?
+
+    -   *Hypothesis*: Some countries with political instability or
+        economic crises may show stagnation or decline
+
+-   **Q3:** Do countries with a higher share of population with no
+    education (`lu`) tend to have lower average years of schooling
+    (`yr_sch`)? Is this relationship consistent across regions?
+
+-   **Q4:** Which age group benefits most from education expansion?
+
+    -   *Hypothesis*: Middle age groups (30–55) should show the clearest
+        differences between 1960 and 2010, as younger cohorts (15–25)
+        may not have completed tertiary education yet regardless of
+        access
 
 ### Cleaning & Manipulation
 
-This data is not tidy and poorly formatted. Therefore, plotting is hard
-and it requires several cleaning steps.
-
--   **Pivoting:** Reconstructing the data from wide to long format (more
-    precise: education level columns should be pivoted into a single
-    column with the education level as values and another column with
-    the corresponding percentages for easier plotting)
--   **Validation checks**:
-    -   Do the shares `lu + lp + ... + lhc` sum to ~100 for each row?
-    -   Are there missing or implausible values (e.g. negative
-        percentages)?
-    -   Are all expected country × year combinations present?
--   **Population-weighted aggregation**: When computing regional/ global
-    averages, observations must be weighted by population since a simple
-    mean would overrepresent small countries
--   cryptic variable names are confusing and could be therefore renamed
--   **Derived variable – dominant education level**: For each country ×
-    year age group,compute which education level has the highest share
+These steps apply globally before any visualization: - **Validation
+checks**: - Do the shares `lu + lp + ... + lhc` sum to ~100 for each
+row? - Are there missing or implausible values (e.g. negative
+percentages)? - Are all expected country × year combinations present? -
+**Renaming**: Cryptic variable names should be renamed to more readable
+labels (e.g. `lu`: `No Education`, `lp`: `Some Primary`, etc.)
 
 ### Visualization goals:
 
-#### Regional Trends in Average Years of Schooling
+#### Viz-1: Regional Trends in Average Years of Schooling *(addresses Q1, Q2)*
 
-Line plot showing the evolution of average years of schooling over time
-for different regions (e.g. World, Sub-Saharan Africa, South Asia, etc.)
+Load the data directly from the raw URL above. Then compute
+population-weighted regional average years of schooling (`yr_sch`) for
+each region and year and plot their evolution over time (1950-2010)
+using a line plot with one line per region.
 
-#### Education Level Distribution by Age Group and Country Comparison
+-   **Manipulation needed here:** Population-weighted aggregation: when
+    computing regional/global averages, observations must be weighted by
+    `pop`, since a simple mean would overrepresent small countries
+-   This directly addresses **Q1** (convergence between regions) and
+    **Q2** (stagnation/decline visible as flat or falling lines)
 
-Compare 2 Countries (e.g. India vs. Germany) in 2010 with a population
-pyramid style plot showing the distribution of education levels (`lu`,
-…, `lhc`) across age groups. Instead of Male/Female, the two sides will
-show (referring to the example from above) India (left) vs. Germany
-(right), with age groups on the y-axis and education level shares as
-stacked bars.
+#### Viz-2: Education Level Distribution by Age Group and Country Comparison *(addresses Q4, Q1)*
+
+Compare a country from a developed region (e.g. Germany) to one from a
+developing region (e.g. India) for the years `1960` and `2010` using a
+population pyramid style plot with facetting to show both years side by
+side.
+
+-   **Manipulation needed here:** Pivot the education level columns
+    (`lu`, `lp`, …, `lhc`) from wide to long format, with one column for
+    education level and one for the corresponding percentage
+-   Instead of Male/Female, the two sides show Germany (left) vs. India
+    (right)
+-   Age groups on the y-axis, education level shares as stacked bars
+-   Use `facet_wrap` or `facet_grid` to show 1960 and 2010 side by side,
+    allowing a 50-year comparison
+-   This directly addresses **Q4** (which age groups benefit most) as
+    well as **Q1**
 
 ![](https://d2mvzyuse3lwjc.cloudfront.net/doc/de/UserGuide/images/Population_Pyramid_Graph/500px-Population_Pyramid_Graph.png)
 
-#### Plot correlation between No Education and Average Years of Schooling
+#### **OPTIONAL** Viz-3: Weighted Mean Education Level vs. Time *(addresses Q1, Q2, Q3)*
 
-scatter plot to visualize whether countries with high no-education
-shares consistently show low average schooling years
+For each country and year, compute a **weighted mean education level**
+using numeric placeholders for each level (1 = no education, …, 7 =
+completed tertiary):
 
-#### Heatmap: Average Years of Schooling by Country and Year
+    mean_edu = mean(level * percentage)
 
-The goal is a choropleth map similar to the following example (if
-possible):
+These group-level means can then be weighted by the relative size of
+each age group within a country and year to get a single mean education
+level per country per year. Use this indicator to:
+
+-   Create a scatter plot of `lu` (no education share) vs. `yr_sch`,
+    colored by region, for a selected year (addressing **Q3**)
+-   Optionally use the derived indicator to study timelines or compare
+    countries (addressing **Q1** and **Q2**)
+
+#### **OPTIONAL** Viz-4: Choropleth Map: Gain in Average Years of Schooling 1950–2010 *(addresses Q1, Q2)*
+
+Compute the absolute increase in `yr_sch` between 1950 & 2010 per
+country and display it on a world map.
+
+-   Countries with the higher gains in `yr_sch` between 1950 & 2010
+    should be shown in darker colors
+-   For the color scale, either a sequential colormap (darker = higher
+    gain) or a **diverging colormap** (see below) can be used
+-   Makes regional patterns and outliers (stagnation/decline)
+    immediately visible
 
 ![](https://data.europa.eu/apps/data-visualisation-guide/Maps%20e22d0627fc944d47be79a1d1a4f8acef/choropleth-population-change-joedavis-eurostat.png)
-Countries with the higher gains in `yr_sch` between 1950 & 2010 should
-be shown in darker colors.
