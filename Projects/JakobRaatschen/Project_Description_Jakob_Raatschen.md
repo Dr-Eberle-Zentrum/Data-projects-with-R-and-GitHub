@@ -25,20 +25,38 @@ find ways to appropriately compare the studies.
 
 The first dataset is from a study by [Massoni and Roux
 (2017)](https://osf.io/s46pr/files/n5zkb) who tested participants in a
-perceptual decision making task. Participants had to decide between two
+perceptual decision making task. You can download the data [here](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/JakobRaatschen/Massoni_2017/data_Massoni_2017.csv). Participants had to decide between two
 circles which one contained more dots. After each trial they were asked
 to rate their confidence in their answer on a scale from 0% to 100% with
 increments of 5%.
+
+| Subj_idx | Stimulus | Response | Confidence | RT_dec   | RT_conf  | Difficulty | Accuracy | Feedback | Study |
+|----------|----------|----------|------------|----------|----------|------------|----------|----------|-------|
+| 1        | 2        | 1        | 0.6        | 1.789951 | 1.249156 | 1          | 0        | 1        | 1     |
+| 1        | 1        | 1        | 0.85       | 1.296789 | 2.289089 | 1          | 1        | 1        | 1     |
+| 1        | 2        | 2        | 0.95       | 1.086871 | 2.472419 | 1          | 1        | 1        | 1     |
+| 1        | 2        | 1        | 0.9        | 1.149476 | 2.241316 | 1          | 0        | 1        | 1     |
+| 1        | 2        | 1        | 0.65       | 1.266833 | 1.845008 | 1          | 0        | 1        | 1     |
+
 
 ## Study 2: Palser et al. (2018)
 
 The second dataset is from a study by [Palser et
 al. (2018)](https://osf.io/s46pr/files/zyjxe) who also investigated
-confidence ratings in a perceptual decision making task. Gabor patches
+confidence ratings in a perceptual decision making task. You can download the data [here](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/JakobRaatschen/Palser_2018/data_Palser_2018.csv). Gabor patches
 were presented in either a first (1) or second (2) interval.
 Participants had to decide, if they either saw the stimulus in the first
 or second interval and then rate their confidence in their answer on a
 scale from 1 to 99 with increments of 1.
+
+| Subj_idx | Stimulus | Response | Confidence | RT_dec | RT_conf | Contrast | Condition |
+|----------|----------|----------|------------|--------|---------|----------|-----------|
+| 1        | 1        | 1        | 22         | 1.176  | 2.576   | 53       | Baseline  |
+| 1        | 2        | 2        | 34         | 1.094  | 0.784   | 53       | Baseline  |
+| 1        | 2        | 2        | 43         | 0.937  | 1.256   | 50       | Baseline  |
+| 1        | 1        | 2        | 34         | 1.097  | 1.119   | 50       | Baseline  |
+| 1        | 2        | 2        | 43         | 0.917  | 3.195   | 53       | Baseline  |
+
 
 ##### Gabor Patches as Stimuli in Study 2
 
@@ -48,7 +66,7 @@ scale from 1 to 99 with increments of 1.
 
 The third dataset is from a study by [Hu et
 al. (2017)](https://osf.io/s46pr/files/zkswc) who investigated memory
-performance in a recognition task. In an encoding phase (first
+performance in a recognition task. You can download the data [here](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/JakobRaatschen/Hu_2017/data_Hu_2017.csv). In an encoding phase (first
 presentation of stimuli) a subset of words were presented one after the
 other. In a subsequent retrieval phase (second presentation of the
 stimuli) the already shown words were paired with a word that had not
@@ -57,14 +75,26 @@ they had seen before and then rate their confidence in their answer on a
 scale from 1 to 6. No experimental manipulations (like stimulus
 difficulty) were applied in this study.
 
+| Subj_idx | Stimulus | Response | Confidence | RT_dec | RT_conf | Accuracy |
+|----------|----------|----------|------------|--------|---------|----------|
+| 1        | 1        | 1        | 2          | 2.114  | 2.006   | 1        |
+| 1        | 1        | 1        | 5          | 1.243  | 1.94    | 1        |
+| 1        | 1        | 2        | 1          | 3.063  | 2.298   | 0        |
+| 1        | 1        | 1        | 6          | 1.742  | 1.421   | 1        |
+| 1        | 2        | 1        | 2          | 3.131  | 1.339   | 0        |
+
+
+
 ### Data Cleaning
+
+Across the three studies the following variables will be in some way of interest: `Subj_idx`, `Stimulus`, `Response`, `Confidence` & `Accuracy` (if existing). If for a single study another variable is relevant it will be specifically stated in the following subsections concerning data cleaning.
 
 #### Study 1
 
 The data set actually contains two studies. We only want to use the
 second study (Participants 67 to 120), as here no manipulation of the
 stimulus difficulty (presentation time of stimulus) was applied. Also
-add a `study_id` variable that should enable us to identify both the distinct study as well as the analysed construct (e.g. `visual_perception_1`).
+add a `study_id` variable that should enable us to identify the distinct study (e.g. `Massoni_&_Roux.`).
 
 A variable on the `Accuracy` of the response already exists, so you do not
 need to create one. However, calculate the `average_performance` for each
@@ -85,7 +115,7 @@ There is a “Contrast” variable, which I assume indicates the contrast of
 the presented stimuli, however, this is not being explained in the
 Readme file. For our purposes it should be fine to ignore this variable.
 
-Also add a `study_id` variable that should enable us to identify both the distinct study as well as the analysed construct (e.g. `visual_perception_2`).
+Also add a `study_id` variable that should enable us to identify the distinct study (e.g. `Palser_et_al.`).
 
 Add a variable indicating the `Accuracy` of the participants.
 For this, you can compare the participants’ answer with the correct
@@ -95,7 +125,7 @@ and add the scores to a separate data frame that also includes a `Subj_idx` vari
 
 #### Study 3
 
-Add a `study_id` variable that should enable us to identify both the distinct study as well as the analysed construct (e.g. `memory_1`).
+Add a `study_id` variable that should enable us to identify the distinct study (e.g. `Hu_et_al.`).
 
 A variable on the `Accuracy` of the response already exists, so you do not
 need to create one. However, calculate the `average_performance` for each
@@ -127,21 +157,21 @@ Also concatenate the datasets you have created including the `average_performanc
 
 For this visualization we need the `confidence` dataset.
 
-The goal should be to create a figure comparing confidence ratings for
-correct and incorrect decisions for each study on both a group and an
+The goal should be to create a figure comparing `Confidence` ratings for
+correct and incorrect decisions (`Accuracy`) for each study on both a group and an
 individual level. For correct decisions confidence should be high, for
 incorrect decisions low.
 
 On the x-Axis for each study the differentiation between correct and
-incorrect should be made on the y-Axis the confidence ratings. Label the
-studies based on the colour of the data points/lines and create a legend
+incorrect should be made (`Accuracy`), the y-Axis should show the `Confidence`. Label the
+studies (`study_id`) based on the colour of the data points/lines and create a legend
 explaining the colours.
 
-For each study you will need to calculate the average confidence ratings
-on an individual and group level for correct and incorrect decisions.
+For each study you will need to calculate the average `Confidence` ratings
+on an individual and group level for correct and incorrect (`Accuracy`) decisions.
 
 It could make sense to visualize the data points in a spaghetti plot
-connecting the confidence ratings for correct and incorrect decisions
+connecting the `Confidence` ratings for correct and incorrect decisions
 for each participant with more transparent lines and the average across
 all participants with a more prominent line.
 
@@ -159,16 +189,17 @@ possibility</figcaption>
 
 ##### Note: for both visualizations you can choose to either have an x-axis distinguishing between studies (as in the sketches) OR create individual panels for each study. Both alternatives have its advantages, decide what you think makes most sense!
 
+##### Note II: the studys should be labeled based on the `study_id` variable, the labels here (and in the second visualization) are based on an earlier version.
+
 ## Data visualization 2: Performance accuracy across studies
 
 For this part we will need a new dependent variable that moves away from
 confidence ratings and focuses on the actual performance of the
-participants. For this we need the earlier added variable of performance
-accuracy.
+participants. For this we need the earlier added `average_performance` variable (in the `performance` dataset).
 
-The plot should have on the x-Axis the 3 studies and on the y-Axis the
-performance scores. For the visualization I suggesst violin plots for
-each study with individual data points and a boxplot within each violin
+Plot on the x-Axis the `study_id` and on the y-Axis the
+`average_performance`. For the visualization I suggesst violin plots for
+each study with individual data points (one for each participant) and a boxplot within each violin
 plot. If you have a reasonable other vision that visualizes the data
 comparably, feel free to pursue that instead.
 
