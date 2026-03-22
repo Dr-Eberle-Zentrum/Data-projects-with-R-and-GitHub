@@ -133,7 +133,7 @@ Example:
 
 Current projects:
 
-- Armin (ArminBurkhardt) - [Project about stock prices](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/9ffa9c453376e78db78056d1be9639d3a902c083/Projects/ArminBurkhardt/project-description.md)
+- Armin (ArminBurkhardt) - [Project about stock prices](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/ArminBurkhardt/project-description.md)
 - Jakob (JakobRaatschen) - [Project about confidence ratings in Psychological studies](Projects/JakobRaatschen/Project_Description_Jakob_Raatschen.md)
 - Karim (KarimMessaoud) - [Project about Global Education Attainment](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/KarimMessaoud/project-description.md)
 - Ziyi (ZiyiWang) - [Project about Language Processing comparsion between LLMs and Humans](Projects/ZiyiWang/Project_Description_Ziyi_Wang.md)
