@@ -10,7 +10,7 @@ Science Framework (OSF). All studies in this database analyse different
 psychological constructs, but have the same structure concerning their
 experimental paradigm: Participants are presented with a stimulus and
 perform some sort of task on it (e.g. determine if they have seen a
-picture before) for which there performance can be evaluated in a binary
+picture before) for which their performance can be evaluated in a binary
 fashion (correct/incorrect). Subsequently, they are asked to rate their
 confidence in their answer.
 
