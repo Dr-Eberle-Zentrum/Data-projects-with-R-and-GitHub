@@ -88,6 +88,27 @@ Example structure of the dataset:
 | 2 | high | EW | human | 5.12 |
 | 3 | medium | OH | GPT-5.2 | 7.41 |
 
+The dataset is structured at the token level, meaning that each row corresponds to a single token within a sentence rather than a full item.
+
+Each item (i.e., sentence continuation) consists of multiple tokens, and surprisal values are computed per token.
+
+The dataset includes the following variables: (you can find the final dataset in ZiyiWang/data/Processed_final_data)
+- item: sentence ID
+- token: token index within the sentence
+- surprisal: surprisal value per token
+- generator: model or human source
+- context: contextual constraint (high vs. medium)
+- condition: particle condition (EW, RA, none)
+
+
+In this project, context and condition are treated as independent variables:
+
+- context refers to the predictability of the preceding context (high vs. medium)
+- condition refers to the presence or absence of specific particles (EW, RA, none), they signal different types of information in a sentence.
+
+Together, they form a 2 × 3 experimental design.
+
+
 ---
 
 ## 4. Data Processing Plan
@@ -98,25 +119,17 @@ The main preprocessing steps include:
 
 ### 1. Handling missing data
 
-Some items may contain missing surprisal values.  
-These items will be removed to ensure that each generator is compared under the same conditions.
+It is evident that the human participants were only tasked with formulating responses to the 34 items. Consequently, in order to facilitate a more robust comparison between human performance and that of LLMs, it is recommended that the values for items 13 and 28 be removed from the analysis. Which not a problem for the analyse between LLMs generators.
+
 
 ### 2. Aggregating surprisal values
 
-For each generator (human or LLM), the **mean surprisal value per subject and condition** will be calculated.
+- For each generator (human or LLM), the **mean surprisal value per subject and condition** will be calculated.This method is the most straightforward. 
 
-This step ensures that the analysis is based on comparable aggregated statistics.
+- Weakness: if compare the average surprise, it will make the local surprise information less obvious. 
 
-Example R workflow:
+- This step ensures that the analysis is based on comparable aggregated statistics.
 
-```{r, eval=FALSE}
-library(dplyr)
-
-data_clean <- data %>%
-  filter(!is.na(surprisal)) %>%
-  group_by(generator, subject, condition) %>%
-  summarise(mean_surprisal = mean(surprisal))
-```
 
 ## 5. Visualization Plan
 
@@ -130,16 +143,9 @@ y-axis: mean surprisal value
 
 lines: different generators (human vs LLMs)
 
-Example visualization:
-```{r eval=FALSE}
-library(ggplot2)
-
-ggplot(data_clean, aes(x = condition, y = mean_surprisal, color = generator)) +
-  stat_summary(fun = mean, geom = "line") +
-  stat_summary(fun = mean, geom = "point") +
-  theme_minimal()
-```
 This plot will allow us to observe whether human-generated language and LLM-generated language show similar or different surprisal patterns across contexts.
+
+
 
 ## 6. Expected Contribution
 

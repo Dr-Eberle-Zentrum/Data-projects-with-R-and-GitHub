@@ -113,7 +113,7 @@ For example, the first row says `Price, Close, Close, ...` and the second says `
   
   - Compute the percentage change in price (between `Open` or `Close`) for each hour (compared to the previous hour) for all stocks and indices. This will be used in the following tasks. 
 
-  - **Price Movements/Volatility**: At which hour of the day do prices across all stocks & indices move/change the most? (In this case: When is the percentage change between the `Open` price and the `Close` price the highest on average?)
+  - **Price Movements/Volatility**: At which hour of the day do prices across all stocks & indices move/change the most? (In this case: When is the absolute percentage change between the `Open` price and the `Close` price the highest on average?)
      
      > Visualize the average price movement per hour of the day here (eg. using a bar plot).
      
