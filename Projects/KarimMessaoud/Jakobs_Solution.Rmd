@@ -122,7 +122,7 @@ ggplot(regional_avg, aes(x = year, y = weighted_yr_sch, color = as.factor(region
   )
 ```
 
-##Visualization 2
+## Visualization 2
 
 ```{r, echo = FALSE, message = FALSE}  
 # 1. Prepare data with Netherlands/Fiji and "Incomplete" math
