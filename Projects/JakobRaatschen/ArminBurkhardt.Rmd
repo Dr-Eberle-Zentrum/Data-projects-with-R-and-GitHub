@@ -3,7 +3,7 @@ title: "Solution for Jakob Raatschen's Project by Armin Burkhardt"
 output: md_document
 ---
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(this.path)
 
@@ -19,7 +19,7 @@ hu <- read_csv("Hu_2017/data_Hu_2017.csv")                # Study 3
 
 ### Study 1
 
-```{r}
+```{r, message=FALSE}
 massoni <- massoni %>%
   filter(Subj_idx >= 67, Subj_idx <= 120) %>%                    # second study only
   mutate(Study_id = "Massoni&Roux")                              # add study_id column
@@ -32,7 +32,7 @@ massoni_subj_perf <- massoni %>%
 
 ### Study 2
 
-```{r}
+```{r, message=FALSE}
 palser <- palser %>%
   drop_na() %>%                                                  # exclude responses with exceeded deadline
   filter(Condition == "Baseline") %>%                            # following the suggestion to make this study more comparable to the others
@@ -48,7 +48,7 @@ palser_subj_perf <- palser %>%
 
 ### Study 3
 
-```{r}
+```{r, message=FALSE}
 # following a similar pattern as above:
 hu <- hu %>%
   mutate(Study_id = "Hu_et_al")
@@ -64,7 +64,7 @@ hu_subj_perf <- hu %>%
 ### All studies
 
 Rescaling of the confidence ratings to 0 to 100:
-```{r}
+```{r, message=FALSE}
 massoni <- massoni %>%
   mutate(Confidence = Confidence * 100)
 
@@ -77,7 +77,7 @@ hu <- hu %>%
 ### Merging the datasets to aggregated dataframes:
 
 Firstly, shift subject indices to avoid overlap:
-```{r}  
+```{r, message=FALSE}  
 palser <- palser %>%  
   mutate(Subj_idx = Subj_idx + max(massoni$Subj_idx)) # shift by largest massoni subject index
 
@@ -88,7 +88,7 @@ hu <- hu %>%
 
 Now merge the datasets into two new dataframes:
 
-```{r}
+```{r, message=FALSE}
 select_relevant <- function(df) {
   df %>%
     select(Subj_idx, Study_id, Accuracy, Confidence)
@@ -108,16 +108,17 @@ performance <- bind_rows(
 ```
 
 resulting in these two final dataframes:
-```{r}
-head(confidence)
-head(performance)
+```{r, message=FALSE, echo=FALSE}
+library(knitr)
+kable(head(confidence))
+kable(head(performance))
 ```
 
 ## Data visualization 1: Confidence ratings and performance accuracy across studies
 
 Firstly, filter out all subjects that have only correct or only incorrect responses.
 
-```{r}
+```{r, message=FALSE}
 subjects_to_include <- confidence %>%
   group_by(Subj_idx) %>%
   summarise(n_correct   = sum(Accuracy == 1),
@@ -132,7 +133,7 @@ confidence_filtered <- confidence %>%
 
 Now the means per subject and study can be calculated:
 
-```{r}
+```{r, message=FALSE}
 
 # in preperation for plotting, create txt labels
 confidence_filtered <- confidence_filtered %>%
@@ -153,7 +154,7 @@ confidence_means_group <- confidence_filtered %>%
 
 Final plot:
 
-```{r}  
+```{r viz-1}  
 ggplot() +
   # individual lines
   geom_line(data = confidence_means_individual, 
@@ -189,7 +190,7 @@ ggplot() +
 
 This was very straightforward thanks to the amazing drawing provided. The following plot shows where most participants fall in terms of their average performance accuracy across the three studies (violin: actual distribution of the data, boxplot: median and range, jitter: individual data points spread out)
 
-```{r}
+```{r viz-2}
 
 ggplot(performance, aes(x = Study_id, y = average_performance, fill = Study_id)) +
   geom_violin(alpha = 0.6, trim = FALSE) +
