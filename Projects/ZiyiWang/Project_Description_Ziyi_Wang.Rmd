@@ -102,6 +102,7 @@ In this project, context and condition are treated as independent variables:
 Together, they form a 2 × 3 experimental design.
 
 
+
 ### 3.3 original pure data
 
 Here is an initial data table containing the initial conditions, contextual settings and the opening sentence.
@@ -153,6 +154,7 @@ This plot will allow us to observe whether human-generated language and LLM-gene
 
 ![3.5 vs. 5.2 vs. human result context](images/with_human_context.png)
 
+
 ## 6. Expected Contribution
 
 - Please compare under which context the difference in surprisal values between different generators is greatest, and under which context it is smallest.
@@ -166,4 +168,3 @@ Levy, R. (2008). Expectation-based syntactic comprehension. Cognition, 106(3), 1
 Smith, N. J., & Levy, R. (2013). The effect of word predictability on reading time is logarithmic. Cognition, 128(3), 302–319.
 
 Lu, Jeuring, Gatt (2025). Evaluating LLM-Generated Versus Human-Authored Responses in Role-Play Dialogues.
-
