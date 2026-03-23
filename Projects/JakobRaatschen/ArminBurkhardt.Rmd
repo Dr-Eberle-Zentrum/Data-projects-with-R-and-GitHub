@@ -185,7 +185,33 @@ ggplot() +
 
 
 
+## Data visualization 2: Performance accuracy across studies
+
+This was very straightforward thanks to the amazing drawing provided. The following plot shows where most participants fall in terms of their average performance accuracy across the three studies (violin: actual distribution of the data, boxplot: median and range, jitter: individual data points spread out)
+
+```{r}
+
+ggplot(performance, aes(x = Study_id, y = average_performance, fill = Study_id)) +
+  geom_violin(alpha = 0.6, trim = FALSE) +
+  # boxplot with outliers hidden as jitter also shows them
+  geom_boxplot(width = 0.1, fill = "white", outlier.shape = NA) +
+  # each individual participants performance score (jittered as in the drawing)
+  geom_jitter(width = 0.1, alpha = 0.6, size = 1.5, color = "darkgray") +
+  theme_minimal() +
+  labs(
+    title = "Average performance accuracy across studies",
+    x = "Study",
+    y = "Performance Accuracy"
+  ) +
+  theme(legend.position = "none")
+
+```
 
 
+## Closing remarks
+
+The data very much confirms that correct decisions usually have higher confidence ratings than incorrect ones, as you stated in your visualization 1 task, and its also interesting to see how well the participants performed across the three studies!
+
+Thank you for this interesting project and especially for the pretty drawings, they helped a lot!
 
 
