@@ -15,6 +15,8 @@ Open-source projects use commit messages to communicate intent, fixes, and chang
 ## Data
 The original dataset contains commit messages and metadata from 34 popular GitHub repositories (e.g., `tensorflow/tensorflow`, `pytorch/pytorch`, `pandas-dev/pandas`) as of April 21, 2021. Source: https://www.kaggle.com/datasets/dhruvildave/github-commit-messages-dataset/data. The repository list is saved in `datasets/source_README.md`.
 
+The commit time range varies by repository (the latest commits are as of April 21, 2021). Report the per-repo min/max dates after loading the data.
+
 Use one of the smaller subsets provided in `datasets/`:
 
 - `datasets/commits_sample_50k.csv` (random 50,000 rows, ~28 MB) — quick prototyping.
@@ -34,13 +36,15 @@ The CSV has the following columns:
 - `message`: commit message text (may include commas or line breaks)
 - `repo`: repository in `owner/name` format
 
+Example file: `datasets/commits_sample_50k.csv`
+
 ### First rows (from `commits_sample_50k.csv`)
 
 ```{r, echo=FALSE}
-# Uncomment to render in R
-# library(knitr)
-# data <- read.csv("datasets/commits_sample_50k.csv")
-# kable(head(data, 5), caption = "Sample of commit data")
+library(knitr)
+data <- read.csv("datasets/commits_sample_50k.csv")
+data$message <- gsub("[\r\n]+", " ", data$message)
+kable(head(data, 5), caption = "Sample of commit data", format = "html", escape = TRUE)
 ```
 
 ### Loading zipped CSVs in R
@@ -53,24 +57,31 @@ read.csv(unz("datasets/commits_sample_150k.csv.zip", "commits_sample_150k.csv"))
 ```
 
 ## Data cleaning / manipulation goals
-1. **Split and standardize columns**
-   - Separate `author` into `author_name` and `author_email`.
+1. **Parse and standardize time**
    - Parse `date` into a proper datetime column and derive `year`, `month`, `weekday`, and `hour`.
+   - Normalize timestamps to UTC so hourly patterns are comparable across global contributors (commit timestamps include a UTC offset, e.g., `2019-05-14 09:12:33 +0700` this would be +7h from UTC).
+   - Drop rows with missing or invalid `date` (needed for time-based plots and annotations).
    - Verify that `commit` is unique; drop duplicates if necessary.
 2. **Message parsing**
    - Normalize message text (trim whitespace, handle casing where needed).
-   - Detect conventional commit prefixes (`feat`, `fix`, `docs`, `refactor`, `test`, `chore`, `style`, `build`, `ci`, `perf`) and label everything else as `other`.
-   - Extract references to issues/PRs (e.g., `#1234`).
-3. **Filtering and validation**
-   - Flag or remove auto-generated messages (e.g., "Merge", "Bump", "Revert").
-   - Check for missing author/email/date fields and summarize completeness per repo.
+   - Detect conventional commit prefixes (`feat`, `fix`, `docs`, `refactor`, `test`, `chore`, `style`, `build`, `ci`, `perf`) by checking the start of the first line only; label everything else as `other`.
+3. **Filtering**
+   - Remove auto-generated messages (e.g., "Merge", "Bump", "Revert") so the statistics reflect human-written commits.
 
 ## Visualization goals
-- **Temporal heatmap**: commits by weekday (rows) and hour (columns), overall and per repo.
+- **Temporal heatmap**: 7x24 commits by weekday (rows) and hour (columns), overall and per repo. (Similar to commit calendar) 
 - **Message-type comparison**: stacked bar chart of commit types by repo (normalized to 100%).
 - **Message length comparison**: boxplots of message length by repo or by commit type.
 - **Optional trend**: monthly time series of commit types for 2–3 selected repos.
 - **Optional “commit calendar”**: 7x53 daily heatmap (like GitHub’s contribution graph) for 2019 and 2020 using `commits_3repos_2019_2020_daily.csv`.
+
+These visualizations connect directly to the questions above: temporal plots show rhythm and seasonality, type comparisons show maintenance vs feature focus, and length distributions highlight differences in communication style.
+
+Example inspiration: GitHub Insights → Contributors → "Commits over time".
+
+![Example GitHub commit activity over time](imgs/commits-over-time.png)
+
+![Example GitHub-style commit calendar](imgs/commit-graph.png)
 
 ## Expected outcome
 A cleaned, tidy dataset with derived time and message-type features, plus 2–3 visualizations that highlight how development patterns differ across major open-source repositories.
