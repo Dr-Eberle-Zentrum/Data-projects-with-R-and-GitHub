@@ -1,3 +1,116 @@
 ---
+title: "Solution for Jakob Raatschen's Project by Armin Burkhardt"
 output: md_document
 ---
+
+```{r, echo=FALSE}
+library(tidyverse)
+library(this.path)
+
+setwd(this.path::this.dir())
+
+massoni <- read_csv("Massoni_2017/data_Massoni_2017.csv") # Study 1
+palser <- read_csv("Palser_2018/data_Palser_2018.csv")    # Study 2
+hu <- read_csv("Hu_2017/data_Hu_2017.csv")                # Study 3
+```
+
+
+## Cleaning the data
+
+### Study 1
+
+```{r}
+massoni <- massoni %>%
+  filter(Subj_idx >= 67, Subj_idx <= 120) %>%                    # second study only
+  mutate(Study_id = "Massoni&Roux")                              # add study_id column
+
+# calculate average performance per subject
+massoni_subj_perf <- massoni %>%
+  group_by(Subj_idx, Study_id) %>%                               # group by subject and keep study_id
+  summarise(average_performance = mean(Accuracy, na.rm = TRUE))  # calc average performance
+```
+
+### Study 2
+
+```{r}
+palser <- palser %>%
+  drop_na() %>%                                                  # exclude responses with exceeded deadline
+  filter(Condition == "Baseline") %>%                            # following the suggestion to make this study more comparable to the others
+  mutate(Study_id = "Palser_et_al",                              # add study_id column
+         Accuracy = ifelse(Response == Stimulus, 1, 0))          # add accuracy column
+
+# again calculate average performance per subject, same as above
+palser_subj_perf <- palser %>%
+  group_by(Subj_idx, Study_id) %>%
+  summarise(average_performance = mean(Accuracy, na.rm = TRUE))
+```
+
+
+### Study 3
+
+```{r}
+# following a similar pattern as above:
+hu <- hu %>%
+  mutate(Study_id = "Hu_et_al")
+
+hu_subj_perf <- hu %>%
+  group_by(Subj_idx, Study_id) %>%
+  summarise(average_performance = mean(Accuracy, na.rm = TRUE))
+
+```
+
+
+
+### All studies
+
+Rescaling of the confidence ratings to 0 to 100:
+```{r}
+massoni <- massoni %>%
+  mutate(Confidence = Confidence * 100)
+
+# palser is already scaled well, except for the bounds 0 and 99, but Ill just ignore that
+
+hu <- hu %>%
+  mutate(Confidence = (Confidence - 1) / 5 * 100) # rescale from 1-6 to 0-100
+```
+
+### Merging the datasets to aggregated dataframes:
+
+Firstly, shift subject indices to avoid overlap:
+```{r}  
+palser <- palser %>%  
+  mutate(Subj_idx = Subj_idx + max(massoni$Subj_idx)) # shift by largest massoni subject index
+
+hu <- hu %>%
+  mutate(Subj_idx = Subj_idx + max(palser$Subj_idx))  # shift by largest palser subject index
+
+```
+
+Now merge the datasets into two new dataframes:
+
+```{r}
+select_relevant <- function(df) {
+  df %>%
+    select(Subj_idx, Study_id, Accuracy, Confidence)
+}
+
+confidence <- bind_rows(
+  select_relevant(massoni),
+  select_relevant(palser),
+  select_relevant(hu)
+)
+
+performance <- bind_rows(
+  massoni_subj_perf,
+  palser_subj_perf,
+  hu_subj_perf
+)
+```
+
+resulting in these two final dataframes:
+```{r}
+head(confidence)
+head(performance)
+```
+
+
