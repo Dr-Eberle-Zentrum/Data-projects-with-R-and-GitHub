@@ -230,10 +230,8 @@ extracting:
 1.  **Parse and standardize time**
     - Parse `date` into a proper datetime column and derive `year`,
       `month`, `weekday`, and `hour`.
-    - Normalize timestamps to UTC so hourly patterns are comparable
-      across global contributors (commit timestamps include a UTC
-      offset, e.g., `2019-05-14 09:12:33 +0700` this would be +7h from
-      UTC).
+    - Drop rows with outlyer times, for example Unix time 0 (1970) or
+      dates pre 2018 etc.
     - Drop rows with missing or invalid `date` (needed for time-based
       plots and annotations).
     - Verify that `commit` is unique; drop duplicates if necessary.
