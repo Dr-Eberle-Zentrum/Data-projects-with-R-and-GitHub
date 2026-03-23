@@ -424,8 +424,8 @@ patterns throughout the day.
 
 -   **Price Movements/Volatility**: At which hour of the day do prices
     across all stocks & indices move/change the most? (In this case:
-    When is the percentage change between the `Open` price and the
-    `Close` price the highest on average?)
+    When is the absolute percentage change between the `Open` price and
+    the `Close` price the highest on average?)
 
     > Visualize the average price movement per hour of the day here (eg.
     > using a bar plot).
