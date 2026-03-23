@@ -113,4 +113,79 @@ head(confidence)
 head(performance)
 ```
 
+## Data visualization 1: Confidence ratings and performance accuracy across studies
+
+Firstly, filter out all subjects that have only correct or only incorrect responses.
+
+```{r}
+subjects_to_include <- confidence %>%
+  group_by(Subj_idx) %>%
+  summarise(n_correct   = sum(Accuracy == 1),
+            n_incorrect = sum(Accuracy == 0)) %>%
+  filter(n_correct > 0, n_incorrect > 0) %>%
+  pull(Subj_idx)
+
+confidence_filtered <- confidence %>%
+  filter(Subj_idx %in% subjects_to_include)
+
+```
+
+Now the means per subject and study can be calculated:
+
+```{r}
+
+# in preperation for plotting, create txt labels
+confidence_filtered <- confidence_filtered %>%
+  mutate(Label = ifelse(Accuracy == 1, "Correct", "Incorrect"))
+
+
+confidence_means_individual <- confidence_filtered %>%
+  group_by(Subj_idx, Study_id, Label) %>%
+  summarise(mean_conf = mean(Confidence, na.rm = TRUE))
+
+
+confidence_means_group <- confidence_filtered %>%
+  group_by(Study_id, Label) %>%
+  summarise(mean_conf = mean(Confidence, na.rm = TRUE))
+
+```
+
+
+Final plot:
+
+```{r}  
+ggplot() +
+  # individual lines
+  geom_line(data = confidence_means_individual, 
+            aes(x = Label, y = mean_conf, group = Subj_idx, color = Study_id), 
+            alpha = 0.6) +  # slightly transparent to make group lines stand out more
+  # individual points
+  geom_point(data = confidence_means_individual, 
+             aes(x = Label, y = mean_conf, color = Study_id), 
+             alpha = 0.6) +
+  # group lines
+  geom_line(data = confidence_means_group, 
+            aes(x = Label, y = mean_conf, group = Study_id, color = Study_id), 
+            linewidth = 1.5) +
+  # group points
+  geom_point(data = confidence_means_group, 
+             aes(x = Label, y = mean_conf, color = Study_id), 
+             size = 3) +
+  facet_wrap(~ Study_id) +  # panel for each study
+  theme_minimal() +
+  labs(
+    title = "Confidence ratings by decision Accuracy across Studies",
+    x = "",
+    y = "Avg. Confidence",
+    color = "Study"
+  ) +
+  theme(legend.position = "right")
+
+```
+
+
+
+
+
+
 
