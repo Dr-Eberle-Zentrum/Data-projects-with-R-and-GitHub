@@ -1,1 +1,20 @@
 
+---
+title: "Solution for Joshua"
+output: md_document
+---
+
+example image
+
+```{r example}  
+
+library(tidyverse)
+iris |> 
+  ggplot(aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
+  geom_point() +
+  theme_minimal() +
+  labs(title = "Iris Dataset: Sepal Length vs Sepal Width",
+       x = "Sepal Length",
+       y = "Sepal Width")
+
+```
