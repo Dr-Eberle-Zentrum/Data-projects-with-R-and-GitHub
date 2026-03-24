@@ -60,7 +60,7 @@ kable(head(data, 5), caption = "Sample of commit data", format = "html", escape 
   - y-axis: day of the week
   - fill color: number of commits.
   
-```{r heatmap, echo=FALSE}
+```{r heatmap, echo=FALSE, message=FALSE}
 library(tidyverse)
 library(lubridate)
 
