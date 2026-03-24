@@ -7,6 +7,18 @@ output: md_document
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 library(tidyverse)
 library(knitr)
+# set working directory to source file location 
+setwd(dirname(rstudioapi::getSourceEditorContext()$path))
+
+# change based on review: add color-blind friendly color palette 
+# see https://siegal.bio.nyu.edu/color-palette/
+color_palette <- c(
+  "human" = "#000000",                # Black
+  "gpt-3.5-turbo-16k" = "#E69F00",    # Orange
+  "gpt-5.2-chat-latest" = "#56B4E9"   # sky blue
+)
+
+
 ```
 
 # Surprisal-Based Comparison of Human and LLM Language Generation
@@ -46,7 +58,9 @@ For each generator (human or LLM), the **mean surprisal value per subject and co
 # 1. Filter out items 13 and 28
 df_clean <- df_final %>%
   mutate(generator = if_else(str_detect(subject, "human"), "human", generator)) %>%
-  filter(!item %in% c(13, 28))
+  filter(!item %in% c(13, 28)) %>%
+  # change based on review: reorder from left to right as RA, EW, OH
+  mutate(condition = factor(condition, levels = c("RA", "EW", "OH"))) 
 
 # 2. Aggregating surprisal values
 data_aggregated <- df_clean %>%
@@ -57,6 +71,7 @@ data_aggregated <- df_clean %>%
     n = n(),
     se = sd_surprisal / sqrt(n),
   .groups = "drop")
+
 
 # Display the aggregated data (Preview)
 head(data_aggregated) %>% kable(caption = "Aggregated Surprisal Values")
@@ -79,6 +94,7 @@ lines: different generators (human vs LLMs)
   geom_line(linewidth = 1) +
   geom_point(size = 3) +
     facet_wrap(~condition, labeller = label_both) + 
+    scale_color_manual(values = color_palette) +
     labs(
       title = "Comparison of Surprisal Patterns: Human vs. LLMs",
       subtitle = "Mean surprisal across context predictability levels and particle conditions",
@@ -98,16 +114,15 @@ lines: different generators (human vs LLMs)
 
 This plot allows us to observe whether human-generated language and LLM-generated language show similar or different surprisal patterns across contexts.
 
-### 5.2 particles plot??? 
-you included the particle plot as an image but no clear instruction/specificiation, 
-so I added it just to be safe.
+### 5.2 particles plot
 
 #### Effect of Particle Condition
 This visualization focuses on how the specific particles (EW, RA, etc.) influence surprisal, aggregating over the context.
 
 ```{r visualization_particles}
 # Aggregate by Condition and Generator only (ignoring Context)
-data_particles <- df_clean %>%
+df_clean %>%
+  filter(generator != "human") %>% # filter out human for this plot
   group_by(generator, condition) %>%
   summarise(
     mean_surprisal = mean(surprisal, na.rm = TRUE),
@@ -115,11 +130,12 @@ data_particles <- df_clean %>%
     n = n(),
     se = sd_surprisal / sqrt(n),
     .groups = "drop"
-  )
-ggplot(data_particles, aes(x = condition, y = mean_surprisal, color = generator, group = generator)) +
+  ) %>%
+ggplot(aes(x = condition, y = mean_surprisal, color = generator, group = generator)) +
   geom_errorbar(aes(ymin = mean_surprisal - se, ymax = mean_surprisal + se), width = 0.1) +
   geom_line(linewidth = 0.8, alpha = 0.7) +
   geom_point(size = 3) +
+   scale_color_manual(values = color_palette) +
   labs(
     title = "Effect of Particle Condition on Surprisal",
     subtitle = "Aggregated over context levels (Error bars represent Standard Error)",
@@ -151,26 +167,25 @@ df_wide <- data_aggregated %>%
   )
 
 # Question 1: Context with greatest/smallest difference between Human and LLMs
-q1_result <- df_wide %>%
+df_wide %>%
   group_by(context) %>%
   summarise(
     avg_diff_human_gpt35 = mean(diff_human_gpt35, na.rm = TRUE),
     avg_diff_human_gpt52 = mean(diff_human_gpt52, na.rm = TRUE)
-  )
+  ) %>%
 # Average difference between Human and LLMs by Context:
-kable(q1_result, caption = "Average difference between Human and LLMs by Context")
+kable(caption = "Average difference between Human and LLMs by Context")
 
 # --- Question 2: Condition with greatest LLM difference ---
-q2_result <- df_wide %>%
+ df_wide %>%
   group_by(condition) %>%
   summarise(
     max_llm_diff = max(diff_llms, na.rm = TRUE),
     mean_llm_diff = mean(diff_llms, na.rm = TRUE)
   ) %>%
-  arrange(desc(mean_llm_diff))
-
+  arrange(desc(mean_llm_diff)) %>%
 # Differences between LLMs (GPT 3.5 vs 5.2) by Particle Condition:
-kable(q2_result, caption = " Differences between LLMs by Particle Condition:")
+kable(caption = " Differences between LLMs by Particle Condition:")
 ```
 
 

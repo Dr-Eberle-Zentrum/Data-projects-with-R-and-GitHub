@@ -139,6 +139,15 @@ subject and condition** will be calculated.
 <tr>
 <td style="text-align: left;">gpt-3.5-turbo-16k</td>
 <td style="text-align: left;">high</td>
+<td style="text-align: left;">RA</td>
+<td style="text-align: right;">6.306301</td>
+<td style="text-align: right;">0.4624776</td>
+<td style="text-align: right;">102</td>
+<td style="text-align: right;">0.0457921</td>
+</tr>
+<tr>
+<td style="text-align: left;">gpt-3.5-turbo-16k</td>
+<td style="text-align: left;">high</td>
 <td style="text-align: left;">EW</td>
 <td style="text-align: right;">6.377505</td>
 <td style="text-align: right;">0.4887934</td>
@@ -156,12 +165,12 @@ subject and condition** will be calculated.
 </tr>
 <tr>
 <td style="text-align: left;">gpt-3.5-turbo-16k</td>
-<td style="text-align: left;">high</td>
+<td style="text-align: left;">medium</td>
 <td style="text-align: left;">RA</td>
-<td style="text-align: right;">6.306301</td>
-<td style="text-align: right;">0.4624776</td>
+<td style="text-align: right;">6.186042</td>
+<td style="text-align: right;">0.4551185</td>
 <td style="text-align: right;">102</td>
-<td style="text-align: right;">0.0457921</td>
+<td style="text-align: right;">0.0450634</td>
 </tr>
 <tr>
 <td style="text-align: left;">gpt-3.5-turbo-16k</td>
@@ -180,15 +189,6 @@ subject and condition** will be calculated.
 <td style="text-align: right;">0.4972432</td>
 <td style="text-align: right;">102</td>
 <td style="text-align: right;">0.0492344</td>
-</tr>
-<tr>
-<td style="text-align: left;">gpt-3.5-turbo-16k</td>
-<td style="text-align: left;">medium</td>
-<td style="text-align: left;">RA</td>
-<td style="text-align: right;">6.186042</td>
-<td style="text-align: right;">0.4551185</td>
-<td style="text-align: right;">102</td>
-<td style="text-align: right;">0.0450634</td>
 </tr>
 </tbody>
 </table>
@@ -209,10 +209,7 @@ This plot allows us to observe whether human-generated language and
 LLM-generated language show similar or different surprisal patterns
 across contexts.
 
-### 5.2 particles plot???
-
-you included the particle plot as an image but no clear
-instruction/specificiation, so I added it just to be safe.
+### 5.2 particles plot
 
 #### Effect of Particle Condition
 
