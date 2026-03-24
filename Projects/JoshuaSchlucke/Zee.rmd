@@ -4,17 +4,336 @@ title: "Solution for Joshua"
 output: md_document
 ---
 
-example image
+# Task description
+Open-source projects use commit messages to communicate intent, fixes, and changes. These short texts can reveal how teams work, how often they fix bugs, and how practices differ across repositories and time. Your task is to explore commit message styles and activity patterns across popular GitHub projects.
 
-```{r example}  
+## Questions / ideas
+- How do commit volumes vary by weekday and hour, and do different repositories show distinct rhythms?
+- How common are conventional commit prefixes (`feat`, `fix`, `docs`, `refactor`, `test`, etc.), and how do these proportions change over time?
+- Are message lengths and formats different across repositories or commit types?
+- Which repositories show more maintenance activity (fix/docs/chore) versus feature activity (feat)?
 
+## Data
+The original dataset contains commit messages and metadata from 34 popular GitHub repositories (e.g., `tensorflow/tensorflow`, `pytorch/pytorch`, `pandas-dev/pandas`) as of April 21, 2021. Source: https://www.kaggle.com/datasets/dhruvildave/github-commit-messages-dataset/data. The repository list is saved in `datasets/source_README.md`.
+
+The commit time range varies by repository (the latest commits are as of April 21, 2021). Report the per-repo min/max dates after loading the data.
+
+Use one of the smaller subsets provided in `datasets/`:
+
+- `datasets/commits_sample_50k.csv` (random 50,000 rows, ~28 MB) — quick prototyping.
+- `datasets/commits_sample_150k.csv.zip` (random 150,000 rows, ~31 MB, zipped) — larger sample that stays under GitHub’s file size limit.
+- `datasets/commits_balanced_3k_per_repo.csv` (~48 MB) — balanced sample with 3,000 commits per repo for fair repo comparison.
+- Raw commit-level files for three repos (large/medium/small) to build a GitHub-style “commit calendar” heatmap. The repos are `torvalds/linux` (large), `pytorch/pytorch` (medium), and `tidyverse/ggplot2` (small).
+  - `datasets/commits_2019_2020_torvalds_linux.csv.zip` (~42 MB, zipped)
+  - `datasets/commits_2019_2020_pytorch_pytorch.csv` (~13 MB)
+  - `datasets/commits_2019_2020_tidyverse_ggplot2.csv` (~0.1 MB)
+
+### Column overview
+The CSV has the following columns:
+
+- `commit`: commit hash
+- `author`: author name and email in one string (e.g., `Name <email>`)
+- `date`: commit date as a string with timezone
+- `message`: commit message text (may include commas or line breaks)
+- `repo`: repository in `owner/name` format
+
+Example file: `datasets/commits_sample_50k.csv`
+
+### First rows (from `commits_sample_50k.csv`)
+
+```{r, echo=FALSE}
+library(knitr)
+data <- read.csv("datasets/commits_sample_50k.csv")
+data$message <- gsub("[\r\n]+", " ", data$message)
+kable(head(data, 5), caption = "Sample of commit data", format = "html", escape = TRUE)
+```
+
+## Solution
+
+### Q1: How do commit volumes vary by weekday and hour, and do different repositories show distinct rhythms?
+
+#### Overall temporal patterns
+
+- To examine temporal commit patterns, the commit timestamps will be parsed and aggregated by weekday and hour. The results will be visualized using a heatmap.
+- The visualization will show:
+  - x-axis: hour of the day
+  - y-axis: day of the week
+  - fill color: number of commits.
+  
+```{r heatmap}
 library(tidyverse)
-iris |> 
-  ggplot(aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
-  geom_point() +
+library(lubridate)
+
+# read the csv
+commits <- read.csv("datasets/commits_sample_50k.csv")
+
+# parse data and derive time-related variables
+commits_sorted <- commits %>%
+  mutate(
+    date_parsed = parse_date_time(date, orders = "a b d HMS Y z", locale = "C"), 
+    year = year (date_parsed),
+    month = month (date_parsed, label = TRUE, abbr = TRUE),
+    weekday = wday (date_parsed, label = TRUE, abbr = TRUE, locale = "C"),
+    hour = hour (date_parsed)
+  ) %>%
+  filter(!is.na(date_parsed))%>%
+  distinct(commit, .keep_all = TRUE)
+
+# Aggregate commit counts by weekday and hour
+commit_counts <- commits_sorted %>%
+  count(weekday, hour)
+
+# Plot overall temporal activity heatmap
+
+ggplot(commit_counts, aes(x = hour, y = weekday, fill = n)) +
+  geom_tile(color = "white", linewidth = 0.2) +
+  scale_fill_viridis_c() +
+  labs(
+    title = "Commit Activity Heatmap by weekday and hour",
+    subtitle = "Overall temporal distribution of commits in the 50k sample",
+       x = "Hour of Day",
+       y = "Day of Week",
+       fill = "Commits"
+    ) +
   theme_minimal() +
-  labs(title = "Iris Dataset: Sepal Length vs Sepal Width",
-       x = "Sepal Length",
-       y = "Sepal Width")
+  theme(
+    text = element_text(size = 12),
+    panel.grid = element_blank(),
+  )
+```
+
+- So, the answer for this part is that, commits are concentrated during typical working hours, especially between approximately 14:00 and 00:00, where the highest activity levels are observed. In contrast, early morning hours (around 01:00–12:00) consistently show low activity.
+
+- Across weekdays, Tuesday to Friday exhibit relatively high and consistent activity levels, while Monday shows a slower start, with lower activity in the morning and increasing toward the afternoon. Weekend activity differs noticeably: Saturday shows reduced activity compared to weekdays, and Sunday has the lowest overall activity.
+
+#### Differences across repositories
+
+- To investigate whether different repositories show distinct temporal rhythms, commit activity will be compared across selected repositories. 
+
+- The visualization will show:
+  - x-axis: hour of the day
+  - y-axis: day of the week
+  - fill color: number of commits
+  - panels: different repositories
+  
+```{r repo_heatmap}
+# choose 4 most active repositories
+top_four <- commits_sorted %>%
+  count(repo, sort = TRUE) %>%
+  slice_head(n = 4)%>%
+  pull(repo)
+
+# Aggregate commit counts for selected repositories
+commit_counts_repo <- commits_sorted %>%
+  filter(repo %in% top_four) %>%
+  count(repo,weekday,hour)
+
+# Plot repository-specific activity patterns
+ggplot(commit_counts_repo, aes(x = hour, y = weekday, fill = n))+
+  geom_tile(color = "white", linewidth = 0.2)+
+  facet_wrap(~repo)+
+  scale_fill_viridis_c()+
+  labs(
+    title = "Repository-specific Commit Rhythms heatmap",
+    subtitle = "Temporal activity patterns for the four most active repositories",
+    x = "Hour of Day",
+    y = "Weekday",
+    fill = "Commits"
+  )+
+  theme_minimal()+
+  theme(
+    text = element_text(size = 12),
+    panel.grid = element_blank(),
+    strip.background = element_rect(fill = "lightgray", color = NA)
+  )
+```
+
+- It is obvious that, differences in commit activity patterns across repositories. 
+  - The repository *chromium/chromium* shows strong and concentrated activity during afternoon and evening hours, especially on weekdays, indicating a structured and synchronized development schedule.
+  - However, *freebsd/freebsd-src* exhibits consistently low and relatively uniform activity across all hours and days, suggesting a smaller or less time-concentrated contributor base.
+  - The repository  *llvm/llvm-project* displays a more moderate and evenly distributed pattern. 
+  - Meanwhile, *torvalds/linux* shows high overall activity with a broad distribution across daytime hours, indicating continuous development and might contributed from multiple time zones.
+
+### Q2: How common are conventional commit prefixes (`feat`, `fix`, `docs`, `refactor`, `test`, etc.), and how do these proportions change over time?
+
+#### Distribution of commit message prefixes
+- To analyze commit style, it is important to sort conventional prefixes and the others.
+  - Conventional prefixes: `feat`, `fix`, `docs`, `refactor`, etc.
+- The visualization will show:
+  - x-axis: commit type
+  - y-axis: number of commits
+  - fill: commit type
+
+```{r prefix_distribution}
+library(stringr)
+
+#Extract commit type 
+commits_type <- commits_sorted %>%
+  mutate(
+    type = str_extract(message, "^[a-z]+"),
+    type = if_else(
+      type %in% c("fear", "fix", "docs", "refactor", "test", "build", "chore", "style", "ci", "perf"),
+      type,
+      "other"
+    )
+  )
+
+#count types
+type_counts <- commits_type %>%
+  count(type, sort = TRUE)
+
+# Plot Bar-chart
+ggplot(type_counts, aes(x = reorder(type, -n), y = n, fill = type)) + 
+  geom_col()+
+  labs(
+    title = "Distribution of commit message tpyes",
+    x = "commit type",
+    y = "number of commits"
+  )+
+  theme_minimal()+
+  theme(legend.position = "none")
+```
+
+- The distribution shows that, a large majority of commit messages fall into the "other" category, and the conventional commit prefixes are relatively uncommon in the dataset. Or we can say, the prefixes' styles are very diverse.
+
+#### proportions changes
+
+- To examine how commit message types evolve over time, the commit counts would be aggregated by month and type.
+
+- The visualization will show:
+  - x-axis: time (month)
+  - y-axis: number of commits
+  - color: commit type
+  
+```{r proportions changes}
+# Aggregate by month
+type_time <- commits_type %>%
+  mutate(month = floor_date(date_parsed, "month")) %>%
+  count(month, type)
+
+# Plot Trend
+ggplot(type_time, aes(x = month, y = n, color = type))+
+  geom_line()+
+  labs(
+    title = "Commit Types Over Time",
+    x = "Time",
+    y = "Number of Commits",
+    color = "Type"
+  )+
+  theme_minimal()
 
 ```
+
+- It's hard to work out how the different conventional types of commit have changed over time., due to the dominance of the "other" category, the trends of conventional commit types (such as `fix`, `docs`, or `refactor`) are not clearly visible in this visualization. Their frequencies remain relatively low throughout the time period and are overshadowed by the much larger volume of non-standardized commit messages.
+
+### Q3: Are message lengths and formats different across repositories or commit types?
+
+#### message length across commit types
+
+- To analyze differences in message length, it is needed to compute the number of characters in each commit and compare distributions across commit types.
+
+- The visualization will show:
+  - x-axis: commit type
+  - y-axis: message length
+  - distribution: boxplot
+  
+```{r length by type}
+# compute message length
+commit_length <- commits_type %>%
+  mutate (
+    message_length = nchar(message)
+  )
+
+# plot boxplot
+ggplot(commit_length, aes(x = type, y = message_length, fill = type))+
+  geom_boxplot()+
+  labs(
+    title = "Message Length by Commit Type",
+    x = "Commit Type",
+    y = "Message Length"
+  )+
+  theme_minimal()+
+  theme(legend.position = "none")
+```
+
+- Commit message format and length are closely related: messages following conventional prefixes are typically shorter and more uniform, while non-standard messages vary widely in length and structure.
+
+#### message length across repositories
+
+- To examine whether repositories differ in their communication style, the message lengths across the repositories would be compared.
+
+- The visualization will show:
+  - x-axis: repository
+  - y-axis: message length
+  
+```{r across repositories}
+# select the top repositories
+top_four <- commits_sorted %>%
+  count(repo, sort = TRUE) %>%
+  slice_head(n = 4) %>%
+  pull(repo)
+
+# filter and plot
+ggplot(commit_length %>% filter(repo %in% top_four),
+       aes(x = repo, y = message_length, fill = repo))+
+  geom_boxplot()+
+  labs(
+    title = "Message Length by Repository",
+    x = "Repository",
+    y = "Message Length"
+  )+
+  theme_minimal()+
+  theme(legend.position = "none")
+
+```
+
+- The boxplot reveals clear differences in message length across repositories.
+ - The `chromium/chromium` repository exhibits the highest variability, with numerous very long commit messages and extreme outliers. 
+ - `torvalds/linux` and `lvm/lvm-project` also show some long messages, but to a lesser extent. 
+ - `freebsd/freebsd-src` displays a much more compact distribution with fewer extreme values.
+ 
+### Q4: Which repositories show more maintenance activity (fix/docs/chore) versus feature activity (feat)?
+
+- To compare development activities across repositories, commits should firstly be classified by activities' type:
+  - maintenance: fix, docs, chore
+  - feature: feat
+  - other: all remaining messages
+
+```{r activity}
+# classify commit activity
+commit_activity <- commits_type %>%
+  mutate(
+    activity = case_when(
+      type %in% c("fix", "docs", "chore") ~ "maintenance",
+      type == "feat" ~ "feature",
+      TRUE ~ "other"
+    )
+  )
+
+# aggregate by repository
+repo_activity <- commit_activity %>%
+  count(repo, activity) %>%
+  group_by(repo)%>%
+  mutate(prop = n / sum(n))
+
+# choose top repos
+top_four <- commits_sorted %>%
+  count(repo, sort = TRUE)%>%
+  slice_head(n = 4) %>%
+  pull(repo)
+
+# filter and plot bar chart
+ggplot(repo_activity %>% filter(repo %in% top_four),
+       aes(x = repo, y = prop, fill = activity))+
+  geom_col(position = "fill")+
+  labs(
+    title = "Maintenance vs Feature Activity by Repository",
+    x = "Repository",
+    y = "Proportion",
+    fill = "Activity Type"
+  )+
+  theme_minimal()
+
+```
+
+- The visualization shows that most repositories are dominated by commits categorized as "other", while maintenance activity (fix, docs, chore) represents only a small proportion. While, feature-related commits (`feat`) are almost entirely absent from the dataset. And there is slightly more maintenance activity in the `llvm/llvm-project` repository than in the other repositories.
