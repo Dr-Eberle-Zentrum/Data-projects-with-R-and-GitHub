@@ -4,7 +4,7 @@ output: md_document
 ---
 
 Setup
-```{r, echo = FALSE, message = FALSE}
+```{r, echo = TRUE, message = FALSE}
 library(readr)
 library(knitr)
 library(khroma)
@@ -17,7 +17,7 @@ data <- read_csv("https://raw.githubusercontent.com/barrolee/BarroLeeDataSet/mas
 
 #### Sum of education level percentages
 
-```{r, echo = FALSE, message = FALSE}
+```{r, echo = TRUE, message = FALSE}
 # Sum up to 100?
 edu_lvl <- subset(data, select = c("lu", "lp", "lpc", "ls", "lsc", "lh", "lhc"))
 min<-which.min(rowSums(edu_lvl))
@@ -29,7 +29,7 @@ sum(edu_lvl[max,])
 
 The sum of education levels should be at ~100, the max. value however, is at almost 200. This is because the completed education level (e.g., lpc) is a subset of that education level in general (e.g., lp). Therefore, for the general education levels the completed subset needs to be subtracted:
 
-```{r, echo = FALSE, message = FALSE}  
+```{r, echo = TRUE, message = FALSE}  
 data <- data %>%
   mutate(
     lp = lp - lpc,
@@ -40,14 +40,14 @@ data <- data %>%
 
 #### Missing values?
 
-```{r, echo = FALSE, message = FALSE}  
+```{r, echo = TRUE, message = FALSE}  
 sum(is.na(data)) # No
 ```
 There are NO missing values
 
 #### Implausible values?
 
-```{r, echo = FALSE, message = FALSE}  
+```{r, echo = TRUE, message = FALSE}  
 # Are there any implausible values (negative percentage)
 min(edu_lvl) # no values below 0
 max(edu_lvl) # no values above 100
@@ -56,7 +56,7 @@ The max value at any single education level is 100, the min value 0
 
 #### Check if for every country there are all year entries
 
-```{r, echo = FALSE, message = FALSE}  
+```{r, echo = TRUE, message = FALSE}  
 # 1. Create a grid of all possible combinations
 all_combinations <- data %>%
   expand(country, year)
@@ -68,14 +68,14 @@ print(missing_entries)
 There are NO missing combinations of country and year
 
 BUT: for age groups from 15, 25 & 75 entries are always double (the second time with ageto == 999). This needs to be removed!
-```{r, echo = FALSE, message = FALSE}
+```{r, echo = TRUE, message = FALSE}
 data <- data %>%
   filter(!(agefrom %in% c(15, 25, 75) & ageto == 999))
 ```
 
 
 ## Renaming columns for improved readability
-```{r, echo = FALSE, message = FALSE}
+```{r, echo = TRUE, message = FALSE}
 data <- data %>%
   rename(No_education = "lu",
          Primary_education  = "lp",
@@ -92,7 +92,7 @@ kable(head(subset(data, select = c("No_education", "Primary_education", "Primary
 
 ## Visualization 1
 
-```{r, echo = FALSE, message = FALSE}
+```{r, echo = TRUE, message = FALSE}
 ## Compute population-weighted regional average years of schooling (`yr_sch`) for each region and year and plot their evolution over time (1950-2010) using a line plot with one line per region.
 
 # Group by Region and Year and calculate the population-weighted average years of schooling
@@ -124,7 +124,7 @@ ggplot(regional_avg, aes(x = year, y = weighted_yr_sch, color = as.factor(region
 
 ## Visualization 2
 
-```{r, echo = FALSE, message = FALSE}  
+```{r, echo = TRUE, message = FALSE}  
 # 1. Prepare data with Netherlands/Fiji and "Incomplete" math
 pyramid_data <- data %>%
   filter(country %in% c("Netherlands", "Fiji"), 
