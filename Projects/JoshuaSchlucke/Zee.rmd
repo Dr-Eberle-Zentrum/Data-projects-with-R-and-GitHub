@@ -60,7 +60,7 @@ kable(head(data, 5), caption = "Sample of commit data", format = "html", escape 
   - y-axis: day of the week
   - fill color: number of commits.
   
-```{r heatmap}
+```{r heatmap, echo=FALSE}
 library(tidyverse)
 library(lubridate)
 
@@ -116,7 +116,7 @@ ggplot(commit_counts, aes(x = hour, y = weekday, fill = n)) +
   - fill color: number of commits
   - panels: different repositories
   
-```{r repo_heatmap}
+```{r repo_heatmap, echo=FALSE}
 # choose 4 most active repositories
 top_four <- commits_sorted %>%
   count(repo, sort = TRUE) %>%
@@ -164,7 +164,7 @@ ggplot(commit_counts_repo, aes(x = hour, y = weekday, fill = n))+
   - y-axis: number of commits
   - fill: commit type
 
-```{r prefix_distribution}
+```{r prefix_distribution, echo=FALSE}
 library(stringr)
 
 #Extract commit type 
@@ -205,7 +205,7 @@ ggplot(type_counts, aes(x = reorder(type, -n), y = n, fill = type)) +
   - y-axis: number of commits
   - color: commit type
   
-```{r proportions changes}
+```{r proportions changes, echo=FALSE}
 # Aggregate by month
 type_time <- commits_type %>%
   mutate(month = floor_date(date_parsed, "month")) %>%
@@ -237,7 +237,7 @@ ggplot(type_time, aes(x = month, y = n, color = type))+
   - y-axis: message length
   - distribution: boxplot
   
-```{r length by type}
+```{r length by type, echo=FALSE}
 # compute message length
 commit_length <- commits_type %>%
   mutate (
@@ -266,7 +266,7 @@ ggplot(commit_length, aes(x = type, y = message_length, fill = type))+
   - x-axis: repository
   - y-axis: message length
   
-```{r across repositories}
+```{r across repositories, echo=FALSE}
 # select the top repositories
 top_four <- commits_sorted %>%
   count(repo, sort = TRUE) %>%
@@ -299,7 +299,7 @@ ggplot(commit_length %>% filter(repo %in% top_four),
   - feature: feat
   - other: all remaining messages
 
-```{r activity}
+```{r activity, echo=FALSE}
 # classify commit activity
 commit_activity <- commits_type %>%
   mutate(

@@ -235,8 +235,6 @@ torvalds/linux
 
 <!-- -->
 
-    library(tidyverse)
-
     ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
     ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
     ## ✔ forcats   1.0.0     ✔ stringr   1.5.2
@@ -247,45 +245,6 @@ torvalds/linux
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
     ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-
-    library(lubridate)
-
-    # read the csv
-    commits <- read.csv("datasets/commits_sample_50k.csv")
-
-    # parse data and derive time-related variables
-    commits_sorted <- commits %>%
-      mutate(
-        date_parsed = parse_date_time(date, orders = "a b d HMS Y z", locale = "C"), 
-        year = year (date_parsed),
-        month = month (date_parsed, label = TRUE, abbr = TRUE),
-        weekday = wday (date_parsed, label = TRUE, abbr = TRUE, locale = "C"),
-        hour = hour (date_parsed)
-      ) %>%
-      filter(!is.na(date_parsed))%>%
-      distinct(commit, .keep_all = TRUE)
-
-    # Aggregate commit counts by weekday and hour
-    commit_counts <- commits_sorted %>%
-      count(weekday, hour)
-
-    # Plot overall temporal activity heatmap
-
-    ggplot(commit_counts, aes(x = hour, y = weekday, fill = n)) +
-      geom_tile(color = "white", linewidth = 0.2) +
-      scale_fill_viridis_c() +
-      labs(
-        title = "Commit Activity Heatmap by weekday and hour",
-        subtitle = "Overall temporal distribution of commits in the 50k sample",
-           x = "Hour of Day",
-           y = "Day of Week",
-           fill = "Commits"
-        ) +
-      theme_minimal() +
-      theme(
-        text = element_text(size = 12),
-        panel.grid = element_blank(),
-      )
 
 ![](Zee_files/figure-markdown_strict/heatmap-1.png)
 
@@ -313,38 +272,6 @@ torvalds/linux
     -   y-axis: day of the week
     -   fill color: number of commits
     -   panels: different repositories
-
-<!-- -->
-
-    # choose 4 most active repositories
-    top_four <- commits_sorted %>%
-      count(repo, sort = TRUE) %>%
-      slice_head(n = 4)%>%
-      pull(repo)
-
-    # Aggregate commit counts for selected repositories
-    commit_counts_repo <- commits_sorted %>%
-      filter(repo %in% top_four) %>%
-      count(repo,weekday,hour)
-
-    # Plot repository-specific activity patterns
-    ggplot(commit_counts_repo, aes(x = hour, y = weekday, fill = n))+
-      geom_tile(color = "white", linewidth = 0.2)+
-      facet_wrap(~repo)+
-      scale_fill_viridis_c()+
-      labs(
-        title = "Repository-specific Commit Rhythms heatmap",
-        subtitle = "Temporal activity patterns for the four most active repositories",
-        x = "Hour of Day",
-        y = "Weekday",
-        fill = "Commits"
-      )+
-      theme_minimal()+
-      theme(
-        text = element_text(size = 12),
-        panel.grid = element_blank(),
-        strip.background = element_rect(fill = "lightgray", color = NA)
-      )
 
 ![](Zee_files/figure-markdown_strict/repo_heatmap-1.png)
 
@@ -375,36 +302,6 @@ torvalds/linux
     -   y-axis: number of commits
     -   fill: commit type
 
-<!-- -->
-
-    library(stringr)
-
-    #Extract commit type 
-    commits_type <- commits_sorted %>%
-      mutate(
-        type = str_extract(message, "^[a-z]+"),
-        type = if_else(
-          type %in% c("fear", "fix", "docs", "refactor", "test", "build", "chore", "style", "ci", "perf"),
-          type,
-          "other"
-        )
-      )
-
-    #count types
-    type_counts <- commits_type %>%
-      count(type, sort = TRUE)
-
-    # Plot Bar-chart
-    ggplot(type_counts, aes(x = reorder(type, -n), y = n, fill = type)) + 
-      geom_col()+
-      labs(
-        title = "Distribution of commit message tpyes",
-        x = "commit type",
-        y = "number of commits"
-      )+
-      theme_minimal()+
-      theme(legend.position = "none")
-
 ![](Zee_files/figure-markdown_strict/prefix_distribution-1.png)
 
 -   The distribution shows that, a large majority of commit messages
@@ -422,24 +319,6 @@ torvalds/linux
     -   x-axis: time (month)
     -   y-axis: number of commits
     -   color: commit type
-
-<!-- -->
-
-    # Aggregate by month
-    type_time <- commits_type %>%
-      mutate(month = floor_date(date_parsed, "month")) %>%
-      count(month, type)
-
-    # Plot Trend
-    ggplot(type_time, aes(x = month, y = n, color = type))+
-      geom_line()+
-      labs(
-        title = "Commit Types Over Time",
-        x = "Time",
-        y = "Number of Commits",
-        color = "Type"
-      )+
-      theme_minimal()
 
 ![](Zee_files/figure-markdown_strict/proportions%20changes-1.png)
 
@@ -465,25 +344,6 @@ torvalds/linux
     -   y-axis: message length
     -   distribution: boxplot
 
-<!-- -->
-
-    # compute message length
-    commit_length <- commits_type %>%
-      mutate (
-        message_length = nchar(message)
-      )
-
-    # plot boxplot
-    ggplot(commit_length, aes(x = type, y = message_length, fill = type))+
-      geom_boxplot()+
-      labs(
-        title = "Message Length by Commit Type",
-        x = "Commit Type",
-        y = "Message Length"
-      )+
-      theme_minimal()+
-      theme(legend.position = "none")
-
 ![](Zee_files/figure-markdown_strict/length%20by%20type-1.png)
 
 -   Commit message format and length are closely related: messages
@@ -500,26 +360,6 @@ torvalds/linux
 
     -   x-axis: repository
     -   y-axis: message length
-
-<!-- -->
-
-    # select the top repositories
-    top_four <- commits_sorted %>%
-      count(repo, sort = TRUE) %>%
-      slice_head(n = 4) %>%
-      pull(repo)
-
-    # filter and plot
-    ggplot(commit_length %>% filter(repo %in% top_four),
-           aes(x = repo, y = message_length, fill = repo))+
-      geom_boxplot()+
-      labs(
-        title = "Message Length by Repository",
-        x = "Repository",
-        y = "Message Length"
-      )+
-      theme_minimal()+
-      theme(legend.position = "none")
 
 ![](Zee_files/figure-markdown_strict/across%20repositories-1.png)
 
@@ -539,42 +379,6 @@ torvalds/linux
     -   maintenance: fix, docs, chore
     -   feature: feat
     -   other: all remaining messages
-
-<!-- -->
-
-    # classify commit activity
-    commit_activity <- commits_type %>%
-      mutate(
-        activity = case_when(
-          type %in% c("fix", "docs", "chore") ~ "maintenance",
-          type == "feat" ~ "feature",
-          TRUE ~ "other"
-        )
-      )
-
-    # aggregate by repository
-    repo_activity <- commit_activity %>%
-      count(repo, activity) %>%
-      group_by(repo)%>%
-      mutate(prop = n / sum(n))
-
-    # choose top repos
-    top_four <- commits_sorted %>%
-      count(repo, sort = TRUE)%>%
-      slice_head(n = 4) %>%
-      pull(repo)
-
-    # filter and plot bar chart
-    ggplot(repo_activity %>% filter(repo %in% top_four),
-           aes(x = repo, y = prop, fill = activity))+
-      geom_col(position = "fill")+
-      labs(
-        title = "Maintenance vs Feature Activity by Repository",
-        x = "Repository",
-        y = "Proportion",
-        fill = "Activity Type"
-      )+
-      theme_minimal()
 
 ![](Zee_files/figure-markdown_strict/activity-1.png)
 
