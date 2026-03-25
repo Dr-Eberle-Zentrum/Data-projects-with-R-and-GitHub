@@ -116,3 +116,64 @@ DFData_adjusted %>%
 
 ```
 
+
+## Vizualization 2: Education Level Distribution by Age Group and Country Comparison
+
+
+```{r, echo=FALSE, message=FALSE}
+
+DFData_adjusted %>%
+  filter(country %in% c("Germany", "India"), year %in% c(1960, 2010), ageto != 999) %>% 
+  select(country, year, agefrom, ageto, `Years of schooling`, `No education`:`Completed tertiary`) %>%
+  pivot_longer(
+    cols = `No education`:`Completed tertiary`, 
+    names_to = "Education level", 
+    values_to = "Percentage"
+    ) %>%
+  mutate(
+    `Age group` = paste0(agefrom, "-", ageto),
+    # reorder with factors
+    `Education level` = factor(`Education level`, levels = c("No education", "Some primary", "Completed primary", "Some secondary", "Completed secondary", "Some tertiary", "Completed tertiary")),
+    country = factor(country, levels = c("Germany", "India")),
+    # invert left side (germany) to make pyramid shaped plot
+    plot_prc = ifelse(country == "Germany", -Percentage, Percentage) 
+  ) %>%
+  
+  
+  ggplot(aes(x = plot_prc, y = `Age group`, fill = `Education level`)) +
+  geom_col() +
+  geom_vline(xintercept=0, color = "black", linewidth = 1) +
+  geom_text(
+    aes(x = ifelse(country == "Germany", -50, 50), y = 10, label = country), 
+    vjust = -4.2,
+    size = 4,
+    inherit.aes = FALSE
+  ) +
+  facet_wrap(~ year) +
+  labs(
+    title = "", 
+    x = "Percentage of population", 
+    y = "Age group"
+  ) +
+  scale_x_continuous(
+    labels = abs,
+    breaks = seq(-100, 100, by = 25),
+  ) +
+  scale_y_discrete(
+    limits = c("15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", " ")
+  ) +
+  theme_minimal() +
+  scale_fill_manual(
+    values = c(`No education` = "#d73027", 
+               `Some primary` = "#fc8d59", 
+               `Completed primary` = "#fee090", 
+               `Some secondary` = "#151588", 
+               `Completed secondary` = "#1010ef", 
+               `Some tertiary` = "#009910", 
+               `Completed tertiary` = "#00dd10")
+  ) + 
+  theme(legend.position = "bottom", panel.spacing = unit(2, "lines"), strip.text = element_text(size = 14, face = "bold"), plot.margin = margin(t = 10, r = 20, b = 10, l = 10)) +
+  guides(fill = guide_legend(reverse = TRUE))
+
+```
+
