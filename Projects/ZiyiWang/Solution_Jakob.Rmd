@@ -1,0 +1,137 @@
+---
+title: "Solution for Ziyi"
+date: "2026-03-25"
+output: md_document
+---
+
+## Project Solution for: Surprisal-Based Comparison of Human and LLM Language Generation
+
+By Jakob
+
+
+#### Loading the data set and checking the first few rows
+```{r, echo=FALSE, warning = FALSE, message = FALSE}
+library(knitr)
+library(tidyverse)
+
+# set current working directory to the directory of this Rmd file
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+# load data
+data<-read_csv("./data/Processed final_data/final.csv")
+kable(head(data))
+
+```
+
+```{r, echo = FALSE, message = FALSE}
+# Data cleaning and aggregation
+
+# remove NAs
+data <- data %>%
+  drop_na()
+
+# Removing items 13 and 28 for data set used for comparison with human participants
+data_human <- data %>%
+  filter(!(item %in% c(13, 28)))
+
+# Aggregating surprisal values (by generator and condition) - comparison with HUMAN
+data_agg_human <- data_human %>%
+  group_by(generator, context, condition) %>%
+  summarise(mean_surprisal = mean(surprisal), .groups = "drop")
+
+data_agg<- data %>%
+  group_by(generator, context, condition) %>%
+  summarise(mean_surprisal = mean(surprisal), .groups = "drop")
+
+```
+
+## Data Visualizations
+
+As dependent variable we use the mean surprisal value, which is aggregated by generator and context/condition. To compare surprisal patterns across generators, the results will be visualized using line plots.
+
+For the visualizations including human participants (I & II), Items 13 & 28 have been removed, for the visualization comparing only LLMs (II), all items are included.
+
+### Visualization I
+
+```{r, echo = FALSE, message = FALSE}
+data_agg_human %>%
+  mutate(condition = factor(condition, levels = c("OH", "RA", "EW"))) %>%
+  group_by(generator, context, condition) %>%
+  summarise(mean_surprisal = mean(mean_surprisal)) %>%
+  ggplot(aes(x = context, y = mean_surprisal, color = fct_reorder2(generator, context, mean_surprisal), group = generator)) +
+  geom_line(linewidth = .8) +
+  geom_point(size = 3) +
+  # add colours
+  scale_color_manual(values = c("gpt-3.5-turbo-16k" = "#A01818", 
+                                "gpt-5.2-chat-latest" = "#9DCCEF", "human" = "#00767B")) +
+  labs(title = "Mean Surprisal by Context and Generator",
+       x = "Context",
+       y = "Mean Surprisal",
+       color = "Generator") +
+  theme_minimal() +
+  theme(
+    legend.position = "right",
+    panel.grid.minor = element_blank()
+  ) +
+  facet_wrap(~condition)
+```
+
+**Interpretation:**
+
+
+
+### Visualization II
+
+```{r, echo = FALSE, message = FALSE}
+data_agg_human %>%
+  group_by(generator, context) %>%
+  summarise(mean_surprisal = mean(mean_surprisal)) %>%
+  ggplot(aes(x = context, y = mean_surprisal, color = fct_reorder2(generator, context, mean_surprisal), group = generator)) +
+  geom_line(linewidth = .8) +
+  geom_point(size = 3) +
+  # add colours
+  scale_color_manual(values = c("gpt-3.5-turbo-16k" = "#A01818", 
+                                "gpt-5.2-chat-latest" = "#9DCCEF", "human" = "#00767B")) +
+  labs(title = "Mean Surprisal by Context and Generator",
+       x = "Condition",
+       y = "Mean Surprisal",
+       color = "Generator") +
+  theme_minimal() +
+  theme(
+    legend.position = "right",
+    panel.grid.minor = element_blank()
+  )
+```
+
+
+**Interpretation:** 
+
+In a highly predictable preceeding context the mean surprisal value of the two GPT generators is closest and both have a considerable difference to the human participants, who in general have lower surprisal values. In a medium predictable preceeding context, the GPT 3.5 still is closer to the GPT 5.2, but its surprisal value approaches more that of the human participants.
+
+### Visualization III
+
+```{r, echo = FALSE, message = FALSE}
+data_agg %>%
+  mutate(condition = factor(condition, levels = c("OH", "RA", "EW"))) %>%
+  filter(generator != "human") %>%
+  group_by(generator, condition) %>%
+  summarise(mean_surprisal = mean(mean_surprisal)) %>%
+  ggplot(aes(x = condition, y = mean_surprisal, color = fct_reorder2(generator, condition, mean_surprisal), group = generator)) +
+  geom_line(linewidth = .8) +
+  geom_point(size = 3) +
+  # add colours
+  scale_color_manual(values = c("gpt-3.5-turbo-16k" = "#A01818", 
+                                "gpt-5.2-chat-latest" = "#9DCCEF")) +
+  labs(title = "Mean Surprisal by Condition and Generator",
+       x = "Condition",
+       y = "Mean Surprisal",
+       color = "Generator") +
+  theme_minimal() +
+  theme(
+    legend.position = "right",
+    panel.grid.minor = element_blank()
+  )
+```
+
+**Interpretation:**
+
+The difference between both GPT generators is highest in the OH condition (when no specific particles are present?). I would conclude from this that when no specific particles are present, the two models are less specificly trained and therefore less restricted in their generation leading to the largest differences in output.
