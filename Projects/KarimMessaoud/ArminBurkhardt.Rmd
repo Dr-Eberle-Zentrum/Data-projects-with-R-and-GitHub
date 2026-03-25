@@ -95,3 +95,24 @@ DFData_adjusted <- DFData_adjusted %>%
   )
 ```
 
+
+
+## Visualization 1: Regional Trends in Average Years of Schooling
+
+```{r, echo=FALSE, message=FALSE}
+
+DFData_adjusted %>%
+  group_by(Region, year) %>%
+  summarise(`Weighted average years of schooling` = weighted.mean(`Years of schooling`, w = pop)) %>%
+  ggplot(aes(x = year, y = `Weighted average years of schooling`, color = Region)) +
+  geom_line() +
+  geom_point(size = 2) +
+  labs(
+    title = "", 
+    x = "Year", 
+    y = "Average years of schooling"
+  ) +
+  theme_minimal()
+
+```
+
