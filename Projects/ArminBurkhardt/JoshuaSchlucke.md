@@ -1,16 +1,3 @@
-    library(tidyverse)
-    library(lubridate)
-
-    visual_dir <- "joshuaschlucke-visualisation"
-    if (!dir.exists(visual_dir)) dir.create(visual_dir)
-
-    knitr::opts_chunk$set(
-        fig.path = file.path(visual_dir, ""),
-        fig.width = 11,
-        fig.height = 7,
-        dpi = 300
-    )
-
 # 1. Data reading & cleaning
 
 In its current state, the data is impossible to work with.
@@ -50,74 +37,6 @@ In its current state, the data is impossible to work with.
   >
   > the new `Volume` should be the sum of all hourly volumes of the day
 
-<!-- -->
-
-    # Read the two header rows to build column names
-    header_rows <- readr::read_csv(
-        "stock_data.csv",
-        col_names = FALSE,
-        n_max = 2,
-        show_col_types = FALSE
-    )
-
-    # Build column names like Close_AAPL, Open_^GSPC, etc.
-    col_names <- map2_chr(header_rows[1, ], header_rows[2, ], function(h1, h2) {
-        h1 <- as.character(h1)
-        h2 <- as.character(h2)
-        if (h2 == "Ticker") {
-            "Datetime"
-        } else {
-            paste(h1, h2, sep = "_")
-        }
-    })
-
-    # Read the actual data, skipping the header rows
-    raw_data <- readr::read_csv(
-        "stock_data.csv",
-        skip = 3,
-        col_names = col_names,
-        col_types = cols(
-            Datetime = col_datetime(),
-            .default = col_double()
-        )
-    )
-
-    # Pivot to tidy format
-    indices <- c("^GSPC", "^IXIC")
-
-    long_data <- raw_data %>%
-        pivot_longer(
-            cols = -Datetime,
-            names_to = c("Metric", "Symbol"),
-            names_sep = "_",
-            values_to = "Value"
-        ) %>%
-        pivot_wider(
-            names_from = Metric,
-            values_from = Value
-        ) %>%
-        filter(!is.na(Datetime)) %>%
-        filter(!(is.na(Open) & is.na(High) & is.na(Low) & is.na(Close) & is.na(Volume))) %>%
-        mutate(
-            Type = if_else(Symbol %in% indices, "Index", "Stock"),
-            Type = factor(Type, levels = c("Stock", "Index"))
-        ) %>%
-        select(Datetime, Symbol, Type, Open, High, Low, Close, Volume)
-
-    # Aggregate hourly data to daily data
-
-    daily_data <- long_data %>%
-        arrange(Symbol, Datetime) %>%
-        group_by(Symbol, Type, Date = as_date(Datetime)) %>%
-        summarise(
-            Open = Open[which.min(Datetime)],
-            Close = Close[which.max(Datetime)],
-            High = max(High, na.rm = TRUE),
-            Low = min(Low, na.rm = TRUE),
-            Volume = sum(Volume, na.rm = TRUE),
-            .groups = "drop"
-        )
-
 # 2. Visualization
 
 - **Price**: Use `ggplot2`s facetting and `geom_line` to plot the daily
@@ -155,14 +74,6 @@ In its current state, the data is impossible to work with.
 
 ![](joshuaschlucke-visualisation/plot-price-1.png)
 
-    ggsave(
-        filename = file.path(visual_dir, "daily_close_by_symbol.png"),
-        plot = price_plot,
-        width = 11,
-        height = 7,
-        dpi = 300
-    )
-
 ## Daily volume
 
     volume_plot <- ggplot(daily_data, aes(x = Date, y = Volume, fill = Type)) +
@@ -171,72 +82,39 @@ In its current state, the data is impossible to work with.
         labs(
             title = "Daily Trading Volume by Symbol",
             x = "Date",
-            y = "Volume",
+            y = "Volume (Millions)",
             fill = "Type"
         ) +
+        scale_y_continuous(labels = scales::label_number(suffix = "M", scale = 1e-6)) +
         theme_minimal()
 
     volume_plot
 
 ![](joshuaschlucke-visualisation/plot-volume-1.png)
 
-    ggsave(
-        filename = file.path(visual_dir, "daily_volume_by_symbol.png"),
-        plot = volume_plot,
-        width = 11,
-        height = 7,
-        dpi = 300
-    )
-
 ## Optional: Candlesticks (stocks only)
 
-    stock_daily <- daily_data %>%
-        filter(Type == "Stock") %>%
-        mutate(
-            Direction = if_else(Close >= Open, "Up", "Down"),
-            BodyTop = pmax(Open, Close),
-            BodyBottom = pmin(Open, Close),
-            DateTime = as.POSIXct(Date) + hours(12)
-        )
+Candlestick plot with tidyquant, but still without whiskers because they
+are only shown on short time frames.
 
-    candlestick_plot <- ggplot(stock_daily, aes(x = DateTime)) +
-        geom_segment(
-            aes(y = Low, yend = High, xend = DateTime, color = Direction),
-            linewidth = 0.5
+    candlestick_plot <- daily_data %>%
+        filter(Type == "Stock") %>%
+        ggplot(aes(x = Date, open = Open, high = High, low = Low, close = Close)) +
+        geom_candlestick(
+            colour_up = "#2E8B57", colour_down = "#B22222",
+            fill_up   = "#2E8B57", fill_down  = "#B22222"
         ) +
-        geom_rect(
-            aes(
-                xmin = DateTime - hours(8),
-                xmax = DateTime + hours(8),
-                ymin = BodyBottom,
-                ymax = BodyTop,
-                fill = Direction,
-                color = Direction
-            ),
-            alpha = 0.85
-        ) +
-        scale_fill_manual(values = c(Up = "#2E8B57", Down = "#B22222")) +
-        scale_color_manual(values = c(Up = "#2E8B57", Down = "#B22222")) +
         facet_wrap(~Symbol, scales = "free_y") +
         labs(
             title = "Daily Candlesticks (Stocks Only)",
             x = "Date",
-            y = "Price",
-            fill = "Direction"
+            y = "Price"
         ) +
         theme_minimal()
 
     candlestick_plot
 
 ![](joshuaschlucke-visualisation/plot-candlesticks-1.png)
-
-    ggsave(
-        filename = file.path(visual_dir, "daily_candlesticks_stocks.png"),
-        plot = candlestick_plot,
-        width = 11,
-        height = 7,
-        dpi = 300
-    )
 
 # 3. Pattern analysis & correlation (hourly)
 
@@ -312,21 +190,13 @@ patterns throughout the day.
         labs(
             title = "Average Absolute Intrahour Price Movement by Hour (US/Eastern)",
             x = "Hour of Day (US/Eastern)",
-            y = "Average |Close - Open| / Open"
+            y = "Average |(Close - Open) / Open|"
         ) +
         theme_minimal()
 
     vol_plot
 
 ![](joshuaschlucke-visualisation/plot-hourly-volatility-1.png)
-
-    ggsave(
-        filename = file.path(visual_dir, "hourly_volatility_by_hour.png"),
-        plot = vol_plot,
-        width = 10,
-        height = 6,
-        dpi = 300
-    )
 
 ## Correlation with S&P 500
 
@@ -353,14 +223,6 @@ patterns throughout the day.
     scatter_plot
 
 ![](joshuaschlucke-visualisation/correlation-analysis-1.png)
-
-    ggsave(
-        filename = file.path(visual_dir, "stock_vs_sp500_scatter.png"),
-        plot = scatter_plot,
-        width = 11,
-        height = 7,
-        dpi = 300
-    )
 
     # Quantify correlation of hourly percentage changes
     sp500_changes <- hourly_trading %>%
@@ -392,14 +254,6 @@ patterns throughout the day.
     cor_plot
 
 ![](joshuaschlucke-visualisation/correlation-analysis-2.png)
-
-    ggsave(
-        filename = file.path(visual_dir, "correlation_with_sp500.png"),
-        plot = cor_plot,
-        width = 9,
-        height = 5,
-        dpi = 300
-    )
 
 # 4. Interpretation
 
