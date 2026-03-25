@@ -78,7 +78,7 @@ In its current state, the data is impossible to work with.
 
     volume_plot <- ggplot(daily_data, aes(x = Date, y = Volume, fill = Type)) +
         geom_col(alpha = 0.75) +
-        facet_wrap(~Symbol, scales = "free_y") +
+        facet_wrap(~Symbol, scales = "free_y", ncol = 1) +
         labs(
             title = "Daily Trading Volume by Symbol",
             x = "Date",
@@ -94,17 +94,18 @@ In its current state, the data is impossible to work with.
 
 ## Optional: Candlesticks (stocks only)
 
-Candlestick plot with tidyquant, but still without whiskers because they
-are only shown on short time frames.
+Candlestick plot with tidyquant, but still without whiskers (no matter
+the scaling) because they are only shown on short time frames or really
+zoomed in.
 
     candlestick_plot <- daily_data %>%
         filter(Type == "Stock") %>%
         ggplot(aes(x = Date, open = Open, high = High, low = Low, close = Close)) +
         geom_candlestick(
             colour_up = "#2E8B57", colour_down = "#B22222",
-            fill_up   = "#2E8B57", fill_down  = "#B22222"
+            fill_up   = "#2E8B57", fill_down  = "#B22222", size = 0.8
         ) +
-        facet_wrap(~Symbol, scales = "free_y") +
+        facet_wrap(~Symbol, scales = "free_y", ncol = 1) +
         labs(
             title = "Daily Candlesticks (Stocks Only)",
             x = "Date",
