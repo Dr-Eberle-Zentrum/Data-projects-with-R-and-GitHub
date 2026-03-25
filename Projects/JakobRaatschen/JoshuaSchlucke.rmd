@@ -32,7 +32,7 @@ palser <- read_csv("Projects/JakobRaatschen/Palser_2018/data_Palser_2018.csv") %
     filter(Condition == "Baseline") %>%
     mutate(Study_id = study_id[2]) %>%
     drop_na() %>%
-    mutate(Accuracy = (Stimulus == Response)) %>% # I know the compare is bool but the mean can use it anyway
+    mutate(Accuracy = as.numeric(Stimulus == Response)) %>% # I know the compare is bool but the mean can use it anyway
     mutate(Confidence = ifelse((Confidence > 99), 99, Confidence)) %>% # This step actually belongs to the "All Studies part" we normalize the Confidence to 1->99
     mutate(Confidence = ((Confidence - 1) / 98)) %>% # Normalizing the confidence vals to 0->100%
     mutate(Subj_idx = ((3 * Subj_idx) + 1)) %>%
@@ -59,10 +59,8 @@ hu_avg_pp
 ```
 
 # All Studies
-For palser the txt says that the scale is 1->99 but that the program was not restricted, which means I would either need to filter out everything above 99 or set it to 99 as the users where just overconfident. Correct would be throwing it out, so I'll set them to 99 :D
+For palser the txt says that the scale is 1->99 but that the program was not restricted, which means I would either need to filter out everything above 99 or set it to 99 as the users where just overconfident. Probably the correct thing would be throwing it out, so I've set them to 99 :D
 
-```{r}
-```
 For the participant ID I would rather like a operation that is easily reversible with knowing only little about the data itself. Since we have 3 lists we can simply use modulo or bitshift for that, I will use modulo for it as it is simpler to understand without computer science knowledge.
 We already created a factor for the studies, so we use the factor as numeric input for:
 $$
@@ -79,5 +77,24 @@ i = y\ \%\ 3
 $$
 
 ```{r, include = FALSE}
+confidence <- full_join(full_join(masoni, palser), hu)
+performance <- full_join(full_join(masoni_avg_pp, palser_avg_pp), hu_avg_pp)
+```
 
+Data visualization
+Spaghetti plot
+```{r}
+confidence %>%
+    filter_out(.by = Subj_idx, ifelse(mean(Accuracy) == 1 || mean(Accuracy) == 0, TRUE, FALSE)) %>%
+    mutate(Study_id = factor(Study_id)) %>%
+    mutate(Accuracy = factor(Accuracy, levels = c(1, 0), labels = c("Correct", "Incorrect"))) %>%
+    group_by(Study_id, Subj_idx, Accuracy) %>%
+    summarise(Confidence = mean(Confidence)) %>%
+    ggplot(aes(Accuracy, Confidence, color = Study_id)) +
+    geom_line(aes(group = Subj_idx), alpha = 0.3) +
+    geom_point(aes(group = Subj_idx), alpha = 0.3) +
+    stat_summary(aes(group = Study_id), fun = mean, geom = "line", linewidth = 1.5) +
+    stat_summary(aes(group = Study_id), fun = mean, geom = "point", size = 3) +
+    facet_wrap(~Study_id) +
+    theme_minimal()
 ```
