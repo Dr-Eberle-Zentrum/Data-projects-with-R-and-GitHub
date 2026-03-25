@@ -116,7 +116,6 @@ DFData_adjusted %>%
 
 ```
 
-
 ## Vizualization 2: Education Level Distribution by Age Group and Country Comparison
 
 
@@ -145,7 +144,7 @@ DFData_adjusted %>%
   geom_vline(xintercept=0, color = "black", linewidth = 1) +
   geom_text(
     aes(x = ifelse(country == "Germany", -50, 50), y = 10, label = country), 
-    vjust = -4.2,
+    vjust = -5,
     size = 4,
     inherit.aes = FALSE
   ) +
@@ -172,8 +171,32 @@ DFData_adjusted %>%
                `Some tertiary` = "#009910", 
                `Completed tertiary` = "#00dd10")
   ) + 
-  theme(legend.position = "bottom", panel.spacing = unit(2, "lines"), strip.text = element_text(size = 14, face = "bold"), plot.margin = margin(t = 10, r = 20, b = 10, l = 10)) +
+  theme(legend.position = "bottom", 
+         panel.grid.major = element_blank(), 
+         panel.grid.minor = element_blank(),
+        panel.spacing = unit(2, "lines"), 
+        strip.text = element_text(size = 14, face = "bold"), 
+        plot.margin = margin(t = 10, r = 60, b = 10, l = 10)) +
   guides(fill = guide_legend(reverse = TRUE))
 
 ```
+
+## Questions and Interpretation
+
+The graphs above show the trends in average years of schooling across different regions over time (Visualization 1), as well as the distribution of education levels by age group for Germany and India in 1960 and 2010 (Visualization 2). These graphs help answer the questions proposed in the project description:
+
+- Q1: Has the global education gap between regions narrowed over time?
+
+  > Visualization 1 shows that, although the average years of schooling has increased for regions ranking lower in the graph, the gap between the regions has not narrowed significantly, as all other regions have kept up. A possible interpretation of this could be that while less developed regions have made significant progress in improving access to education, people in developed regions spend more time in education, pursuing higher levels of education. This explanation is backed by Visualization 2, which shows that the percentage of people with completed tertiary education has increased significantly in developed regions, while for less developed regions there has just been a shift from no education to some primary and some secondary education. This could explain the steady increase across all countries.
+  
+- Q2: Are there countries where average years of schooling have stagnated or even declined?
+
+  > Visualization 1 shows that this was not the case for any region. All regions show a steady increase in average years of schooling over time, with no decline or stagnation.
+  
+- Q4: Which age group benefits most from education expansion?
+
+  > Generally, the younger the group, the more they benefit from education expansion, as can be interpreted from Visualization 2. Looking at Germany in 2010 for instance, the group with the highest percentage of completed tertiary education is the 30-34 age group, which is to be expected, as younger people are still in the persuit of this education level.
+  >
+  > Looking at the trends in Visualization 2 with the context of the increase in schooling years in Visualization 1, it is safe to say that the percentage of people completing tertiary education will be higher in the group 15-19 fifteen years down the line (eg. in 2025), than the group 30-34 in 2010. Thus, the youngest groups will likely end up with the highest education level on average, as has been the trend so far, benefiting the most from education expansion. 
+
 
