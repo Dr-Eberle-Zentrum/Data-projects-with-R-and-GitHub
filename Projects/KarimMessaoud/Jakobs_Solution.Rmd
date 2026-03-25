@@ -199,6 +199,8 @@ data %>%
   theme(
     legend.position = "bottom",
     legend.box = "horizontal",
+    legend.text = element_text(size = 6),
+    legend.title = element_text(size = 9),
     panel.grid.major.y = element_blank()
   )
 ```
@@ -270,6 +272,9 @@ data %>%
   theme_minimal() +
   theme(
     legend.position = "bottom",
+    # reduce font size of legend
+    legend.text = element_text(size = 6),
+    legend.title = element_text(size = 9),
     panel.grid.major.y = element_blank()
   )
 
