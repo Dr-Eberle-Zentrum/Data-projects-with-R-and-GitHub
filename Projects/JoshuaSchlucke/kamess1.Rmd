@@ -1,0 +1,188 @@
+---
+title: "solution for Joshua by Karim"
+output: md_document
+---
+
+# Git Commit Analysis PyTorch
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(tidyverse)
+library(lubridate)
+library(stringr)
+library(scales)
+```
+
+## Questions / ideas
+- How do commit volumes vary by weekday and hour, and do different repositories show distinct rhythms?
+- How common are conventional commit prefixes (`feat`, `fix`, `docs`, `refactor`, `test`, etc.), and how do these proportions change over time?
+- Are message lengths and formats different across repositories or commit types?
+- Which repositories show more maintenance activity (fix/docs/chore) versus feature activity (feat)?
+
+## Data 
+
+```{r load_data}
+
+commits_raw <- read_csv("datasets/commits_2019_2020_pytorch_pytorch.csv")
+```
+
+## Data cleaning / manipulation goals
+
+1. **Parse and standardize time**
+   - Parse `date` into a proper datetime column and derive `year`, `month`, `weekday`, and `hour`.
+   - Drop rows with outlyer times, for example Unix time 0 (1970) or dates pre 2018 etc.
+   - Drop rows with missing or invalid `date` (needed for time-based plots and annotations).
+   - Verify that `commit` is unique; drop duplicates if necessary.
+2. **Message parsing**
+   - Normalize message text (trim whitespace, handle casing where needed).
+   - Detect conventional commit prefixes (`feat`, `fix`, `docs`, `refactor`, `test`, `chore`, `style`, `build`, `ci`, `perf`) by checking the start of the first line only; label everything else as `other`.
+3. **Filtering**
+   - Remove auto-generated messages (e.g., "Merge", "Bump", "Revert") so the statistics reflect human-written commits.
+ 
+```{r data_cleaning}  
+ commits_clean <- commits_raw %>%
+  # 1. Parse dates
+  mutate(
+    date_parsed = parse_date_time(date, orders = "a b d H:M:S Y z"),
+    year = year(date_parsed),
+    month = month(date_parsed, label = TRUE),
+    weekday = wday(date_parsed, label = TRUE, abbr = TRUE, week_start = 1),
+    hour = hour(date_parsed)
+  ) %>%
+  # Filter for invalid data (before 2018)
+  filter(!is.na(date_parsed), year >= 2018) %>%
+    distinct(commit, .keep_all = TRUE) %>%
+  # 2. normalize message text
+ mutate(
+    message_clean = str_trim(str_to_lower(message)),
+    first_line    = str_extract(message_clean, "^[^\n]+")
+     ) %>%
+    mutate(
+    commit_type = case_when(
+      str_detect(first_line, "^(feat|add|new|implement|create)")    ~ "feat",
+      str_detect(first_line, "^(fix|patch|correct|resolve)")         ~ "fix",
+      str_detect(first_line, "^docs|readme|comment|typo")          ~ "docs",
+      str_detect(first_line, "^refactor|simplify|clean")      ~ "refactor",
+      str_detect(first_line, "^test |coverage")               ~ "test",
+      str_detect(first_line, "^chore|update|upgrade")    ~ "chore",
+      str_detect(first_line, "^style")    ~ "style",
+      str_detect(first_line, "^build")    ~ "build",
+      str_detect(first_line, "^ci|action|workflow")       ~ "ci",
+      str_detect(first_line, "^perf")     ~ "perf",
+      TRUE                               ~ "other"),
+     msg_length = nchar(message_clean) #needed for later
+  ) %>%
+#  3. remove auto-generated messages
+ filter(!str_detect(first_line, "^(merge|bump|revert)"))
+```
+  
+## Visualization goals
+
+### **Temporal heatmap**: 7x24 commits by weekday (rows) and hour (columns), overall and per repo. (Similar to commit calendar)
+```{r temporal_heatmap}  
+commits_clean %>%
+  count(weekday, hour) %>%
+  ggplot( aes(x = hour, y = fct_rev(weekday), fill = n)) +
+  geom_tile(color = "white") +
+  scale_fill_viridis_c(option = "plasma", name = "Commits") +
+  scale_x_continuous(breaks = 0:23) +
+  labs(
+    title = "Commit Activity Heatmap",
+    subtitle = "When are developers most active?",
+    x = "Hour of Day",
+    y = "Weekday"
+  ) +
+  theme_minimal() +
+  theme(panel.grid = element_blank())
+```
+*Question 1: How do commit volumes vary by weekday and hour?*
+
+> The temporal heatmap shows a clear "work week" rhythm. Activity is mostly concentrated between Monday and Friday, with a significant drop-off on the weekends. Regarding the time of day, there is a consistent block of high activity between 4:00 PM and 00:00 PM. Interestingly, the activity between 1:00 AM and 5:00 AM is still higher than in the morning or early afternoon. This suggests that a large portion of the work happens outside of traditional 9-to-5 hours, with many developers being active late at night or very early in the morning, which is quite surprising. 
+
+### **Message-type comparison**: stacked bar chart of commit types by repo (normalized to 100%).
+
+```{r commit_type_comparison}
+commits_clean %>%
+  count(commit_type) %>% 
+  mutate(commit_type = fct_reorder(commit_type, n)) %>%
+  ggplot(aes(x = commit_type, y = n, fill = commit_type)) +
+  geom_col(show.legend = FALSE) +
+  geom_text(aes(label = n), hjust = -0.2, size = 3) + # Zeigt die Anzahl an
+  coord_flip() +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1))) + # Platz für Labels rechts
+  labs(
+    title = "Distribution of Commit Types (Improved Regex)",
+    x = "Commit Type",
+    y = "Number of Commits"
+  ) +
+  theme_light()
+```
+
+*How common are conventional commit prefixes (`feat`, `fix`, `docs`, `refactor`, `test`, etc.), and how do these proportions change over time?*
+
+> While the "other" category remains the largest with over 10,000 commits, a significant portion of the data can be classified by looking for common action verbs. Among the categorized commits, "feat" is the most frequent type (2,113), followed closely by "fix" (1,854). This indicates that while the PyTorch repository does not strictly enforce standardized "Conventional Commit" tags, the developers frequently use descriptive language like "add", "new", or "fix" to label their work. Other categories such as "chore" (655) and "refactor" (383) are also present, showing a diverse range of development activities beyond simple feature additions.
+
+### Message length comparison: boxplots of message length by repo or by commit type
+
+```{r message_length_comparison}
+commits_clean %>%
+  filter(commit_type != "other") %>% #filter out "other" since plot becomes ugly with many outliers
+  ggplot(aes(x =commit_type, y = msg_length, fill =commit_type)) +
+  geom_boxplot(outlier.alpha = 0.3) +
+  #log scala, since some messages can be very long and skew the scale
+  scale_y_log10(labels = scales::comma) +
+  labs(
+    title = "Commit Message Length by Type",
+    y = "Length (characters, log scale)",
+    x = "Type"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+*Are message lengths and formats different across repositories or commit types?*
+
+> Yes, the message lengths vary quite a bit depending on the commit type. The boxplot shows that "chore" "feat" and "fix" commits tend to have very different lengths, with many outliers indicating very long and detailed explanations for complex changes. In contrast, "style" messages (as an example) are in comparison very short and consistent, likely because they often contain standardized or automated text. 
+
+*Which repositories show more maintenance versus feature activity? (based on Vis-2 & Vis-3)*
+
+> The distribution of commit types reveals a balanced development strategy. Feature-related activity is very strong, with over 2,100 commits dedicated to adding or implementing new functionality. However, when combining all maintenance-oriented categories—including fixes, chores, documentation, and refactoring—this "housekeeping" work actually represents the majority of the classified activity. This confirms that PyTorch is a mature and stable framework. The developers invest heavily in fixing bugs and maintaining the codebase to ensure reliability, which is just as important as the introduction of new features.
+
+### Optional “commit calendar”: 7x53 daily heatmap (like GitHub’s contribution graph) for 2019 and 2020  
+```{r commit_calendar}
+
+ commits_clean %>%
+  mutate(date = as.Date(date_parsed)) %>%
+  count(date) %>%
+  complete(date = seq(min(date), max(date), by = "day"), fill = list(n = 0)) %>%
+  mutate(
+   year = year(date),
+   week = isoweek(date),
+    # 1 = Sunday 7 = Saturday (like github calendar) 
+    weekday = wday(date, week_start = 7, label = TRUE, abbr = TRUE)
+  ) %>%
+ggplot( aes(x = week, y = fct_rev(weekday), fill = n)) +
+ geom_tile(color = "white", size = 0.5) +
+ facet_wrap(~year, ncol = 1, strip.position = "top") +
+scale_fill_gradient(low = "#ebedf0", high = "#216e39", name = "Commits") +
+scale_x_continuous(
+    expand = c(0, 0),
+    breaks = seq(1, 52, by = 4), 
+    labels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "")[seq(1, 13, by = 1)]
+  ) +
+  labs(
+    title = "Commit Activity Calendar (PyTorch)",
+    subtitle = "Daily commit frequency similar to GitHub contribution graph",
+    x = "Week of Year",
+    y = ""
+  ) +
+  theme_minimal() +
+  theme(
+    panel.grid = element_blank(),
+    axis.ticks = element_blank(),
+    strip.text = element_text(face = "bold", size = 12, hjust = 0),
+    legend.position = "bottom",
+    aspect.ratio = 1/7)
+
+```
+
