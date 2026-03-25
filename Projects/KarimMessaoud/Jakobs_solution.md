@@ -145,4 +145,5 @@ across the past decades. Just from the visualization (without
 statistical tests) it is difficult to pinpoint one group that has
 benefited the most, however, in the Netherlands the increased education
 level is very prominent in the 25-34 year old, while in Fiji the
-increase seems to be most noticeable in the 15-24 year olds.
+increase seems to be most noticeable in the age group of 15-24 year
+olds.
