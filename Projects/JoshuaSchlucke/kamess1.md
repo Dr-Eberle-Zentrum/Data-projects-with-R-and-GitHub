@@ -40,7 +40,8 @@
 ### **Temporal heatmap**: 7x24 commits by weekday (rows) and hour (columns), overall and per repo. (Similar to commit calendar)
 
 ![](kamess1_files/figure-markdown_strict/temporal_heatmap-1.png)
-*Question 1: How do commit volumes vary by weekday and hour?*
+
+*How do commit volumes vary by weekday and hour?*
 
 > The temporal heatmap shows a clear “work week” rhythm. Activity is
 > mostly concentrated between Monday and Friday, with a significant

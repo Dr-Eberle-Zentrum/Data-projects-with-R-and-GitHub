@@ -95,7 +95,8 @@ commits_clean %>%
   theme_minimal() +
   theme(panel.grid = element_blank())
 ```
-*Question 1: How do commit volumes vary by weekday and hour?*
+
+*How do commit volumes vary by weekday and hour?*
 
 > The temporal heatmap shows a clear "work week" rhythm. Activity is mostly concentrated between Monday and Friday, with a significant drop-off on the weekends. Regarding the time of day, there is a consistent block of high activity between 4:00 PM and 00:00 PM. Interestingly, the activity between 1:00 AM and 5:00 AM is still higher than in the morning or early afternoon. This suggests that a large portion of the work happens outside of traditional 9-to-5 hours, with many developers being active late at night or very early in the morning, which is quite surprising. 
 
@@ -107,9 +108,9 @@ commits_clean %>%
   mutate(commit_type = fct_reorder(commit_type, n)) %>%
   ggplot(aes(x = commit_type, y = n, fill = commit_type)) +
   geom_col(show.legend = FALSE) +
-  geom_text(aes(label = n), hjust = -0.2, size = 3) + # Zeigt die Anzahl an
+  geom_text(aes(label = n), hjust = -0.2, size = 3) +
   coord_flip() +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.1))) + # Platz für Labels rechts
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1))) + 
   labs(
     title = "Distribution of Commit Types (Improved Regex)",
     x = "Commit Type",
