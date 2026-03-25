@@ -1,0 +1,56 @@
+---
+title: "Solution by Joshua"
+output: md_document
+---
+
+
+```{r, include = FALSE}
+library(tidyverse)
+knitr::opts_knit$set(root.dir = here::here())
+```
+
+Study 1
+```{r, include = FALSE}
+study_id <- factor(c("Masoni", "Palser", "Hu"), ordered = T)
+
+masoni <- read_csv("Projects/JakobRaatschen/Massoni_2017/data_Massoni_2017.csv") %>%
+    filter(Study == 2) %>%
+    mutate(Study_id = study_id[1]) %>%
+    drop_na() %>%
+    select(Study_id, Subj_idx, Stimulus, Response, Confidence, Accuracy)
+
+masoni_avg_pp <- masoni %>%
+    summarise(.by = Subj_idx, Avg_Accuracy = mean(Accuracy))
+
+masoni_avg_pp
+```
+
+Study 2
+```{r, include = FALSE}
+palser <- read_csv("Projects/JakobRaatschen/Palser_2018/data_Palser_2018.csv") %>%
+    filter(Condition == "Baseline") %>%
+    mutate(Study_id = study_id[2]) %>%
+    drop_na() %>%
+    mutate(Accuracy = (Stimulus == Response)) %>% # I know the compare is bool but the mean can use it anyway
+    select(Study_id, Subj_idx, Stimulus, Response, Confidence, Accuracy)
+
+palser_avg_pp <- palser %>%
+    summarise(.by = Subj_idx, Avg_Accuracy = mean(Accuracy))
+palser_avg_pp
+```
+
+Study 3
+```{r, include = FALSE}
+hu <- read_csv("Projects/JakobRaatschen/Hu_2017/data_Hu_2017.csv")
+hu
+masoni <- read_csv("Projects/JakobRaatschen/Massoni_2017/data_Massoni_2017.csv") %>%
+    filter(Study == 2) %>%
+    mutate(Study_id = study_id[1]) %>%
+    drop_na() %>%
+    select(Study_id, Subj_idx, Stimulus, Response, Confidence, Accuracy)
+
+hu_avg_pp <- hu %>%
+    summarise(.by = Subj_idx, Avg_Accuracy = mean(Accuracy))
+
+hu_avg_pp
+```
