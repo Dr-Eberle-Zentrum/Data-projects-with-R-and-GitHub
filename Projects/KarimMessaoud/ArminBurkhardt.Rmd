@@ -1,0 +1,97 @@
+---
+title: "Solution for Karim's Project by Armin"
+output: md_document
+---
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(this.path)
+library(khroma)
+library(scales)
+library(knitr)
+
+setwd(this.path::this.dir())
+
+BLData <- read_csv("https://raw.githubusercontent.com/barrolee/BarroLeeDataSet/refs/heads/master/BLData/BL2013_MF_v2.2.csv") 
+```
+
+
+## Data cleaning & manipulation
+
+The validation check shows that the percentage sums far exceed 100%. More precisely, the range of the percentage sums are as follows:
+
+```{r data_val, echo=FALSE}
+check_sums <- function(df) {
+  df %>%
+    mutate(perc_sum = lu + lp + lpc + ls + lsc + lh + lhc) %>%
+    summarise(`Minimum sum` = min(perc_sum), `Maximum sum` = max(perc_sum)) %>%
+    kable()
+}
+
+BLData %>%
+  check_sums()
+```
+
+This is especially interesting, because education levels are mutually exclusive, so the percentage sums should always add up to 100%.
+However if one was to consider that people with `completed` education are also counted in the more generalized education level (`some`), the following ranges are calculated:
+
+```{r data_val1, echo=FALSE}
+
+DFData_adjusted <- BLData %>%
+  mutate(
+    lp = lp - lpc,
+    ls = ls - lsc,
+    lh = lh - lhc
+  )
+
+check_sums(DFData_adjusted)
+```
+
+This makes much more sense than the previous results, thus the adjusted data will be used from now on.
+
+Testing for implausible values and missing values:
+
+```{r, echo=FALSE, message=FALSE}
+# temporary variable to make the visible code prettier
+data <- DFData_adjusted %>%
+  select(lu:lhc)
+```
+
+```{r data_val2}
+min(data)
+max(data)
+sum(is.na(data))
+```
+
+There are no values below 0 or above 100, and there are no missing values. 
+
+Are all expected country × year combinations present?
+
+```{r data_val3, echo=FALSE}
+expected_combinations <- expand.grid(
+  country = unique(BLData$country),
+  year = unique(BLData$year)
+)
+
+missing_combinations <- anti_join(expected_combinations, BLData, by = c("country", "year"))
+nrow(missing_combinations) == 0
+```
+All expected combinations are present, so there are no missing country × year combinations.
+
+**Renaming cryptic names**
+
+```{r, message=FALSE}
+DFData_adjusted <- DFData_adjusted %>%
+  rename(
+    `No education` = lu,
+    `Some primary` = lp,
+    `Completed primary` = lpc,
+    `Some secondary` = ls,
+    `Completed secondary` = lsc,
+    `Some tertiary` = lh,
+    `Completed tertiary` = lhc,
+    `Years of schooling` = yr_sch,
+    Region = region_code
+  )
+```
+
