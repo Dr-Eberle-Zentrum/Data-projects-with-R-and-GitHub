@@ -1,28 +1,19 @@
 Setup
 
-    library(readr)
-    library(knitr)
-    library(khroma)
-
-    ## Warning: Paket 'khroma' wurde unter R Version 4.5.3 erstellt
-
-    library(tidyverse)
-    data <- read_csv("https://raw.githubusercontent.com/barrolee/BarroLeeDataSet/master/BLData/BL2013_MF_v2.2.csv")
-
 ## Validation Checks
 
 #### Sum of education level percentages
 
     # Sum up to 100?
     edu_lvl <- subset(data, select = c("lu", "lp", "lpc", "ls", "lsc", "lh", "lhc"))
-    min<-which.min(rowSums(edu_lvl))
-    max<-which.max(rowSums(edu_lvl)) # Max Value almost at 200, something must be wrong here with the data
+    min_val<-which.min(rowSums(edu_lvl))
+    max_val<-which.max(rowSums(edu_lvl)) # Max Value almost at 200, something must be wrong here with the data
     # What to do? Should from a threshold on entries be removed?
-    sum(edu_lvl[min,])
+    sum(edu_lvl[min_val,])
 
     ## [1] 99.84
 
-    sum(edu_lvl[max,])
+    sum(edu_lvl[max_val,])
 
     ## [1] 199.74
 
@@ -31,13 +22,6 @@ is at almost 200. This is because the completed education level (e.g.,
 lpc) is a subset of that education level in general (e.g., lp).
 Therefore, for the general education levels the completed subset needs
 to be subtracted:
-
-    data <- data %>%
-      mutate(
-        lp = lp - lpc,
-        ls = ls - lsc,
-        lh = lh - lhc
-      )
 
 #### Missing values?
 
@@ -78,21 +62,7 @@ There are NO missing combinations of country and year
 BUT: for age groups from 15, 25 & 75 entries are always double (the
 second time with ageto == 999). This needs to be removed!
 
-    data <- data %>%
-      filter(!(agefrom %in% c(15, 25, 75) & ageto == 999))
-
 ## Renaming columns for improved readability
-
-    data <- data %>%
-      rename(No_education = "lu",
-             Primary_education  = "lp",
-             Primary_education_completed = "lpc",
-             Secondary_education = "ls",
-             Secondary_education_completed = "lsc",
-             Higher_education = "lh",
-             Higher_education_completed = "lhc")
-
-    kable(head(subset(data, select = c("No_education", "Primary_education", "Primary_education_completed", "Secondary_education", "Secondary_education_completed", "Higher_education", "Higher_education_completed")), 1))
 
 <table>
 <colgroup>
@@ -132,95 +102,47 @@ second time with ageto == 999). This needs to be removed!
 
 ## Visualization 1
 
-    ## Compute population-weighted regional average years of schooling (`yr_sch`) for each region and year and plot their evolution over time (1950-2010) using a line plot with one line per region.
-
-    # Group by Region and Year and calculate the population-weighted average years of schooling
-    regional_avg <- data %>%
-      group_by(region_code, year) %>%
-      summarise(
-        total_population = sum(pop, na.rm = TRUE),
-        weighted_yr_sch = weighted.mean(yr_sch, w = pop, na.rm = TRUE),
-        .groups = "drop"
-      )
-
-    # Plot the evolution of population-weighted average years of schooling over time for each region
-    ggplot(regional_avg, aes(x = year, y = weighted_yr_sch, color = as.factor(region_code))) +
-      geom_line(linewidth = 1) +
-      geom_point(size = 2) +
-      scale_x_continuous(breaks = seq(1950,2010, by = 10)) +
-      scale_color_nightfall(discrete = TRUE) +
-      labs(title = "Population-Weighted Average Years of Schooling Over Time",
-           subtitle = "Analysis by Region (1950-2010)",
-           x = "Year",
-           y = "Population-Weighted Average Years of Schooling",
-           color = "Region") +
-      theme_minimal() +
-      theme(
-        legend.position = "right",
-        panel.grid.minor = element_blank()
-      )
-
 ![](Jakobs_solution_files/figure-markdown_strict/unnamed-chunk-9-1.png)
+
+#### Takeaways from the first visualization:
+
+\*\* Q1: Has the global education gap between regions narrowed over
+time?\*\*
+
+-   The plot shows that there has been a general increase in average
+    years of schooling across all regions from 1950 to 2010, but the gap
+    between regions has not as much narrowed as we might have expected.
+    However, this question should be further investigated by looking at
+    different variables indicating access to education. The increase in
+    total years of schooling in developed countries might not be due to
+    an increase in access to education but rather the development of
+    tertiary education having received a higher social value in these
+    countries over the past decades.
+
+\*\* Q2: Are there countries where average years of schooling have
+stagnated or even declined?\*\*
+
+-   Mainly in Sub-Saharan Africa the increase in average years of
+    schooling has become less steep since the mid 1990s. However, it is
+    difficult to link specific regional events to the increase (or its
+    stagnation), for this single countries instead of regions might need
+    to be investigated.
 
 ## Visualization 2
 
-    # 1. Prepare data with Netherlands/Fiji and "Incomplete" math
-    pyramid_data <- data %>%
-      filter(country %in% c("Netherlands", "Fiji"), 
-             year %in% c(1960, 2010)) %>%
-      mutate(
-        age_range = paste0(agefrom, "-", ageto),
-        # Ensure the axis stays in numerical order (15-19 before 20-24)
-        age_range = reorder(age_range, agefrom)
-      ) %>%
-      pivot_longer(
-        cols = c("No_education", 
-                 "Primary_education", "Primary_education_completed", 
-                 "Secondary_education", "Secondary_education_completed", 
-                 "Higher_education", "Higher_education_completed"),
-        names_to = "education_level",
-        values_to = "percentage"
-      ) %>%
-      mutate(
-        # Netherlands on the left (negative)
-        adj_percentage = ifelse(country == "Netherlands", -percentage, percentage),
-        
-        # OPPOSITE ORDER: Higher education will now be at the center line
-        education_level = factor(education_level, levels = rev(c(
-          "No_education", 
-          "Primary_education", "Primary_education_completed", 
-          "Secondary_education", "Secondary_education_completed", 
-          "Higher_education", "Higher_education_completed"
-        )))
-      )
-
-    # 2. Plotting
-    ggplot(pyramid_data, aes(x = adj_percentage, 
-                             y = age_range, 
-                             fill = education_level)) +
-      geom_col(width = 0.8) +
-      geom_vline(xintercept = 0, color = "black", linewidth = 0.6) +
-      facet_wrap(~year) +
-      # Limits set to 115 to keep bars away from the edges
-      scale_x_continuous(labels = abs) + 
-      scale_fill_nightfall(
-        discrete = TRUE,
-        reverse = TRUE,
-        labels = c("Higher (Comp)", "Higher (Inc)", "Secondary (Comp)", 
-                   "Secondary (Inc)", "Primary (Comp)", "Primary (Inc)", "No Education")
-      ) +
-      labs(
-        title = "Education Comparison: Netherlands (Left) vs. Fiji (Right)",
-        subtitle = "Years 1960 and 2010 | Advanced degrees at the center",
-        x = "Percentage of Population",
-        y = "Age Groups",
-        fill = "Education Level"
-      ) +
-      theme_minimal() +
-      theme(
-        legend.position = "bottom",
-        legend.text = element_text(size = 7),
-        panel.grid.major.y = element_blank()
-      )
-
 ![](Jakobs_solution_files/figure-markdown_strict/unnamed-chunk-10-1.png)
+
+## Visualization 2.1 (Age groups in 10-year cohorts)
+
+![](Jakobs_solution_files/figure-markdown_strict/unnamed-chunk-11-1.png)
+
+## Takeaways from the second visualization:
+
+**Q4: Which age group benefits most from education expansion?**
+
+In both countries all age groups have benefited from education expansion
+across the past decades. Just from the visualization (without
+statistical tests) it is difficult to pinpoint one group that has
+benefited the most, however, in the Netherlands the increased education
+level is very prominent in the 25-34 year old, while in Fiji the
+increase seems to be most noticeable in the 15-24 year olds.
