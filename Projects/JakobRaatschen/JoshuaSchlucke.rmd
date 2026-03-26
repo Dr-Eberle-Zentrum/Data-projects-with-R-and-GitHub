@@ -129,15 +129,15 @@ confidence %>%
     mutate(
         Study_id = factor(Study_id,
             levels = c("Masoni", "Palser", "Hu"),
-            labels = c("Massoni & Roux", "Palser et al.", "Hu et al.")
+            labels = c("Massoni & Roux\n(Construct: Perception)", "Palser et al.\n(Construct: Perception)", "Hu et al.\n(Construct: Memory)")
         )
     ) %>%
     mutate(Accuracy = factor(Accuracy, levels = c(1, 0), labels = c("Correct", "Incorrect"))) %>%
     group_by(Study_id, Subj_idx, Accuracy) %>%
     summarise(Confidence = mean(Confidence)) %>%
     ggplot(aes(Accuracy, Confidence, color = Study_id)) +
-    geom_line(aes(group = Subj_idx), alpha = 0.3) +
-    geom_point(aes(group = Subj_idx), alpha = 0.3) +
+    geom_line(aes(group = Subj_idx), alpha = 0.3, linewidth = 0.4) +
+    geom_point(aes(group = Subj_idx), alpha = 0.3, size = 1) +
     stat_summary(aes(group = Study_id), fun = mean, geom = "line", linewidth = 1.5) +
     stat_summary(aes(group = Study_id), fun = mean, geom = "point", size = 3) +
     facet_wrap(~Study_id) +
@@ -156,7 +156,7 @@ performance %>%
     mutate(
         Study_id = factor(Study_id,
             levels = c("Masoni", "Palser", "Hu"),
-            labels = c("Massoni & Roux", "Palser et al.", "Hu et al.")
+            labels = c("Massoni & Roux\n(Construct: Perception)", "Palser et al.\n(Construct: Perception)", "Hu et al.\n(Construct: Memory)")
         )
     ) %>%
     ggplot(aes(Study_id, Avg_Accuracy, fill = Study_id)) +
