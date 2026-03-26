@@ -1,7 +1,3 @@
----
-title: "Solution by Joshua"
-output: md_document
----
 # Cross-Study Confidence-Ratings Project
 
 For this project we use three datasets from the Confidence database available on the Open Science Framework (OSF). All studies in this database analyze different psychological constructs, but have the same structure concerning their experimental paradigm: Participants are presented with a stimulus and perform some sort of task on it (e.g. determine if they have seen a picture before) for which their performance can be evaluated in a binary fashion (correct/incorrect). Subsequently, they are asked to rate their confidence in their answer.
@@ -53,25 +49,34 @@ Luckily as CS major we constantly have to learn modular arithmetic and for the f
 We can use "Restklassen" (Congruence classes) to encode the 3 lists, we can simply use modulo (math) or bitshift (computer science) for that, I will use modulo for it as it is simpler to understand and reason about without computer science knowledge.
 
 The idea behind it is the following, we need 3 unique "Classes" and they are not allowed to overlap, so we multiply every number with a different residue from dividing (modulo) numbers by 3
+```math
+\begin{array}{rcl}
+\text{participantIDs}_1 & = & 3 \times x + 0 \\
+\text{participantIDs}_2 & = & 3 \times x + 1 \\
+\text{participantIDs}_3 & = & 3 \times x + 2
+\end{array}
+```
+That way we can never have overlapping numbers. And even better, I had already created a factor for the studies, so we can use the factor as numeric input for:
 
 $$
-participantIDs_1 = 3 \times x + 0 \\\\
-participantIDs_2 = 3 \times x + 1 \\\\
-participantIDs_3 = 3 \times x + 2
+i = Rfactor - 1 \\
 $$
-That way we can never have overlapping numbers. And even better, I had already created a factor for the studies, so we can use the factor as numeric input for:
 $$
-i = Rfactor - 1 \\\\
 participantID = 3x+i
 $$
+
 And reversing it becomes easy:
-$$ 
+
+$$
 x = \frac{(y - i)}{3}
 $$
-i can be calculated simply by doing 
-$$ 
-i = y \mod 3
+
+i can be calculated simply by doing
+
 $$
+i = y \bmod 3
+$$
+
 
 
 
