@@ -9,7 +9,7 @@ Financial markets are highly complex systems that are influenced by many factors
 
 # Get tidy data
 
-```{r setup, echo=FALSE, message=FALSE}
+```{r setup, echo=FALSE, message=FALSE,warning=FALSE}
 library(readr)
 library(dplyr)
 library(stringr)
@@ -18,35 +18,43 @@ library(tidyr)
 library(forcats)
 library(ggplot2)
 library(scales)
+library(knitr)
+library(lubridate)
+library(tidyquant)
 ```
 
 ## Data cleaning
-- Read the first three rows f the file to extract the column names.
-```{r read_data, echo=FALSE, message=FALSE}
-header <- read_csv("stock_data.csv", n_max = 3, col_names = FALSE)
-```
 
-- combine the two header rows into meaningful column names.
+- read data and combine the two header rows into meaningful column names.
 ```{r rename, echo=FALSE, message=FALSE, warning=FALSE}
-#First row: price type (Open, Close, etc.)
-price_type <- as.character(header[1, ])
-#Second row: stock/index symbols
-symbols <- as.character(header[2, ])
-#Third row: Datetime
-Datetime <- as.character(header[3, ])
-#combine both into one column name (e.g., AAPL_Close)
-col_name <- ifelse(
-  is.na(symbols),
-  price_type,
-    paste(symbols, price_type, sep = "_")
-)
-col_name[1] <- Datetime
+setwd("~/Data-projects-with-R-and-GitHub/Projects/ArminBurkhardt")
+
+col_names <- read_csv("stock_data.csv", n_max = 2, col_names = FALSE) %>%
+  mutate(row = row_number()) %>%
+  pivot_longer(
+    cols = -row,
+    names_to = "col_id",
+    values_to = "value"
+  ) %>%
+  pivot_wider(
+    names_from = row,
+    values_from = value,
+    names_prefix = "row_"
+  ) %>%
+  mutate(
+    col_name = if_else(
+      col_id == "X1",
+      "Datetime",
+      paste(row_2, row_1, sep = "_")
+    )
+  ) %>%
+  pull(col_name)
 ```
 
 - Skip the header rows and apply the new column names.
 ```{r actual_data, echo=FALSE, message=FALSE}
-#read the dataset again, skip the first three rows
-data_raw <- read_csv("stock_data.csv", skip = 3, col_names = col_name)
+#read the dataset again, skip the first two rows
+data_raw <- read_csv("stock_data.csv", skip = 2,col_names = col_names, show_col_types = FALSE)
 ```
 
 - Convert columns to appropriate data types.
@@ -54,43 +62,41 @@ data_raw <- read_csv("stock_data.csv", skip = 3, col_names = col_name)
 data_raw <- data_raw %>%
   mutate(
     # Convert datetime to proper datetime format
-    Datetime = as.POSIXct(Datetime),
+    Datetime = as.POSIXct(Datetime,format = "%Y-%m-%d %H:%M:%S"),
     # Convert all other columns to numeric
     across(-Datetime, as.numeric)
-  )
+  ) %>% 
+  filter(!is.na(Datetime))
 ```
 
 - Check the cleaned dataset.
 ```{r check_data, echo =FALSE, message=FALSE}
 data_raw %>%
-  slice_head(n = 5)
+  slice_head(n = 5)%>%
+  kable()
 ```
 ## Data formatting
 - Pivot all price related columns into a long format and separate the symbol from the price type.
+
+- Transform the measurement variable (`Measure`) into individual columns.
+
+- Add a `Type` Column indicating whether each symbol is a stock or an index.
 ```{r, echo=FALSE, message=FALSE}
 # Reshape the dataset into long format
-data_long <- data_raw %>%
+data_tidy <- data_raw %>%
   pivot_longer(
     cols = -Datetime,
     names_to = c("Symbol", "Measure"),
-    names_sep = "_"
-  )
-```
-
-- Transform the measurement variable (`Measure`) into individual columns.
-```{r, echo=FALSE, message=FALSE}
-# Convert measurement types into separate columns
-data_tidy <- data_long %>%
+    names_sep = "_",
+    values_to = "value"
+  )%>%
+#convert measurement types into separate columns
   pivot_wider(
     names_from = Measure,
     values_from = value
-  )
-```
-
-- Add a `Tpye` Column indicating whether each symbol is a stock or an index.
-```{r, echo=FALSE, message=FALSE}
-data_tidy <- data_tidy %>%
-  mutate(
+  ) %>%
+# classify each symbol as stock or index
+   mutate(
     Type = if_else(
       Symbol %in% c("^GSPC", "^IXIC"),
       "Index",
@@ -103,19 +109,17 @@ data_tidy <- data_tidy %>%
 
 - Check tidy dataset
 ```{r, echo =FALSE, message=FALSE}
-data_tidy %>% slice_head(n = 7)
+data_tidy %>% slice_head(n = 7)%>%
+  kable()
 ```
 
 ## Aggregation
 - Extract the date from the datetime column
-```{r, echo=FALSE, message=FALSE}
-data_daily <- data_tidy %>%
-  mutate(Date = as.Date(Datetime))
-```
 
 - Summarise the data for each day and symbol according to the required rules.
 ```{r, echo=FALSE, message=FALSE}
-data_daily <- data_daily %>%
+data_daily <- data_tidy %>%
+  mutate(Date = as.Date(Datetime))%>%
   arrange(Datetime) %>%
   group_by(Date, Symbol, Type) %>%
   summarise(
@@ -130,7 +134,8 @@ data_daily <- data_daily %>%
 
 - Check aggregated data
 ```{r, echo =FALSE, message=FALSE}
-data_daily %>% slice_head(n = 5)
+data_daily %>% slice_head(n = 5)%>%
+  kable()
 ```
 
 # Visualization
@@ -138,14 +143,23 @@ data_daily %>% slice_head(n = 5)
 ## Price
 Plot the daily closing prices for all stocks and indices using `facet`.
 ```{r, fig.width=14, fig.height=10, out.width="100%", echo=FALSE, message=FALSE}
-ggplot(data_daily, 
-       aes(x = Date, y = Close)) +
-  geom_line(color = "blue") +
-  facet_wrap(~ Symbol, scales = "free_y", ncol = 2) +
+data_label <- data_daily %>%
+  mutate(
+    Symbol_label = if_else(
+      Type == "Index",
+      paste("index", str_remove(Symbol, "^\\^")),
+      paste("stock", Symbol)
+    )
+  )
+ggplot(data_label, 
+       aes(x = Date, y = Close, color = Type)) +
+  geom_line() +
+  facet_wrap(~ Symbol_label, scales = "free_y", ncol = 1) +
   labs(
     title = "Daily Closing Prices of Stocks and Indices",
     x = "Date",
-    y = "Close Price"
+    y = "Close Price",
+    color = "Type"
   ) +
   theme_minimal()+
   theme(strip.text = element_text(face = "bold"))
@@ -155,18 +169,23 @@ ggplot(data_daily,
 
 - Visualize the daily trading volume for all stocks and indices using bar plots with `facet`.
 ```{r,fig.width=14, fig.height=10, out.width="100%",echo=FALSE, message=FALSE}
-ggplot(data_daily, 
-       aes(x = Date, y = Volume)) +
-  geom_col(fill = "orange",alpha = 0.8) +
-  facet_wrap(~ Symbol, scales = "free_y", ncol = 2) +
+ggplot(data_label, 
+       aes(x = Date, y = Volume, fill = Type)) +
+  geom_col(alpha = 0.8) +
+  facet_wrap(~ Symbol_label, scales = "free_y", ncol = 1) +
+  scale_y_continuous(labels = label_number(
+    scale_cut = cut_si(""),
+    accuracy = 0.1
+  ))+
   labs(
     title = "Daily Trading Volume of Stocks and Indices",
     x = "Date",
-    y = "Volume"
+    y = "Volume",
+    fill = "Type"
   ) +
   theme_minimal() +
   theme(
-    strip.text = element_text(size = 8, face = "bold")
+    strip.text = element_text( face = "bold")
   )
 ```
 
@@ -174,28 +193,29 @@ ggplot(data_daily,
 
 - Represent daily price data using candlesticks based on open, high, low, and close values.
 ```{r,fig.width=14, fig.height=10, out.width="100%", echo=FALSE, message=FALSE}
-ggplot(data_daily,
-       aes(x = Date))+
-  #Wick (high-low line)
-  geom_segment(aes(xend = Date, y = Low, yend = High), color = "black")+
-  #Body (open-close rectangle)
-  geom_rect(
-    aes(xmin = Date - 0.3, xmax = Date + 0.3, ymin = pmin(Open, Close), ymax = pmax(Open, Close), fill = Close > Open)
+ggplot(data_label,
+       aes(x = Date, y = Close))+
+  geom_candlestick(
+    aes(
+      open = Open,
+      high = High,
+      low = Low,
+      close = Close
+    ),
+    colour_up = "green",
+    colour_down = "red",
+    fill_up = "green",
+    fill_down = "red"
   )+
-  #Color: green for up, red for down
-  scale_fill_manual(
-    values = c("TRUE" = "darkgreen", "FALSE" = "red"),
-    labels = c("FALSE" = "down", "TRUE" = "up"),
-    name = "Daily Movement"
-  )+
-  facet_wrap(~Symbol, scales = "free_y", ncol = 2)+
+  facet_wrap(~Symbol_label, scales = "free_y", ncol = 1)+
   labs(
     title = "candlestick chart of daily prices",
     x = "Date",
     y = "Price"
   )+
-  theme_minimal()+
+  theme_dark()+
   theme(strip.text = element_text(face = "bold"))
+
 ```
 
 (I wanted to include a bar chart showing the daily volume in the same graph, but as the y-axes couldn’t be merged and required scaling, I found it too difficult to achieve, so I gave up.)
@@ -220,7 +240,8 @@ hourly_change %>%
   mutate(
     price_change = paste0(round(price_change, 2), "%")
     )%>%
-  slice_head(n = 7)
+  slice_head(n = 7)%>%
+  kable()
 ```
 ## Volatility movement (bar-plot)
 -  Calculate the absolute percentage change between the hourly open and close prices.
@@ -261,39 +282,10 @@ ggplot(movement_summary,
 ## Correlation
 
 ### line-plot
-- Compare each stock’s price with the S&P 500 index over time using line plots.
-```{r, echo = FALSE,message=FALSE}
-# Extract S&P500
-sp500 <- data_daily %>%
-  filter(Symbol == "^GSPC") %>%
-  select(Date, sp500 = Close)
-#Keep the stocks filter out indexes
-stocks <- data_daily %>%
-  filter(Symbol %in% c("AAPL", "NVDA", "AMZN", "LMT", "V"))
-#Merge the data
-data_compare <- stocks %>%
-  left_join(sp500, by = "Date") %>%
-   pivot_longer(
-    cols = c(Close, sp500),
-    names_to = "Series",
-    values_to = "Price"
-  )
-#line plot
-ggplot(data_compare,
-       aes(x = Date, y = Price, color = Series)) +
-  geom_line() +
-  facet_wrap(~ Symbol, scales = "free_y", ncol = 2) +
-  labs(
-    title = "Stock Prices vs S&P 500",
-    x = "Date",
-    y = "Price",
-    color = "Series"
-  ) +
-  theme_minimal() +
-  theme(strip.text = element_text(face = "bold"))
-```
 
-- As the data on the y-axis varied too widely, making it difficult to visualise clearly, I decided to use a percentage change trend chart for comparison
+- As the data on the y-axis varied too widely (If draw a plot with the y-axis showing price, the difference between the index and the stocks is too big and hard to compare), making it difficult to visualise clearly, so there are two way to show the correlation between index and the stocks
+
+  - use a percentage change trend chart for comparison (two lines)
 ```{r, echo = FALSE,message=FALSE}
 # Extract S&P500
 sp500 <- data_daily %>%
@@ -315,14 +307,15 @@ data_compare_long <- data_compare %>%
 # percentage growth
 data_compare_pct <- data_compare_long %>%
   group_by(Symbol, Series) %>%
+  arrange(Date, .by_group = TRUE) %>%
   mutate(
-    pct_growth = (Price / first(Price) - 1) * 100
+    pct_growth = (Price / first(Price) - 1)
   ) %>%
   ungroup()
 ggplot(data_compare_pct, 
        aes(x = Date, y = pct_growth, color = Series)) +
   geom_line() +
-  facet_wrap(~ Symbol, scales = "free_y", ncol = 2) +
+  facet_wrap(~ Symbol, scales = "free_y", ncol = 1) +
   scale_y_continuous(labels = percent_format(scale = 1)) +
   labs(
     title = "Percentage Growth of Stocks vs S&P 500",
@@ -333,10 +326,37 @@ ggplot(data_compare_pct,
   theme_minimal() +
   theme(strip.text = element_text(face = "bold"))
 ```
+  - or plot a scatter plot with the index value (growth percentage) in x Axis and stock value (growth percentage) in y axis:
+```{r, echo = FALSE,message=FALSE}
+data_compare_scatter <- data_compare_pct %>%
+  select(Date, Symbol, Series, pct_growth)%>%
+  pivot_wider(
+    names_from = Series,
+    values_from = pct_growth) %>%
+  rename(stock_pct_growth = Close, index_pct_growth = sp500
+  )
+
+ggplot(data_compare_scatter, 
+       aes(x = stock_pct_growth, y = index_pct_growth)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", se = FALSE, color = "red")+
+  facet_wrap(~ Symbol, scales = "free", ncol = 1) +
+  scale_x_continuous(labels = percent_format()) +
+  scale_y_continuous(labels = percent_format())+
+  labs(
+    title = "Percentage Growth of Stocks vs S&P 500",
+    x = "S&P 500 Percentage Growth",
+    y = "Stock Percentage Growth"
+  ) +
+  theme_minimal() +
+  theme(strip.text = element_text(face = "bold"))
+```
+- Interpretation：This plot illustrates the relationship between the percentage growth of individual stocks and the index (S&P 500). By adding a fitted linear trend line using `geom_smooth`, the correlation between the two can be observed more intuitively: the more closely the data points cluster around the fitted line, the stronger the linear relationship between the stock and the index; conversely, greater dispersion indicates a weaker correlation. Based on the plot, AMZN and NVDA appear to have data points that lie closer to the fitted line, suggesting a stronger alignment with the overall market trend.
+  
 ### correlation coefficient
 - calculate:
 
-```{r, echo=FALSE, message=FALSE}
+```{r, fig.width=6, fig.height=4, echo=FALSE, message=FALSE}
 # Extract the hourly percentage changes of the S&P 500 as the reference series.
 sp500_change <- hourly_change %>%
   filter(Symbol == "^GSPC") %>%
@@ -356,14 +376,14 @@ sp500_change <- hourly_change %>%
     .groups = "drop"
   ) %>%
   arrange(desc(correlation))
-cor_results
+kable(cor_results)
 ```
   
 - plot
-```{r, echo =FALSE, message=FALSE}
+```{r, fig.width=6, fig.height=4, echo =FALSE, message=FALSE}
 ggplot(cor_results, 
        aes(x = reorder(Symbol, correlation), y = correlation)) +
-  geom_col(fill = "steelblue") +
+  geom_col(fill = "steelblue", width = 0.5) +
   labs(
     title = "Correlation of Stock Price Changes with S&P 500",
     x = "Stock",
@@ -372,6 +392,4 @@ ggplot(cor_results,
   theme_minimal()
 ```
 
-- Now the question could be answered, stock prices are generally positively correlated with the S&P 500, although the strength of the correlation varies across companies. Both the trend line plot and the correlation coefficient illustrate this point, AMZN shows the highest correlation with the S&P 500 and is therefore the most similar in terms of price movements.
-
-- (However, I should also point out that the trend line chart should only be used as a guide; the correlation coefficient measures whether the patterns of change in the share price and the index are consistent, and conclusions should primarily be drawn by referring to the correlation coefficient.)
+- Now the question could be answered, stock prices are generally positively correlated with the S&P 500, although the strength of the correlation varies across companies. Both the growth percentage scatter plot and the correlation coefficient illustrate this point, AMZN and NVDA shows the higher correlation with the S&P 500 and is therefore the more similar in terms of price movements.
