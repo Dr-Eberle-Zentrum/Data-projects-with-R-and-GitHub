@@ -26,6 +26,7 @@ library(tidyquant)
 ## Data cleaning
 
 - read data and combine the two header rows into meaningful column names.
+
 ```{r rename, echo=FALSE, message=FALSE, warning=FALSE}
 setwd("~/Data-projects-with-R-and-GitHub/Projects/ArminBurkhardt")
 
@@ -52,12 +53,14 @@ col_names <- read_csv("stock_data.csv", n_max = 2, col_names = FALSE) %>%
 ```
 
 - Skip the header rows and apply the new column names.
+
 ```{r actual_data, echo=FALSE, message=FALSE}
 #read the dataset again, skip the first two rows
 data_raw <- read_csv("stock_data.csv", skip = 2,col_names = col_names, show_col_types = FALSE)
 ```
 
 - Convert columns to appropriate data types.
+
 ```{r fix_data_types, echo=FALSE, message=FALSE}
 data_raw <- data_raw %>%
   mutate(
@@ -70,6 +73,7 @@ data_raw <- data_raw %>%
 ```
 
 - Check the cleaned dataset.
+
 ```{r fig.width= 2, fig.height= 3,check_data, echo =FALSE, message=FALSE}
 data_raw %>%
   slice_head(n = 5)%>%
@@ -81,6 +85,7 @@ data_raw %>%
 - Transform the measurement variable (`Measure`) into individual columns.
 
 - Add a `Type` Column indicating whether each symbol is a stock or an index.
+
 ```{r, echo=FALSE, message=FALSE}
 # Reshape the dataset into long format
 data_tidy <- data_raw %>%
@@ -108,6 +113,7 @@ data_tidy <- data_raw %>%
 ```
 
 - Check tidy dataset
+
 ```{r, fig.width= 4, fig.height= 6,  echo =FALSE, message=FALSE}
 data_tidy %>% slice_head(n = 7)%>%
   kable()
@@ -117,6 +123,7 @@ data_tidy %>% slice_head(n = 7)%>%
 - Extract the date from the datetime column
 
 - Summarise the data for each day and symbol according to the required rules.
+
 ```{r, echo=FALSE, message=FALSE}
 data_daily <- data_tidy %>%
   mutate(Date = as.Date(Datetime))%>%
@@ -133,6 +140,7 @@ data_daily <- data_tidy %>%
 ```
 
 - Check aggregated data
+
 ```{r, fig.width= 4, fig.height= 6, echo =FALSE, message=FALSE}
 data_daily %>% slice_head(n = 5)%>%
   kable()
@@ -142,7 +150,8 @@ data_daily %>% slice_head(n = 5)%>%
 
 ## Price
 Plot the daily closing prices for all stocks and indices using `facet`.
-```{r, fig.width=4, fig.height=10, echo=FALSE, message=FALSE}
+
+```{r, fig.width=6, fig.height=15, echo=FALSE, message=FALSE}
 data_label <- data_daily %>%
   mutate(
     Symbol_label = if_else(
@@ -168,7 +177,8 @@ ggplot(data_label,
 ## Volume
 
 - Visualize the daily trading volume for all stocks and indices using bar plots with `facet`.
-```{r,fig.width=4, fig.height=10, echo=FALSE, message=FALSE}
+
+```{r,fig.width=6, fig.height=15, echo=FALSE, message=FALSE}
 ggplot(data_label, 
        aes(x = Date, y = Volume, fill = Type)) +
   geom_col(alpha = 0.8) +
@@ -192,7 +202,8 @@ ggplot(data_label,
 ## Candlesticks
 
 - Represent daily price data using candlesticks based on open, high, low, and close values.
-```{r,fig.width=4, fig.height=10, echo=FALSE, message=FALSE}
+
+```{r,fig.width=6, fig.height=15, echo=FALSE, message=FALSE}
 ggplot(data_label,
        aes(x = Date, y = Close))+
   geom_candlestick(
@@ -223,6 +234,7 @@ ggplot(data_label,
 # Pattern analysis & correlation
 ## Percentage computing
 - Calculate the percentage change in closing price compared to the previous hour for each stock and index.
+
 ```{r, echo=FALSE, message=FALSE}
 hourly_change <- data_tidy %>%
   arrange(Symbol, Datetime) %>%
@@ -234,6 +246,7 @@ hourly_change <- data_tidy %>%
 ```
 
 - check the computed percentage changes
+
 ```{r, echo =FALSE, message=FALSE}
 hourly_change %>%
   select(Datetime, Symbol, Close, price_change) %>% 
@@ -245,6 +258,7 @@ hourly_change %>%
 ```
 ## Volatility movement (bar-plot)
 -  Calculate the absolute percentage change between the hourly open and close prices.
+
 ```{r, echo = FALSE, message=FALSE}
 hourly_volatility <- data_tidy %>%
   mutate(
@@ -254,6 +268,7 @@ hourly_volatility <- data_tidy %>%
 ```
 
 - Aggregate the average absolute price movement by hour across all stocks and indices.
+
 ```{r, echo = FALSE,message=FALSE}
 movement_summary <- hourly_volatility %>%
   group_by(hour) %>%
@@ -264,6 +279,7 @@ movement_summary <- hourly_volatility %>%
 ```
 
 - Visualize the average price movement per hour of the day using a bar plot.
+
 ```{r, fig.width=7, fig.height=3.5,echo=FALSE, message=FALSE}
 volatility_by_hour_ny <- data_tidy %>%
   mutate(
@@ -290,6 +306,7 @@ ggplot(volatility_by_hour_ny, aes(x = Hour_ny, y = avg_abs_change)) +
   ) +
   theme_minimal()
 ```
+
 - Answer: Prices change the most at 7.00 (NewYork Time) on average.
 
 ## Correlation
@@ -299,7 +316,8 @@ ggplot(volatility_by_hour_ny, aes(x = Hour_ny, y = avg_abs_change)) +
 - As the data on the y-axis varied too widely (If draw a plot with the y-axis showing price, the difference between the index and the stocks is too big and hard to compare), making it difficult to visualise clearly, so there are two way to show the correlation between index and the stocks
 
   - use a percentage change trend chart for comparison (two lines)
-```{r,fig.width= 5, fig.height= 10, echo = FALSE,message=FALSE}
+  
+```{r,fig.width= 6, fig.height= 15, echo = FALSE,message=FALSE}
 # Extract S&P500
 sp500 <- data_daily %>%
   filter(Symbol == "^GSPC") %>%
@@ -339,8 +357,10 @@ ggplot(data_compare_pct,
   theme_minimal() +
   theme(strip.text = element_text(face = "bold"))
 ```
+
   - or plot a scatter plot with the index value (growth percentage) in x Axis and stock value (growth percentage) in y axis:
-```{r, fig.width= 4, fig.height= 10,echo = FALSE,message=FALSE}
+  
+```{r, fig.width= 6, fig.height= 15,echo = FALSE,message=FALSE}
 data_compare_scatter <- data_compare_pct %>%
   select(Date, Symbol, Series, pct_growth)%>%
   pivot_wider(
@@ -364,6 +384,7 @@ ggplot(data_compare_scatter,
   theme_minimal() +
   theme(strip.text = element_text(face = "bold"))
 ```
+
 - Interpretation：This plot illustrates the relationship between the percentage growth of individual stocks and the index (S&P 500). By adding a fitted linear trend line using `geom_smooth`, the correlation between the two can be observed more intuitively: the more closely the data points cluster around the fitted line, the stronger the linear relationship between the stock and the index; conversely, greater dispersion indicates a weaker correlation. Based on the plot, AMZN and NVDA appear to have data points that lie closer to the fitted line, suggesting a stronger alignment with the overall market trend.
   
 ### correlation coefficient
@@ -391,8 +412,9 @@ sp500_change <- hourly_change %>%
   arrange(desc(correlation))
 kable(cor_results)
 ```
-  
+
 - plot
+
 ```{r,fig.width= 5, fig.height= 3, echo =FALSE, message=FALSE}
 ggplot(cor_results, 
        aes(x = reorder(Symbol, correlation), y = correlation)) +
@@ -404,5 +426,6 @@ ggplot(cor_results,
   ) +
   theme_minimal()
 ```
+
 
 - Now the question could be answered, stock prices are generally positively correlated with the S&P 500, although the strength of the correlation varies across companies. Both the growth percentage scatter plot and the correlation coefficient illustrate this point, AMZN and NVDA shows the higher correlation with the S&P 500 and is therefore the more similar in terms of price movements.

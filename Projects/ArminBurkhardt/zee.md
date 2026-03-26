@@ -497,19 +497,22 @@ them. How closely do you think stock and index prices correlate?
 ## Price
 
 Plot the daily closing prices for all stocks and indices using `facet`.
+
 ![](zee_files/figure-markdown_strict/unnamed-chunk-5-1.png)
 
 ## Volume
 
 -   Visualize the daily trading volume for all stocks and indices using
     bar plots with `facet`.
-    ![](zee_files/figure-markdown_strict/unnamed-chunk-6-1.png)
+
+![](zee_files/figure-markdown_strict/unnamed-chunk-6-1.png)
 
 ## Candlesticks
 
 -   Represent daily price data using candlesticks based on open, high,
     low, and close values.
-    ![](zee_files/figure-markdown_strict/unnamed-chunk-7-1.png)
+
+![](zee_files/figure-markdown_strict/unnamed-chunk-7-1.png)
 
 (I wanted to include a bar chart showing the daily volume in the same
 graph, but as the y-axes couldn’t be merged and required scaling, I
@@ -588,7 +591,9 @@ found it too difficult to achieve, so I gave up.)
     stocks and indices.
 
 -   Visualize the average price movement per hour of the day using a bar
-    plot. ![](zee_files/figure-markdown_strict/unnamed-chunk-12-1.png)
+    plot.
+
+![](zee_files/figure-markdown_strict/unnamed-chunk-12-1.png)
 
 -   Answer: Prices change the most at 7.00 (NewYork Time) on average.
 
@@ -603,10 +608,13 @@ found it too difficult to achieve, so I gave up.)
     between index and the stocks
 
     -   use a percentage change trend chart for comparison (two lines)
-        ![](zee_files/figure-markdown_strict/unnamed-chunk-13-1.png)
-    -   or plot a scatter plot with the index value (growth percentage)
-        in x Axis and stock value (growth percentage) in y axis:
-        ![](zee_files/figure-markdown_strict/unnamed-chunk-14-1.png)
+
+![](zee_files/figure-markdown_strict/unnamed-chunk-13-1.png)
+
+-   or plot a scatter plot with the index value (growth percentage) in x
+    Axis and stock value (growth percentage) in y axis:
+
+![](zee_files/figure-markdown_strict/unnamed-chunk-14-1.png)
 
 -   Interpretation：This plot illustrates the relationship between the
     percentage growth of individual stocks and the index (S&P 500). By
@@ -654,7 +662,9 @@ found it too difficult to achieve, so I gave up.)
 </tbody>
 </table>
 
--   plot ![](zee_files/figure-markdown_strict/unnamed-chunk-16-1.png)
+-   plot
+
+![](zee_files/figure-markdown_strict/unnamed-chunk-16-1.png)
 
 -   Now the question could be answered, stock prices are generally
     positively correlated with the S&P 500, although the strength of the
