@@ -6,7 +6,7 @@ output: md_document
 
 ## Project Solution for: Surprisal-Based Comparison of Human and LLM Language Generation
 
-By Jakob
+By Jakob Raatschen
 
 
 #### Loading the data set and checking the first few rows
@@ -54,7 +54,7 @@ For the visualizations including human participants (I & II), Items 13 & 28 have
 
 ```{r, echo = FALSE, message = FALSE}
 data_agg_human %>%
-  mutate(condition = factor(condition, levels = c("OH", "RA", "EW"))) %>%
+  mutate(condition = factor(condition, levels = c("RA", "EW", "OH"))) %>%
   group_by(generator, context, condition) %>%
   summarise(mean_surprisal = mean(mean_surprisal)) %>%
   ggplot(aes(x = context, y = mean_surprisal, color = fct_reorder2(generator, context, mean_surprisal), group = generator)) +
@@ -92,7 +92,7 @@ data_agg_human %>%
   scale_color_manual(values = c("gpt-3.5-turbo-16k" = "#A01818", 
                                 "gpt-5.2-chat-latest" = "#9DCCEF", "human" = "#00767B")) +
   labs(title = "Mean Surprisal by Context and Generator",
-       x = "Condition",
+       x = "Context",
        y = "Mean Surprisal",
        color = "Generator") +
   theme_minimal() +
@@ -111,7 +111,7 @@ In a highly predictable preceeding context the mean surprisal value of the two G
 
 ```{r, echo = FALSE, message = FALSE}
 data_agg %>%
-  mutate(condition = factor(condition, levels = c("OH", "RA", "EW"))) %>%
+  mutate(condition = factor(condition, levels = c("RA", "EW", "OH"))) %>%
   filter(generator != "human") %>%
   group_by(generator, condition) %>%
   summarise(mean_surprisal = mean(mean_surprisal)) %>%

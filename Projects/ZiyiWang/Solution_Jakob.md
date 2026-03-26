@@ -1,6 +1,6 @@
 ## Project Solution for: Surprisal-Based Comparison of Human and LLM Language Generation
 
-By Jakob
+By Jakob Raatschen
 
 #### Loading the data set and checking the first few rows
 
