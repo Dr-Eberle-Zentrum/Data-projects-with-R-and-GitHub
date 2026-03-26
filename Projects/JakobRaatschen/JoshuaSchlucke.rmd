@@ -2,6 +2,15 @@
 title: "Solution by Joshua"
 output: md_document
 ---
+# Cross-Study Confidence-Ratings Project
+
+For this project we use three datasets from the Confidence database available on the Open Science Framework (OSF). All studies in this database analyze different psychological constructs, but have the same structure concerning their experimental paradigm: Participants are presented with a stimulus and perform some sort of task on it (e.g. determine if they have seen a picture before) for which their performance can be evaluated in a binary fashion (correct/incorrect). Subsequently, they are asked to rate their confidence in their answer.
+
+For the solution of this project no AI was used, and no code of other submissions was looked at, only the resulting plots where used for inspiration.
+
+## Data import and cleanup
+
+We are importing the data from a local csv, each study provides a text file that helps with the interpretation and cleanup of their data. 
 
 
 ```{r, include = FALSE}
@@ -10,8 +19,11 @@ library(ggbeeswarm)
 knitr::opts_knit$set(root.dir = here::here())
 ```
 
-Study 1
-```{r, include = FALSE}
+### Massoni & Roux
+
+The Massoni dataset includes two studies, so we filter out the first incompatible study, other then that the dataset is well behaved and does not need any special processing or cleanup.
+
+```{r study-1, include = FALSE}
 study_id <- factor(c("Masoni", "Palser", "Hu"), levels = c("Masoni", "Palser", "Hu"), ordered = TRUE)
 
 masoni <- read_csv("Projects/JakobRaatschen/Massoni_2017/data_Massoni_2017.csv") %>%
@@ -20,7 +32,6 @@ masoni <- read_csv("Projects/JakobRaatschen/Massoni_2017/data_Massoni_2017.csv")
     drop_na() %>%
     mutate(Subj_idx = (3 * Subj_idx)) %>%
     select(Study_id, Subj_idx, Stimulus, Response, Confidence, Accuracy)
-masoni
 
 avg_pp <- function(dataframe) {
     dataframe %>%
@@ -30,12 +41,15 @@ avg_pp <- function(dataframe) {
 }
 
 masoni_avg_pp <- avg_pp(masoni)
-
-masoni_avg_pp
 ```
 
-Study 2
-```{r, include = FALSE}
+### Palser et al.
+
+For Palser we need to append a Accuracy col as the dataset does not include one, we do this by comparing the Stimulus with the Response and set equality to 1 and otherwise 0.
+
+Also the Palser study does not include a confidence scale from 0 to 1 (0->100%). In the text file the authors say that the scale is 1->99 but that the program was not restricted, which meant, that ~17 values where above 99, which means I would either need to filter out everything above 99 or set it to 99 as the users where just overconfident. Probably the correct thing would be throwing it out, so I've set them to 99 :D
+
+```{r study-2, include = FALSE}
 palser <- read_csv("Projects/JakobRaatschen/Palser_2018/data_Palser_2018.csv") %>%
     filter(Condition == "Baseline") %>%
     mutate(Study_id = study_id[2]) %>%
@@ -45,29 +59,35 @@ palser <- read_csv("Projects/JakobRaatschen/Palser_2018/data_Palser_2018.csv") %
     mutate(Confidence = ((Confidence - 1) / 98)) %>% # Normalizing the confidence vals to 0->100%
     mutate(Subj_idx = ((3 * Subj_idx) + 1)) %>%
     select(Study_id, Subj_idx, Stimulus, Response, Confidence, Accuracy)
-palser
-palser_avg_pp <- avg_pp(palser)
 
-palser_avg_pp
+palser_avg_pp <- avg_pp(palser)
 ```
 
-Study 3
-```{r, include = FALSE}
+
+### Hu et al.
+
+The Hu et al. dataset is again very well behaved, the only data processing we need to do is normalizing their used confidence scale from 1 to 6 to again 0->1.
+
+```{r study-3, include = FALSE}
 hu <- read_csv("Projects/JakobRaatschen/Hu_2017/data_Hu_2017.csv") %>%
     mutate(Study_id = study_id[3]) %>%
     drop_na() %>%
     mutate(Confidence = ((Confidence - 1) / 5)) %>% # Normalizing the 1->6 scale
     mutate(Subj_idx = ((3 * Subj_idx) + 2)) %>%
     select(Study_id, Subj_idx, Stimulus, Response, Confidence, Accuracy)
-hu
-hu_avg_pp <- avg_pp(hu)
 
-hu_avg_pp
+hu_avg_pp <- avg_pp(hu)
 ```
 
-# All Studies
-For palser the txt says that the scale is 1->99 but that the program was not restricted, which means I would either need to filter out everything above 99 or set it to 99 as the users where just overconfident. Probably the correct thing would be throwing it out, so I've set them to 99 :D
+### All Studies
+#### Normalization
+The Project description suggests a different normalization but I have chosen a simpler mathematical normalization for 2 simple reasons, because of the study design and the absense of a true 0 in study 2 and 3 we do not get a 1 to 1 comparison anyway, since the scale design can already influence the participants. So we can do a simpler untidy normalization as it won't be the most influencial factor as study 3 is ordinal not interval, for the participants the difference between 1 → 2 may not equal 4 → 5 psychologically.
 
+So since we are searching for is not real comparability but reasonable alignment, and therefore a simple normalization is in my eyes the way to go.
+
+#### Participant ID
+
+As we need to combine the data of three studies into one dataframe
 For the participant ID I would rather like a operation that is easily reversible with knowing only little about the data itself. Since we have 3 lists we can simply use modulo or bitshift for that, I will use modulo for it as it is simpler to understand without computer science knowledge.
 We already created a factor for the studies, so we use the factor as numeric input for:
 $$
@@ -80,7 +100,7 @@ x = \frac{(y - i)}{3}
 $$
 i can be calculated simply by doing 
 $$ 
-i = y\ \%\ 3 
+i = y \mod 3
 $$
 
 ```{r, include = FALSE}
@@ -90,7 +110,7 @@ performance <- full_join(full_join(masoni_avg_pp, palser_avg_pp), hu_avg_pp)
 
 Data visualization
 Spaghetti plot
-```{r}
+```{r spaghettiPlot}
 confidence %>%
     filter_out(.by = Subj_idx, ifelse(mean(Accuracy) == 1 || mean(Accuracy) == 0, TRUE, FALSE)) %>%
     mutate(
@@ -118,7 +138,7 @@ confidence %>%
 ```
 
 Violin plot
-```{r}
+```{r violinPlot}
 performance %>%
     mutate(
         Study_id = factor(Study_id,
