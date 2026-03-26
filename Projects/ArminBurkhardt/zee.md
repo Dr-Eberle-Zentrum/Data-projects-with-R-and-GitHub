@@ -591,7 +591,7 @@ found it too difficult to achieve, so I gave up.)
     plot.
     <img src="zee_files/figure-markdown_strict/unnamed-chunk-12-1.png" width="100%" />
 
--   Answer: Prices change the most at 13:00 on average.
+-   Answer: Prices change the most at 7.00 (NewYork Time) on average.
 
 ## Correlation
 
