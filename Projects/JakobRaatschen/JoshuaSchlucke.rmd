@@ -6,6 +6,7 @@ output: md_document
 
 ```{r, include = FALSE}
 library(tidyverse)
+library(ggbeeswarm)
 knitr::opts_knit$set(root.dir = here::here())
 ```
 
@@ -107,5 +108,9 @@ confidence %>%
 
 Violin plot
 ```{r}
-performance
+performance %>%
+    ggplot() +
+    geom_violin(aes(Study_id, Avg_Accuracy, fill = Study_id), alpha = 0.7) +
+    geom_boxplot(aes(Study_id, Avg_Accuracy, fill = Study_id), alpha = 0.5, outliers = FALSE, width = 0.1) +
+    geom_quasirandom(aes(Study_id, Avg_Accuracy, fill = Study_id), color = "black", shape = 21)
 ```
