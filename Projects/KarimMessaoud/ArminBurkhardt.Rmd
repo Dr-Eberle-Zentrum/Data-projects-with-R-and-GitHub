@@ -108,7 +108,6 @@ DFData_adjusted %>%
   geom_line() +
   geom_point(size = 2) +
   labs(
-    title = "", 
     x = "Year", 
     y = "Average years of schooling"
   ) +
@@ -116,7 +115,7 @@ DFData_adjusted %>%
 
 ```
 
-## Vizualization 2: Education Level Distribution by Age Group and Country Comparison
+## Visualization 2: Education Level Distribution by Age Group and Country Comparison
 
 
 ```{r, echo=FALSE, message=FALSE}
@@ -132,13 +131,18 @@ DFData_adjusted %>%
   mutate(
     `Age group` = paste0(agefrom, "-", ageto),
     # reorder with factors
-    `Education level` = factor(`Education level`, levels = c("No education", "Some primary", "Completed primary", "Some secondary", "Completed secondary", "Some tertiary", "Completed tertiary")),
+    `Education level` = factor(`Education level`, 
+                               levels = c("No education", 
+                                          "Some primary", 
+                                          "Completed primary", 
+                                          "Some secondary", 
+                                          "Completed secondary", 
+                                          "Some tertiary", 
+                                          "Completed tertiary")),
     country = factor(country, levels = c("Germany", "India")),
     # invert left side (germany) to make pyramid shaped plot
     plot_prc = ifelse(country == "Germany", -Percentage, Percentage) 
   ) %>%
-  
-  
   ggplot(aes(x = plot_prc, y = `Age group`, fill = `Education level`)) +
   geom_col() +
   geom_vline(xintercept=0, color = "black", linewidth = 1) +
@@ -192,7 +196,30 @@ The graphs above show the trends in average years of schooling across different 
 - Q2: Are there countries where average years of schooling have stagnated or even declined?
 
   > Visualization 1 shows that this was not the case for any region. All regions show a steady increase in average years of schooling over time, with no decline or stagnation.
-  
+
+
+### Further investigation
+
+To confirm this, the per country data can be analyzed to check for any stagnation or decline in average years of schooling.
+
+
+```{r, echo=FALSE, message=FALSE}
+# again store temparily in a variable
+data <- DFData_adjusted %>%
+  group_by(country, year) %>%
+  summarise(`Average Years of schooling` = weighted.mean(`Years of schooling`, w = pop, na.rm=TRUE)) %>%
+  arrange(year) %>%
+  mutate(`Yearly change` = `Average Years of schooling` - lag(`Average Years of schooling`))
+```
+```{r, echo=FALSE}
+data %>%
+  filter(`Yearly change` <= 0) %>%
+  select(country, year, `Average Years of schooling`, `Yearly change`) %>%
+  kable()
+```
+
+Surprisingly, there are many countries, even some developed ones, that show a decline in average years of schooling in some years. However, these declines are mostly insignificant and do not indicate a long term stagnation or decline in education levels. Thus, the overall trend of increasing average years of schooling over time still holds true for all regions.
+
 - Q4: Which age group benefits most from education expansion?
 
   > Generally, the younger the group, the more they benefit from education expansion, as can be interpreted from Visualization 2. Looking at Germany in 2010 for instance, the group with the highest percentage of completed tertiary education is the 30-34 age group, which is to be expected, as younger people are still in the persuit of this education level.
