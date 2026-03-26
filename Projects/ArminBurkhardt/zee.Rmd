@@ -70,7 +70,7 @@ data_raw <- data_raw %>%
 ```
 
 - Check the cleaned dataset.
-```{r check_data, echo =FALSE, message=FALSE}
+```{r fig.width= 4, fig.height= 6, out.width= "100%", check_data, echo =FALSE, message=FALSE}
 data_raw %>%
   slice_head(n = 5)%>%
   kable()
@@ -108,7 +108,7 @@ data_tidy <- data_raw %>%
 ```
 
 - Check tidy dataset
-```{r, echo =FALSE, message=FALSE}
+```{r, fig.width= 4, fig.height= 6, out.width= "100%", echo =FALSE, message=FALSE}
 data_tidy %>% slice_head(n = 7)%>%
   kable()
 ```
@@ -133,7 +133,7 @@ data_daily <- data_tidy %>%
 ```
 
 - Check aggregated data
-```{r, echo =FALSE, message=FALSE}
+```{r, fig.width= 4, fig.height= 6, out.width= "100%",echo =FALSE, message=FALSE}
 data_daily %>% slice_head(n = 5)%>%
   kable()
 ```
@@ -142,7 +142,7 @@ data_daily %>% slice_head(n = 5)%>%
 
 ## Price
 Plot the daily closing prices for all stocks and indices using `facet`.
-```{r, fig.width=14, fig.height=10, out.width="100%", echo=FALSE, message=FALSE}
+```{r, fig.width=6, fig.height=15, out.width="100%", echo=FALSE, message=FALSE}
 data_label <- data_daily %>%
   mutate(
     Symbol_label = if_else(
@@ -168,7 +168,7 @@ ggplot(data_label,
 ## Volume
 
 - Visualize the daily trading volume for all stocks and indices using bar plots with `facet`.
-```{r,fig.width=14, fig.height=10, out.width="100%",echo=FALSE, message=FALSE}
+```{r,fig.width=6, fig.height=15, out.width="100%",echo=FALSE, message=FALSE}
 ggplot(data_label, 
        aes(x = Date, y = Volume, fill = Type)) +
   geom_col(alpha = 0.8) +
@@ -192,7 +192,7 @@ ggplot(data_label,
 ## Candlesticks
 
 - Represent daily price data using candlesticks based on open, high, low, and close values.
-```{r,fig.width=14, fig.height=10, out.width="100%", echo=FALSE, message=FALSE}
+```{r,fig.width=6, fig.height=15, out.width="100%", echo=FALSE, message=FALSE}
 ggplot(data_label,
        aes(x = Date, y = Close))+
   geom_candlestick(
@@ -264,10 +264,10 @@ movement_summary <- hourly_volatility %>%
 ```
 
 - Visualize the average price movement per hour of the day using a bar plot.
-```{r, echo = FALSE,message=FALSE}
+```{r, fig.width= 5, fig.height= 4, out.width= "100%", echo = FALSE,message=FALSE}
 ggplot(movement_summary, 
        aes(x = hour, y = avg_movement)) +
-  geom_col(fill = "steelblue") +
+  geom_col(fill = "steelblue",width = 0.6) +
   scale_y_continuous(labels = scales::percent_format(scale = 1)) +
   labs(
     title = "Average Absolute Price Movement by Hour of Day",
@@ -286,7 +286,7 @@ ggplot(movement_summary,
 - As the data on the y-axis varied too widely (If draw a plot with the y-axis showing price, the difference between the index and the stocks is too big and hard to compare), making it difficult to visualise clearly, so there are two way to show the correlation between index and the stocks
 
   - use a percentage change trend chart for comparison (two lines)
-```{r, echo = FALSE,message=FALSE}
+```{r,fig.width= 8, fig.height= 15, out.width= "100%", echo = FALSE,message=FALSE}
 # Extract S&P500
 sp500 <- data_daily %>%
   filter(Symbol == "^GSPC") %>%
@@ -327,7 +327,7 @@ ggplot(data_compare_pct,
   theme(strip.text = element_text(face = "bold"))
 ```
   - or plot a scatter plot with the index value (growth percentage) in x Axis and stock value (growth percentage) in y axis:
-```{r, echo = FALSE,message=FALSE}
+```{r, fig.width= 6, fig.height= 15, out.width= "100%", echo = FALSE,message=FALSE}
 data_compare_scatter <- data_compare_pct %>%
   select(Date, Symbol, Series, pct_growth)%>%
   pivot_wider(
@@ -356,7 +356,7 @@ ggplot(data_compare_scatter,
 ### correlation coefficient
 - calculate:
 
-```{r, fig.width=6, fig.height=4, echo=FALSE, message=FALSE}
+```{r, fig.width=6, fig.height=2, echo=FALSE, message=FALSE}
 # Extract the hourly percentage changes of the S&P 500 as the reference series.
 sp500_change <- hourly_change %>%
   filter(Symbol == "^GSPC") %>%
@@ -380,7 +380,7 @@ kable(cor_results)
 ```
   
 - plot
-```{r, fig.width=6, fig.height=4, echo =FALSE, message=FALSE}
+```{r,fig.width= 5, fig.height= 4, out.width= "100%", echo =FALSE, message=FALSE}
 ggplot(cor_results, 
        aes(x = reorder(Symbol, correlation), y = correlation)) +
   geom_col(fill = "steelblue", width = 0.5) +

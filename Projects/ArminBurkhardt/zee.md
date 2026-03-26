@@ -588,7 +588,8 @@ found it too difficult to achieve, so I gave up.)
     stocks and indices.
 
 -   Visualize the average price movement per hour of the day using a bar
-    plot. ![](zee_files/figure-markdown_strict/unnamed-chunk-12-1.png)
+    plot.
+    <img src="zee_files/figure-markdown_strict/unnamed-chunk-12-1.png" width="100%" />
 
 -   Answer: Prices change the most at 13:00 on average.
 
@@ -603,10 +604,10 @@ found it too difficult to achieve, so I gave up.)
     between index and the stocks
 
     -   use a percentage change trend chart for comparison (two lines)
-        ![](zee_files/figure-markdown_strict/unnamed-chunk-13-1.png)
+        <img src="zee_files/figure-markdown_strict/unnamed-chunk-13-1.png" width="100%" />
     -   or plot a scatter plot with the index value (growth percentage)
         in x Axis and stock value (growth percentage) in y axis:
-        ![](zee_files/figure-markdown_strict/unnamed-chunk-14-1.png)
+        <img src="zee_files/figure-markdown_strict/unnamed-chunk-14-1.png" width="100%" />
 
 -   Interpretation：This plot illustrates the relationship between the
     percentage growth of individual stocks and the index (S&P 500). By
@@ -654,7 +655,8 @@ found it too difficult to achieve, so I gave up.)
 </tbody>
 </table>
 
--   plot ![](zee_files/figure-markdown_strict/unnamed-chunk-16-1.png)
+-   plot
+    <img src="zee_files/figure-markdown_strict/unnamed-chunk-16-1.png" width="100%" />
 
 -   Now the question could be answered, stock prices are generally
     positively correlated with the S&P 500, although the strength of the
