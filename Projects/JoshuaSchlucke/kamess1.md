@@ -37,7 +37,7 @@
 
 ## Visualization goals
 
-### **Temporal heatmap**: 7x24 commits by weekday (rows) and hour (columns), overall and per repo. (Similar to commit calendar)
+### **Temporal heatmap for PyTorch**: 7x24 commits by weekday (rows) and hour (columns)
 
 ![](kamess1_files/figure-markdown_strict/temporal_heatmap-1.png)
 
@@ -51,7 +51,13 @@
 > higher than in the morning or early afternoon. This suggests that a
 > large portion of the work happens outside of traditional 9-to-5 hours,
 > with many developers being active late at night or very early in the
-> morning, which is quite surprising.
+> morning, which is quite surprising. However, if we look at the
+> developers’ actual local time (the right plot), this apparent “night
+> shift” largely disappears. The late-night activity seen in the
+> normalized UTC plot is actually just an artifact of time zone
+> differences across a globally distributed team. When adjusting for
+> local timezones, it becomes clear that most developers are indeed
+> working during traditional daytime hours in their respective regions.
 
 ### **Message-type comparison**: stacked bar chart of commit types by repo (normalized to 100%).
 
@@ -61,20 +67,20 @@
 `refactor`, `test`, etc.), and how do these proportions change over
 time?*
 
-> While the “other” category remains the largest with over 10,000
+> While the “other” category remains the largest with over 11,300
 > commits, a significant portion of the data can be classified by
 > looking for common action verbs. Among the categorized commits, “feat”
 > is the most frequent type (2,113), followed closely by “fix” (1,854).
 > This indicates that while the PyTorch repository does not strictly
 > enforce standardized “Conventional Commit” tags, the developers
 > frequently use descriptive language like “add”, “new”, or “fix” to
-> label their work. Other categories such as “chore” (655) and
-> “refactor” (383) are also present, showing a diverse range of
+> label their work. Other categories such as “chore” (414) and
+> “refactor” (273) are also present, showing a diverse range of
 > development activities beyond simple feature additions.
 
 ### Message length comparison: boxplots of message length by repo or by commit type
 
-![](kamess1_files/figure-markdown_strict/message_length_comparison-1.png)
+![](kamess1_files/figure-markdown_strict/message_length_comparison-1.png)![](kamess1_files/figure-markdown_strict/message_length_comparison-2.png)
 
 *Are message lengths and formats different across repositories or commit
 types?*
