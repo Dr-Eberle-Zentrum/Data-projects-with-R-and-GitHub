@@ -93,7 +93,12 @@ Spaghetti plot
 ```{r}
 confidence %>%
     filter_out(.by = Subj_idx, ifelse(mean(Accuracy) == 1 || mean(Accuracy) == 0, TRUE, FALSE)) %>%
-    mutate(Study_id = factor(Study_id)) %>%
+    mutate(
+        Study_id = factor(Study_id,
+            levels = c("Masoni", "Palser", "Hu"),
+            labels = c("Massoni & Roux", "Palser et al.", "Hu et al.")
+        )
+    ) %>%
     mutate(Accuracy = factor(Accuracy, levels = c(1, 0), labels = c("Correct", "Incorrect"))) %>%
     group_by(Study_id, Subj_idx, Accuracy) %>%
     summarise(Confidence = mean(Confidence)) %>%
@@ -103,14 +108,32 @@ confidence %>%
     stat_summary(aes(group = Study_id), fun = mean, geom = "line", linewidth = 1.5) +
     stat_summary(aes(group = Study_id), fun = mean, geom = "point", size = 3) +
     facet_wrap(~Study_id) +
+    labs(
+        title = "Confidence ratings and performance accuracy across studies",
+        x = NULL,
+        y = "Average Confidence",
+        color = "Study"
+    ) +
     theme_minimal()
 ```
 
 Violin plot
 ```{r}
 performance %>%
-    ggplot() +
-    geom_violin(aes(Study_id, Avg_Accuracy, fill = Study_id), alpha = 0.7) +
-    geom_boxplot(aes(Study_id, Avg_Accuracy, fill = Study_id), alpha = 0.5, outliers = FALSE, width = 0.1) +
-    geom_quasirandom(aes(Study_id, Avg_Accuracy, fill = Study_id), color = "black", shape = 21)
+    mutate(
+        Study_id = factor(Study_id,
+            levels = c("Masoni", "Palser", "Hu"),
+            labels = c("Massoni & Roux", "Palser et al.", "Hu et al.")
+        )
+    ) %>%
+    ggplot(aes(Study_id, Avg_Accuracy, fill = Study_id)) +
+    geom_violin(alpha = 0.7) +
+    geom_boxplot(alpha = 0.5, outliers = FALSE, width = 0.1) +
+    geom_quasirandom(color = "black", shape = 21) +
+    labs(
+        x = NULL,
+        y = "Performance Accuracy",
+        title = "Performance accuracy across studies",
+        fill = "Study"
+    )
 ```
