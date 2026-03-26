@@ -87,14 +87,27 @@ So since we are searching for is not real comparability but reasonable alignment
 
 #### Participant ID
 
-As we need to combine the data of three studies into one dataframe
-For the participant ID I would rather like a operation that is easily reversible with knowing only little about the data itself. Since we have 3 lists we can simply use modulo or bitshift for that, I will use modulo for it as it is simpler to understand without computer science knowledge.
-We already created a factor for the studies, so we use the factor as numeric input for:
+As we need to combine the data of three studies into one dataframe and Jakob very intelligently noticed that the Participant IDs could overlap in such cases, which could be ignored if we always keep the StudyID as additional reference column, but this would make data analysis harder so a simple encoding is very helpful in this case.
+
+The suggestion was to add the sample size of study 1 to every ID in study 2 but this sadly does not avoid any collition, additionally in this case the IDs of study 1 start with 67, and the IDs of study 2 start with 1, so there is actually a very high chance we are generating a collition here instead of solving it.
+
+I would prefer an operation that is easily reversible without having to know much about the data.
+Luckily as CS major we constantly have to learn modular arithmetic and for the first time it is actually useful.
+We can use "Restklassen" (Congruence classes) to encode the 3 lists, we can simply use modulo (math) or bitshift (computer science) for that, I will use modulo for it as it is simpler to understand and reason about without computer science knowledge.
+
+The idea behind it is the following, we need 3 unique "Classes" and they are not allowed to overlap, so we multiply every number with a different residue from dividing (modulo) numbers by 3
+
 $$
-i = factornumber - 1 \\\\
-y = 3x+i
+participantIDs_1 = 3 \times x + 0 \\\\
+participantIDs_2 = 3 \times x + 1 \\\\
+participantIDs_3 = 3 \times x + 2
 $$
-That way we can easily
+That way we can never have overlapping numbers. And even better, I had already created a factor for the studies, so we can use the factor as numeric input for:
+$$
+i = Rfactor - 1 \\\\
+participantID = 3x+i
+$$
+And reversing it becomes easy:
 $$ 
 x = \frac{(y - i)}{3}
 $$
@@ -108,8 +121,8 @@ confidence <- full_join(full_join(masoni, palser), hu)
 performance <- full_join(full_join(masoni_avg_pp, palser_avg_pp), hu_avg_pp)
 ```
 
-Data visualization
-Spaghetti plot
+# Data visualization
+## Spaghetti plot
 ```{r spaghettiPlot}
 confidence %>%
     filter_out(.by = Subj_idx, ifelse(mean(Accuracy) == 1 || mean(Accuracy) == 0, TRUE, FALSE)) %>%
@@ -137,7 +150,7 @@ confidence %>%
     theme_minimal()
 ```
 
-Violin plot
+## Violin plot
 ```{r violinPlot}
 performance %>%
     mutate(
