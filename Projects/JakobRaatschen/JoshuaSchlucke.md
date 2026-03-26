@@ -135,13 +135,6 @@ i can be calculated simply by doing
         ) +
         theme_minimal()
 
-    ## `summarise()` has regrouped the output.
-    ## ℹ Summaries were computed grouped by Study_id, Subj_idx, and Accuracy.
-    ## ℹ Output is grouped by Study_id and Subj_idx.
-    ## ℹ Use `summarise(.groups = "drop_last")` to silence this message.
-    ## ℹ Use `summarise(.by = c(Study_id, Subj_idx, Accuracy))` for per-operation
-    ##   grouping (`?dplyr::dplyr_by`) instead.
-
 ![](JoshuaSchlucke_files/figure-markdown_strict/spaghettiPlot-1.png)
 
 ## Violin plot

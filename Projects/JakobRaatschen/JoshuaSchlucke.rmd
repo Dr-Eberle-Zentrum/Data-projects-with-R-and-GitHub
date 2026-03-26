@@ -123,7 +123,7 @@ performance <- full_join(full_join(masoni_avg_pp, palser_avg_pp), hu_avg_pp)
 
 # Data visualization
 ## Spaghetti plot
-```{r spaghettiPlot}
+```{r spaghettiPlot, message=FALSE, warning=FALSE}
 confidence %>%
     filter_out(.by = Subj_idx, ifelse(mean(Accuracy) == 1 || mean(Accuracy) == 0, TRUE, FALSE)) %>%
     mutate(
@@ -151,7 +151,7 @@ confidence %>%
 ```
 
 ## Violin plot
-```{r violinPlot}
+```{r violinPlot, message=FALSE, warning=FALSE}
 performance %>%
     mutate(
         Study_id = factor(Study_id,
