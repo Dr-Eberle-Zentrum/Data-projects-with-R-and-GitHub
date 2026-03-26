@@ -12,6 +12,7 @@ library(lubridate)
 library(stringr)
 library(scales)
 library(patchwork)
+setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 ```
 
 ## Questions / ideas
@@ -23,7 +24,7 @@ library(patchwork)
 ## Data 
 
 ```{r load_data}
-setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+
 
 commits_raw <- read_csv("datasets/commits_2019_2020_pytorch_pytorch.csv")
 ```
