@@ -27,7 +27,7 @@ header <- read_csv("stock_data.csv", n_max = 3, col_names = FALSE)
 ```
 
 - combine the two header rows into meaningful column names.
-```{r rename, echo=FALSE, message=FALSE}
+```{r rename, echo=FALSE, message=FALSE, warning=FALSE}
 #First row: price type (Open, Close, etc.)
 price_type <- as.character(header[1, ])
 #Second row: stock/index symbols
@@ -150,8 +150,10 @@ ggplot(data_daily,
   theme_minimal()+
   theme(strip.text = element_text(face = "bold"))
 ```
+
 ## Volume
-Visualize the daily trading volume for all stocks and indices using bar plots with `facet`.
+
+- Visualize the daily trading volume for all stocks and indices using bar plots with `facet`.
 ```{r,fig.width=14, fig.height=10, out.width="100%",echo=FALSE, message=FALSE}
 ggplot(data_daily, 
        aes(x = Date, y = Volume)) +
@@ -167,8 +169,10 @@ ggplot(data_daily,
     strip.text = element_text(size = 8, face = "bold")
   )
 ```
+
 ## Candlesticks
-Represent daily price data using candlesticks based on open, high, low, and close values.
+
+- Represent daily price data using candlesticks based on open, high, low, and close values.
 ```{r,fig.width=14, fig.height=10, out.width="100%", echo=FALSE, message=FALSE}
 ggplot(data_daily,
        aes(x = Date))+

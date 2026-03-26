@@ -18,11 +18,6 @@ them. How closely do you think stock and index prices correlate?
 
 -   combine the two header rows into meaningful column names.
 
-<!-- -->
-
-    ## Warning in col_name[1] <- Datetime: number of items to replace is not a
-    ## multiple of replacement length
-
 -   Skip the header rows and apply the new column names.
 
 -   Convert columns to appropriate data types.
@@ -99,12 +94,18 @@ them. How closely do you think stock and index prices correlate?
 
 Plot the daily closing prices for all stocks and indices using `facet`.
 <img src="zee_files/figure-markdown_strict/unnamed-chunk-8-1.png" width="100%" />
-\## Volume Visualize the daily trading volume for all stocks and indices
-using bar plots with `facet`.
-<img src="zee_files/figure-markdown_strict/unnamed-chunk-9-1.png" width="100%" />
-\## Candlesticks Represent daily price data using candlesticks based on
-open, high, low, and close values.
-<img src="zee_files/figure-markdown_strict/unnamed-chunk-10-1.png" width="100%" />
+
+## Volume
+
+-   Visualize the daily trading volume for all stocks and indices using
+    bar plots with `facet`.
+    <img src="zee_files/figure-markdown_strict/unnamed-chunk-9-1.png" width="100%" />
+
+## Candlesticks
+
+-   Represent daily price data using candlesticks based on open, high,
+    low, and close values.
+    <img src="zee_files/figure-markdown_strict/unnamed-chunk-10-1.png" width="100%" />
 
 (I wanted to include a bar chart showing the daily volume in the same
 graph, but as the y-axes couldn’t be merged and required scaling, I
