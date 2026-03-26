@@ -20,8 +20,15 @@ masoni <- read_csv("Projects/JakobRaatschen/Massoni_2017/data_Massoni_2017.csv")
     mutate(Subj_idx = (3 * Subj_idx)) %>%
     select(Study_id, Subj_idx, Stimulus, Response, Confidence, Accuracy)
 masoni
-masoni_avg_pp <- masoni %>%
-    summarise(.by = Subj_idx, Avg_Accuracy = mean(Accuracy))
+
+avg_pp <- function(dataframe) {
+    dataframe %>%
+        group_by(Subj_idx, Study_id) %>%
+        summarise(Avg_Accuracy = mean(Accuracy), .groups = "drop") %>%
+        select(Study_id, Subj_idx, Avg_Accuracy)
+}
+
+masoni_avg_pp <- avg_pp(masoni)
 
 masoni_avg_pp
 ```
@@ -38,8 +45,8 @@ palser <- read_csv("Projects/JakobRaatschen/Palser_2018/data_Palser_2018.csv") %
     mutate(Subj_idx = ((3 * Subj_idx) + 1)) %>%
     select(Study_id, Subj_idx, Stimulus, Response, Confidence, Accuracy)
 palser
-palser_avg_pp <- palser %>%
-    summarise(.by = Subj_idx, Avg_Accuracy = mean(Accuracy))
+palser_avg_pp <- avg_pp(palser)
+
 palser_avg_pp
 ```
 
@@ -52,8 +59,7 @@ hu <- read_csv("Projects/JakobRaatschen/Hu_2017/data_Hu_2017.csv") %>%
     mutate(Subj_idx = ((3 * Subj_idx) + 2)) %>%
     select(Study_id, Subj_idx, Stimulus, Response, Confidence, Accuracy)
 hu
-hu_avg_pp <- hu %>%
-    summarise(.by = Subj_idx, Avg_Accuracy = mean(Accuracy))
+hu_avg_pp <- avg_pp(hu)
 
 hu_avg_pp
 ```
@@ -97,4 +103,9 @@ confidence %>%
     stat_summary(aes(group = Study_id), fun = mean, geom = "point", size = 3) +
     facet_wrap(~Study_id) +
     theme_minimal()
+```
+
+Violin plot
+```{r}
+performance
 ```
