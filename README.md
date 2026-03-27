@@ -289,7 +289,7 @@ Now it is time to [open a pull request](https://github.com/Dr-Eberle-Zentrum/Dat
     -   suggest him/her as reviewer (upper right in GitHub Pull Request interface)
     -   send him/her a message via a comment "@USERNAME"
 -   make your pull request a **draft**, to highlight it is work in progress (and not ready for merging)
-    -   to this end, click on "Convert to draft" in the upper right below the reviewer list
+    -   to this end, click on **"Convert to draft"** in the upper right below the reviewer list
 
 #### Goal
 
@@ -315,6 +315,8 @@ The **project owner** should
     -   you can even (in discussion and agreement) change the goal of this solution! Your are not fixed to the initial project plan from this point on!
     -   provide hints/ideas how to tackle the project (if known to you or needed)
     -   ...
+-   even when you are happy with the result: 
+    - >> **formulate and request at least one noteworthy change!** <<
 
 The **solution author** should
 
@@ -332,12 +334,22 @@ Thus, you can directly discuss if you meet the ideas of the project owner or sug
 
 *You will get a loooot of GitHub emails this week!* :grin:
 
+- Once you are happy with the revision, mark it as ready for merging. To this end,
+  - Click the **"Ready for review"** Button at the end of your Pull Request 
+  - (only available for Draft Pull Requests...)
+  
+**DO NOT MERGE THE PULL REQUEST YOURSELF! THANKS!**
+  
+*That way, I will know you are happy and will have a final look before merging.*
+
+
 #### Goal
 
 At the end of Phase 2 you will
 
 -   have experienced the pull request workflow from both sides
 -   have integrated an interactive reviewing cycle in your project solution
+-   have marked for me (the project owner) your readyness for merging
 -   be ready for the next project! :grin:
 
 ## Beautifying your project
