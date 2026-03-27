@@ -23,7 +23,7 @@ The validation check shows that the percentage sums far exceed 100%. More precis
 ```{r data_val, echo=FALSE}
 check_sums <- function(df) {
   df %>%
-    mutate(perc_sum = lu + lp + lpc + ls + lsc + lh + lhc) %>%
+    mutate(perc_sum = rowSums(across(lu:lhc))) %>%
     summarise(`Minimum sum` = min(perc_sum), `Maximum sum` = max(perc_sum)) %>%
     kable()
 }
@@ -130,20 +130,35 @@ DFData_adjusted %>%
     ) %>%
   mutate(
     `Age group` = paste0(agefrom, "-", ageto),
-    # reorder with factors
-    `Education level` = factor(`Education level`, 
-                               levels = c("No education", 
-                                          "Some primary", 
-                                          "Completed primary", 
-                                          "Some secondary", 
-                                          "Completed secondary", 
-                                          "Some tertiary", 
-                                          "Completed tertiary")),
+    `Education category` = factor(
+      case_when(
+        `Education level` %in% c("Some primary", "Completed primary") ~ "Primary",
+        `Education level` %in% c("Some secondary", "Completed secondary") ~ "Secondary",
+        `Education level` %in% c("Some tertiary", "Completed tertiary") ~ "Tertiary",
+        TRUE ~ "None"
+      ),
+      levels = c(
+        # "None", "Primary", "Secondary", "Tertiary"
+        "Tertiary", "Secondary", "Primary", "None"
+      )
+    ),
+    `Education alpha` = factor(
+      case_when(
+        `Education level` %in% c("Some primary", "Some secondary", "Some tertiary") ~ "Some",
+        `Education level` %in% c("Completed primary", "Completed secondary", "Completed tertiary") ~ "Completed",
+        TRUE ~ "None"
+      ),
+      levels = c(
+        # "None", "Some", "Completed"
+        "Completed", "Some", "None"
+      )
+    ),
     country = factor(country, levels = c("Germany", "India")),
-    # invert left side (germany) to make pyramid shaped plot
-    plot_prc = ifelse(country == "Germany", -Percentage, Percentage) 
   ) %>%
-  ggplot(aes(x = plot_prc, y = `Age group`, fill = `Education level`)) +
+  ggplot(aes(x = Percentage * ifelse(country == "Germany", -1, 1), 
+             y = `Age group`, 
+             fill = `Education category`,
+             alpha = `Education alpha`)) +
   geom_col() +
   geom_vline(xintercept=0, color = "black", linewidth = 1) +
   geom_text(
@@ -167,21 +182,26 @@ DFData_adjusted %>%
   ) +
   theme_minimal() +
   scale_fill_manual(
-    values = c(`No education` = "#d73027", 
-               `Some primary` = "#fc8d59", 
-               `Completed primary` = "#fee090", 
-               `Some secondary` = "#151588", 
-               `Completed secondary` = "#1010ef", 
-               `Some tertiary` = "#009910", 
-               `Completed tertiary` = "#00dd10")
+    values = c(`None` = "#d73027", 
+               `Primary` = "#fc8d59",
+               `Secondary` = "#1010ef", 
+               `Tertiary` = "#00dd10")
   ) + 
+  scale_alpha_manual(
+    values = c(`None` = 1, 
+               `Some` = 0.5, 
+               `Completed` = 1)
+  ) +
   theme(legend.position = "bottom", 
-         panel.grid.major = element_blank(), 
-         panel.grid.minor = element_blank(),
+        legend.margin = margin(t = 0),
+        legend.box = "vertical",
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
         panel.spacing = unit(2, "lines"), 
         strip.text = element_text(size = 14, face = "bold"), 
-        plot.margin = margin(t = 10, r = 60, b = 10, l = 10)) +
-  guides(fill = guide_legend(reverse = TRUE))
+        plot.margin = margin(t = 10, r = 20, b = 10, l = 20)) +
+  guides(fill = guide_legend(reverse = F, nrow = 1), 
+         alpha = guide_legend(reverse = F, nrow = 1))
 
 ```
 
