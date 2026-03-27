@@ -58,12 +58,13 @@ Steps:
 3. Drop duplicate commit hashes.
 4. Normalize messages (trim, flatten newlines); remove auto-generated commits that start with *merge*, *bump*, or *revert*.
 5. Derive features: `year`, `month`, `weekday`, `hour`, `message_length`, and conventional commit `commit_type` (others → `other`).
+   Parsed times keep the recorded clock time and use UTC only as a neutral container after removing offsets (no timezone conversion applied).
 
 ```{r clean}
 prepared <- raw %>%
   mutate(
     date_stripped = str_replace(date, "\\s[+-]\\d{4}$", ""),
-    # After removing offsets we keep the recorded local clock time; UTC is used only as a neutral reference
+    # After removing offsets we keep the recorded local clock time; UTC is only a neutral container (not a true conversion)
     date_local = parse_date_time(date_stripped, orders = "a b d H:M:S Y", tz = "UTC", locale = "C"),
     message = str_replace_all(message, "[\r\n]+", " "),
     message = str_trim(message),
@@ -71,7 +72,7 @@ prepared <- raw %>%
   )
 
 valid_dates <- prepared %>%
-  filter(!is.na(date_local), between(year(date_local), 2018, 2022))
+  filter(!is.na(date_local), between(year(date_local), 2018, 2021))
 
 dedup <- valid_dates %>%
   arrange(date_local) %>%
@@ -106,7 +107,7 @@ Most rows survive once timestamps are parsed without timezone offsets; dropping 
 cleanup_steps <- tribble(
   ~Step, ~Rows,
   "Raw rows", raw_rows,
-  "Valid dates (>=2018, tz offset ignored)", nrow(valid_dates),
+  "Valid dates >=2018", nrow(valid_dates),
   "Distinct commit hashes", nrow(dedup),
   "After removing auto-generated", nrow(filtered),
   "Ready for analysis", nrow(clean)

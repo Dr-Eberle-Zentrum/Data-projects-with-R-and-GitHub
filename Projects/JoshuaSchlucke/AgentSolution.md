@@ -26,7 +26,9 @@ Steps:
     commits that start with *merge*, *bump*, or *revert*.
 5.  Derive features: `year`, `month`, `weekday`, `hour`,
     `message_length`, and conventional commit `commit_type` (others →
-    `other`).
+    `other`). Parsed times keep the recorded clock time and use UTC only
+    as a neutral container after removing offsets (no timezone
+    conversion applied).
 
 ### Cleanup summary
 
@@ -50,8 +52,7 @@ commits.
 <td style="text-align: left;">100.0%</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Valid dates (&gt;=2018, tz offset
-ignored)</td>
+<td style="text-align: left;">Valid dates &gt;=2018</td>
 <td style="text-align: right;">95484</td>
 <td style="text-align: left;">93.6%</td>
 </tr>
