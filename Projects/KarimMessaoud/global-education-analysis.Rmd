@@ -1,0 +1,375 @@
+---
+title: "Global Education Attainment Analysis"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo    = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  fig.width  = 10,
+  fig.height = 6
+)
+```
+
+```{r load-packages}
+library(readr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(knitr)
+library(scales)
+library(forcats)
+```
+
+## Data
+
+The analysis uses the **Barro-Lee Educational Attainment Dataset (v2.2, 2013)**.  
+Data source: <http://barrolee.com> or directly via  
+<https://raw.githubusercontent.com/barrolee/BarroLeeDataSet/refs/heads/master/BLData/BL2013_MF_v2.2.csv>
+
+```{r load-data}
+data_path <- "BL2013_MF_v2.2.csv"
+data_url  <- "https://raw.githubusercontent.com/barrolee/BarroLeeDataSet/master/BLData/BL2013_MF_v2.2.csv"
+
+bl_raw <- tryCatch(
+  read_csv(data_url, show_col_types = FALSE),
+  error = function(e) read_csv(data_path, show_col_types = FALSE)
+)
+```
+
+### First rows of the dataset
+
+```{r preview-table}
+kable(
+  head(bl_raw, 5),
+  caption = "First 5 rows of the Barro-Lee dataset",
+  align   = "c",
+  digits  = 2
+)
+```
+
+**Key columns**
+
+| Column | Description |
+|--------|-------------|
+| `lu`   | % with no education |
+| `lp`   | % with some primary education |
+| `lpc`  | % with completed primary education |
+| `ls`   | % with some secondary education |
+| `lsc`  | % with completed secondary education |
+| `lh`   | % with some higher/tertiary education |
+| `lhc`  | % with completed higher/tertiary education |
+| `yr_sch` | Average years of schooling |
+| `WBcode` | World Bank country code |
+| `region_code` | World region |
+
+The education-level variables are mutually exclusive: each person is counted only under
+their **highest** attained education level.
+
+---
+
+## Data Cleaning & Validation
+
+```{r data-cleaning}
+# This dataset is already filtered to combined sex (MF only)
+# Retain only standard 5-year age groups (exclude aggregate rows: ageto==999)
+bl <- bl_raw |>
+  filter(ageto != 999)
+```
+
+### Check 1 — Education level groups sum to 100
+
+The dataset uses three mutually exclusive **level groups**: primary (`lp`), secondary
+(`ls`), and higher (`lh`). Within each group, the `*c` variant (`lpc`, `lsc`, `lhc`)
+counts those who **completed** that level. Accordingly, `lu + lp + ls + lh ≈ 100` for
+each row, while `lu + lp + lpc + ls + lsc + lh + lhc` will naturally exceed 100 (as
+`lpc`, `lsc`, `lhc` are nested subsets of their parent level).
+
+```{r check-sum}
+share_check <- bl |>
+  mutate(total_share = lu + lp + ls + lh) |>
+  summarise(
+    n_rows            = n(),
+    mean_total        = round(mean(total_share, na.rm = TRUE), 2),
+    min_total         = round(min(total_share,  na.rm = TRUE), 2),
+    max_total         = round(max(total_share,  na.rm = TRUE), 2),
+    n_off_by_gt0.5pct = sum(abs(total_share - 100) > 0.5, na.rm = TRUE)
+  )
+
+kable(share_check, caption = "Share sum validation: lu + lp + ls + lh should be ~100")
+```
+
+### Check 2 — Missing and negative values
+
+```{r check-missing}
+edu_cols <- c("lu", "lp", "lpc", "ls", "lsc", "lh", "lhc", "yr_sch", "pop")
+
+missing_check <- bl |>
+  summarise(across(all_of(edu_cols), ~sum(is.na(.)))) |>
+  pivot_longer(everything(), names_to = "column", values_to = "n_missing")
+
+negative_check <- bl |>
+  summarise(across(all_of(edu_cols), ~sum(. < 0, na.rm = TRUE))) |>
+  pivot_longer(everything(), names_to = "column", values_to = "n_negative")
+
+checks <- left_join(missing_check, negative_check, by = "column")
+kable(checks, caption = "Missing and negative value counts per column")
+```
+
+### Check 3 — Country × year coverage
+
+```{r check-coverage}
+expected_years <- seq(1950, 2010, by = 5)
+
+incomplete <- bl |>
+  group_by(country) |>
+  summarise(n_years = n_distinct(year), .groups = "drop") |>
+  filter(n_years < length(expected_years))
+
+if (nrow(incomplete) == 0) {
+  cat("All countries have data for all", length(expected_years), "expected years.\n")
+} else {
+  cat(nrow(incomplete), "countries have incomplete year coverage:\n")
+  kable(incomplete, caption = "Countries with fewer than 13 year observations")
+}
+```
+
+---
+
+## Visualization 1 — Regional Trends in Average Years of Schooling
+
+*Addresses Q1 (Has the education gap between regions narrowed?) and Q2 (Are there
+countries where schooling stagnated?)*
+
+Population-weighted average years of schooling per region per year:
+
+```{r viz1}
+regional_trends <- bl |>
+  filter(!is.na(yr_sch), !is.na(pop), pop > 0, !is.na(region_code)) |>
+  group_by(region_code, year) |>
+  summarise(
+    yr_sch_wtd = sum(yr_sch * pop) / sum(pop),
+    .groups = "drop"
+  )
+
+ggplot(regional_trends, aes(x = year, y = yr_sch_wtd, color = region_code)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  scale_x_continuous(breaks = seq(1950, 2010, 10)) +
+  scale_color_brewer(palette = "Dark2") +
+  labs(
+    title    = "Regional Trends in Average Years of Schooling (1950–2010)",
+    subtitle = "Population-weighted regional averages across 5-year age groups",
+    x        = "Year",
+    y        = "Average Years of Schooling",
+    color    = "Region"
+  ) +
+  theme_bw() +
+  theme(
+    legend.position  = "bottom",
+    legend.title     = element_text(face = "bold"),
+    plot.title       = element_text(face = "bold")
+  ) +
+  guides(color = guide_legend(nrow = 3))
+```
+
+---
+
+## Visualization 2 — Education Distribution by Age Group (Population Pyramid Style)
+
+*Addresses Q4 (Which age group benefits most?) and Q1*
+
+Germany (left) vs. India (right) for the years 1960 and 2010, with stacked bars
+showing the share in each education level per 5-year age group.
+
+```{r viz2, fig.width=12, fig.height=7}
+# Correct mutually exclusive education shares:
+# lu, lp-lpc, lpc, ls-lsc, lsc, lh-lhc, lhc  (sum = lu + lp + ls + lh ≈ 100)
+
+pyr_data <- bl |>
+  filter(
+    country %in% c("Germany", "India"),
+    year    %in% c(1960, 2010),
+    agefrom >= 15, ageto <= 64
+  ) |>
+  mutate(
+    `No Education`       = lu,
+    `Some Primary`       = lp  - lpc,
+    `Complete Primary`   = lpc,
+    `Some Secondary`     = ls  - lsc,
+    `Complete Secondary` = lsc,
+    `Some Tertiary`      = lh  - lhc,
+    `Complete Tertiary`  = lhc
+  ) |>
+  select(country, year, agefrom, ageto,
+         `No Education`, `Some Primary`, `Complete Primary`,
+         `Some Secondary`, `Complete Secondary`,
+         `Some Tertiary`, `Complete Tertiary`) |>
+  pivot_longer(
+    cols      = `No Education`:`Complete Tertiary`,
+    names_to  = "edu_level",
+    values_to = "share"
+  ) |>
+  mutate(
+    age_group = factor(
+      paste0(agefrom, "–", ageto),
+      levels = paste0(seq(15, 60, 5), "–", seq(19, 64, 5))
+    ),
+    edu_level = factor(edu_level,
+                       levels = c("No Education", "Some Primary", "Complete Primary",
+                                  "Some Secondary", "Complete Secondary",
+                                  "Some Tertiary", "Complete Tertiary")),
+    # Germany bars extend left (negative), India bars extend right (positive)
+    share_directed = ifelse(country == "Germany", -share, share)
+  )
+
+ggplot(pyr_data,
+       aes(x = share_directed, y = age_group, fill = edu_level)) +
+  geom_bar(stat = "identity") +
+  facet_wrap(~year, labeller = label_both) +
+  geom_vline(xintercept = 0, color = "black", linewidth = 0.6) +
+  scale_x_continuous(
+    labels = function(x) paste0(abs(x), "%"),
+    limits = c(-100, 100),
+    breaks = seq(-100, 100, 25)
+  ) +
+  scale_fill_brewer(palette = "RdYlGn") +
+  labs(
+    title    = "Education Level Distribution by Age Group",
+    subtitle = "← Germany (left)  |  India (right) →",
+    x        = "Share of Age Group (%)",
+    y        = "Age Group",
+    fill     = "Education Level"
+  ) +
+  theme_bw() +
+  theme(
+    legend.position = "bottom",
+    plot.title      = element_text(face = "bold"),
+    plot.subtitle   = element_text(face = "bold", size = 11)
+  ) +
+  guides(fill = guide_legend(nrow = 2))
+```
+
+---
+
+## Visualization 3 — No-Education Share vs. Average Years of Schooling
+
+*Addresses Q3 (Do countries with more uneducated population have lower average
+schooling?) — shown here for the year 2010*
+
+Each point is one country; colour encodes world region. Values are
+population-weighted averages across all 5-year age groups.
+
+```{r viz3}
+scatter_year <- 2010
+
+viz3_data <- bl |>
+  filter(year == scatter_year, !is.na(lu), !is.na(yr_sch),
+         !is.na(pop), pop > 0, !is.na(region_code)) |>
+  group_by(country, region_code) |>
+  summarise(
+    lu_wtd     = sum(lu     * pop) / sum(pop),
+    yr_sch_wtd = sum(yr_sch * pop) / sum(pop),
+    .groups    = "drop"
+  )
+
+ggplot(viz3_data,
+       aes(x = yr_sch_wtd, y = lu_wtd, color = region_code)) +
+  geom_point(size = 2.5, alpha = 0.8) +
+  scale_color_brewer(palette = "Dark2") +
+  labs(
+    title    = paste0("No-Education Share vs. Average Years of Schooling (",
+                      scatter_year, ")"),
+    subtitle = "Each point = one country; population-weighted values across age groups",
+    x        = "Average Years of Schooling",
+    y        = "Share with No Education (%)",
+    color    = "Region"
+  ) +
+  theme_bw() +
+  theme(
+    legend.position = "right",
+    plot.title      = element_text(face = "bold")
+  ) +
+  guides(color = guide_legend(ncol = 1))
+```
+
+---
+
+## Visualization 4 — Choropleth Map: Gain in Average Years of Schooling (1950–2010)
+
+*Addresses Q1 and Q2*
+
+Countries coloured by the absolute increase in average years of schooling between
+1950 and 2010.  **Red** = negative or zero gain; **Green** = highest gains;
+**Light grey** = no data.
+
+```{r viz4, fig.width=12, fig.height=7}
+# Population-weighted country average for 1950 and 2010
+gain_data <- bl |>
+  filter(year %in% c(1950, 2010), !is.na(yr_sch), !is.na(pop), pop > 0) |>
+  group_by(country, WBcode, year) |>
+  summarise(yr_sch_avg = sum(yr_sch * pop) / sum(pop), .groups = "drop") |>
+  pivot_wider(names_from = year, values_from = yr_sch_avg,
+              names_prefix = "yr_sch_") |>
+  mutate(gain = yr_sch_2010 - yr_sch_1950) |>
+  filter(!is.na(gain))
+
+# Map BL country names → ggplot2 map_data region names
+name_fixes <- c(
+  "Brunei Darussalam"                                    = "Brunei",
+  "Congo"                                                = "Republic of Congo",
+  "Cote dIvoire"                                         = "Ivory Coast",
+  "Dominican Rep."                                       = "Dominican Republic",
+  "Iran (Islamic Republic of)"                           = "Iran",
+  "Lao People's Democratic Republic"                     = "Laos",
+  "Libyan Arab Jamahiriya"                               = "Libya",
+  "Republic of Korea"                                    = "South Korea",
+  "Republic of Moldova"                                  = "Moldova",
+  "Russian Federation"                                   = "Russia",
+  "Syrian Arab Republic"                                 = "Syria",
+  "Trinidad and Tobago"                                  = "Trinidad",
+  "United Kingdom"                                       = "UK",
+  "United Republic of Tanzania"                          = "Tanzania",
+  "Viet Nam"                                             = "Vietnam",
+  "China, Hong Kong Special Administrative Region"       = "Hong Kong",
+  "China, Macao Special Administrative Region"           = "Macao"
+)
+
+gain_map <- gain_data |>
+  mutate(map_region = dplyr::recode(country, !!!name_fixes))
+
+# Build world map and join
+world_map  <- map_data("world")
+world_edu  <- world_map |>
+  left_join(gain_map, by = c("region" = "map_region"))
+
+# Compute diverging colour scale centred at 0
+min_gain  <- min(gain_data$gain, na.rm = TRUE)
+max_gain  <- max(gain_data$gain, na.rm = TRUE)
+zero_frac <- (0 - min_gain) / (max_gain - min_gain)   # position of 0 in [0, 1]
+
+ggplot(world_edu, aes(x = long, y = lat, group = group, fill = gain)) +
+  geom_polygon(color = "white", linewidth = 0.08) +
+  scale_fill_gradientn(
+    colors = c("darkred", "red", "lightyellow", "lightgreen", "darkgreen"),
+    values = c(0, zero_frac * 0.98, zero_frac, zero_frac + 0.02, 1),
+    limits = c(min_gain, max_gain),
+    na.value = "lightgray",
+    name = "Gain\n(years)"
+  ) +
+  coord_fixed(ratio = 1.3) +
+  labs(
+    title    = "Gain in Average Years of Schooling per Country (1950–2010)",
+    subtitle = "Red = negative / zero gain  |  Green = highest gains  |  Light grey = no data"
+  ) +
+  theme_void() +
+  theme(
+    legend.position  = "bottom",
+    legend.direction = "horizontal",
+    legend.key.width = unit(2, "cm"),
+    plot.title       = element_text(face = "bold", size = 13),
+    plot.subtitle    = element_text(size = 10)
+  )
+```
