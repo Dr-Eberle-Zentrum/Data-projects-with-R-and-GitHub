@@ -30,6 +30,7 @@ conv_prefixes <- c("feat", "fix", "docs", "refactor", "test", "chore", "style", 
 # Conventional commit prefixes, matched only at the start of the message
 conv_pattern <- str_c("^(", str_c(conv_prefixes, collapse = "|"), ")(\\(|:|\\b)")
 weekday_levels <- wday(1:7, label = TRUE, abbr = TRUE, week_start = 1)
+# Trim extreme lengths when plotting the message length distribution
 length_quantile <- 0.98
 ```
 
@@ -66,7 +67,8 @@ Steps:
 prepared <- raw %>%
   mutate(
     date_stripped = str_replace(date, "\\s[+-]\\d{4}$", ""),
-    # Offsets are removed: the POSIXct is stored in UTC but represents the raw clock time from the commit author and cannot be mapped back to their actual timezone (hour-of-day stats mix timezones)
+    # Offsets are removed: the POSIXct is stored in UTC but represents the raw clock time from the commit author
+    # It cannot be mapped back to the original timezone, so hour-of-day stats mix contributors from many zones
     date_naive = parse_date_time(date_stripped, orders = "a b d H:M:S Y", tz = "UTC", locale = "C"),
     message = str_replace_all(message, "[\r\n]+", " "),
     message = str_trim(message),
@@ -100,6 +102,8 @@ classified <- filtered %>%
 
 clean <- classified %>%
   select(commit, author, repo, date_naive, message, message_length, year, month, weekday, hour, commit_type)
+
+length_cap <- quantile(clean$message_length, length_quantile)
 ```
 
 ### Cleanup summary
@@ -212,7 +216,7 @@ Feature and fix commits tend to carry longer descriptions than chores/CI, sugges
 ```{r message-length, fig.width=8, fig.height=5}
 ggplot(clean, aes(commit_type, message_length, fill = commit_type)) +
   geom_boxplot(outlier.alpha = 0.15) +
-  scale_y_continuous(limits = c(0, quantile(clean$message_length, length_quantile)), labels = comma) +
+  scale_y_continuous(limits = c(0, length_cap), labels = comma) +
   scale_fill_brewer(palette = "Pastel1") +
   labs(
     title = "Message length distribution by commit type",
