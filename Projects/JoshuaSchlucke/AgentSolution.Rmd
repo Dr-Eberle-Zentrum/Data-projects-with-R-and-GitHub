@@ -1,0 +1,246 @@
+---
+title: "GitHub Commit Patterns – Agent Solution"
+output: md_document
+---
+
+This notebook solves the commit-message exploration proposed in the project description.  
+Key choices:
+
+- Use the balanced sample (`datasets/commits_balanced_3k_per_repo.csv`) to compare repositories fairly.
+- **Ignore timezone offsets** when deriving hours/weekday patterns to reflect the local commit times authors recorded in Git.
+- Remove obviously auto-generated commits and normalize messages before classifying them.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  fig.path = "AgentSolution_plots/"
+)
+options(dplyr.summarise.inform = FALSE)
+if (!dir.exists("AgentSolution_plots")) dir.create("AgentSolution_plots")
+
+library(tidyverse)
+library(lubridate)
+library(scales)
+library(knitr)
+
+source_file <- "datasets/commits_balanced_3k_per_repo.csv"
+conv_prefixes <- c("feat", "fix", "docs", "refactor", "test", "chore", "style", "build", "ci", "perf")
+weekday_levels <- wday(1:7, label = TRUE, abbr = TRUE, week_start = 1)
+```
+
+## Load data
+
+```{r load}
+raw <- read_csv(
+  source_file,
+  col_types = cols(
+    commit = col_character(),
+    author = col_character(),
+    date = col_character(),
+    message = col_character(),
+    repo = col_character()
+  )
+)
+raw_rows <- nrow(raw)
+```
+
+Balanced sample with `r raw_rows` commits across `r n_distinct(raw$repo)` repositories.
+
+## Clean and enrich
+
+Steps:
+
+1. Strip timezone offsets from the `date` string to keep the **recorded local time** (hour-of-day analyses ignore offset shifts).
+2. Parse datetimes; drop missing/invalid and pre-2018 timestamps.
+3. Drop duplicate commit hashes.
+4. Normalize messages (trim, flatten newlines); remove auto-generated commits that start with *merge*, *bump*, or *revert*.
+5. Derive features: `year`, `month`, `weekday`, `hour`, `message_length`, and conventional commit `commit_type` (others → `other`).
+
+```{r clean}
+prepared <- raw %>%
+  mutate(
+    date_stripped = str_replace(date, " [+-][0-9]{4}$", ""),
+    date_local = parse_date_time(date_stripped, orders = "a b d H:M:S Y", tz = "UTC", locale = "C"),
+    message = str_replace_all(message, "[\r\n]+", " "),
+    message = str_trim(message),
+    message_lower = str_to_lower(message)
+  )
+
+valid_dates <- prepared %>%
+  filter(!is.na(date_local), between(year(date_local), 2018, 2022))
+
+dedup <- valid_dates %>%
+  arrange(date_local) %>%
+  distinct(commit, .keep_all = TRUE)
+
+auto_pattern <- "^(merge|bump|revert)\\b"
+filtered <- dedup %>%
+  mutate(auto_generated = str_detect(message_lower, auto_pattern)) %>%
+  filter(!auto_generated)
+
+classified <- filtered %>%
+  mutate(
+    commit_type = str_match(message_lower, "^(feat|fix|docs|refactor|test|chore|style|build|ci|perf)(\\(|:|\\b)")[, 2],
+    commit_type = if_else(is.na(commit_type), "other", commit_type),
+    commit_type = factor(commit_type, levels = c(conv_prefixes, "other")),
+    message_length = nchar(message),
+    year = year(date_local),
+    month = as_date(floor_date(date_local, "month")),
+    weekday = factor(wday(date_local, label = TRUE, abbr = TRUE, week_start = 1), levels = weekday_levels),
+    hour = hour(date_local)
+  )
+
+clean <- classified %>%
+  select(commit, author, repo, date_local, message, message_length, year, month, weekday, hour, commit_type)
+```
+
+### Cleanup summary
+
+Most rows survive once timestamps are parsed without timezone offsets; dropping auto-generated messages keeps the focus on human-written commits.
+
+```{r cleanup-summary}
+cleanup_steps <- tribble(
+  ~Step, ~Rows,
+  "Raw rows", raw_rows,
+  "Valid dates (>=2018, tz offset ignored)", nrow(valid_dates),
+  "Distinct commit hashes", nrow(dedup),
+  "After removing auto-generated", nrow(filtered),
+  "Ready for analysis", nrow(clean)
+)
+
+cleanup_steps %>%
+  mutate(Retained = percent(Rows / first(Rows))) %>%
+  kable(caption = "Row counts after each cleaning step")
+```
+
+### Repository coverage
+
+Top repositories after cleaning (all within 2018–2021 coverage):
+
+```{r repo-span}
+repo_span <- clean %>%
+  group_by(repo) %>%
+  summarise(
+    commits = n(),
+    first_date = as_date(min(date_local)),
+    last_date = as_date(max(date_local)),
+    .groups = "drop"
+  ) %>%
+  arrange(desc(commits))
+
+kable(head(repo_span, 10), caption = "Top repositories (coverage and span)")
+```
+
+## Visualizations
+
+### Overall weekday/hour heatmap
+
+Daily rhythm using recorded local times shows peaks in daytime and a secondary evening wave.
+```{r heatmap-overall, fig.width=8, fig.height=4}
+heat_df <- clean %>%
+  count(weekday, hour)
+
+ggplot(heat_df, aes(hour, weekday, fill = n)) +
+  geom_tile(color = "white") +
+  scale_x_continuous(breaks = seq(0, 23, by = 2)) +
+  scale_fill_viridis_c(option = "C") +
+  labs(
+    title = "Commits by weekday and hour (timezone offsets ignored)",
+    x = "Hour of day",
+    y = NULL,
+    fill = "Commits"
+  )
+```
+
+### Weekday/hour heatmap by repository (top 6)
+
+Top repositories reveal different rhythms—some concentrated around business hours, others stretching into nights.
+```{r heatmap-repo, fig.width=10, fig.height=8}
+top_repos <- repo_span %>% slice_head(n = 6) %>% pull(repo)
+
+heat_repo <- clean %>%
+  filter(repo %in% top_repos) %>%
+  count(repo, weekday, hour)
+
+ggplot(heat_repo, aes(hour, weekday, fill = n)) +
+  geom_tile(color = "white") +
+  scale_x_continuous(breaks = seq(0, 23, by = 4)) +
+  scale_fill_viridis_c(option = "D") +
+  facet_wrap(~repo, ncol = 2) +
+  labs(
+    title = "Top repos: commits by weekday/hour (local clock preserved)",
+    x = "Hour of day",
+    y = NULL,
+    fill = "Commits"
+  )
+```
+
+### Commit types per repository
+
+Shares of conventional commit prefixes highlight whether a repo is feature-driven (`feat`) or maintenance-heavy (`fix`, `chore`, `docs`).
+```{r types-by-repo, fig.width=9, fig.height=6}
+type_share <- clean %>%
+  count(repo, commit_type) %>%
+  group_by(repo) %>%
+  mutate(pct = n / sum(n)) %>%
+  ungroup()
+
+ggplot(type_share, aes(x = reorder(repo, -pct), y = pct, fill = commit_type)) +
+  geom_col(position = "fill", color = "white") +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  scale_fill_brewer(palette = "Paired") +
+  coord_flip() +
+  labs(
+    title = "Conventional commit prefixes across repositories",
+    x = NULL,
+    y = "Share of commits",
+    fill = "Commit type"
+  )
+```
+
+### Message length by commit type
+
+Feature and fix commits tend to carry longer descriptions than chores/CI, suggesting richer context for impactful changes.
+```{r message-length, fig.width=8, fig.height=5}
+ggplot(clean, aes(commit_type, message_length, fill = commit_type)) +
+  geom_boxplot(outlier.alpha = 0.15) +
+  scale_y_continuous(limits = c(0, quantile(clean$message_length, 0.98)), labels = comma) +
+  scale_fill_brewer(palette = "Pastel1") +
+  labs(
+    title = "Message length distribution by commit type",
+    x = "Commit type",
+    y = "Characters"
+  ) +
+  theme(legend.position = "none")
+```
+
+### Monthly activity trend (top 3 repos)
+
+Monthly totals for the busiest repositories show sustained activity with late-2020/early-2021 spikes.
+```{r monthly-trend, fig.width=9, fig.height=5}
+trend_repos <- repo_span %>% slice_head(n = 3) %>% pull(repo)
+
+monthly <- clean %>%
+  filter(repo %in% trend_repos) %>%
+  count(month, repo)
+
+ggplot(monthly, aes(month, n, color = repo)) +
+  geom_line(linewidth = 1) +
+  scale_x_date(date_breaks = "3 months", date_labels = "%Y-%m") +
+  scale_y_continuous(labels = comma) +
+  labs(
+    title = "Monthly commit volume for busiest repositories",
+    x = "Month",
+    y = "Commits"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+## Takeaways
+
+- Ignoring timezone offsets (using the recorded local clock) surfaces clear daytime and late-evening peaks; activity spans the full week with softer dips on weekends.
+- A handful of repositories dominate volume; their hourly rhythms differ—some cluster around EU work hours, others show broader spread.
+- Conventional commit prefixes are widely used; `fix`/`chore` heavy repos contrast with more `feat`-oriented ones.
+- Message lengths vary by type: fixes and features are longer than chores/CI, hinting at richer descriptions for impactful changes.
