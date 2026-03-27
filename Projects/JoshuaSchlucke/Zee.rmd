@@ -120,7 +120,7 @@ ggplot(commit_counts_repo, aes(x = hour, y = weekday, fill = n))+
   - y-axis: number of commits
   - fill: commit type
 
-```{r prefix_distribution, echo=FALSE}
+```{r prefix_distribution, fig.width=12, fig.height=6 ,echo=FALSE}
 library(stringr)
 
 #Extract commit type 
