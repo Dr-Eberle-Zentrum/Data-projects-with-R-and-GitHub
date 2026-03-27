@@ -53,7 +53,7 @@ Balanced sample with `r raw_rows` commits across `r n_distinct(raw$repo)` reposi
 
 Steps:
 
-1. Strip timezone offsets from the `date` string to keep the **recorded local time** (hour-of-day analyses ignore offset shifts).
+1. Strip timezone offsets from the `date` string to keep the **clock time recorded by the author** (hour-of-day analyses ignore offset shifts; the original timezone cannot be recovered).
 2. Parse datetimes; drop missing/invalid and pre-2018 timestamps.
 3. Drop duplicate commit hashes.
 4. Normalize messages (trim, flatten newlines); remove auto-generated commits that start with *merge*, *bump*, or *revert*.
@@ -64,7 +64,7 @@ Steps:
 prepared <- raw %>%
   mutate(
     date_stripped = str_replace(date, "\\s[+-]\\d{4}$", ""),
-    # After removing offsets we keep the recorded local clock time; UTC is only a neutral container (not a true conversion)
+    # Offsets are removed: the POSIXct is stored in UTC but represents the raw clock time from the commit author and cannot be mapped back to their actual timezone
     date_local = parse_date_time(date_stripped, orders = "a b d H:M:S Y", tz = "UTC", locale = "C"),
     message = str_replace_all(message, "[\r\n]+", " "),
     message = str_trim(message),
@@ -78,6 +78,7 @@ dedup <- valid_dates %>%
   arrange(date_local) %>%
   distinct(commit, .keep_all = TRUE)
 
+# Remove obvious automation (merge commits, dependency bumps, and reverts) so the stats reflect human-written messages
 auto_pattern <- "^(merge|bump|revert)\\b"
 filtered <- dedup %>%
   mutate(auto_generated = str_detect(message_lower, auto_pattern)) %>%

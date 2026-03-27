@@ -18,8 +18,9 @@ Balanced sample with 102000 commits across 34 repositories.
 
 Steps:
 
-1.  Strip timezone offsets from the `date` string to keep the **recorded
-    local time** (hour-of-day analyses ignore offset shifts).
+1.  Strip timezone offsets from the `date` string to keep the **clock
+    time recorded by the author** (hour-of-day analyses ignore offset
+    shifts; the original timezone cannot be recovered).
 2.  Parse datetimes; drop missing/invalid and pre-2018 timestamps.
 3.  Drop duplicate commit hashes.
 4.  Normalize messages (trim, flatten newlines); remove auto-generated
