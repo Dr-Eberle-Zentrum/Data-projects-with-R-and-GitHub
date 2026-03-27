@@ -7,7 +7,7 @@ This notebook solves the commit-message exploration proposed in the project desc
 Key choices:
 
 - Use the balanced sample (`datasets/commits_balanced_3k_per_repo.csv`) to compare repositories fairly.
-- **Ignore timezone offsets** when deriving hours/weekday patterns to reflect the local commit times authors recorded in Git.
+- **Ignore timezone offsets** when deriving hours/weekday patterns, working with the raw clock times recorded in commits (timezone context is removed).
 - Remove obviously auto-generated commits and normalize messages before classifying them.
 
 ```{r setup, include=FALSE}
@@ -27,6 +27,8 @@ library(knitr)
 
 source_file <- "datasets/commits_balanced_3k_per_repo.csv"
 conv_prefixes <- c("feat", "fix", "docs", "refactor", "test", "chore", "style", "build", "ci", "perf")
+# Conventional commit prefixes, matched only at the start of the message
+conv_pattern <- str_c("^(", str_c(conv_prefixes, collapse = "|"), ")(\\(|:|\\b)")
 weekday_levels <- wday(1:7, label = TRUE, abbr = TRUE, week_start = 1)
 length_quantile <- 0.98
 ```
@@ -65,17 +67,17 @@ prepared <- raw %>%
   mutate(
     date_stripped = str_replace(date, "\\s[+-]\\d{4}$", ""),
     # Offsets are removed: the POSIXct is stored in UTC but represents the raw clock time from the commit author and cannot be mapped back to their actual timezone
-    date_local = parse_date_time(date_stripped, orders = "a b d H:M:S Y", tz = "UTC", locale = "C"),
+    date_naive = parse_date_time(date_stripped, orders = "a b d H:M:S Y", tz = "UTC", locale = "C"),
     message = str_replace_all(message, "[\r\n]+", " "),
     message = str_trim(message),
     message_lower = str_to_lower(message)
   )
 
 valid_dates <- prepared %>%
-  filter(!is.na(date_local), between(year(date_local), 2018, 2021))
+  filter(!is.na(date_naive), between(year(date_naive), 2018, 2021))
 
 dedup <- valid_dates %>%
-  arrange(date_local) %>%
+  arrange(date_naive) %>%
   distinct(commit, .keep_all = TRUE)
 
 # Remove obvious automation (merge commits, dependency bumps, and reverts) so the stats reflect human-written messages
@@ -86,18 +88,18 @@ filtered <- dedup %>%
 
 classified <- filtered %>%
   mutate(
-    commit_type = str_match(message_lower, str_c("^(", str_c(conv_prefixes, collapse = "|"), ")(\\(|:|\\b)"))[, 2],
+    commit_type = str_match(message_lower, conv_pattern)[, 2],
     commit_type = if_else(is.na(commit_type), "other", commit_type),
     commit_type = factor(commit_type, levels = c(conv_prefixes, "other")),
     message_length = nchar(message),
-    year = year(date_local),
-    month = as_date(floor_date(date_local, "month")),
-    weekday = factor(wday(date_local, label = TRUE, abbr = TRUE, week_start = 1), levels = weekday_levels),
-    hour = hour(date_local)
+    year = year(date_naive),
+    month = as_date(floor_date(date_naive, "month")),
+    weekday = factor(wday(date_naive, label = TRUE, abbr = TRUE, week_start = 1), levels = weekday_levels),
+    hour = hour(date_naive)
   )
 
 clean <- classified %>%
-  select(commit, author, repo, date_local, message, message_length, year, month, weekday, hour, commit_type)
+  select(commit, author, repo, date_naive, message, message_length, year, month, weekday, hour, commit_type)
 ```
 
 ### Cleanup summary
@@ -128,8 +130,8 @@ repo_span <- clean %>%
   group_by(repo) %>%
   summarise(
     commits = n(),
-    first_date = as_date(min(date_local)),
-    last_date = as_date(max(date_local)),
+    first_date = as_date(min(date_naive)),
+    last_date = as_date(max(date_naive)),
     .groups = "drop"
   ) %>%
   arrange(desc(commits))

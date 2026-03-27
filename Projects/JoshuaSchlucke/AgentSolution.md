@@ -5,8 +5,9 @@ Key choices:
 -   Use the balanced sample
     (`datasets/commits_balanced_3k_per_repo.csv`) to compare
     repositories fairly.
--   **Ignore timezone offsets** when deriving hours/weekday patterns to
-    reflect the local commit times authors recorded in Git.
+-   **Ignore timezone offsets** when deriving hours/weekday patterns,
+    working with the raw clock times recorded in commits (timezone
+    context is removed).
 -   Remove obviously auto-generated commits and normalize messages
     before classifying them.
 
