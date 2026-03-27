@@ -402,9 +402,9 @@ cat("1. **Human vs. LLM comparison** (restricted to OH condition and shared item
     "compared to both GPT-3.5 and GPT-5.2. ",
     "The direction and magnitude of differences depend on context.\n\n")
 
-cat("2. **Context effect**: Under the high-predictability context, ",
+cat("2. **Context effect**: Under the medium-predictability context, ",
     "generators tend to differ more in their surprisal values, ",
-    "suggesting that high-context settings amplify differences in prediction behavior.\n\n")
+    "suggesting that less constrained contexts amplify differences in prediction behavior.\n\n")
 
 cat("3. **LLM-only condition comparison**: ",
     "GPT-3.5 and GPT-5.2 show the most distinct surprisal patterns under certain ",

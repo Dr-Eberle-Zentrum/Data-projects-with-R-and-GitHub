@@ -807,9 +807,9 @@ Mean LLM surprisal difference by condition (averaged over contexts)
     GPT-5.2. The direction and magnitude of differences depend on
     context.
 
-2.  **Context effect**: Under the high-predictability context,
+2.  **Context effect**: Under the medium-predictability context,
     generators tend to differ more in their surprisal values, suggesting
-    that high-context settings amplify differences in prediction
+    that less constrained contexts amplify differences in prediction
     behavior.
 
 3.  **LLM-only condition comparison**: GPT-3.5 and GPT-5.2 show the most
