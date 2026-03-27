@@ -35,16 +35,13 @@ commits_sorted <- read_csv("datasets/commits_sample_50k.csv") %>%
     weekday = factor(weekday, levels = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")),
     hour = hour(date_parsed)
   ) %>%
-  filter(!is.na(date_parsed)) %>%
+  drop_na(date_parsed) %>%
   distinct(commit, .keep_all = TRUE)
 
-# Aggregate commit counts by weekday and hour
-commit_counts <- commits_sorted %>%
-  count(weekday, hour)
-
-# Plot overall temporal activity heatmap
-
-ggplot(commit_counts, aes(x = hour, y = weekday, fill = n)) +
+# Aggregate commit counts by weekday and hour and plot heatmap
+commits_sorted %>%
+  count(weekday, hour) %>%
+ggplot(aes(x = hour, y = weekday, fill = n)) +
   geom_tile(color = "white", linewidth = 0.2) +
   scale_fill_viridis_c() +
   labs(
