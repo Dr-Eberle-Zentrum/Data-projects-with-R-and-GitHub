@@ -13,6 +13,7 @@ By Jakob Raatschen
 ```{r, echo=FALSE, warning = FALSE, message = FALSE}
 library(knitr)
 library(tidyverse)
+library(patchwork)
 
 # set current working directory to the directory of this Rmd file
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
@@ -53,16 +54,21 @@ For the visualizations including human participants (I & II), Items 13 & 28 have
 ### Visualization I
 
 ```{r, echo = FALSE, message = FALSE}
-data_agg_human %>%
+# add colour-palette vector
+colours <- c("#A01818", "#9DCCEF", "#00767B")
+
+p1<- data_human %>%
   mutate(condition = factor(condition, levels = c("RA", "EW", "OH"))) %>%
   group_by(generator, context, condition) %>%
-  summarise(mean_surprisal = mean(mean_surprisal)) %>%
+  summarise(se = sd(surprisal, na.rm = TRUE) / sqrt(n()),
+            mean_surprisal = mean(surprisal), .groups = "drop") %>%
   ggplot(aes(x = context, y = mean_surprisal, color = fct_reorder2(generator, context, mean_surprisal), group = generator)) +
   geom_line(linewidth = .8) +
   geom_point(size = 3) +
+  geom_errorbar(aes(ymin = mean_surprisal - se, ymax = mean_surprisal + se), width = 0.2) +
   # add colours
-  scale_color_manual(values = c("gpt-3.5-turbo-16k" = "#A01818", 
-                                "gpt-5.2-chat-latest" = "#9DCCEF", "human" = "#00767B")) +
+  scale_color_manual(values = c("gpt-3.5-turbo-16k" = colours[1], 
+                                "gpt-5.2-chat-latest" = colours[2], "human" = colours[3])) +
   labs(title = "Mean Surprisal by Context and Generator",
        x = "Context",
        y = "Mean Surprisal",
@@ -73,33 +79,49 @@ data_agg_human %>%
     panel.grid.minor = element_blank()
   ) +
   facet_wrap(~condition)
+p2 <- p1 +
+  labs(title = "Mean Surprisal with Y-Axis starting at 0") +
+  expand_limits(y = 0)
+
+p1
+p2
 ```
-
-**Interpretation:**
-
 
 
 ### Visualization II
 
 ```{r, echo = FALSE, message = FALSE}
-data_agg_human %>%
+p3<- data_human %>%
   group_by(generator, context) %>%
-  summarise(mean_surprisal = mean(mean_surprisal)) %>%
+  summarise(sd = sd(surprisal, na.rm = T),
+            se = sd / sqrt(n()),
+            mean_surprisal = mean(surprisal)) %>%
   ggplot(aes(x = context, y = mean_surprisal, color = fct_reorder2(generator, context, mean_surprisal), group = generator)) +
   geom_line(linewidth = .8) +
   geom_point(size = 3) +
+  geom_errorbar(aes(ymin = mean_surprisal - se, ymax = mean_surprisal + se), width = 0.2) +
   # add colours
-  scale_color_manual(values = c("gpt-3.5-turbo-16k" = "#A01818", 
-                                "gpt-5.2-chat-latest" = "#9DCCEF", "human" = "#00767B")) +
+  scale_color_manual(values = c("gpt-3.5-turbo-16k" = colours[1], 
+                                "gpt-5.2-chat-latest" = colours[2], "human" = colours[3])) +
   labs(title = "Mean Surprisal by Context and Generator",
        x = "Context",
        y = "Mean Surprisal",
        color = "Generator") +
   theme_minimal() +
   theme(
-    legend.position = "right",
-    panel.grid.minor = element_blank()
+    panel.grid.minor = element_blank(),
+    # remove legend for this plot, since it will be shown in the second plot
+    legend.position = "none"
   )
+
+p4<- p3 +
+  labs(title = "") +
+  theme(
+    legend.position = "right"
+  ) +
+  expand_limits(y = 0)
+
+p3 | p4
 ```
 
 
@@ -107,31 +129,87 @@ data_agg_human %>%
 
 In a highly predictable preceeding context the mean surprisal value of the two GPT generators is closest and both have a considerable difference to the human participants, who in general have lower surprisal values. In a medium predictable preceeding context, the GPT 3.5 still is closer to the GPT 5.2, but its surprisal value approaches more that of the human participants.
 
+However, the distances are very small, which can be seen when looking at the plot with the y-axis starting at 0.
+
 ### Visualization III
 
 ```{r, echo = FALSE, message = FALSE}
-data_agg %>%
+p5<- data %>%
   mutate(condition = factor(condition, levels = c("RA", "EW", "OH"))) %>%
   filter(generator != "human") %>%
   group_by(generator, condition) %>%
-  summarise(mean_surprisal = mean(mean_surprisal)) %>%
+  summarise(sd_val = sd(surprisal, na.rm = T),
+            se = sd_val / sqrt(n()),
+            mean_surprisal = mean(surprisal)) %>%
   ggplot(aes(x = condition, y = mean_surprisal, color = fct_reorder2(generator, condition, mean_surprisal), group = generator)) +
   geom_line(linewidth = .8) +
   geom_point(size = 3) +
+  geom_errorbar(aes(ymin = mean_surprisal - se, ymax = mean_surprisal + se), width = 0.2) +
   # add colours
-  scale_color_manual(values = c("gpt-3.5-turbo-16k" = "#A01818", 
-                                "gpt-5.2-chat-latest" = "#9DCCEF")) +
+  scale_color_manual(values = c("gpt-3.5-turbo-16k" = colours[1], 
+                                "gpt-5.2-chat-latest" = colours[2])) +
   labs(title = "Mean Surprisal by Condition and Generator",
        x = "Condition",
        y = "Mean Surprisal",
        color = "Generator") +
   theme_minimal() +
   theme(
-    legend.position = "right",
+    legend.position = "none",
     panel.grid.minor = element_blank()
   )
+
+p6 <- p5 +
+  labs(title = "") +
+  expand_limits(y = 0) +
+  theme(
+    legend.position = "right"
+  )
+
+p5 | p6
 ```
 
 **Interpretation:**
 
-The difference between both GPT generators is highest in the OH condition (when no specific particles are present?). I would conclude from this that when no specific particles are present, the two models are less specificly trained and therefore less restricted in their generation leading to the largest differences in output.
+The difference between both GPT generators is highest in the OH condition (when no specific particles are present). I would conclude from this that when no specific particles are present, the two models are less specificly trained and therefore less restricted in their generation leading to the largest differences in output.
+
+However, the distances are very small, which can be seen when looking at the plot with the y-axis starting at 0.
+
+
+## Additional Visualization (Correlation between surprisal values of  generators)
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+
+# Scatterplots comparing surprisal values of different generators for each item, colored by context
+generator_combinations <- combn(unique(data$generator), 2, simplify = FALSE)
+map(generator_combinations, ~ {
+  df_plot <- data %>%
+    filter(generator %in% .x) %>%
+    group_by(item, context, condition, generator) %>%
+    summarise(item_surprisal = mean(surprisal, na.rm = TRUE), .groups = "drop") %>%
+    pivot_wider(
+      names_from = generator, 
+      values_from = item_surprisal
+    )
+  r_value <- round(cor(df_plot[[.x[1]]], df_plot[[.x[2]]], 
+                       method = "pearson", use = "complete.obs"), 2)
+  ggplot(df_plot, aes(x = .data[[.x[1]]], 
+                      y = .data[[.x[2]]], 
+                      color = context)) +
+    geom_point(size = 1.5, alpha = 0.5) +
+    geom_smooth(method = "lm", se = FALSE, color = "black") +
+    annotate("text", x = Inf, y = Inf, 
+             label = paste("r =", r_value),
+             hjust = 9.1, vjust = 2.1, size = 3, fontface = "bold") +
+    labs(title = paste("Correlation:", .x[1], "vs", .x[2]),
+         x = paste("Surprisal (", .x[1], ")", sep=""),
+         y = paste("Surprisal (", .x[2], ")", sep="")) +
+    theme_minimal() +
+    theme(legend.position = "right", panel.grid.minor = element_blank())
+})
+```
+
+**Interpretation:**
+
+While the correlation across all generators is quite high, interestingly the smallest correlation is between the two GPT generators. This might be explained based on the parameters used for both models.
+
+A systematic difference based on the context is not really apparent.

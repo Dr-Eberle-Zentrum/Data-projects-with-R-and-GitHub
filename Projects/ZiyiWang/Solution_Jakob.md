@@ -96,9 +96,7 @@ all items are included.
 
 ### Visualization I
 
-![](Solution_Jakob_files/figure-markdown_strict/unnamed-chunk-3-1.png)
-
-**Interpretation:**
+![](Solution_Jakob_files/figure-markdown_strict/unnamed-chunk-3-1.png)![](Solution_Jakob_files/figure-markdown_strict/unnamed-chunk-3-2.png)
 
 ### Visualization II
 
@@ -113,6 +111,9 @@ surprisal values. In a medium predictable preceeding context, the GPT
 3.5 still is closer to the GPT 5.2, but its surprisal value approaches
 more that of the human participants.
 
+However, the distances are very small, which can be seen when looking at
+the plot with the y-axis starting at 0.
+
 ### Visualization III
 
 ![](Solution_Jakob_files/figure-markdown_strict/unnamed-chunk-5-1.png)
@@ -120,7 +121,34 @@ more that of the human participants.
 **Interpretation:**
 
 The difference between both GPT generators is highest in the OH
-condition (when no specific particles are present?). I would conclude
+condition (when no specific particles are present). I would conclude
 from this that when no specific particles are present, the two models
 are less specificly trained and therefore less restricted in their
 generation leading to the largest differences in output.
+
+However, the distances are very small, which can be seen when looking at
+the plot with the y-axis starting at 0.
+
+## Additional Visualization (Correlation between surprisal values of generators)
+
+    ## [[1]]
+
+![](Solution_Jakob_files/figure-markdown_strict/unnamed-chunk-6-1.png)
+
+    ## 
+    ## [[2]]
+
+![](Solution_Jakob_files/figure-markdown_strict/unnamed-chunk-6-2.png)
+
+    ## 
+    ## [[3]]
+
+![](Solution_Jakob_files/figure-markdown_strict/unnamed-chunk-6-3.png)
+
+**Interpretation:**
+
+While the correlation across all generators is quite high, interestingly
+the smallest correlation is between the two GPT generators. This might
+be explained based on the parameters used for both models.
+
+A systematic difference based on the context is not really apparent.
