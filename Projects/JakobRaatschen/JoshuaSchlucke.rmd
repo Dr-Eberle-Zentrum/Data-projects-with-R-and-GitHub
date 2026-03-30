@@ -16,6 +16,8 @@ We are importing the data from a local csv, each study provides a text file that
 ```{r, include = FALSE}
 library(tidyverse)
 library(ggbeeswarm)
+library(scales)
+library(ggdist)
 knitr::opts_knit$set(root.dir = here::here())
 ```
 
@@ -32,15 +34,6 @@ masoni <- read_csv("Projects/JakobRaatschen/Massoni_2017/data_Massoni_2017.csv")
     drop_na() %>%
     mutate(Subj_idx = (3 * Subj_idx)) %>%
     select(Study_id, Subj_idx, Stimulus, Response, Confidence, Accuracy)
-
-avg_pp <- function(dataframe) {
-    dataframe %>%
-        group_by(Subj_idx, Study_id) %>%
-        summarise(Avg_Accuracy = mean(Accuracy), .groups = "drop") %>%
-        select(Study_id, Subj_idx, Avg_Accuracy)
-}
-
-masoni_avg_pp <- avg_pp(masoni)
 ```
 
 ### Palser et al.
@@ -56,11 +49,9 @@ palser <- read_csv("Projects/JakobRaatschen/Palser_2018/data_Palser_2018.csv") %
     drop_na() %>%
     mutate(Accuracy = as.numeric(Stimulus == Response)) %>% # I know the compare is bool but the mean can use it anyway
     mutate(Confidence = ifelse((Confidence > 99), 99, Confidence)) %>% # This step actually belongs to the "All Studies part" we normalize the Confidence to 1->99
-    mutate(Confidence = ((Confidence - 1) / 98)) %>% # Normalizing the confidence vals to 0->100%
+    mutate(Confidence = rescale(Confidence, to = c(0, 1), from = c(1, 99))) %>% # Normalizing the confidence vals to 0->100%
     mutate(Subj_idx = ((3 * Subj_idx) + 1)) %>%
     select(Study_id, Subj_idx, Stimulus, Response, Confidence, Accuracy)
-
-palser_avg_pp <- avg_pp(palser)
 ```
 
 
@@ -72,11 +63,9 @@ The Hu et al. dataset is again very well behaved, the only data processing we ne
 hu <- read_csv("Projects/JakobRaatschen/Hu_2017/data_Hu_2017.csv") %>%
     mutate(Study_id = study_id[3]) %>%
     drop_na() %>%
-    mutate(Confidence = ((Confidence - 1) / 5)) %>% # Normalizing the 1->6 scale
+    mutate(Confidence = rescale(Confidence, to = c(0, 1), from = c(1, 6))) %>% # Normalizing the 1->6 scale
     mutate(Subj_idx = ((3 * Subj_idx) + 2)) %>%
     select(Study_id, Subj_idx, Stimulus, Response, Confidence, Accuracy)
-
-hu_avg_pp <- avg_pp(hu)
 ```
 
 ### All Studies
@@ -97,28 +86,49 @@ We can use "Restklassen" (Congruence classes) to encode the 3 lists, we can simp
 
 The idea behind it is the following, we need 3 unique "Classes" and they are not allowed to overlap, so we multiply every number with a different residue from dividing (modulo) numbers by 3
 
-$$
-participantIDs_1 = 3 \times x + 0 \\\\
-participantIDs_2 = 3 \times x + 1 \\\\
-participantIDs_3 = 3 \times x + 2
-$$
+```math
+\begin{array}{rcl}
+\text{participantIDs}_1 & = & 3 \times x + 0 \\
+\text{participantIDs}_2 & = & 3 \times x + 1 \\
+\text{participantIDs}_3 & = & 3 \times x + 2
+\end{array}
+```
 That way we can never have overlapping numbers. And even better, I had already created a factor for the studies, so we can use the factor as numeric input for:
+
 $$
-i = Rfactor - 1 \\\\
+i = Rfactor - 1 \\
+$$
+$$
 participantID = 3x+i
 $$
+
 And reversing it becomes easy:
-$$ 
+
+$$
 x = \frac{(y - i)}{3}
 $$
-i can be calculated simply by doing 
-$$ 
-i = y \mod 3
+
+i can be calculated simply by doing
+
+$$
+i = y \bmod 3
 $$
 
+
+
 ```{r, include = FALSE}
-confidence <- full_join(full_join(masoni, palser), hu)
-performance <- full_join(full_join(masoni_avg_pp, palser_avg_pp), hu_avg_pp)
+avg_pp <- function(dataframe) {
+    dataframe %>%
+        group_by(Subj_idx, Study_id) %>%
+        summarise(Avg_Accuracy = mean(Accuracy), .groups = "drop") %>%
+        select(Study_id, Subj_idx, Avg_Accuracy)
+}
+
+performance <- list(masoni, palser, hu) %>%
+    map(avg_pp) %>%
+    bind_rows()
+
+confidence <- bind_rows(masoni, palser, hu)
 ```
 
 # Data visualization
@@ -160,9 +170,10 @@ performance %>%
         )
     ) %>%
     ggplot(aes(Study_id, Avg_Accuracy, fill = Study_id)) +
-    geom_violin(alpha = 0.7) +
-    geom_boxplot(alpha = 0.5, outliers = FALSE, width = 0.1) +
-    geom_quasirandom(color = "black", shape = 21) +
+    geom_violin(alpha = 0.4) +
+    stat_dots(side = "both", alpha = 0.4) +
+    geom_boxplot(alpha = 0.7, outliers = FALSE, width = 0.1) +
+    # geom_quasirandom(color = "black", shape = 21) +
     labs(
         x = NULL,
         y = "Performance Accuracy",
