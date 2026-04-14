@@ -1,0 +1,288 @@
+---
+title: "Solution for Karim"
+output: md_document
+---
+
+Setup
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+
+library(readr)
+library(knitr)
+library(khroma)
+library(tidyverse)
+data <- read_csv("https://raw.githubusercontent.com/barrolee/BarroLeeDataSet/master/BLData/BL2013_MF_v2.2.csv")
+
+```
+
+## Validation Checks
+
+
+#### Sum of education level percentages
+
+```{r, echo = TRUE, message = FALSE}
+# Sum up to 100?
+edu_lvl <- subset(data, select = c("lu", "lp", "lpc", "ls", "lsc", "lh", "lhc"))
+min_val<-which.min(rowSums(edu_lvl))
+max_val<-which.max(rowSums(edu_lvl)) # Max Value almost at 200, something must be wrong here with the data
+# What to do? Should from a threshold on entries be removed?
+sum(edu_lvl[min_val,])
+sum(edu_lvl[max_val,])
+```
+
+The sum of education levels should be at ~100, the max. value however, is at almost 200. This is because the completed education level (e.g., lpc) is a subset of that education level in general (e.g., lp). Therefore, for the general education levels the completed subset needs to be subtracted:
+
+```{r, echo = FALSE, message = FALSE}  
+data <- data %>%
+  mutate(
+    lp = lp - lpc,
+    ls = ls - lsc,
+    lh = lh - lhc
+  )
+```
+
+#### Missing values?
+
+```{r, echo = TRUE, message = FALSE}  
+sum(is.na(data)) # No
+```
+There are NO missing values
+
+#### Implausible values?
+
+```{r, echo = TRUE, message = FALSE}  
+# Are there any implausible values (negative percentage)
+min(edu_lvl) # no values below 0
+max(edu_lvl) # no values above 100
+```
+The max value at any single education level is 100, the min value 0
+
+#### Check if for every country there are all year entries
+
+```{r, echo = TRUE, message = FALSE}  
+# 1. Create a grid of all possible combinations
+all_combinations <- data %>%
+  expand(country, year)
+# 2. Find which combinations are NOT in your original data
+missing_entries <- all_combinations %>%
+  anti_join(data, by = c("country", "year"))
+print(missing_entries)
+```
+There are NO missing combinations of country and year
+
+BUT: for age groups from 15, 25 & 75 entries are always double (the second time with ageto == 999). This needs to be removed!
+```{r, echo = FALSE, message = FALSE}
+data <- data %>%
+  filter(!(agefrom %in% c(15, 25, 75) & ageto == 999))
+```
+
+
+## Renaming columns for improved readability
+```{r, echo = FALSE, message = FALSE}
+edu_mapping <- c(
+  No_education = "lu",
+  Primary_education = "lp",
+  Primary_education_completed = "lpc",
+  Secondary_education = "ls",
+  Secondary_education_completed = "lsc",
+  Higher_education = "lh",
+  Higher_education_completed = "lhc"
+)
+
+data <- data %>%
+  rename(!!!edu_mapping)
+
+data %>%
+  select(all_of(names(edu_mapping))) %>%
+  head(1) %>%
+  kable()
+```
+
+# Data Visualizations
+
+## Visualization 1
+
+```{r, echo = FALSE, message = FALSE}
+## Compute population-weighted regional average years of schooling (`yr_sch`) for each region and year and plot their evolution over time (1950-2010) using a line plot with one line per region.
+
+# Plot the evolution of population-weighted average years of schooling over time for each region
+data %>%
+  group_by(region_code, year) %>%
+  summarise(
+    total_population = sum(pop, na.rm = TRUE),
+    weighted_yr_sch = weighted.mean(yr_sch, w = pop, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  ggplot(aes(x = year, y = weighted_yr_sch, color = as.factor(region_code))) +
+    geom_line(linewidth = 1) +
+    geom_point(size = 2) +
+    scale_x_continuous(breaks = seq(1950,2010, by = 10)) +
+    scale_color_nightfall(discrete = TRUE) +
+    labs(title = "Population-Weighted Average Years of Schooling Over Time",
+         subtitle = "Analysis by Region (1950-2010)",
+         x = "Year",
+         y = "Population-Weighted Average Years of Schooling",
+         color = "Region") +
+    theme_minimal() +
+    theme(
+      legend.position = "right",
+      panel.grid.minor = element_blank()
+    )
+```
+
+#### Takeaways from the first visualization:
+
+** Q1: Has the global education gap between regions narrowed over time?**
+
+- The plot shows that there has been a general increase in average years of schooling across all regions from 1950 to 2010, but the gap between regions has not as much narrowed as we might have expected. However, this question should be further investigated by looking at different variables indicating access to education. The increase in total years of schooling in developed countries might not be due to an increase in access to education but rather the development of tertiary education having received a higher social value in these countries over the past decades.
+
+** Q2: Are there countries where average years of schooling have stagnated or even declined?**
+
+- Mainly in Sub-Saharan Africa the increase in average years of schooling has become less steep since the mid 1990s. However, it is difficult to link specific regional events to the increase (or its stagnation), for this single countries instead of regions might need to be investigated.
+
+## Visualization 2
+
+```{r, echo = FALSE, message = FALSE}
+data %>%
+  filter(country %in% c("Netherlands", "Fiji"), 
+         year %in% c(1960, 2010)) %>%
+  mutate(
+    age_range = reorder(paste0(agefrom, "-", ageto), agefrom)
+  ) %>%
+  pivot_longer(
+    cols = contains("education"), # Nutzt alle Spalten mit 'education' im Namen
+    names_to = "education_level",
+    values_to = "percentage"
+  ) %>%
+  mutate(
+    # 1. Spalte für Abschluss-Status (T/F)
+    # No_education behandeln wir als "completed", damit es kräftig erscheint
+    is_completed = str_detect(education_level, "_completed") | education_level == "No_education",
+    is_completed = factor(is_completed, levels = c(TRUE, FALSE)),
+    
+    # 2. Spalte für das reine Level (Extrahieren des Hauptbegriffs)
+    level = case_when(
+      str_detect(education_level, "Primary") ~ "Primary",
+      str_detect(education_level, "Secondary") ~ "Secondary",
+      str_detect(education_level, "Higher") ~ "Higher",
+      TRUE ~ "No Education"
+    ),
+    level = factor(level, levels = c("Higher", "Secondary", "Primary", "No Education")),
+    
+    # Ausrichtung für das Histogramm
+    adj_percentage = ifelse(country == "Netherlands", -percentage, percentage)
+  ) %>%
+  ggplot(aes(x = adj_percentage, 
+             y = age_range, 
+             fill = level, 
+             alpha = is_completed)) +
+  geom_col(width = 0.8, color = "white", linewidth = 0.1) + # Weiße Trennlinien helfen bei alpha
+  geom_vline(xintercept = 0, color = "black", linewidth = 0.6) +
+  facet_wrap(~year) +
+  scale_x_continuous(labels = abs) + 
+  # Nur noch 4 Farben nötig:
+  scale_fill_manual(
+      values = c("Higher" = "#A01818", "Secondary" = "#FFB954", "Primary" = "#9DCCEF", "No Education" = "#00767B")) +
+  # Alpha-Werte manuell steuern (Incomplete = 0.5, Completed = 1.0)
+  scale_alpha_manual(
+    values = c("FALSE" = 0.45, "TRUE" = 1),
+    labels = c("FALSE" = "Incomplete", "TRUE" = "Completed"),
+    name = "Status"
+  ) +
+  labs(
+    title = "Education Comparison: Netherlands (Left) vs. Fiji (Right)",
+    subtitle = "Analysis by Level (Color) and Completion (Transparency)",
+    x = "Percentage of Population",
+    y = "Age Groups",
+    fill = "Education Level"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    legend.box = "horizontal",
+    legend.text = element_text(size = 6),
+    legend.title = element_text(size = 9),
+    panel.grid.major.y = element_blank()
+  )
+```
+
+
+## Visualization 2.1 (Age groups in 10-year cohorts)
+
+```{r, echo = FALSE, message = FALSE}  
+
+data %>%
+  filter(country %in% c("Netherlands", "Fiji"), 
+         year %in% c(1960, 2010)) %>%
+  # 1. Kohorten definieren
+  mutate(
+    cohort_start = floor((agefrom - 5) / 10) * 10 + 5,
+    age_cohort = paste0(cohort_start, "-", cohort_start + 9)
+  ) %>%
+  # 2. Gewichtung lokal pro Kohorte berechnen
+  # Durch das group_by bezieht sich w = pop nur auf die Sub-Gruppen innerhalb der Kohorte
+  group_by(country, year, age_cohort, cohort_start) %>%
+  summarise(
+    across(contains("education"), ~ weighted.mean(.x, w = pop, na.rm = TRUE)),
+    .groups = "drop"
+  ) %>%
+  # 3. Ins Langformat umwandeln
+  pivot_longer(
+    cols = contains("education"),
+    names_to = "education_level",
+    values_to = "percentage"
+  ) %>%
+  # 4. Logik für Farben und Alpha
+  mutate(
+    is_completed = str_detect(education_level, "_completed") | education_level == "No_education",
+    is_completed = factor(is_completed, levels = c(TRUE, FALSE)),
+    level = case_when(
+      str_detect(education_level, "Primary") ~ "Primary",
+      str_detect(education_level, "Secondary") ~ "Secondary",
+      str_detect(education_level, "Higher") ~ "Higher",
+      TRUE ~ "No Education"
+    ),
+    level = factor(level, levels = c("Higher", "Secondary", "Primary", "No Education")),
+    age_cohort = reorder(age_cohort, cohort_start),
+    adj_percentage = ifelse(country == "Netherlands", -percentage, percentage)
+  ) %>%
+  # 5. Visualisierung
+  ggplot(aes(x = adj_percentage, y = age_cohort, fill = level, alpha = is_completed, group = interaction(is_completed, level))) +
+  # color = NA verhindert die Lücken zwischen den Segmenten
+  geom_col(width = 0.8, color = NA) + 
+  geom_vline(xintercept = 0, color = "black", linewidth = 0.6) +
+  facet_wrap(~year) +
+  # Labels auf abs setzen, damit die linke Seite positiv beschriftet ist
+  scale_x_continuous(labels = abs) + 
+  scale_fill_manual(
+    values = c("Higher" = "#A01818", "Secondary" = "#FFB954", 
+               "Primary" = "#9DCCEF", "No Education" = "#00767B")
+  ) +
+  scale_alpha_manual(
+    values = c("FALSE" = 0.45, "TRUE" = 1),
+    labels = c("FALSE" = "Incomplete", "TRUE" = "Completed"),
+    name = "Status"
+  ) +
+  labs(
+    title = "Education Comparison: Netherlands (Left) vs. Fiji (Right)",
+    subtitle = "10-Year Cohorts | Locally Population-Weighted",
+    x = "Weighted Percentage of Population",
+    y = "Age Cohorts",
+    fill = "Education Level"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    # reduce font size of legend
+    legend.text = element_text(size = 6),
+    legend.title = element_text(size = 9),
+    panel.grid.major.y = element_blank()
+  )
+
+```
+
+
+## Takeaways from the second visualization:
+
+**Q4: Which age group benefits most from education expansion?**
+
+In both countries all age groups have benefited from education expansion across the past decades. Just from the visualization (without statistical tests) it is difficult to pinpoint one group that has benefited the most, however, in the Netherlands the increased education level is very prominent in the 25-34 year old, while in Fiji the increase seems to be most noticeable in the age group of 15-24 year olds.
