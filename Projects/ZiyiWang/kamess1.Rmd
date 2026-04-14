@@ -1,0 +1,204 @@
+---
+title: "Solution for Ziyis Project"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(tidyverse)
+library(knitr)
+# set working directory to source file location 
+setwd(dirname(rstudioapi::getSourceEditorContext()$path))
+
+# change based on review: add color-blind friendly color palette 
+# see https://siegal.bio.nyu.edu/color-palette/
+color_palette <- c(
+  "human" = "#000000",                # Black
+  "gpt-3.5-turbo-16k" = "#E69F00",    # Orange
+  "gpt-5.2-chat-latest" = "#56B4E9"   # sky blue
+)
+
+
+```
+
+# Surprisal-Based Comparison of Human and LLM Language Generation
+
+## Research Question
+
+The main research question of this project is:
+
+Do human speakers and Large Language Models generate language with similar surprisal patterns under the same contextual conditions?
+
+More specifically, the project investigates:
+
+whether different generators (human vs LLMs) produce different surprisal values
+how surprisal values change across different contextual conditions
+whether LLM-generated continuations resemble human language in terms of predictability
+
+## 3. Dataset
+
+```{r load_data}
+df_final <- read_csv("data/Processed final_data/final.csv")
+head(df_final) %>% kable(caption = "Preview of Raw Data")
+```
+
+## 4. Data Processing Plan
+
+Before the analysis, the dataset will be cleaned and standardized.
+
+### 4.1 Handling missing data
+
+It is evident that the human participants were only tasked with formulating responses to the 34 items. Consequently, in order to facilitate a more robust comparison between human performance and that of LLMs, it is recommended that the values for items 13 and 28 be removed from the analysis.
+
+### 4.2 Aggregating surprisal values
+
+For each generator (human or LLM), the **mean surprisal value per subject and condition** will be calculated.
+
+```{r processing}
+# 1. Filter out items 13 and 28
+df_clean <- df_final %>%
+  mutate(generator = if_else(str_detect(subject, "human"), "human", generator)) %>%
+  filter(!item %in% c(13, 28)) %>%
+  # change based on review: reorder from left to right as RA, EW, OH
+  mutate(condition = factor(condition, levels = c("RA", "EW", "OH"))) 
+
+# 2. Aggregating surprisal values
+data_aggregated <- df_clean %>%
+  group_by(generator, context, condition) %>%
+  summarise(
+    mean_surprisal = mean(surprisal, na.rm = TRUE),
+    sd_surprisal = sd(surprisal, na.rm = TRUE),
+    n = n(),
+    se = sd_surprisal / sqrt(n),
+  .groups = "drop")
+
+
+# Display the aggregated data (Preview)
+head(data_aggregated) %>% kable(caption = "Aggregated Surprisal Values")
+```
+
+## 5. Visualization Plan
+
+### 5.1 main plot
+To compare surprisal patterns across generators, the results will be visualized using line plots.
+
+The visualization will show:
+x-axis: context condition
+y-axis: mean surprisal value
+lines: different generators (human vs LLMs)
+
+```{r visualization}
+  # Create the line plot
+  ggplot(data_aggregated, aes(x = context, y = mean_surprisal, color = generator, group = generator)) +
+  geom_errorbar(aes(ymin = mean_surprisal - se, ymax = mean_surprisal + se), width = 0.1) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 3) +
+    facet_wrap(~condition, labeller = label_both) + 
+    scale_color_manual(values = color_palette) +
+    labs(
+      title = "Comparison of Surprisal Patterns: Human vs. LLMs",
+      subtitle = "Mean surprisal across context predictability levels and particle conditions",
+      x = "Context Predictability",
+      y = "Mean Surprisal",
+      color = "Generator"
+    ) +
+    theme_minimal() +
+    theme(
+      legend.position = "bottom",
+      strip.background = element_rect(fill = "lightgray", color = NA),
+      text = element_text(size = 12)
+    )
+
+```
+
+
+This plot allows us to observe whether human-generated language and LLM-generated language show similar or different surprisal patterns across contexts.
+
+### 5.2 particles plot
+
+#### Effect of Particle Condition
+This visualization focuses on how the specific particles (EW, RA, etc.) influence surprisal, aggregating over the context.
+
+```{r visualization_particles}
+# Aggregate by Condition and Generator only (ignoring Context)
+df_clean %>%
+  filter(generator != "human") %>% # filter out human for this plot
+  group_by(generator, condition) %>%
+  summarise(
+    mean_surprisal = mean(surprisal, na.rm = TRUE),
+    sd_surprisal = sd(surprisal, na.rm = TRUE),
+    n = n(),
+    se = sd_surprisal / sqrt(n),
+    .groups = "drop"
+  ) %>%
+ggplot(aes(x = condition, y = mean_surprisal, color = generator, group = generator)) +
+  geom_errorbar(aes(ymin = mean_surprisal - se, ymax = mean_surprisal + se), width = 0.1) +
+  geom_line(linewidth = 0.8, alpha = 0.7) +
+  geom_point(size = 3) +
+   scale_color_manual(values = color_palette) +
+  labs(
+    title = "Effect of Particle Condition on Surprisal",
+    subtitle = "Aggregated over context levels (Error bars represent Standard Error)",
+    x = "Particle Condition",
+    y = "Mean Surprisal",
+    color = "Generator"
+  ) +
+  theme_minimal()
+```
+----
+
+## 6. Expected Contribution
+
+- Please compare under which context the difference in surprisal values between different generators is greatest, and under which context it is smallest.
+
+- Under which conditions is the difference in surprisal values between different LLMs-generators greatest?
+
+To answer the research questions regarding the differences between generators, we calculate the absolute differences in mean surprisal.
+
+```{r analysis_answers}
+#  Pivot wider to calculate differences
+df_wide <- data_aggregated %>%
+  select(context, condition, generator, mean_surprisal) %>%
+  pivot_wider(names_from = generator, values_from = mean_surprisal) %>%
+  mutate(
+    diff_human_gpt35 = abs(human - `gpt-3.5-turbo-16k`),
+    diff_human_gpt52 = abs(human - `gpt-5.2-chat-latest`),
+    diff_llms = abs(`gpt-3.5-turbo-16k` - `gpt-5.2-chat-latest`)
+  )
+
+# Question 1: Context with greatest/smallest difference between Human and LLMs
+df_wide %>%
+  group_by(context) %>%
+  summarise(
+    avg_diff_human_gpt35 = mean(diff_human_gpt35, na.rm = TRUE),
+    avg_diff_human_gpt52 = mean(diff_human_gpt52, na.rm = TRUE)
+  ) %>%
+# Average difference between Human and LLMs by Context:
+kable(caption = "Average difference between Human and LLMs by Context")
+
+# --- Question 2: Condition with greatest LLM difference ---
+ df_wide %>%
+  group_by(condition) %>%
+  summarise(
+    max_llm_diff = max(diff_llms, na.rm = TRUE),
+    mean_llm_diff = mean(diff_llms, na.rm = TRUE)
+  ) %>%
+  arrange(desc(mean_llm_diff)) %>%
+# Differences between LLMs (GPT 3.5 vs 5.2) by Particle Condition:
+kable(caption = " Differences between LLMs by Particle Condition:")
+```
+
+
+
+*1. Please compare under which context the difference in surprisal values between different generators is greatest, and under which context it is smallest.*
+
+- The data shows that the difference in surprisal values between human and LLM generators is greatest in the medium predictability context (avg. diff ~0.15 for GPT-3.5 and ~0.25 for GPT-5.2). Conversely, the difference is smallest in the high predictability context (avg. diff ~0.12 for GPT-3.5 and ~0.23 for GPT-5.2).
+
+- Interpretation: This suggests that in highly constrained contexts ("high"), where the next word is obvious, LLMs and humans align more closely. In less constrained contexts ("medium"), where there is more creative freedom, the statistical properties of LLM-generated language diverge more strongly from human language.
+
+
+*2. Under which conditions is the difference in surprisal values between different LLMs-generators greatest?*
+
+- Comparing the two LLMs (GPT-3.5 vs. GPT-5.2), the difference in surprisal values is greatest in the 'OH' condition (mean difference of 0.104), closely followed by the 'RA' condition. The models show the smallest difference in the 'EW' condition (mean difference of 0.040).
+
+- Interpretation: The particles "OH" and "RA" seem to lead to more divergent processing or generation strategies between the two model versions compared to the "EW" particle.
