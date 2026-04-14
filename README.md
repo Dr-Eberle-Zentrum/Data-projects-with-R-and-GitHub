@@ -133,16 +133,13 @@ Example:
 
 Current projects:
 
-- Armin (ArminBurkhardt) - [Project about stock prices](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/ArminBurkhardt/project-description.md)
-  - solutions by [Joshua](Projects/ArminBurkhardt/JoshuaSchlucke.md) and [Ziyi](‎Projects/ArminBurkhardt/zee.md)
-- Jakob (JakobRaatschen) - [Project about confidence ratings in Psychological studies](Projects/JakobRaatschen/Project_Description_Jakob_Raatschen.md)
-  - solution by [Armin](Projects/JakobRaatschen/ArminBurkhardt.md) and [Joshua](Projects/JakobRaatschen/JoshuaSchlucke.md)
-- Karim (KarimMessaoud) - [Project about Global Education Attainment](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/main/Projects/KarimMessaoud/project-description.md)
-  - solutions by [Jakob](Projects/KarimMessaoud/Jakobs_solution.md) and [Armin](Projects/KarimMessaoud/ArminBurkhardt.md)
-- Ziyi (ZiyiWang) - [Project about Language Processing comparsion between LLMs and Humans](Projects/ZiyiWang/Project_Description_Ziyi_Wang.md)
-  - solutions by [Karim](Projects/ZiyiWang/kamess1.md) and [Jakob](Projects/ZiyiWang/Solution_Jakob.md)
-- Joshua (JoshuaSchlucke) - [Project about GitHub commit message patterns](Projects/JoshuaSchlucke/project-description.md)
-  - solutions by [Ziyi](Projects/JoshuaSchlucke/Zee.md) and [Karim](Projects/JoshuaSchlucke/kamess1.md)
+- ..name.. (..githubname..) - [..projectname..](..markdownlink..)
+- ..name.. (..githubname..) - [..projectname..](..markdownlink..)
+- ..name.. (..githubname..) - [..projectname..](..markdownlink..)
+- ..name.. (..githubname..) - [..projectname..](..markdownlink..)
+- 
+-
+-
 
 
 
