@@ -48,7 +48,7 @@ These have to be done only once and will be forgotten soon after.
 
 11. Get ready to work with it
 
-    -   study the brief [Section 6.4 The no branch workflow](https://edav.info/github.html#the-no-branch-workflow) on your *own* git repositories
+    -   study the brief [Section 6.4 The no branch workflow](https://edav.info/git_GitHub.html#the-no-branch-besides-main-workflow) on your *own* git repositories
 
 12. Let's try: Change something and `Push` your changes!
 
