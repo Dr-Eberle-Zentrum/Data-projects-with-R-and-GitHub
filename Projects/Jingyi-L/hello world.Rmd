@@ -1,7 +1,6 @@
 ---
 title: "hello world"
-output: 
-  github_document
+output: github_document
 ---
 
 Hi, I am here.
