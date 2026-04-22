@@ -1,8 +1,7 @@
 ---
 title: "hello world"
 output: 
-  github_document: default
-  html_document: default
+  github_document
 ---
 
 Hi, I am here.
