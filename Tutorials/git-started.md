@@ -52,7 +52,7 @@ These have to be done only once and will be forgotten soon after.
 
 12. Let's try: Change something and `Push` your changes!
 
-    -   create a subfolder within the **Project** folder named as your **GitHub account user name**
+    -   create a subfolder within the [**Project** folder](../Projects/) named as your **GitHub account user name**
     -   create *within* your new folder a new file `hello-world.md` and say "Hi I am here" within the file
     -   add the file to git control and push the file to GitHub
     -   check online if you can see your file and all is good!
