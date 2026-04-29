@@ -4,7 +4,7 @@ This project accompanies the course
 
 **"R2 - Data projects with R and Github"**
 
-at the Dr. Eberle Center for Digital Competencies at the University of Tübingen.
+at the Dr. Eberle Center for Digital Competencies at the University of Tübingen, Germany.
 
 ## Tutorials
 
