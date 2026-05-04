@@ -3,3 +3,20 @@ title: "MartinsProject"
 output: html_document
 ---
 
+
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(readr)
+library(dplyr)
+```
+
+
+```{r zipOrdner}
+
+## PV-Ordner mit den ZIP-Dateien
+zip_ordner <- "Projects/martin-raden/PV"
+
+## Alle ZIP-Dateien automatisch finden
+zip_dateien <- list.files(zip_ordner, pattern = "\\.zip$", full.names = TRUE)
