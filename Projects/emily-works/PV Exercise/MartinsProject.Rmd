@@ -44,7 +44,7 @@ verbundene_daten <- bind_rows(daten_liste)
 
 ```
 
-Nun müssen alle Spalten noch den richtigen Datentyp bekommen
+Nun müssen alle Spalten noch den richtigen Datentyp bekommen.
 
 ```{r Datentypen}
 

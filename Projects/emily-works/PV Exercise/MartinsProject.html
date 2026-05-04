@@ -353,7 +353,72 @@ display: none;
 </div>
 
 
+<pre class="r"><code>## PV-Ordner mit den ZIP-Dateien
+zip_ordner &lt;- &quot;~/Documents/Data-projects-with-R-and-GitHub/Projects/martin-raden/PV&quot;
 
+## Alle ZIP-Dateien im ZIP Ordner finden
+zip_dateien &lt;- list.files(zip_ordner, pattern = &quot;\\.zip$&quot;, full.names = TRUE)
+
+## Liste für die Daten erstellen
+daten_liste &lt;- vector(&quot;list&quot;, length(zip_dateien))
+
+## Alle ZIP-Dateien mit FOR-Loop auslesen (hier hat die KI geholfen, leider kann ich
+## nicht genau erklären wie, aber es funktioniert 🥲)
+
+for (i in 1:length(zip_dateien)) {
+  zip_inhalt &lt;- unzip(zip_dateien[i], list = TRUE)
+  csv_name &lt;- zip_inhalt$Name[grepl(&quot;\\.csv$&quot;, zip_inhalt$Name)][1]
+  daten_liste[[i]] &lt;- read_delim(
+    file = unz(zip_dateien[i], csv_name),
+    delim = &quot;;&quot;,
+    col_types = cols(.default = col_character()),
+    show_col_types = FALSE
+  )
+}</code></pre>
+<pre><code>## Warning: One or more parsing issues, call `problems()` on your data frame for details,
+## e.g.:
+##   dat &lt;- vroom(...)
+##   problems(dat)
+## One or more parsing issues, call `problems()` on your data frame for details,
+## e.g.:
+##   dat &lt;- vroom(...)
+##   problems(dat)
+## One or more parsing issues, call `problems()` on your data frame for details,
+## e.g.:
+##   dat &lt;- vroom(...)
+##   problems(dat)
+## One or more parsing issues, call `problems()` on your data frame for details,
+## e.g.:
+##   dat &lt;- vroom(...)
+##   problems(dat)
+## One or more parsing issues, call `problems()` on your data frame for details,
+## e.g.:
+##   dat &lt;- vroom(...)
+##   problems(dat)
+## One or more parsing issues, call `problems()` on your data frame for details,
+## e.g.:
+##   dat &lt;- vroom(...)
+##   problems(dat)
+## One or more parsing issues, call `problems()` on your data frame for details,
+## e.g.:
+##   dat &lt;- vroom(...)
+##   problems(dat)
+## One or more parsing issues, call `problems()` on your data frame for details,
+## e.g.:
+##   dat &lt;- vroom(...)
+##   problems(dat)</code></pre>
+<pre class="r"><code>## Daten in einer Variable speichern
+verbundene_daten &lt;- bind_rows(daten_liste)</code></pre>
+<p>Nun müssen alle Spalten noch den richtigen Datentyp bekommen.</p>
+<pre class="r"><code>daten &lt;- verbundene_daten %&gt;%
+  mutate(
+    Datum = as.Date(Datum, format = &quot;%d.%m.%Y&quot;),
+    across(
+      c(`Netzeinspeisung [kWh]`, `Netzbezug [kWh]`,
+        `Speicherung [kWh]`, `PV Ertrag [kWh]`),
+      ~ parse_number(.x, locale = locale(decimal_mark = &quot;,&quot;, grouping_mark = &quot;.&quot;))
+    )
+  )</code></pre>
 
 
 
