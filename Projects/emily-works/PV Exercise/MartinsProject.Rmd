@@ -104,12 +104,33 @@ daten_neu <- daten_2025 %>%
 
 ```
 
+# Datenanalyse und -visualisierung
+```{r Datenanalyse}
 
+daten_monatlich <- daten_neu %>%
+  group_by(Monat = format(Datum, "%Y-%m"))%>%
+  summarise(
+    `PV Ertrag [kWh]` = sum(`PV Ertrag [kWh]`, na.rm = TRUE),
+    `Netzeinspeisung [kWh]` = sum(`Netzeinspeisung [kWh]`, na.rm = TRUE),
+    `Netzbezug [kWh]` = sum(`Netzbezug [kWh]`, na.rm = TRUE),
+    `Eigenverbrauch [kWh]` = sum(`Eigenverbrauch [kWh]`, na.rm = TRUE),
+    `Gesamtverbrauch [kWh]` = sum(`Gesamtverbrauch [kWh]`, na.rm = TRUE),
+    `Eigenverbrauchsanteil [%]` = mean(`Eigenverbrauchsanteil [%]`, na.rm = TRUE)
+  )
 
+```
 
+Nun wollen wir die Tabelle erweitern
+```{r Tabelle erweitern}
+daten_monatlich <- daten_monatlich %>%
+  mutate(
+    `Stromkosten [€]`= `Netzbezug [kWh]` * 0.30,
+    `Einspeisevergütung [€]` = `Netzeinspeisung [kWh]` * 0.08,
+    `Einsparungen durch Eigenverbrauch [kWh]`= `Eigenverbrauch [kWh]` * 0.30,
+    `Gesamtwirtschaftlichkeit [€]`= `Einsparungen durch Eigenverbrauch [kWh]` + `Einspeisevergütung [€]` - `Stromkosten [€]`
+  )
 
-
-
+```
 
 
 
