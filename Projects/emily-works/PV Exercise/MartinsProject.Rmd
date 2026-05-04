@@ -41,7 +41,7 @@ for (i in 1:length(zip_dateien)) {
 }
 
 ## Daten in einer Variable speichern
-verbundene_daten <- bind_rows(daten_liste)
+daten_importiert <- bind_rows(daten_liste)
 
 ```
 
@@ -49,7 +49,7 @@ Nun müssen alle Spalten noch den richtigen Datentyp bekommen.
 
 ```{r Datentypen}
 
-daten_typisiert <- verbundene_daten %>%
+daten_typisiert <- daten_importiert %>%
   mutate(
     Datum = as.Date(Datum, format = "%d.%m.%Y"),
     across(
@@ -75,7 +75,7 @@ duplikate <- daten_typisiert %>%
   add_count(Datum) %>%
   filter(n > 1)
 
-sliced_daten <- daten_typisiert %>%
+daten_sliced <- daten_typisiert %>%
   group_by(Datum) %>%
   slice_max(order_by = `PV Ertrag [kWh]`, n = 1, with_ties = FALSE) %>%
   ungroup()
@@ -84,7 +84,7 @@ sliced_daten <- daten_typisiert %>%
 Nun wollen wir nur Daten aus 2025 behalten
 ```{r Daten filtern}
 
-daten_2025 <- sliced_daten %>%
+daten_2025 <- daten_sliced %>%
   filter(!is.na(Datum), format(Datum, "%Y") == "2025")
 ```
 
@@ -94,7 +94,7 @@ daten_2025 <- sliced_daten %>%
 
 ```{r Datenaufbereitung}
 
-daten_neu <- daten_2025 %>%
+daten_2025 <- daten_2025 %>%
   mutate(
     `Eigenverbrauch [kWh]` = `PV Ertrag [kWh]` - `Netzeinspeisung [kWh]` - `Speicherung [kWh]`,
     `Gesamtverbrauch [kWh]` = `Netzbezug [kWh]` + `Eigenverbrauch [kWh]`,
@@ -107,7 +107,7 @@ daten_neu <- daten_2025 %>%
 # Datenanalyse und -visualisierung
 ```{r Datenanalyse}
 
-daten_monatlich <- daten_neu %>%
+daten_2025_monatlich <- daten_2025 %>%
   group_by(Monat = format(Datum, "%Y-%m"))%>%
   summarise(
     `PV Ertrag [kWh]` = sum(`PV Ertrag [kWh]`, na.rm = TRUE),
@@ -122,12 +122,12 @@ daten_monatlich <- daten_neu %>%
 
 Nun wollen wir die Tabelle erweitern
 ```{r Tabelle erweitern}
-daten_monatlich <- daten_monatlich %>%
+daten_2025_monatlich <- daten_2025_monatlich %>%
   mutate(
     `Stromkosten [€]`= `Netzbezug [kWh]` * 0.30,
     `Einspeisevergütung [€]` = `Netzeinspeisung [kWh]` * 0.08,
-    `Einsparungen durch Eigenverbrauch [kWh]`= `Eigenverbrauch [kWh]` * 0.30,
-    `Gesamtwirtschaftlichkeit [€]`= `Einsparungen durch Eigenverbrauch [kWh]` + `Einspeisevergütung [€]` - `Stromkosten [€]`
+    `Einsparungen durch Eigenverbrauch [€]`= `Eigenverbrauch [kWh]` * 0.30,
+    `Gesamtwirtschaftlichkeit [€]`= `Einsparungen durch Eigenverbrauch [€]` + `Einspeisevergütung [€]` - `Stromkosten [€]`
   )
 
 ```
@@ -135,8 +135,30 @@ daten_monatlich <- daten_monatlich %>%
 Darstellung als Tabelle
 ```{r Tabelle darstellen}
 library(knitr)
-kable(daten_monatlich, digits = 2, caption = "Monatliche Zusammenfassung")
+kable(daten_2025_monatlich, digits = 2, caption = "Monatliche Zusammenfassung")
 ```
 
+Nun wollen wir doe Kosten-/Vergütungsbezogenen Spalten visualisieren
+```{r Kostenvisualisierung}
+ggplot() +
+  geom_col(data = daten_2025_monatlich, aes(x = Monat, y = `Einspeisevergütung [€]`), fill = "blue") +
+  geom_col(data = daten_2025_monatlich, aes(x = Monat, y = -`Stromkosten [€]`), fill = "red") +
+  geom_col(data = daten_2025_monatlich, aes(x = Monat, y = `Einsparungen durch Eigenverbrauch [kWh]`), fill = "yellow") +
+  geom_line(data = daten_2025_monatlich, aes(x = Monat, y = `Gesamtwirtschaftlichkeit [€]`), color = "pink", group = 1)
+```
+---
 
+# Jahresübersicht
 
+Nun wollen wir einen Blick auf das gesamte Jahr werfen
+```{r Jahresübersicht}
+
+daten_jahresuebersicht <- daten_2025 %>%
+  ungroup() %>%
+  mutate(
+    `Amortisierung [€]` = `Einsparungen durch Eigenverbrauch [€]` + `Einspeisevergütung [€]`,
+    `Durchschnittlicher Netzbezug [kWh]` = mean(`Netzbezug [kWh]`, na.rm = TRUE)
+  )
+
+```
+`Tage mit vollem Speicher [%]`= 
