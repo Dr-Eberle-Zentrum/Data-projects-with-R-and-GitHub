@@ -99,7 +99,8 @@ daten_neu <- daten_2025 %>%
     `Eigenverbrauch [kWh]` = `PV Ertrag [kWh]` - `Netzeinspeisung [kWh]` - `Speicherung [kWh]`,
     `Gesamtverbrauch [kWh]` = `Netzbezug [kWh]` + `Eigenverbrauch [kWh]`,
     `Eigenverbrauchsanteil [%]` = (`Eigenverbrauch [kWh]` / `Gesamtverbrauch [kWh]`) * 100
-  )
+  ) %>%
+  arrange(Datum)
 
 ```
 
