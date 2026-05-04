@@ -10,13 +10,53 @@ library(tidyverse)
 library(ggplot2)
 library(readr)
 library(dplyr)
+options(OutDec = ",")
 ```
 
 
-```{r zipOrdner}
+```{r Datenimport}
 
 ## PV-Ordner mit den ZIP-Dateien
-zip_ordner <- "Projects/martin-raden/PV"
+zip_ordner <- "~/Documents/Data-projects-with-R-and-GitHub/Projects/martin-raden/PV"
 
-## Alle ZIP-Dateien automatisch finden
+## Alle ZIP-Dateien im ZIP Ordner finden
 zip_dateien <- list.files(zip_ordner, pattern = "\\.zip$", full.names = TRUE)
+
+## Liste für die Daten erstellen
+daten_liste <- vector("list", length(zip_dateien))
+
+## Alle ZIP-Dateien mit FOR-Loop auslesen (hier hat die KI geholfen, leider kann ich
+## nicht genau erklären wie, aber es funktioniert 🥲)
+
+for (i in 1:length(zip_dateien)) {
+  zip_inhalt <- unzip(zip_dateien[i], list = TRUE)
+  csv_name <- zip_inhalt$Name[grepl("\\.csv$", zip_inhalt$Name)][1]
+  daten_liste[[i]] <- read_delim(
+    file = unz(zip_dateien[i], csv_name),
+    delim = ";",
+    col_types = cols(.default = col_character()),
+    show_col_types = FALSE
+  )
+}
+
+## Daten in einer Variable speichern
+verbundene_daten <- bind_rows(daten_liste)
+
+```
+
+Nun müssen alle Spalten noch den richtigen Datentyp bekommen
+
+```{r Datentypen}
+
+daten <- verbundene_daten %>%
+  mutate(
+    Datum = as.Date(Datum, format = "%d.%m.%Y"),
+    across(
+      c(`Netzeinspeisung [kWh]`, `Netzbezug [kWh]`,
+        `Speicherung [kWh]`, `PV Ertrag [kWh]`),
+      ~ parse_number(.x, locale = locale(decimal_mark = ",", grouping_mark = "."))
+    )
+  )
+
+```
+
