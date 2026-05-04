@@ -446,7 +446,169 @@ sliced_daten &lt;- daten_typisiert %&gt;%
     `Eigenverbrauch [kWh]` = `PV Ertrag [kWh]` - `Netzeinspeisung [kWh]` - `Speicherung [kWh]`,
     `Gesamtverbrauch [kWh]` = `Netzbezug [kWh]` + `Eigenverbrauch [kWh]`,
     `Eigenverbrauchsanteil [%]` = (`Eigenverbrauch [kWh]` / `Gesamtverbrauch [kWh]`) * 100
+  ) %&gt;%
+  arrange(Datum)</code></pre>
+</div>
+<div id="datenanalyse-und--visualisierung" class="section level1">
+<h1>Datenanalyse und -visualisierung</h1>
+<pre class="r"><code>daten_monatlich &lt;- daten_neu %&gt;%
+  group_by(Monat = format(Datum, &quot;%Y-%m&quot;))%&gt;%
+  summarise(
+    `PV Ertrag [kWh]` = sum(`PV Ertrag [kWh]`, na.rm = TRUE),
+    `Netzeinspeisung [kWh]` = sum(`Netzeinspeisung [kWh]`, na.rm = TRUE),
+    `Netzbezug [kWh]` = sum(`Netzbezug [kWh]`, na.rm = TRUE),
+    `Eigenverbrauch [kWh]` = sum(`Eigenverbrauch [kWh]`, na.rm = TRUE),
+    `Gesamtverbrauch [kWh]` = sum(`Gesamtverbrauch [kWh]`, na.rm = TRUE),
+    `Eigenverbrauchsanteil [%]` = mean(`Eigenverbrauchsanteil [%]`, na.rm = TRUE)
   )</code></pre>
+<p>Nun wollen wir die Tabelle erweitern</p>
+<pre class="r"><code>daten_monatlich &lt;- daten_monatlich %&gt;%
+  mutate(
+    `Stromkosten [€]`= `Netzbezug [kWh]` * 0.30,
+    `Einspeisevergütung [€]` = `Netzeinspeisung [kWh]` * 0.08,
+    `Einsparungen durch Eigenverbrauch [kWh]`= `Eigenverbrauch [kWh]` * 0.30,
+    `Gesamtwirtschaftlichkeit [€]`= `Einsparungen durch Eigenverbrauch [kWh]` + `Einspeisevergütung [€]` - `Stromkosten [€]`
+  )</code></pre>
+<p>Darstellung als Tabelle</p>
+<pre class="r"><code>library(knitr)
+kable(daten_monatlich, digits = 2, caption = &quot;Monatliche Zusammenfassung&quot;)</code></pre>
+<table>
+<caption>Monatliche Zusammenfassung</caption>
+<colgroup>
+<col width="3%" />
+<col width="6%" />
+<col width="9%" />
+<col width="6%" />
+<col width="8%" />
+<col width="9%" />
+<col width="10%" />
+<col width="6%" />
+<col width="9%" />
+<col width="16%" />
+<col width="12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Monat</th>
+<th align="right">PV Ertrag [kWh]</th>
+<th align="right">Netzeinspeisung [kWh]</th>
+<th align="right">Netzbezug [kWh]</th>
+<th align="right">Eigenverbrauch [kWh]</th>
+<th align="right">Gesamtverbrauch [kWh]</th>
+<th align="right">Eigenverbrauchsanteil [%]</th>
+<th align="right">Stromkosten [€]</th>
+<th align="right">Einspeisevergütung [€]</th>
+<th align="right">Einsparungen durch Eigenverbrauch [kWh]</th>
+<th align="right">Gesamtwirtschaftlichkeit [€]</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2025-01</td>
+<td align="right">313,43</td>
+<td align="right">160,42</td>
+<td align="right">27,10</td>
+<td align="right">33,97</td>
+<td align="right">61,07</td>
+<td align="right">49,64</td>
+<td align="right">8,13</td>
+<td align="right">12,83</td>
+<td align="right">10,19</td>
+<td align="right">14,89</td>
+</tr>
+<tr class="even">
+<td align="left">2025-02</td>
+<td align="right">436,24</td>
+<td align="right">301,50</td>
+<td align="right">21,72</td>
+<td align="right">41,92</td>
+<td align="right">63,64</td>
+<td align="right">57,03</td>
+<td align="right">6,52</td>
+<td align="right">24,12</td>
+<td align="right">12,58</td>
+<td align="right">30,18</td>
+</tr>
+<tr class="odd">
+<td align="left">2025-03</td>
+<td align="right">728,74</td>
+<td align="right">611,56</td>
+<td align="right">20,63</td>
+<td align="right">40,43</td>
+<td align="right">61,06</td>
+<td align="right">57,59</td>
+<td align="right">6,19</td>
+<td align="right">48,92</td>
+<td align="right">12,13</td>
+<td align="right">54,86</td>
+</tr>
+<tr class="even">
+<td align="left">2025-04</td>
+<td align="right">1145,89</td>
+<td align="right">1040,88</td>
+<td align="right">16,93</td>
+<td align="right">48,96</td>
+<td align="right">65,89</td>
+<td align="right">61,92</td>
+<td align="right">5,08</td>
+<td align="right">83,27</td>
+<td align="right">14,69</td>
+<td align="right">92,88</td>
+</tr>
+<tr class="odd">
+<td align="left">2025-05</td>
+<td align="right">1343,54</td>
+<td align="right">1206,39</td>
+<td align="right">14,93</td>
+<td align="right">94,70</td>
+<td align="right">109,63</td>
+<td align="right">67,25</td>
+<td align="right">4,48</td>
+<td align="right">96,51</td>
+<td align="right">28,41</td>
+<td align="right">120,44</td>
+</tr>
+<tr class="even">
+<td align="left">2025-06</td>
+<td align="right">1500,56</td>
+<td align="right">1366,43</td>
+<td align="right">12,58</td>
+<td align="right">99,88</td>
+<td align="right">112,46</td>
+<td align="right">91,55</td>
+<td align="right">3,77</td>
+<td align="right">109,31</td>
+<td align="right">29,96</td>
+<td align="right">135,50</td>
+</tr>
+<tr class="odd">
+<td align="left">2025-07</td>
+<td align="right">1186,49</td>
+<td align="right">1020,63</td>
+<td align="right">15,82</td>
+<td align="right">102,94</td>
+<td align="right">118,76</td>
+<td align="right">78,18</td>
+<td align="right">4,75</td>
+<td align="right">81,65</td>
+<td align="right">30,88</td>
+<td align="right">107,79</td>
+</tr>
+<tr class="even">
+<td align="left">2025-08</td>
+<td align="right">1154,59</td>
+<td align="right">1042,92</td>
+<td align="right">17,07</td>
+<td align="right">49,48</td>
+<td align="right">66,55</td>
+<td align="right">212,66</td>
+<td align="right">5,12</td>
+<td align="right">83,43</td>
+<td align="right">14,84</td>
+<td align="right">93,16</td>
+</tr>
+</tbody>
+</table>
 </div>
 
 

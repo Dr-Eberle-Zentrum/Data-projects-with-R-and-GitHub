@@ -132,6 +132,11 @@ daten_monatlich <- daten_monatlich %>%
 
 ```
 
+Darstellung als Tabelle
+```{r Tabelle darstellen}
+library(knitr)
+kable(daten_monatlich, digits = 2, caption = "Monatliche Zusammenfassung")
+```
 
 
 
