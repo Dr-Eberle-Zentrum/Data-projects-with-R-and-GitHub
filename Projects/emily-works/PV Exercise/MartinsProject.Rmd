@@ -14,7 +14,7 @@ options(OutDec = ",")
 ```
 
 
-```{r Datenimport, warning = FALSE, message = FAlSE}
+```{r Datenimport}
 
 ## PV-Ordner mit den ZIP-Dateien
 zip_ordner <- "~/Documents/Data-projects-with-R-and-GitHub/Projects/martin-raden/PV"
@@ -46,9 +46,9 @@ verbundene_daten <- bind_rows(daten_liste)
 
 Nun müssen alle Spalten noch den richtigen Datentyp bekommen.
 
-```{r Datentypen, warning = FALSE, message = FAlSE}
+```{r Datentypen}
 
-daten <- verbundene_daten %>%
+daten_typisiert <- verbundene_daten %>%
   mutate(
     Datum = as.Date(Datum, format = "%d.%m.%Y"),
     across(
@@ -58,5 +58,32 @@ daten <- verbundene_daten %>%
     )
   )
 
+```
+
+Nun wollen wir nach fehlenden Werten suchen
+```{r Fehlende Werte}
+fehlende_werte <- daten_typisiert %>%
+  summarise(across(everything(), ~ sum(is.na(.))))
+
+```
+es gibt keine fehlenden Werte? (oder??????)
+
+Nun wollen wir prüfen, ob es doppelte Einträge gibt
+```{r Doppelte Einträge}
+duplikate <- daten_typisiert %>%
+  add_count(Datum) %>%
+  filter(n > 1)
+
+sliced_daten <- daten_typisiert %>%
+  group_by(Datum) %>%
+  slice_max(order_by = `PV Ertrag [kWh]`, n = 1, with_ties = FALSE) %>%
+  ungroup()
+```
+
+Nun wollen wir nur Daten aus 2025 behalten
+```{r Daten filtern}
+
+daten_2025 <- sliced_daten %>%
+  filter(!is.na(Datum), format(Datum, "%Y") == "2025")
 ```
 
