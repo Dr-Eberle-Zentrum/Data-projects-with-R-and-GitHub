@@ -14,7 +14,7 @@ options(OutDec = ",")
 ```
 
 
-```{r Datenimport}
+```{r Datenimport, warning = FALSE, message = FAlSE}
 
 ## PV-Ordner mit den ZIP-Dateien
 zip_ordner <- "~/Documents/Data-projects-with-R-and-GitHub/Projects/martin-raden/PV"
@@ -46,7 +46,7 @@ verbundene_daten <- bind_rows(daten_liste)
 
 Nun müssen alle Spalten noch den richtigen Datentyp bekommen.
 
-```{r Datentypen}
+```{r Datentypen, warning = FALSE, message = FAlSE}
 
 daten <- verbundene_daten %>%
   mutate(
