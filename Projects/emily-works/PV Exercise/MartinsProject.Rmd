@@ -13,6 +13,7 @@ library(dplyr)
 options(OutDec = ",")
 ```
 
+# Datenimport
 
 ```{r Datenimport}
 
@@ -86,4 +87,29 @@ Nun wollen wir nur Daten aus 2025 behalten
 daten_2025 <- sliced_daten %>%
   filter(!is.na(Datum), format(Datum, "%Y") == "2025")
 ```
+
+---
+
+# Datenaufbereitung
+
+```{r Datenaufbereitung}
+
+daten_neu <- daten_2025 %>%
+  mutate(
+    `Eigenverbrauch [kWh]` = `PV Ertrag [kWh]` - `Netzeinspeisung [kWh]` - `Speicherung [kWh]`,
+    `Gesamtverbrauch [kWh]` = `Netzbezug [kWh]` + `Eigenverbrauch [kWh]`,
+    `Eigenverbrauchsanteil [%]` = (`Eigenverbrauch [kWh]` / `Gesamtverbrauch [kWh]`) * 100
+  )
+
+```
+
+
+
+
+
+
+
+
+
+
 

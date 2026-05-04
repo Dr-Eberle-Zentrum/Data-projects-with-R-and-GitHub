@@ -353,6 +353,8 @@ display: none;
 </div>
 
 
+<div id="datenimport" class="section level1">
+<h1>Datenimport</h1>
 <pre class="r"><code>## PV-Ordner mit den ZIP-Dateien
 zip_ordner &lt;- &quot;~/Documents/Data-projects-with-R-and-GitHub/Projects/martin-raden/PV&quot;
 
@@ -410,7 +412,7 @@ for (i in 1:length(zip_dateien)) {
 <pre class="r"><code>## Daten in einer Variable speichern
 verbundene_daten &lt;- bind_rows(daten_liste)</code></pre>
 <p>Nun müssen alle Spalten noch den richtigen Datentyp bekommen.</p>
-<pre class="r"><code>daten &lt;- verbundene_daten %&gt;%
+<pre class="r"><code>daten_typisiert &lt;- verbundene_daten %&gt;%
   mutate(
     Datum = as.Date(Datum, format = &quot;%d.%m.%Y&quot;),
     across(
@@ -419,6 +421,33 @@ verbundene_daten &lt;- bind_rows(daten_liste)</code></pre>
       ~ parse_number(.x, locale = locale(decimal_mark = &quot;,&quot;, grouping_mark = &quot;.&quot;))
     )
   )</code></pre>
+<p>Nun wollen wir nach fehlenden Werten suchen</p>
+<pre class="r"><code>fehlende_werte &lt;- daten_typisiert %&gt;%
+  summarise(across(everything(), ~ sum(is.na(.))))</code></pre>
+<p>es gibt keine fehlenden Werte? (oder??????)</p>
+<p>Nun wollen wir prüfen, ob es doppelte Einträge gibt</p>
+<pre class="r"><code>duplikate &lt;- daten_typisiert %&gt;%
+  add_count(Datum) %&gt;%
+  filter(n &gt; 1)
+
+sliced_daten &lt;- daten_typisiert %&gt;%
+  group_by(Datum) %&gt;%
+  slice_max(order_by = `PV Ertrag [kWh]`, n = 1, with_ties = FALSE) %&gt;%
+  ungroup()</code></pre>
+<p>Nun wollen wir nur Daten aus 2025 behalten</p>
+<pre class="r"><code>daten_2025 &lt;- sliced_daten %&gt;%
+  filter(!is.na(Datum), format(Datum, &quot;%Y&quot;) == &quot;2025&quot;)</code></pre>
+<hr />
+</div>
+<div id="datenaufbereitung" class="section level1">
+<h1>Datenaufbereitung</h1>
+<pre class="r"><code>daten_neu &lt;- daten_2025 %&gt;%
+  mutate(
+    `Eigenverbrauch [kWh]` = `PV Ertrag [kWh]` - `Netzeinspeisung [kWh]` - `Speicherung [kWh]`,
+    `Gesamtverbrauch [kWh]` = `Netzbezug [kWh]` + `Eigenverbrauch [kWh]`,
+    `Eigenverbrauchsanteil [%]` = (`Eigenverbrauch [kWh]` / `Gesamtverbrauch [kWh]`) * 100
+  )</code></pre>
+</div>
 
 
 
