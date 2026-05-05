@@ -143,22 +143,11 @@ Nun wollen wir doe Kosten-/Vergütungsbezogenen Spalten visualisieren
 ggplot() +
   geom_col(data = daten_2025_monatlich, aes(x = Monat, y = `Einspeisevergütung [€]`), fill = "blue") +
   geom_col(data = daten_2025_monatlich, aes(x = Monat, y = -`Stromkosten [€]`), fill = "red") +
-  geom_col(data = daten_2025_monatlich, aes(x = Monat, y = `Einsparungen durch Eigenverbrauch [kWh]`), fill = "yellow") +
+  geom_col(data = daten_2025_monatlich, aes(x = Monat, y = `Einsparungen durch Eigenverbrauch [€]`), fill = "yellow") +
   geom_line(data = daten_2025_monatlich, aes(x = Monat, y = `Gesamtwirtschaftlichkeit [€]`), color = "pink", group = 1)
 ```
----
+--- 
 
 # Jahresübersicht
 
-Nun wollen wir einen Blick auf das gesamte Jahr werfen
-```{r Jahresübersicht}
-
-daten_jahresuebersicht <- daten_2025 %>%
-  ungroup() %>%
-  mutate(
-    `Amortisierung [€]` = `Einsparungen durch Eigenverbrauch [€]` + `Einspeisevergütung [€]`,
-    `Durchschnittlicher Netzbezug [kWh]` = mean(`Netzbezug [kWh]`, na.rm = TRUE)
-  )
-
-```
-`Tage mit vollem Speicher [%]`= 
+Nun wollen wir einen Blick auf das gesamte Jahr werfen (ab hier haben wir nicht weitergearbeitet). Zeitaufwand bis hier: ~3,5 Stunden
