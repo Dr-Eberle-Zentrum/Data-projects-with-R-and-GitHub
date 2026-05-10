@@ -1,6 +1,7 @@
 ---
 title: "project-description"
 output: md_document
+date: "`r format(Sys.Date(), '%d %B %Y')`"
 editor_options: 
   markdown: 
     wrap: 72
