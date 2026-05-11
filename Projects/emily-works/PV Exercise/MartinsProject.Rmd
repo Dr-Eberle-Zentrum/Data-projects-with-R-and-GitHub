@@ -15,7 +15,7 @@ options(OutDec = ",")
 
 # Datenimport
 
-```{r Datenimport}
+```{r Datenimport, warning = FALSE, message = FALSE}
 
 ## PV-Ordner mit den ZIP-Dateien
 zip_ordner <- "~/Documents/Data-projects-with-R-and-GitHub/Projects/martin-raden/PV"
