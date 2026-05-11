@@ -1,0 +1,265 @@
+Lord of the Rings is a fantasy novel trilogy written by J.R.R. Tolkien.
+Until today, it is one of the most popular and influential works of
+fantasy literature, and has been adapted into several films, video
+games, and other media. The story follows a group of characters as they
+embark on a quest to destroy a powerful ring that has the potential to
+enslave the world.
+
+In this analysis, we will explore the distribution of speakers time in
+Lord of the Rings. For that, not the minutes of speaking in the movies,
+but the number of words spoken by each character in the three books will
+be used as a proxy for the time spent speaking. This is due to practical
+reasons (data availability), as well as the fact that the movies are an
+adaption of the three books, making the novels the source material. We
+will analyze the amount of time each character spends speaking in the
+novel, and how it is distributed among the different characters.
+
+This analysis will help us understand which characters have the most
+dialogue and how the speaking time is distributed among the characters
+in the story. We will also explore any patterns or trends in the
+distribution of speakers time, and how it may relate to the overall
+narrative of the novel. This also in light of the gender representation
+in the novel, as the movies are often criticized for not passing the
+[Bechdel-Wallace Test](https://bechdeltest.com).
+
+------------------------------------------------------------------------
+
+## Data
+
+The data used for this analysis will consist of two datasets.
+
+### Words by Character
+
+The dataset concerned with the number of words spoken by each character
+contains the number of words spoken by each character in the three
+volumes of Lord of the Rings. The dataset was created by counting the
+number of words spoken by each character in the novels, and is available
+in the project folder under the name `WordsByCharacter.csv`.
+
+The creator of this dataset is **FSharpAdvent** (on GitHub). All
+information about, as well as the dataset can be found here:
+<https://github.com/MokoSan/FSharpAdvent/blob/master/Data>.
+
+The data is organized in a tabular format, with each row representing a
+character and the number of words they spoke in a particular chapter of
+the novel. The columns include the name of the film (book), the chapter,
+the character’s name, race and the number of words spoken by them:
+
+<table>
+<colgroup>
+<col style="width: 41%" />
+<col style="width: 20%" />
+<col style="width: 16%" />
+<col style="width: 11%" />
+<col style="width: 10%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: center;">Film</th>
+<th style="text-align: center;">Chapter</th>
+<th style="text-align: center;">Character</th>
+<th style="text-align: center;">Race</th>
+<th style="text-align: center;">Words</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">The Fellowship of the Ring</td>
+<td style="text-align: center;">01: Prologue</td>
+<td style="text-align: center;">Bilbo</td>
+<td style="text-align: center;">Hobbit</td>
+<td style="text-align: center;">4</td>
+</tr>
+<tr>
+<td style="text-align: center;">The Fellowship of the Ring</td>
+<td style="text-align: center;">01: Prologue</td>
+<td style="text-align: center;">Elrond</td>
+<td style="text-align: center;">Elf</td>
+<td style="text-align: center;">5</td>
+</tr>
+<tr>
+<td style="text-align: center;">The Fellowship of the Ring</td>
+<td style="text-align: center;">01: Prologue</td>
+<td style="text-align: center;">Galadriel</td>
+<td style="text-align: center;">Elf</td>
+<td style="text-align: center;">460</td>
+</tr>
+</tbody>
+</table>
+
+The columns are defined as follows:
+
+-   **Film**: The Name of the individual novel (The Fellowship of the
+    Ring, The Two Towers, The Return of the King).
+-   **Chapter**: The chapter of the specified novel in which the
+    character speaks.
+-   **Character**: The name of the character who speaks.
+-   **Race**: The Race (Species) of the specified character.
+-   **Words**: The number of words spoken by the specified character in
+    the specified chapter within the specified book.
+
+### Character Information
+
+The second dataset contains information about the characters in Lord of
+the Rings, including their name, race, gender and realm.
+
+The dataset is available in the project folder under the name
+`InformationByCharacter.csv`. The creator of this dataset is me, Emily.
+The data was collected and compiled by me, based on information from the
+novels and other sources, such as the LOTR-Wiki.
+
+The data is organized in a tabular format, with each row representing a
+character:
+
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Character</th>
+<th style="text-align: center;">Race</th>
+<th style="text-align: center;">Gender</th>
+<th style="text-align: center;">Realm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">Aragorn</td>
+<td style="text-align: center;">Men</td>
+<td style="text-align: center;">Male</td>
+<td style="text-align: center;">Gondor</td>
+</tr>
+<tr>
+<td style="text-align: center;">Arwen</td>
+<td style="text-align: center;">Elf</td>
+<td style="text-align: center;">Female</td>
+<td style="text-align: center;">Rivendell</td>
+</tr>
+<tr>
+<td style="text-align: center;">Bilbo</td>
+<td style="text-align: center;">Hobbit</td>
+<td style="text-align: center;">Male</td>
+<td style="text-align: center;">The Shire</td>
+</tr>
+</tbody>
+</table>
+
+The columns are defined as follows:
+
+-   **name**: The name of the specified character.
+-   **race**: The race (species) of the specified character.
+-   **gender**: The gender of the specified character.
+-   **realm**: The realm (location) of which the specified character is
+    mainly associated with.
+
+**Disclaimer**: The data used in this analysis is not official data, but
+rather data that has been collected and compiled by fans of the Lord of
+the Rings series (and me). Therefore, there may be inaccuracies or
+inconsistencies in the data, and it should be interpreted with caution.
+However, it is still a valuable resource for analyzing the
+characteristics of speakers time in the novels.
+
+------------------------------------------------------------------------
+
+# Tasks
+
+## 1. Data import
+
+The first step in the analysis is to import the data from the two
+datasets into R. As the data is split into two different files, we will
+need to **import** both datasets and then **merge** them together based
+on the **character’s name**. This will allow us to have all the relevant
+information about each character in one dataset, which will make it
+easier to analyze the distribution of speakers time.
+
+*Hint: Only merge the two datasets based on the character’s name,
+**after** summarizing the number of words by character (Step 2.2. of
+Data Analysis).*
+
+Please note, that characters can appear **multiple times** in the
+`WordsByCharacter` dataset, as they can speak in multiple chapters
+across the three books. In the `InformationByCharacter` dataset, each
+character appears only once, as it contains general information about
+the characters.
+
+Please check:
+
+-   Is every data record complete (no missing values)?
+    -   If not, can the missing values be reasonably filled in
+        (i.e. gender = “Unknown”?).
+    -   The corresponding rows should **NOT** be removed.
+-   Are there any inconsistencies in the data (e.g. different spellings
+    of the same character’s name)?
+
+## 2. Data Analysis & Visualization
+
+Once the data is imported and merged, we can begin analyzing the
+distribution of speakers time.
+
+### 2.1. Speakers Time by Volume
+
+The first step is to calculate the total number of words spoken in each
+of the three books. For that, create a new table that summarizes the
+total number of words spoken in each book.
+
+Answer these questions:
+
+-   What is the total number of words spoken?
+-   Which book has the highest number of words spoken?
+-   Which book has the lowest number of words spoken?
+
+Please visualize the distribution of the total number of words using a
+pie chart, similar to this:
+
+///gsgdgdgd////
+
+### 2.2. Speakers Time by Character
+
+The next step is to calculate the total number of words spoken by each
+character across all three books. For that create a new table that
+summarizes the total number of words across all volumes spoken by each
+character.
+
+Answer these questions:
+
+-   Which character has the most speaking time?
+-   Which character has the least speaking time?
+-   How is the distribution of speakers time among the characters?
+    -   Is the distribution of speakers time among the characters skewed
+        (i.e. a few characters speak a lot, while most characters speak
+        very little)?
+
+Please visualize this distribution using a donut chart, similar to this:
+
+//Z////////
+
+### 2.3. Speakers Time by Characteristics
+
+Next, we can analyze the distribution of speakers time based on
+different characteristics of the characters. Summarize the number of
+words spoken by characters based on gender, realm and race.
+
+Answer these questions:
+
+-   Which gender has the most/least speaking time?
+    -   How is it distributed?
+-   Which race has the most/least speaking time?
+    -   How is it distributed?
+-   Which realm are characters with the most/least speaking time
+    associated with?
+
+Please visualize each of these distributions using a donut chart,
+similar to the one above.
+
+### 2.4. Speakers Time of Frodo
+
+Finally, we can analyze the speaking time of `Frodo`, the main character
+of the story
+
+-   Calculate the total number of words spoken by Frodo across all three
+    books.
+    -   Compare the total number of words to the total number of words
+        spoken by all characters.
+    -   Visualize this in a donut chart, similar to the one below:
+-   Calculate the number of chapters in which Frodo speaks.
+    -   Compare the number of chapters in which Frodo speaks to the
+        total number of chapters in the three books.
+    -   Visualize this in a pie chart, similar to the one below:
