@@ -22,6 +22,15 @@ The data is organized in a tabular format, with each row representing a characte
 | The Fellowship of the Ring | 01: Prologue |   Elrond  |   Elf  |   5   |
 | The Fellowship of the Ring | 01: Prologue | Galadriel |   Elf  |  460  |
 
+The columns are defined as follows:
+
+- **Film**: The Name of the individual novel (The Fellowship of the Ring, The Two Towers, The Return of the King).
+- **Chapter**: The chapter of the specified novel in which the character speaks.
+- **Character**: The name of the character who speaks.
+- **Race**: The Race (Species) of the specified character.
+- **Words**: The number of words spoken by the specified character in the specified chapter within the specified book.
+
+# Tasks
 
 
 
