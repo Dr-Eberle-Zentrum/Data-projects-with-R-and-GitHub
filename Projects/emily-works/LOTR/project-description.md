@@ -213,7 +213,7 @@ of the three books. For that, create a new table that includes:
 Please visualize the distribution of the total number of words across
 the three volumes, using a pie chart similar to this:
 
-///gsgdgdgd////
+![](~/Documents/Data-projects-with-R-and-GitHub/Projects/emily-works/LOTR/TotalNumber.png)
 
 ### 2.2. Speakers Time by Character
 
@@ -231,9 +231,9 @@ Answer these questions:
         (i.e. a few characters speak a lot, while most characters speak
         very little)?
 
-Please visualize this distribution using a donut chart, similar to this:
+Please visualize this distribution using a pie chart, similar to this:
 
-//Z////////
+![](~/Documents/Data-projects-with-R-and-GitHub/Projects/emily-works/LOTR/TotalCharacter.png)
 
 ### 2.3. Speakers Time by Characteristics
 
@@ -250,7 +250,7 @@ Answer these questions:
 -   Which realm are characters with the most/least speaking time
     associated with?
 
-Please visualize each of these distributions using a donut chart,
+Please visualize **each** of these distributions using a donut chart,
 similar to the one above.
 
 ### 2.4. Speakers Time of Frodo
@@ -262,8 +262,10 @@ of the story
     books.
     -   Compare the total number of words to the total number of words
         spoken by all characters.
-    -   Visualize this in a donut chart, similar to the one below:
+    -   Visualize this in a pie chart, similar to the one below:
+        ![](~/Documents/Data-projects-with-R-and-GitHub/Projects/emily-works/LOTR/TotalFrodo.png)
 -   Calculate the number of chapters in which Frodo speaks.
     -   Compare the number of chapters in which Frodo speaks to the
         total number of chapters in the three books.
     -   Visualize this in a pie chart, similar to the one below:
+        ![](~/Documents/Data-projects-with-R-and-GitHub/Projects/emily-works/LOTR/TotalChapFrodo.png)
