@@ -133,7 +133,7 @@ Example:
 
 Current projects:
 
-- ..name.. (..githubname..) - [..projectname..](..markdownlink..)
+- Emily (emily-works) - [Distribution of Speakers Time in Lord of the Rings](Projects/emily-works/LOTR/project-description.md)
 - ..name.. (..githubname..) - [..projectname..](..markdownlink..)
 - ..name.. (..githubname..) - [..projectname..](..markdownlink..)
 - ..name.. (..githubname..) - [..projectname..](..markdownlink..)
