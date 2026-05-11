@@ -382,7 +382,7 @@ in the novel, as the movies are often criticized for not passing the <a href="ht
 <h2>Data</h2>
 <p>The data used for this analysis will consist of two datasets.</p>
 <div id="words-by-character" class="section level3">
-<h3>1. Words by Character</h3>
+<h3>Words by Character</h3>
 <p>The dataset concerned with the number of words spoken by each
 character contains the number of words spoken by each character in the
 three books of Lord of the Rings. The dataset was created by counting
@@ -453,7 +453,7 @@ character in the specified chapter within the specified book.</li>
 </ul>
 </div>
 <div id="character-information" class="section level3">
-<h3>2. Character Information</h3>
+<h3>Character Information</h3>
 <p>The second dataset contains information about the characters in Lord
 of the Rings, including their name, race, gender and realm.</p>
 <p>The dataset is available in the project folder under the name
@@ -466,26 +466,30 @@ a character:</p>
 <table>
 <thead>
 <tr class="header">
-<th>Character</th>
-<th>Race</th>
-<th>Gender</th>
+<th align="center">Character</th>
+<th align="center">Race</th>
+<th align="center">Gender</th>
+<th align="center">Realm</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Aragorn</td>
-<td>Men</td>
-<td>Male</td>
+<td align="center">Aragorn</td>
+<td align="center">Men</td>
+<td align="center">Male</td>
+<td align="center">Gondor</td>
 </tr>
 <tr class="even">
-<td>Arwen</td>
-<td>Elf</td>
-<td>Female</td>
+<td align="center">Arwen</td>
+<td align="center">Elf</td>
+<td align="center">Female</td>
+<td align="center">Rivendell</td>
 </tr>
 <tr class="odd">
-<td>Bilbo</td>
-<td>Hobbit</td>
-<td>Male</td>
+<td align="center">Bilbo</td>
+<td align="center">Hobbit</td>
+<td align="center">Male</td>
+<td align="center">The Shire</td>
 </tr>
 </tbody>
 </table>
@@ -511,9 +515,91 @@ analyzing the characteristics of speakers time in the novels.</p>
 <div id="tasks" class="section level1">
 <h1>Tasks</h1>
 <div id="data-import" class="section level2">
-<h2>Data import</h2>
+<h2>1. Data import</h2>
 <p>The first step in the analysis is to import the data from the two
-datasets into R.</p>
+datasets into R. As the data is split into two different files, we will
+need to <strong>import</strong> both datasets and then
+<strong>merge</strong> them together based on the <strong>character’s
+name</strong>. This will allow us to have all the relevant information
+about each character in one dataset, which will make it easier to
+analyze the distribution of speakers time.</p>
+<p><em>Hint: Only merge the two datasets based on the character’s name,
+<strong>after</strong> summarizing the number of words by character
+(Step 2.2. of Data Analysis).</em></p>
+<p>Please note, that characters can appear <strong>multiple
+times</strong> in the <code>WordsByCharacter</code> dataset, as they can
+speak in multiple chapters across the three books. In the
+<code>InformationByCharacter</code> dataset, each character appears only
+once, as it contains general information about the characters.</p>
+<p>Please check:</p>
+<ul>
+<li>Is every data record complete (no missing values)?
+<ul>
+<li>If not, can the missing values be reasonably filled in (i.e. gender
+= “Unknown”?).</li>
+<li>The corresponding rows should <strong>NOT</strong> be removed.</li>
+</ul></li>
+<li>Are there any inconsistencies in the data (e.g. different spellings
+of the same character’s name)?</li>
+</ul>
+</div>
+<div id="data-analysis-visualization" class="section level2">
+<h2>2. Data Analysis &amp; Visualization</h2>
+<p>Once the data is imported and merged, we can begin analyzing the
+distribution of speakers time.</p>
+<div id="speakers-time-by-volume" class="section level3">
+<h3>2.1. Speakers Time by Volume</h3>
+<p>The first step is to calculate the total number of words spoken in
+each of the three books. For that, create a new table that summarizes
+the total number of words spoken in each book.</p>
+<p>Answer these questions:</p>
+<ul>
+<li>What is the total number of words spoken?</li>
+<li>Which book has the highest number of words spoken?</li>
+<li>Which book has the lowest number of words spoken?</li>
+</ul>
+<p>Please visualize the distribution of the total number of words using
+a pie chart, similar to this:</p>
+<p>///gsgdgdgd////</p>
+</div>
+<div id="speakers-time-by-character" class="section level3">
+<h3>2.2. Speakers Time by Character</h3>
+<p>The first step is to calculate the total number of words spoken by
+each character across all three books. For that create a new table that
+summarizes the total number of words across all volumes spoken by each
+character.</p>
+<p>Answer these questions:</p>
+<ul>
+<li>Which character has the most speaking time?</li>
+<li>Which character has the least speaking time?</li>
+<li>How is the distribution of speakers time among the characters (in
+%)?</li>
+</ul>
+<p>Please visualize this distribution using a donut chart, similar to
+this:</p>
+<p>//Z////////</p>
+</div>
+<div id="speakers-time-by-characteristics" class="section level3">
+<h3>2.3. Speakers Time by Characteristics</h3>
+<p>Next, we can analyze the distribution of speakers time based on
+different characteristics of the characters. Summarize the number of
+words spoken by characters based on gender, realm and race.</p>
+<p>Answer these questions:</p>
+<ul>
+<li>Which gender has the most/least speaking time?
+<ul>
+<li>How is it distributed?</li>
+</ul></li>
+<li>Which race has the most/least speaking time?
+<ul>
+<li>How is it distributed?</li>
+</ul></li>
+<li>Which realm are characters with the most/least speaking time
+associated with?</li>
+</ul>
+<p>Please visualize each of these distributions using a donut chart,
+similar to the one above.</p>
+</div>
 </div>
 </div>
 

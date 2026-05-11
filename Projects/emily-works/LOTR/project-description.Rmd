@@ -16,7 +16,7 @@ This analysis will help us understand which characters have the most dialogue an
 ## Data
 The data used for this analysis will consist of two datasets. 
 
-### 1. Words by Character
+### Words by Character
 The dataset concerned with the number of words spoken by each character contains the number of words spoken by each character in the three books of Lord of the Rings. The dataset was created by counting the number of words spoken by each character in the novels, and is available in the project folder under the name `WordsByCharacter.csv`. 
 
 The creator of this dataset is **FSharpAdvent** (on GitHub). All information about, as well as the dataset can be found here: https://github.com/MokoSan/FSharpAdvent/blob/master/Data.
@@ -37,7 +37,7 @@ The columns are defined as follows:
 - **Race**: The Race (Species) of the specified character.
 - **Words**: The number of words spoken by the specified character in the specified chapter within the specified book.
 
-### 2. Character Information
+### Character Information
 The second dataset contains information about the characters in Lord of the Rings, including their name, race, gender and realm. 
 
 The dataset is available in the project folder under the name `InformationByCharacter.csv`. The creator of this dataset is me, Emily. The data was collected and compiled by me, based on information from the novels and other sources, such as the LOTR-Wiki.
@@ -63,8 +63,63 @@ The columns are defined as follows:
 
 # Tasks
 
-## Data import
-The first step in the analysis is to import the data from the two datasets into R. 
+## 1. Data import
+The first step in the analysis is to import the data from the two datasets into R. As the data is split into two different files, we will need to **import** both datasets and then **merge** them together based on the **character's name**. This will allow us to have all the relevant information about each character in one dataset, which will make it easier to analyze the distribution of speakers time.
+
+_Hint: Only merge the two datasets based on the character's name, **after** summarizing the number of words by character (Step 2.2. of Data Analysis)._
+
+Please note, that characters can appear **multiple times** in the `WordsByCharacter` dataset, as they can speak in multiple chapters across the three books. In the `InformationByCharacter` dataset, each character appears only once, as it contains general information about the characters. 
+
+Please check:
+
+- Is every data record complete (no missing values)?
+  - If not, can the missing values be reasonably filled in (i.e. gender = "Unknown"?).
+  - The corresponding rows should **NOT** be removed.
+- Are there any inconsistencies in the data (e.g. different spellings of the same character's name)?
+
+## 2. Data Analysis & Visualization
+Once the data is imported and merged, we can begin analyzing the distribution of speakers time.
+
+### 2.1. Speakers Time by Volume
+The first step is to calculate the total number of words spoken in each of the three books. For that, create a new table that summarizes the total number of words spoken in each book.
+
+Answer these questions:
+
+- What is the total number of words spoken?
+- Which book has the highest number of words spoken?
+- Which book has the lowest number of words spoken?
+
+Please visualize the distribution of the total number of words using a pie chart, similar to this:
+
+///gsgdgdgd////
+
+### 2.2. Speakers Time by Character
+The next step is to calculate the total number of words spoken by each character across all three books. For that create a new table that summarizes the total number of words across all volumes spoken by each character. 
+
+Answer these questions:
+
+- Which character has the most speaking time? 
+- Which character has the least speaking time? 
+- How is the distribution of speakers time among the characters (in %)?
+- 
+
+Please visualize this distribution using a donut chart, similar to this:
+
+//Z////////
+
+### 2.3. Speakers Time by Characteristics
+Next, we can analyze the distribution of speakers time based on different characteristics of the characters. Summarize the number of words spoken by characters based on gender, realm and race.
+
+Answer these questions:
+
+- Which gender has the most/least speaking time?
+  - How is it distributed?
+- Which race has the most/least speaking time? 
+  - How is it distributed?
+- Which realm are characters with the most/least speaking time associated with? 
+
+Please visualize each of these distributions using a donut chart, similar to the one above.
+
 
 
 
