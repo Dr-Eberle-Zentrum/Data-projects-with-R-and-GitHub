@@ -1,0 +1,70 @@
+---
+title: "Analysis of the Distribution of Speakers Time in Lord of the Rings "
+output: html_document
+---
+
+# Distribution of Speakers Time in Lord of Rings
+
+Lord of the Rings is a fantasy novel trilogy written by J.R.R. Tolkien. Until today, it is one of the most popular and influential works of fantasy literature, and has been adapted into several films, video games, and other media. The story follows a group of characters as they embark on a quest to destroy a powerful ring that has the potential to enslave the world.
+
+In this analysis, we will explore the distribution of speakers time in Lord of the Rings. For that, not the minutes of speaking in the movies, but the number of words spoken by each character in the three books will be used as a proxy for the time spent speaking. This is due to practical reasons (data availability), as well as the fact that the movies are an adaption of the three books, making the novels the source material. We will analyze the amount of time each character spends speaking in the novel, and how it is distributed among the different characters. 
+
+This analysis will help us understand which characters have the most dialogue and how the speaking time is distributed among the characters in the story. We will also explore any patterns or trends in the distribution of speakers time, and how it may relate to the overall narrative of the novel. This also in light of the gender representation in the novel, as the movies are often criticized for not passing the [Bechdel-Wallace Test](https://bechdeltest.com).
+
+---
+
+## Data
+The data used for this analysis will consist of two datasets. 
+
+### 1. Words by Character
+The dataset concerned with the number of words spoken by each character contains the number of words spoken by each character in the three books of Lord of the Rings. The dataset was created by counting the number of words spoken by each character in the novels, and is available in the project folder under the name `WordsByCharacter.csv`. 
+
+The creator of this dataset is **FSharpAdvent** (on GitHub). All information about, as well as the dataset can be found here: https://github.com/MokoSan/FSharpAdvent/blob/master/Data.
+
+The data is organized in a tabular format, with each row representing a character and the number of words they spoke in a particular chapter of the novel. The columns include the name of the film (book), the chapter, the character's name, race and the number of words spoken by them:
+
+|            Film            |    Chapter   | Character |  Race  | Words |
+|:--------------------------:|:------------:|:---------:|:------:|:-----:|
+| The Fellowship of the Ring | 01: Prologue |   Bilbo   | Hobbit |   4   |
+| The Fellowship of the Ring | 01: Prologue |   Elrond  |   Elf  |   5   |
+| The Fellowship of the Ring | 01: Prologue | Galadriel |   Elf  |  460  |
+
+The columns are defined as follows:
+
+- **Film**: The Name of the individual novel (The Fellowship of the Ring, The Two Towers, The Return of the King).
+- **Chapter**: The chapter of the specified novel in which the character speaks.
+- **Character**: The name of the character who speaks.
+- **Race**: The Race (Species) of the specified character.
+- **Words**: The number of words spoken by the specified character in the specified chapter within the specified book.
+
+### 2. Character Information
+The second dataset contains information about the characters in Lord of the Rings, including their name, race, gender and realm. 
+
+The dataset is available in the project folder under the name `InformationByCharacter.csv`. The creator of this dataset is me, Emily. The data was collected and compiled by me, based on information from the novels and other sources, such as the LOTR-Wiki.
+
+The data is organized in a tabular format, with each row representing a character:
+
+|  Character  |  Race    |  Gender  |  Realm    |
+|:-----------:|:--------:|:--------:|:---------:|
+|  Aragorn    |  Men     |  Male    | Gondor    |
+|  Arwen      |  Elf     |  Female  | Rivendell |
+|  Bilbo      |  Hobbit  |  Male    | The Shire |
+
+The columns are defined as follows:
+
+- **name**: The name of the specified character.
+- **race**: The race (species) of the specified character.
+- **gender**: The gender of the specified character.
+- **realm**: The realm (location) of which the specified character is associated with.
+
+**Disclaimer**: The data used in this analysis is not official data, but rather data that has been collected and compiled by fans of the Lord of the Rings series. Therefore, there may be  inaccuracies or inconsistencies in the data, and it should be interpreted with caution.  However, it is still a valuable resource for analyzing the characteristics of speakers time in the novels.
+
+---
+
+# Tasks
+
+## Data import
+The first step in the analysis is to import the data from the two datasets into R. 
+
+
+

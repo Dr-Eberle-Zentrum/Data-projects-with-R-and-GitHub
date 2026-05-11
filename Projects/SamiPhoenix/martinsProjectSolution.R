@@ -26,6 +26,7 @@ big_data <- big_data |>
   mutate("Monat" = Datum)
 
 big_data$Monat <- format(as.Date(big_data$Monat, format="%d/%m/%Y"), "%m")
+# month() and months()
 
 table <- big_data |> 
   group_by(Monat) |> 
