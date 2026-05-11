@@ -1,9 +1,7 @@
 ---
-title: "Analysis of the Distribution of Speakers Time in Lord of the Rings "
-output: html_document
+title: "Distribution of Speakers Time in Lord of the Rings"
+output: md_document
 ---
-
-# Distribution of Speakers Time in Lord of Rings
 
 Lord of the Rings is a fantasy novel trilogy written by J.R.R. Tolkien. Until today, it is one of the most popular and influential works of fantasy literature, and has been adapted into several films, video games, and other media. The story follows a group of characters as they embark on a quest to destroy a powerful ring that has the potential to enslave the world.
 
