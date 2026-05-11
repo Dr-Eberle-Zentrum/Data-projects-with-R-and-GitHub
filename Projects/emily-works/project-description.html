@@ -377,14 +377,21 @@ in the story. We will also explore any patterns or trends in the
 distribution of speakers time, and how it may relate to the overall
 narrative of the novel. This also in light of the gender representation
 in the novel, as the movies are often criticized for not passing the <a href="https://bechdeltest.com">Bechdel-Wallace Test</a>.</p>
+<hr />
 <div id="data" class="section level2">
 <h2>Data</h2>
-<p>The data used for this analysis was obtained from a dataset that
-contains the number of words spoken by each character in the three books
-of Lord of the Rings. The dataset was created by counting the number of
-words spoken by each character in the novels, and is available in the
-project folder. The creator of this dataset is FSharpAdvent (on GitHub).
-All information about the dataset can be found here: <a href="https://github.com/MokoSan/FSharpAdvent/blob/master/Data" class="uri">https://github.com/MokoSan/FSharpAdvent/blob/master/Data</a>.</p>
+<p>The data used for this analysis will consist of two datasets.</p>
+<div id="words-by-character" class="section level3">
+<h3>1. Words by Character</h3>
+<p>The dataset concerned with the number of words spoken by each
+character contains the number of words spoken by each character in the
+three books of Lord of the Rings. The dataset was created by counting
+the number of words spoken by each character in the novels, and is
+available in the project folder under the name
+<code>WordsByCharacter.csv</code>.</p>
+<p>The creator of this dataset is <strong>FSharpAdvent</strong> (on
+GitHub). All information about, as well as the dataset can be found
+here: <a href="https://github.com/MokoSan/FSharpAdvent/blob/master/Data" class="uri">https://github.com/MokoSan/FSharpAdvent/blob/master/Data</a>.</p>
 <p>The data is organized in a tabular format, with each row representing
 a character and the number of words they spoke in a particular chapter
 of the novel. The columns include the name of the film (book), the
@@ -445,6 +452,111 @@ character.</li>
 character in the specified chapter within the specified book.</li>
 </ul>
 </div>
+<div id="character-information" class="section level3">
+<h3>2. Character Information</h3>
+<p>The second dataset contains information about the characters in Lord
+of the Rings, including their birth year, death year, gender, hair
+color, height, name, race, realm, and spouse. Not all of these variables
+will be used in the analysis, but they are included in the dataset for
+completeness.</p>
+<p>The dataset is available in the project folder under the name
+<code>InformationByCharacter.csv</code>. The creator of this dataset is
+<strong>tianyigu</strong> (on GitHub). All information about, as well as
+the dataset can be found here: <a href="https://github.com/tianyigu/Lord_of_the_ring_project/blob/master/LOTR_code/lotr_demograph_scripy" class="uri">https://github.com/tianyigu/Lord_of_the_ring_project/blob/master/LOTR_code/lotr_demograph_scripy</a>.
+The data is organized in a tabular format, with each row representing a
+character:</p>
+<table style="width:100%;">
+<colgroup>
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">birth</th>
+<th align="center">death</th>
+<th align="center">gender</th>
+<th align="center">hair</th>
+<th align="center">height</th>
+<th align="center">name</th>
+<th align="center">race</th>
+<th align="center">realm</th>
+<th align="center">spouse</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">Unknow</td>
+<td align="center">Unknow</td>
+<td align="center">Female</td>
+<td align="center">Unknow</td>
+<td align="center">Unknow</td>
+<td align="center">Adanel</td>
+<td align="center">Men</td>
+<td align="center">Unknow</td>
+<td align="center">Belemir</td>
+</tr>
+<tr class="even">
+<td align="center">TA 2978</td>
+<td align="center">February 26,, ,3019</td>
+<td align="center">Male</td>
+<td align="center">Dark (book) Light brown (movie)</td>
+<td align="center">Unknow</td>
+<td align="center">Boromir</td>
+<td align="center">Men</td>
+<td align="center">Unknow</td>
+<td align="center">Unknow</td>
+</tr>
+<tr class="odd">
+<td align="center">Unknown</td>
+<td align="center">March,, ,3019</td>
+<td align="center">Male</td>
+<td align="center">Unknow</td>
+<td align="center">Unknow</td>
+<td align="center">Lagduf</td>
+<td align="center">Orcs</td>
+<td align="center">Unknow</td>
+<td align="center">Unknow</td>
+</tr>
+</tbody>
+</table>
+<p>The columns are defined as follows:</p>
+<ul>
+<li><strong>birth</strong>: The birth year of the specified
+character.</li>
+<li><strong>death</strong>: The death year of the specified
+character.</li>
+<li><strong>gender</strong>: The gender of the specified character.</li>
+<li><strong>hair</strong>: The hair color of the specified
+character.</li>
+<li><strong>height</strong>: The height of the specified character.</li>
+<li><strong>name</strong>: The name of the specified character.</li>
+<li><strong>race</strong>: The race (species) of the specified
+character.</li>
+<li><strong>realm</strong>: The realm (location) of which the specified
+character is associated with.</li>
+<li><strong>spouse</strong>: The name of the spouse of the specified
+character.</li>
+</ul>
+<p><strong>Disclaimer</strong>: The data used in this analysis is not
+official data, but rather data that has been collected and compiled by a
+fan of the Lord of the Rings series. Therefore, there may be some
+inaccuracies or inconsistencies in the data, and it should be
+interpreted with caution. Especially the <code>Realm</code> Column will
+prove to be highly unrealiable and will not be used in this analysis.
+However, it is still a valuable resource for analyzing the distribution
+of speakers time in the novels.</p>
+</div>
+</div>
+</div>
+<div id="tasks" class="section level1">
+<h1>Tasks</h1>
 </div>
 
 
