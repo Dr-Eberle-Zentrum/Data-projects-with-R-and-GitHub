@@ -38,32 +38,33 @@ The columns are defined as follows:
 - **Words**: The number of words spoken by the specified character in the specified chapter within the specified book.
 
 ### 2. Character Information
-The second dataset contains information about the characters in Lord of the Rings, including their birth year, death year,	gender,	hair color,	height,	name,	race,	realm, and spouse. Not all of these variables will be used in the analysis, but they are included in the dataset for completeness. 
+The second dataset contains information about the characters in Lord of the Rings, including their name, race, gender and realm. 
 
-The dataset is available in the project folder under the name `InformationByCharacter.csv`. The creator of this dataset is **tianyigu** (on GitHub). All information about, as well as the dataset can be found here: https://github.com/tianyigu/Lord_of_the_ring_project/blob/master/LOTR_code/lotr_demograph_scripy.
+The dataset is available in the project folder under the name `InformationByCharacter.csv`. The creator of this dataset is me, Emily. The data was collected and compiled by me, based on information from the novels and other sources, such as the LOTR-Wiki.
+
 The data is organized in a tabular format, with each row representing a character:
 
-| birth | death | gender | hair | height | name | race | realm | spouse |
-|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| Unknow | Unknow | Female | Unknow | Unknow | Adanel | Men | Unknow | Belemir |
-| TA 2978 | February 26,, ,3019 | Male | Dark (book) Light brown (movie) | Unknow | Boromir | Men | Unknow | Unknow |
-| Unknown | March,, ,3019 | Male | Unknow | Unknow | Lagduf | Orcs | Unknow | Unknow |
+|  Character  |  Race    |  Gender  |  Realm    |
+|:-----------:|:--------:|:--------:|:---------:|
+|  Aragorn    |  Men     |  Male    | Gondor    |
+|  Arwen      |  Elf     |  Female  | Rivendell |
+|  Bilbo      |  Hobbit  |  Male    | The Shire |
 
 The columns are defined as follows:
 
-- **birth**: The birth year of the specified character.
-- **death**: The death year of the specified character.
-- **gender**: The gender of the specified character.
-- **hair**: The hair color of the specified character.
-- **height**: The height of the specified character.
 - **name**: The name of the specified character.
 - **race**: The race (species) of the specified character.
+- **gender**: The gender of the specified character.
 - **realm**: The realm (location) of which the specified character is associated with.
-- **spouse**: The name of the spouse of the specified character.
 
-**Disclaimer**: The data used in this analysis is not official data, but rather data that has been collected and compiled by a fan of the Lord of the Rings series. Therefore, there may be some inaccuracies or inconsistencies in the data, and it should be interpreted with caution. Especially the `Realm` Column unfortunately proves to be somewhat unreliable and will therefor not be used in this analysis. However, it is still a valuable resource for analyzing the characteristics of speakers time in the novels.
+**Disclaimer**: The data used in this analysis is not official data, but rather data that has been collected and compiled by fans of the Lord of the Rings series. Therefore, there may be  inaccuracies or inconsistencies in the data, and it should be interpreted with caution.  However, it is still a valuable resource for analyzing the characteristics of speakers time in the novels.
+
+---
 
 # Tasks
+
+## Data import
+The first step in the analysis is to import the data from the two datasets into R. 
 
 
 

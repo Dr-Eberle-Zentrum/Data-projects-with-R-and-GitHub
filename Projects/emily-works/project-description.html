@@ -455,108 +455,66 @@ character in the specified chapter within the specified book.</li>
 <div id="character-information" class="section level3">
 <h3>2. Character Information</h3>
 <p>The second dataset contains information about the characters in Lord
-of the Rings, including their birth year, death year, gender, hair
-color, height, name, race, realm, and spouse. Not all of these variables
-will be used in the analysis, but they are included in the dataset for
-completeness.</p>
+of the Rings, including their name, race, gender and realm.</p>
 <p>The dataset is available in the project folder under the name
 <code>InformationByCharacter.csv</code>. The creator of this dataset is
-<strong>tianyigu</strong> (on GitHub). All information about, as well as
-the dataset can be found here: <a href="https://github.com/tianyigu/Lord_of_the_ring_project/blob/master/LOTR_code/lotr_demograph_scripy" class="uri">https://github.com/tianyigu/Lord_of_the_ring_project/blob/master/LOTR_code/lotr_demograph_scripy</a>.
-The data is organized in a tabular format, with each row representing a
-character:</p>
-<table style="width:100%;">
-<colgroup>
-<col width="11%" />
-<col width="11%" />
-<col width="11%" />
-<col width="11%" />
-<col width="11%" />
-<col width="11%" />
-<col width="11%" />
-<col width="11%" />
-<col width="11%" />
-</colgroup>
+me, Emily. The data was collected and compiled by me, based on
+information from the novels and other sources, such as the
+LOTR-Wiki.</p>
+<p>The data is organized in a tabular format, with each row representing
+a character:</p>
+<table>
 <thead>
 <tr class="header">
-<th align="center">birth</th>
-<th align="center">death</th>
-<th align="center">gender</th>
-<th align="center">hair</th>
-<th align="center">height</th>
-<th align="center">name</th>
-<th align="center">race</th>
-<th align="center">realm</th>
-<th align="center">spouse</th>
+<th>Character</th>
+<th>Race</th>
+<th>Gender</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="center">Unknow</td>
-<td align="center">Unknow</td>
-<td align="center">Female</td>
-<td align="center">Unknow</td>
-<td align="center">Unknow</td>
-<td align="center">Adanel</td>
-<td align="center">Men</td>
-<td align="center">Unknow</td>
-<td align="center">Belemir</td>
+<td>Aragorn</td>
+<td>Men</td>
+<td>Male</td>
 </tr>
 <tr class="even">
-<td align="center">TA 2978</td>
-<td align="center">February 26,, ,3019</td>
-<td align="center">Male</td>
-<td align="center">Dark (book) Light brown (movie)</td>
-<td align="center">Unknow</td>
-<td align="center">Boromir</td>
-<td align="center">Men</td>
-<td align="center">Unknow</td>
-<td align="center">Unknow</td>
+<td>Arwen</td>
+<td>Elf</td>
+<td>Female</td>
 </tr>
 <tr class="odd">
-<td align="center">Unknown</td>
-<td align="center">March,, ,3019</td>
-<td align="center">Male</td>
-<td align="center">Unknow</td>
-<td align="center">Unknow</td>
-<td align="center">Lagduf</td>
-<td align="center">Orcs</td>
-<td align="center">Unknow</td>
-<td align="center">Unknow</td>
+<td>Bilbo</td>
+<td>Hobbit</td>
+<td>Male</td>
 </tr>
 </tbody>
 </table>
 <p>The columns are defined as follows:</p>
 <ul>
-<li><strong>birth</strong>: The birth year of the specified
-character.</li>
-<li><strong>death</strong>: The death year of the specified
-character.</li>
-<li><strong>gender</strong>: The gender of the specified character.</li>
-<li><strong>hair</strong>: The hair color of the specified
-character.</li>
-<li><strong>height</strong>: The height of the specified character.</li>
 <li><strong>name</strong>: The name of the specified character.</li>
 <li><strong>race</strong>: The race (species) of the specified
 character.</li>
+<li><strong>gender</strong>: The gender of the specified character.</li>
 <li><strong>realm</strong>: The realm (location) of which the specified
 character is associated with.</li>
-<li><strong>spouse</strong>: The name of the spouse of the specified
-character.</li>
 </ul>
 <p><strong>Disclaimer</strong>: The data used in this analysis is not
-official data, but rather data that has been collected and compiled by a
-fan of the Lord of the Rings series. Therefore, there may be some
+official data, but rather data that has been collected and compiled by
+fans of the Lord of the Rings series. Therefore, there may be
 inaccuracies or inconsistencies in the data, and it should be
-interpreted with caution. Especially the <code>Realm</code> Column will
-prove to be highly unrealiable and will not be used in this analysis.
-However, it is still a valuable resource for analyzing the distribution
-of speakers time in the novels.</p>
+interpreted with caution. However, it is still a valuable resource for
+analyzing the characteristics of speakers time in the novels.</p>
+<hr />
 </div>
 </div>
 </div>
 <div id="tasks" class="section level1">
 <h1>Tasks</h1>
+<div id="data-import" class="section level2">
+<h2>Data import</h2>
+<p>The first step in the analysis is to import the data from the two
+datasets into R.</p>
+</div>
 </div>
 
 
