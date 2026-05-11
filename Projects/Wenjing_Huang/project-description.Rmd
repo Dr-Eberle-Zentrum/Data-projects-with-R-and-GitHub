@@ -1,0 +1,68 @@
+---
+title: "The releation between social media usage and health information seeking behaviour(HISB) among adolescent in Vanuatu"
+output: html_document
+---
+
+# Introduction:
+
+Digital heath conceptually consists of two sectors, namely digitalisation & digization in health &well-ness industry and mental health affected by digital platforms. When it comes to the first concept, most studies confirmed that orgin of country, place of residence,gender..many factors had an impact on online HISB.Shifting focus to less developed countries, questions arise: How do the youth engage with digital platforms, and what is the real gap from age-groups? Do they use which type of social media to search health information? To address this, we analyze a dataset from Vanuatu, a South Pacific island nation. 
+
+# Dataset Citation 
+Wattelez, G., Amon, K., Nedjar-Guerre, A., Forsyth, R., Peralta, L., Urvoy, M.-J., Caillaud, C., & Galy, O. (2025). Exploring the Digital Health Landscape: How adolescents living in urban and rural Vanuatu use online platforms to access health information (anonymized version of the dataset and supplementary tables) (2.0.0) [Data set]. Zenodo. <https://doi.org/10.5281/zenodo.17154763>
+
+## Steps
+
+### Data_import
+
+You need to import and get a short overview of data. You can find data in the following link(https://zenodo.org/records/17154763/files/2024-12-09_FALAH_Vanuatu_socialMediaUse_Zenodo_anonymized.csv?download=1).
+
+Descriptions in coloums:
+
+- individual information:
+  - **Participant**: Participant ID of the study
+  - **Sex**: Sex of the participant ("F" for female or "M" for male)
+  - **Age range**: Age range of the adolescent participant ("Lower than or equal to 15", "Between 16 and 17 inclusive" or "Greater than or equal to 18")
+
+- Questionaire:
+
+  - **Mobile phone**
+    - Do you have a mobile phone?: response to the question ("Yes" or "No")
+    - Is this mobile phone yours or do you share it?: response to the question ("Shared" or "Not shared")
+
+  
+  - **Use of devices**
+  
+  In this part of questionaire the choice **can only be single considered**.
+  
+    - 1.When you are on the computer and/or tablet, what type of actions do you most often perform?   single choice: ticked or not ("Checked" or "Unchecked")
+      
+      -  column(choice) followed by this order:"Searching for general information", "Discussion by email or on the digital social networks with friends or family", "Watching your social network feed", "Listening to the music", "Playing games", "Study or homeworks", "Viewing videos", "Other"
+    
+    - 2.When you are on your mobile phone, what type of actions do you perform most often?  single choice: ticked or not ("Checked" or "Unchecked")
+      - columns followed by order mentioned above.
+
+  - **Social media and health**
+  In this part of the questionnaire the **choice can be single or multiple**!
+    - 1.Which social media platform/site is your favourite to use for health? And what do you like about it?
+      - **Favourite platform/site for health(followed by this order)**: social media,search engine,unclear,none.
+    
+    - 2.For searching health information, which app, social media or website do you use?
+      - **For searching health information**: social media,search engine,web site,unclear,none
+
+    - 3.For discussing health topics, which app, social media or website do you use?
+      - **For discussing(followed by this order)**: social media, search engine, app, web site, unclear, none
+
+
+### Data_cleaning
+You need to tidy data. And final table should look like the preview that showed on the webseits[https://zenodo.org/records/17154763?preview_file=undefined]
+
+You can adjust colnames whenever you have better presenting ways.
+
+### Visualization
+You need to visualize data to answer following questions:
+
+1.Is there a huge difference between female and male/diffrent age-groups, when it comes to HISB?
+
+2.Is there a strong or weak relation between general perform behaviours on electricities and HISB?
+
+
