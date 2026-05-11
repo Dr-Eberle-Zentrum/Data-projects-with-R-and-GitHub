@@ -1,3 +1,5 @@
+# Distribution of Speakers Time in Lord of the Rings
+
 Lord of the Rings is a fantasy novel trilogy written by J.R.R. Tolkien.
 Until today, it is one of the most popular and influential works of
 fantasy literature, and has been adapted into several films, video
@@ -8,19 +10,21 @@ enslave the world.
 In this analysis, we will explore the distribution of speakers time in
 Lord of the Rings. For that, not the minutes of speaking in the movies,
 but the number of words spoken by each character in the three books will
-be used as a proxy for the time spent speaking. This is due to practical
-reasons (data availability), as well as the fact that the movies are an
-adaption of the three books, making the novels the source material. We
-will analyze the amount of time each character spends speaking in the
-novel, and how it is distributed among the different characters.
+be used as a proxy for the time spent speaking (with some tweaking to
+include movie-only characters). This is due to practical reasons (data
+availability), as well as the fact that the movies are an adaption of
+the three books, making the novels the source material. We will analyze
+the amount of time each character spends speaking in the novel, and how
+it is distributed among the different characters.
 
 This analysis will help us understand which characters have the most
 dialogue and how the speaking time is distributed among the characters
 in the story. We will also explore any patterns or trends in the
 distribution of speakers time, and how it may relate to the overall
 narrative of the novel. This also in light of the gender representation
-in the novel, as the movies are often criticized for not passing the
-[Bechdel-Wallace Test](https://bechdeltest.com).
+in the novel, as the movies are often criticized for their lack of
+diverse representation, like not passing the [Bechdel-Wallace
+Test](https://bechdeltest.com).
 
 ------------------------------------------------------------------------
 
@@ -30,14 +34,14 @@ The data used for this analysis will consist of two datasets.
 
 ### Words by Character
 
-The dataset concerned with the number of words spoken by each character
-contains the number of words spoken by each character in the three
-volumes of Lord of the Rings. The dataset was created by counting the
-number of words spoken by each character in the novels, and is available
-in the project folder under the name `WordsByCharacter.csv`.
+This dataset is concerned with the number of words spoken contains the
+number of words spoken by each character in all three volumes of Lord of
+the Rings. The dataset was created by counting the number of words
+spoken by each character in the novels, and is available in the project
+folder under the name `WordsByCharacter.csv`.
 
 The creator of this dataset is **FSharpAdvent** (on GitHub). All
-information about, as well as the dataset can be found here:
+information about it, as well as the original dataset can be found here:
 <https://github.com/MokoSan/FSharpAdvent/blob/master/Data>.
 
 The data is organized in a tabular format, with each row representing a
@@ -188,26 +192,26 @@ Please check:
     -   The corresponding rows should **NOT** be removed.
 -   Are there any inconsistencies in the data (e.g. different spellings
     of the same character’s name)?
+    -   In the event of a mismatch in the `Character` or `Race` column
+        between the two datasets, the corresponding rows should be
+        merged based on the content of dataset 1 (`WordsByCharacter`).
 
 ## 2. Data Analysis & Visualization
 
-Once the data is imported and merged, we can begin analyzing the
-distribution of speakers time.
+Once the data is imported, we can begin analyzing the distribution of
+speakers time.
 
 ### 2.1. Speakers Time by Volume
 
 The first step is to calculate the total number of words spoken in each
-of the three books. For that, create a new table that summarizes the
-total number of words spoken in each book.
-
-Answer these questions:
+of the three books. For that, create a new table that includes:
 
 -   What is the total number of words spoken?
 -   Which book has the highest number of words spoken?
 -   Which book has the lowest number of words spoken?
 
-Please visualize the distribution of the total number of words using a
-pie chart, similar to this:
+Please visualize the distribution of the total number of words across
+the three volumes, using a pie chart similar to this:
 
 ///gsgdgdgd////
 
