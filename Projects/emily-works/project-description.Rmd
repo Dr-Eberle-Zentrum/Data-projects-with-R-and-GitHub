@@ -14,8 +14,6 @@ This analysis will help us understand which characters have the most dialogue an
 ## Data
 The data used for this analysis was obtained from a dataset that contains the number of words spoken by each character in the three books of Lord of the Rings. The dataset was created by counting the number of words spoken by each character in the novels, and is available in the project folder. The creator of this dataset is FSharpAdvent (on GitHub). All information about the dataset can be found here: https://github.com/MokoSan/FSharpAdvent/blob/master/Data.
 
-Columns: Film,Chapter,Character,Race,Words
-
 The data is organized in a tabular format, with each row representing a character and the number of words they spoke in a particular chapter of the novel. The columns include the name of the film (book), the chapter, the character's name, race and the number of words spoken by them:
 
 |            Film            |    Chapter   | Character |  Race  | Words |
