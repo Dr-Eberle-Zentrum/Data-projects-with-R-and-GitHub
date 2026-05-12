@@ -1,5 +1,5 @@
 ---
-title: "Project Description: Laptop Price Analysis"
+title: "Laptop Price Analysis"
 author: "Jingyi Li"
 date: "2026-05-12"
 output: github_document
