@@ -213,12 +213,7 @@ of the three books. For that, create a new table that includes:
 Please visualize the distribution of the total number of words across
 the three volumes, using a pie chart similar to this:
 
-<figure>
-<img
-src="~/Documents/Data-projects-with-R-and-GitHub/Projects/emily-works/LOTR/TotalNumber.png"
-alt="Pie chart" />
-<figcaption aria-hidden="true">Pie chart</figcaption>
-</figure>
+![](~/Documents/Data-projects-with-R-and-GitHub/Projects/emily-works/LOTR/TotalNumber.png)
 
 ### 2.2. Speakers Time by Character
 
