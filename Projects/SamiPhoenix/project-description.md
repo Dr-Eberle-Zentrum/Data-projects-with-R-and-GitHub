@@ -33,19 +33,10 @@ not yet represented by the data
 
 ### b) We want to compare the different Kingdoms, and if they have been affected to different extends:
 
-Calculate how many percent of each Kingdoms’ Species are EX or EW, plot
-these in a simple bar diagram, one bar per Kingdom. Plot2 Exclude any
-Kingdoms that have total of less than 1000 Species from the plot. \###
-c) Next we are interested in the most and least affected classes, as
-well as which Kingdom they belong to: Show in a Barplot, the 10 most and
-10 least affected Classes, color them according to their Kingdom and
+`Calculate how many percent of each Kingdoms Species are EX or EW, plot these in a simple bar diagram, one bar per Kingdom. Plot2 Exclude any Kingdoms that have total of less than 1000 Species from the plot.`
+\### c) Next we are interested in the most and least affected classes,
+as well as which Kingdom they belong to: Show in a Barplot, the 10 most
+and 10 least affected Classes, color them according to their Kingdom and
 place a legend that explains the colors. Affected being defined as how
 many percent are at least Critically Endangered (or EX/EW) Plot1
-![image](Projects/SamiPhoenix/dependencies/Plot1)
-
-IUCN Red List Categories: EX - Extinct, EW - Extinct in the Wild, CR -
-Critically Endangered (includes CR(PE) and CR(PEW)), EN - Endangered,
-VU - Vulnerable, LR/cd - Lower Risk/conservation dependent, NT - Near
-Threatened (includes LR/nt - Lower Risk/near threatened), DD - Data
-Deficient, LC - Least Concern (includes LR/lc - Lower Risk/least
-concern).
+![image](Projects/SamiPhoenix/dependencies/Plot1.png)
