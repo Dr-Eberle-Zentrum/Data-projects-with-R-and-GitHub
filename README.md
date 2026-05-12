@@ -134,7 +134,7 @@ Example:
 Current projects:
 
 - Emily (emily-works) - [Distribution of Speakers Time in Lord of the Rings](Projects/emily-works/LOTR/project-description.md)
-- ..name.. (..githubname..) - [..projectname..](..markdownlink..)
+- Samandar (SamiPhoenix) - [Project about the IUCN Red List of Threatened Species](Projects/SamiPhoenix/project-description.md)
 - ..name.. (..githubname..) - [..projectname..](..markdownlink..)
 - ..name.. (..githubname..) - [..projectname..](..markdownlink..)
 - 
