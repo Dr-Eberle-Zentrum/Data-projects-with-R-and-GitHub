@@ -1,6 +1,6 @@
 ---
 title: "Project about the IUCN Red List of Threatened Species"
-output: html_document
+output: md_document
 ---
 
 The data provides the number of species from every class and how they are classified according to the red list.
