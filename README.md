@@ -136,7 +136,7 @@ Current projects:
 - Emily (emily-works) - [Distribution of Speakers Time in Lord of the Rings](Projects/emily-works/LOTR/project-description.md)
 - Samandar (SamiPhoenix) - [Project about the IUCN Red List of Threatened Species](Projects/SamiPhoenix/project-description.md)
 - Jingyi Li (Yoli-bo) - [Laptop Price Analysis](Projects/Jingyi-L/project-description.md)
-- ..name.. (..githubname..) - [..projectname..](..markdownlink..)
+- Wenjing Huang (Wenjing-H06) - [The Influence of online performation on HIBS](Projects/Wenjing_Huang/project-description.md)
 - 
 -
 -
