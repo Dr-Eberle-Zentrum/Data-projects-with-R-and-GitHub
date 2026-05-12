@@ -11,7 +11,7 @@
 
 
 
-<title>Analysis of the Distribution of Speakers Time in Lord of the Rings</title>
+<title>Distribution of Speakers Time in Lord of the Rings</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -348,14 +348,14 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Analysis of the Distribution of Speakers
-Time in Lord of the Rings</h1>
+<h1 class="title toc-ignore">Distribution of Speakers Time in Lord of
+the Rings</h1>
 
 </div>
 
 
-<div id="distribution-of-speakers-time-in-lord-of-rings" class="section level1">
-<h1>Distribution of Speakers Time in Lord of Rings</h1>
+<div id="distribution-of-speakers-time-in-lord-of-the-rings" class="section level1">
+<h1>Distribution of Speakers Time in Lord of the Rings</h1>
 <p>Lord of the Rings is a fantasy novel trilogy written by J.R.R.
 Tolkien. Until today, it is one of the most popular and influential
 works of fantasy literature, and has been adapted into several films,
@@ -365,33 +365,33 @@ to enslave the world.</p>
 <p>In this analysis, we will explore the distribution of speakers time
 in Lord of the Rings. For that, not the minutes of speaking in the
 movies, but the number of words spoken by each character in the three
-books will be used as a proxy for the time spent speaking. This is due
-to practical reasons (data availability), as well as the fact that the
-movies are an adaption of the three books, making the novels the source
-material. We will analyze the amount of time each character spends
-speaking in the novel, and how it is distributed among the different
-characters.</p>
+books will be used as a proxy for the time spent speaking (with some
+tweaking to include movie-only characters). This is due to practical
+reasons (data availability), as well as the fact that the movies are an
+adaption of the three books, making the novels the source material. We
+will analyze the amount of time each character spends speaking in the
+novel, and how it is distributed among the different characters.</p>
 <p>This analysis will help us understand which characters have the most
 dialogue and how the speaking time is distributed among the characters
 in the story. We will also explore any patterns or trends in the
 distribution of speakers time, and how it may relate to the overall
 narrative of the novel. This also in light of the gender representation
-in the novel, as the movies are often criticized for not passing the <a href="https://bechdeltest.com">Bechdel-Wallace Test</a>.</p>
+in the novel, as the movies are often criticized for their lack of
+diverse representation, like not passing the <a href="https://bechdeltest.com">Bechdel-Wallace Test</a>.</p>
 <hr />
 <div id="data" class="section level2">
 <h2>Data</h2>
 <p>The data used for this analysis will consist of two datasets.</p>
 <div id="words-by-character" class="section level3">
 <h3>Words by Character</h3>
-<p>The dataset concerned with the number of words spoken by each
-character contains the number of words spoken by each character in the
-three books of Lord of the Rings. The dataset was created by counting
-the number of words spoken by each character in the novels, and is
-available in the project folder under the name
-<code>WordsByCharacter.csv</code>.</p>
+<p>This dataset is concerned with the number of words spoken contains
+the number of words spoken by each character in all three volumes of
+Lord of the Rings. The dataset was created by counting the number of
+words spoken by each character in the novels, and is available in the
+project folder under the name <code>WordsByCharacter.csv</code>.</p>
 <p>The creator of this dataset is <strong>FSharpAdvent</strong> (on
-GitHub). All information about, as well as the dataset can be found
-here: <a href="https://github.com/MokoSan/FSharpAdvent/blob/master/Data" class="uri">https://github.com/MokoSan/FSharpAdvent/blob/master/Data</a>.</p>
+GitHub). All information about it, as well as the original dataset can
+be found here: <a href="https://github.com/MokoSan/FSharpAdvent/blob/master/Data" class="uri">https://github.com/MokoSan/FSharpAdvent/blob/master/Data</a>.</p>
 <p>The data is organized in a tabular format, with each row representing
 a character and the number of words they spoke in a particular chapter
 of the novel. The columns include the name of the film (book), the
@@ -500,11 +500,11 @@ a character:</p>
 character.</li>
 <li><strong>gender</strong>: The gender of the specified character.</li>
 <li><strong>realm</strong>: The realm (location) of which the specified
-character is associated with.</li>
+character is mainly associated with.</li>
 </ul>
 <p><strong>Disclaimer</strong>: The data used in this analysis is not
 official data, but rather data that has been collected and compiled by
-fans of the Lord of the Rings series. Therefore, there may be
+fans of the Lord of the Rings series (and me). Therefore, there may be
 inaccuracies or inconsistencies in the data, and it should be
 interpreted with caution. However, it is still a valuable resource for
 analyzing the characteristics of speakers time in the novels.</p>
@@ -540,31 +540,35 @@ once, as it contains general information about the characters.</p>
 <li>The corresponding rows should <strong>NOT</strong> be removed.</li>
 </ul></li>
 <li>Are there any inconsistencies in the data (e.g. different spellings
-of the same character’s name)?</li>
+of the same character’s name)?
+<ul>
+<li>In the event of a mismatch in the <code>Character</code> or
+<code>Race</code> column between the two datasets, the corresponding
+rows should be merged based on the content of dataset 1
+(<code>WordsByCharacter</code>).</li>
+</ul></li>
 </ul>
 </div>
 <div id="data-analysis-visualization" class="section level2">
 <h2>2. Data Analysis &amp; Visualization</h2>
-<p>Once the data is imported and merged, we can begin analyzing the
-distribution of speakers time.</p>
+<p>Once the data is imported, we can begin analyzing the distribution of
+speakers time.</p>
 <div id="speakers-time-by-volume" class="section level3">
 <h3>2.1. Speakers Time by Volume</h3>
 <p>The first step is to calculate the total number of words spoken in
-each of the three books. For that, create a new table that summarizes
-the total number of words spoken in each book.</p>
-<p>Answer these questions:</p>
+each of the three books. For that, create a new table that includes:</p>
 <ul>
 <li>What is the total number of words spoken?</li>
 <li>Which book has the highest number of words spoken?</li>
 <li>Which book has the lowest number of words spoken?</li>
 </ul>
-<p>Please visualize the distribution of the total number of words using
-a pie chart, similar to this:</p>
-<p>///gsgdgdgd////</p>
+<p>Please visualize the distribution of the total number of words across
+the three volumes, using a pie chart similar to this:</p>
+<p><img role="img" src="~/Documents/Data-projects-with-R-and-GitHub/Projects/emily-works/LOTR/TotalNumber.png" /></p>
 </div>
 <div id="speakers-time-by-character" class="section level3">
 <h3>2.2. Speakers Time by Character</h3>
-<p>The first step is to calculate the total number of words spoken by
+<p>The next step is to calculate the total number of words spoken by
 each character across all three books. For that create a new table that
 summarizes the total number of words across all volumes spoken by each
 character.</p>
@@ -572,12 +576,16 @@ character.</p>
 <ul>
 <li>Which character has the most speaking time?</li>
 <li>Which character has the least speaking time?</li>
-<li>How is the distribution of speakers time among the characters (in
-%)?</li>
+<li>How is the distribution of speakers time among the characters?
+<ul>
+<li>Is the distribution of speakers time among the characters skewed
+(i.e. a few characters speak a lot, while most characters speak very
+little)?</li>
+</ul></li>
 </ul>
-<p>Please visualize this distribution using a donut chart, similar to
+<p>Please visualize this distribution using a pie chart, similar to
 this:</p>
-<p>//Z////////</p>
+<p><img role="img" src="~/Documents/Data-projects-with-R-and-GitHub/Projects/emily-works/LOTR/TotalCharacter.png" /></p>
 </div>
 <div id="speakers-time-by-characteristics" class="section level3">
 <h3>2.3. Speakers Time by Characteristics</h3>
@@ -597,8 +605,28 @@ words spoken by characters based on gender, realm and race.</p>
 <li>Which realm are characters with the most/least speaking time
 associated with?</li>
 </ul>
-<p>Please visualize each of these distributions using a donut chart,
-similar to the one above.</p>
+<p>Please visualize <strong>each</strong> of these distributions using a
+donut chart, similar to the one above.</p>
+</div>
+<div id="speakers-time-of-frodo" class="section level3">
+<h3>2.4. Speakers Time of Frodo</h3>
+<p>Finally, we can analyze the speaking time of <code>Frodo</code>, the
+main character of the story</p>
+<ul>
+<li>Calculate the total number of words spoken by Frodo across all three
+books.
+<ul>
+<li>Compare his total number of words to the total number of words
+spoken by all characters.</li>
+<li>Visualize this in a pie chart, similar to the one below: <img role="img" src="~/Documents/Data-projects-with-R-and-GitHub/Projects/emily-works/LOTR/TotalFrodo.png" /></li>
+</ul></li>
+<li>Calculate the number of chapters in which Frodo speaks.
+<ul>
+<li>Compare the number of chapters in which Frodo speaks to the total
+number of chapters in the three books.</li>
+<li>Visualize this in a pie chart, similar to the one below: <img role="img" src="~/Documents/Data-projects-with-R-and-GitHub/Projects/emily-works/LOTR/TotalChapFrodo.png" /></li>
+</ul></li>
+</ul>
 </div>
 </div>
 </div>
