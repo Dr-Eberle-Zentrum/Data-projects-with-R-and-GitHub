@@ -90,7 +90,7 @@ The first step is to calculate the total number of words spoken in each of the t
 
 Please visualize the distribution of the total number of words across the three volumes, using a pie chart similar to this:
 
-![Pie chart](~/Documents/Data-projects-with-R-and-GitHub/Projects/emily-works/LOTR/TotalNumber.png)
+![](~/Documents/Data-projects-with-R-and-GitHub/Projects/emily-works/LOTR/TotalNumber.png)
 
 ### 2.2. Speakers Time by Character
 The next step is to calculate the total number of words spoken by each character across all three books. For that create a new table that summarizes the total number of words across all volumes spoken by each character. 
