@@ -137,7 +137,7 @@ Current projects:
 - Samandar (SamiPhoenix) - [Project about the IUCN Red List of Threatened Species](Projects/SamiPhoenix/project-description.md)
 - Jingyi Li (Yoli-bo) - [Laptop Price Analysis](Projects/Jingyi-L/project-description.md)
 - Wenjing Huang (Wenjing-H06) - [Project about The Influence of online performation on HIBS](Projects/Wenjing_Huang/project-description.md)
-- 
+- Nikolas (Chaoicci) - [Fun with languages](Projects/Chaoicci/project-description.md)
 -
 -
 
