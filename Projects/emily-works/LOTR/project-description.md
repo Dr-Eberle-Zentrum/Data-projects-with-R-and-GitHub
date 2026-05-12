@@ -93,14 +93,14 @@ the character’s name, race and the number of words spoken by them:
 
 The columns are defined as follows:
 
--   **Film**: The Name of the individual novel (The Fellowship of the
-    Ring, The Two Towers, The Return of the King).
--   **Chapter**: The chapter of the specified novel in which the
-    character speaks.
--   **Character**: The name of the character who speaks.
--   **Race**: The Race (Species) of the specified character.
--   **Words**: The number of words spoken by the specified character in
-    the specified chapter within the specified book.
+- **Film**: The Name of the individual novel (The Fellowship of the
+  Ring, The Two Towers, The Return of the King).
+- **Chapter**: The chapter of the specified novel in which the character
+  speaks.
+- **Character**: The name of the character who speaks.
+- **Race**: The Race (Species) of the specified character.
+- **Words**: The number of words spoken by the specified character in
+  the specified chapter within the specified book.
 
 ### Character Information
 
@@ -148,11 +148,11 @@ character:
 
 The columns are defined as follows:
 
--   **name**: The name of the specified character.
--   **race**: The race (species) of the specified character.
--   **gender**: The gender of the specified character.
--   **realm**: The realm (location) of which the specified character is
-    mainly associated with.
+- **name**: The name of the specified character.
+- **race**: The race (species) of the specified character.
+- **gender**: The gender of the specified character.
+- **realm**: The realm (location) of which the specified character is
+  mainly associated with.
 
 **Disclaimer**: The data used in this analysis is not official data, but
 rather data that has been collected and compiled by fans of the Lord of
@@ -186,15 +186,15 @@ the characters.
 
 Please check:
 
--   Is every data record complete (no missing values)?
-    -   If not, can the missing values be reasonably filled in
-        (i.e. gender = “Unknown”?).
-    -   The corresponding rows should **NOT** be removed.
--   Are there any inconsistencies in the data (e.g. different spellings
-    of the same character’s name)?
-    -   In the event of a mismatch in the `Character` or `Race` column
-        between the two datasets, the corresponding rows should be
-        merged based on the content of dataset 1 (`WordsByCharacter`).
+- Is every data record complete (no missing values)?
+  - If not, can the missing values be reasonably filled in (i.e. gender
+    = “Unknown”?).
+  - The corresponding rows should **NOT** be removed.
+- Are there any inconsistencies in the data (e.g. different spellings of
+  the same character’s name)?
+  - In the event of a mismatch in the `Character` or `Race` column
+    between the two datasets, the corresponding rows should be merged
+    based on the content of dataset 1 (`WordsByCharacter`).
 
 ## 2. Data Analysis & Visualization
 
@@ -206,9 +206,9 @@ speakers time.
 The first step is to calculate the total number of words spoken in each
 of the three books. For that, create a new table that includes:
 
--   What is the total number of words spoken?
--   Which book has the highest number of words spoken?
--   Which book has the lowest number of words spoken?
+- What is the total number of words spoken?
+- Which book has the highest number of words spoken?
+- Which book has the lowest number of words spoken?
 
 Please visualize the distribution of the total number of words across
 the three volumes, using a pie chart similar to this:
@@ -224,12 +224,12 @@ character.
 
 Answer these questions:
 
--   Which character has the most speaking time?
--   Which character has the least speaking time?
--   How is the distribution of speakers time among the characters?
-    -   Is the distribution of speakers time among the characters skewed
-        (i.e. a few characters speak a lot, while most characters speak
-        very little)?
+- Which character has the most speaking time?
+- Which character has the least speaking time?
+- How is the distribution of speakers time among the characters?
+  - Is the distribution of speakers time among the characters skewed
+    (i.e. a few characters speak a lot, while most characters speak very
+    little)?
 
 Please visualize this distribution using a pie chart, similar to this:
 
@@ -243,12 +243,12 @@ words spoken by characters based on gender, realm and race.
 
 Answer these questions:
 
--   Which gender has the most/least speaking time?
-    -   How is it distributed?
--   Which race has the most/least speaking time?
-    -   How is it distributed?
--   Which realm are characters with the most/least speaking time
-    associated with?
+- Which gender has the most/least speaking time?
+  - How is it distributed?
+- Which race has the most/least speaking time?
+  - How is it distributed?
+- Which realm are characters with the most/least speaking time
+  associated with?
 
 Please visualize **each** of these distributions using a donut chart,
 similar to the one above.
@@ -258,14 +258,14 @@ similar to the one above.
 Finally, we can analyze the speaking time of `Frodo`, the main character
 of the story
 
--   Calculate the total number of words spoken by Frodo across all three
-    books.
-    -   Compare the total number of words to the total number of words
-        spoken by all characters.
-    -   Visualize this in a pie chart, similar to the one below:
-        ![](~/Documents/Data-projects-with-R-and-GitHub/Projects/emily-works/LOTR/TotalFrodo.png)
--   Calculate the number of chapters in which Frodo speaks.
-    -   Compare the number of chapters in which Frodo speaks to the
-        total number of chapters in the three books.
-    -   Visualize this in a pie chart, similar to the one below:
-        ![](~/Documents/Data-projects-with-R-and-GitHub/Projects/emily-works/LOTR/TotalChapFrodo.png)
+- Calculate the total number of words spoken by Frodo across all three
+  books.
+  - Compare his total number of words to the total number of words
+    spoken by all characters.
+  - Visualize this in a pie chart, similar to the one below:
+    ![](~/Documents/Data-projects-with-R-and-GitHub/Projects/emily-works/LOTR/TotalFrodo.png)
+- Calculate the number of chapters in which Frodo speaks.
+  - Compare the number of chapters in which Frodo speaks to the total
+    number of chapters in the three books.
+  - Visualize this in a pie chart, similar to the one below:
+    ![](~/Documents/Data-projects-with-R-and-GitHub/Projects/emily-works/LOTR/TotalChapFrodo.png)

@@ -1,6 +1,6 @@
 ---
 title: "Distribution of Speakers Time in Lord of the Rings"
-output: md_document
+output: html_document
 ---
 
 # Distribution of Speakers Time in Lord of the Rings
