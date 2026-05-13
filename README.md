@@ -138,7 +138,7 @@ Current projects:
 - Jingyi Li (Yoli-bo) - [Laptop Price Analysis](Projects/Jingyi-L/project-description.md)
 - Wenjing Huang (Wenjing-H06) - [Project about The Influence of online performation on HIBS](Projects/Wenjing_Huang/project-description.md)
 - Nikolas (Chaoicci) - [Fun with languages](Projects/Chaoicci/project-description.md)
--
+- Lea (lea-immenkamp) - [Deterrents and children’s consumption of sweets] (Projects/lea-immenkamp/project-description.md)
 -
 
 
