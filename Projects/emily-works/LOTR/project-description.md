@@ -148,10 +148,10 @@ character:
 
 The columns are defined as follows:
 
-- **name**: The name of the specified character.
-- **race**: The race (species) of the specified character.
-- **gender**: The gender of the specified character.
-- **realm**: The realm (location) of which the specified character is
+- **Name**: The name of the specified character.
+- **Race**: The race (species) of the specified character.
+- **Gender**: The gender of the specified character.
+- **Realm**: The realm (location) of which the specified character is
   mainly associated with.
 
 **Disclaimer**: The data used in this analysis is not official data, but
