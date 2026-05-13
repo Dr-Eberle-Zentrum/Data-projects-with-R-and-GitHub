@@ -233,7 +233,7 @@ Answer these questions:
 
 Please visualize this distribution using a pie chart, similar to this:
 
-![](~/Documents/Data-projects-with-R-and-GitHub/Projects/emily-works/LOTR/TotalCharacter.png)
+![](TotalCharacter.png)
 
 ### 2.3. Speakers Time by Characteristics
 
@@ -263,9 +263,9 @@ of the story
   - Compare his total number of words to the total number of words
     spoken by all characters.
   - Visualize this in a pie chart, similar to the one below:
-    ![](~/Documents/Data-projects-with-R-and-GitHub/Projects/emily-works/LOTR/TotalFrodo.png)
+    ![](TotalFrodo.png)
 - Calculate the number of chapters in which Frodo speaks.
   - Compare the number of chapters in which Frodo speaks to the total
     number of chapters in the three books.
   - Visualize this in a pie chart, similar to the one below:
-    ![](~/Documents/Data-projects-with-R-and-GitHub/Projects/emily-works/LOTR/TotalChapFrodo.png)
+    ![](TotalChapFrodo.png)
