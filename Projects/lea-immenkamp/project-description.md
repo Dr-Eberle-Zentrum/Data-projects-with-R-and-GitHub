@@ -17,11 +17,7 @@ study, this constitutes a within-subject design.
 ### Intervention 1: Reality Check discussions
 
 The children had short conversations with teenagers and adults who spoke
-about their experiences of heavy sweet consumption. Topics included, for
-example: - frequent visits to the dentist - stomach ache after eating
-sweets, - dealing with being overweight and diabetes. The conversations
-were intended to show the children in a vivid way what consequences
-excessive sugar consumption can have.
+about their experiences of heavy sweet consumption.
 
 ### Intervention 2: The Sugar Shock videos
 
@@ -32,8 +28,8 @@ make the sugar content visible.
 
 # Data
 
-You find the data in the Excel tabs “Intervention data” and
-“questionaire”
+You find the [Data.xlsx](data.xlsx) in the Excel tabs “Intervention
+data” and “questionaire”
 
 1.  Quality index prior to the intervention The variables i1t0 to i5t0
     capture five behavioural indicators prior to the intervention.
@@ -99,7 +95,7 @@ than the other. Intervention → Motivation/Helpfulness → ΔQI
     the y-axis “Behavioral Indicator” (Numeric scale 1-4; tick marks
     1,2,3,4). Similar to this:
 
-    ![](images/clipboard-702734749.png)
+    [Image](images/example%20plot.png)
 
 Or plot it completely different. You should at least highlight the
 changes from pre to post within your plot.
