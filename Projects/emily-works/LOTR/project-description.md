@@ -40,8 +40,9 @@ the Rings. The dataset was created by counting the number of words
 spoken by each character in the novels, and is available in the project
 folder under the name `WordsByCharacter.csv`.
 
-The creator of this dataset is **FSharpAdvent** (on GitHub). All
-information about it, as well as the original dataset can be found here:
+The creator of this dataset is **Mukund Raghav Sharma (MokoSan)** (on
+GitHub). All information about it, as well as the original dataset can
+be found here:
 <https://github.com/MokoSan/FSharpAdvent/blob/master/Data>.
 
 The data is organized in a tabular format, with each row representing a
