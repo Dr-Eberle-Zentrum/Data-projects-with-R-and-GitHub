@@ -52,10 +52,10 @@ The data is organized in a tabular format, with each row representing a characte
 
 The columns are defined as follows:
 
-- **name**: The name of the specified character.
-- **race**: The race (species) of the specified character.
-- **gender**: The gender of the specified character.
-- **realm**: The realm (location) of which the specified character is mainly associated with.
+- **Name**: The name of the specified character.
+- **Race**: The race (species) of the specified character.
+- **Gender**: The gender of the specified character.
+- **Realm**: The realm (location) of which the specified character is mainly associated with.
 
 **Disclaimer**: The data used in this analysis is not official data, but rather data that has been collected and compiled by fans of the Lord of the Rings series (and me). Therefore, there may be  inaccuracies or inconsistencies in the data, and it should be interpreted with caution. However, it is still a valuable resource for analyzing the characteristics of speakers time in the novels.
 
@@ -90,7 +90,7 @@ The first step is to calculate the total number of words spoken in each of the t
 
 Please visualize the distribution of the total number of words across the three volumes, using a pie chart similar to this:
 
-![](~/Documents/Data-projects-with-R-and-GitHub/Projects/emily-works/LOTR/TotalNumber.png)
+![](TotalNumber.png)
 
 ### 2.2. Speakers Time by Character
 The next step is to calculate the total number of words spoken by each character across all three books. For that create a new table that summarizes the total number of words across all volumes spoken by each character. 
