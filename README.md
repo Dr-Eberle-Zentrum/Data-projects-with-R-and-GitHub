@@ -142,7 +142,7 @@ Current projects:
 - Jannis Dennochweiler (Jannis-DW) - [Films and Inflation](Projects/Jannis-DW/project-description.md)
 - Minseo
 - Rida
-- Michael (Michael1208S) - [Fertility Intentions and Relationship Quality] (Projects/Michael1208S/project-description.md) 
+- Michael (Michael1208S) - [Fertility Intentions, Relationship Quality and more](Projects/Michael/project-description.md) 
 
 
 
