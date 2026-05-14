@@ -35,6 +35,7 @@ Hint: You can see the codebooks with all variables, questions and scales online.
 
 [⬇️ **FReDA_panel_4waves_long_labeled.csv.zip**](FReDA_panel_4waves_long_labeled.csv.zip)
 
+Hint: Ignore error message that file is too big. Just open it.
 
 ----
 
