@@ -32,29 +32,9 @@ Also, I already merged these 9 waves into 4 waves representing the years 2021 to
 Hint: You can see the codebooks with all variables, questions and scales online. 
 
 
-Daten herunterladen
 
-Klicke auf den Button, um die CSV-Datei herunterzuladen:
+[⬇️ **FReDA_panel_4waves_long_labeled.csv.zip**](FReDA_panel_4waves_long_labeled.csv.zip)
 
-```{r embed_csv, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
-
-csv_data <- read.csv("FReDA_panel_4waves_long_labeled.csv")
-
-temp_file <- tempfile(fileext = ".csv")
-write.csv(csv_data, temp_file, row.names = FALSE)
-
-binary_data <- readBin(temp_file, "raw", n = file.info(temp_file)$size)
-
-base64_data <- base64enc::base64encode(binary_data)
-
-cat('<a href="data:text/csv;base64,', base64_data, '" 
-       download="FReDA_panel_4waves_long_labeled.csv"
-       style="background-color: #4CAF50; color: white; padding: 12px 24px; 
-              text-decoration: none; border-radius: 5px; font-size: 16px;
-              display: inline-block; margin: 10px 0;">
-       📥 Download FReDA_panel_4waves_long_labeled.csv
-    </a>')
-```
 
 ----
 
