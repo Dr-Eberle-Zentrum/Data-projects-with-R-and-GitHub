@@ -1,6 +1,8 @@
 # Demographic shift in Germany
 
-## Relationship Quality and Fertility Intentions: An Analysis of the FReDA Data-set
+## Relationship Quality, Fertility Intentions and more 
+
+### An Analysis of the FReDA Data-set
 
 ------
  
