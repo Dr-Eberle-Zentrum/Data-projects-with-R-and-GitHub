@@ -15,7 +15,7 @@ Is the so called "Generationenvertrag" in Germany still intact or on the edge of
 How can "old societies" finance Health Care systems (Older people require significantly more medical care and cost more)?
 How is the economy effected by the shortage of young people entering the job market?
 
-  To prevent the huge potential negative effects of low fertility rates, many sociologists think about how to prevent (or at least weaken) the ongoing demographic shift. 
+  To prevent the potential negative effects of low fertility rates, many sociologists think about how to prevent (or at least weaken) the ongoing demographic shift. 
 One approach for example is to analyse, how effective migration is to reduce workforce-shortage (how can the integration of migrants into the labor market be more efficient?). 
 
   In this project, we focus on another (in my opinion important) approach:
@@ -27,7 +27,7 @@ To use their own words: "FReDA - The German Family Demography Panel Study" is a 
 
 It is a Panel Study. Therefore we have 9 waves (Surveys) reaching from 2021 to 2024.
 If we merge these 9 waves togheter we get a total of 194.931 observations and 2316 variables!
-I already did the job of filtering relevant variables. So in the Dataset provided are "just" 107921observations and 203 variables. 
+I already did the job of filtering relevant variables. So in the Dataset provided are "just" 107.921observations and 203 variables. 
 Also, I already merged these 9 waves into 4 waves representing the years 2021 to 2024 (so wave 1 are all waves/surveys from 2021, wave 2 all waves/surveys from 2022 and so on). 
 Hint: You can see the codebooks with all variables, questions and scales online. 
 
