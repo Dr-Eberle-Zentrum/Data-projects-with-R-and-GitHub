@@ -104,7 +104,7 @@ than the other. Intervention → Motivation/Helpfulness → ΔQI
     the y-axis "Behavioral Indicator" (Numeric scale 1-4; tick marks
     1,2,3,4). Similar to this:
 
-    [Image](images/example%20plot.png)
+    ![Image](images/example%20plot.png)
 
 Or plot it completely different. You should at least highlight the
 changes from pre to post within your plot.
