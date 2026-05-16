@@ -140,8 +140,7 @@ Current projects:
 - Nikolas (Chaoicci) - [Fun with languages](Projects/Chaoicci/project-description.md)
 - Lea (lea-immenkamp) - [Deterrents and children’s consumption of sweets](Projects/lea-immenkamp/project-description.md) 
 - Jannis Dennochweiler (Jannis-DW) - [Films and Inflation](Projects/Jannis-DW/project-description.md)
-- Minseo
-- Rida
+- Minseo (Minseo) - [Social Media Advertising and Campaign Performance](Projects/Minseo/minseo-project-description.md)
 - Michael (Michael1208S) - [Fertility Intentions, Relationship Quality and more](Projects/Michael/project-description.md) 
 
 
