@@ -76,7 +76,7 @@ Now we want to see if there are regional differences between East and West Germa
   You can research the Dataset for yourself for potential variables and questions that could be relevant for fertility intentions.
   In the end, if you really want to show off, you can also do a multiple regression analysis to see which variables have the biggest effect on fertility intentions.
   
-  Finally, you can think about policies, that would improve fertility rates based on the results of your analysis. For example: If you find out that people with low trust in institutions are less likely to have children, you could think about policies that would increase trust in institutions. 
+  Finally, you can think about policies, that would improve fertility rates based on the results of your analysis. For example: If you find out that people with low trust in institutions are less likely to have children, you could think about policies that would increase trust in institutions.
 
 
 
