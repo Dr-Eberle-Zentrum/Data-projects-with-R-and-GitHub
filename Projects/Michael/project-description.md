@@ -79,11 +79,17 @@ Now we want to see if there are regional differences between East and West Germa
   If you really want to show of you can also think about other variables in the Dataset who could effect fertility intentions (frt68, frt69). For example: What role does trust in institutions play? What happens with the correlation beween satisfaction with relationship and fertility intentions, when we control for trust in institutions? 
   
   Trust in institutions is reflected in the variables omo41i1 - omo41i6.
+----
 omo41i1: Trust in Government. Question in Survey:"How much confidence do you have in the way the following institutions and groups do their job?" (1=Very low trust, 5=very high trust)
+----
 omo41i2: Trust in Police: Question in Survey:"How much confidence do you have in the way the following institutions and groupsdo their job?" (1=Very low trust, 5=very high trust)
+----
 omo41i3: Trust Health Care Sector: Question in Survey:"How much confidence do you have in the way the following institutions and groups do their job?" (1=Very low trust, 5=very high trust)
+----
 omo41i4: Trust in Civil Service: Question in Survey:"How much confidence do you have in the way the following institutions and groups do their job?" (1=Very low trust, 5=very high trust)
+----
 omo41i5: Trust in News Media: Question in Survey:"How much confidence do you have in the way the following institutions and groups do their job?" (1=Very low trust, 5=very high trust)
+----
 omo41i6: Trust in European Union: Question in Survey:"How much confidence do you have in the way the following institutions and groups do their job?" (1=Very low trust, 5=very high trust).
 
 Be aware of observations with negative values (e.g. "-2" since -2 is "No Answer". So mutate these variables to NA before analysis)!
