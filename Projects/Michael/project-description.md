@@ -22,10 +22,10 @@ One approach for example is to analyse, how effective migration is to reduce wor
 We want to analyse the reasons behind low fertility rates. 
 Only when we understand why people in relationships decide to have no children and which circumstances prevent them from having children, we can make informed policy recommendations, that address the causes rather than just treating the symptoms. 
 
-The Dataset used to analyse this is called FReDA. It is a very big family demography Panel Study by the Leibnitz Institute for Social Sciences.
+The Dataset used to analyse this is called FReDA. It is a very big family demography panel study by the Leibnitz Institute for Social Sciences.
 To use their own words: "FReDA - The German Family Demography Panel Study" is a scientific study that focuses thematically on family life and intimate relationships in Germany. The study provides researchers with representative, reliable, high-quality data, thus enabling them to conduct up-to-date analyses of the German population and of families in Germany."
 
-It is a Panel Study. Therefore we have 9 waves (Surveys) reaching from 2021 to 2024.
+It is a panel study. Therefore we have 9 waves (Surveys) reaching from 2021 to 2024.
 If we merge these 9 waves togheter we get a total of 194.931 observations and 2316 variables!
 I already did the job of filtering relevant variables. So in the Dataset provided are "just" 107.921observations and 203 variables. 
 Also, I already merged these 9 waves into 4 waves representing the years 2021 to 2024 (so wave 1 are all waves/surveys from 2021, wave 2 all waves/surveys from 2022 and so on). 
@@ -50,13 +50,13 @@ Question in Survey:"Do you want children or more children at all?" (1=Not at all
 The variable used to measure a more specific intention of getting children is called "frt69"
 Question in Survey:"Do you plan to have a child in the next 3 years?" (1=Not at all. 5=Yes, certainly).
 
-1.1. What is the correlation between satisfaction with relationship with the general intention to get children and the correlation between  satisfaction with relationship with the more specific intention to get children (in the next 3 months). 
+1.1. What is the correlation between satisfaction with relationship with the general intention to get children and the correlation between satisfaction with relationship with the more specific intention to get children (in the next 3 years). 
 
-1.2. Make a wonderful graph! On the x-axis: sat3. On the y-axis frt69. I want to see how much percent of people are in each box (there are 55 boxes because sat3 goes from 0 to 10 and frt69 goes from 1 to 5). 
+1.2. Make a wonderful graph! On the x-axis: sat3. On the y-axis frt69. I want to see how much percent of people are in each box (there are 55 boxes because sat3 goes from 0 to 10 and frt69 goes from 1 to 5. So you have to visualize all possible combinations of variables. E.g. x% have answered: sat3=0 and frt69=1, y% have answered sat3=1 and frt69=1, and so on.). 
 
 1.3. Why do you think that people who are satisfied with their relationship the most are seemingly less likely to get children in the near future? 
 
-1.4. What statistical problems do we run into? (Hint: Look at the distribution in the variable sat3. How manny percent are unsatisfied or very unsatisfied?)
+1.4. What statistical problems do we run into? (Hint: Look at the distribution in the variable sat3. How many percent are unsatisfied or very unsatisfied?)
 
 ### Task 2
 
@@ -68,7 +68,15 @@ Now we want to see if there are regional differences between East and West Germa
 
 2.1. Which region has more conservative viewpoints regarding the role a mother should play in the family? Which region has more egalitarian viewpoints?
 
-2.2. Make a wonderful graph! It should visualize the regional differences between East and West Germany according to these different values on the role of woman in families. 
+2.2. Make a wonderful graph! It should visualize the regional differences between East and West Germany according to these different values on the role of woman in families. Think for yourself what kind of graph would suit best to visualize this.
+
+### Task 3 (optional)
+
+  If you really want to show of you can also think about other variables in the Dataset who could effect fertility intentions (frt68, frt69). For example: What role does trust in institutions play? What happens with the correlation beween satisfaction with relationship and fertility intentions, when we control for trust in institutions? 
+  You can research the Dataset for yourself for potential variables and questions that could be relevant for fertility intentions.
+  In the end, if you really want to show off, you can also do a multiple regression analysis to see which variables have the biggest effect on fertility intentions.
+  
+  Finally, you can think about policies, that would improve fertility rates based on the results of your analysis. For example: If you find out that people with low trust in institutions are less likely to have children, you could think about policies that would increase trust in institutions. 
 
 
 
