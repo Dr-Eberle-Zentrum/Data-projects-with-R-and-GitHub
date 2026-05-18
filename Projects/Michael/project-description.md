@@ -50,6 +50,8 @@ Question in Survey:"Do you want children or more children at all?" (1=Not at all
 The variable used to measure a more specific intention of getting children is called "frt69"
 Question in Survey:"Do you plan to have a child in the next 3 years?" (1=Not at all. 5=Yes, certainly).
 
+Be aware of observations with negative values (e.g. "-2" since -2 is "No Answer". So mutate these variables to NA before analysis)!
+
 1.1. What is the correlation between satisfaction with relationship with the general intention to get children and the correlation between satisfaction with relationship with the more specific intention to get children (in the next 3 years). 
 
 1.2. Make a wonderful graph! On the x-axis: sat3. On the y-axis frt69. I want to see how much percent of people are in each box (there are 55 boxes because sat3 goes from 0 to 10 and frt69 goes from 1 to 5. So you have to visualize all possible combinations of variables. E.g. x% have answered: sat3=0 and frt69=1, y% have answered sat3=1 and frt69=1, and so on.). 
@@ -65,6 +67,8 @@ Now we want to see if there are regional differences between East and West Germa
   We focus on different viewpoints on the role of a mother in a family. A rather conservative ideal of a good relationship is, when the woman is staying at home to care for the family. A variable which could measures this view is called "val1i3". Question in survey: "Women should take care of the family more than their career." (1=Not at all, 5=Yes, absolutely). 
   Another relevant variable in this context is called "val1i5" Question in survey: "A child under the age of 6 is suffering, if the mother works." (1=Not at all, 5=Yes, absoluetly). 
   The variable "east" is used to differentiate between East and West Germany. It measures if someone is living in East Germany (0=No, I do not live in East Germany, 1=Yes, I live in East Germany). For simplification, we assume that everyone who is not living in East Germany, is living in West Germany since the surveys from FReDA are only handed out in Germany. 
+  
+  Be aware of observations with negative values (e.g. "-2" since -2 is "No Answer". So mutate these variables to NA before analysis)!
 
 2.1. Which region has more conservative viewpoints regarding the role a mother should play in the family? Which region has more egalitarian viewpoints?
 
@@ -73,7 +77,18 @@ Now we want to see if there are regional differences between East and West Germa
 ### Task 3 (optional)
 
   If you really want to show of you can also think about other variables in the Dataset who could effect fertility intentions (frt68, frt69). For example: What role does trust in institutions play? What happens with the correlation beween satisfaction with relationship and fertility intentions, when we control for trust in institutions? 
-  You can research the Dataset for yourself for potential variables and questions that could be relevant for fertility intentions.
+  
+  Trust in institutions is reflected in the variables omo41i1 - omo41i6.
+omo41i1: Trust in Government. Question in Survey:"How much confidence do you have in the way the following institutions and groups do their job?" (1=Very low trust, 5=very high trust)
+omo41i2: Trust in Police: Question in Survey:"How much confidence do you have in the way the following institutions and groupsdo their job?" (1=Very low trust, 5=very high trust)
+omo41i3: Trust Health Care Sector: Question in Survey:"How much confidence do you have in the way the following institutions and groups do their job?" (1=Very low trust, 5=very high trust)
+omo41i4: Trust in Civil Service: Question in Survey:"How much confidence do you have in the way the following institutions and groups do their job?" (1=Very low trust, 5=very high trust)
+omo41i5: Trust in News Media: Question in Survey:"How much confidence do you have in the way the following institutions and groups do their job?" (1=Very low trust, 5=very high trust)
+omo41i6: Trust in European Union: Question in Survey:"How much confidence do you have in the way the following institutions and groups do their job?" (1=Very low trust, 5=very high trust).
+
+Be aware of observations with negative values (e.g. "-2" since -2 is "No Answer". So mutate these variables to NA before analysis)!
+
+  You can research the Dataset for yourself for potential variables and questions that could be relevant for fertility intentions. 
   In the end, if you really want to show off, you can also do a multiple regression analysis to see which variables have the biggest effect on fertility intentions.
   
   Finally, you can think about policies, that would improve fertility rates based on the results of your analysis. For example: If you find out that people with low trust in institutions are less likely to have children, you could think about policies that would increase trust in institutions.
