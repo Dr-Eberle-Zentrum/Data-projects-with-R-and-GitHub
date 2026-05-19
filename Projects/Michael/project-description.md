@@ -54,11 +54,18 @@ Be aware of observations with negative values (e.g. "-2" since -2 is "No Answer"
 
 1.1. What is the correlation between satisfaction with relationship with the general intention to get children and the correlation between satisfaction with relationship with the more specific intention to get children (in the next 3 years). 
 
-1.2. Make a wonderful graph! On the x-axis: sat3. On the y-axis frt69. I want to see how much percent of people are in each box (there are 55 boxes because sat3 goes from 0 to 10 and frt69 goes from 1 to 5. So you have to visualize all possible combinations of variables. E.g. x% have answered: sat3=0 and frt69=1, y% have answered sat3=1 and frt69=1, and so on.). 
+1.2. Plot a heat map! On the x-axis: sat3. On the y-axis frt69. I want to see how much percent of people are in each box which displays the relative frequency of people with a specific combination of relationship satisfaction and intention to get children in the next 3 years. 
 
 1.3. Why do you think that people who are satisfied with their relationship the most are seemingly less likely to get children in the near future? 
 
 1.4. What statistical problems do we run into? (Hint: Look at the distribution in the variable sat3. How many percent are unsatisfied or very unsatisfied?)
+
+1.5. See if age is affecting the correlation between relationship satisfaction and fertility intentions (use it as a control variable).
+
+1.6. Now we can add number of children (nkids) and relationship duration (reldur) as control variables. What happens to the correlation between relationship satisfaction and fertility intentions when we introduce these variables into our model? 
+
+1.7. significance: Are the correlations between relationship satisfaction and fertility intentions significant? (Hint: Look at the p-value of the correlation coefficient). What is the 95% confidence interval of the correlation coefficient? What does it mean? 
+
 
 ### Task 2
 
@@ -72,30 +79,46 @@ Now we want to see if there are regional differences between East and West Germa
 
 2.1. Which region has more conservative viewpoints regarding the role a mother should play in the family? Which region has more egalitarian viewpoints?
 
-2.2. Make a wonderful graph! It should visualize the regional differences between East and West Germany according to these different values on the role of woman in families. Think for yourself what kind of graph would suit best to visualize this.
+2.2. Do a violine plot for visualization! It should visualize the regional differences between East and West Germany according to these different values on the role of woman in families. Think for yourself what kind of graph would suit best to visualize this.
+Also both plots should be visualized in one graph via faceting. So you can easily compare the regional differences between the two different viewpoints on the role of a mother in a family.
 
 ### Task 3 (optional)
 
-  If you really want to show of you can also think about other variables in the Dataset who could effect fertility intentions (frt68, frt69). For example: What role does trust in institutions play? What happens with the correlation beween satisfaction with relationship and fertility intentions, when we control for trust in institutions? 
+ 3.1. If you really want to show of you can also think about other variables in the Dataset who could effect fertility intentions (frt68, frt69). For example: What role does trust in institutions play? What happens with the correlation beween satisfaction with relationship and fertility intentions, when we control for trust in institutions? 
   
-  Trust in institutions is reflected in the variables omo41i1 - omo41i6.
+  Trust in institutions is reflected in the variables omo41i1 - omo41i6. The scale is the same for all these variables. Question in Survey:"How much confidence do you have in the way the following institutions and groups do their job?" (1=Very low trust, 5=very high trust). The only difference between these variables is that they are measuring trust in different institutions.
 ----
-omo41i1: Trust in Government. Question in Survey:"How much confidence do you have in the way the following institutions and groups do their job?" (1=Very low trust, 5=very high trust)
+omo41i1: Trust in Government. Question in Survey:"How much confidence do you have in the way the following institutions and groups do their job?" 
 ----
-omo41i2: Trust in Police: Question in Survey:"How much confidence do you have in the way the following institutions and groupsdo their job?" (1=Very low trust, 5=very high trust)
+omo41i2: Trust in Police: Question in Survey:"How much confidence do you have in the way the following institutions and groupsdo their job?" 
 ----
-omo41i3: Trust Health Care Sector: Question in Survey:"How much confidence do you have in the way the following institutions and groups do their job?" (1=Very low trust, 5=very high trust)
+omo41i3: Trust Health Care Sector: Question in Survey:"How much confidence do you have in the way the following institutions and groups do their job?". 
 ----
-omo41i4: Trust in Civil Service: Question in Survey:"How much confidence do you have in the way the following institutions and groups do their job?" (1=Very low trust, 5=very high trust)
+omo41i4: Trust in Civil Service: Question in Survey:"How much confidence do you have in the way the following institutions and groups do their job?". 
 ----
-omo41i5: Trust in News Media: Question in Survey:"How much confidence do you have in the way the following institutions and groups do their job?" (1=Very low trust, 5=very high trust)
+omo41i5: Trust in News Media: Question in Survey:"How much confidence do you have in the way the following institutions and groups do their job?". 
 ----
-omo41i6: Trust in European Union: Question in Survey:"How much confidence do you have in the way the following institutions and groups do their job?" (1=Very low trust, 5=very high trust).
+omo41i6: Trust in European Union: Question in Survey:"How much confidence do you have in the way the following institutions and groups do their job?".
 
 Be aware of observations with negative values (e.g. "-2" since -2 is "No Answer". So mutate these variables to NA before analysis)!
 
-  You can research the Dataset for yourself for potential variables and questions that could be relevant for fertility intentions. 
-  In the end, if you really want to show off, you can also do a multiple regression analysis to see which variables have the biggest effect on fertility intentions.
+3.2. You can research the Dataset for yourself for potential variables and questions that could be relevant for fertility intentions.
+---
+  
+  Relevant variables could be: 
+----
+  pa15 - Indicated fairness of division of household tasks (1=I do much more than my fair share).
+---
+  sat14 - Satisfaction with division of childcare tasks (0=Not at all satisfied, 10=Completely satisfied. 
+---- 
+crn21i2 - Problems parenting with partner: Discussions regarding care and parenting issues end in fights (1=Never, 5=Very frequently).
+---
+
+job60 - Flexible work arrangements current job. Does your employer allow regular flexible time arrangements for personal reasons, like for adapting to children's schedules? (1=Yes, 2=No)
+---
+  
+  In the end, if you really want to show off, you can also do a multiple regression analysis to see which variables have the biggest effect on fertility intentions. 
+---
   
   Finally, you can think about policies, that would improve fertility rates based on the results of your analysis. For example: If you find out that people with low trust in institutions are less likely to have children, you could think about policies that would increase trust in institutions.
 
