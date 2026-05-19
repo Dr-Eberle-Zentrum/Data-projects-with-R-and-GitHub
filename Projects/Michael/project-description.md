@@ -87,38 +87,38 @@ Also both plots should be visualized in one graph via faceting. So you can easil
  3.1. If you really want to show of you can also think about other variables in the Dataset who could effect fertility intentions (frt68, frt69). For example: What role does trust in institutions play? What happens with the correlation beween satisfaction with relationship and fertility intentions, when we control for trust in institutions? 
   
   Trust in institutions is reflected in the variables omo41i1 - omo41i6. The scale is the same for all these variables. Question in Survey:"How much confidence do you have in the way the following institutions and groups do their job?" (1=Very low trust, 5=very high trust). The only difference between these variables is that they are measuring trust in different institutions.
-----
+
 omo41i1: Trust in Government. Question in Survey:"How much confidence do you have in the way the following institutions and groups do their job?" 
-----
+
 omo41i2: Trust in Police: Question in Survey:"How much confidence do you have in the way the following institutions and groupsdo their job?" 
-----
+
 omo41i3: Trust Health Care Sector: Question in Survey:"How much confidence do you have in the way the following institutions and groups do their job?". 
-----
+
 omo41i4: Trust in Civil Service: Question in Survey:"How much confidence do you have in the way the following institutions and groups do their job?". 
-----
+
 omo41i5: Trust in News Media: Question in Survey:"How much confidence do you have in the way the following institutions and groups do their job?". 
-----
+
 omo41i6: Trust in European Union: Question in Survey:"How much confidence do you have in the way the following institutions and groups do their job?".
 
 Be aware of observations with negative values (e.g. "-2" since -2 is "No Answer". So mutate these variables to NA before analysis)!
 
 3.2. You can research the Dataset for yourself for potential variables and questions that could be relevant for fertility intentions.
----
+
   
   Relevant variables could be: 
-----
+
   pa15 - Indicated fairness of division of household tasks (1=I do much more than my fair share).
----
+
   sat14 - Satisfaction with division of childcare tasks (0=Not at all satisfied, 10=Completely satisfied. 
----- 
+
 crn21i2 - Problems parenting with partner: Discussions regarding care and parenting issues end in fights (1=Never, 5=Very frequently).
----
+
 
 job60 - Flexible work arrangements current job. Does your employer allow regular flexible time arrangements for personal reasons, like for adapting to children's schedules? (1=Yes, 2=No)
----
+
   
   In the end, if you really want to show off, you can also do a multiple regression analysis to see which variables have the biggest effect on fertility intentions. 
----
+
   
   Finally, you can think about policies, that would improve fertility rates based on the results of your analysis. For example: If you find out that people with low trust in institutions are less likely to have children, you could think about policies that would increase trust in institutions.
 
