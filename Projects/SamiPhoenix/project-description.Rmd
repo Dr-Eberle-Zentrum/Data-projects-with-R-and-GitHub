@@ -1,3 +1,13 @@
+<!-- 3c) verlange, dass der plot wirklich so ausschaut, sprich einen platzhalter (zB drei punkte oder ähnliches) zwischen den beiden blöcken von bars.. -->
+
+<!-- If you want, you could add some more info on what exactly the IUCN Red List is and explain what your general goal is in your project (maybe some 2-3 sentences in the first block). This would help as a starting point. -->
+<!-- For task 3a, I am not sure I understand correctly what you want me to do. Is it the percentage in relation to the subtotal number of all animals (bottom row Subtotal)? Or is it in relation to the subtotal of each animal (last column Total of each animal)? Maybe you could be a bit clearer on this task by giving more details. -->
+<!-- Just a general remark, when referring to column or row names, etc., it might be a good idea to consistently highlight them in some form (sometimes you highlight them as code, sometimes not). This would make it better understandable as a reader and might clear up some misunderstandings. -->
+
+
+
+
+
 ---
 title: "Project about the IUCN Red List of Threatened Species"
 output: md_document
@@ -9,37 +19,68 @@ The data provides the number of species from every class and how they are classi
 Link to the Data: https://www.iucnredlist.org/statistics
 On the site you will also see, that they are ordered by the Kingdom as well, this is not yet represented by the data
 
+
+
 # Tasks:
+
 
 ## 1. Data import and wrangling
 
-### a) Download the csv-file from the provided link
+### a) Import csv into R
 
-The
+I have placed the `.csv` in my `/dependencies` folder, you can import it from there.
+
+
+```{r table_Peek, echo=FALSE, message=FALSE}
+
+options(knitr.kable.max_rows = 4)
+
+"~/Data-projects-with-R-and-GitHub/Projects/SamiPhoenix/dependencies/SpeciesByKingdomAndClass.csv" |> 
+  readr::read_delim() |>
+  knitr::kable(caption = "After importing the table should look like this:")
+
+```
+
+### b) Visit the Website
+
 [IUCN Red List](https://www.iucnredlist.org/statistics)
-has an option to download the .csv
 
-### b) Import csv into R
+Check out the table and the legend below, familiarize yourself with the column names and what categories they belong to.
 
 ### c) Add Kingdom data
 
-On the website you will see that they also have data on which Kingdom the various classes belong to, we want to add this data manually, find a way to do so, add a new Column that contains this information to the imported table.
+On the website you will see that they also have data on which Kingdom the various Classes belong to, we want to add this data semi-automatically.
+
+* Manually note the different Kingdoms and in what order they appear in the online table.
+
+* Use `lag()` and/or `fill()` alongside the fact that the table is ordered lexicographically by Class-name within each Kingdom to automatically find the boundaries between the different Kingdoms.
+
+* Add the Kingdom information in a new column named `Kingdom`
 
 
 ## 2. Data Manipulation
 
-### a) Remove unwanted Columns
-The legend on the website also explains that `Possibly Extinct` and `Possibly Extinct in the Wild` are not from the IUCN, as such take them out of your table, but make sure that it doesn't change the total amount of species represented.
+### a) Remove unwanted columns
+The legend on the website also explains that `Possibly Extinct` and `Possibly Extinct in the Wild` are not classifications from the IUCN, as such take them out of your table.
+Then also remove the Column `Subtotal (EX+EW+ CR(PE)+CR(PEW))`.
 
-### c) Simplify Columns
-Integrate `LR/cd - Lower Risk/conservation dependent` into `NT - Near Threatened (includes LR/nt - Lower Risk/near threatened)`
+### c) Simplify columns
+I dislike the following categories:
 
-### d) Make Column names readable
+* `LR/cd - Lower Risk/conservation dependent`
 
-The website also has an explanation of the Column names at the bottom, look them up and replace the Column names with the easier to read full names of the categories.
+* `NT - Near Threatened (includes LR/nt - Lower Risk/near threatened)`
 
-The Column that you added to in step c) you can just call `Near Threatened`
+I want you to restructure them by integrating them into one singular new column, which is made up of the sum of both.
+Call this column `Near Threatened` and remove the old ones.
 
+### d) Make column names readable
+
+The website also has an explanation of the column names at the bottom, look them up and replace the column names with the easier to read full names of the categories, shorten in a way where:
+
+* The columns should at the end all have names that are in line with `Near Threatened`.
+
+* They remain unique.
 
 ## 3. Data Visualisation
 
@@ -51,7 +92,7 @@ Before you start visualizing, create a separate table, where the columns contain
 
 We want to compare the different Kingdoms, especially if they have been affected to different extends:
 
-To this end, calculate how many percent of each Kingdoms' Species are EX or EW and plot these in a simple barplot.
+To this end, calculate how many percent of each Kingdoms' Species are `EX` or `EW` and plot these in a simple bar-plot.
 
 Exclude any Kingdoms that have a total of less than 1000 Species from the plot.
 
@@ -60,11 +101,11 @@ Exclude any Kingdoms that have a total of less than 1000 Species from the plot.
 
 ### c) Visualize most and least affected Classes
 
-Next we are interested in the most and least affected classes, as well as which Kingdom they belong to:
+Next we are interested in the most and least affected Classes, as well as which `Kingdom` they belong to:
 
-Show in a barplot, the 10 most and 10 least affected Classes, color them according to their Kingdom and place a legend that explains the colors.
+Show in a bar-plot the 10 most and the 10 least affected Classes, color them according to their Kingdom and place a legend that explains the colors.
 
-Affected here is defined as `Percent of at least Critically Endangered Species in a given Class`
+Affected here is defined as the "Percent of at least Critically Endangered Species in a given Class"
 
 ![](dependencies/Plot1.png)
 
