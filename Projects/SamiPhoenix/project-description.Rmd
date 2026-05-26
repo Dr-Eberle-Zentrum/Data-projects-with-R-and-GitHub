@@ -1,24 +1,23 @@
-<!-- 3c) verlange, dass der plot wirklich so ausschaut, sprich einen platzhalter (zB drei punkte oder ähnliches) zwischen den beiden blöcken von bars.. -->
-
-<!-- If you want, you could add some more info on what exactly the IUCN Red List is and explain what your general goal is in your project (maybe some 2-3 sentences in the first block). This would help as a starting point. -->
-<!-- For task 3a, I am not sure I understand correctly what you want me to do. Is it the percentage in relation to the subtotal number of all animals (bottom row Subtotal)? Or is it in relation to the subtotal of each animal (last column Total of each animal)? Maybe you could be a bit clearer on this task by giving more details. -->
-<!-- Just a general remark, when referring to column or row names, etc., it might be a good idea to consistently highlight them in some form (sometimes you highlight them as code, sometimes not). This would make it better understandable as a reader and might clear up some misunderstandings. -->
-
-
-
-
-
 ---
 title: "Project about the IUCN Red List of Threatened Species"
 output: md_document
 ---
 
-The data provides the number of species from every class and how they are classified according to the red list.
+The IUCN (International Union for Conservation of Nature) and their "Red List of Threatened Species" aim to draw attention to, and keep track of, how non-human life on earth is faring.
 
+To this end they assess various species and how their populations are developing over time, sorting them into categories, doubtless you've seen some of these categories before, like `Threatened` or even `Extinct`.
 
-Link to the Data: https://www.iucnredlist.org/statistics
-On the site you will also see, that they are ordered by the Kingdom as well, this is not yet represented by the data
+The table you will be working on only covers a small part of the Red Lists scope, namely it provides the number of species from every class and how they are classified according to the red list. (There is also Kingdom data but we will get to that.)
 
+Now `Species` you've all heard before, it is the smallest unit in the taxonomy of life, defined by members of a species being able to produce offspring which itself is able to produce offspring.
+
+`Class` and `Kingdom` might feel more foreign to you, but it just comes down to larger umbrellas of life. A Class contains many Species each
+
+* There are also more so-called Taxonomic Ranks in between but we don't care about those here.
+
+And a `Kingdom` contains many `Classes` itself, `Kingdom` being one of the highest ranks. One Kingdom for example is `Animalia` which includes all animals. Or `Plantae` which includes all plants.
+
+* Again there are more intermediary steps between `Kingdom` and `Class`.
 
 
 # Tasks:
@@ -62,7 +61,7 @@ On the website you will see that they also have data on which Kingdom the variou
 
 ### a) Remove unwanted columns
 The legend on the website also explains that `Possibly Extinct` and `Possibly Extinct in the Wild` are not classifications from the IUCN, as such take them out of your table.
-Then also remove the Column `Subtotal (EX+EW+ CR(PE)+CR(PEW))`.
+Then also remove the column `Subtotal (EX+EW+ CR(PE)+CR(PEW))`.
 
 ### c) Simplify columns
 I dislike the following categories:
@@ -82,19 +81,34 @@ The website also has an explanation of the column names at the bottom, look them
 
 * They remain unique.
 
+
 ## 3. Data Visualisation
 
 ### a) Create relative amount table
 
-Before you start visualizing, create a separate table, where the columns contain the percent of Species that are in that category instead of the absolute number.
+Before you start visualizing, create a separate table. In this table, each of the columns, except the `Total` column, contain the percent of the `Total` they make up row-wise.
+
+* So if in the old table, a row contains a `Total` of 200 and an `EX` of 8, the new table would say 4 in the `EX` column.
+
+* The `Total` column should always display 100
+
+* Also give the column names an update so it says `<ColumnName> [%]`
 
 ### b) Visualize difference between Kingdoms
 
 We want to compare the different Kingdoms, especially if they have been affected to different extends:
 
-To this end, calculate how many percent of each Kingdoms' Species are `EX` or `EW` and plot these in a simple bar-plot.
+To this end, create a bar plot as in the picture, one bar per Kingdom. Exclude any Kingdoms that have a total of less than 1000 Species from the plot.
 
-Exclude any Kingdoms that have a total of less than 1000 Species from the plot.
+The y-Axis contains the percent of species in that `Kingdom` that fall into various categories colored as in the picture. The categories are:
+
+* Extinct: `EX` or `EW`
+
+* Affected: `CR`, `EN` or `VU`
+
+* Unaffected or no data: Rest
+
+Make sure you find better labels and names for the Legend and the Axis labels.
 
 ![](dependencies/Plot2.png)
 
@@ -103,9 +117,22 @@ Exclude any Kingdoms that have a total of less than 1000 Species from the plot.
 
 Next we are interested in the most and least affected Classes, as well as which `Kingdom` they belong to:
 
-Show in a bar-plot the 10 most and the 10 least affected Classes, color them according to their Kingdom and place a legend that explains the colors.
-
 Affected here is defined as the "Percent of at least Critically Endangered Species in a given Class"
+
+Create a bar-plot that contains (from left to right):
+
+* The 10 most affected Classes, ordered from most to least.
+
+* Three dots like in the provided picture.
+
+* the 10 least affected Classes, ordered from most to least
+
+Make sure to also:
+
+* Color the bars according to the Classes' `Kingdom` and place a legend that explains the colors.
+
+* Label every bar with the appropriate `name` of the Class and make sure it looks good (you might want to use diagonal labels or other tricks)
+
 
 ![](dependencies/Plot1.png)
 
