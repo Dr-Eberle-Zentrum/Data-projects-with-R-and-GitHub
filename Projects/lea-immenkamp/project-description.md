@@ -35,9 +35,8 @@ each type). The order is irrelevant.
 You find the [Data.xlsx](data.xlsx) in the Excel tabs “Intervention
 data” and “questionaire”
 
-1.  **Quality index prior to the intervention** The variables i1t0 to
-    i5t0 capture five behavioural indicators prior to the intervention.
-    Examples:
+**Quality index prior to the intervention** The variables i1t0 to i5t0
+capture five behavioural indicators prior to the intervention. Examples:
 
 -   reaches straight for sweets
 -   ask for sweets when hungry
@@ -48,24 +47,24 @@ gives the quality index before the intervention e.g.: QIpre=
 i1t0+i2t0+i3t0+i4t0+i5t0 and can reach a value betwenn 0 and 5. (0, if
 behaviour is not favourable and 5, if behavior is favourable)
 
-1.  **Quality index following the intervention** Variables i1 to i5
-    measure the same behavioural indicators following the intervention.
-    The sum gives the quality index after the intervention.
+**Quality index following the intervention**: Variables i1 to i5 measure
+the same behavioural indicators following the intervention. The sum
+gives the quality index after the intervention.
 
-2.  **Motivation and Helpfulness**: After each intervention, the
-    children answered two questions: “How motivated were you to eat
-    fewer sweets?” Scale: 1 = not at all motivated 4 = very motivated
-    “How helpful did you find the method?” Scale: 1 = not at all helpful
-    4 = very helpful The aim is to investigate whether the children’s
-    motivation explains why one intervention is more effective than the
-    other. Intervention → Motivation/Helpfulness → ΔQI
+**Motivation and Helpfulness**: After each intervention, the children
+answered two questions: “How motivated were you to eat fewer sweets?”
+Scale: 1 = not at all motivated 4 = very motivated “How helpful did you
+find the method?” Scale: 1 = not at all helpful 4 = very helpful The aim
+is to investigate whether the children’s motivation explains why one
+intervention is more effective than the other. Intervention →
+Motivation/Helpfulness → ΔQI
 
-3.  **Childrens age**. You can find the age in the second table
-    “questionnaire”).
+**Childrens age**: You can find the age in the second table
+“questionnaire”).
 
-4.  **Generall attitude** Childrens general attitude towards sweets was
-    measured with 4 items (sweet1-sweet4) on a 4-point scale. The mean
-    of these items gives the general attitude towards sweets (Attitude).
+**Generall attitude**: Childrens general attitude towards sweets was
+measured with 4 items (sweet1-sweet4) on a 4-point scale. The mean of
+these items gives the general attitude towards sweets (Attitude).
 
 # Tasks
 
@@ -96,7 +95,10 @@ behaviour is not favourable and 5, if behavior is favourable)
     thickness or colour should be scaled according to the frequency of
     the line. Get inspiration here:
 
-    ![Image](images/example%20plot.png)
+    <figure>
+    <img src="images/example%20plot.png" alt="Image" />
+    <figcaption aria-hidden="true">Image</figcaption>
+    </figure>
 
 5.  Test whether motivation moderates the relationship between the
     intervention and the QIpost in quality (for each type) and control

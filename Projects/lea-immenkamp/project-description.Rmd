@@ -48,23 +48,9 @@ data" and "questionaire"
     i5t0 capture five behavioural indicators prior to the intervention.
     Examples:
 
--   <div>
-
-    -   reaches straight for sweets
-
-    </div>
-
--   <div>
-
-    -   ask for sweets when hungry
-
-    </div>
-
--   <div>
-
-    -   ...
-
-    </div>
+- reaches straight for sweets 
+- ask for sweets when hungry
+- ...
 
 Coding: 0 = unfavourable behaviour 1 = favourable behaviour. The sum
 gives the quality index before the intervention e.g.: QIpre=
