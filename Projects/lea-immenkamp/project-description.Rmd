@@ -44,7 +44,7 @@ each type). The order is irrelevant.
 You find the [Data.xlsx](data.xlsx) in the Excel tabs "Intervention
 data" and "questionaire"
 
--   **Quality index prior to the intervention** The variables i1t0 to
+**Quality index prior to the intervention** The variables i1t0 to
     i5t0 capture five behavioural indicators prior to the intervention.
     Examples:
 
@@ -71,11 +71,11 @@ gives the quality index before the intervention e.g.: QIpre=
 i1t0+i2t0+i3t0+i4t0+i5t0 and can reach a value betwenn 0 and 5. (0, if
 behaviour is not favourable and 5, if behavior is favourable)
 
--   **Quality index following the intervention**: Variables i1 to i5
+**Quality index following the intervention**: Variables i1 to i5
     measure the same behavioural indicators following the intervention.
     The sum gives the quality index after the intervention.
 
--   **Motivation and Helpfulness**: After each intervention, the
+**Motivation and Helpfulness**: After each intervention, the
     children answered two questions: “How motivated were you to eat
     fewer sweets?” Scale: 1 = not at all motivated 4 = very motivated
     “How helpful did you find the method?” Scale: 1 = not at all helpful
@@ -83,10 +83,10 @@ behaviour is not favourable and 5, if behavior is favourable)
     motivation explains why one intervention is more effective than the
     other. Intervention → Motivation/Helpfulness → ΔQI
 
--   **Childrens age**: You can find the age in the second table
+**Childrens age**: You can find the age in the second table
     "questionnaire").
 
--   **Generall attitude**: Childrens general attitude towards sweets was
+**Generall attitude**: Childrens general attitude towards sweets was
     measured with 4 items (sweet1-sweet4) on a 4-point scale. The mean
     of these items gives the general attitude towards sweets (Attitude).
 
