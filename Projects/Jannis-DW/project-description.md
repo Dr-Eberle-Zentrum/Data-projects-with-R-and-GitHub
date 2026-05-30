@@ -99,7 +99,7 @@ the end it should look somewhat like this:
 
 ![](https://dr-eberle-zentrum.github.io/Data-projects-with-R-and-GitHub/Projects/Jannis-DW/Horizontal_Bar_Graph.png)
 
-\##Optional Tasks:
+## Optional Tasks:
 
 If you would like to even improve your plot from before: Mark all the
 films that your favourite actor/actress has participated in with a
