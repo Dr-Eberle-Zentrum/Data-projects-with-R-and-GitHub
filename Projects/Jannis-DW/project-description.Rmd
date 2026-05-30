@@ -2,6 +2,9 @@
 title: "Data Projects with R and GitHub: Movies and Inflation"
 output: md_document
 ---
+
+# Data Projects with R and GitHub: Movies and Inflation
+
 -------------------------------------------------------------
 
 Movies are a big and important part of our culture. They are a source of entertainment, a way to tell stories, and a reflection of society. But they are also a big business, with billions of dollars in revenue generated each year. In this project, we will explore the relationship between movies and inflation. We will use a dataset that contains information about movies released between 1970 and 2020, including their ratings, box office performance, and inflation-adjusted gross collections.
@@ -13,7 +16,7 @@ However, please do not download it onto your computer but load it directly into 
 
 The dataset provides numerous details about movies which include: 
 
-- ´Title´: movie title.
+- `Title`: movie title.
 - ´Release_Year´: year of the movie's release.
 - ´Watchtime´: movie duration in minutes.
 - ´Genre´: genre.
@@ -66,6 +69,7 @@ Let's take a closer look at the role of the different genres. Please detach the 
 Last but not least: Let's see how different directors score! Create a horizontal bar plot for each director that shows the average combined score as well as the standard deviation through whiskers and also presents the number of movies next to the bar as a text annotation. At the end it should look somewhat like this:
 
 ![excample_horizontal_bar_plot](https://dr-eberle-zentrum.github.io/Data-projects-with-R-and-GitHub/Projects/Jannis-DW/Horizontal_Bar_Graph.png)
+
 
 ##Optional Tasks:
 

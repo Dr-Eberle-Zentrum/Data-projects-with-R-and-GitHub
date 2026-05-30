@@ -1,3 +1,5 @@
+# Data Projects with R and GitHub: Movies and Inflation
+
 ------------------------------------------------------------------------
 
 Movies are a big and important part of our culture. They are a source of
@@ -18,7 +20,7 @@ link.
 
 The dataset provides numerous details about movies which include:
 
-- ´Title´: movie title.
+- `Title`: movie title.
 - ´Release\_Year´: year of the movie’s release.
 - ´Watchtime´: movie duration in minutes.
 - ´Genre´: genre.
