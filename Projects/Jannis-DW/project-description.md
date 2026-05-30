@@ -97,12 +97,7 @@ score as well as the standard deviation through whiskers and also
 presents the number of movies next to the bar as a text annotation. At
 the end it should look somewhat like this:
 
-<figure>
-<img
-src="https://dr-eberle-zentrum.github.io/Data-projects-with-R-and-GitHub/Projects/Jannis-DW/Horizontal_Bar_Graph.png"
-alt="excample_horizontal_bar_plot" />
-<figcaption aria-hidden="true">excample_horizontal_bar_plot</figcaption>
-</figure>
+![](https://dr-eberle-zentrum.github.io/Data-projects-with-R-and-GitHub/Projects/Jannis-DW/Horizontal_Bar_Graph.png)
 
 \##Optional Tasks:
 

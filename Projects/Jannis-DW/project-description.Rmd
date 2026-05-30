@@ -68,7 +68,7 @@ Let's take a closer look at the role of the different genres. Please detach the 
 
 Last but not least: Let's see how different directors score! Create a horizontal bar plot for each director that shows the average combined score as well as the standard deviation through whiskers and also presents the number of movies next to the bar as a text annotation. At the end it should look somewhat like this:
 
-![excample_horizontal_bar_plot](https://dr-eberle-zentrum.github.io/Data-projects-with-R-and-GitHub/Projects/Jannis-DW/Horizontal_Bar_Graph.png)
+![](https://dr-eberle-zentrum.github.io/Data-projects-with-R-and-GitHub/Projects/Jannis-DW/Horizontal_Bar_Graph.png)
 
 
 ##Optional Tasks:
