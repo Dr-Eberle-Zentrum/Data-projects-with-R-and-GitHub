@@ -1,6 +1,6 @@
 ---
 title: "The releation between social media usage and health information seeking behaviour(HISB) among adolescent in Vanuatu"
-output: html_document
+output: md_document
 ---
 
 # Introduction:
