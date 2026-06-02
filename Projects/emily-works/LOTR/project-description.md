@@ -291,7 +291,7 @@ COMPOSITE PLOT**
     chapters in which Frodo speaks Please create a stacked barplot that
     shows the percentage of Frodo’s words per chapter (on the x-axis).
 
-\![\](BarplotFrodo.png
+![](BarplotFrodo.png)
 
 ### 2.4. Character Connections (Optional)
 

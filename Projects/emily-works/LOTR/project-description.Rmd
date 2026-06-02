@@ -133,7 +133,7 @@ _A quick note on this task: This task has 3 subtasks, however all plots that you
 #### 2.3.2. STACKED BARPLOT: Number of chapters in which Frodo speaks 
 Please create a stacked barplot that shows the percentage of Frodo's words per chapter (on the x-axis).
 
-![](BarplotFrodo.png
+![](BarplotFrodo.png) 
 
 
 
