@@ -229,13 +229,16 @@ summarizes the total number of words across all volumes spoken by each
 character.
 
 Please visualize this distribution using a **pie chart**, similar to the
-one below. - Only show the **top 9 characters with the most speaking
-time**, and group all other characters into a single category. - The
-coloring of the pie chart should be based on the `Gender` of the
-characters, but each character should have a different shade of the
-color. - Use the `ggplot2` package for the visualization, and the
-`fct_lump()` function to group the characters with the least speaking
-time into the “other” category.
+one below.
+
+- Only show the **top 9 characters with the most speaking time**, and
+  group all other characters into a single category.
+- The coloring of the pie chart should be based on the `Gender` of the
+  characters, but each character should have a different shade of the
+  color.
+- Use the `ggplot2` package for the visualization, and the `fct_lump()`
+  function to group the characters with the least speaking time into the
+  “other” category.
 
 *Make sure the percentages are included as labels, because otherwise the
 pie charts are practically unreadable*
@@ -251,13 +254,16 @@ books, and whether there are any changes in the speaking time of
 characters across the different volumes.
 
 Please visualize this distribution using **three (3) pie charts**,
-similar to the one above. - Only show the **top 9 characters with the
-most speaking time**, and group all other characters into a single
-category. - The coloring of the pie chart should be based on the
-`Gender` of the characters, but each character should have a different
-shade of the color. - Use the `ggplot2` package for the visualization,
-and the `fct_lump()` function to group the characters with the least
-speaking time into the “other” category.
+similar to the one above.
+
+- Only show the **top 9 characters with the most speaking time**, and
+  group all other characters into a single category.
+- The coloring of the pie chart should be based on the `Gender` of the
+  characters, but each character should have a different shade of the
+  color.
+- Use the `ggplot2` package for the visualization, and the `fct_lump()`
+  function to group the characters with the least speaking time into the
+  “other” category.
 
 ### 2.3. Speakers Time of Frodo
 
@@ -266,7 +272,9 @@ of the story.
 
 *A quick note on this task: This task has 3 subtasks, however all plots
 that you are about to create should be generated as *ONE SINGLE
-COMPOSITE PLOT** ![](CompositePlot.png)
+COMPOSITE PLOT**
+
+![](CompositePlot.png)
 
 #### 2.3.1. PIE CHART RIGHT: Speaking Time of Frodo across all 3 books
 
@@ -275,7 +283,8 @@ COMPOSITE PLOT** ![](CompositePlot.png)
   - Compare his total number of words to the total number of words
     spoken by all characters.
   - Visualize this in a pie chart, similar to the one below:
-    ![](TotalFrodo.png)
+
+![](TotalFrodo.png)
 
 #### 2.3.2. PIE CHART LEFT: Number of chapters in which Frodo speaks
 
@@ -283,14 +292,16 @@ COMPOSITE PLOT** ![](CompositePlot.png)
   - Compare the number of chapters in which Frodo speaks to the total
     number of chapters in the three books.
   - Visualize this in a pie chart, similar to the one below:
-    ![](TotalChapFrodo.png)
+
+![](TotalChapFrodo.png)
 
 #### 2.3.2. STACKED BARPLOT TOP: Number of chapters in which Frodo speaks
 
 - Calculate the percentage of Frodo’s words in each chapter, compared to
   the total number of words spoken in that chapter.
   - Visualize this in a stacked barplot, similar to the one below:
-    ![](BarplotFrodo.png)
+
+![](BarplotFrodo.png)
 
 ### 2.4. Character Connections (Optional)
 

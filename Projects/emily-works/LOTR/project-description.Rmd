@@ -99,6 +99,7 @@ The next step is to calculate the total number of words spoken by each character
 At first, we will calculate the total number of words spoken by each character across all three books. For that create a new table that summarizes the total number of words across all volumes spoken by each character. 
 
 Please visualize this distribution using a **pie chart**, similar to the one below. 
+
 - Only show the **top 9 characters with the most speaking time**, and group all other characters into a single category.
 - The coloring of the pie chart should be based on the `Gender` of the characters, but each character should have a different shade of the color.
 - Use the `ggplot2` package for the visualization, and the `fct_lump()` function to group the characters with the least speaking time into the "other" category.
@@ -111,6 +112,7 @@ _Make sure the percentages are included as labels, because otherwise the pie cha
 Next we will calculate the total number of words spoken by each character for each individual book. This will allow us to analyze how the speaking time of each character is distributed across the three books, and whether there are any changes in the speaking time of characters across the different volumes.
 
 Please visualize this distribution using **three (3) pie charts**, similar to the one above. 
+
 - Only show the **top 9 characters with the most speaking time**, and group all other characters into a single category.
 - The coloring of the pie chart should be based on the `Gender` of the characters, but each character should have a different shade of the color.
 - Use the `ggplot2` package for the visualization, and the `fct_lump()` function to group the characters with the least speaking time into the "other" category.
@@ -120,23 +122,27 @@ Please visualize this distribution using **three (3) pie charts**, similar to th
 Finally, we can analyze the speaking time of `Frodo`, the main character of the story.
 
 _A quick note on this task: This task has 3 subtasks, however all plots that you are about to create should be generated as *ONE SINGLE COMPOSITE PLOT*_
+
 ![](CompositePlot.png)
 
 #### 2.3.1. PIE CHART RIGHT: Speaking Time of Frodo across all 3 books 
 - Calculate the total number of words spoken by Frodo across all three books.
   - Compare his total number of words to the total number of words spoken by all characters.
   - Visualize this in a pie chart, similar to the one below:
+
 ![](TotalFrodo.png)
 
 #### 2.3.2. PIE CHART LEFT: Number of chapters in which Frodo speaks  
 - Calculate the number of chapters in which Frodo speaks.
   - Compare the number of chapters in which Frodo speaks to the total number of chapters in the three books.
   - Visualize this in a pie chart, similar to the one below:
+
 ![](TotalChapFrodo.png)
 
 #### 2.3.2. STACKED BARPLOT TOP: Number of chapters in which Frodo speaks 
 - Calculate the percentage of Frodo's words in each chapter, compared to the total number of words spoken in that chapter.
   - Visualize this in a stacked barplot, similar to the one below:
+
 ![](BarplotFrodo.png) 
 
 ### 2.4. Character Connections (Optional)
