@@ -229,13 +229,16 @@ summarizes the total number of words across all volumes spoken by each
 character.
 
 Please visualize this distribution using a **pie chart**, similar to the
-one below. - Only show the **top 9 characters with the most speaking
-time**, and group all other characters into a single category. - The
-coloring of the pie chart should be based on the `Gender` of the
-characters, but each character should have a different shade of the
-color. - Use the `ggplot2` package for the visualization, and the
-`fct_lump()` function to group the characters with the least speaking
-time into the “other” category.
+one below.
+
+- Only show the **top 9 characters with the most speaking time**, and
+  group all other characters into a single category.
+- The coloring of the pie chart should be based on the `Gender` of the
+  characters, but each character should have a different shade of the
+  color.
+- Use the `ggplot2` package for the visualization, and the `fct_lump()`
+  function to group the characters with the least speaking time into the
+  “other” category.
 
 *Make sure the percentages are included as labels, because otherwise the
 pie charts are practically unreadable*
@@ -251,13 +254,16 @@ books, and whether there are any changes in the speaking time of
 characters across the different volumes.
 
 Please visualize this distribution using **three (3) pie charts**,
-similar to the one above. - Only show the **top 9 characters with the
-most speaking time**, and group all other characters into a single
-category. - The coloring of the pie chart should be based on the
-`Gender` of the characters, but each character should have a different
-shade of the color. - Use the `ggplot2` package for the visualization,
-and the `fct_lump()` function to group the characters with the least
-speaking time into the “other” category.
+similar to the one above.
+
+- Only show the **top 9 characters with the most speaking time**, and
+  group all other characters into a single category.
+- The coloring of the pie chart should be based on the `Gender` of the
+  characters, but each character should have a different shade of the
+  color.
+- Use the `ggplot2` package for the visualization, and the `fct_lump()`
+  function to group the characters with the least speaking time into the
+  “other” category.
 
 ### 2.3. Speakers Time of Frodo
 
