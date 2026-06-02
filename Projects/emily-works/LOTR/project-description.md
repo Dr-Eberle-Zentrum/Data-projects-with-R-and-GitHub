@@ -218,45 +218,61 @@ the three volumes, using a donut chart similar to this:
 ### 2.2. Speakers Time by Character
 
 The next step is to calculate the total number of words spoken by each
+character. This will allow us to analyze which characters have the most
+speaking time and which characters have the least speaking time.
+
+#### 2.2.1. Total Speaking Time by Character across all 3 books
+
+At first, we will calculate the total number of words spoken by each
 character across all three books. For that create a new table that
 summarizes the total number of words across all volumes spoken by each
 character.
 
-Answer these questions:
+Please visualize this distribution using a *pie chart*, similar to the
+one below. Please only show the *top 9 characters with the most speaking
+time*, and group all other characters into a single category called
+*other*. The coloring of the pie chart should be based on the `Gender`
+of the characters, but each character should have a different shade of
+the color.
 
-- Which character has the most speaking time?
-- Which character has the least speaking time?
-- How is the distribution of speakers time among the characters?
-  - Is the distribution of speakers time among the characters skewed
-    (i.e. a few characters speak a lot, while most characters speak very
-    little)?
+For this please use the `ggplot2` package for the visualization, and the
+`fct_lump()` function to group the characters with the least speaking
+time into the “other” category.
 
-Please visualize this distribution using a pie chart, similar to this:
+*Make sure the percentages are included as labels, because otherwise the
+pie charts are practically unreadable*
 
 ![](TotalCharacter.png)
 
-### 2.3. Speakers Time by Characteristics
+#### 2.2.2. Total Speaking Time by Character for each individual book
 
-Next, we can analyze the distribution of speakers time based on
-different characteristics of the characters. Summarize the number of
-words spoken by characters based on gender, realm and race.
+Next we will calculate the total number of words spoken by each
+character for each individual book. This will allow us to analyze how
+the speaking time of each character is distributed across the three
+books, and whether there are any changes in the speaking time of
+characters across the different volumes.
 
-Answer these questions:
+Please visualize this distribution using a *pie chart*, similar to the
+one from 2.2.1. Please only show the *top 9 characters with the most
+speaking time*, and group all other characters into a single category
+called *other*. The coloring of the pie chart should be based on the
+`Gender` of the characters, but each character should have a different
+shade of the color.
 
-- Which gender has the most/least speaking time?
-  - How is it distributed?
-- Which race has the most/least speaking time?
-  - How is it distributed?
-- Which realm are characters with the most/least speaking time
-  associated with?
+For this please use the `ggplot2` package for the visualization, and the
+`fct_lump()` function to group the characters with the least speaking
+time into the “other” category.
 
-Please visualize **each** of these distributions using a donut chart,
-similar to the one above.
-
-### 2.4. Speakers Time of Frodo
+### 2.3. Speakers Time of Frodo
 
 Finally, we can analyze the speaking time of `Frodo`, the main character
-of the story
+of the story.
+
+*A quick note on this task: This task has 3 subtasks, however all plots
+that you are about to create should be generated as *ONE SINGLE
+COMPOSITE PLOT**
+
+#### 2.3.1. PIE CHART: Speaking Time of Frodo across all 3 books
 
 - Calculate the total number of words spoken by Frodo across all three
   books.
@@ -264,23 +280,20 @@ of the story
     spoken by all characters.
   - Visualize this in a pie chart, similar to the one below:
     ![](TotalFrodo.png)
+
+#### 2.3.2. PIE CHART: Number of chapters in which Frodo speaks
+
 - Calculate the number of chapters in which Frodo speaks.
   - Compare the number of chapters in which Frodo speaks to the total
     number of chapters in the three books.
   - Visualize this in a pie chart, similar to the one below:
-    ![](TotalChapFrodo.png) Another idea I found very interesting while
-    reading the project was the possibility of analyzing relationships
-    between characters. For example, it could be fun to see which
-    characters appear together most often in the same chapters. This
-    could give additional insight into the structure of the story and
-    interactions between characters.
+    ![](TotalChapFrodo.png) \#### 2.3.2. STACKED BARPLOT: Number of
+    chapters in which Frodo speaks Please create a stacked barplot that
+    shows the percentage of Frodo’s words per chapter (on the x-axis).
 
-I also think this could lead to some additional visualizations, such as
-a heatmap graph, showing character connections. I thought kind of
-analysis could fit the topic really well and make the project even more
-unique and interactive.
+\![\](BarplotFrodo.png
 
-### 2.5. Character Connections (Optional)
+### 2.4. Character Connections (Optional)
 
 For last, we want to analyze the relationships between characters based
 on their co-occurrence in chapters.
