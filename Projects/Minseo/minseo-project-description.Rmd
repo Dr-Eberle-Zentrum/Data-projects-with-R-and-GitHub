@@ -7,7 +7,7 @@ output: md_document
 
 ------------------------------------------------------------------------
 
-Social media advertising is an important part of modern marketing and public relations.\
+Social media advertising is an important part of modern marketing and public relations.
 This project explores how social media advertising campaigns differ across platforms, customer segments, and campaign goals.
 
 The focus of this project lies on cleaning, restructuring, and visualizing advertising campaign data. I am especially interested in how different advertising strategies lead to audience interaction and financial performance.
@@ -16,11 +16,27 @@ The focus of this project lies on cleaning, restructuring, and visualizing adver
 
 ------------------------------------------------------------------------
 
-The dataset used for this project can be downloaded from:
+The original dataset can be found on Kaggle, which is an online platform where users can publish, share, and download datasets for data analysis projects.
+
 
 <https://www.kaggle.com/datasets/jsonk11/social-media-advertising-dataset/data>
 
+However, since Kaggle requires user registration to download the dataset, a local copy of the CSV file can be found within 'Minseo' project folder.
+
+
+### Summary of the Dataset
+
+```{r echo=FALSE, message=FALSE}
+library(readr)
+library(knitr)
+
+ads <- read_csv("Social Media Advertising.csv", show_col_types = FALSE)
+
+kable(head(ads))
+```
+
 The dataset contains information about social media advertising campaigns, including audience targeting, campaign goals, platforms, engagement scores, clicks, impressions, acquisition costs, and ROI.
+
 
 The data is provided as a CSV file and includes the following variables:
 
@@ -51,7 +67,6 @@ The data is provided as a CSV file and includes the following variables:
 
 Before the data can be analyzed, several variables need to be cleaned or restructured.
 
--   remove special characters from variable names
 -   convert `Duration` values into numeric day values
 -   clean currency-formatted variables such as `Acquisition_Cost`
 -   convert `Date` into a proper date format
@@ -68,9 +83,15 @@ These steps are important because several variables are not immediately ready fo
 
 One important question is which campaign goals are most effective at generating audience interaction on social media.
 
-To answer this question, the data will be grouped by `Campaign_Goal`, and the average `Engagement_Score` will be calculated for each campaign goal.
 
-This should help identify whether certain campaign goals are more successful at attracting audience involvement.
+To answer this question, the data will be grouped by `Campaign_Goal`. For each campaign goal, create a nicely formatted summary table showing:
+
+- the average of `Engagement_Score` 
+- the standard deviation of `Engagement_Score`
+- the number of campaigns
+
+The standard deviation should help show whether engagement scores are consistent within each campaign goal or vary strongly between campaigns.
+Also, this overall table should help identify whether certain campaign goals are more successful at attracting audience involvement.
 
 ## 2. Which age group has the highest click-through rate?
 
@@ -80,11 +101,19 @@ Instead of only comparing raw click counts, I will calculate a click-through rat
 
 Click-through rate will be calculated as `Clicks / Impressions`.
 
-To answer this question, the `Target_Audience` column should first be split into separate demographic variables. Then the average click-through rate will be calculated for each age group.
+To make the analysis more precise, each age range should be decomposed into individual ages. For example, the campaign targeting 25-34 should be counted for every age from 25 to 34. After restructuring the data caculate the average click-through rate for each individual age! To answer this question, the `Target_Audience` column should first be split into separate demographic variables. Then the average click-through rate will be calculated for each age group.
 
 This makes the comparison fairer than using only raw click counts, because campaigns with more impressions naturally tend to have more clicks.
 
-**Tip:** Check whether the `Target_Audience` column has been split into separate gender and age group variables.
+**Tip:** Check whether the `Target_Audience` column has been properly split into separate gender and age group variables.
+
+## Additional task of data visualization 
+
+As an additional challenge, a small data visualization could also be created here:
+
+Create a age-separated click-through rate plot using faceting by gender. The plot should show click-through rate by exact age separately for male and female target audiences. 
+
+**Tip:** Campaigns labeled as targeting “all” should be counted for both men and women.
 
 # Tasks for Data Visualization
 
@@ -92,7 +121,7 @@ This makes the comparison fairer than using only raw click counts, because campa
 
 Create a line graph showing how average ROI changes with campaign duration across different social media platforms.
 
-For this visualization, the `Duration` column first needs to be converted into numeric day values. Then the data will be grouped by campaign duration and social media platform.
+The data should be grouped by `Duration` and `Channel_Used`.
 
 The final graph should show:
 
