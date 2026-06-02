@@ -3,6 +3,7 @@ title: "Laptop Price Analysis"
 author: "Jingyi Li"
 date: "2026-05-12"
 output: github_document
+always_allow_html: true
 ---         
 
 ### Topic:
@@ -24,9 +25,41 @@ I hypothesize that higher-end hardware specifications (e.g., faster CPUs, larger
 
 ### Data Source
 
-*Source:* https://www.kaggle.com/datasets/ehtishamsadiq/uncleaned-laptop-price-dataset
+**Original source:** https://www.kaggle.com/datasets/ehtishamsadiq/uncleaned-laptop-price-dataset
+
+ You can download the dataset directly using this link: [uncleaned laptop price dataset (CSV)](data/laptopData.csv)
+ 
+#### Dataset Overview
 
 The Uncleaned Laptop Price dataset is a collection of laptop product listings scraped from an online e-commerce website. The dataset includes information about various laptop models, such as their brand, screen size, processor, memory, storage capacity, operating system, and price. However, the dataset is uncleaned, meaning that it contains missing values, inconsistent formatting, and other errors that need to be addressed before the data can be used for analysis.
+
+```{r, message=FALSE, echo=FALSE}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+
+my_data <- read_csv("data/laptopData.csv")
+preview_data <- head(my_data[, 2:12], 6)
+
+kable(preview_data) %>% 
+  kable_styling(font_size = 12, bootstrap_options = c("striped", "hover"))
+```
+
+#### Column Explanations
+To ensure the description is self-contained, here is a short explanation of the core columns I will analyze:
+
+- Company: The brand of the laptop (e.g., Apple, HP, Acer, Asus).
+- TypeName: The category of the laptop (e.g., Notebook, Ultrabook, Gaming, Netbook).
+- Inches: The screen size in inches.
+- ScreenResolution: Text describing the resolution and panel type (e.g., IPS Panel Retina Display 2560x1600).
+- Cpu: The processor specification, including brand, model, and clock speed (e.g., Intel Core i5 2.3GHz).
+- Ram: The amount of memory (e.g., 8GB, 16GB).
+- Memory: The storage technology and capacity (e.g., 128GB SSD, 1TB HDD).
+- Gpu: The graphics card specification.
+- OpSys: The operating system (e.g., macOS, Windows 10, No OS).
+- Weight: The physical weight of the laptop (e.g., 1.37kg).
+- Price: The price of the laptop (originally in Indian Rupee, INR).
+
 
 ### Data Manipulation Goals
 
@@ -36,8 +69,21 @@ The Uncleaned Laptop Price dataset is a collection of laptop product listings sc
 
 ### Visualization Goals
 
-1. **Price Distribution Visualization**: Create histograms and box plots to visualize the distribution of laptop prices and identify any outliers or clusters.
-2. **Correlation Analysis**: Use scatter plots and correlation matrices to explore the relationships between hardware. 
-3. **Brand Price Comparison**: Generate bar charts or box plots to compare the average prices of laptops across different brands, highlighting any significant differences.
+Setting **Price** as the main variable, I will investigate the relations between price and other hardware specifications and categorizations through the following visualizations:
+
+1. **Price vs. Numeric Features (Scatter Plot)**
+   * **Goal**: Investigate how continuous numerical variables like `Ram` (or extracted CPU clock speed, `Weight`) correlate with `Price`.
+   * **Axes**: Set `Ram` , `CPU` or `Weight` (numerical) on the X-axis and `Price` on the Y-axis.
+   * **Overplotting**: Apply semi-transparency to handle overlapping points, and overlay a shaded region or density contours using `ggdensity`or something else to observe where the bulk of the market lies.
+
+2. **Price vs. Categorical Features (Distribution Plot)**
+   * **Goal**: Observe the price variance across discrete categories like `Company` (Brand) and `TypeName` (Laptop Type).
+   * **Refinement (Violine over Boxplot)**: Instead of a simple bar chart or box plot, request a **Violine Plot** for each brand/type to show the full probability density and multi-modality of prices.
+  
+3. **Price Distribution Overlap (Ridgeline Plot)**
+   * **Goal**: Compare the overall price profile across the most common laptop types (`Notebook`, `Ultrabook`, `Gaming`).
+   * **Specification**: Plot a baseline price histogram for the entire dataset, and overlay a **Ridgeline Plot** split by `TypeName` right on top, allowing an immediate visual comparison of price peaks between standard notebooks and premium segments.
+
+
 
 
