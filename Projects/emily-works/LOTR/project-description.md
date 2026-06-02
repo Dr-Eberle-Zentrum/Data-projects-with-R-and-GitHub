@@ -272,7 +272,9 @@ of the story.
 
 *A quick note on this task: This task has 3 subtasks, however all plots
 that you are about to create should be generated as *ONE SINGLE
-COMPOSITE PLOT** ![](CompositePlot.png)
+COMPOSITE PLOT**
+
+![](CompositePlot.png)
 
 #### 2.3.1. PIE CHART RIGHT: Speaking Time of Frodo across all 3 books
 
@@ -281,7 +283,8 @@ COMPOSITE PLOT** ![](CompositePlot.png)
   - Compare his total number of words to the total number of words
     spoken by all characters.
   - Visualize this in a pie chart, similar to the one below:
-    ![](TotalFrodo.png)
+
+![](TotalFrodo.png)
 
 #### 2.3.2. PIE CHART LEFT: Number of chapters in which Frodo speaks
 
@@ -289,14 +292,16 @@ COMPOSITE PLOT** ![](CompositePlot.png)
   - Compare the number of chapters in which Frodo speaks to the total
     number of chapters in the three books.
   - Visualize this in a pie chart, similar to the one below:
-    ![](TotalChapFrodo.png)
+
+![](TotalChapFrodo.png)
 
 #### 2.3.2. STACKED BARPLOT TOP: Number of chapters in which Frodo speaks
 
 - Calculate the percentage of Frodo’s words in each chapter, compared to
   the total number of words spoken in that chapter.
   - Visualize this in a stacked barplot, similar to the one below:
-    ![](BarplotFrodo.png)
+
+![](BarplotFrodo.png)
 
 ### 2.4. Character Connections (Optional)
 
