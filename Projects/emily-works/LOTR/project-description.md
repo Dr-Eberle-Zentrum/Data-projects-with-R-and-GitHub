@@ -94,12 +94,12 @@ the character’s name, race and the number of words spoken by them:
 
 The columns are defined as follows:
 
-- **Film**: The Name of the individual novel (The Fellowship of the
+- **Film**: The name of the individual novel (The Fellowship of the
   Ring, The Two Towers, The Return of the King).
 - **Chapter**: The chapter of the specified novel in which the character
   speaks.
 - **Character**: The name of the character who speaks.
-- **Race**: The Race (Species) of the specified character.
+- **Race**: The race (species) of the specified character.
 - **Words**: The number of words spoken by the specified character in
   the specified chapter within the specified book.
 
@@ -175,10 +175,6 @@ on the **character’s name**. This will allow us to have all the relevant
 information about each character in one dataset, which will make it
 easier to analyze the distribution of speakers time.
 
-*Hint: Only merge the two datasets based on the character’s name,
-**after** summarizing the number of words by character (Step 2.2. of
-Data Analysis).*
-
 Please note, that characters can appear **multiple times** in the
 `WordsByCharacter` dataset, as they can speak in multiple chapters
 across the three books. In the `InformationByCharacter` dataset, each
@@ -187,6 +183,9 @@ the characters.
 
 Please check:
 
+- Has every piece of data been imported correctly? Please pay special
+  attention to the `Realm` data, as it contains some special characters
+  (e.g. “Lothlórien”).
 - Is every data record complete (no missing values)?
   - If not, can the missing values be reasonably filled in (i.e. gender
     = “Unknown”?).
@@ -212,7 +211,7 @@ of the three books. For that, create a new table that includes:
 - Which book has the lowest number of words spoken?
 
 Please visualize the distribution of the total number of words across
-the three volumes, using a pie chart similar to this:
+the three volumes, using a donut chart similar to this:
 
 ![](TotalNumber.png)
 
@@ -269,4 +268,36 @@ of the story
   - Compare the number of chapters in which Frodo speaks to the total
     number of chapters in the three books.
   - Visualize this in a pie chart, similar to the one below:
-    ![](TotalChapFrodo.png)
+    ![](TotalChapFrodo.png) Another idea I found very interesting while
+    reading the project was the possibility of analyzing relationships
+    between characters. For example, it could be fun to see which
+    characters appear together most often in the same chapters. This
+    could give additional insight into the structure of the story and
+    interactions between characters.
+
+I also think this could lead to some additional visualizations, such as
+a heatmap graph, showing character connections. I thought kind of
+analysis could fit the topic really well and make the project even more
+unique and interactive.
+
+### 2.5. Character Connections (Optional)
+
+For last, we want to analyze the relationships between characters based
+on their co-occurrence in chapters.
+
+1.  Create a co-appearance dataframe by:
+
+- For each chapter, identify all unique characters who appear
+- Generate all possible pairs of characters within each chapter
+- Count how many chapters each character pair appears together in
+
+The result should be a dataframe with columns `character1`,
+`character2`, and `count`
+
+1.  Create the heatmap using ggplot2:
+
+- You can use the `geom_tile()` function from the `ggplot2` package
+- Only map pairs with a count &gt; 5 to the heatmap, to avoid
+  overcrowding the graph
+
+The graph should look somewhat close to this: ![](Heatmap.png)
