@@ -5,7 +5,7 @@ digitalisation & digization in health &well-ness industry and mental
 health affected by digital platforms. When it comes to the first
 concept, most studies confirmed that origin of country, place of
 residence,gender..many factors have an impact on “Health Information
-Seeking Behaviour”(**abbreviated HIBS**).
+Seeking Behaviour”(**abbreviated HISB**).
 
 Shifting focus to less developed countries, questions arise: How do the
 youth engage with digital platforms, and what is the real gap from
