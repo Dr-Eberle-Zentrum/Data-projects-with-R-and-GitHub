@@ -91,7 +91,7 @@ these items gives the general attitude towards sweets (Attitude).
     panel contains its own set of lines. Name the x-axis “Intervention
     type” (with two categorial positions; Quality Index Pre and Quality
     Index Post) and the y-axis “Behavioral Indicator” (Numeric scale
-    1-4; tick marks 1,2,3,4). In order to manage overplotting, the line
+    0-5; tick marks 0,1,2,3,4,5). In order to manage overplotting, the line
     thickness or colour should be scaled according to the frequency of
     the line. Get inspiration here:
 

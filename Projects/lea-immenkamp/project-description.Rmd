@@ -121,3 +121,7 @@ behaviour is not favourable and 5, if behavior is favourable)
     motivation on the x-Axis, QIpost quality on the y-axis and one line
     (colour) for each Intervention type. It should look like an
     interaction plot in the end.
+    
+
+    
+    
