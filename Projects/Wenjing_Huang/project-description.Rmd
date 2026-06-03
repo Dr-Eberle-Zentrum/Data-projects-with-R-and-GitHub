@@ -5,7 +5,7 @@ output: md_document
 
 # Introduction:
 
-Digital heath conceptually consists of two sectors, namely digitalisation & digization in health &well-ness industry and mental health affected by digital platforms. When it comes to the first concept, most studies confirmed that origin of country, place of residence,gender..many factors have an impact on "Health Information Seeking Behaviour"(**abbreviated HIBS**). 
+Digital heath conceptually consists of two sectors, namely digitalisation & digization in health &well-ness industry and mental health affected by digital platforms. When it comes to the first concept, most studies confirmed that origin of country, place of residence,gender..many factors have an impact on "Health Information Seeking Behaviour"(**abbreviated HISB**). 
 
 Shifting focus to less developed countries, questions arise: How do the youth engage with digital platforms, and what is the real gap from age-groups? Do they use which type of social media to search health information? To address these, we analyze a dataset from Vanuatu, a South Pacific island nation. 
 
