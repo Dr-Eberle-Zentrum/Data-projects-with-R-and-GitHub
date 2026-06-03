@@ -503,12 +503,31 @@ of the core columns I will analyze:
 
 ### Data Manipulation Goals
 
-1.  **Data Cleaning**: Address missing values, correct inconsistent
-    formatting, and remove any duplicate entries to ensure the dataset
-    is accurate and reliable for analysis.
-2.  **Data Transformation**: Normalize or standardize numerical features
-    to facilitate comparison and improve the performance of any
-    subsequent analysis.
+1.  **Handling Blank Rows & Invalid Symbols (`?`)**:
+    - Remove Empty Rows: The dataset contains exactly 30 completely
+      blank rows.
+    - Filter Invalid Strings: There are hidden non-numeric symbols `?`
+      in the data Rows.
+2.  **Feature Extraction & Type Conversion (String to Numeric)**:
+    - `Ram` Column: Strip the “GB” text extension (e.g., converting
+      “8GB” to “8”) and cast the column from character (`chr`) to
+      integer (`int`).
+    - `Weight` Column: Strip the “kg” text extension (e.g., converting
+      “1.37kg” to “1.37”) and cast the column to a numeric (`dbl`)
+      format.
+    - `Cpu` Column: Extract the continuous numerical variable
+      representing processor clock speed in GHz (e.g., parsing `2.3` out
+      of `"Intel Core i5 2.3GHz"`) .
+3.  **Categorical Consolidation & Engineering**:
+    - `ScreenResolution` Column: Create binary logical flags (`is_IPS`
+      and `is_Retina`) based on text descriptions, and extract pure
+      pixel dimensions (Width and Height) into separate numerical
+      columns.
+    - `OpSys` Column: Group sparse categories into broader groups (e.g.,
+      combining different variants like “Windows 10”, “Windows 10 S”,
+      and “Windows 7” into a unified “Windows” label, and grouping “Mac
+      OS X” with “macOS”) to ensure clear and readable visual
+      distributions.
 
 ### Visualization Goals
 
