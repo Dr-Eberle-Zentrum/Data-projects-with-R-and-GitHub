@@ -1,0 +1,52 @@
+---
+title: "SamiPhoenix"
+output: md_document
+---
+
+
+```{r setup, echo=FALSE, message=FALSE}
+
+library(tidyverse)
+library(stringr)
+
+
+```
+
+```{r tableImportManipulation, echo=FALSE, message=FALSE}
+
+uncleanData <- "~/Data-projects-with-R-and-GitHub/Projects/Jingyi-L/data/laptopData.csv" %>% 
+  read_csv(na = c("", "NA", "?"))
+
+  #1
+Data <- uncleanData %>% 
+  drop_na() %>% 
+  select(-1) %>% 
+  #2
+  mutate(Ram = as.integer(str_replace_all(Ram, "GB", ""))) %>% 
+  mutate(Weight = as.double(str_replace_all(Weight, "kg", ""))) %>% 
+  mutate(Cpu = as.double(str_extract(Cpu, "\\d+\\.?\\d*(?=GHz)"))) %>% 
+  #3
+  mutate(HasIPS = str_detect(ScreenResolution, "IPS")) %>% 
+  mutate(HasRetina = str_detect(ScreenResolution, "Retina")) %>%
+  mutate(Width = as.integer(str_extract(ScreenResolution, "\\d+(?=x)"))) %>% 
+  mutate(Height = as.integer(str_extract(ScreenResolution, "(?<=x)\\d+"))) %>% 
+    mutate(OpSys = case_when(
+    str_detect(OpSys, regex("windows", ignore_case = TRUE)) ~ "Windows",
+    str_detect(OpSys, regex("mac", ignore_case = TRUE)) ~ "macOS",
+    TRUE ~ OpSys
+    ))
+
+```
+
+
+
+```{r Visualisation, echo=FALSE, message=FALSE}
+
+
+
+```
+
+
+
+
+
