@@ -1,0 +1,8 @@
+---
+title: "lea-immenkamp"
+author: "Lea Immenkamp"
+date: "2026-06-07"
+output: md_document
+---
+Movies are a big and important part of our culture. They are a source of entertainment, a way to tell stories, and a reflection of society. But they are also a big business, with billions of dollars in revenue generated each year. In this project, we will explore the relationship between movies and inflation. We will use a dataset that contains information about movies released between 1970 and 2020, including their ratings, box office performance, and inflation-adjusted gross collections.
+
