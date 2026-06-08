@@ -19,7 +19,7 @@ uncleanData <- "~/Data-projects-with-R-and-GitHub/Projects/Jingyi-L/data/laptopD
   read_csv(na = c("", "NA", "?"))
 
   #1
-Data <- uncleanData %>% 
+data <- uncleanData %>% 
   drop_na() %>% 
   select(-1) %>% 
   #2
@@ -42,6 +42,36 @@ Data <- uncleanData %>%
 
 
 ```{r Visualisation, echo=FALSE, message=FALSE}
+
+library(scales)
+library(ggridges)
+
+#1
+data %>% 
+  ggplot(aes(x = Cpu, y = Price)) +
+  geom_point(alpha = 0.25) +
+  geom_density2d(alpha = 0.75) +
+  scale_y_continuous(labels = label_comma())
+
+
+#2
+data %>% 
+  ggplot(aes(x = TypeName, y = Price)) +
+  geom_boxplot() +
+  scale_y_continuous(labels = label_comma())
+
+#3
+
+data %>% 
+  ggplot(aes(x = Price)) +
+  geom_histogram(color = "black", fill = "purple") +
+  scale_x_continuous(labels = label_comma()) 
+
+data %>% 
+  ggplot(aes(x = Price)) +
+  geom_density_ridges(data = data %>%
+                        filter( TypeName == c("Notebook", "Ultrabook", "Gaming")), 
+                      aes(y = TypeName, scale = 1.5), alpha = 0.5)
 
 
 
