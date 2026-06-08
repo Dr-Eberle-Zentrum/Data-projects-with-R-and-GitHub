@@ -3,6 +3,8 @@ title: "SamiPhoenix"
 output: md_document
 ---
 
+## Solution of "Wrangling and Analyzing Laptop Market Data"
+
 
 
 ```{r setup, echo=FALSE, message=FALSE}

@@ -1,1 +1,3 @@
+## Solution of “Wrangling and Analyzing Laptop Market Data”
+
 ![](SamiPhoenix_files/figure-markdown_strict/Visualisation-1.png)![](SamiPhoenix_files/figure-markdown_strict/Visualisation-2.png)![](SamiPhoenix_files/figure-markdown_strict/Visualisation-3.png)![](SamiPhoenix_files/figure-markdown_strict/Visualisation-4.png)
