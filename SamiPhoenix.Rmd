@@ -61,16 +61,16 @@ data %>%
   scale_y_continuous(labels = label_comma())
 
 #3
-
+# Histogram
 data %>% 
   ggplot(aes(x = Price)) +
   geom_histogram(color = "black", fill = "purple") +
-  scale_x_continuous(labels = label_comma()) 
-
+  scale_x_continuous(labels = label_comma())
+# Ridgeline
 data %>% 
   ggplot(aes(x = Price)) +
   geom_density_ridges(data = data %>%
-                        filter( TypeName == c("Notebook", "Ultrabook", "Gaming")), 
+                        filter( TypeName %in% c("Notebook", "Ultrabook", "Gaming")), 
                       aes(y = TypeName, scale = 1.5), alpha = 0.5)
 
 
