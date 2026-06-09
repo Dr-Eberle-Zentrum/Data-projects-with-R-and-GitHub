@@ -12,19 +12,6 @@
     ## ℹ Use `spec()` to retrieve the full column specification for this data.
     ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
-On the website you will see that they also have data on which Kingdom
-the various Classes belong to, we want to add this data
-semi-automatically.
-
-Manually note the different Kingdoms and in what order they appear in
-the online table.
-
-Use lag() and/or fill() alongside the fact that the table is ordered
-lexicographically by Class-name within each Kingdom to automatically
-find the boundaries between the different Kingdoms.
-
-Add the Kingdom information in a new column named Kingdom
-
 ## Add Kingdom Data
 
     kingdoms <- c("Animalia", "Chromista", "Fungi", "Plantae") # list kingdoms in the order they appear in
@@ -32,17 +19,13 @@ Add the Kingdom information in a new column named Kingdom
     kingdom_data  <- raw_data %>%
       mutate(
         ClassChange = Name < lag(Name), # create column that says TRUE when a change appears (new kingdom)
-        ClassChange = replace_na(ClassChange, TRUE) # replaces NA in 1st observation with TRUE
-        ) %>%
-      mutate(
-        Kingdom = ifelse(ClassChange == TRUE, kingdoms, NA)  
-        # creates a new column, where TRUE there's a kingdom name
-            ) %>%
-      fill(Kingdom, .direction ="down") %>%
+        ClassChange = replace_na(ClassChange, TRUE), # replaces NA in 1st observation with TRUE
+        Kingdom = ifelse(ClassChange == TRUE, kingdoms[cumsum(ClassChange)], NA)
+      ) %>%
+      fill(Kingdom, .direction = "down") %>%
       # fills the NAs with the value
       select(!("ClassChange"))
       # removes the ClassChange column again
-
 
     kingdom_data$Kingdom[75] <- NA 
     # removes kingdom name from last row bc. its the total & therefor has no kingdom
@@ -62,12 +45,38 @@ Add the Kingdom information in a new column named Kingdom
              ) %>%
       rename(
         "Extinct" = "EX",
-        "Extinct in the Wild" = "EW",
-        "Critically Endangered" = "CR",
+        "ExtinctWild" = "EW",
+        "CriticallyEndangered" = "CR",
         "Endangered" = "EN",
         "Vulnerable" = "VU",
-        "Low Risk" = "LC or LR/lc",
-        "Data Deficient" = "DD"
-        )
+        "LowRisk" = "LC or LR/lc",
+        "DataDeficient" = "DD"
+        ) %>%
+      select(`Name`,`Kingdom`,`Extinct`:`DataDeficient`, `NearThreatened`, `Total`)
+      # changes column order
 
 # Data Visualization
+
+Unfortunately I couldn’t figure out how the plots are supposed to work
+:(
+
+First step: create a new seperate table
+
+    data_table <- manipulated_data %>%
+      transmute(
+        `Name`,
+        `Kingdom`,
+        across(c(`Extinct`:`Total`), ~ .x / Total * 100, .names = "{.col} [%]")
+        )
+
+Create barplot 1:
+
+manipulated\_data %&gt;% mutate( Unaffected =
+sum(across(`LowRisk`:`NearThreatened`)) ) %&gt;% filter ( Total &gt;
+1000 ) %&gt;% group\_by(Kingdom) %&gt;% summarise( Extinct =
+sum(`Subtotal (EX+EW)`), Affected = sum(`Subtotal (threatened spp.)`),
+Unaffected = sum(Unaffected) ) %&gt;% ggplot() + geom\_bar(aes( x =
+Kingdom, y = Total, fill = “Extinct”), stat = “identity”, position =
+“stack”)
+
+\`\`\`
