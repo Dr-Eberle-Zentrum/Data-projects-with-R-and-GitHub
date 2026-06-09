@@ -164,6 +164,8 @@ Size and color of the lines indicate the frequency of the line.
 Note: I added `child_id` as a random effect (as: `(1 | ID)`), since a
 random effect is needed for the `lmer()` function.
 
+The summary of the model looks like this:
+
     ## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
     ## lmerModLmerTest]
     ## Formula: qi_post ~ Intervention * Motivation + qi_pre + (1 | child_id)
