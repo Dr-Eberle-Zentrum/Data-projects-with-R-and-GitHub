@@ -38,10 +38,36 @@ Add the Kingdom information in a new column named Kingdom
         Kingdom = ifelse(ClassChange == TRUE, kingdoms, NA)  
         # creates a new column, where TRUE there's a kingdom name
             ) %>%
-      fill(Kingdom, .direction ="down")
-             # fills the NAs with the value 
+      fill(Kingdom, .direction ="down") %>%
+      # fills the NAs with the value
+      select(!("ClassChange"))
+      # removes the ClassChange column again
+
 
     kingdom_data$Kingdom[75] <- NA 
     # removes kingdom name from last row bc. its the total & therefor has no kingdom
 
-kingdom\_data &lt;-
+# Data Manipulation
+
+    manipulated_data <- kingdom_data %>%
+      select(!("CR(PE)":"Subtotal (EX+EW+ CR(PE)+CR(PEW))")) %>%
+      # removes columns
+      rowwise() %>%
+      mutate( 
+        NearThreatened = sum(across("LR/cd":"NT or LR/nt"))
+        # combines columns
+            ) %>%
+      select(!("LR/cd":"NT or LR/nt")
+             # removes columns
+             ) %>%
+      rename(
+        "Extinct" = "EX",
+        "Extinct in the Wild" = "EW",
+        "Critically Endangered" = "CR",
+        "Endangered" = "EN",
+        "Vulnerable" = "VU",
+        "Low Risk" = "LC or LR/lc",
+        "Data Deficient" = "DD"
+        )
+
+# Data Visualization
