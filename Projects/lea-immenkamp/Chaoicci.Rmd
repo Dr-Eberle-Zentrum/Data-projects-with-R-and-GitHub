@@ -47,6 +47,17 @@ data_full <- full_join(data_qis, data_mean_sweets, by = "child_id") |>
                                labels = c("Reality Check", "Sugar Shock")),
          child_id = factor(child_id))
 ```
+# Task 1-3
+After importing, calculating the quality index before and after the intervention,
+calculating the mean of sweet 1-4 and merging the two tables, the dataset looks
+like this:
+```{r table, echo = FALSE}
+knitr::kable(
+  data_full[1:5, ],
+  caption = "Dataset"
+)
+```
+
 
 # Task 4: Comparison of the two interventions
 ```{r comparison-of-interventions, echo = FALSE}
@@ -72,6 +83,9 @@ data_full |>
   scale_x_continuous(breaks = c(1, 2),
                      labels = c("QIpre", "QIpost")) 
 ```
+
+The individual changes before and after the intervention are plotted. Size and 
+color of the lines indicate the frequency of the line.
 
 # Task 5: Test whether motivation moderates the relationship between the intervention and the QIpost
 Note: I added `child_id` as a random effect (as: `(1 | ID)`), since a random 
