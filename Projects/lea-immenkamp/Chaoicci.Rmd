@@ -90,6 +90,8 @@ color of the lines indicate the frequency of the line.
 # Task 5: Test whether motivation moderates the relationship between the intervention and the QIpost
 Note: I added `child_id` as a random effect (as: `(1 | ID)`), since a random 
 effect is needed for the `lmer()` function. 
+
+The summary of the model looks like this:
 ```{r relationship-intervention-qi_post, warning = FALSE, echo = FALSE, message = FALSE}
 # Task 5: Test whether motivation moderates relationship between intervention
 # and QIpost
