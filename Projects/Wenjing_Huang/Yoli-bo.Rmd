@@ -289,9 +289,8 @@ df <- df %>%
     mobile_hisb =
       mobile_searching * hisb_rate
   )
-# =========================
-# Summaries
-# =========================
+
+
 
 computer_summary <- df %>%
   group_by(age_sex_group) %>%
