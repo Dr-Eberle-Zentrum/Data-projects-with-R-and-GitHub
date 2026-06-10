@@ -1,0 +1,546 @@
+Wenjing’s Project Solution
+================
+Jingyi LI
+2026-06-09
+
+``` r
+# Remove the three open-ended text response columns
+df <- df %>%
+  select(
+    -which_social_media_platform_site_facebook_instagram_twitter_tiktok_snapchat_is_your_favourite_to_use_for_your_health_and_what_do_you_like_about_it,
+    -for_searching_health_information_which_app_social_media_or_website_do_you_use,
+    -for_discussing_health_topics_with_other_people_online_which_app_social_media_or_website_do_you_use
+  )
+```
+
+``` r
+# Create a new variable "age_group" based on the "age_range" variable
+df <- df %>%
+  mutate(
+    age_group = case_when(
+      str_detect(age_range, "Lower") ~ "<=15",
+      str_detect(age_range, "16") ~ "16-17",
+      str_detect(age_range, "18") ~ ">=18",
+      TRUE ~ NA_character_
+    )
+  )
+
+df <- df %>%
+  mutate(
+    age_sex_group = paste(age_group, sex)
+  )
+```
+
+``` r
+# Convert binary variables to numeric (1 for "Checked"/"Yes", 0 for "Unchecked"/"No")
+
+df <- df %>%
+  mutate(across(
+    where(~ all(.x %in% c("Checked", "Unchecked", "Yes", "No", NA))),
+    ~ case_when(
+      . == "Checked" ~ 1,
+      . == "Yes" ~ 1,
+      . == "Unchecked" ~ 0,
+      . == "No" ~ 0,
+      TRUE ~ NA_real_
+    )
+  ))
+```
+
+``` r
+df <- df %>%
+  mutate(
+    mobile_phone_ownership = case_when(
+      do_you_have_a_mobile_phone == 0 ~ 0,
+      do_you_have_a_mobile_phone == 1 &
+        is_this_mobile_phone_yours_or_do_you_share_it == "Shared" ~ 1,
+      do_you_have_a_mobile_phone == 1 &
+        is_this_mobile_phone_yours_or_do_you_share_it == "Not shared" ~ 2,
+      TRUE ~ NA_real_
+    )
+  )
+```
+
+``` r
+# Platform for health
+df <- df %>%
+  mutate(
+    platform_for_health = case_when(
+      favourite_platform_site_for_health_social_media == 1 ~ "social media",
+      favourite_platform_site_for_health_search_engine == 1 ~ "search engine",
+      favourite_platform_site_for_health_unclear == 1 ~ "unclear",
+      favourite_platform_site_for_health_none == 1 ~ "none",
+      TRUE ~ NA_character_
+    )
+  )
+
+# Platform for HISB
+df <- df %>%
+  mutate(
+    platform_for_hisb = case_when(
+      for_searching_health_information_social_media == 1 ~ "social media",
+      for_searching_health_information_search_engine == 1 ~ "search engine",
+      for_searching_health_information_web_site == 1 ~ "web site",
+      for_searching_health_information_unclear == 1 ~ "unclear",
+      for_searching_health_information_none == 1 ~ "none",
+      TRUE ~ NA_character_
+    )
+  )
+
+# Platform for discussing health topics
+df <- df %>%
+  mutate(
+    platform_for_health_topic = case_when(
+      for_discussing_social_media == 1 ~ "social media",
+      for_discussing_search_engine == 1 ~ "search engine",
+      for_discussing_app == 1 ~ "app",
+      for_discussing_web_site == 1 ~ "web site",
+      for_discussing_unclear == 1 ~ "unclear",
+      for_discussing_none == 1 ~ "none",
+      TRUE ~ NA_character_
+    )
+  )
+
+# Apply "Do you use apps..." rule
+df <- df %>%
+  mutate(
+    platform_for_health = ifelse(
+      do_you_use_apps_social_media_or_websites_for_your_health == 0,
+      "none",
+      platform_for_health
+    ),
+    platform_for_hisb = ifelse(
+      do_you_use_apps_social_media_or_websites_for_your_health == 0,
+      "none",
+      platform_for_hisb
+    ),
+    platform_for_health_topic = ifelse(
+      do_you_use_apps_social_media_or_websites_for_your_health == 0,
+      "none",
+      platform_for_health_topic
+    )
+  )
+```
+
+``` r
+df <- df %>%
+  mutate(
+    computer_searching =
+      when_you_are_on_the_computer_and_or_tablet_what_type_of_actions_do_you_most_often_perform_choice_searching_for_general_information,
+
+    computer_socializing = rowSums(across(c(
+      when_you_are_on_the_computer_and_or_tablet_what_type_of_actions_do_you_most_often_perform_choice_discussion_by_email_or_on_the_digital_social_networks_with_friends_or_family,
+      when_you_are_on_the_computer_and_or_tablet_what_type_of_actions_do_you_most_often_perform_choice_watching_your_social_network_feed
+    )), na.rm = TRUE),
+
+    computer_entertainment = rowSums(across(c(
+      when_you_are_on_the_computer_and_or_tablet_what_type_of_actions_do_you_most_often_perform_choice_listening_to_the_music,
+      when_you_are_on_the_computer_and_or_tablet_what_type_of_actions_do_you_most_often_perform_choice_playing_games,
+      when_you_are_on_the_computer_and_or_tablet_what_type_of_actions_do_you_most_often_perform_choice_viewing_videos
+    )), na.rm = TRUE),
+
+    computer_studying =
+      when_you_are_on_the_computer_and_or_tablet_what_type_of_actions_do_you_most_often_perform_choice_study_or_homeworks,
+
+    computer_others =
+      when_you_are_on_the_computer_and_or_tablet_what_type_of_actions_do_you_most_often_perform_choice_other
+  )
+
+#===========================================================
+# 7. Combine mobile usage
+#===========================================================
+df <- df %>%
+  mutate(
+    mobile_searching =
+      when_you_are_on_your_mobile_phone_what_type_of_actions_do_you_perform_most_often_choice_searching_for_general_information,
+
+    mobile_socializing = rowSums(across(c(
+      when_you_are_on_your_mobile_phone_what_type_of_actions_do_you_perform_most_often_choice_discussion_by_email_or_on_the_digital_social_networks_with_friends_or_family,
+      when_you_are_on_your_mobile_phone_what_type_of_actions_do_you_perform_most_often_choice_watching_your_social_network_feed,
+      when_you_are_on_your_mobile_phone_what_type_of_actions_do_you_perform_most_often_choice_telephone_conversation
+    )), na.rm = TRUE),
+
+    mobile_entertainment = rowSums(across(c(
+      when_you_are_on_your_mobile_phone_what_type_of_actions_do_you_perform_most_often_choice_listening_to_the_music,
+      when_you_are_on_your_mobile_phone_what_type_of_actions_do_you_perform_most_often_choice_playing_games,
+      when_you_are_on_your_mobile_phone_what_type_of_actions_do_you_perform_most_often_choice_viewing_videos
+    )), na.rm = TRUE),
+
+    mobile_studying =
+      when_you_are_on_your_mobile_phone_what_type_of_actions_do_you_perform_most_often_choice_study_or_homeworks,
+
+    mobile_others =
+      when_you_are_on_your_mobile_phone_what_type_of_actions_do_you_perform_most_often_choice_other
+  )
+
+df <- df %>%
+  mutate(
+    platform_for_health = case_when(
+      favourite_platform_site_for_health_social_media == 1 ~ "social media",
+      favourite_platform_site_for_health_search_engine == 1 ~ "search engine",
+      favourite_platform_site_for_health_unclear == 1 ~ "unclear",
+      favourite_platform_site_for_health_none == 1 ~ "none",
+      TRUE ~ NA_character_
+    )
+  )
+```
+
+``` r
+# Combine HISB platform usage
+df <- df %>%
+  mutate(
+    hisb_rate = rowSums(across(c(
+      for_searching_health_information_social_media,
+      for_searching_health_information_search_engine,
+      for_searching_health_information_web_site
+    )), na.rm = TRUE)
+  )
+```
+
+``` r
+# Remove the original platform variables
+df <- df %>%
+  select(
+    -favourite_platform_site_for_health_social_media,
+    -favourite_platform_site_for_health_search_engine,
+    -favourite_platform_site_for_health_unclear,
+    -favourite_platform_site_for_health_none,
+    -for_searching_health_information_social_media,
+    -for_searching_health_information_search_engine,
+    -for_searching_health_information_web_site,
+    -for_searching_health_information_unclear,
+    -for_searching_health_information_none,
+    -for_discussing_social_media,
+    -for_discussing_search_engine,
+    -for_discussing_app,
+    -for_discussing_web_site,
+    -for_discussing_unclear,
+    -for_discussing_none,
+    -do_you_use_apps_social_media_or_websites_for_your_health
+  )
+
+df <- df %>%
+  select(
+    -starts_with("when_you_are_on_the_computer_and_or_tablet_what_type_of_actions_do_you_most_often_perform_choice_"),
+    -starts_with("when_you_are_on_your_mobile_phone_what_type_of_actions_do_you_perform_most_often_choice_")
+  )
+```
+
+``` r
+df_cleaned <- df
+
+# Save the cleaned data
+write_csv(df_cleaned, "../WenjingProjectSolution/dataset/cleaned_data.csv", na = "")
+```
+
+``` r
+df <- read.csv("../WenjingProjectSolution/dataset/cleaned_data.csv", stringsAsFactors = FALSE)
+
+colnames(df)
+```
+
+    ##  [1] "participant"                                  
+    ##  [2] "sex"                                          
+    ##  [3] "age_range"                                    
+    ##  [4] "do_you_have_a_mobile_phone"                   
+    ##  [5] "is_this_mobile_phone_yours_or_do_you_share_it"
+    ##  [6] "age_group"                                    
+    ##  [7] "age_sex_group"                                
+    ##  [8] "mobile_phone_ownership"                       
+    ##  [9] "platform_for_health"                          
+    ## [10] "platform_for_hisb"                            
+    ## [11] "platform_for_health_topic"                    
+    ## [12] "computer_searching"                           
+    ## [13] "computer_socializing"                         
+    ## [14] "computer_entertainment"                       
+    ## [15] "computer_studying"                            
+    ## [16] "computer_others"                              
+    ## [17] "mobile_searching"                             
+    ## [18] "mobile_socializing"                           
+    ## [19] "mobile_entertainment"                         
+    ## [20] "mobile_studying"                              
+    ## [21] "mobile_others"                                
+    ## [22] "hisb_rate"
+
+``` r
+dim(df)
+```
+
+    ## [1] 197  22
+
+``` r
+df <- df %>%
+  filter(
+    !age_sex_group %in% c(
+      "NA F",
+      "NA M"
+    )
+  )
+
+df <- df %>%
+  mutate(
+    computer_hisb =
+      computer_searching * hisb_rate,
+
+    mobile_hisb =
+      mobile_searching * hisb_rate
+  )
+# =========================
+# Summaries
+# =========================
+
+computer_summary <- df %>%
+  group_by(age_sex_group) %>%
+  summarise(
+    Searching = mean(computer_searching),
+    Socializing = mean(computer_socializing),
+    Entertainment = mean(computer_entertainment),
+    Studying = mean(computer_studying),
+    Other = mean(computer_others),
+    HISB_Rate = mean(hisb_rate),
+    .groups = "drop"
+  )
+
+mobile_summary <- df %>%
+  group_by(age_sex_group) %>%
+  summarise(
+    Searching = mean(mobile_searching),
+    Socializing = mean(mobile_socializing),
+    Entertainment = mean(mobile_entertainment),
+    Studying = mean(mobile_studying),
+    Other = mean(mobile_others),
+    HISB_Rate = mean(hisb_rate),
+    .groups = "drop"
+  )
+```
+
+``` r
+normalize_usage <- function(dat){
+
+  dat %>%
+    rowwise() %>%
+    mutate(
+
+      total =
+        Searching +
+        Socializing +
+        Entertainment +
+        Studying +
+        Other,
+
+      Searching = Searching / total,
+      Socializing = Socializing / total,
+      Entertainment = Entertainment / total,
+      Studying = Studying / total,
+      Other = Other / total
+
+    ) %>%
+    ungroup() %>%
+    select(-total)
+
+}
+
+computer_summary <- normalize_usage(computer_summary)
+mobile_summary <- normalize_usage(mobile_summary)
+```
+
+``` r
+plot_df <- bind_rows(
+
+  computer_summary %>%
+    pivot_longer(
+      Searching:Other,
+      names_to = "Usage",
+      values_to = "Proportion"
+    ) %>%
+    mutate(Device = "Computer"),
+
+  mobile_summary %>%
+    pivot_longer(
+      Searching:Other,
+      names_to = "Usage",
+      values_to = "Proportion"
+    ) %>%
+    mutate(Device = "Mobile Phone")
+
+)
+
+hisb_df <- bind_rows(
+
+  computer_summary %>%
+    mutate(Device = "Computer"),
+
+  mobile_summary %>%
+    mutate(Device = "Mobile Phone")
+
+)
+```
+
+``` r
+group_order <- c(
+  "<=15 F",
+  "<=15 M",
+  "16-17 F",
+  "16-17 M",
+  ">=18 F",
+  ">=18 M"
+)
+
+plot_df$age_sex_group <-
+  factor(
+    plot_df$age_sex_group,
+    levels = group_order
+  )
+
+hisb_df$age_sex_group <-
+  factor(
+    hisb_df$age_sex_group,
+    levels = group_order
+  )
+
+computer_summary
+```
+
+    ## # A tibble: 6 × 7
+    ##   age_sex_group Searching Socializing Entertainment Studying  Other HISB_Rate
+    ##   <chr>             <dbl>       <dbl>         <dbl>    <dbl>  <dbl>     <dbl>
+    ## 1 16-17 F          0.143       0.0769         0.516    0.231 0.0330    0.178 
+    ## 2 16-17 M          0.113       0.0484         0.597    0.210 0.0323    0.219 
+    ## 3 <=15 F           0.0541      0.0811         0.541    0.270 0.0541    0.182 
+    ## 4 <=15 M           0.0714      0.0476         0.667    0.190 0.0238    0.0833
+    ## 5 >=18 F           0.133       0.0667         0.6      0.133 0.0667    0.222 
+    ## 6 >=18 M           0.115       0.0385         0.731    0.115 0         0.0833
+
+``` r
+mobile_summary
+```
+
+    ## # A tibble: 6 × 7
+    ##   age_sex_group Searching Socializing Entertainment Studying  Other HISB_Rate
+    ##   <chr>             <dbl>       <dbl>         <dbl>    <dbl>  <dbl>     <dbl>
+    ## 1 16-17 F          0.0741      0.259          0.506    0.123 0.0370    0.178 
+    ## 2 16-17 M          0.0943      0.113          0.642    0.132 0.0189    0.219 
+    ## 3 <=15 F           0.0588      0.279          0.485    0.147 0.0294    0.182 
+    ## 4 <=15 M           0.0465      0.163          0.581    0.186 0.0233    0.0833
+    ## 5 >=18 F           0.190       0.143          0.476    0.143 0.0476    0.222 
+    ## 6 >=18 M           0.115       0.0769         0.654    0.154 0         0.0833
+
+``` r
+hisb_df <- plot_df %>%
+  select(age_sex_group, Device) %>%  # 保留 Device 列以匹配分面图
+  distinct() %>%
+  left_join(
+    df %>%
+      # 直接把现存的 >0 的值修正为 1，算出真正的比例
+      mutate(hisb_indicator = ifelse(hisb_rate > 0, 1, 0)) %>%
+      group_by(age_sex_group) %>%
+      summarise(HISB_Rate = mean(hisb_indicator, na.rm = TRUE), .groups = "drop"),
+    by = "age_sex_group"
+  )
+
+
+usage_colors <- c(
+  Searching = "#1B9E77",
+  Socializing = "#D95F02",
+  Entertainment = "#7570B3",
+  Studying = "#E7298A",
+  Other = "#66A61E"
+)
+
+
+p <- ggplot(
+  plot_df,
+  aes(
+    x = age_sex_group,
+    y = Proportion,
+    fill = Usage
+  )
+) +
+  geom_col() +
+
+  # 柱状图上的比例数字
+  geom_text(
+    aes(label = ifelse(Proportion > 0.03, percent(Proportion, accuracy = 1), "")),
+    position = position_stack(vjust = 0.5), 
+    color = "white",                        
+    size = 2.8   
+  ) +
+
+  # HISB Rate 折线
+  geom_line(
+    data = hisb_df,
+    aes(x = age_sex_group, y = HISB_Rate, group = 1),
+    inherit.aes = FALSE,
+    colour = "black",
+    linewidth = 1
+  ) +
+
+  # HISB Rate 数据点
+  geom_point(
+    data = hisb_df,
+    aes(x = age_sex_group, y = HISB_Rate),
+    inherit.aes = FALSE,
+    colour = "black",
+    size = 3
+  ) +
+
+  # HISB Rate 防遮挡标签
+  geom_label(
+    data = hisb_df,
+    aes(
+      x = age_sex_group,
+      y = HISB_Rate,
+      label = round(HISB_Rate, 2) 
+    ),
+    inherit.aes = FALSE,
+    size = 3.5,
+    color = "white",
+    fill = alpha("black", 0.7),
+    fontface = "bold",
+    label.padding = unit(0.2, "lines")
+  ) +
+
+  facet_wrap(
+    ~Device,
+    nrow = 1
+  ) +
+
+  scale_fill_manual(
+    values = usage_colors
+  ) +
+
+  scale_y_continuous(
+    labels = percent,
+    sec.axis = sec_axis(
+      ~.,
+      name = "Overall HISB Rate", 
+      labels = percent
+    )
+  ) +
+
+  labs(
+    title = str_wrap("Electronic Device Usage and Overall HISB Rate by Age-Sex Group", width = 50),
+    x = "Age×Sex Group",
+    y = "Proportion of Participants",
+    fill = "Usage Category"
+  ) +
+
+  theme_bw(base_size = 12) +
+
+  theme(
+    legend.position = "bottom", 
+    plot.title = element_text(
+      hjust = 0.5,
+      face = "bold",
+      margin = margin(b = 15)
+    )
+  )
+
+p
+```
+
+![](WenjingProjectSolution_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+
+``` r
+ggsave("figures/usage_hisb_plot.png", p, width=14, height=12, dpi=300)
+```
