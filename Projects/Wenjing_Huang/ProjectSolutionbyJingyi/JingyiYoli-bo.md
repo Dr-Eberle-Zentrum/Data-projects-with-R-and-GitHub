@@ -230,11 +230,11 @@ df <- df %>%
 df_cleaned <- df
 
 # Save the cleaned data
-write_csv(df_cleaned, "../WenjingProjectSolution/dataset/cleaned_data.csv", na = "")
+write_csv(df_cleaned, "../ProjectSolutionbyJingyi/dataset/cleaned_data.csv", na = "")
 ```
 
 ``` r
-df <- read.csv("../WenjingProjectSolution/dataset/cleaned_data.csv", stringsAsFactors = FALSE)
+df <- read.csv("../ProjectSolutionbyJingyi/dataset/cleaned_data.csv", stringsAsFactors = FALSE)
 
 colnames(df)
 ```
@@ -539,7 +539,7 @@ p <- ggplot(
 p
 ```
 
-![](WenjingProjectSolution_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+![](JingyiYoli-bo_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 ``` r
 ggsave("figures/usage_hisb_plot.png", p, width=14, height=12, dpi=300)

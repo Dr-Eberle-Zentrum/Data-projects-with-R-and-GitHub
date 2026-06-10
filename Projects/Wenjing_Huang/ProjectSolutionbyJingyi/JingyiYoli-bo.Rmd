@@ -18,7 +18,7 @@ library(janitor)
 library(scales)
 
 # Load the data
-df <- read_delim("../WenjingProjectSolution/dataset/primarydata.csv", delim = ";", quote ="", escape_double = FALSE, locale = locale(encoding = "UTF-8"), trim_ws = TRUE)
+df <- read_delim("../ProjectSolutionbyJingyi/dataset/primarydata.csv", delim = ";", quote ="", escape_double = FALSE, locale = locale(encoding = "UTF-8"), trim_ws = TRUE)
 
 df <- clean_names(df)
 
@@ -259,13 +259,13 @@ df <- df %>%
 df_cleaned <- df
 
 # Save the cleaned data
-write_csv(df_cleaned, "../WenjingProjectSolution/dataset/cleaned_data.csv", na = "")
+write_csv(df_cleaned, "../ProjectSolutionbyJingyi/dataset/cleaned_data.csv", na = "")
 
 ```
 
 
 ```{r}
-df <- read.csv("../WenjingProjectSolution/dataset/cleaned_data.csv", stringsAsFactors = FALSE)
+df <- read.csv("../ProjectSolutionbyJingyi/dataset/cleaned_data.csv", stringsAsFactors = FALSE)
 
 colnames(df)
 dim(df)
@@ -410,11 +410,11 @@ mobile_summary
 
 ```{r}
 hisb_df <- plot_df %>%
-  select(age_sex_group, Device) %>%  # 保留 Device 列以匹配分面图
+  select(age_sex_group, Device) %>% 
   distinct() %>%
   left_join(
     df %>%
-      # 直接把现存的 >0 的值修正为 1，算出真正的比例
+      
       mutate(hisb_indicator = ifelse(hisb_rate > 0, 1, 0)) %>%
       group_by(age_sex_group) %>%
       summarise(HISB_Rate = mean(hisb_indicator, na.rm = TRUE), .groups = "drop"),
@@ -441,7 +441,7 @@ p <- ggplot(
 ) +
   geom_col() +
 
-  # 柱状图上的比例数字
+  # number labels for proportions > 3%
   geom_text(
     aes(label = ifelse(Proportion > 0.03, percent(Proportion, accuracy = 1), "")),
     position = position_stack(vjust = 0.5), 
@@ -449,7 +449,7 @@ p <- ggplot(
     size = 2.8   
   ) +
 
-  # HISB Rate 折线
+  # HISB Rate lines
   geom_line(
     data = hisb_df,
     aes(x = age_sex_group, y = HISB_Rate, group = 1),
@@ -458,7 +458,7 @@ p <- ggplot(
     linewidth = 1
   ) +
 
-  # HISB Rate 数据点
+  # HISB Rate points
   geom_point(
     data = hisb_df,
     aes(x = age_sex_group, y = HISB_Rate),
@@ -467,7 +467,7 @@ p <- ggplot(
     size = 3
   ) +
 
-  # HISB Rate 防遮挡标签
+  # HISB Rate labels
   geom_label(
     data = hisb_df,
     aes(
