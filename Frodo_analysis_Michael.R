@@ -1,0 +1,459 @@
+library(dplyr)
+library(tidyr)
+library(stringer)
+library(readr)   # für read_csv
+
+# 1. Data Import and Cleaning
+
+# Import datasets
+words <- read_csv("~/Downloads/WordsByCharacter.csv")
+info  <- read_csv("~/Downloads/InformationByCharacter.csv", 
+                  locale = locale(encoding = "UTF-8"))
+
+# Quick checks
+glimpse(words)
+glimpse(info)
+
+# Check special characters (sollte "Lothlórien" korrekt anzeigen)
+unique(info$Realm)
+# zeigt Lothlórien nicht korrekt an.
+
+# Check missing values
+colSums(is.na(words)) # no missing values 
+colSums(is.na(info)) # in "Realm" are 2 missing values. 
+
+# Fill missing genders with "Unknown"
+info$Gender[is.na(info$Gender)] <- "Unknown"
+
+# Now I check, if the character names in both datasets match,
+# to ensure we can merge them later if needed.
+# Extract unique character names from both datasets
+words_names <- unique(words$Character)
+info_names  <- unique(info$Character)
+
+# See which names are in words but not in info
+setdiff(words_names, info_names) # in words is "Boson", which is not in info. 
+# See which are in info but not in words
+setdiff(info_names, words_names) # In info is "Bosun", which is not in words...
+
+# Korrektur: "Bosun" in info is changed to "Boson" (like in words)
+info$Character[info$Character == "Bosun"] <- "Boson"
+
+# Check again
+setdiff(unique(words$Character), unique(info$Character))
+# Now there is no mismatch!
+
+# Now merge Datasets
+lotr_full <- words %>%
+  left_join(info, by = c("Character" = "Character"))
+
+# Check which characters have missing info after merge
+missing_info <- lotr_full %>%
+  filter(is.na(Gender)) %>%
+  pull(Character) %>%
+  unique()
+print(missing_info) # -> No char with missing info.
+
+# create new race variabel "Race_Final" with race from info if available, otherwise from words.
+
+lotr_full <- lotr_full %>%
+  mutate(Race_final = if_else(is.na(Race_from_info), Race_from_words, Race_from_info))
+
+glimpse(lotr_full) # looks good! 
+
+n_distinct(lotr_full$Character) # still 74 characters. 
+
+
+# Speaker Time Analysis
+
+
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(ggplot2)
+library(forcats)   
+library(scales)    
+
+
+# 2.1 Speaker time by volume (book)
+
+# Calculate total words per book
+words_by_book <- lotr_full %>%
+  group_by(Film) %>%
+  summarise(total_words = sum(Words, na.rm = TRUE)) %>%
+  ungroup()
+print(words_by_book)
+
+# Which book has highest / lowest total words?
+cat("Total words per book:\n")
+print(words_by_book)
+cat("\nHighest:", words_by_book$Film[which.max(words_by_book$total_words)], "\n")
+cat("Lowest:", words_by_book$Film[which.min(words_by_book$total_words)], "\n")
+
+# Donut chart of total words across books
+# Prepare data for donut: we need a dummy "total" to create the hole
+donut_data <- words_by_book %>%
+  mutate(share = total_words / sum(total_words),
+         label = paste0(Film, "\n", round(share*100, 1), "%"))
+
+p_donut <- ggplot(donut_data, aes(x = 2, y = share, fill = Film)) +
+  geom_bar(stat = "identity", width = 1, color = "white") +
+  coord_polar(theta = "y", start = 0) +
+  xlim(0.5, 2.5) +   # creates the hole (donut effect)
+  geom_text(aes(x = 2.5, label = label), position = position_stack(vjust = 0.5), size = 4) +
+  theme_void() +
+  labs(title = "Total spoken words by book") +
+  scale_fill_brewer(palette = "Set2") +
+  theme(legend.position = "right")
+
+print(p_donut)
+
+
+# 2.2. Speaker time by character
+
+# 2.2.1 Total across all three books and visualization
+# Sum words per character (across all books)
+char_total <- lotr_full %>%
+  group_by(Character, Gender) %>%
+  summarise(total_words = sum(Words, na.rm = TRUE), .groups = "drop") %>%
+  arrange(desc(total_words))
+
+# Create "other" category for characters not in top 9
+char_total <- char_total %>%
+  mutate(Character_lumped = fct_lump(Character, n = 9, w = total_words, other_level = "Other"))
+
+# Aggregate the "Other" group
+char_total_agg <- char_total %>%
+  group_by(Character_lumped, Gender) %>%
+  summarise(total_words = sum(total_words), .groups = "drop") %>%
+  arrange(desc(total_words))
+
+# Assign a base color per gender
+gender_base <- c("Male" = "#2E86AB", "Female" = "#D64933", "Unknown" = "#A0A0A0")
+
+# For each character, create a slightly modified shade (by adjusting brightness)
+library(scales)
+
+
+p_pie_total <- ggplot(char_total_agg, aes(x = "", y = total_words, fill = Gender)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar(theta = "y") +
+  geom_text(aes(label = paste0(Character_lumped, "\n", round(total_words/sum(total_words)*100, 1), "%")),
+            position = position_stack(vjust = 0.5), size = 3.5) +
+  scale_fill_manual(values = c("Male" = "#4682B4", "Female" = "#CD5C5C", "Unknown" = "#B0B0B0")) +
+  theme_void() +
+  labs(title = "Total spoken words by character (all books)") +
+  theme(legend.position = "right")
+
+print(p_pie_total) # -> does not look so good. 
+
+# different method:
+
+# Pie chart ohne Charakternamen im Chart
+p_pie_legend <- ggplot(char_total_agg, aes(x = "", y = total_words, fill = Character_lumped)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar(theta = "y") +
+  geom_text(aes(label = paste0(round(total_words/sum(total_words)*100, 1), "%")),
+            position = position_stack(vjust = 0.5), size = 3) +
+  scale_fill_manual(name = "Character", 
+                    values = setNames(colorRampPalette(c("#4682B4", "#CD5C5C", "#B0B0B0"))(nrow(char_total_agg)),
+                                      char_total_agg$Character_lumped)) +
+  theme_void() +
+  labs(title = "Total spoken words by character (all books)") +
+  theme(legend.position = "right",
+        legend.text = element_text(size = 8))
+
+print(p_pie_legend) # looks better but one pair of numbers is still overlapping. 
+
+# Just 5 + Other (not Top 9)
+char_total_agg_5 <- char_total %>%
+  mutate(Character_lumped = fct_lump(Character, n = 5, w = total_words, other_level = "Other")) %>%
+  group_by(Character_lumped, Gender) %>%
+  summarise(total_words = sum(total_words), .groups = "drop") %>%
+  arrange(desc(total_words))
+
+p_pie_5 <- ggplot(char_total_agg_5, aes(x = "", y = total_words, fill = Gender)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar(theta = "y") +
+  geom_text(aes(label = paste0(Character_lumped, "\n", 
+                               round(total_words/sum(total_words)*100, 1), "%")),
+            position = position_stack(vjust = 0.5), size = 3.5) +
+  scale_fill_manual(values = c("Male" = "#4682B4", "Female" = "#CD5C5C", "Unknown" = "#B0B0B0")) +
+  theme_void() +
+  labs(title = "Total spoken words (Top 5 characters)") +
+  theme(legend.position = "right")
+
+print(p_pie_5) # looks better but still not ideal.
+
+
+
+# 2.2.2 Total speaking time by character for each individual book
+# Create a list of three pie charts (one per book)
+books <- unique(lotr_full$Film)
+
+pie_list <- list()
+for (b in books) {
+# Subset data for the book
+  book_data <- lotr_full %>% filter(Film == b)
+  
+# Sum per character in this book
+  char_book <- book_data %>%
+    group_by(Character, Gender) %>%
+    summarise(total_words = sum(Words, na.rm = TRUE), .groups = "drop") %>%
+    arrange(desc(total_words)) %>%
+    mutate(Character_lumped = fct_lump(Character, n = 9, w = total_words, other_level = "Other"))
+  
+  char_book_agg <- char_book %>%
+    group_by(Character_lumped, Gender) %>%
+    summarise(total_words = sum(total_words), .groups = "drop")
+  
+  # Pie chart
+  p <- ggplot(char_book_agg, aes(x = "", y = total_words, fill = Gender)) +
+    geom_bar(stat = "identity", width = 1) +
+    coord_polar(theta = "y") +
+    geom_text(aes(label = paste0(Character_lumped, "\n", round(total_words/sum(total_words)*100, 1), "%")),
+              position = position_stack(vjust = 0.5), size = 3) +
+    scale_fill_manual(values = c("Male" = "#4682B4", "Female" = "#CD5C5C", "Unknown" = "#B0B0B0")) +
+    theme_void() +
+    labs(title = b) +
+    theme(legend.position = "none")  # legend would clutter, we show per plot
+  
+  pie_list[[b]] <- p
+}
+
+# Arrange the three pie charts side by side
+library(patchwork)
+combined_pies <- wrap_plots(pie_list, ncol = 3) +
+  plot_annotation(title = "Spoken words per book – top 9 characters",
+                  theme = theme(plot.title = element_text(hjust = 0.5)))
+print(combined_pies)
+
+
+# 2.3. Speaker time of Frodo
+
+# 2.3.1 Frodo's words compared to all others
+total_all <- sum(lotr_full$Words, na.rm = TRUE)
+frodo_words <- lotr_full %>% filter(Character == "Frodo") %>% pull(Words) %>% sum(na.rm = TRUE)
+other_words <- total_all - frodo_words
+
+frodo_pie <- data.frame(
+  category = c("Frodo", "Other characters"),
+  words = c(frodo_words, other_words)
+) %>%
+  mutate(percent = words / sum(words) * 100,
+         label = paste0(category, "\n", round(percent, 1), "%"))
+
+print(frodo_pie) # Frodo speaks 2281 words. Other characters speak 29688 words. 
+
+p_frodo_words <- ggplot(frodo_pie, aes(x = "", y = words, fill = category)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar(theta = "y") +
+  geom_text(aes(label = label), position = position_stack(vjust = 0.5), size = 5) +
+  scale_fill_manual(values = c("Frodo" = "#FFB347", "Other characters" = "#5D9B9B")) +
+  theme_void() +
+  labs(title = "Frodo's share of all words") +
+  theme(legend.position = "bottom")
+
+print(p_frodo_words) # Pie in relative numbers. Frodo speaks 7.1% of all words.
+
+# 2.3.2 Pie chart: Number of chapters in which Frodo speaks
+total_chapters <- lotr_full %>%
+  distinct(Film, Chapter) %>%
+  nrow()
+
+frodo_chapters <- lotr_full %>%
+  filter(Character == "Frodo") %>%
+  distinct(Film, Chapter) %>%
+  nrow()
+
+chapter_pie <- data.frame(
+  category = c("Frodo speaks", "Other chapters"),
+  count = c(frodo_chapters, total_chapters - frodo_chapters)
+) %>%
+  mutate(percent = count / sum(count) * 100,
+         label = paste0(category, "\n", round(percent, 1), "%"))
+
+print(chapter_pie) # Frodo speaks in 57 chapters and speaks not in 131 chapters
+# So Frodo speaks in 30,3% of all chapters and speaks not in 69,7% of all chapters . 
+
+p_frodo_chapters <- ggplot(chapter_pie, aes(x = "", y = count, fill = category)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar(theta = "y") +
+  geom_text(aes(label = label), position = position_stack(vjust = 0.5), size = 5) +
+  scale_fill_manual(values = c("Frodo speaks" = "#FFB347", "Other chapters" = "#5D9B9B")) +
+  theme_void() +
+  labs(title = "Chapters with Frodo speaking") +
+  theme(legend.position = "bottom")
+
+print(p_frodo_chapters)
+
+# 2.3.3 (its 2.3.2 in the task?) Stacked barplot: Percentage of Frodo's words per chapter
+# For each chapter, compute total words and Frodo's words
+chapter_frodo <- lotr_full %>%
+  group_by(Film, Chapter) %>%
+  summarise(total_chapter = sum(Words, na.rm = TRUE),
+            frodo_chapter = sum(Words[Character == "Frodo"], na.rm = TRUE), .groups = "drop") %>%
+  mutate(percent_frodo = frodo_chapter / total_chapter * 100,
+         chapter_label = paste0(Film, "\n", Chapter))
+
+print(chapter_frodo) 
+
+# IN which chapters speaks frodo the most?
+chapter_frodo %>%
+  arrange(desc(percent_frodo)) %>%
+  head(10) %>%
+  select(Film, Chapter, percent_frodo) # -> IN Chapter "Osgiliath" in "The Two Towers" 
+# Frodo speaks 76.7% of the words which is the most in all chapters.  
+
+# Create a factor for ordering (by book and chapter number)
+# Extract chapter number from Chapter column (e.g., "01: Prologue" -> numeric)
+chapter_frodo <- chapter_frodo %>%
+  mutate(chapter_num = as.numeric(str_extract(Chapter, "^[0-9]+"))) %>%
+  arrange(Film, chapter_num) %>%
+  mutate(chapter_label = factor(chapter_label, levels = unique(chapter_label)))
+
+p_stacked <- ggplot(chapter_frodo, aes(x = chapter_label, y = percent_frodo, fill = "Frodo")) +
+  geom_bar(stat = "identity", width = 0.8, fill = "#FFB347") +
+  geom_text(aes(label = paste0(round(percent_frodo, 1), "%")), vjust = -0.5, size = 2.5) +
+  labs(x = "Chapter", y = "Percentage of words spoken by Frodo",
+       title = "Frodo's word share per chapter") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size = 6),
+        plot.title = element_text(hjust = 0.5))
+
+# Combine the three plots into one composite plot
+# Layout: two pie charts on bottom row (left and right) and barplot on top row (full width)
+library(patchwork)
+composite_plot <- (p_stacked) /
+  (p_frodo_words + p_frodo_chapters) +
+  plot_annotation(title = "Frodo's presence in the story",
+                  theme = theme(plot.title = element_text(hjust = 0.5)))
+
+print(composite_plot) # Total mess because of the many chapters. 
+
+
+# Try to do it with the 3 books instead of all the chapters: 
+
+book_frodo <- lotr_full %>%
+  group_by(Film) %>%
+  summarise(total_book = sum(Words, na.rm = TRUE),
+            frodo_book = sum(Words[Character == "Frodo"], na.rm = TRUE), .groups = "drop") %>%
+  mutate(percent_frodo = frodo_book / total_book * 100,
+         percent_other = 100 - percent_frodo)
+
+# Prepare data for stacked barplot (two rows per book: Frodo and Other)
+book_stack <- book_frodo %>%
+  select(Film, percent_frodo, percent_other) %>%
+  pivot_longer(cols = c(percent_frodo, percent_other),
+               names_to = "type",
+               values_to = "percentage") %>%
+  mutate(type = if_else(type == "percent_frodo", "Frodo", "Other characters"))
+
+# Create stacked barplot
+p_stacked <- ggplot(book_stack, aes(x = Film, y = percentage, fill = type)) +
+  geom_bar(stat = "identity", position = "stack", width = 0.6) +
+  geom_text(aes(label = paste0(round(percentage, 1), "%")),
+            position = position_stack(vjust = 0.5), size = 4) +
+  scale_fill_manual(values = c("Frodo" = "#FFB347", "Other characters" = "#5D9B9B")) +
+  labs(x = "Book", y = "Percentage of words",
+       title = "Frodo's word share per book") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5))
+
+# The composite plot now uses this new p_stacked
+composite_plot <- (p_stacked) /
+  (p_frodo_words + p_frodo_chapters) +
+  plot_annotation(title = "Frodo's presence in the story",
+                  theme = theme(plot.title = element_text(hjust = 0.5)))
+
+print(composite_plot) # Looks good now!
+
+
+# 2.4: Optional: Character connections (co-occurrence heatmap)
+
+# For each chapter, get all characters that appear
+# Then generate all pairs of characters within that chapter and count co-occurrences
+
+# First we need the list of unique chapters with their characters
+chapter_characters <- lotr_full %>%
+  select(Film, Chapter, Character) %>%
+  distinct()  # each character once per chapter
+print(chapter_characters) # ok looks good.
+
+# Function to generate all pairs from a vector of characters
+generate_pairs <- function(chars) {
+  if (length(chars) < 2) return(NULL)
+  combn(chars, 2, simplify = FALSE)
+}
+
+print(generate_pairs(c("Frodo", "Sam", "Gandalf"))) # test the function, looks good.
+
+# Generate pairs per chapter
+pairs_list <- chapter_characters %>%
+  group_by(Film, Chapter) %>%
+  summarise(chars = list(Character), .groups = "drop") %>%
+  mutate(pairs = map(chars, generate_pairs)) %>%
+  unnest(pairs, keep_empty = FALSE) %>%
+  mutate(Character1 = map_chr(pairs, 1),
+         Character2 = map_chr(pairs, 2)) %>%
+  select(Film, Chapter, Character1, Character2)
+
+print(pairs_list) # looks good, we have pairs of characters per chapter.
+
+# Count co-occurrences across all chapters
+co_occurrence <- pairs_list %>%
+  group_by(Character1, Character2) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  filter(count > 5) %>%   # only keep pairs appearing in >5 chapters to reduce clutter
+  mutate(Character1 = factor(Character1),
+         Character2 = factor(Character2))
+
+print(co_occurrence) # looks good!!
+# Arargon and Boromir appear in 13 chapters together, Arargon and Eomer in 6 etc. 
+
+# Create heatmap
+if (nrow(co_occurrence) > 0) {
+  p_heatmap <- ggplot(co_occurrence, aes(x = Character1, y = Character2, fill = count)) +
+    geom_tile() +
+    scale_fill_gradient(low = "white", high = "steelblue", name = "Co-occurrence\n(chapters)") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size = 8),
+          axis.text.y = element_text(size = 8),
+          panel.grid = element_blank()) +
+    labs(x = "", y = "", title = "Character co‑appearance in chapters (count > 5)")
+  print(p_heatmap)
+} else {
+  cat("No character pairs with co‑occurrence > 5. Try lowering threshold or check data.\n")
+}
+
+# Frodo and Sam apear in the most chapters togheter. Then comes Arargon and Gimli.
+
+# In how many chapters Frodo and Sam appear together?
+frodo_sam_chapters <- pairs_list %>%
+  filter((Character1 == "Frodo" & Character2 == "Sam") | (Character1 == "Sam" & Character2 == "Frodo")) %>%
+  nrow()
+cat("Frodo and Sam appear together in", frodo_sam_chapters, "chapters.\n")
+# In 46 chapters!
+
+# In how many chapters does Frodo appear without Sam?
+frodo_without_sam_chapters <- chapter_characters %>%
+  filter(Character == "Frodo") %>%
+  anti_join(chapter_characters %>% filter(Character == "Sam"), by = c("Film", "Chapter")) %>%
+  nrow()
+cat("Frodo appears without Sam in", frodo_without_sam_chapters, "chapters.\n")
+# In just 11 chapters Frodo appears without Sam.
+
+# In how many chapters does Arargon and Gimli appear together?
+aragorn_gimli_chapters <- pairs_list %>%
+  filter((Character1 == "Aragorn" & Character2 == "Gimli") | (Character1 == "Gimli" & Character2 == "Aragorn")) %>%
+  nrow()
+cat("Aragorn and Gimli appear together in", aragorn_gimli_chapters, "chapters.\n")
+# In  39 chapters Aragorn and Gimli appear together.
+
+#In how many chapters does Aragon appear without Gimli?
+aragorn_without_gimli_chapters <- chapter_characters %>%
+  filter(Character == "Aragorn") %>%
+  anti_join(chapter_characters %>% filter(Character == "Gimli"), by = c("Film", "Chapter")) %>%
+  nrow()
+cat("Aragorn appears without Gimli in", aragorn_without_gimli_chapters, "chapters.\n")
+# In 22 chapters Aragorn appears without Gimli... 
