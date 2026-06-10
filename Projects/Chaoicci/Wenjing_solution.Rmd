@@ -3,3 +3,55 @@ title: "Wenjing_solution"
 output: html_document
 ---
 
+
+
+```{r import_data}
+
+install.packages("jsonlite")
+library(jsonlite)
+data <- fromJSON("https://huggingface.co/datasets/lukeslp/world-languages/raw/main/world_languages_integrated.json")
+View(data)
+
+```
+
+
+```{r reform_dataframe }
+language_name <- data$name
+speaker_count <- data$speaker_count$count
+speaking_country<- data$speaker_count$metadata$countries
+speaking_country[sapply(speaking_country,is.null)] <- NA
+speaking_country <- sapply(speaking_country,function(x){if(all(is.na(x))) NA else paste(x,collapse = ", ")})
+re_df <- data.frame(language_name,speaking_country,speaker_count)
+
+```
+
+
+
+```{r data_cleaning}
+language_num_in_countries <- re_df %>% filter(!is.na(speaking_country)) %>% separate_rows(speaking_country,sep = ",\\s*") %>% group_by(speaking_country)%>% summarise(language_count=n_distinct(language_name)) %>% arrange(desc(language_count)) %>% head(20)
+
+View(language_num_in_countries)
+
+```
+
+```{r data_visualization_Q1}
+install.packages("rnaturalearth")
+install.packages("rnaturalearthdata")
+library(rnaturalearth)
+
+world_map <- ne_countries(scale = "small",returnclass = "sf")
+map_data <- world_map %>% left_join(language_num_in_countries, by=c("name"="speaking_country") )
+plot<- ggplot(data = map_data) +
+    geom_sf(aes(fill = language_count), color = "red", size = 0.1) +
+    scale_fill_viridis_c(name = "Number of Languages", 
+                         option = "viridis", 
+                         na.value = "gray",
+                         direction = -1) + 
+    labs(title = "Linguistic Diversity by Country",
+         subtitle = "Number of languages spoken per country")
+    theme_minimal() +
+    theme(legend.position = "bottom",
+          legend.key.width = unit(2, "cm"))
+          
+print(plot)
+```
