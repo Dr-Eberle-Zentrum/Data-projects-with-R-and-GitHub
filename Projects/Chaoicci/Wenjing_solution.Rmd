@@ -1,21 +1,22 @@
 ---
 title: "Wenjing_solution"
-output: md_document
+output: html_document
 ---
 
+Plot for Q1:
 
-
-```{r import_data}
-
-install.packages("jsonlite")
+```{r import_data,echo=FALSE,message=FALSE,include=FALSE}
+library(tidyverse)
+library(dplyr)
+install.packages("jsonlite",repos = "https://cran.rstudio.com/")
 library(jsonlite)
 data <- fromJSON("https://huggingface.co/datasets/lukeslp/world-languages/raw/main/world_languages_integrated.json")
-View(data)
+
 
 ```
 
 
-```{r reform_dataframe }
+```{r reform_dataframe ,echo=FALSE,message=FALSE}
 language_name <- data$name
 speaker_count <- data$speaker_count$count
 speaking_country<- data$speaker_count$metadata$countries
@@ -27,16 +28,17 @@ re_df <- data.frame(language_name,speaking_country,speaker_count)
 
 
 
-```{r data_cleaning}
-language_num_in_countries <- re_df %>% filter(!is.na(speaking_country)) %>% separate_rows(speaking_country,sep = ",\\s*") %>% group_by(speaking_country)%>% summarise(language_count=n_distinct(language_name)) %>% arrange(desc(language_count)) %>% head(20)
+```{r data_cleaning,echo=FALSE,message=FALSE}
+language_num_in_countries <- re_df %>% 
+  filter(!is.na(speaking_country)) %>%separate_rows(speaking_country,sep = ",\\s*") %>% group_by(speaking_country) %>% summarise(language_count=n_distinct(language_name)) %>% arrange(desc(language_count)) %>% head(20)
 
-View(language_num_in_countries)
+
 
 ```
 
-```{r data_visualization_Q1}
-install.packages("rnaturalearth")
-install.packages("rnaturalearthdata")
+```{r data_visualization_Q1,echo=FALSE,message=FALSE,warning=FALSE,warning=FALSE,results='hide'}
+install.packages("rnaturalearth",repos = "https://cran.rstudio.com/")
+install.packages("rnaturalearthdata",repos = "https://cran.rstudio.com/")
 library(rnaturalearth)
 
 world_map <- ne_countries(scale = "small",returnclass = "sf")
