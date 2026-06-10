@@ -1,6 +1,14 @@
+---
+title: "Michaels solution for Emily"
+output: md_document
+---
+
+```{r code}
+
+
 library(dplyr)
 library(tidyr)
-library(stringer)
+library(stringr)
 library(readr)   # für read_csv
 
 # 1. Data Import and Cleaning
@@ -457,3 +465,5 @@ aragorn_without_gimli_chapters <- chapter_characters %>%
   nrow()
 cat("Aragorn appears without Gimli in", aragorn_without_gimli_chapters, "chapters.\n")
 # In 22 chapters Aragorn appears without Gimli... 
+
+```
