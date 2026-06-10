@@ -5,17 +5,18 @@ output: md_document
 
 ## Solution of "Wrangling and Analyzing Laptop Market Data"
 
-
-
-```{r setup, echo=FALSE, message=FALSE}
+First loading the necessary libraries:
+```{r setup, echo=TRUE, message=FALSE}
 
 library(tidyverse)
 library(stringr)
-
+library(scales)
+library(ggridges)
 
 ```
 
-```{r tableImportManipulation, echo=FALSE, message=FALSE}
+Doing all the data transformations:
+```{r tableImportManipulation, echo=TRUE, message=FALSE}
 
 uncleanData <- "~/Data-projects-with-R-and-GitHub/Projects/Jingyi-L/data/laptopData.csv" %>% 
   read_csv(na = c("", "NA", "?"))
@@ -42,11 +43,9 @@ data <- uncleanData %>%
 ```
 
 
+Doing the Visualizations, Nr.3 was not possible as far as I could tell, so instead I drew them after each other.
+```{r Visualisation, echo=TRUE, message=FALSE}
 
-```{r Visualisation, echo=FALSE, message=FALSE}
-
-library(scales)
-library(ggridges)
 
 #1
 data %>% 
@@ -74,7 +73,6 @@ data %>%
   geom_density_ridges(data = data %>%
                         filter( TypeName %in% c("Notebook", "Ultrabook", "Gaming")), 
                       aes(y = TypeName, scale = 1.5), alpha = 0.5)
-
 
 
 ```
