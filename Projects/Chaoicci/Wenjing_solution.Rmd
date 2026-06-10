@@ -1,6 +1,6 @@
 ---
 title: "Wenjing_solution"
-output: html_document
+output: md_document
 ---
 
 
