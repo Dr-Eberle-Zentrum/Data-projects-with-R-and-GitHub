@@ -1,32 +1,9 @@
----
-title: "Wenjing's Project Solution"
-author: "Jingyi LI"
-date: "2026-06-09"
-output: github_document
-always_allow_html: true
----
+Wenjing’s Project Solution
+================
+Jingyi LI
+2026-06-09
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-
-
-library(tidyverse)
-library(ggplot2)
-library(dplyr)
-library(stringr)
-library(janitor)
-library(scales)
-
-# Load the data
-df <- read_delim("../ProjectSolutionbyJingyi/dataset/primarydata.csv", delim = ";", quote ="", escape_double = FALSE, locale = locale(encoding = "UTF-8"), trim_ws = TRUE)
-
-df <- clean_names(df)
-
-table(df$age_range, useNA = "always")
-
-```
-
-```{r}
+``` r
 # Remove the three open-ended text response columns
 df <- df %>%
   select(
@@ -36,8 +13,7 @@ df <- df %>%
   )
 ```
 
-
-```{r}
+``` r
 # Create a new variable "age_group" based on the "age_range" variable
 df <- df %>%
   mutate(
@@ -55,7 +31,7 @@ df <- df %>%
   )
 ```
 
-```{r}
+``` r
 # Convert binary variables to numeric (1 for "Checked"/"Yes", 0 for "Unchecked"/"No")
 
 df <- df %>%
@@ -69,10 +45,9 @@ df <- df %>%
       TRUE ~ NA_real_
     )
   ))
-
 ```
 
-```{r}
+``` r
 df <- df %>%
   mutate(
     mobile_phone_ownership = case_when(
@@ -86,8 +61,7 @@ df <- df %>%
   )
 ```
 
-```{r}
-
+``` r
 # Platform for health
 df <- df %>%
   mutate(
@@ -148,7 +122,7 @@ df <- df %>%
   )
 ```
 
-```{r}
+``` r
 df <- df %>%
   mutate(
     computer_searching =
@@ -209,11 +183,9 @@ df <- df %>%
       TRUE ~ NA_character_
     )
   )
-
-
 ```
 
-```{r}
+``` r
 # Combine HISB platform usage
 df <- df %>%
   mutate(
@@ -225,7 +197,7 @@ df <- df %>%
   )
 ```
 
-```{r}
+``` r
 # Remove the original platform variables
 df <- df %>%
   select(
@@ -254,25 +226,49 @@ df <- df %>%
   )
 ```
 
-
-```{r}
+``` r
 df_cleaned <- df
 
 # Save the cleaned data
 write_csv(df_cleaned, "../ProjectSolutionbyJingyi/dataset/cleaned_data.csv", na = "")
-
 ```
 
-
-```{r}
+``` r
 df <- read.csv("../ProjectSolutionbyJingyi/dataset/cleaned_data.csv", stringsAsFactors = FALSE)
 
 colnames(df)
+```
+
+    ##  [1] "participant"                                  
+    ##  [2] "sex"                                          
+    ##  [3] "age_range"                                    
+    ##  [4] "do_you_have_a_mobile_phone"                   
+    ##  [5] "is_this_mobile_phone_yours_or_do_you_share_it"
+    ##  [6] "age_group"                                    
+    ##  [7] "age_sex_group"                                
+    ##  [8] "mobile_phone_ownership"                       
+    ##  [9] "platform_for_health"                          
+    ## [10] "platform_for_hisb"                            
+    ## [11] "platform_for_health_topic"                    
+    ## [12] "computer_searching"                           
+    ## [13] "computer_socializing"                         
+    ## [14] "computer_entertainment"                       
+    ## [15] "computer_studying"                            
+    ## [16] "computer_others"                              
+    ## [17] "mobile_searching"                             
+    ## [18] "mobile_socializing"                           
+    ## [19] "mobile_entertainment"                         
+    ## [20] "mobile_studying"                              
+    ## [21] "mobile_others"                                
+    ## [22] "hisb_rate"
+
+``` r
 dim(df)
 ```
 
+    ## [1] 197  22
 
-```{r}
+``` r
 df <- df %>%
   filter(
     !age_sex_group %in% c(
@@ -318,7 +314,7 @@ mobile_summary <- df %>%
   )
 ```
 
-```{r}
+``` r
 normalize_usage <- function(dat){
 
   dat %>%
@@ -348,7 +344,7 @@ computer_summary <- normalize_usage(computer_summary)
 mobile_summary <- normalize_usage(mobile_summary)
 ```
 
-```{r}
+``` r
 plot_df <- bind_rows(
 
   computer_summary %>%
@@ -380,7 +376,7 @@ hisb_df <- bind_rows(
 )
 ```
 
-```{r}
+``` r
 group_order <- c(
   "<=15 F",
   "<=15 M",
@@ -403,12 +399,33 @@ hisb_df$age_sex_group <-
   )
 
 computer_summary
-mobile_summary
-
 ```
 
+    ## # A tibble: 6 × 7
+    ##   age_sex_group Searching Socializing Entertainment Studying  Other HISB_Rate
+    ##   <chr>             <dbl>       <dbl>         <dbl>    <dbl>  <dbl>     <dbl>
+    ## 1 16-17 F          0.143       0.0769         0.516    0.231 0.0330    0.178 
+    ## 2 16-17 M          0.113       0.0484         0.597    0.210 0.0323    0.219 
+    ## 3 <=15 F           0.0541      0.0811         0.541    0.270 0.0541    0.182 
+    ## 4 <=15 M           0.0714      0.0476         0.667    0.190 0.0238    0.0833
+    ## 5 >=18 F           0.133       0.0667         0.6      0.133 0.0667    0.222 
+    ## 6 >=18 M           0.115       0.0385         0.731    0.115 0         0.0833
 
-```{r}
+``` r
+mobile_summary
+```
+
+    ## # A tibble: 6 × 7
+    ##   age_sex_group Searching Socializing Entertainment Studying  Other HISB_Rate
+    ##   <chr>             <dbl>       <dbl>         <dbl>    <dbl>  <dbl>     <dbl>
+    ## 1 16-17 F          0.0741      0.259          0.506    0.123 0.0370    0.178 
+    ## 2 16-17 M          0.0943      0.113          0.642    0.132 0.0189    0.219 
+    ## 3 <=15 F           0.0588      0.279          0.485    0.147 0.0294    0.182 
+    ## 4 <=15 M           0.0465      0.163          0.581    0.186 0.0233    0.0833
+    ## 5 >=18 F           0.190       0.143          0.476    0.143 0.0476    0.222 
+    ## 6 >=18 M           0.115       0.0769         0.654    0.154 0         0.0833
+
+``` r
 hisb_df <- plot_df %>%
   select(age_sex_group, Device) %>% 
   distinct() %>%
@@ -520,9 +537,10 @@ p <- ggplot(
   )
 
 p
-
 ```
-```{r}
+
+![](JingyiYoli-bo_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+
+``` r
 ggsave("figures/usage_hisb_plot.png", p, width=14, height=12, dpi=300)
 ```
-
