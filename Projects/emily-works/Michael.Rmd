@@ -9,13 +9,15 @@ output: md_document
 library(dplyr)
 library(tidyr)
 library(stringr)
-library(readr)   # für read_csv
+library(readr)  
+library(purrr)
+library(tidyverse)
 
 # 1. Data Import and Cleaning
 
 # Import datasets
-words <- read_csv("~/Downloads/WordsByCharacter.csv")
-info  <- read_csv("~/Downloads/InformationByCharacter.csv", 
+words <- read_csv("LOTR/WordsByCharacter.csv")
+info  <- read_csv("LOTR/InformationByCharacter.csv", 
                   locale = locale(encoding = "UTF-8"))
 
 # Quick checks
@@ -63,11 +65,18 @@ missing_info <- lotr_full %>%
 print(missing_info) # -> No char with missing info.
 
 # create new race variabel "Race_Final" with race from info if available, otherwise from words.
+names(lotr_full)
+ # Merge Datasets
+lotr_full <- words %>%
+  left_join(info, by = c("Character" = "Character"))
 
+# Rename race columns for clarity
 lotr_full <- lotr_full %>%
+  rename(Race_from_words = Race.x,
+         Race_from_info = Race.y) %>%
   mutate(Race_final = if_else(is.na(Race_from_info), Race_from_words, Race_from_info))
 
-glimpse(lotr_full) # looks good! 
+glimpse(lotr_full) # now it will work
 
 n_distinct(lotr_full$Character) # still 74 characters. 
 
@@ -465,5 +474,5 @@ aragorn_without_gimli_chapters <- chapter_characters %>%
   nrow()
 cat("Aragorn appears without Gimli in", aragorn_without_gimli_chapters, "chapters.\n")
 # In 22 chapters Aragorn appears without Gimli... 
-
 ```
+
