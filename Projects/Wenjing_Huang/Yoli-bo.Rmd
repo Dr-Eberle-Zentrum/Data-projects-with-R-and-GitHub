@@ -26,8 +26,11 @@ table(df$age_range, useNA = "always")
 
 ```
 
+### Data Cleaning
+
 ```{r}
-# Remove the three open-ended text response columns
+# Removing columns with text answers. Such as "Which social media platform/site (Facebook, Instagram, Twitter, Tiktok, Snapchat) is your favourite to use for your health? And what do you like about it?"
+
 df <- df %>%
   select(
     -which_social_media_platform_site_facebook_instagram_twitter_tiktok_snapchat_is_your_favourite_to_use_for_your_health_and_what_do_you_like_about_it,
@@ -38,7 +41,8 @@ df <- df %>%
 
 
 ```{r}
-# Create a new variable "age_group" based on the "age_range" variable
+# Simplifying participants’ answers by changing all characters/words records checked/unchecked or Yes/No into numeric 1/0 R encoding. Simplifying participants’s age records to <= 15 F or M, 16-17 F or M, >=18 F or M.(Attention that records in table for the same category may be different. For example:%22Greater than or equal to 18” vs Greater than or equal 18”)
+
 df <- df %>%
   mutate(
     age_group = case_when(
@@ -73,6 +77,8 @@ df <- df %>%
 ```
 
 ```{r}
+# Merging “Do you have a mobile phone?” into “Is this mobile phone yours or do you share it ?” and the new column called “mobile_phone ownership”; Making responses numeric: 0 stands for do not have mobile phone, 1 stands for have shared mobile phone, 2 stands for have own mobile phone. Do not forget solving missing values with NA;
+
 df <- df %>%
   mutate(
     mobile_phone_ownership = case_when(
@@ -87,6 +93,7 @@ df <- df %>%
 ```
 
 ```{r}
+# Merging columns that for a same question in Social media and health to one column, such as "Platform for health", "Platform for HISB", "Platform for health topic";
 
 # Platform for health
 df <- df %>%
@@ -127,7 +134,8 @@ df <- df %>%
     )
   )
 
-# Apply "Do you use apps..." rule
+# Merging "Do you use apps, social media or websites for your health" in the following columns. When the answer to that question is no, solving missing values with none, otherwise solvng missing value with NA. The values should be social media, search engine, app, web site, unclear, none.
+
 df <- df %>%
   mutate(
     platform_for_health = ifelse(
@@ -149,6 +157,8 @@ df <- df %>%
 ```
 
 ```{r}
+# Combining above numeric responses that in Use of devices. The new values should be completed by the sum of the subbranches. Renaming each column with short but representative name. For example: we combine numeric responses in "Discussion by email or on the digital social networks with friends or family" and "Watching your social network feed" to Computer Socialzing; "Listening to the music", "Playing games","viewing videos" to Computer Entertainment. So finally the column should be Computer Searching,Computer Socializing,Computer Entertainment,Computer Studying,Others. You should rename them with usage of Mobile Phone in this same format. Attention that Telephone conversation counts to Socializing.
+
 df <- df %>%
   mutate(
     computer_searching =
@@ -172,9 +182,7 @@ df <- df %>%
       when_you_are_on_the_computer_and_or_tablet_what_type_of_actions_do_you_most_often_perform_choice_other
   )
 
-#===========================================================
-# 7. Combine mobile usage
-#===========================================================
+
 df <- df %>%
   mutate(
     mobile_searching =
@@ -263,6 +271,16 @@ write_csv(df_cleaned, "../Wenjing_Huang/dataset/cleaned_data.csv", na = "")
 
 ```
 
+### Visualization
+1.Dividing participants into 6 groups that serves as X-axis Age✖️Sex Group.
+2.Participants without age information were excluded in the data analysis. NAin other columns counts as numeric 0 while analyzing.
+3.Bars that presenting same age groups should stay closer together.
+4.Remember to use facet relevant functions to finish two plots, which means that they must use same 5 usage categories, the colour mapping,singile shared legend.
+5.Pay attention that this is required as dual Y-axis plot. Each range is different. Detailed seen in the following sample plot.
+6.label names should be following: X-axis Age✖️Sex Group Left-Y-axisProportion of participants Right-Y-axisHISB Rate plot-name Electronic Device Usage and HISB Rate by Age-Sex Group.
+7.color:different color for different groups; black line with filled black circle point marker.
+8.The legend should be placed on the right of the plot.
+
 
 ```{r}
 df <- read.csv("../Wenjing_Huang/dataset/cleaned_data.csv", stringsAsFactors = FALSE)
@@ -273,153 +291,90 @@ dim(df)
 
 
 ```{r}
-df <- df %>%
-  filter(
-    !age_sex_group %in% c(
-      "NA F",
-      "NA M"
-    )
-  )
+group_order <- c("<=15 F", "<=15 M", "16-17 F", "16-17 M", ">=18 F", ">=18 M")
 
 df <- df %>%
-  mutate(
-    computer_hisb =
-      computer_searching * hisb_rate,
+  filter(age_sex_group %in% group_order) %>%
+  mutate(age_sex_group = factor(age_sex_group, levels = group_order)) %>%
+  mutate(across(c(
+    computer_searching,
+    computer_socializing,
+    computer_entertainment,
+    computer_studying,
+    computer_others,
+    mobile_searching,
+    mobile_socializing,
+    mobile_entertainment,
+    mobile_studying,
+    mobile_others,
+    hisb_rate),
+  ~ replace_na(.x, 0)))
 
-    mobile_hisb =
-      mobile_searching * hisb_rate
-  )
-
-
-
-computer_summary <- df %>%
+hisb_by_group <- df %>%
+  mutate(hisb_indicator = as.integer(hisb_rate > 0,1,0)) %>%
   group_by(age_sex_group) %>%
-  summarise(
-    Searching = mean(computer_searching),
-    Socializing = mean(computer_socializing),
-    Entertainment = mean(computer_entertainment),
-    Studying = mean(computer_studying),
-    Other = mean(computer_others),
-    HISB_Rate = mean(hisb_rate),
-    .groups = "drop"
-  )
+  summarise(HISB_Rate = mean(hisb_indicator, na.rm = TRUE), .groups = "drop")
 
-mobile_summary <- df %>%
-  group_by(age_sex_group) %>%
-  summarise(
-    Searching = mean(mobile_searching),
-    Socializing = mean(mobile_socializing),
-    Entertainment = mean(mobile_entertainment),
-    Studying = mean(mobile_studying),
-    Other = mean(mobile_others),
-    HISB_Rate = mean(hisb_rate),
-    .groups = "drop"
-  )
-```
-
-```{r}
-normalize_usage <- function(dat){
-
+summarise_usage <- function(dat, s, soc, ent, stu, oth) {
   dat %>%
+    group_by(age_sex_group) %>%
+    summarise(
+      Searching     = mean({{ s   }}),
+      Socializing   = mean({{ soc }}),
+      Entertainment = mean({{ ent }}),
+      Studying      = mean({{ stu }}),
+      Others        = mean({{ oth }}),
+      .groups = "drop"
+    ) %>%
+
     rowwise() %>%
     mutate(
-
-      total =
-        Searching +
-        Socializing +
-        Entertainment +
-        Studying +
-        Other,
-
+      total = Searching + Socializing + Entertainment + Studying + Others,
       Searching = Searching / total,
       Socializing = Socializing / total,
       Entertainment = Entertainment / total,
       Studying = Studying / total,
-      Other = Other / total
-
+      Others = Others / total
     ) %>%
     ungroup() %>%
     select(-total)
-
 }
 
-computer_summary <- normalize_usage(computer_summary)
-mobile_summary <- normalize_usage(mobile_summary)
+computer_sum <- summarise_usage(df,
+  computer_searching, computer_socializing, computer_entertainment, computer_studying, computer_others)
+
+mobile_sum <- summarise_usage(df, computer_searching, computer_socializing, computer_entertainment, computer_studying, computer_others)
+
+usage_levels <- c("Searching", "Socializing", "Entertainment", "Studying", "Others")
+
 ```
+
 
 ```{r}
 plot_df <- bind_rows(
 
-  computer_summary %>%
-    pivot_longer(
-      Searching:Other,
-      names_to = "Usage",
-      values_to = "Proportion"
-    ) %>%
-    mutate(Device = "Computer"),
+  computer_sum %>%
+    pivot_longer(Searching:Others, names_to = "Usage", values_to = "Proportion") %>%
+    mutate(Device = "Computer Usage"),
 
-  mobile_summary %>%
-    pivot_longer(
-      Searching:Other,
-      names_to = "Usage",
-      values_to = "Proportion"
-    ) %>%
-    mutate(Device = "Mobile Phone")
+  mobile_sum %>%
+    pivot_longer(Searching:Others, names_to = "Usage", values_to = "Proportion") %>%
+    mutate(Device = "Mobile Phone Usage")
+) %>% 
+  mutate(Usage = factor(Usage, levels = usage_levels),
+         Device = factor(Device, levels = c("Computer Usage", "Mobile Phone Usage")))
 
-)
 
 hisb_df <- bind_rows(
 
-  computer_summary %>%
-    mutate(Device = "Computer"),
-
-  mobile_summary %>%
-    mutate(Device = "Mobile Phone")
-
-)
-```
-
-```{r}
-group_order <- c(
-  "<=15 F",
-  "<=15 M",
-  "16-17 F",
-  "16-17 M",
-  ">=18 F",
-  ">=18 M"
-)
-
-plot_df$age_sex_group <-
-  factor(
-    plot_df$age_sex_group,
-    levels = group_order
-  )
-
-hisb_df$age_sex_group <-
-  factor(
-    hisb_df$age_sex_group,
-    levels = group_order
-  )
-
-computer_summary
-mobile_summary
-
+  hisb_by_group %>% mutate(Device = "Computer Usage"),
+  hisb_by_group %>% mutate(Device = "Mobile Phone Usage")
+) %>%
+  mutate(Device = factor(Device, levels = c("Computer Usage", "Mobile Phone Usage")))
 ```
 
 
 ```{r}
-
-hisb_df <- plot_df %>%
-  select(age_sex_group, Device) %>% 
-  distinct() %>%
-  left_join(
-    df %>%
-      
-      mutate(hisb_indicator = ifelse(hisb_rate > 0, 1, 0)) %>%
-      group_by(age_sex_group) %>%
-      summarise(HISB_Rate = mean(hisb_indicator, na.rm = TRUE), .groups = "drop"),
-    by = "age_sex_group"
-  )
 
 
 usage_colors <- c(
@@ -427,21 +382,17 @@ usage_colors <- c(
   Socializing = "#D95F02",
   Entertainment = "#7570B3",
   Studying = "#E7298A",
-  Other = "#66A61E"
+  Others = "#66A61E"
 )
 
 
-p <- ggplot(
-  plot_df,
-  aes(
-    x = age_sex_group,
-    y = Proportion,
-    fill = Usage
-  )
-) +
+p <- ggplot(plot_df, 
+            aes(x = age_sex_group, y = Proportion, fill = Usage)) +
+  
+  
   geom_col() +
 
-  # number labels for proportions > 3%
+
   geom_text(
     aes(label = ifelse(Proportion > 0.03, percent(Proportion, accuracy = 1), "")),
     position = position_stack(vjust = 0.5), 
@@ -470,34 +421,29 @@ p <- ggplot(
   # HISB Rate labels
   geom_label(
     data = hisb_df,
-    aes(
-      x = age_sex_group,
-      y = HISB_Rate,
-      label = round(HISB_Rate, 2) 
-    ),
+    aes(x = age_sex_group, y = HISB_Rate, label = round(HISB_Rate, 2)),
     inherit.aes = FALSE,
     size = 3.5,
     color = "white",
     fill = alpha("black", 0.7),
     fontface = "bold",
     label.padding = unit(0.2, "lines")
-  ) +
+) +
 
-  facet_wrap(
-    ~Device,
-    nrow = 1
-  ) +
+  facet_wrap(~Device, nrow = 1) +
 
   scale_fill_manual(
     values = usage_colors
   ) +
 
   scale_y_continuous(
-    labels = percent,
+    name = "Proportion of Participants",
+    labels = function(x) sprintf("%.1f", x),
+    expand = c(0, 0),
     sec.axis = sec_axis(
-      ~.,
-      name = "Overall HISB Rate", 
-      labels = percent
+      transform = ~.,
+      name = "HISB_Rate", 
+      labels = function(x) sprintf("%.1f", x)
     )
   ) +
 
