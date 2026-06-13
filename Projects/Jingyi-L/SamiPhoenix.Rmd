@@ -6,7 +6,7 @@ output: md_document
 ## Solution of "Wrangling and Analyzing Laptop Market Data"
 
 First loading the necessary libraries:
-```{r setup, echo=TRUE, message=FALSE}
+```{r setup, echo=FALSE, message=FALSE}
 
 library(tidyverse)
 library(stringr)
@@ -18,7 +18,7 @@ library(ggridges)
 Doing all the data transformations:
 ```{r tableImportManipulation, echo=TRUE, message=FALSE}
 
-uncleanData <- "~/Data-projects-with-R-and-GitHub/Projects/Jingyi-L/data/laptopData.csv" %>% 
+uncleanData <- "data/laptopData.csv" %>% 
   read_csv(na = c("", "NA", "?"))
 
   #1
@@ -42,6 +42,13 @@ data <- uncleanData %>%
 
 ```
 
+```{r dataPeek, echo=FALSE, message=FALSE}
+
+options(knitr.kable.max_rows = 4)
+
+knitr::kable(data, caption = "After the data manipulation the table looks like this")
+
+```
 
 Doing the Visualizations, Nr.3 was not possible as far as I could tell, so instead I drew them after each other.
 ```{r Visualisation, echo=TRUE, message=FALSE}
