@@ -7,7 +7,7 @@ output: md_document
 
 # use the tidyverse package for data manipulation and visualization
 # use piping where possible to make the code more readable and efficient
-
+```{loading libraries and loading data}
 library(tidyverse)
 library(ggplot2)
 library (stringr)
@@ -18,10 +18,10 @@ setwd("/Users/jannisdennochweiler/R2 Course/Projects/Minseo")
 data <- read_csv("Social Media Advertising.csv")
 
 head(data)
-
+```
 #Data cleanup
 
-
+```{Data cleanup}
 cleandata <- data %>%
 mutate(Duration = as.numeric(str_remove(Duration, " Days"))) %>%
 mutate(Acquisition_Cost = as.numeric(str_sub(Acquisition_Cost, 2))) %>%
@@ -29,7 +29,9 @@ mutate(Date = as.Date(Date, format ="%m/%d/%Y")) %>%
 separate(Target_Audience, into = c("gender", "age_group"), sep = " ")
       
 head(cleandata)
+```
 
+```{Data manipulation}
 # everything clear, now manipulation
 
 summary <- cleandata %>%
@@ -69,7 +71,9 @@ avg_click_through_rate = mean(click_through_rate)
 
 
 head(agedata)
+```
 
+```{Data Visualisation}
 # Visualisation
 #Create a line graph showing how average ROI changes with campaign duration across different social media platforms.
 
@@ -90,9 +94,9 @@ ggplot(aes(x = Duration, y = ROI, color = Channel_Used)) +
   theme_minimal() +
   theme(legend.title = element_blank())
 
-Result (i doubt this is correct):
-![](line_graph_jannis.png)
+Result (i doubt this is fully correct):
+![Line Graph](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/JannisSolutionforMinseo/Projects/Minseo/line_graph_jannis.png)
 
-
+```
 
 

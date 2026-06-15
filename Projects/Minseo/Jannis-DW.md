@@ -4,65 +4,86 @@
 
 # use piping where possible to make the code more readable and efficient
 
-library(tidyverse) library(ggplot2) library (stringr) library(dplyr)
-library(tidyr)
+    library(tidyverse)
+    library(ggplot2)
+    library (stringr)
+    library(dplyr)
+    library(tidyr)
 
-setwd(“/Users/jannisdennochweiler/R2 Course/Projects/Minseo”) data &lt;-
-read\_csv(“Social Media Advertising.csv”)
+    setwd("/Users/jannisdennochweiler/R2 Course/Projects/Minseo")
+    data <- read_csv("Social Media Advertising.csv")
 
-head(data)
+    head(data)
 
 \#Data cleanup
 
-cleandata &lt;- data %&gt;% mutate(Duration =
-as.numeric(str\_remove(Duration, ” Days”))) %&gt;%
-mutate(Acquisition\_Cost = as.numeric(str\_sub(Acquisition\_Cost, 2)))
-%&gt;% mutate(Date = as.Date(Date, format =“%m/%d/%Y”)) %&gt;%
-separate(Target\_Audience, into = c(“gender”, “age\_group”), sep = ” “)
+    cleandata <- data %>%
+    mutate(Duration = as.numeric(str_remove(Duration, " Days"))) %>%
+    mutate(Acquisition_Cost = as.numeric(str_sub(Acquisition_Cost, 2))) %>%
+    mutate(Date = as.Date(Date, format ="%m/%d/%Y")) %>%
+    separate(Target_Audience, into = c("gender", "age_group"), sep = " ")
+          
+    head(cleandata)
 
-head(cleandata)
+    # everything clear, now manipulation
 
-# everything clear, now manipulation
+    summary <- cleandata %>%
+    group_by(Campaign_Goal) %>%
+    summarise(
+    avg_engagement = mean(Engagement_Score, na.rm = TRUE),
+      sd_engagement = sd(Engagement_Score, na.rm = TRUE),
+      number_campaigns = n()
+              )
+    summary
 
-summary &lt;- cleandata %&gt;% group\_by(Campaign\_Goal) %&gt;%
-summarise( avg\_engagement = mean(Engagement\_Score, na.rm = TRUE),
-sd\_engagement = sd(Engagement\_Score, na.rm = TRUE), number\_campaigns
-= n() ) summary
+    # data manipulation nr 2 (I had no Idea so this first big code chunk is mainly AI :/)
 
-# data manipulation nr 2 (I had no Idea so this first big code chunk is mainly AI :/)
+    data_expanded <- cleandata %>%
+      mutate(age_group = str_replace_all(age_group, "–", "-"),
+             age_group = str_replace_all(age_group, " ", "")) %>%
+      separate(age_group, into = c("min_age", "max_age"), sep = "-") %>%
+      mutate(
+        min_age = as.numeric(min_age),
+        max_age = as.numeric(max_age)
+      ) %>%
+      filter(!is.na(min_age), !is.na(max_age)) %>%
+      rowwise() %>%
+      mutate(age = list(seq(min_age, max_age))) %>%
+      unnest(age)
 
-data\_expanded &lt;- cleandata %&gt;% mutate(age\_group =
-str\_replace\_all(age\_group, “–”, “-”), age\_group =
-str\_replace\_all(age\_group, ” “,”“)) %&gt;% separate(age\_group, into
-= c(”min\_age”, “max\_age”), sep = “-”) %&gt;% mutate( min\_age =
-as.numeric(min\_age), max\_age = as.numeric(max\_age) ) %&gt;%
-filter(!is.na(min\_age), !is.na(max\_age)) %&gt;% rowwise() %&gt;%
-mutate(age = list(seq(min\_age, max\_age))) %&gt;% unnest(age)
 
-data\_expanded2 &lt;- data\_expanded%&gt;% mutate(click\_through\_rate =
-Clicks / Impressions)
+    data_expanded2 <- data_expanded%>%
+    mutate(click_through_rate = Clicks / Impressions)
 
-agedata &lt;- data\_expanded2 %&gt;% group\_by(age) %&gt;% summarise(
-avg\_click\_through\_rate = mean(click\_through\_rate) )
 
-head(agedata)
+    agedata <- data_expanded2 %>%
+    group_by(age) %>%
+    summarise(
+    avg_click_through_rate = mean(click_through_rate)
+    )
 
-# Visualisation
 
-\#Create a line graph showing how average ROI changes with campaign
-duration across different social media platforms.
+    head(agedata)
 
-\#The data should be grouped by Duration and Channel\_Used.
+    # Visualisation
+    #Create a line graph showing how average ROI changes with campaign duration across different social media platforms.
 
-\#The final graph should show: \#campaign duration on the x-axis
-\#average ROI on the y-axis \#separate lines for different social media
-platforms
+    #The data should be grouped by Duration and Channel_Used.
 
-cleandata %&gt;% group\_by(Duration, Channel\_Used) %&gt;% ggplot(aes(x
-= Duration, y = ROI, color = Channel\_Used)) + geom\_line(stat =
-“summary”, fun = “mean”) + labs(title = “Average ROI by Campaign
-Duration and Social Media Platform”, x = “Campaign Duration (Days)”, y =
-“Average ROI”) + theme\_minimal() + theme(legend.title =
-element\_blank())
+    #The final graph should show:
+    #campaign duration on the x-axis
+    #average ROI on the y-axis
+    #separate lines for different social media platforms
 
-Result (i doubt this is correct): ![](line_graph_jannis.png)
+    cleandata %>%
+    group_by(Duration, Channel_Used) %>%
+    ggplot(aes(x = Duration, y = ROI, color = Channel_Used)) +
+      geom_line(stat = "summary", fun = "mean") +
+      labs(title = "Average ROI by Campaign Duration and Social Media Platform",
+           x = "Campaign Duration (Days)",
+           y = "Average ROI") +
+      theme_minimal() +
+      theme(legend.title = element_blank())
+
+    Result (i doubt this is fully correct):
+    ![Line Graph](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/JannisSolutionforMinseo/Projects/Minseo/line_graph_jannis.png)
