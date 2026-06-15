@@ -86,4 +86,4 @@
       theme(legend.title = element_blank())
 
     Result (i doubt this is fully correct):
-    ![Line Graph](https://github.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/blob/JannisSolutionforMinseo/Projects/Minseo/line_graph_jannis.png)
+    ![Line Graph](Jannis_DW_files/line_graph_jannis.png)
