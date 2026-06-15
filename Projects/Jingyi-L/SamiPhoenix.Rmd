@@ -28,7 +28,7 @@ data <- uncleanData %>%
   #2
   mutate(Ram = as.integer(str_replace_all(Ram, "GB", ""))) %>% 
   mutate(Weight = as.double(str_replace_all(Weight, "kg", ""))) %>% 
-  mutate(Cpu = as.double(str_extract(Cpu, "\\d+\\.?\\d*(?=GHz)"))) %>% 
+  mutate(Cpu_clock = as.double(str_extract(Cpu, "\\d+\\.?\\d*(?=GHz)"))) %>% 
   #3
   mutate(HasIPS = str_detect(ScreenResolution, "IPS")) %>% 
   mutate(HasRetina = str_detect(ScreenResolution, "Retina")) %>%
@@ -56,7 +56,7 @@ Doing the Visualizations, Nr.3 was not possible as far as I could tell, so inste
 
 #1
 data %>% 
-  ggplot(aes(x = Cpu, y = Price)) +
+  ggplot(aes(x = Cpu_clock, y = Price)) +
   geom_point(alpha = 0.25) +
   geom_density2d(alpha = 0.75) +
   scale_y_continuous(labels = label_comma()) +
