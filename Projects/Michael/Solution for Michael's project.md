@@ -63,6 +63,8 @@ within the next 3 years. However, the correlations are weak.
 
     ## Saving 7 x 5 in image
 
+![](heatmap.png)
+
 ### 1.3. Why do you think that people who are satisfied with their relationship the most are seemingly less likely to get children in the near future?
 
 Answer: They are already happy with their relationship and do not feel
@@ -230,3 +232,5 @@ be more egalitatrian.
     ggsave("violinplot.png")
 
     ## Saving 7 x 5 in image
+
+![](violinplot.png)
