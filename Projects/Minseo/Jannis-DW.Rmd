@@ -90,7 +90,8 @@ ggplot(aes(x = Duration, y = ROI, color = Channel_Used)) +
   theme_minimal() +
   theme(legend.title = element_blank())
 
-
+Result (i doubt this is correct):
+![](line_graph_jannis.png)
 
 
 

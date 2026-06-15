@@ -64,3 +64,5 @@ cleandata %&gt;% group\_by(Duration, Channel\_Used) %&gt;% ggplot(aes(x
 Duration and Social Media Platform”, x = “Campaign Duration (Days)”, y =
 “Average ROI”) + theme\_minimal() + theme(legend.title =
 element\_blank())
+
+Result (i doubt this is correct): ![](line_graph_jannis.png)
