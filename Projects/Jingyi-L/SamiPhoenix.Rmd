@@ -59,27 +59,41 @@ data %>%
   ggplot(aes(x = Cpu, y = Price)) +
   geom_point(alpha = 0.25) +
   geom_density2d(alpha = 0.75) +
-  scale_y_continuous(labels = label_comma())
+  scale_y_continuous(labels = label_comma()) +
+  labs(x = "Cpu Clock Speed [Ghz]",
+       y = "Price in Indian Rupee",
+       title = "Breakdown of CPU clock speed and price")
 
 
 #2
 data %>% 
   ggplot(aes(x = TypeName, y = Price)) +
   geom_boxplot() +
-  scale_y_continuous(labels = label_comma())
+  scale_y_continuous(labels = label_comma()) +
+  labs(x = "Price in Indian Rupee",
+       y = "Laptop Type",
+       title = "Different Prices for different types of Laptops")
 
 #3
 # Histogram
 data %>% 
   ggplot(aes(x = Price)) +
   geom_histogram(color = "black", fill = "purple") +
-  scale_x_continuous(labels = label_comma())
+  scale_x_continuous(labels = label_comma()) +
+  labs(x = "Price in Indian Rupee",
+       y = "",
+       title = "Distribution of Laptop prices")
 # Ridgeline
 data %>% 
   ggplot(aes(x = Price)) +
   geom_density_ridges(data = data %>%
                         filter( TypeName %in% c("Notebook", "Ultrabook", "Gaming")), 
-                      aes(y = TypeName, scale = 1.5), alpha = 0.5)
+                      aes(y = TypeName, scale = 1.5, fill = TypeName), alpha = 0.5) +
+  labs(x = "Price in Indian Rupee",
+       y = "",
+       title = "Distribution of Price for different types of Laptops") +
+  scale_x_continuous(labels = label_comma())
+
 
 
 ```
