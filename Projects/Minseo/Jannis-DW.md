@@ -85,5 +85,5 @@
       theme_minimal() +
       theme(legend.title = element_blank())
 
-    Result (i doubt this is fully correct):
-    ![Line Graph](line_graph_jannis.png)
+Result (i doubt this is fully correct):
+![Line Graph](line_graph_jannis.png)
