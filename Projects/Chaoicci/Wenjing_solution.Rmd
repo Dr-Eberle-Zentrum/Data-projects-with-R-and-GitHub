@@ -1,14 +1,21 @@
 ---
 title: "Wenjing_solution"
-output: html_document
+output: md_document
 ---
 
-Plot for Q1:
-
 ```{r import_data,echo=FALSE,message=FALSE,include=FALSE}
+#install packages for data cleaning
 library(tidyverse)
 library(dplyr)
-install.packages("jsonlite",repos = "https://cran.rstudio.com/")
+
+#install packages for importing json. file data 
+#install.packages("jsonlite",repos = "https://cran.rstudio.com/")
+
+#install packages for world map visualization 
+#install.packages("rnaturalearth",repos = "https://cran.rstudio.com/")
+#install.packages("rnaturalearthdata",repos = "https://cran.rstudio.com/")
+
+#data import
 library(jsonlite)
 data <- fromJSON("https://huggingface.co/datasets/lukeslp/world-languages/raw/main/world_languages_integrated.json")
 
@@ -17,43 +24,136 @@ data <- fromJSON("https://huggingface.co/datasets/lukeslp/world-languages/raw/ma
 
 
 ```{r reform_dataframe ,echo=FALSE,message=FALSE}
-language_name <- data$name
-speaker_count <- data$speaker_count$count
-speaking_country<- data$speaker_count$metadata$countries
-speaking_country[sapply(speaking_country,is.null)] <- NA
-speaking_country <- sapply(speaking_country,function(x){if(all(is.na(x))) NA else paste(x,collapse = ", ")})
-re_df <- data.frame(language_name,speaking_country,speaker_count)
+#done: reform data with column "language_name","speaking_country","speaker_count"
+# fill missing value with 'NA' in tibble
 
+#optimize codes by using pipeline
+
+re_df <- tibble(
+  language_name = data$name,
+  speaker_count = data$speaker_count$count) %>% mutate(speaking_country={
+    raw_countries=data$speaker_count$metadata$countries
+    map_chr(raw_countries,~{
+      if(is.null(.x)||all(is.na(.x))){
+        NA_character_
+      }else{
+        paste(.x, collapse = ", ")
+      }
+    })
+    
+  }) 
+ 
 ```
 
 
+Calculating the number of languages spoken in each country:
+```{r data_cleaning_Q1, echo=FALSE}
 
-```{r data_cleaning,echo=FALSE,message=FALSE}
+#calculating the number of languages spoken in each country
 language_num_in_countries <- re_df %>% 
-  filter(!is.na(speaking_country)) %>%separate_rows(speaking_country,sep = ",\\s*") %>% group_by(speaking_country) %>% summarise(language_count=n_distinct(language_name)) %>% arrange(desc(language_count)) %>% head(20)
-
-
-
+  drop_na(speaking_country) %>%separate_rows(speaking_country,sep = ",\\s*") %>% group_by(speaking_country) %>% summarise(language_count=n_distinct(language_name)) %>% arrange(desc(language_count)) 
+language_num_in_countries
 ```
 
-```{r data_visualization_Q1,echo=FALSE,message=FALSE,warning=FALSE,warning=FALSE,results='hide'}
-install.packages("rnaturalearth",repos = "https://cran.rstudio.com/")
-install.packages("rnaturalearthdata",repos = "https://cran.rstudio.com/")
-library(rnaturalearth)
+Plot1: showing linguistic diversity per countries
+```{r data_visualization_Q1,echo=FALSE,message=FALSE,warning=FALSE,results='hide',fig.width=12,fig.height=8,out.width="100%"}
 
+library(rnaturalearth)
+# world_map data is also prepared for the second plot
 world_map <- ne_countries(scale = "small",returnclass = "sf")
+
 map_data <- world_map %>% left_join(language_num_in_countries, by=c("name"="speaking_country") )
-plot<- ggplot(data = map_data) +
-    geom_sf(aes(fill = language_count), color = "red", size = 0.1) +
+
+#plot the number of languages spoken per country
+ggplot(data = map_data) +
+    geom_sf(aes(fill = language_count), color = "black", size = 0.1) +
     scale_fill_viridis_c(name = "Number of Languages", 
                          option = "viridis", 
                          na.value = "gray",
                          direction = -1) + 
     labs(title = "Linguistic Diversity by Country",
-         subtitle = "Number of languages spoken per country")
+         subtitle = "Number of languages spoken per country")+
     theme_minimal() +
     theme(legend.position = "bottom",
           legend.key.width = unit(2, "cm"))
           
-print(plot)
+
+```
+
+```{r data_cleaning_Q2.1,echo=FALSE}
+# Find the five languages with the largest number of speakers(as highlighted data)
+top5_speakers <- re_df %>% arrange(desc(re_df$speaker_count)) %>% head(5) %>%  select(language_name, speaking_country) %>% separate_rows(speaking_country,sep = ",\\s*")
+
+highlight_data <- world_map %>% right_join(top5_speakers,by=c("name"="speaking_country")) %>% select(language_name,geometry)
+
+
+```
+
+```{r data_cleaning_Q2.2,echo=FALSE}
+lang_stats <- re_df %>%
+  # separate countries and remove missing values）
+  separate_rows(speaking_country, sep = ",\\s*") %>%
+ drop_na(speaking_country) %>%
+  group_by(language_name) %>%
+  summarise(
+    speaker_count = first(speaker_count),              # speaker_count
+    country_count = n_distinct(speaking_country)       # country_count
+  ) %>%
+  ungroup()
+
+top_widespread <- lang_stats %>%
+  slice_max(country_count, n = 10, na_rm = TRUE) %>%
+  pull(language_name)
+
+top_spoken <- lang_stats %>%
+  slice_max(speaker_count, n = 10, na_rm = TRUE) %>%
+  pull(language_name)
+
+plot3_data <- bind_rows(
+  lang_stats %>% filter(language_name %in% top_spoken),
+  lang_stats %>% filter(language_name %in% top_widespread)
+) %>%
+  distinct(language_name, .keep_all = TRUE) %>%
+  mutate(
+    category = case_when(
+      language_name %in% top_spoken & language_name %in% top_widespread ~ "Both Top 10s",
+      language_name %in% top_spoken ~ "Only Spoken Top 10",
+      language_name %in% top_widespread ~ "Only Widespread Top 10",
+      TRUE ~ "Other"
+    )
+  ) %>%
+  arrange(desc(speaker_count))
+
+
+```
+
+
+Plot2.1 showing geographic distribution of five largest languages
+```{r data_visualization_Q2.1,echo=FALSE}
+ggplot()+geom_sf(data=world_map,fill="grey",color="white",size=0.1)+geom_sf(data=highlight_data,fill="red",color="black",size=0.1)+facet_wrap(~language_name,ncol=3)+theme_minimal()+labs(title = "Geographic Distribution of five largest languages",subtitle = "Red: countries where the language is spoken ")
+
+```
+
+```{r data_visualization_Q2.2, echo=FALSE}
+
+# !!for plot 2.2 :I do not follow the requirement "labeling the points with numbers enclosed in circles and providing a corresponding legend." because I think directly enclosing language name in a circle is also clear.
+
+ggplot(plot3_data, aes(x = speaker_count, y = country_count, fill = category)) +
+  geom_point(shape = 21, color = "grey", size = 8, stroke = 1.2) +
+  geom_text(aes(label = language_name), size = 4, color = "black", fontface = "bold") +
+  scale_fill_manual(
+    values = c(
+      "Both Top 10s" = "red",          
+      "Only Spoken Top 10" = "yellow",    
+      "Only Widespread Top 10" = "green" 
+    ),
+    name = "Language Category"
+  ) +scale_x_log10(label=scales::comma)+scale_y_log10(label=scales::comma)+ #make data distribution more linear
+  labs(
+    title = "Top 10 Most Spoken vs. Most Widespread Languages",
+    subtitle = "Red = both Top 10s | Blue = only speakers | Green = only countries",
+    x = "Number of Speakers (log scale)",
+    y = "Number of Countries (log scale)",
+  ) +
+  theme_minimal() +theme(legend.position = 'bottom')
 ```
