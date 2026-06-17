@@ -76,7 +76,6 @@ ggplot(data = map_data) +
     theme_minimal() +
     theme(legend.position = "bottom",
           legend.key.width = unit(2, "cm"))
-          
 
 ```
 
