@@ -21,15 +21,12 @@
 # Data Manipulation
 
     manipulated_data <- kingdom_data %>%
-      select(!("CR(PE)":"Subtotal (EX+EW+ CR(PE)+CR(PEW))")) %>%
-      # removes columns
+      select(!("CR(PE)":"Subtotal (EX+EW+ CR(PE)+CR(PEW))")) %>%  # removes columns
       rowwise() %>%
       mutate( 
-        NearThreatened = sum(across("LR/cd":"NT or LR/nt"))
-        # combines columns
+        NearThreatened = sum(c_across("LR/cd":"NT or LR/nt"))  # combines columns
             ) %>%
-      select(!("LR/cd":"NT or LR/nt")
-             # removes columns
+      select(!("LR/cd":"NT or LR/nt")   # removes columns
              ) %>%
       rename(
         "Extinct" = "EX",
@@ -40,8 +37,7 @@
         "LowRisk" = "LC or LR/lc",
         "DataDeficient" = "DD"
         ) %>%
-      select(`Name`,`Kingdom`,`Extinct`:`DataDeficient`, `NearThreatened`, `Total`)
-      # changes column order
+      select(`Name`,`Kingdom`,`Extinct`:`Subtotal (threatened spp.)`, `NearThreatened`, `LowRisk`:`Total`)     # changes column order
 
 # Data Visualization
 
