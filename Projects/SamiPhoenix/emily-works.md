@@ -41,26 +41,39 @@
 
 # Data Visualization
 
-Unfortunately I couldn’t figure out how the plots are supposed to work
-:(
-
 First step: create a new seperate table
 
     data_table <- manipulated_data %>%
+      filter ( Total > 1000 ) %>%
       transmute(
         `Name`,
         `Kingdom`,
-        across(c(`Extinct`:`Total`), ~ .x / Total * 100, .names = "{.col} [%]")
+        across(c(`Extinct`:`Total`), ~round ( .x / Total * 100, 2), .names = "{.col} [%]")
         )
 
 Create barplot 1:
 
-manipulated\_data %&gt;% mutate( Unaffected =
-sum(across(`LowRisk`:`NearThreatened`)) ) %&gt;% filter ( Total &gt;
-1000 ) %&gt;% group\_by(Kingdom) %&gt;% summarise( Extinct =
-sum(`Subtotal (EX+EW)`), Affected = sum(`Subtotal (threatened spp.)`),
-Unaffected = sum(Unaffected) ) %&gt;% ggplot() + geom\_bar(aes( x =
-Kingdom, y = Total, fill = “Extinct”), stat = “identity”, position =
-“stack”)
+    data_table %>%
+      rowwise() %>%
+      mutate(
+        `Unaffected [%]` = sum(c_across(`NearThreatened [%]`:`DataDeficient [%]`))
+      ) %>%
+      group_by(Kingdom) %>%
+      summarise(
+        Extinct = mean(`Subtotal (EX+EW) [%]`),
+        Affected = mean(`Subtotal (threatened spp.) [%]`),
+        Unaffected = mean(`Unaffected [%]`)
+      ) %>%
+      pivot_longer(
+        cols = c(Extinct, Affected, Unaffected),
+        names_to = "Category",
+        values_to = "Percentage"
+      ) %>%
+      filter(!is.na(Kingdom)) %>%
+      ggplot() +
+       geom_bar(aes( x = Kingdom, y = Percentage, fill = Category), stat = "identity", position = "stack") +
+      ggtitle("Distribution of Impact Among Kingdoms") +
+      xlab("Kingdom") +
+      ylab("Average Percentage within Species")
 
-\`\`\`
+![](emily-works_files/figure-markdown_strict/barplot-1-1.png)
