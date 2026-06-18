@@ -2,33 +2,21 @@
 
     raw_data  <- read_csv("dependencies/SpeciesByKingdomAndClass.csv")
 
-    ## Rows: 75 Columns: 16
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ","
-    ## chr  (1): Name
-    ## dbl  (4): EX, EW, CR(PEW), LR/cd
-    ## num (11): Subtotal (EX+EW), CR(PE), Subtotal (EX+EW+ CR(PE)+CR(PEW)), CR, EN...
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-
 ## Add Kingdom Data
 
     kingdoms <- c("Animalia", "Chromista", "Fungi", "Plantae") # list kingdoms in the order they appear in
 
     kingdom_data  <- raw_data %>%
       mutate(
-        ClassChange = Name < lag(Name), # create column that says TRUE when a change appears (new kingdom)
-        ClassChange = replace_na(ClassChange, TRUE), # replaces NA in 1st observation with TRUE
-        Kingdom = ifelse(ClassChange == TRUE, kingdoms[cumsum(ClassChange)], NA)
+        ClassChange = Name < lag(Name),     # create column that says TRUE when a change appears (new kingdom)
+        ClassChange = replace_na(ClassChange, TRUE),       # replaces NA in 1st observation with TRUE
+        AllKingdom = ifelse(ClassChange == TRUE, kingdoms[cumsum(ClassChange)], NA)
       ) %>%
-      fill(Kingdom, .direction = "down") %>%
-      # fills the NAs with the value
-      select(!("ClassChange"))
-      # removes the ClassChange column again
-
-    kingdom_data$Kingdom[75] <- NA 
-    # removes kingdom name from last row bc. its the total & therefor has no kingdom
+      fill(AllKingdom, .direction = "down") %>%      # fills the NAs with the value
+      mutate(
+        Kingdom = if_else(Name == "Total", NA, AllKingdom)
+        ) %>%
+      select(!c("ClassChange","AllKingdom"))     # removes the ClassChange & AllKingdom column 
 
 # Data Manipulation
 
