@@ -3,6 +3,7 @@ title: "lea-immenkamp"
 author: "Lea Immenkamp"
 date: "2026-06-07"
 output: md_document
+always_allow_html: true
 ---
 ```{r library loading}
 library(tidyverse)
