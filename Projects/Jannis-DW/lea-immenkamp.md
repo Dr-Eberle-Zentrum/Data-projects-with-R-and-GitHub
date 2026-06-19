@@ -60,6 +60,7 @@ rating and Metascore.
 The next step was to look at the correlation for different genres.
 
 ![](lea-immenkamp_files/figure-markdown_strict/role%20of%20genre%20visualization-1.png)
+
 **Interpretation** Across genres, there is a positive linear trend
 between Movie rating and Metascore.
 

@@ -147,6 +147,7 @@ movies_clean %>%
   theme(strip.text = element_text(face = "bold", size = 10))
 
 ```
+
 **Interpretation** Across genres, there is a positive linear trend between Movie rating and Metascore. 
 
 
@@ -173,7 +174,7 @@ movies_clean %>%
   
   # bar plot
   ggplot(aes(x = avg_score, y = director)) +
-    geom_col(fill = "steelblue", alpha = 0.8, width = 0.7) +
+    geom_col(fill = "steelblue", alpha = 0.9, width = 0.1) +
   # Add whiskers 
     geom_errorbar(
       aes(xmin = avg_score - sd_score, xmax = avg_score + sd_score),
@@ -192,15 +193,6 @@ movies_clean %>%
     ) +
     theme_minimal()
 
-# Save output in a nicer format
-ggsave(
-  filename = "director_scores.png",
-  width = 10,      
-  height = 8,      
-  units = "in",
-  dpi = 300,
-  bg = "white"      
-)
 ```
 
 
