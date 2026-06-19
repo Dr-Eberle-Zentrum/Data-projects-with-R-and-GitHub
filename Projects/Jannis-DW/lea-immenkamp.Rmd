@@ -1,10 +1,19 @@
 ---
-title: "lea-immenkamp"
+title: "Movies and Inflation Solution"
 author: "Lea Immenkamp"
 date: "2026-06-07"
 output: md_document
 always_allow_html: true
 ---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,    # Versteckt den R-Code
+  warning = FALSE, # Versteckt alle Warnmeldungen (z.B. gelöschte Zeilen im Plot)
+  message = FALSE  # Versteckt Paket-Lademeldungen (z.B. von tidyverse)
+)
+```
+
+
 ```{r library loading}
 library(tidyverse)
 library(scales)
@@ -19,7 +28,6 @@ movies <- read_csv2("sciFiMovies_dataset.csv")
 
 
 ```{r data cleaning}
-glimpse(movies)
 
 # Add unique ID
 movies_clean <- movies %>% 
@@ -45,6 +53,10 @@ separate_rows(genre, sep = ",\\s*") %>%
   rename(genre_list=data)
 ```
 
+
+# What is the overall best movie?
+The movie that has got the highest score when combining Movie Rating (IMDB movie rating) and Metascore (metacritic movie rating).
+
 ```{r analysis}
 movies_analyzed <- movies_clean %>% 
   # Combine movie_rating and metascore
@@ -57,9 +69,6 @@ best_movie <- movies_analyzed %>%
   arrange(desc(total_score)) %>% 
   slice(1) %>% 
   select(title, release_year, movie_rating, metascore, total_score)
-
-# Display the best movie
-print(best_movie)
 
 # Visualization 
 best_movie %>%
@@ -80,6 +89,8 @@ best_movie %>%
   ) %>%
   row_spec(1)
 ```
+
+# Correlation between Movie Rating and Metascore
 
 ```{r correlation visualization}
 # Create a scatterplot to check for correlation
@@ -110,8 +121,15 @@ ggsave(
 )
 
 ```
+
 **Interpretation**
 The scatterplot shows a positive linear trend. Thus it can be concluded that there is a positive correlation between Movie rating and Metascore.
+
+
+
+
+# The role of the different genres
+The next step was to look at the correlation for different genres.
 
 ```{r role of genre visualization}
 movies_clean %>% 
@@ -129,6 +147,12 @@ movies_clean %>%
   theme(strip.text = element_text(face = "bold", size = 10))
 
 ```
+**Interpretation** Across genres, there is a positive linear trend between Movie rating and Metascore. 
+
+
+
+# Director Score
+A horizontal bar plot for each director showing the average combined score, as well as the standard deviation indicated by the whiskers. The number of films is presented as a text annotation next to the bar. 
 
 ```{r director score}
 # Prepare the data per director
@@ -179,6 +203,10 @@ ggsave(
 )
 ```
 
+
+
+# Do films that have a good rating also make more money?
+
 ```{r optional task}
 # I do not have a favorite actor, but I am interested in the second optional task
 # There is no data about the costs of the movies as a third dimension 
@@ -204,4 +232,44 @@ movies_clean %>%
   ) +
   theme_minimal()
 ```
+
+**Interpretation** There is a linear trend between Gross Equivalent Earnings and the combined score. However, a lot of movies did not earn any money (gross equivalent= 0), which acts as a floor effect and of course influences the trend.
+
+
+**Remove films with zero revenue**
+
+```{r remove films without revenue}
+movies_clean %>% 
+  mutate(
+    gross_num = as.numeric(gross_equivalent),
+    total_score = movie_rating + metascore
+  ) %>% 
+  filter(!is.na(gross_num), gross_num > 0) %>% 
+  unnest(genre_list) %>% 
+  group_by(gross_num, total_score) %>% 
+  slice_head(n = 1) %>% 
+  ungroup() %>% 
+
+  ggplot(aes(x = gross_num, y = total_score, color = genre)) +
+  geom_point(alpha = 0.5, size = 2) + 
+  geom_smooth(method = "lm", formula = y ~ x, color = "black", se = TRUE) +
+  scale_x_sqrt(labels = scales::label_dollar(scale = 1e-6, suffix = "M")) +
+  scale_color_brewer(palette = "Dark2") + 
+  labs(
+    title = "Does Financial Success Align with Movie Quality?",
+    subtitle = "Inflation-Adjusted Gross Earnings vs. Combined Score by Primary Genre",
+    x = "Gross Equivalent Earnings (in Millions USD)",
+    y = "Combined Score (User Rating + Metascore)",
+    color = "Primary Genre"
+  ) +
+  theme_minimal()
+```
+
+
+
+
+
+
+
+
 
