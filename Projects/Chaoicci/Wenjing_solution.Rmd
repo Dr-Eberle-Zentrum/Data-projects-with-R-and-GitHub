@@ -156,3 +156,60 @@ ggplot(plot3_data, aes(x = speaker_count, y = country_count, fill = category)) +
   ) +
   theme_minimal() +theme(legend.position = 'bottom')
 ```
+
+Top-5 language_families:
+```{r data_clean_Q3,echo=FALSE}
+
+lang_path <- tibble(language=data$language_history$name,path=data$language_history$family_tree$path) %>% filter(!sapply(path,is.null)) %>% mutate(family=map_chr(path, ~ .x[2])) %>% select(language,family)
+
+
+lang_speaker_num <- re_df %>% filter(language_name %in% lang_path$language) %>% select(language_name,speaker_count)
+
+top5_families <- lang_path %>% left_join(lang_speaker_num,by=c("language"="language_name")) %>% drop_na() %>% group_by(family) %>% summarise(count=sum(speaker_count)) %>% arrange(desc(count)) %>% head(5)
+top5_families
+
+top10_speakers_per_country <- lang_path %>% left_join(lang_speaker_num,by=c("language"="language_name")) %>% drop_na() %>% group_by(family) %>% slice_max(speaker_count,n=10,with_ties = F) %>% filter(family %in% top5_families$family)
+```
+Top 5 Language Families and Their Most Spoken Languages:
+```{r language_fam_visualization,echo=FALSE,fig.width=12,fig.height=8,out.width="100%"}
+  
+p_final <- top10_speakers_per_country %>%
+  mutate(Family = factor(family, levels = top5_families)) %>%
+  ggplot(aes(x = reorder(language, speaker_count), 
+             y = speaker_count, 
+             fill = language)) +
+  geom_col() +
+  coord_flip() +
+  facet_wrap(~family, scales = "free_y", nrow = 2, ncol = 3) +
+  labs(
+    title = "Top 5 Language Families and Their Most Spoken Languages",
+    subtitle = "Each bar represents a language within the family",
+    x = "",
+    y = "Number of Speakers"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 18, face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(size = 12, hjust = 0.5, color = "gray50"),
+    axis.text.y = element_text(size = 8),
+    legend.position = "none",
+    strip.text = element_text(size = 14, face = "bold", color = "white"),
+    strip.background = element_rect(fill = "steelblue", color = NA),
+    panel.spacing = unit(0.5, "lines")
+  ) +
+  scale_fill_viridis_d()
+
+print(p_final)
+
+```
+# Data attribution:
+# This dataset is `world_languages_integrated.json` by Luke Steuber (MIT License)
+# Data sources: 
+# 1. Glottolog 5.0 (Max Planck Institute for Evolutionary Anthropology) https://glottolog.org/
+# Geographic coordinates, language family classification, glottocodes, and macroareas (License: CC-BY-4.0) https://creativecommons.org/licenses/by/4.0/
+# 2. Joshua Project https://joshuaproject.net/
+# Speaker population aggregates, Bible translation status, and religion data
+
+# Full license information https://huggingface.co/datasets/lukeslp/world-languages/blob/main/LICENSE.md
+# This project is not for commercial purposes but for educational purposes only.
+
