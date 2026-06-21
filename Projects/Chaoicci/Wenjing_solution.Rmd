@@ -173,7 +173,7 @@ top10_speakers_per_country <- lang_path %>% left_join(lang_speaker_num,by=c("lan
 Top 5 Language Families and Their Most Spoken Languages:
 ```{r language_fam_visualization,echo=FALSE,fig.width=12,fig.height=8,out.width="100%"}
   
-p_final <- top10_speakers_per_country %>%
+top10_speakers_per_country %>%
   mutate(Family = factor(family, levels = top5_families)) %>%
   ggplot(aes(x = reorder(language, speaker_count), 
              y = speaker_count, 
@@ -199,17 +199,17 @@ p_final <- top10_speakers_per_country %>%
   ) +
   scale_fill_viridis_d()
 
-print(p_final)
-
 ```
-# Data attribution:
-# This dataset is `world_languages_integrated.json` by Luke Steuber (MIT License)
-# Data sources: 
-# 1. Glottolog 5.0 (Max Planck Institute for Evolutionary Anthropology) https://glottolog.org/
-# Geographic coordinates, language family classification, glottocodes, and macroareas (License: CC-BY-4.0) https://creativecommons.org/licenses/by/4.0/
-# 2. Joshua Project https://joshuaproject.net/
-# Speaker population aggregates, Bible translation status, and religion data
 
-# Full license information https://huggingface.co/datasets/lukeslp/world-languages/blob/main/LICENSE.md
-# This project is not for commercial purposes but for educational purposes only.
+
+
+Data attribution:
+This dataset is `world_languages_integrated.json` by Luke Steuber (MIT License)
+Data sources: 
+1. Glottolog 5.0 (Max Planck Institute for Evolutionary Anthropology) https://glottolog.org/
+Geographic coordinates, language family classification, glottocodes, and macroareas (License: CC-BY-4.0) <https://creativecommons.org/licenses/by/4.0/>
+2. Joshua Project <https://joshuaproject.net/>
+Speaker population aggregates, Bible translation status, and religion data
+Full license information <https://huggingface.co/datasets/lukeslp/world-languages/blob/main/LICENSE.md>
+This project is not for commercial purposes but for educational purposes only.
 
