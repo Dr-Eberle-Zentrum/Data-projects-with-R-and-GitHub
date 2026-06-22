@@ -43,7 +43,7 @@
 
 First step: create a new seperate table
 
-    data_table <- manipulated_data %>%
+    data_table_filtered <- manipulated_data %>%
       filter ( Total > 1000 ) %>%
       transmute(
         `Name`,
@@ -51,9 +51,9 @@ First step: create a new seperate table
         across(c(`Extinct`:`Total`), ~round ( .x / Total * 100, 2), .names = "{.col} [%]")
         )
 
-Create barplot 1:
+Create Barplot 1:
 
-    data_table %>%
+    data_table_filtered %>%
       rowwise() %>%
       mutate(
         `Unaffected [%]` = sum(c_across(`NearThreatened [%]`:`DataDeficient [%]`))
@@ -74,6 +74,62 @@ Create barplot 1:
        geom_bar(aes( x = Kingdom, y = Percentage, fill = Category), stat = "identity", position = "stack") +
       ggtitle("Distribution of Impact Among Kingdoms") +
       xlab("Kingdom") +
-      ylab("Average Percentage within Species")
+      ylab("Average Percentage within Species") +
+      scale_fill_manual(values = c("Extinct" = "red", "Affected" = "orange", "Unaffected" = "green"))
 
 ![](emily-works_files/figure-markdown_strict/barplot-1-1.png)
+
+Create Barplot 2:
+
+First step, prepare the data:
+
+    library(dplyr)
+
+    data_table_unfiltered <- manipulated_data %>%
+      transmute(
+        `Name`,
+        `Kingdom`,
+        across(c(`Extinct`:`Total`), ~round ( .x / Total * 100, 2), .names = "{.col} [%]")
+        ) %>%
+      rowwise() %>%
+      mutate(
+        `Affected [%]` = sum(c_across(`Extinct [%]`:`CriticallyEndangered [%]`))
+      ) 
+
+    data_top_ten <- data_table_unfiltered %>%
+      ungroup() %>%
+      arrange(desc(`Affected [%]`)) %>% 
+      slice_head(n = 10)
+
+    data_bottom_ten <- data_table_unfiltered %>%
+      ungroup() %>%
+      arrange(desc(`Affected [%]`)) %>% 
+      slice_tail(n = 10)
+
+    gap_plot <- tibble(
+      `Name` = "...",
+      `Kingdom` = NA_character_,
+      `Affected [%]` = NA_real_
+    )
+      
+    ordered_data <- bind_rows(
+      data_top_ten %>% select(`Name`, `Kingdom`, `Affected [%]`),
+      gap_plot,
+      data_bottom_ten %>% select(`Name`, `Kingdom`, `Affected [%]`)
+    )
+
+    ordered_levels <- c(as.character(data_top_ten$Name), "...", as.character(data_bottom_ten$Name))
+    ordered_data$Name <- factor(as.character(ordered_data$Name), levels = ordered_levels)
+
+Now we map this to get the desired plot:
+
+    ordered_data %>%
+      ggplot() +
+      geom_col(aes(x = Name, y = `Affected [%]`, fill = Kingdom)) +
+      theme_minimal() +
+      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+
+    ## Warning: Removed 1 row containing missing values or values outside the scale range
+    ## (`geom_col()`).
+
+![](emily-works_files/figure-markdown_strict/barplot-2-mapping-1.png)
