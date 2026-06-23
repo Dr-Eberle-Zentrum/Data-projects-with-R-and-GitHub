@@ -1,0 +1,110 @@
+---
+title: "R Markdown"
+date: "2026-04-28"
+output:
+  html_document:
+    df_print: paged
+---
+<style type="text/css">
+/* Level 1 header: Bold and Blue */
+h1 {
+  color: #4682B4;
+  font-weight: bold;
+}
+
+/* Level 2 header: pink*/
+h2 {
+  color: #DB7093;
+}
+
+/* Level 3 header: Purple */
+h3 {
+  color: #800080;
+}
+</style>
+
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+## Chunk
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+
+### Insert chunk
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+```{r}
+curve(1 * x, from = 0, to = 5)
+```
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
+
+## Run a plot
+
+```{r setup, include = FALSE}
+library(ggplot2)
+library(dplyr)
+
+smaller <- diamonds %>% 
+  filter(carat <= 2.5)
+```
+
+We have data about `r nrow(diamonds)` diamonds. Only 
+`r nrow(diamonds) - nrow(smaller)` are larger than
+2.5 carats. The distribution of the remainder is shown
+below:
+
+```{r, echo = FALSE}
+smaller %>% 
+  ggplot(aes(carat)) + 
+  geom_freqpoly(binwidth = 0.01)
+```
+
+## Create a CV
+
+### JINGYI LI
+**Nationality:** Chinese  
+**E-mail:** 12345@gmail.com  
+
+---  
+
+#### Education  
+**Bachelor of Science Degree**  
+*Shanghai International Studies University*  
+City: Shanghai | Country: China | Website: https://www.shisu.edu.cn | Field(s) of study: Education Technology  
+
+**Master of Arts Degree**  
+*University of Tübingen*  
+City: Tübingen | Country: Germany | Website: https://uni-tuebingen.de/en/ | Field(s) of study: Computational Linguistic  
+
+---  
+
+#### Work Experience
+
+**Product Assistant**      
+*CMF Technologies*  
+
+* Participate in product design and assist with product prototype design
+* Participate in product testing  
+* Follow up product operation: collects product requirements and oﬀers  
+
+#### Language Skills  
+
+Languages | Level
+------------- | -------------
+Mandarin | Mother Tongue
+English | B2
+German | A1.2
+
+
+
+
+
+
+
+
+

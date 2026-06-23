@@ -1,0 +1,217 @@
+---
+title: "Martin Project Solution"
+author: "Jingyi LI"
+date: "2026-05-06"
+output: html_document
+---
+
+```{r}
+Sys.setlocale("LC_TIME", "de_DE.UTF-8")
+library(tidyverse)
+library(ggplot2)
+library(ggrepel)
+library(knitr)
+library(lubridate)
+
+```
+
+
+```{r}
+# 1. Locate all ZIP files in the specified directory using a regex pattern
+zip_paths <- list.files("./Projects/martin-raden/PV", pattern = "\\.zip$", full.names = TRUE)
+
+# 2. Iterate through each ZIP file to extract and read the CSV content
+pv_list <- lapply(zip_paths, function(path) {
+  fname <- unzip(path, list = TRUE)$Name[1]
+  read_csv2(unz(path, fname))
+})
+
+# 3. Combine all individual data frames into a single master data frame
+pv_data <- bind_rows(pv_list)
+```
+
+```{r}
+pv_data_clean <- pv_data %>%
+  # Convert the 'Datum' column from string (DD.MM.YYYY) to a formal Date object
+  mutate(Datum = as.Date(Datum, format = "%d.%m.%Y")) %>%
+  
+  # Batch process all columns containing power metrics ([kWh])
+  mutate(across(contains("[kWh]"), ~ {
+    as.numeric(gsub(",", ".", gsub("[^0-9,.-]", "", as.character(.x))))
+  })) %>%
+  
+  filter(format(Datum, "%Y") == "2025") %>%
+  
+  # Handle potential data duplicates for the same day
+  group_by(Datum) %>%
+  slice_max(`PV Ertrag [kWh]`, n = 1, with_ties = FALSE) %>%
+  ungroup()
+```
+
+```{r}
+# Aggregate data by month and calculate financial performance
+pv_final <- pv_data_clean %>%
+  mutate( `Eigenverbrauch [kWh]` = `PV Ertrag [kWh]` - `Netzeinspeisung [kWh]` - `Speicherung [kWh]`,
+  `Gesamtverbrauch [kWh]` = `Eigenverbrauch [kWh]` + `Netzbezug [kWh]`,
+  `Eigenverbrauchsanteil [%]` = (`Eigenverbrauch [kWh]` / `Gesamtverbrauch [kWh]`) * 100) %>%
+  
+  arrange(Datum)
+
+pv_final %>% 
+  select(Datum, `Eigenverbrauch [kWh]`, `Gesamtverbrauch [kWh]`, `Eigenverbrauchsanteil [%]`) %>% 
+  head()
+```
+
+```{r}
+monthly_data <- pv_final %>%
+  # Extract the month as a number (1-12) and map it to a factor with German labels
+  mutate(Month_Num = as.numeric(format(Datum, "%m")),
+    Monat = factor(Month_Num, levels = 1:12, labels = c("Jan", "Feb", "Mrz", "Apr", "Mai", "Jun", 
+                              "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"))
+  ) %>%
+  
+  # Aggregate electrical metrics by month
+  group_by(Monat) %>%
+  summarise(across( contains("[kWh]"), 
+    ~ sum(.x, na.rm = TRUE) ), .groups = "drop") %>%
+  
+  # Calculate financial metrics (Costs and Savings)
+  mutate(
+    `Stromkosten [€]` = `Netzbezug [kWh]` * 0.30,
+    `Einspeisevergütung [€]` = `Netzeinspeisung [kWh]` * 0.08,
+    `Einsparungen durch Eigenverbrauch [€]` = `Eigenverbrauch [kWh]` * 0.30,
+    `Gesamtwirtschaftlichkeit [€]` = `Einsparungen durch Eigenverbrauch [€]` + `Einspeisevergütung [€]` - `Stromkosten [€]`
+  ) %>%
+  
+  # Final formatting
+  mutate(across(where(is.numeric), ~ round(.x, 2)))
+
+# Output the result as a clean Markdown table for the report
+knitr::kable(monthly_data)
+```
+
+```{r}
+plot_data <- monthly_data %>%
+  select(Monat, `Stromkosten [€]`, `Einspeisevergütung [€]`, `Einsparungen durch Eigenverbrauch [€]`) %>%
+  mutate(`Stromkosten [€]` = -`Stromkosten [€]`) %>%
+  pivot_longer(
+    cols = -Monat, 
+    names_to = "Kategorie", 
+    values_to = "Euro"
+  )
+```
+
+
+```{r}
+# 1. Define the color
+my_colors <- c(
+  "Stromkosten [€]" = "#E67E22",                         # Orange for costs
+  "Einspeisevergütung [€]" = "#27AE60",                  # Green for revenue
+  "Einsparungen durch Eigenverbrauch [€]" = "#2980B9"    # Blue for savings
+)
+
+# 2.visualization
+ggplot() +
+  # Draw the stacked bar chart for monthly components
+  geom_col(data = plot_data, 
+           aes(x = Monat, y = Euro, fill = Kategorie), 
+           position = "stack", alpha = 0.8, width = 0.7) +
+  
+  # Add the line chart representing 'Total Economic Benefit' 
+  geom_line(data = monthly_data, 
+            aes(x = Monat, y = `Gesamtwirtschaftlichkeit [€]`, group = 1), 
+            color = "#8E44AD", linewidth = 1.2) +
+  
+  # Add points on the line for better visualization of monthly data points
+  geom_point(data = monthly_data, 
+             aes(x = Monat, y = `Gesamtwirtschaftlichkeit [€]`), 
+             color = "#8E44AD", fill = "white", size = 3, shape = 21, stroke = 1.5) +
+  
+  # Apply manual color mapping using the German keys defined above
+  scale_fill_manual(values = my_colors) +
+  
+  # Keep chart titles and labels in the original language as requested
+  labs(title = "Monatliche Kosten und Einsparungen 2025",
+       subtitle = "Analyse der Wirtschaftlichkeit (Einsparungen vs. Kosten)",
+       x = "Monat",
+       y = "Euro [€]",
+       fill = "Kategorie") +
+  
+  # Apply a clean, professional theme
+  theme_minimal(base_size = 12) +
+  theme(
+    panel.grid.minor = element_blank(),           # Remove minor grid lines
+    panel.grid.major.x = element_blank(),         # Remove vertical grid lines for clarity
+    plot.title = element_text(face = "bold", size = 16),
+    legend.position = "bottom"                    # Place legend at the bottom
+  ) +
+  
+  # Add a horizontal dashed line at y=0 as a baseline reference
+  geom_hline(yintercept = 0, color = "grey30", linetype = "dashed")
+```
+
+
+
+```{r}
+# 1. Prepare data for the pie chart
+pie_plot_data <- tibble(
+  Category = c("Einsparung", "Einspeiseverguetung", "Restkosten"),
+  Price = c(
+    # Use backticks for columns with spaces and units
+    sum(pv_data_clean$`Eigenverbrauch [kWh]`, na.rm = TRUE) * 0.30,
+    sum(pv_data_clean$`Netzeinspeisung [kWh]`, na.rm = TRUE) * 0.08,
+    12000 - (sum(pv_data_clean$`Eigenverbrauch [kWh]`, na.rm = TRUE) * 0.30 + 
+             sum(pv_data_clean$`Netzeinspeisung [kWh]`, na.rm = TRUE) * 0.08)
+  )
+) %>%
+  arrange(desc(Category)) %>%
+  mutate(
+    Percentage = Price / sum(Price) * 100,
+    # Labels show only amounts and percentages for clarity
+    Label_Text = paste0(round(Price, 0), " €\n(", round(Percentage, 1), "%)"),
+    # Calculate exact center position for labels
+    pos = cumsum(Price) - Price/2,
+    # Calculate angle to determine label direction (left vs right)
+    angle = (cumsum(Price) - Price/2) / sum(Price) * 360
+  )
+
+# 2. Create the Pie Chart Visualization
+ggplot(pie_plot_data, aes(x = 1.8, y = Price, fill = Category)) +
+  # Create the ring shape
+  geom_col(width = 0.7, color = "white") + 
+  coord_polar(theta = "y") +
+  
+  # Use repel to prevent label overlapping and push them to sides
+  geom_label_repel(
+    aes(y = pos, label = Label_Text),
+    size = 3.5,
+    # Logic: nudge left if angle > 180, else nudge right
+    nudge_x = ifelse(pie_plot_data$angle > 180, -1.2, 1.2), 
+    force = 10,
+    segment.color = "grey30",
+    segment.size = 0.5,
+    min.segment.length = 0, # Always draw leader lines
+    show.legend = FALSE,
+    direction = "both",
+    box.padding = 1.2
+  ) +
+  
+  # Manual color scale to fix potential encoding issues with 'ü' in legend
+  scale_fill_manual(
+    values = c("#66C2A5", "#FC8D62", "#8DA0CB"), 
+    labels = c("Einsparung", "Einspeisevergütung", "Restkosten")
+  ) +
+  
+  # Clean layout with no axes or grid
+  theme_void() +
+  labs(title = "Amortisierung der Photovoltaikanlage",
+       fill = "Kategorie") +
+  theme(
+    legend.position = "right",
+    plot.margin = unit(c(1,1,1,1), "cm") 
+  ) +
+  # Expand x-axis to provide physical space for external labels
+  xlim(0.5, 3.5)
+```
+
+

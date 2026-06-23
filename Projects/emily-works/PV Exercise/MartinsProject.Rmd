@@ -1,0 +1,153 @@
+---
+title: "MartinsProject"
+output: html_document
+---
+
+
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(readr)
+library(dplyr)
+options(OutDec = ",")
+```
+
+# Datenimport
+
+```{r Datenimport, warning = FALSE, message = FALSE}
+
+## PV-Ordner mit den ZIP-Dateien
+zip_ordner <- "~/Documents/Data-projects-with-R-and-GitHub/Projects/martin-raden/PV"
+
+## Alle ZIP-Dateien im ZIP Ordner finden
+zip_dateien <- list.files(zip_ordner, pattern = "\\.zip$", full.names = TRUE)
+
+## Liste für die Daten erstellen
+daten_liste <- vector("list", length(zip_dateien))
+
+## Alle ZIP-Dateien mit FOR-Loop auslesen (hier hat die KI geholfen, leider kann ich
+## nicht genau erklären wie, aber es funktioniert 🥲)
+
+for (i in 1:length(zip_dateien)) {
+  zip_inhalt <- unzip(zip_dateien[i], list = TRUE)
+  csv_name <- zip_inhalt$Name[grepl("\\.csv$", zip_inhalt$Name)][1]
+  daten_liste[[i]] <- read_delim(
+    file = unz(zip_dateien[i], csv_name),
+    delim = ";",
+    col_types = cols(.default = col_character()),
+    show_col_types = FALSE
+  )
+}
+
+## Daten in einer Variable speichern
+daten_importiert <- bind_rows(daten_liste)
+
+```
+
+Nun müssen alle Spalten noch den richtigen Datentyp bekommen.
+
+```{r Datentypen}
+
+daten_typisiert <- daten_importiert %>%
+  mutate(
+    Datum = as.Date(Datum, format = "%d.%m.%Y"),
+    across(
+      c(`Netzeinspeisung [kWh]`, `Netzbezug [kWh]`,
+        `Speicherung [kWh]`, `PV Ertrag [kWh]`),
+      ~ parse_number(.x, locale = locale(decimal_mark = ",", grouping_mark = "."))
+    )
+  )
+
+```
+
+Nun wollen wir nach fehlenden Werten suchen
+```{r Fehlende Werte}
+fehlende_werte <- daten_typisiert %>%
+  summarise(across(everything(), ~ sum(is.na(.))))
+
+```
+es gibt keine fehlenden Werte? (oder??????)
+
+Nun wollen wir prüfen, ob es doppelte Einträge gibt
+```{r Doppelte Einträge}
+duplikate <- daten_typisiert %>%
+  add_count(Datum) %>%
+  filter(n > 1)
+
+daten_sliced <- daten_typisiert %>%
+  group_by(Datum) %>%
+  slice_max(order_by = `PV Ertrag [kWh]`, n = 1, with_ties = FALSE) %>%
+  ungroup()
+```
+
+Nun wollen wir nur Daten aus 2025 behalten
+```{r Daten filtern}
+
+daten_2025 <- daten_sliced %>%
+  filter(!is.na(Datum), format(Datum, "%Y") == "2025")
+```
+
+---
+
+# Datenaufbereitung
+
+```{r Datenaufbereitung}
+
+daten_2025 <- daten_2025 %>%
+  mutate(
+    `Eigenverbrauch [kWh]` = `PV Ertrag [kWh]` - `Netzeinspeisung [kWh]` - `Speicherung [kWh]`,
+    `Gesamtverbrauch [kWh]` = `Netzbezug [kWh]` + `Eigenverbrauch [kWh]`,
+    `Eigenverbrauchsanteil [%]` = (`Eigenverbrauch [kWh]` / `Gesamtverbrauch [kWh]`) * 100
+  ) %>%
+  arrange(Datum)
+
+```
+
+# Datenanalyse und -visualisierung
+```{r Datenanalyse}
+
+daten_2025_monatlich <- daten_2025 %>%
+  group_by(Monat = format(Datum, "%Y-%m"))%>%
+  summarise(
+    `PV Ertrag [kWh]` = sum(`PV Ertrag [kWh]`, na.rm = TRUE),
+    `Netzeinspeisung [kWh]` = sum(`Netzeinspeisung [kWh]`, na.rm = TRUE),
+    `Netzbezug [kWh]` = sum(`Netzbezug [kWh]`, na.rm = TRUE),
+    `Eigenverbrauch [kWh]` = sum(`Eigenverbrauch [kWh]`, na.rm = TRUE),
+    `Gesamtverbrauch [kWh]` = sum(`Gesamtverbrauch [kWh]`, na.rm = TRUE),
+    `Eigenverbrauchsanteil [%]` = mean(`Eigenverbrauchsanteil [%]`, na.rm = TRUE)
+  )
+
+```
+
+Nun wollen wir die Tabelle erweitern
+```{r Tabelle erweitern}
+daten_2025_monatlich <- daten_2025_monatlich %>%
+  mutate(
+    `Stromkosten [€]`= `Netzbezug [kWh]` * 0.30,
+    `Einspeisevergütung [€]` = `Netzeinspeisung [kWh]` * 0.08,
+    `Einsparungen durch Eigenverbrauch [€]`= `Eigenverbrauch [kWh]` * 0.30,
+    `Gesamtwirtschaftlichkeit [€]`= `Einsparungen durch Eigenverbrauch [€]` + `Einspeisevergütung [€]` - `Stromkosten [€]`
+  )
+
+```
+
+Darstellung als Tabelle
+```{r Tabelle darstellen}
+library(knitr)
+kable(daten_2025_monatlich, digits = 2, caption = "Monatliche Zusammenfassung")
+```
+
+Nun wollen wir doe Kosten-/Vergütungsbezogenen Spalten visualisieren
+```{r Kostenvisualisierung}
+ggplot() +
+  geom_col(data = daten_2025_monatlich, aes(x = Monat, y = `Einspeisevergütung [€]`), fill = "blue") +
+  geom_col(data = daten_2025_monatlich, aes(x = Monat, y = -`Stromkosten [€]`), fill = "red") +
+  geom_col(data = daten_2025_monatlich, aes(x = Monat, y = `Einsparungen durch Eigenverbrauch [€]`), fill = "yellow") +
+  geom_line(data = daten_2025_monatlich, aes(x = Monat, y = `Gesamtwirtschaftlichkeit [€]`), color = "pink", group = 1)
+```
+--- 
+
+# Jahresübersicht
+
+Nun wollen wir einen Blick auf das gesamte Jahr werfen (ab hier haben wir nicht weitergearbeitet). Zeitaufwand bis hier: ~3,5 Stunden
