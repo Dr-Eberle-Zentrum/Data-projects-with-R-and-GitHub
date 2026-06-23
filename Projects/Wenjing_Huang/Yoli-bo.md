@@ -19,20 +19,18 @@ df <- df %>%
 ``` r
 # Simplifying participants’ answers by changing all characters/words records checked/unchecked or Yes/No into numeric 1/0 R encoding. Simplifying participants’s age records to <= 15 F or M, 16-17 F or M, >=18 F or M.(Attention that records in table for the same category may be different. For example:%22Greater than or equal to 18” vs Greater than or equal 18”)
 
-df <- df %>%
+processed_data <- clean_data %>%
   mutate(
     age_group = case_when(
       str_detect(age_range, "Lower") ~ "<=15",
       str_detect(age_range, "16") ~ "16-17",
       str_detect(age_range, "18") ~ ">=18",
       TRUE ~ NA_character_
-    )
-  )
+    ),
 
-df <- df %>%
-  mutate(
     age_sex_group = paste(age_group, sex)
   )
+df <- processed_data
 ```
 
 ``` r
@@ -69,76 +67,92 @@ df <- df %>%
 
 ``` r
 # Merging columns that for a same question in Social media and health to one column, such as "Platform for health", "Platform for HISB", "Platform for health topic";
-
 # Platform for health
-df <- df %>%
-  mutate(
-    platform_for_health = case_when(
-      favourite_platform_site_for_health_social_media == 1 ~ "social media",
-      favourite_platform_site_for_health_search_engine == 1 ~ "search engine",
-      favourite_platform_site_for_health_unclear == 1 ~ "unclear",
-      favourite_platform_site_for_health_none == 1 ~ "none",
-      TRUE ~ NA_character_
-    )
-  )
-
 # Platform for HISB
-df <- df %>%
-  mutate(
-    platform_for_hisb = case_when(
-      for_searching_health_information_social_media == 1 ~ "social media",
-      for_searching_health_information_search_engine == 1 ~ "search engine",
-      for_searching_health_information_web_site == 1 ~ "web site",
-      for_searching_health_information_unclear == 1 ~ "unclear",
-      for_searching_health_information_none == 1 ~ "none",
-      TRUE ~ NA_character_
-    )
-  )
-
 # Platform for discussing health topics
-df <- df %>%
-  mutate(
-    platform_for_health_topic = case_when(
-      for_discussing_social_media == 1 ~ "social media",
-      for_discussing_search_engine == 1 ~ "search engine",
-      for_discussing_app == 1 ~ "app",
-      for_discussing_web_site == 1 ~ "web site",
-      for_discussing_unclear == 1 ~ "unclear",
-      for_discussing_none == 1 ~ "none",
-      TRUE ~ NA_character_
-    )
-  )
-
 # Merging "Do you use apps, social media or websites for your health" in the following columns. When the answer to that question is no, solving missing values with none, otherwise solvng missing value with NA. The values should be social media, search engine, app, web site, unclear, none.
 
+create_platform <- function(data, conditions) {
+  case_when(
+    !!!conditions,
+    TRUE ~ NA_character_
+  )
+}
+
 df <- df %>%
   mutate(
-    platform_for_health = ifelse(
-      do_you_use_apps_social_media_or_websites_for_your_health == 0,
-      "none",
-      platform_for_health
+    platform_for_health = create_platform(
+      .,
+      list(
+        favourite_platform_site_for_health_social_media == 1 ~ "social media",
+        favourite_platform_site_for_health_search_engine == 1 ~ "search engine",
+        favourite_platform_site_for_health_unclear == 1 ~ "unclear",
+        favourite_platform_site_for_health_none == 1 ~ "none"
+      )
     ),
-    platform_for_hisb = ifelse(
-      do_you_use_apps_social_media_or_websites_for_your_health == 0,
-      "none",
-      platform_for_hisb
+
+    platform_for_hisb = create_platform(
+      .,
+      list(
+        for_searching_health_information_social_media == 1 ~ "social media",
+        for_searching_health_information_search_engine == 1 ~ "search engine",
+        for_searching_health_information_web_site == 1 ~ "web site",
+        for_searching_health_information_unclear == 1 ~ "unclear",
+        for_searching_health_information_none == 1 ~ "none"
+      )
     ),
-    platform_for_health_topic = ifelse(
-      do_you_use_apps_social_media_or_websites_for_your_health == 0,
-      "none",
-      platform_for_health_topic
+
+    platform_for_health_topic = create_platform(
+      .,
+      list(
+        for_discussing_social_media == 1 ~ "social media",
+        for_discussing_search_engine == 1 ~ "search engine",
+        for_discussing_app == 1 ~ "app",
+        for_discussing_web_site == 1 ~ "web site",
+        for_discussing_unclear == 1 ~ "unclear",
+        for_discussing_none == 1 ~ "none"
+      )
+    )
+  ) %>%
+  mutate(
+    across(
+      c(platform_for_health,
+        platform_for_hisb,
+        platform_for_health_topic),
+      ~ ifelse(
+        do_you_use_apps_social_media_or_websites_for_your_health == 0,
+        "none",
+        .
+      )
     )
   )
 ```
 
 ``` r
 # Combining above numeric responses that in Use of devices. The new values should be completed by the sum of the subbranches. Renaming each column with short but representative name. For example: we combine numeric responses in "Discussion by email or on the digital social networks with friends or family" and "Watching your social network feed" to Computer Socialzing; "Listening to the music", "Playing games","viewing videos" to Computer Entertainment. So finally the column should be Computer Searching,Computer Socializing,Computer Entertainment,Computer Studying,Others. You should rename them with usage of Mobile Phone in this same format. Attention that Telephone conversation counts to Socializing.
-
 df <- df %>%
-  mutate(
+  rename(
     computer_searching =
       when_you_are_on_the_computer_and_or_tablet_what_type_of_actions_do_you_most_often_perform_choice_searching_for_general_information,
 
+    computer_studying =
+      when_you_are_on_the_computer_and_or_tablet_what_type_of_actions_do_you_most_often_perform_choice_study_or_homeworks,
+
+    computer_others =
+      when_you_are_on_the_computer_and_or_tablet_what_type_of_actions_do_you_most_often_perform_choice_other,
+
+    mobile_searching =
+      when_you_are_on_your_mobile_phone_what_type_of_actions_do_you_perform_most_often_choice_searching_for_general_information,
+
+    mobile_studying =
+      when_you_are_on_your_mobile_phone_what_type_of_actions_do_you_perform_most_often_choice_study_or_homeworks,
+
+    mobile_others =
+      when_you_are_on_your_mobile_phone_what_type_of_actions_do_you_perform_most_often_choice_other
+  )
+
+df <- df %>%
+  mutate(
     computer_socializing = rowSums(across(c(
       when_you_are_on_the_computer_and_or_tablet_what_type_of_actions_do_you_most_often_perform_choice_discussion_by_email_or_on_the_digital_social_networks_with_friends_or_family,
       when_you_are_on_the_computer_and_or_tablet_what_type_of_actions_do_you_most_often_perform_choice_watching_your_social_network_feed
@@ -150,19 +164,6 @@ df <- df %>%
       when_you_are_on_the_computer_and_or_tablet_what_type_of_actions_do_you_most_often_perform_choice_viewing_videos
     )), na.rm = TRUE),
 
-    computer_studying =
-      when_you_are_on_the_computer_and_or_tablet_what_type_of_actions_do_you_most_often_perform_choice_study_or_homeworks,
-
-    computer_others =
-      when_you_are_on_the_computer_and_or_tablet_what_type_of_actions_do_you_most_often_perform_choice_other
-  )
-
-
-df <- df %>%
-  mutate(
-    mobile_searching =
-      when_you_are_on_your_mobile_phone_what_type_of_actions_do_you_perform_most_often_choice_searching_for_general_information,
-
     mobile_socializing = rowSums(across(c(
       when_you_are_on_your_mobile_phone_what_type_of_actions_do_you_perform_most_often_choice_discussion_by_email_or_on_the_digital_social_networks_with_friends_or_family,
       when_you_are_on_your_mobile_phone_what_type_of_actions_do_you_perform_most_often_choice_watching_your_social_network_feed,
@@ -173,13 +174,7 @@ df <- df %>%
       when_you_are_on_your_mobile_phone_what_type_of_actions_do_you_perform_most_often_choice_listening_to_the_music,
       when_you_are_on_your_mobile_phone_what_type_of_actions_do_you_perform_most_often_choice_playing_games,
       when_you_are_on_your_mobile_phone_what_type_of_actions_do_you_perform_most_often_choice_viewing_videos
-    )), na.rm = TRUE),
-
-    mobile_studying =
-      when_you_are_on_your_mobile_phone_what_type_of_actions_do_you_perform_most_often_choice_study_or_homeworks,
-
-    mobile_others =
-      when_you_are_on_your_mobile_phone_what_type_of_actions_do_you_perform_most_often_choice_other
+    )), na.rm = TRUE)
   )
 
 df <- df %>%
@@ -210,21 +205,9 @@ df <- df %>%
 # Remove the original platform variables
 df <- df %>%
   select(
-    -favourite_platform_site_for_health_social_media,
-    -favourite_platform_site_for_health_search_engine,
-    -favourite_platform_site_for_health_unclear,
-    -favourite_platform_site_for_health_none,
-    -for_searching_health_information_social_media,
-    -for_searching_health_information_search_engine,
-    -for_searching_health_information_web_site,
-    -for_searching_health_information_unclear,
-    -for_searching_health_information_none,
-    -for_discussing_social_media,
-    -for_discussing_search_engine,
-    -for_discussing_app,
-    -for_discussing_web_site,
-    -for_discussing_unclear,
-    -for_discussing_none,
+    -starts_with("favourite_platform_site_for_health_"),
+    -starts_with("for_discussing_"),
+    -starts_with("for_searching_health_information_"),
     -do_you_use_apps_social_media_or_websites_for_your_health
   )
 
@@ -259,41 +242,6 @@ groups; black line with filled black circle point marker. 8.The legend
 should be placed on the right of the plot.
 
 ``` r
-df <- read.csv("../Wenjing_Huang/dataset/cleaned_data.csv", stringsAsFactors = FALSE)
-
-colnames(df)
-```
-
-    ##  [1] "participant"                                  
-    ##  [2] "sex"                                          
-    ##  [3] "age_range"                                    
-    ##  [4] "do_you_have_a_mobile_phone"                   
-    ##  [5] "is_this_mobile_phone_yours_or_do_you_share_it"
-    ##  [6] "age_group"                                    
-    ##  [7] "age_sex_group"                                
-    ##  [8] "mobile_phone_ownership"                       
-    ##  [9] "platform_for_health"                          
-    ## [10] "platform_for_hisb"                            
-    ## [11] "platform_for_health_topic"                    
-    ## [12] "computer_searching"                           
-    ## [13] "computer_socializing"                         
-    ## [14] "computer_entertainment"                       
-    ## [15] "computer_studying"                            
-    ## [16] "computer_others"                              
-    ## [17] "mobile_searching"                             
-    ## [18] "mobile_socializing"                           
-    ## [19] "mobile_entertainment"                         
-    ## [20] "mobile_studying"                              
-    ## [21] "mobile_others"                                
-    ## [22] "hisb_rate"
-
-``` r
-dim(df)
-```
-
-    ## [1] 197  22
-
-``` r
 group_order <- c("<=15 F", "<=15 M", "16-17 F", "16-17 M", ">=18 F", ">=18 M")
 
 df <- df %>%
@@ -314,7 +262,7 @@ df <- df %>%
   ~ replace_na(.x, 0)))
 
 hisb_by_group <- df %>%
-  mutate(hisb_indicator = as.integer(hisb_rate > 0,1,0)) %>%
+  mutate(hisb_indicator = as.integer(hisb_rate > 0)) %>%
   group_by(age_sex_group) %>%
   summarise(HISB_Rate = mean(hisb_indicator, na.rm = TRUE), .groups = "drop")
 
@@ -346,24 +294,36 @@ summarise_usage <- function(dat, s, soc, ent, stu, oth) {
 computer_sum <- summarise_usage(df,
   computer_searching, computer_socializing, computer_entertainment, computer_studying, computer_others)
 
-mobile_sum <- summarise_usage(df, computer_searching, computer_socializing, computer_entertainment, computer_studying, computer_others)
+mobile_sum <- summarise_usage(
+  df,
+  mobile_searching,
+  mobile_socializing,
+  mobile_entertainment,
+  mobile_studying,
+  mobile_others
+)
 
 usage_levels <- c("Searching", "Socializing", "Entertainment", "Studying", "Others")
 ```
 
 ``` r
-plot_df <- bind_rows(
-
-  computer_sum %>%
-    pivot_longer(Searching:Others, names_to = "Usage", values_to = "Proportion") %>%
-    mutate(Device = "Computer Usage"),
-
-  mobile_sum %>%
-    pivot_longer(Searching:Others, names_to = "Usage", values_to = "Proportion") %>%
-    mutate(Device = "Mobile Phone Usage")
-) %>% 
-  mutate(Usage = factor(Usage, levels = usage_levels),
-         Device = factor(Device, levels = c("Computer Usage", "Mobile Phone Usage")))
+plot_df <- list(
+  "Computer Usage" = computer_sum,
+  "Mobile Phone Usage" = mobile_sum
+) %>%
+  bind_rows(.id = "Device") %>%
+  pivot_longer(
+    Searching:Others,
+    names_to = "Usage",
+    values_to = "Proportion"
+  ) %>%
+  mutate(
+    Usage = factor(Usage, levels = usage_levels),
+    Device = factor(
+      Device,
+      levels = c("Computer Usage", "Mobile Phone Usage")
+    )
+  )
 
 
 hisb_df <- bind_rows(
