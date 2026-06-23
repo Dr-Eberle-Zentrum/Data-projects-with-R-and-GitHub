@@ -4,74 +4,85 @@
 
 ## Add Kingdom Data
 
-    kingdoms <- c("Animalia", "Chromista", "Fungi", "Plantae") # list kingdoms in the order they appear in
+- lists kingdoms in the order they appear in the data set
+- creates column that says TRUE when a change appears (new kingdom)
+- replaces NA in 1st observation with TRUE
+- fills the NAs with the value of the last non-NA observation
+- removes the ClassChange & AllKingdom column
+
+<!-- -->
+
+    kingdoms <- c("Animalia", "Chromista", "Fungi", "Plantae") 
 
     kingdom_data  <- raw_data %>%
-      mutate(
-        ClassChange = Name < lag(Name),     # create column that says TRUE when a change appears (new kingdom)
-        ClassChange = replace_na(ClassChange, TRUE),       # replaces NA in 1st observation with TRUE
-        AllKingdom = ifelse(ClassChange == TRUE, kingdoms[cumsum(ClassChange)], NA)
-      ) %>%
-      fill(AllKingdom, .direction = "down") %>%      # fills the NAs with the value
-      mutate(
-        Kingdom = if_else(Name == "Total", NA, AllKingdom)
-        ) %>%
-      select(!c("ClassChange","AllKingdom"))     # removes the ClassChange & AllKingdom column 
+      mutate(ClassChange = Name < lag(Name),     
+             ClassChange = replace_na(ClassChange, TRUE),
+             AllKingdom = ifelse(ClassChange == TRUE, kingdoms[cumsum(ClassChange)], NA)) %>%
+      fill(AllKingdom, .direction = "down") %>%
+      mutate(Kingdom = if_else(Name == "Total", NA, AllKingdom)) %>%
+      select(!c("ClassChange","AllKingdom"))      
 
 # Data Manipulation
 
+- removes non-IUCN data
+- creates new column for NearThreatened species by combining the two
+  columns that contain this information
+- renames columns for clarity
+- reorders columns
+
+<!-- -->
+
     manipulated_data <- kingdom_data %>%
-      select(!("CR(PE)":"Subtotal (EX+EW+ CR(PE)+CR(PEW))")) %>%  # removes columns
+      select(!("CR(PE)":"Subtotal (EX+EW+ CR(PE)+CR(PEW))")) %>%
       rowwise() %>%
-      mutate( 
-        NearThreatened = sum(c_across("LR/cd":"NT or LR/nt"))  # combines columns
-            ) %>%
-      select(!("LR/cd":"NT or LR/nt")   # removes columns
-             ) %>%
-      rename(
-        "Extinct" = "EX",
-        "ExtinctWild" = "EW",
-        "CriticallyEndangered" = "CR",
-        "Endangered" = "EN",
-        "Vulnerable" = "VU",
-        "LowRisk" = "LC or LR/lc",
-        "DataDeficient" = "DD"
-        ) %>%
-      select(`Name`,`Kingdom`,`Extinct`:`Subtotal (threatened spp.)`, `NearThreatened`, `LowRisk`:`Total`)     # changes column order
+      mutate(NearThreatened = sum(c_across("LR/cd":"NT or LR/nt"))) %>%
+      select(!("LR/cd":"NT or LR/nt")) %>%
+      rename("Extinct" = "EX",
+             "ExtinctWild" = "EW",
+             "CriticallyEndangered" = "CR",
+             "Endangered" = "EN",
+             "Vulnerable" = "VU",
+             "LowRisk" = "LC or LR/lc",
+             "DataDeficient" = "DD") %>%
+      select(`Name`,`Kingdom`,`Extinct`:`Subtotal (threatened spp.)`, `NearThreatened`, `LowRisk`:`Total`)
 
 # Data Visualization
 
-First step: create a new seperate table
+- creates new table
+- filters only for classes with at least 1000 recorded species
+- creates relative amount table
+
+<!-- -->
 
     data_table_filtered <- manipulated_data %>%
-      filter ( Total > 1000 ) %>%
-      transmute(
-        `Name`,
-        `Kingdom`,
-        across(c(`Extinct`:`Total`), ~round ( .x / Total * 100, 2), .names = "{.col} [%]")
-        )
+      filter (Total > 1000) %>%
+      transmute(`Name`,
+                `Kingdom`,
+                across(c(`Extinct`:`Total`), ~round ( .x / Total * 100, 2), .names = "{.col} [%]"))
 
-Create Barplot 1:
+## Barplot 1
+
+- creates new column for unaffected species by combining the two columns
+  that contain this information
+- groups the data by kingdom and calculates the mean percentage for each
+  category
+- creates barplot
+
+<!-- -->
 
     data_table_filtered %>%
       rowwise() %>%
-      mutate(
-        `Unaffected [%]` = sum(c_across(`NearThreatened [%]`:`DataDeficient [%]`))
-      ) %>%
+      mutate(`Unaffected [%]` = sum(c_across(`NearThreatened [%]`:`DataDeficient [%]`))) %>%
       group_by(Kingdom) %>%
-      summarise(
-        Extinct = mean(`Subtotal (EX+EW) [%]`),
-        Affected = mean(`Subtotal (threatened spp.) [%]`),
-        Unaffected = mean(`Unaffected [%]`)
-      ) %>%
-      pivot_longer(
-        cols = c(Extinct, Affected, Unaffected),
-        names_to = "Category",
-        values_to = "Percentage"
-      ) %>%
+      summarise(Extinct = mean(`Subtotal (EX+EW) [%]`),
+                Affected = mean(`Subtotal (threatened spp.) [%]`),
+                Unaffected = mean(`Unaffected [%]`)) %>%
+      pivot_longer(cols = c(Extinct, Affected, Unaffected),
+                   names_to = "Category",
+                   values_to = "Percentage") %>%
       filter(!is.na(Kingdom)) %>%
       ggplot() +
-       geom_bar(aes( x = Kingdom, y = Percentage, fill = Category), stat = "identity", position = "stack") +
+      geom_bar(aes( x = Kingdom, y = Percentage, fill = Category), stat = "identity", position = "stack") +
       ggtitle("Distribution of Impact Among Kingdoms") +
       xlab("Kingdom") +
       ylab("Average Percentage within Species") +
@@ -79,57 +90,67 @@ Create Barplot 1:
 
 ![](emily-works_files/figure-markdown_strict/barplot-1-1.png)
 
-Create Barplot 2:
+## Barplot 2
 
-First step, prepare the data:
+- creates the same table as above, but w/o the 1000 species filter (+
+  adds a new column for the total affected species)
+- creates a new table with the top 10 and bottom 24 classes based on the
+  total affected species
+- adds a gap in the middle of the table to separate the two groups
+
+<!-- -->
 
     library(dplyr)
 
     data_table_unfiltered <- manipulated_data %>%
-      transmute(
-        `Name`,
-        `Kingdom`,
-        across(c(`Extinct`:`Total`), ~round ( .x / Total * 100, 2), .names = "{.col} [%]")
-        ) %>%
+      transmute(`Name`,
+                `Kingdom`,
+                across(c(`Extinct`:`Total`), ~round ( .x / Total * 100, 2), .names = "{.col} [%]")) %>%
       rowwise() %>%
-      mutate(
-        `Affected [%]` = sum(c_across(`Extinct [%]`:`CriticallyEndangered [%]`))
-      ) 
+      mutate(`Affected [%]` = sum(c_across(`Extinct [%]`:`CriticallyEndangered [%]`))) 
 
     data_top_ten <- data_table_unfiltered %>%
       ungroup() %>%
       arrange(desc(`Affected [%]`)) %>% 
       slice_head(n = 10)
 
-    data_bottom_ten <- data_table_unfiltered %>%
+    data_bottom_twentyfour <- data_table_unfiltered %>%
       ungroup() %>%
       arrange(desc(`Affected [%]`)) %>% 
-      slice_tail(n = 10)
+      slice_tail(n = 24)
 
     gap_plot <- tibble(
-      `Name` = "...",
-      `Kingdom` = NA_character_,
-      `Affected [%]` = NA_real_
-    )
+      Name = c("gap_one", "gap_two", "gap_three"),
+      Kingdom = NA_character_,
+      `Affected [%]` = NA_real_)
       
     ordered_data <- bind_rows(
-      data_top_ten %>% select(`Name`, `Kingdom`, `Affected [%]`),
+      data_top_ten %>% 
+        select(Name, Kingdom, `Affected [%]`), 
       gap_plot,
-      data_bottom_ten %>% select(`Name`, `Kingdom`, `Affected [%]`)
-    )
+      data_bottom_twentyfour %>% 
+        select(Name, Kingdom, `Affected [%]`))
 
-    ordered_levels <- c(as.character(data_top_ten$Name), "...", as.character(data_bottom_ten$Name))
-    ordered_data$Name <- factor(as.character(ordered_data$Name), levels = ordered_levels)
+------------------------------------------------------------------------
 
-Now we map this to get the desired plot:
+- “locks” the order of the classes in the barplot by converting the
+  `Name` column to a factor with levels set to the unique values of Name
+  in the order they appear in `ordered_data`
+- creates a barplot with the top 10 and bottom 24 classes based on the
+  total affected species
+- adds the gap in the middle to separate the two groups (`geom_point()`)
+
+<!-- -->
 
     ordered_data %>%
+      mutate(Name = factor(Name, levels = unique(Name))) %>%
       ggplot() +
       geom_col(aes(x = Name, y = `Affected [%]`, fill = Kingdom)) +
-      theme_minimal() +
-      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-
-    ## Warning: Removed 1 row containing missing values or values outside the scale range
-    ## (`geom_col()`).
+      geom_point(data = gap_plot, aes(x = Name, y = 50), size = 2) +
+      scale_x_discrete(labels = function(x) ifelse(grepl("gap_", x), "", x)) +  # Hide gap labels
+      scale_fill_grey(na.translate = FALSE) +
+      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+      ggtitle("Most and Least Affected Classes") +
+      xlab("Class")
 
 ![](emily-works_files/figure-markdown_strict/barplot-2-mapping-1.png)
