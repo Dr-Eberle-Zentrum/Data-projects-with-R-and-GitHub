@@ -164,8 +164,8 @@ so instead I drew them after each other.
       ggplot(aes(x = TypeName, y = Price)) +
       geom_boxplot() +
       scale_y_continuous(labels = label_comma()) +
-      labs(x = "Price in Indian Rupee",
-           y = "Laptop Type",
+      labs(x = "Laptop Type",
+           y = "Price in Indian Rupee",
            title = "Different Prices for different types of Laptops")
 
 ![](SamiPhoenix_files/figure-markdown_strict/Visualisation-2.png)
