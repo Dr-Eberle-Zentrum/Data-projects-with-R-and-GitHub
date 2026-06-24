@@ -276,4 +276,4 @@ be more egalitatrian.
 
     ## Saving 7 x 5 in image
 
-![](histograms.png)
+![](histogram.png)
