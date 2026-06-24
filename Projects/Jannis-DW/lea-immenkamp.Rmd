@@ -90,6 +90,33 @@ best_movie %>%
   row_spec(1)
 ```
 
+```{r top 10}
+# Extract the top 10 highest-scoring movies
+top10_movies <- movies_analyzed %>%  
+  arrange(desc(total_score)) %>%  
+  slice(1:10) %>%  # Selects the top 10 rows
+  select(title, release_year, movie_rating, metascore, total_score)
+
+# Visualization 
+top10_movies %>%
+  kable(
+    col.names = c(
+      "Title",
+      "Year",
+      "IMDb Rating",
+      "Metascore",
+      "Total Score"
+    ),
+    caption = "Top 10 Rated Movies"
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width = FALSE,
+    position = "center"
+  )
+```
+
+
 # Correlation between Movie Rating and Metascore
 
 ```{r correlation visualization}

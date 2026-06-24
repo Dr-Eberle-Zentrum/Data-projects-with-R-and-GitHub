@@ -46,6 +46,202 @@ Metrópolis
 </tr>
 </tbody>
 </table>
+<table class="table table-striped table-hover table-condensed" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Top 10 Rated Movies
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Title
+</th>
+<th style="text-align:right;">
+Year
+</th>
+<th style="text-align:right;">
+IMDb Rating
+</th>
+<th style="text-align:right;">
+Metascore
+</th>
+<th style="text-align:right;">
+Total Score
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Metrópolis
+</td>
+<td style="text-align:right;">
+1927
+</td>
+<td style="text-align:right;">
+83
+</td>
+<td style="text-align:right;">
+98
+</td>
+<td style="text-align:right;">
+181
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WALL·E
+</td>
+<td style="text-align:right;">
+2008
+</td>
+<td style="text-align:right;">
+84
+</td>
+<td style="text-align:right;">
+95
+</td>
+<td style="text-align:right;">
+179
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+La guerra de las galaxias
+</td>
+<td style="text-align:right;">
+1977
+</td>
+<td style="text-align:right;">
+86
+</td>
+<td style="text-align:right;">
+90
+</td>
+<td style="text-align:right;">
+176
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gravity
+</td>
+<td style="text-align:right;">
+2013
+</td>
+<td style="text-align:right;">
+77
+</td>
+<td style="text-align:right;">
+96
+</td>
+<td style="text-align:right;">
+173
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Alien, el octavo pasajero
+</td>
+<td style="text-align:right;">
+1979
+</td>
+<td style="text-align:right;">
+84
+</td>
+<td style="text-align:right;">
+89
+</td>
+<td style="text-align:right;">
+173
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+La novia de Frankenstein
+</td>
+<td style="text-align:right;">
+1935
+</td>
+<td style="text-align:right;">
+78
+</td>
+<td style="text-align:right;">
+95
+</td>
+<td style="text-align:right;">
+173
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Regreso al futuro
+</td>
+<td style="text-align:right;">
+1985
+</td>
+<td style="text-align:right;">
+85
+</td>
+<td style="text-align:right;">
+87
+</td>
+<td style="text-align:right;">
+172
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+¡Olvídate de mí!
+</td>
+<td style="text-align:right;">
+2004
+</td>
+<td style="text-align:right;">
+83
+</td>
+<td style="text-align:right;">
+89
+</td>
+<td style="text-align:right;">
+172
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Spider-Man: Un nuevo universo
+</td>
+<td style="text-align:right;">
+2018
+</td>
+<td style="text-align:right;">
+84
+</td>
+<td style="text-align:right;">
+87
+</td>
+<td style="text-align:right;">
+171
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mad Max: Furia en la carretera
+</td>
+<td style="text-align:right;">
+2015
+</td>
+<td style="text-align:right;">
+81
+</td>
+<td style="text-align:right;">
+90
+</td>
+<td style="text-align:right;">
+171
+</td>
+</tr>
+</tbody>
+</table>
 
 # Correlation between Movie Rating and Metascore
 
