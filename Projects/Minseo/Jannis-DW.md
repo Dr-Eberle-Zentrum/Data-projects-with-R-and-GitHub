@@ -579,6 +579,7 @@ differences are not substantial enough to draw definitive conclusions.
       theme_minimal() +
       theme(legend.title = element_blank())
 
+
 ![](Jannis-DW_files/figure-markdown_strict/Visualisation-1.png)
 
 #### Interpretation:
@@ -586,3 +587,4 @@ differences are not substantial enough to draw definitive conclusions.
 All kinds of Channels have a nearly identical RIO except for Pinterest
 which is much lower. All ROIs stay constant over the whole campaign
 duration. Therefore, Pinterest should not be used in a campaign.
+
