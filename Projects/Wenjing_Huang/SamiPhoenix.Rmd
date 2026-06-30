@@ -1,0 +1,155 @@
+---
+title: "SamiPhoenix"
+output: html_document
+---
+
+```{r libraries, echo=FALSE, message=FALSE}
+
+library(tidyverse)
+
+```
+
+```{r everything, echo=FALSE, message=FALSE, warning=FALSE}
+
+phone_ownership <- function(table){
+  case_when(
+    table$`Do you have a mobile phone?` == "No" ~ 0,
+    table$`Is this mobile phone yours or do you share it ?` == "Shared" ~ 1,
+    TRUE ~ 2
+  )
+}
+
+
+  # Reading Data
+data <-
+  read_delim("2024-12-09_FALAH_Vanuatu_socialMediaUse_Zenodo_anonymized.csv",
+             delim = ";",
+             locale = locale(encoding = "Windows-1252")) %>% 
+  
+  # 1. Removing Columns with Text Answers:
+  select(
+    -`Which social media platform/site (Facebook, Instagram, Twitter, Tiktok, Snapchat) is your favourite to use for your health? And what do you like about it?`,
+    -`For searching health information, which app, social media or website do you use ?`,
+    -`For discussing health topics with other people online, which app, social media or website do you use ?`
+  ) %>% 
+  
+  # 2. Merging Phone Ownership Columns:
+  mutate(`mobile_phone ownership` = phone_ownership(.)) %>% 
+  select(-`Do you have a mobile phone?`, -`Is this mobile phone yours or do you share it ?`) %>% 
+  
+  # 3. Simplifying Participant's Answers:
+  mutate_all(funs(str_replace_all(., "Checked", "1"))) %>% 
+  mutate_all(funs(str_replace_all(., "Unchecked", "0"))) %>%
+  mutate_all(funs(str_replace_all(., "Yes", "1"))) %>% 
+  mutate_all(funs(str_replace_all(., "No", "0"))) %>% 
+  
+  # Handling NA:
+  replace(is.na(.), "0") %>% 
+
+  # Simplifying Age
+  mutate(`Age range` = case_when(
+    str_detect(`Age range`, "Greater than or equal to 18") ~ ">= 18",
+    str_detect(`Age range`, "Between 16 and 17 inclusive") ~ "16-17",
+    str_detect(`Age range`, "Lower than or equal 15")      ~ "<= 15"
+  )) %>% 
+  mutate(Age_Sex = paste(`Age range`, Sex)) %>%
+  
+  # 2. Merging again
+  mutate(Health_Platform = case_when(
+    `Favourite platform/site for health: social media`  == 1 ~ "social media",
+    `Favourite platform/site for health: search engine` == 1 ~ "search engine",
+    `Favourite platform/site for health: unclear`       == 1 ~ "unclear",
+    `Favourite platform/site for health: none`          == 1 ~ "none"
+  )) %>% 
+  mutate(HISB_Platform = case_when(
+    `For searching health information: social media`    == 1 ~ "social media",
+    `For searching health information: search engine`   == 1 ~ "search engine",
+    `For searching health information: web site`        == 1 ~ "web site",
+    `For searching health information: unclear`         == 1 ~ "unclear",
+    `For searching health information: none`            == 1 ~ "none"
+  )) %>% 
+  mutate(Discussion_Platform = case_when(
+    `For discussing: social media` == 1 ~ "social media",
+    `For discussing: search engine` == 1 ~ "search engine",
+    `For discussing: app` == 1 ~ "app",
+    `For discussing: web site` == 1 ~ "web site",
+    `For discussing: unclear` == 1 ~ "unclear",
+    `For discussing: none` == 1 ~ "none"
+  )) %>% 
+  mutate(across(
+    c(
+      Health_Platform,
+      HISB_Platform,
+      Discussion_Platform
+    ),
+    ~ ifelse(
+      `Do you use apps, social media or websites for your health?` == 0,
+      "none",
+      .
+    )
+  )) %>% 
+  
+  # 4. Renaming and combining
+  rename(
+    Age = `Age range`,
+    Computer_Browsing =
+      `When you are on the computer and/or tablet, what type of actions do you most often perform?   (choice=Searching for general information)`,
+    Computer_Studying =
+      `When you are on the computer and/or tablet, what type of actions do you most often perform?   (choice=Study or homeworks)`,
+    Computer_Other =
+      `When you are on the computer and/or tablet, what type of actions do you most often perform?   (choice=Other)`,
+    Phone_Browsing =
+      `When you are on your mobile phone, what type of actions do you perform most often?   (choice=Searching for general information)`,
+    Phone_Studying =
+      `When you are on your mobile phone, what type of actions do you perform most often?   (choice=Study or homeworks)`,
+    Phone_Other =
+      `When you are on your mobile phone, what type of actions do you perform most often?   (choice=Other)`
+  ) %>% 
+  mutate(Computer_Socializing = (
+    as.numeric(`When you are on your mobile phone, what type of actions do you perform most often?   (choice=Discussion by email or on the digital social networks with friends or family)`)
+    + as.numeric(`When you are on your mobile phone, what type of actions do you perform most often?   (choice=Watching your social network feed)`)
+  )) %>% 
+  mutate(Computer_Entertainment = (
+    as.numeric(`When you are on your mobile phone, what type of actions do you perform most often?   (choice=Listening to the music)`) +
+      as.numeric(`When you are on your mobile phone, what type of actions do you perform most often?   (choice=Playing games)`) +
+      as.numeric(`When you are on your mobile phone, what type of actions do you perform most often?   (choice=Viewing videos)`)
+  )) %>% 
+  mutate(Phone_Socializing = (
+    as.numeric(`When you are on your mobile phone, what type of actions do you perform most often?   (choice=Discussion by email or on the digital social networks with friends or family)`) +
+      as.numeric(`When you are on your mobile phone, what type of actions do you perform most often?   (choice=Watching your social network feed)`) +
+      as.numeric(`When you are on your mobile phone, what type of actions do you perform most often?   (choice=Telephone conversation)`)
+  )) %>% 
+  mutate(Phone_Entertainment = (
+    as.numeric(`When you are on your mobile phone, what type of actions do you perform most often?   (choice=Listening to the music)`) +
+      as.numeric(`When you are on your mobile phone, what type of actions do you perform most often?   (choice=Playing games)`) +
+      as.numeric(`When you are on your mobile phone, what type of actions do you perform most often?   (choice=Viewing videos)`)
+  )) %>% 
+  mutate(HISB_Usage = (
+    as.numeric(`For searching health information: social media`) +
+    as.numeric(`For searching health information: search engine`) +
+    as.numeric(`For searching health information: web site`)
+  )) %>% 
+  select(
+    -(`Favourite platform/site for health: social media`:`For discussing: none`)
+  ) %>%
+  select(
+    -starts_with("When"),
+    -`Do you use apps, social media or websites for your health?`
+  ) %>% 
+  
+  # Prep for Visualization
+  # Drop NA in Age
+  filter(!is.na(Age)) %>% 
+  mutate(Age_Sex = as.factor(Age_Sex)) %>% 
+  
+
+  
+  
+  
+
+
+  
+
+
+
+```
