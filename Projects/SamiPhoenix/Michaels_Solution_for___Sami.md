@@ -211,6 +211,6 @@ species within a class. This plot shows the **10 most affected** and the
 <img src="Michaels_Solution_for___Sami_files/figure-markdown_github/class_plot-1.png" style="display: block; margin: auto;" />
 
 
-------------------------------------------------------------------------
+-------------------------------------------------------------------------
 
 
