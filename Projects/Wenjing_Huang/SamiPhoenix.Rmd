@@ -1,6 +1,6 @@
 ---
 title: "SamiPhoenix"
-output: html_document
+output: md_document
 ---
 
 ```{r libraries, echo=FALSE, message=FALSE}
@@ -9,7 +9,7 @@ library(tidyverse)
 
 ```
 
-```{r everything, echo=FALSE, message=FALSE, warning=FALSE}
+```{r everything, echo=TRUE, message=FALSE, warning=FALSE}
 
 phone_ownership <- function(table){
   case_when(
