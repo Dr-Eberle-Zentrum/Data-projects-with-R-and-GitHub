@@ -140,7 +140,7 @@ data <-
   # Prep for Visualization
   # Drop NA in Age
   filter(!is.na(Age)) %>% 
-  mutate(Age_Sex = as.factor(Age_Sex)) %>% 
+  mutate(Age_Sex = as.factor(Age_Sex))
   
 
   
