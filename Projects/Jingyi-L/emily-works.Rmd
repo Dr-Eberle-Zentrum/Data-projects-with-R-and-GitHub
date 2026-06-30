@@ -1,0 +1,202 @@
+---
+title: "emily-works"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+
+library(tidyverse)
+library(ggplot2)
+
+```
+
+# Data Manipulation
+
+## Data Import
+
+```{r data-manipulation, include=FALSE}
+
+uncleaned_data <- read_csv("data/laptopData.csv")
+head(uncleaned_data)
+
+```
+
+
+- Remove empty rows with `drop_na()`
+- Remove invalid symbols with `str_replace_all()`
+- Remove the "GB" text extension from the Ram column and convert it to integer using `as.integer()`
+- Remove the "kg" text extension from the Weight column and convert it to numeric using `as.double()`
+- Extract the continuous numerical variable representing processor clock speed in GHz from the Cpu column using `str_extract()` and convert it to numeric using `as.double()`
+- Create new columns (`is_IPS` and `is_Retina`) based on the presence of specific keywords in the ScreenResolution column using `str_detect()`
+- Extract the pure pixel dimensions (Width and Height) from the ScreenResolution column using `str_extract()` and converts them to integer using `as.integer()` and stores them in separate columns
+- Create a new column (`OpSys`) that groups categories into broader groups using `case_when()` and `str_detect()`
+
+```{r data-cleaning, include=FALSE}
+
+clean_data <- uncleaned_data %>%
+  drop_na() %>%  
+  mutate(
+    across(everything(), ~ str_replace_all(., "\\?", "")),
+    Ram = as.integer(str_replace_all(Ram, "GB", "")),
+    Weight = as.double(str_replace_all(Weight, "kg", "")),
+    Cpu_clock = as.double(str_extract(Cpu, "\\d+\\.?\\d*(?=GHz)"))) %>%
+  mutate(
+    is_IPS = str_detect(ScreenResolution, "IPS"),
+    is_Retina = str_detect(ScreenResolution, "Retina"),
+    ScreenResolution = str_extract(ScreenResolution, "\\d+x\\d+"),
+    Width = as.integer(str_extract(ScreenResolution, "^\\d+")),
+    Height = as.integer(str_extract(ScreenResolution, "(?<=x)\\d+")),
+    OpSys = case_when(
+      str_detect(OpSys, "Windows") ~ "Windows",
+      str_detect(OpSys, "Mac OS X|macOS") ~ "macOS",
+      TRUE ~ OpSys))
+  
+```
+
+``` {r clean data check, echo = FALSE, results = 'asis'}
+
+library(knitr)
+kable(clean_data [1:5, ], caption = "Data after Manipulation")
+
+```
+
+# Visualization
+
+I'll first convert the price to USD for better interpretability, assuming an exchange rate of 1 USD = 83 INR.
+```{r price conversion, include = FALSE}
+
+clean_data_USD <- clean_data %>%
+  mutate(Price = as.numeric(Price), 
+         Price_USD = Price / 83)
+```
+
+## 1. Price vs. Numeric Features
+
+### RAM & Price
+```{r plot RAM , echo=FALSE}
+
+clean_data_USD %>%
+  ggplot(aes(x = Ram, 
+             y = Price_USD)) +
+  geom_jitter(alpha = 0.3, 
+              width = 0.2, 
+              height = 0) +
+  stat_density_2d(aes(fill = after_stat(level)), 
+                  geom = "polygon", 
+                  alpha = 0.2) +
+  scale_fill_viridis_c() +
+  theme_minimal() +
+  labs(title = "Price vs. RAM with Market Density", 
+       x = "RAM (GB)", 
+       y = "Price (USD)",
+       fill = "Density")
+
+```
+
+### CPU & Price
+```{r plot CPU , echo=FALSE}
+
+clean_data_USD %>%
+  ggplot(aes(x = Cpu_clock, 
+             y = Price_USD)) +
+  geom_jitter(alpha = 0.3, 
+              width = 0.2, 
+              height = 0) +
+  stat_density_2d(aes(fill = after_stat(level)), 
+                  geom = "polygon", 
+                  alpha = 0.2) +
+  scale_fill_viridis_c() +
+  theme_minimal() +
+  labs(title = "Price vs. CPU with Market Density", 
+       x = "CPU Clock Speed (GHz)", 
+       y = "Price (USD)",
+       fill = "Density")
+
+```
+
+### Weight & Price
+```{r plot Weight , echo=FALSE, warning = FALSE}
+
+clean_data_USD %>%
+  ggplot(aes(x = Weight, 
+             y = Price_USD)) +
+  geom_jitter(alpha = 0.3, 
+              width = 0.2, 
+              height = 0) +
+  stat_density_2d(aes(fill = after_stat(level)), 
+                  geom = "polygon", 
+                  alpha = 0.2) +
+  scale_fill_viridis_c() +
+  theme_minimal() +
+  labs(title = "Weight vs. CPU with Market Density", 
+       x = "Weight (kg)", 
+       y = "Price (USD)",
+       fill = "Density")
+
+```
+
+##Price vs. Categorical Features (Distribution Plot)
+
+### By Company
+```{r plot Company, echo=FALSE, height= 1000}
+
+clean_data_USD %>%
+  ggplot(aes(x = Company, 
+             y = Price_USD)) +
+  geom_violin(fill = "blue", 
+              alpha = 0.7) +
+  geom_boxplot(width = 0.1, 
+               alpha = 0.5) +
+  coord_flip() +
+  theme_minimal() +
+  labs(title = "Price Distribution by Company",
+       x = "Brand",
+       y = "Price (USD)")
+
+```
+
+### By Laptop Type
+```{r plot LaptopType, echo=FALSE, height= 800}
+
+clean_data_USD %>%
+  ggplot(aes(x = TypeName, 
+             y = Price_USD)) +
+  geom_violin(fill = "blue") +
+  geom_boxplot(width = 0.1) +
+  coord_flip() +
+  theme_minimal() +
+  labs(title = "Price Distribution by Laptop Type",
+       x = "Brand",
+       y = "Price (USD)")
+
+```
+
+## Price Distribution Overlap
+
+```{r ridgeline plot, echo=FALSE}
+
+library(ggridges)
+
+clean_data_USD %>%
+  filter(TypeName %in% c("Notebook", 
+                         "Ultrabook", 
+                         "Gaming")) %>%
+  ggplot(aes(x = Price_USD,
+             fill = TypeName)) +
+  geom_density(alpha = 0.4) +
+  scale_fill_viridis_d() +
+  labs(title = "Price Distribution Overlap: Notebook vs Ultrabook vs Gaming",
+       x = "Price in USD",
+       y = "Laptop Type",
+       fill = "Type") +
+  theme(axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        legend.position = "bottom")
+
+
+```
+
+
+
+
+
