@@ -82,13 +82,13 @@ The new information in the table looks somewhat like this:
 
 Note: I put `Movie Rating` on the x, since there is no variable called
 `Movie_Score` and context suggests that `Movie Rating` was intended.
+Also, I removed `NA` in `Metascore`.
 
 ![](Chaoicci_files/figure-markdown_strict/correlation-plot-1.png)
 
 There seems to be a positive correlation. This would suggest that Movies
 with a high Movie Rating also tend to have a high Metascore.
 
-The relationship of `Movie Rating` and `Metascore` by `Genre`:
 ![](Chaoicci_files/figure-markdown_strict/correlation-by-genre-1.png)
 
 ## How do different directors score?
@@ -96,3 +96,12 @@ The relationship of `Movie Rating` and `Metascore` by `Genre`:
 Note: I only included the directors with the most movies (The 35
 directors with the most movies).
 ![](Chaoicci_files/figure-markdown_strict/directors_plot-1.png)
+
+## Optional Task
+
+![](Chaoicci_files/figure-markdown_strict/plot-with-actor-1.png)
+
+![](Chaoicci_files/figure-markdown_strict/plot-rating-and-money-1.png)
+This plot is a bit harder to interpret. There seems to be some
+(positive) correlation, however, most movies didn’t make that much money
+compared to the other movies.
