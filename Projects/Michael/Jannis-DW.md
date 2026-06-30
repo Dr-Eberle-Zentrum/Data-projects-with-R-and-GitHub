@@ -1,18 +1,220 @@
 # Solution for Michael’s Project “Demographic Shift in Germany”
 
     data <- read.csv("FReDA_panel_4waves_long_labeled.csv")
-    data
+    head(data)
+
+    ##       id welle    pid sample sat3 pa27 sd3 sd40 sd43 sd11 sd7e1 pstat
+    ## 1 111000     2     NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 2 111000     3     NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 3 111000     4     NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 4 828000     3 828103    101    9    2  NA   NA   NA   NA    NA     1
+    ## 5 828000     4 828104    101    9    2  NA   NA   NA   NA    NA     1
+    ## 6 907000     2     NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ##   separation relstat reldur sd5ezby pa64 pa65 pa66 pa68i1 pa17i1 pa17i2 pa17i4
+    ## 1         -7       6     -3      NA   NA   NA   NA     NA     NA     NA     NA
+    ## 2         -3       6     -3      NA   NA   NA   NA     NA     NA     NA     NA
+    ## 3         -3       6     -3      NA   NA   NA   NA     NA     NA     NA     NA
+    ## 4         -7       3     -7      NA   NA   NA   NA     NA      5      4      2
+    ## 5          0       3     36      NA   -3    5   NA     NA      5      5      2
+    ## 6         -7       6     -3      NA   NA   NA   NA     NA     NA     NA     NA
+    ##   pa17i5 pa17i6 pa17i8 pa21i7 pa21i8 pa21i9 pa21i10 pa21i11 pa21i12 pa21i13
+    ## 1     NA     NA     NA     NA     NA     NA      NA      NA      NA      NA
+    ## 2     NA     NA     NA     NA     NA     NA      NA      NA      NA      NA
+    ## 3     NA     NA     NA     NA     NA     NA      NA      NA      NA      NA
+    ## 4      5      1      5     NA     NA     NA      NA      NA      NA      NA
+    ## 5      4      1      5      3      1      1       1       1       1       1
+    ## 6     NA     NA     NA     NA     NA     NA      NA      NA      NA      NA
+    ##   pa22ri1 pa22ri9 pa22ri10 pa22ri11 pa22ri12 pa22ri8 pa18i1 pa18i2 pa18i3
+    ## 1      NA      NA       NA       NA       NA      NA     NA     NA     NA
+    ## 2      NA      NA       NA       NA       NA      NA     NA     NA     NA
+    ## 3      NA      NA       NA       NA       NA      NA     NA     NA     NA
+    ## 4       1       1        5        1        2       5      4      1      2
+    ## 5       1       1        5        1        2       4     NA     NA     NA
+    ## 6      NA      NA       NA       NA       NA      NA     NA     NA     NA
+    ##   pa18i4 pa18i6 pa18i7 pa18i8 pa18i10 pa18i11 pa18i12 pa18i13 pa18i14 pa18i15
+    ## 1     NA     NA     NA     NA      NA      NA      NA      NA      NA      NA
+    ## 2     NA     NA     NA     NA      NA      NA      NA      NA      NA      NA
+    ## 3     NA     NA     NA     NA      NA      NA      NA      NA      NA      NA
+    ## 4      1      4      1      1       1       4       2       1       2       2
+    ## 5     NA     NA     NA     NA      NA      NA      NA      NA      NA      NA
+    ## 6     NA     NA     NA     NA      NA      NA      NA      NA      NA      NA
+    ##   pa18i16 pa19i1 pa19i8 pa14i6 pa14i7 pa14i8 pa14i9 pa14i10 pa14i11 pa14i12
+    ## 1      NA     NA     NA     NA     NA     NA     NA      NA      NA      NA
+    ## 2      NA     NA     NA     NA     NA     NA     NA      NA      NA      NA
+    ## 3      NA     NA     NA     NA     NA     NA     NA      NA      NA      NA
+    ## 4       5      5      5      4      2      3      5       1       3       2
+    ## 5      NA     NA     NA      4      1      3      5       1       3       2
+    ## 6      NA     NA     NA     NA     NA     NA     NA      NA      NA      NA
+    ##   pa15 sat13 sat14 pa67i1 pa67i2 pa67i3 pa67i4 pa67i5 sd55 sat10 job48 job49
+    ## 1   NA    NA    NA     NA     NA     NA     NA     NA   NA    NA    NA    NA
+    ## 2   NA    NA    NA     NA     NA     NA     NA     NA   NA    NA    NA    NA
+    ## 3   NA    NA    NA     NA     NA     NA     NA     NA   NA    NA    NA    NA
+    ## 4    3    NA    -3     NA     NA     NA     NA     NA   NA    NA    NA    NA
+    ## 5    4     8    -3     -3     -3     -3     -3     -3   NA    NA    NA    NA
+    ## 6   NA    NA    NA     NA     NA     NA     NA     NA   NA    NA    NA    NA
+    ##   job25 job60 job66 job61i1 job61i2 job61i3 job61i4 job61i5 sdp64 pjob42 sex30
+    ## 1     2     1     1       3       4       4       4       4    -3     NA    NA
+    ## 2     1     1     1       3       3       4       4       4    -3     NA    NA
+    ## 3     4     1     1       4       4       4       4       4    -3     NA    NA
+    ## 4    NA    NA     1      NA      NA      NA      NA      NA    -2     NA     1
+    ## 5    NA    NA     1      NA      NA      NA      NA      NA    -3     NA     1
+    ## 6    -3    -3    -3      -3      -3      -3      -3      -3    -3     NA    NA
+    ##   inc13 hhincnet inc52 sdp42 inc42i1 inc42i2 inc43i1 inc43i2 hc13 bhc1 bhc10
+    ## 1  1700     1700     5    -3      NA      NA      NA      NA   NA    2     1
+    ## 2  1700     1700     5    -3      NA      NA      NA      NA   NA    1    -3
+    ## 3  2200     2200     4    -3      NA      NA      NA      NA   NA    1    -3
+    ## 4   -10     3250     5    -4      -3      -3      -3      -3   NA    2     1
+    ## 5  3700     3700     5     1      NA      NA      NA      NA   NA    2     1
+    ## 6  1200     1200     1    -3      NA      NA      NA      NA   NA    2     1
+    ##   crn119 crn123 crn134 crn136m crn125w crn124i1 crn124i2 crn124i3 crn124i4
+    ## 1     NA     NA     NA      NA      NA       NA       NA       NA       NA
+    ## 2     NA     NA     NA      NA      NA       NA       NA       NA       NA
+    ## 3     NA     NA     NA      NA      NA       NA       NA       NA       NA
+    ## 4     -3     -3     -3      -3      NA       -3       -3       NA       -3
+    ## 5     -3     -3     NA      -3      NA       -3       -3       NA       -3
+    ## 6     NA     NA     NA      NA      NA       NA       NA       NA       NA
+    ##   crn124i5 crn124i6 crn124i7 crn124i8 crn124i9 crn11i7 crn11i10 crn20i1 crn20i2
+    ## 1       NA       NA       NA       NA       NA      NA       NA      NA      NA
+    ## 2       NA       NA       NA       NA       NA      NA       NA      NA      NA
+    ## 3       NA       NA       NA       NA       NA      NA       NA      NA      NA
+    ## 4       NA       -3       -3       NA       -3      NA       NA      NA      NA
+    ## 5       NA       -3       -3       NA       -3      NA       NA      NA      NA
+    ## 6       NA       NA       NA       NA       NA      NA       NA      NA      NA
+    ##   crn21i1 crn21i2 crn21i3 nkids sdp4g frt69 frt68 frt70 frt5 frt67 frt43i1
+    ## 1      NA      NA      NA     3    NA    NA    NA    NA   NA    NA      NA
+    ## 2      NA      NA      NA     3    NA    NA    NA    NA   NA    NA      NA
+    ## 3      NA      NA      NA     3    NA    NA    NA    NA   NA    NA      NA
+    ## 4      NA      NA      NA     0    NA     3    NA     2    2    NA      NA
+    ## 5      NA      NA      NA     0    NA     3     5     2    2     2      NA
+    ## 6      NA      NA      NA     2    NA    NA    NA    NA   NA    NA      NA
+    ##   frt43i2 frt43i3 frt43i4 frt43i5 frt43i6 frt43i7 frt43i8 frt43i9 frt43i10
+    ## 1      NA      NA      NA      NA      NA      NA      NA      NA       NA
+    ## 2      NA      NA      NA      NA      NA      NA      NA      NA       NA
+    ## 3      NA      NA      NA      NA      NA      NA      NA      NA       NA
+    ## 4      NA      NA      NA      NA      NA      NA      NA      NA       NA
+    ## 5      NA      NA      NA      NA      NA      NA      NA      NA       NA
+    ## 6      NA      NA      NA      NA      NA      NA      NA      NA       NA
+    ##   frt43i11 frt47i1 frt47i2 frt47i3 frt47i4 frt47i5 frt47i6 frt47i7 frt47i8
+    ## 1       NA      NA      NA      NA      NA      NA      NA      NA      NA
+    ## 2       NA      NA      NA      NA      NA      NA      NA      NA      NA
+    ## 3       NA      NA      NA      NA      NA      NA      NA      NA      NA
+    ## 4       NA       0       0       0       0       0       0       0       0
+    ## 5       NA       0       0       0       0       0       0       0       0
+    ## 6       NA      NA      NA      NA      NA      NA      NA      NA      NA
+    ##   frt47i9 frt41 frt42 frt45 frt46 sex32 sex33 sex34 omo19i1 omo19i2 val7i3
+    ## 1      NA    NA    NA    NA    NA    NA    NA    NA       4       2     NA
+    ## 2      NA    NA    NA    NA    NA    NA    NA    NA      NA      NA     NA
+    ## 3      NA    NA    NA    NA    NA    NA    NA    NA      NA      NA      2
+    ## 4       1     4     4    NA     2    -3    -3   -10      NA      NA     NA
+    ## 5       1     4     4    NA     2    -3    -3     2      NA      NA     NA
+    ## 6      NA    NA    NA    NA    NA    NA    NA    NA       5       5     NA
+    ##   per3i7 val1i3 val1i5 val1i11 val1i12 val1i14 val1i15 val1i16 val1i17 val9i1
+    ## 1      4     NA      2      NA      NA       4       1       1       4     NA
+    ## 2     NA     NA     NA      NA      NA      NA      NA      NA      NA     NA
+    ## 3     NA     NA     NA      NA      NA      NA      NA      NA      NA     NA
+    ## 4     NA     NA     NA      NA      NA      NA      NA      NA      NA     NA
+    ## 5     NA     NA     NA      NA      NA      NA      NA      NA      NA     NA
+    ## 6      3     NA      2      NA      NA       4       2       2       4     NA
+    ##   val9i6 val10i1 val10i2 val10i3 val10i4 val10i5 val11i1 val11i2 val11i3
+    ## 1     NA      NA      NA      NA      NA      NA       2      25       1
+    ## 2     NA      NA      NA      NA      NA      NA       1      -3       1
+    ## 3     NA      NA      NA      NA      NA      NA      NA      NA      NA
+    ## 4     NA      NA      NA      NA      NA      NA      NA      NA      NA
+    ## 5     NA      NA      NA      NA      NA      NA      NA      NA      NA
+    ## 6     NA      NA      NA      NA      NA      NA      -2      -3      -2
+    ##   val11i4 val2i7 val2i8 val2i9 val13i1 val13i2 val13i3 val13i4 val13i5 val13i6
+    ## 1      -3     NA     NA     NA      NA      NA      NA      NA      NA      NA
+    ## 2      -3     NA     NA     NA       4       4       2       2       4       2
+    ## 3      NA     NA     NA     NA      NA      NA      NA      NA      NA      NA
+    ## 4      NA     NA     NA     NA      NA      NA      NA      NA      NA      NA
+    ## 5      NA     NA     NA     NA      NA      NA      NA      NA      NA      NA
+    ## 6      -3     NA     NA     NA      NA      NA      NA      NA      NA      NA
+    ##   val13i7 val13i8 val13i9 omo41i1 omo41i2 omo41i3 omo41i4 omo41i5 omo41i6 sex
+    ## 1      NA      NA      NA      NA      NA      NA      NA      NA      NA   2
+    ## 2       2       4       2       3       4       4       4       3       3   2
+    ## 3      NA      NA      NA       3       3       3       3       2       3   2
+    ## 4      NA      NA      NA      NA      NA      NA      NA      NA      NA   1
+    ## 5      NA      NA      NA      NA      NA      NA      NA      NA      NA   1
+    ## 6      NA      NA      NA      NA      NA      NA      NA      NA      NA   2
+    ##   doby age east isced11 sd57 mig10 hw10 hw11w hw11m sd47i1
+    ## 1 1971  51    1       3   NA    NA   NA    NA    NA    -10
+    ## 2 1971  52    1       3   NA    NA   NA    NA    NA    -10
+    ## 3 1971  53    1       3   NA    NA   NA    NA    NA    -10
+    ## 4 1992  30    1       4   NA    NA   NA    NA    NA      1
+    ## 5 1992  31    1       4   NA    NA   NA    NA    NA    -10
+    ## 6 1981  41    0       2   NA    NA   NA    NA    NA    -10
+
+    library(tidyverse)
+
+    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+    ## ✔ dplyr     1.2.1     ✔ readr     2.2.0
+    ## ✔ forcats   1.0.1     ✔ stringr   1.6.0
+    ## ✔ ggplot2   4.0.3     ✔ tibble    3.3.1
+    ## ✔ lubridate 1.9.5     ✔ tidyr     1.3.2
+    ## ✔ purrr     1.2.2     
+    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ✖ dplyr::filter() masks stats::filter()
+    ## ✖ dplyr::lag()    masks stats::lag()
+    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+
+    library(dplyr)
+    library(ggplot2)
+    library(kableExtra)
+
+    ## 
+    ## Attaching package: 'kableExtra'
+    ## 
+    ## The following object is masked from 'package:dplyr':
+    ## 
+    ##     group_rows
+
+    library(ppcor)
+
+    ## Loading required package: MASS
+    ## 
+    ## Attaching package: 'MASS'
+    ## 
+    ## The following object is masked from 'package:dplyr':
+    ## 
+    ##     select
+
+    #Where possible, use functions of the loaded packages
+
+## Analysis of Reasons for the low Fertility Rate
+
+    # mutating values with `-2` to `NA` for the variable `fertility_rate
+    data <- data %>%
+     mutate(
+       across(c(sat3,frt68,frt69,age,nkids,reldur),~replace(.x, .x<0, NA)))
+      
+
+    #1.1
+    cor(data$sat3, data$frt68, use = "complete.obs")
+
+    ## [1] 0.1555075
+
+    cor(data$sat3, data$frt69, use = "complete.obs")
+
+    ## [1] 0.1458812
+
+    #1.2
+    # heat map, sat3 on x axis, frt69 on y axis, I want to see how much percent of people are in each box which displays the relative frequency of people with a specific combination of relationship satisfaction and intention to get children in the next 3 years.
+
+    data%>%
+      mutate(
+      #  percentages = (n)/sum(n)
+      ) 
 
     ##           id welle      pid sample sat3 pa27 sd3 sd40 sd43 sd11 sd7e1 pstat
-    ## 1     111000     2       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 2     111000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 3     111000     4       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 1     111000     2       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 2     111000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 3     111000     4       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ## 4     828000     3   828103    101    9    2  NA   NA   NA   NA    NA     1
     ## 5     828000     4   828104    101    9    2  NA   NA   NA   NA    NA     1
-    ## 6     907000     2       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 7     945000     2       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 8     945000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 9     945000     4       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 6     907000     2       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 7     945000     2       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 8     945000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 9     945000     4       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ## 10   1028000     2  1028101    101    9   NA  NA   NA   NA   NA    NA     1
     ## 11   1028000     3  1028101    101    8   NA  NA   NA   NA   NA    NA     1
     ## 12   1028000     4  1028101    101    9   NA  NA   NA   NA   NA    NA     1
@@ -29,9 +231,9 @@
     ## 23   1909000     2  1909103    101    8   NA  NA   NA   NA   NA    NA     1
     ## 24   1909000     3  1909103    101    8   NA  NA   NA   NA   NA    NA     1
     ## 25   1909000     4  1909103    101    9   NA  NA   NA   NA   NA    NA     1
-    ## 26   2546000     2       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 27   2546000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 28   2546000     4       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 26   2546000     2       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 27   2546000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 28   2546000     4       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ## 29   2581000     2  2581103    101    8   NA  NA   NA   NA   NA    NA     1
     ## 30   2581000     3  2581103    101    9   NA  NA   NA   NA   NA    NA     1
     ## 31   2581000     4  2581103    101    7   NA  NA   NA   NA   NA    NA     1
@@ -39,14 +241,14 @@
     ## 33   2720000     2  2720102    101    8   NA  NA   NA   NA   NA    NA     1
     ## 34   2720000     3  2720102    101    9   NA  NA   NA   NA   NA    NA     1
     ## 35   2720000     4  2720102    101    8   NA  NA   NA   NA   NA    NA     1
-    ## 36   3134000     2       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 37   3134000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 36   3134000     2       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 37   3134000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ## 38   3134000     4  3134101    101    5   NA  NA   NA   NA   NA    NA     1
-    ## 39   3491000     2       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 40   3491000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 41   3491000     4       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 39   3491000     2       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 40   3491000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 41   3491000     4       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ## 42   3651000     2  3651101    101    6   NA  NA   NA   NA   NA    NA     1
-    ## 43   3651000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 43   3651000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ## 44   3651000     4  3651102    101    6    2  NA   NA   NA   NA    NA     1
     ## 45   3788000     2  3788101    101    6   NA  NA   NA   NA   NA    NA     1
     ## 46   3788000     3  3788101    101    7   NA  NA   NA   NA   NA    NA     1
@@ -58,9 +260,9 @@
     ## 52   5444000     2  5444102    101    9   NA  NA   NA   NA   NA    NA     1
     ## 53   5444000     3  5444102    101    9   NA  NA   NA   NA   NA    NA     1
     ## 54   5444000     4  5444102    101    7   NA  NA   NA   NA   NA    NA     1
-    ## 55   5810000     2       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 56   5810000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 57   5810000     4       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 55   5810000     2       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 56   5810000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 57   5810000     4       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ## 58   5843000     2  5843103    101    9   NA  NA   NA   NA   NA    NA     1
     ## 59   5843000     3  5843103    101   10   NA  NA   NA   NA   NA    NA     1
     ## 60   5843000     4  5843103    101   10   NA  NA   NA   NA   NA    NA     1
@@ -86,18 +288,18 @@
     ## 80   8465000     2  8465101    101   10   NA  NA   NA   NA   NA    NA     1
     ## 81   8465000     3  8465101    101   10   NA  NA   NA   NA   NA    NA     1
     ## 82   8465000     4  8465101    101   10   NA  NA   NA   NA   NA    NA     1
-    ## 83   8948000     2       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 83   8948000     2       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ## 84   8948000     3  8948102    101   10   NA  NA   NA   NA   NA    NA     1
-    ## 85   8948000     4       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 85   8948000     4       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ## 86   9139000     2  9139102    101   10   NA  NA   NA   NA   NA    NA     1
     ## 87   9139000     3  9139102    101   10   NA  NA   NA   NA   NA    NA     1
     ## 88   9139000     4  9139102    101   10   NA  NA   NA   NA   NA    NA     1
-    ## 89   9161000     2       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 90   9161000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 91   9161000     4       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 92   9346000     2       NA    101   -3   -3  NA   NA   NA   NA    NA     0
-    ## 93   9346000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 94   9346000     4       NA    101   -3   -3  NA   NA   NA   NA    NA     0
+    ## 89   9161000     2       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 90   9161000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 91   9161000     4       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 92   9346000     2       NA    101   NA   -3  NA   NA   NA   NA    NA     0
+    ## 93   9346000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 94   9346000     4       NA    101   NA   -3  NA   NA   NA   NA    NA     0
     ## 95   9598000     2  9598101    101    9   NA  NA   NA   NA   NA    NA     1
     ## 96   9598000     3  9598101    101    8   NA  NA   NA   NA   NA    NA     1
     ## 97   9917000     2  9917101    101   10   NA  NA   NA   NA   NA    NA     1
@@ -110,8 +312,8 @@
     ## 104 10665000     3 10665101    101    9   NA  NA   NA   NA   NA    NA     1
     ## 105 10665000     4 10665101    101    9   NA  NA   NA   NA   NA    NA     1
     ## 106 10789000     2 10789101    101    7   NA  NA   NA   NA   NA    NA     1
-    ## 107 10789000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 108 10789000     4       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 107 10789000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 108 10789000     4       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ## 109 10957000     2 10957101    101   10    2  NA   NA   NA   NA    NA     1
     ## 110 11002000     2 11002101    101    9   NA  NA   NA   NA   NA    NA     1
     ## 111 11002000     3 11002101    101    9   NA  NA   NA   NA   NA    NA     1
@@ -120,7 +322,7 @@
     ## 114 11132000     3 11132103    101    7   NA  NA   NA   NA   NA    NA     1
     ## 115 11132000     4 11132103    101    8   NA  NA   NA   NA   NA    NA     1
     ## 116 11295000     2 11295101    101    9   NA  NA   NA   NA   NA    NA     1
-    ## 117 11295000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 117 11295000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ## 118 11295000     4 11295102    101   10   NA  NA   NA   NA   NA    NA     1
     ## 119 12092000     2 12092101    101   10   NA  NA   NA   NA   NA    NA     1
     ## 120 12092000     3 12092101    101   10   NA  NA   NA   NA   NA    NA     1
@@ -133,9 +335,9 @@
     ## 127 12542000     2 12542102    101    2   NA  NA   NA   NA   NA    NA     1
     ## 128 12542000     3 12542102    101    3    1  NA   NA   NA   NA    NA     1
     ## 129 12542000     4 12542103    101    8   NA  NA   NA   NA   NA    NA     1
-    ## 130 12915000     2       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 131 12915000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 132 12915000     4       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 130 12915000     2       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 131 12915000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 132 12915000     4       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ## 133 13102000     2 13102101    101   10   NA  NA   NA   NA   NA    NA     1
     ## 134 13102000     3 13102101    101    8   NA  NA   NA   NA   NA    NA     1
     ## 135 13102000     4 13102101    101    8   NA  NA   NA   NA   NA    NA     1
@@ -152,9 +354,9 @@
     ## 146 15401000     2 15401103    101    6   NA  NA   NA   NA   NA    NA     1
     ## 147 15401000     3 15401103    101    5   NA  NA   NA   NA   NA    NA     1
     ## 148 15401000     4 15401103    101    6   NA  NA   NA   NA   NA    NA     1
-    ## 149 15479000     2       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 149 15479000     2       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ## 150 15479000     3 15479106    101    6   NA  NA   NA   NA   NA    NA     1
-    ## 151 15479000     4       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 151 15479000     4       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ## 152 15595000     2 15595101    101    9   NA  NA   NA   NA   NA    NA     1
     ## 153 15595000     3 15595101    101   10   NA  NA   NA   NA   NA    NA     1
     ## 154 15595000     4 15595101    101   10   NA  NA   NA   NA   NA    NA     1
@@ -174,17 +376,17 @@
     ## 168 16629000     2 16629102    101    6   NA  NA   NA   NA   NA    NA     1
     ## 169 16629000     3 16629102    101    7   NA  NA   NA   NA   NA    NA     1
     ## 170 16629000     4 16629102    101    7   NA  NA   NA   NA   NA    NA     1
-    ## 171 16806000     2       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 172 16806000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 173 16806000     4       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 171 16806000     2       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 172 16806000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 173 16806000     4       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ## 174 17018000     2 17018101    101   10   NA  NA   NA   NA   NA    NA     1
     ## 175 17018000     3 17018101    101   10   NA  NA   NA   NA   NA    NA     1
     ## 176 17018000     4 17018101    101   10   NA  NA   NA   NA   NA    NA     1
-    ## 177 17048000     2       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 178 17048000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 179 17048000     4       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 180 17385000     2       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 181 17385000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 177 17048000     2       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 178 17048000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 179 17048000     4       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 180 17385000     2       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 181 17385000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ## 182 17385000     4 17385105    101    8   NA  NA   NA   NA   NA    NA     1
     ## 183 17552000     2 17552101    101   10   NA  NA   NA   NA   NA    NA     1
     ## 184 17552000     3 17552101    101    9   NA  NA   NA   NA   NA    NA     1
@@ -195,21 +397,21 @@
     ## 189 18605000     2 18605101    101    8   NA  NA   NA   NA   NA    NA     1
     ## 190 18605000     3 18605101    101    8   NA  NA   NA   NA   NA    NA     1
     ## 191 18605000     4 18605101    101    8   NA  NA   NA   NA   NA    NA     1
-    ## 192 18814000     2       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 193 18814000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 194 18814000     4       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 192 18814000     2       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 193 18814000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 194 18814000     4       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ## 195 19935000     2 19935103    101    7   NA  NA   NA   NA   NA    NA     1
     ## 196 19935000     3 19935103    101    7   NA  NA   NA   NA   NA    NA     1
     ## 197 19935000     4 19935103    101    7   NA  NA   NA   NA   NA    NA     1
-    ## 198 19949000     2       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 199 19949000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 198 19949000     2       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 199 19949000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ## 200 19949000     4 19949102    101    7   NA  NA   NA   NA   NA    NA     1
     ## 201 20180000     2 20180103    101    8   NA  NA   NA   NA   NA    NA     1
     ## 202 20180000     3 20180103    101    7   NA  NA   NA   NA   NA    NA     1
     ## 203 20180000     4 20180103    101    8   NA  NA   NA   NA   NA    NA     1
-    ## 204 20344000     2       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 205 20344000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 206 20344000     4       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 204 20344000     2       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 205 20344000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 206 20344000     4       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ## 207 20618000     2 20618101    101   10   NA  NA   NA   NA   NA    NA     1
     ## 208 20618000     3 20618101    101    9   NA  NA   NA   NA   NA    NA     1
     ## 209 20618000     4 20618101    101    8   NA  NA   NA   NA   NA    NA     1
@@ -231,9 +433,9 @@
     ## 225 22083000     2 22083101    101    7   NA  NA   NA   NA   NA    NA     1
     ## 226 22083000     3 22083101    101   10   NA  NA   NA   NA   NA    NA     1
     ## 227 22083000     4 22083101    101   10   NA  NA   NA   NA   NA    NA     1
-    ## 228 22234000     2       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 229 22234000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 230 22234000     4       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 228 22234000     2       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 229 22234000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 230 22234000     4       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ## 231 23561000     2 23561102    101    7   NA  NA   NA   NA   NA    NA     1
     ## 232 23561000     3 23561102    101    8   NA  NA   NA   NA   NA    NA     1
     ## 233 23561000     4 23561102    101    8   NA  NA   NA   NA   NA    NA     1
@@ -246,9 +448,9 @@
     ## 240 25498000     2 25498101    101    9   NA  NA   NA   NA   NA    NA     1
     ## 241 25498000     3 25498101    101    9   NA  NA   NA   NA   NA    NA     1
     ## 242 25498000     4 25498101    101    8    2  NA   NA   NA   NA    NA     1
-    ## 243 25694000     2       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 244 25694000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 245 25694000     4       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 243 25694000     2       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 244 25694000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 245 25694000     4       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ## 246 25758000     2 25758102    101   10   NA  NA   NA   NA   NA    NA     1
     ## 247 25758000     3 25758102    101    9   NA  NA   NA   NA   NA    NA     1
     ## 248 25758000     4 25758102    101    8   NA  NA   NA   NA   NA    NA     1
@@ -258,9 +460,9 @@
     ## 252 26574000     2 26574103    101   10   NA  NA   NA   NA   NA    NA     1
     ## 253 26574000     3 26574103    101   10   NA  NA   NA   NA   NA    NA     1
     ## 254 26574000     4 26574103    101   10   NA  NA   NA   NA   NA    NA     1
-    ## 255 26926000     2       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 256 26926000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 257 26926000     4       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 255 26926000     2       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 256 26926000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 257 26926000     4       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ## 258 27152000     2 27152101    101    7   NA  NA   NA   NA   NA    NA     1
     ## 259 27152000     3 27152101    101    5   NA  NA   NA   NA   NA    NA     1
     ## 260 27152000     4 27152101    101    6   NA  NA   NA   NA   NA    NA     1
@@ -293,14 +495,14 @@
     ## 287 30569000     3 30569101    101    7   NA  NA   NA   NA   NA    NA     1
     ## 288 30569000     4 30569101    101    6   NA  NA   NA   NA   NA    NA     1
     ## 289 30631000     2 30631101    101    8   NA  NA   NA   NA   NA    NA     1
-    ## 290 30631000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 291 30631000     4       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 290 30631000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 291 30631000     4       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ## 292 30834000     2 30834101    101    9    2  NA   NA   NA   NA    NA     1
     ## 293 30834000     3 30834101    101    9   NA  NA   NA   NA   NA    NA     1
     ## 294 30834000     4 30834101    101    8   NA  NA   NA   NA   NA    NA     1
     ## 295 31045000     2 31045103    101    5   NA  NA   NA   NA   NA    NA     1
-    ## 296 31045000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 297 31045000     4       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 296 31045000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 297 31045000     4       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ## 298 31649000     2 31649102    101    9    2  NA   NA   NA   NA    NA     1
     ## 299 31649000     3 31649102    101   10   NA  NA   NA   NA   NA    NA     1
     ## 300 31649000     4 31649102    101    8   NA  NA   NA   NA   NA    NA     1
@@ -308,15 +510,15 @@
     ## 302 31743000     3 31743102    101    7   NA  NA   NA   NA   NA    NA     1
     ## 303 31743000     4 31743102    101    8   NA  NA   NA   NA   NA    NA     1
     ## 304 32927000     2 32927103    101    8    2  NA   NA   NA   NA    NA     1
-    ## 305 33141000     2       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 306 33141000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 307 33141000     4       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 305 33141000     2       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 306 33141000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 307 33141000     4       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ## 308 33552000     2 33552101    101    9   NA  NA   NA   NA   NA    NA     1
     ## 309 33552000     3 33552101    101    9   NA  NA   NA   NA   NA    NA     1
     ## 310 33552000     4 33552101    101    9   NA  NA   NA   NA   NA    NA     1
-    ## 311 33828000     2       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 312 33828000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 313 33828000     4       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 311 33828000     2       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 312 33828000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 313 33828000     4       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ## 314 34283000     2 34283101    101    7   NA  NA   NA   NA   NA    NA     1
     ## 315 34283000     3 34283101    101    8   NA  NA   NA   NA   NA    NA     1
     ## 316 34283000     4 34283101    101    8   NA  NA   NA   NA   NA    NA     1
@@ -344,13 +546,13 @@
     ## 338 36504000     2 36504101    101   10   NA  NA   NA   NA   NA    NA     1
     ## 339 36504000     3 36504101    101   10   NA  NA   NA   NA   NA    NA     1
     ## 340 36504000     4 36504101    101   10   NA  NA   NA   NA   NA    NA     1
-    ## 341 36510000     2       NA    101   -3   -3  NA   NA   NA   NA    NA     0
-    ## 342 37681000     2       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 343 37681000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 344 37681000     4       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 345 38162000     2       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 346 38162000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 347 38162000     4       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 341 36510000     2       NA    101   NA   -3  NA   NA   NA   NA    NA     0
+    ## 342 37681000     2       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 343 37681000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 344 37681000     4       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 345 38162000     2       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 346 38162000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 347 38162000     4       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ## 348 38791000     2 38791101    101    9   NA  NA   NA   NA   NA    NA     1
     ## 349 38791000     3 38791101    101    7   NA  NA   NA   NA   NA    NA     1
     ## 350 38791000     4 38791101    101    8   NA  NA   NA   NA   NA    NA     1
@@ -394,11 +596,11 @@
     ## 388 41571000     3 41571103    101   10   NA  NA   NA   NA   NA    NA     1
     ## 389 41571000     4 41571103    101   10   NA  NA   NA   NA   NA    NA     1
     ## 390 41686000     2 41686104    101    9   NA  NA   NA   NA   NA    NA     1
-    ## 391 41686000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 392 41686000     4       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 393 41957000     2       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 394 41957000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 395 41957000     4       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 391 41686000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 392 41686000     4       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 393 41957000     2       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 394 41957000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 395 41957000     4       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ## 396 42069000     2 42069101    101   10   NA  NA   NA   NA   NA    NA     1
     ## 397 42069000     3 42069101    101   10   NA  NA   NA   NA   NA    NA     1
     ## 398 42069000     4 42069101    101    9   NA  NA   NA   NA   NA    NA     1
@@ -415,23 +617,23 @@
     ## 409 43700000     2 43700102    101    9   NA  NA   NA   NA   NA    NA     1
     ## 410 43730000     2 43730103    101    9    2  NA   NA   NA   NA    NA     1
     ## 411 43730000     4 43730103    101    6    2  NA   NA   NA   NA    NA     1
-    ## 412 44495000     2       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 413 44495000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 414 44495000     4       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 412 44495000     2       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 413 44495000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 414 44495000     4       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ## 415 44502000     2 44502105    101   10   NA  NA   NA   NA   NA    NA     1
     ## 416 44502000     3 44502105    101   10   NA  NA   NA   NA   NA    NA     1
     ## 417 44502000     4 44502105    101    2   NA  NA   NA   NA   NA    NA     1
     ## 418 45374000     2 45374101    101    9   NA  NA   NA   NA   NA    NA     1
     ## 419 45374000     3 45374101    101    8   NA  NA   NA   NA   NA    NA     1
     ## 420 45374000     4 45374101    101    8   NA  NA   NA   NA   NA    NA     1
-    ## 421 45881000     2       NA    101   -3   -3  NA   NA   NA   NA    NA     0
+    ## 421 45881000     2       NA    101   NA   -3  NA   NA   NA   NA    NA     0
     ## 422 46686000     2 46686101    101    9    2  NA   NA   NA   NA    NA     1
-    ## 423 46686000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 424 46686000     4       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 425 46895000     2       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 426 46895000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 427 46895000     4       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 428 47230000     2       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 423 46686000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 424 46686000     4       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 425 46895000     2       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 426 46895000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 427 46895000     4       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 428 47230000     2       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ## 429 47230000     3 47230101    101    6   NA  NA   NA   NA   NA    NA     1
     ## 430 48484000     2 48484105    101    7   NA  NA   NA   NA   NA    NA     1
     ## 431 48484000     3 48484105    101    5   NA  NA   NA   NA   NA    NA     1
@@ -446,9 +648,9 @@
     ## 440 49164000     4 49164101    101    5   NA  NA   NA   NA   NA    NA     1
     ## 441 49244000     2 49244101    101    9    2  NA   NA   NA   NA    NA     1
     ## 442 50194000     2 50194101    101    5   NA  NA   NA   NA   NA    NA     1
-    ## 443 50288000     2       NA    101   -3   -3  NA   NA   NA   NA    NA     0
-    ## 444 50288000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 445 50288000     4       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 443 50288000     2       NA    101   NA   -3  NA   NA   NA   NA    NA     0
+    ## 444 50288000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 445 50288000     4       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ## 446 51030000     2 51030103    101    7   NA  NA   NA   NA   NA    NA     1
     ## 447 51030000     3 51030103    101    7    2  NA   NA   NA   NA    NA     1
     ## 448 51030000     4 51030103    101    7   NA  NA   NA   NA   NA    NA     1
@@ -494,18 +696,18 @@
     ## 488 56108000     2 56108101    101    5   NA  NA   NA   NA   NA    NA     1
     ## 489 56108000     3 56108101    101    5   NA  NA   NA   NA   NA    NA     1
     ## 490 56108000     4 56108101    101    5   NA  NA   NA   NA   NA    NA     1
-    ## 491 56217000     2       NA    101   -3   NA  NA   NA   NA   NA    NA     0
-    ## 492 56217000     3       NA    101   -3   NA  NA   NA   NA   NA    NA     0
+    ## 491 56217000     2       NA    101   NA   NA  NA   NA   NA   NA    NA     0
+    ## 492 56217000     3       NA    101   NA   NA  NA   NA   NA   NA    NA     0
     ##     separation relstat reldur sd5ezby pa64 pa65 pa66 pa68i1 pa17i1 pa17i2
-    ## 1           -7       6     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 2           -3       6     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 3           -3       6     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 4           -7       3     -7      NA   NA   NA   NA     NA      5      4
+    ## 1           -7       6     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 2           -3       6     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 3           -3       6     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 4           -7       3     NA      NA   NA   NA   NA     NA      5      4
     ## 5            0       3     36      NA   -3    5   NA     NA      5      5
-    ## 6           -7       6     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 7           -7       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 8           -3       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 9           -3       1     -3      NA   NA   NA   NA     NA     NA     NA
+    ## 6           -7       6     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 7           -7       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 8           -3       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 9           -3       1     NA      NA   NA   NA   NA     NA     NA     NA
     ## 10           0       4    210      NA   NA   NA   NA     NA     NA     NA
     ## 11           0       4    223      NA   NA   NA   NA     NA     NA     NA
     ## 12           0       4    235      NA   NA   NA   NA     NA     NA     NA
@@ -522,9 +724,9 @@
     ## 23           0       4     42      NA   NA   NA   NA     NA     NA     NA
     ## 24           0       4     54      NA   NA   NA   NA     NA     NA     NA
     ## 25           0       4     66      NA   NA   NA   NA     NA     NA     NA
-    ## 26          -7       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 27          -3       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 28          -3       1     -3      NA   NA   NA   NA     NA     NA     NA
+    ## 26          -7       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 27          -3       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 28          -3       1     NA      NA   NA   NA   NA     NA     NA     NA
     ## 29           0       3     18      NA   NA   NA   NA     NA     NA     NA
     ## 30           0       3     30      NA   NA   NA   NA     NA     NA     NA
     ## 31           0       3     42      NA   NA   NA   NA     NA     NA     NA
@@ -532,14 +734,14 @@
     ## 33           0       3    118      NA   NA   NA   NA     NA     NA     NA
     ## 34           0       3    130      NA   NA   NA   NA     NA     NA     NA
     ## 35           0       3    142      NA   NA   NA   NA     NA     NA     NA
-    ## 36          -7       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 37          -3       1     -3      NA   NA   NA   NA     NA     NA     NA
+    ## 36          -7       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 37          -3       1     NA      NA   NA   NA   NA     NA     NA     NA
     ## 38          -3       2      5      NA   NA   NA   NA     NA     NA     NA
-    ## 39          -7       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 40          -3       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 41          -3       1     -3      NA   NA   NA   NA     NA     NA     NA
+    ## 39          -7       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 40          -3       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 41          -3       1     NA      NA   NA   NA   NA     NA     NA     NA
     ## 42           0       8    177      NA   NA   NA   NA     NA     NA     NA
-    ## 43           1       6     -3      NA   NA   NA   NA     NA     NA     NA
+    ## 43           1       6     NA      NA   NA   NA   NA     NA     NA     NA
     ## 44          -3       7      3      NA    3    1   NA     NA      4      3
     ## 45           0       4    171      NA   NA   NA   NA     NA     NA     NA
     ## 46           0       4    183      NA   NA   NA   NA     NA     NA     NA
@@ -551,9 +753,9 @@
     ## 52           0       3     97      NA   NA   NA   NA     NA     NA     NA
     ## 53           0       3    106      NA   NA   NA   NA     NA     NA     NA
     ## 54           0       3    119      NA   NA   NA   NA     NA     NA     NA
-    ## 55          -7       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 56          -3       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 57          -3       1     -3      NA   NA   NA   NA     NA     NA     NA
+    ## 55          -7       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 56          -3       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 57          -3       1     NA      NA   NA   NA   NA     NA     NA     NA
     ## 58          -3       2      0      NA   NA   NA   NA     NA     NA     NA
     ## 59           0       4     12      NA   NA   NA   NA     NA     NA     NA
     ## 60           0       4     25      NA   NA   NA   NA     NA     NA     NA
@@ -579,20 +781,20 @@
     ## 80           0       4     51      NA   NA   NA   NA     NA     NA     NA
     ## 81           0       4     64      NA   NA   NA   NA     NA     NA     NA
     ## 82           0       4     77      NA   NA   NA   NA     NA     NA     NA
-    ## 83          -7       1     -3      NA   NA   NA   NA     NA     NA     NA
+    ## 83          -7       1     NA      NA   NA   NA   NA     NA     NA     NA
     ## 84          -3       2      5      NA   NA   NA   NA     NA     NA     NA
-    ## 85          -3       1     -3      NA   NA   NA   NA     NA     NA     NA
+    ## 85          -3       1     NA      NA   NA   NA   NA     NA     NA     NA
     ## 86           0       4    168      NA   NA   NA   NA     NA     NA     NA
     ## 87           0       4    178      NA   NA   NA   NA     NA     NA     NA
     ## 88           0       4    190      NA   NA   NA   NA     NA     NA     NA
-    ## 89          -7       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 90          -3       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 91          -3       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 92          -3       1     -3      NA   NA   NA   NA     NA     -3     -3
-    ## 93          -3       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 94          -3       1     -3      NA   -3   -3   NA     NA     -3     -3
-    ## 95           0       4     -7      NA   NA   NA   NA     NA     NA     NA
-    ## 96           0       4     -7      NA   NA   NA   NA     NA     NA     NA
+    ## 89          -7       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 90          -3       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 91          -3       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 92          -3       1     NA      NA   NA   NA   NA     NA     -3     -3
+    ## 93          -3       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 94          -3       1     NA      NA   -3   -3   NA     NA     -3     -3
+    ## 95           0       4     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 96           0       4     NA      NA   NA   NA   NA     NA     NA     NA
     ## 97           0       4    300      NA   NA   NA   NA     NA     NA     NA
     ## 98           0       4    311      NA   NA   NA   NA     NA     NA     NA
     ## 99           0       4    320      NA   -3   -3   NA     NA      4      4
@@ -603,8 +805,8 @@
     ## 104          0       4    189      NA   NA   NA   NA     NA     NA     NA
     ## 105          0       4    201      NA   NA   NA   NA     NA     NA     NA
     ## 106          0       2    107      NA   NA   NA   NA     NA     NA     NA
-    ## 107          1       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 108         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
+    ## 107          1       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 108         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
     ## 109          0       4    194      NA   NA   NA   NA     NA      4      4
     ## 110          0       4    141      NA   NA   NA   NA     NA     NA     NA
     ## 111          0       4    153      NA   NA   NA   NA     NA     NA     NA
@@ -613,7 +815,7 @@
     ## 114          0       4     71      NA   NA   NA   NA     NA     NA     NA
     ## 115          0       4     84      NA   NA   NA   NA     NA     NA     NA
     ## 116          0       4    336      NA   NA   NA   NA     NA     NA     NA
-    ## 117          1       6     -3      NA   NA   NA   NA     NA     NA     NA
+    ## 117          1       6     NA      NA   NA   NA   NA     NA     NA     NA
     ## 118          0       8     11      NA   NA   NA   NA     NA     NA     NA
     ## 119          0       4    291      NA   NA   NA   NA     NA     NA     NA
     ## 120          0       4    303      NA   NA   NA   NA     NA     NA     NA
@@ -626,9 +828,9 @@
     ## 127          0       3     38      NA   NA   NA   NA     NA     NA     NA
     ## 128          0       3     45      NA   NA   NA   NA     NA      2      3
     ## 129          0       3     18      NA   NA   NA   NA     NA     NA     NA
-    ## 130         -7       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 131         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 132         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
+    ## 130         -7       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 131         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 132         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
     ## 133          0       4    172      NA   NA   NA   NA     NA     NA     NA
     ## 134          0       4    183      NA   NA   NA   NA     NA     NA     NA
     ## 135          0       4    195      NA   NA   NA   NA     NA     NA     NA
@@ -645,9 +847,9 @@
     ## 146          0       3     91      NA   NA   NA   NA     NA     NA     NA
     ## 147          0       4    103      NA   NA   NA   NA     NA     NA     NA
     ## 148          0       4    115      NA   NA   NA   NA     NA     NA     NA
-    ## 149         -7       1     -3      NA   NA   NA   NA     NA     NA     NA
+    ## 149         -7       1     NA      NA   NA   NA   NA     NA     NA     NA
     ## 150          0       2      7      NA   NA   NA   NA     NA     NA     NA
-    ## 151         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
+    ## 151         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
     ## 152          0       4    335      NA   NA   NA   NA     NA     NA     NA
     ## 153          0       4    347      NA   NA   NA   NA     NA     NA     NA
     ## 154          0       4    360      NA   NA   NA   NA     NA     NA     NA
@@ -667,17 +869,17 @@
     ## 168          0       4    157      NA   NA   NA   NA     NA     NA     NA
     ## 169          0       4    168      NA   NA   NA   NA     NA     NA     NA
     ## 170          0       4    180      NA   NA   NA   NA     NA     NA     NA
-    ## 171         -7       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 172         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 173         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
+    ## 171         -7       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 172         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 173         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
     ## 174          0       5    387      NA   NA   NA   NA     NA     NA     NA
     ## 175          0       4    400      NA   NA   NA   NA     NA     NA     NA
     ## 176          0       4    411      NA   NA   NA   NA     NA     NA     NA
-    ## 177         -7       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 178         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 179         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 180         -7       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 181         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
+    ## 177         -7       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 178         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 179         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 180         -7       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 181         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
     ## 182         -3       3      4      NA   NA   NA   NA     NA     NA     NA
     ## 183          0       3     81      NA   NA   NA   NA     NA     NA     NA
     ## 184          0       3     93      NA   NA   NA   NA     NA     NA     NA
@@ -688,21 +890,21 @@
     ## 189          0       4    214      NA   NA   NA   NA     NA     NA     NA
     ## 190          0       4    226      NA   NA   NA   NA     NA     NA     NA
     ## 191          0       4    239      NA   NA   NA   NA     NA     NA     NA
-    ## 192         -7       6     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 193         -3       6     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 194         -3       6     -3      NA   NA   NA   NA     NA     NA     NA
+    ## 192         -7       6     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 193         -3       6     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 194         -3       6     NA      NA   NA   NA   NA     NA     NA     NA
     ## 195          0       3     45      NA   NA   NA   NA     NA     NA     NA
     ## 196          0       3     56      NA   NA   NA   NA     NA     NA     NA
     ## 197          0       3     68      NA   NA   NA   NA     NA     NA     NA
-    ## 198         -7       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 199         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
+    ## 198         -7       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 199         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
     ## 200          0       2      7      NA   NA   NA   NA     NA     NA     NA
     ## 201          0       2    134      NA   NA   NA   NA     NA     NA     NA
     ## 202          0       2    148      NA   NA   NA   NA     NA     NA     NA
     ## 203          0       2    158      NA   NA   NA   NA     NA     NA     NA
-    ## 204         -7       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 205         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 206         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
+    ## 204         -7       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 205         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 206         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
     ## 207          0       4    141      NA   NA   NA   NA     NA     NA     NA
     ## 208          0       4    153      NA   NA   NA   NA     NA     NA     NA
     ## 209          0       4    165      NA   NA   NA   NA     NA     NA     NA
@@ -724,9 +926,9 @@
     ## 225         -3       2      0      NA   NA   NA   NA     NA     NA     NA
     ## 226          0       2     12      NA   NA   NA   NA     NA     NA     NA
     ## 227          0       3     24      NA   NA   NA   NA     NA     NA     NA
-    ## 228         -7       6     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 229         -3       6     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 230         -3       6     -3      NA   NA   NA   NA     NA     NA     NA
+    ## 228         -7       6     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 229         -3       6     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 230         -3       6     NA      NA   NA   NA   NA     NA     NA     NA
     ## 231          0      -7     49      NA   NA   NA   NA     NA     NA     NA
     ## 232          0      -7     61      NA   NA   NA   NA     NA     NA     NA
     ## 233          0      -7     73      NA   NA   NA   NA     NA     NA     NA
@@ -739,9 +941,9 @@
     ## 240          0       4    379      NA   NA   NA   NA     NA     NA     NA
     ## 241          0       4    391      NA   NA   NA   NA     NA     NA     NA
     ## 242          0       4    398      NA   -3   -3   NA     NA      4      4
-    ## 243         -7       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 244         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 245         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
+    ## 243         -7       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 244         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 245         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
     ## 246          0       4     27      NA   NA   NA   NA     NA     NA     NA
     ## 247          0       4     39      NA   NA   NA   NA     NA     NA     NA
     ## 248          0       4     51      NA   NA   NA   NA     NA     NA     NA
@@ -751,9 +953,9 @@
     ## 252          0       3     28      NA   NA   NA   NA     NA     NA     NA
     ## 253          0       3     40      NA   NA   NA   NA     NA     NA     NA
     ## 254          0       3     52      NA   NA   NA   NA     NA     NA     NA
-    ## 255         -7       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 256         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 257         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
+    ## 255         -7       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 256         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 257         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
     ## 258          0       4    115      NA   NA   NA   NA     NA     NA     NA
     ## 259          0       4    126      NA   NA   NA   NA     NA     NA     NA
     ## 260          0       4    138      NA   NA   NA   NA     NA     NA     NA
@@ -786,30 +988,30 @@
     ## 287          0       4    260      NA   NA   NA   NA     NA     NA     NA
     ## 288          0       4    272      NA   NA   NA   NA     NA     NA     NA
     ## 289          0       4    250      NA   NA   NA   NA     NA     NA     NA
-    ## 290          1       6     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 291         -3       6     -3      NA   NA   NA   NA     NA     NA     NA
+    ## 290          1       6     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 291         -3       6     NA      NA   NA   NA   NA     NA     NA     NA
     ## 292          0       4     93      NA   NA   NA   NA     NA      5      4
     ## 293          0       4    110      NA   NA   NA   NA     NA     NA     NA
     ## 294          0       4    122      NA   NA   NA   NA     NA     NA     NA
     ## 295          0       3     43      NA   NA   NA   NA     NA     NA     NA
-    ## 296         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 297         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 298          0       3     -7      NA   NA   NA   NA     NA      4      4
-    ## 299          0       4     -7      NA   NA   NA   NA     NA     NA     NA
-    ## 300          0       4     -7      NA   NA   NA   NA     NA     NA     NA
+    ## 296         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 297         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 298          0       3     NA      NA   NA   NA   NA     NA      4      4
+    ## 299          0       4     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 300          0       4     NA      NA   NA   NA   NA     NA     NA     NA
     ## 301          0       4    116      NA   NA   NA   NA     NA     NA     NA
     ## 302          0       4    126      NA   NA   NA   NA     NA     NA     NA
     ## 303          0       4    138      NA   NA   NA   NA     NA     NA     NA
     ## 304          0       4    125      NA   NA   NA   NA     NA      4      4
-    ## 305         -7       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 306         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 307         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
+    ## 305         -7       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 306         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 307         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
     ## 308          0       4    261      NA   NA   NA   NA     NA     NA     NA
     ## 309          0       4    273      NA   NA   NA   NA     NA     NA     NA
     ## 310          0       4    285      NA   NA   NA   NA     NA     NA     NA
-    ## 311         -7       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 312         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 313         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
+    ## 311         -7       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 312         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 313         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
     ## 314          0       4    387      NA   NA   NA   NA     NA     NA     NA
     ## 315          0       4    399      NA   NA   NA   NA     NA     NA     NA
     ## 316          0       4    411      NA   NA   NA   NA     NA     NA     NA
@@ -837,19 +1039,19 @@
     ## 338          0       4    191      NA   NA   NA   NA     NA     NA     NA
     ## 339          0       4    203      NA   NA   NA   NA     NA     NA     NA
     ## 340          0       4    216      NA   NA   NA   NA     NA     NA     NA
-    ## 341          1       1     -3      NA   NA   NA   NA     NA     -3     -3
-    ## 342         -7       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 343         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 344         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 345         -7       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 346         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 347         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
+    ## 341          1       1     NA      NA   NA   NA   NA     NA     -3     -3
+    ## 342         -7       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 343         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 344         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 345         -7       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 346         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 347         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
     ## 348          0       4    106      NA   NA   NA   NA     NA     NA     NA
     ## 349          0       4    118      NA   NA   NA   NA     NA     NA     NA
     ## 350          0       4    130      NA   NA   NA   NA     NA     NA     NA
-    ## 351          0       2     -7      NA   NA   NA   NA     NA     NA     NA
-    ## 352          0       2     -7      NA   NA   NA   NA     NA     NA     NA
-    ## 353          0       2     -7      NA   NA   NA   NA     NA     NA     NA
+    ## 351          0       2     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 352          0       2     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 353          0       2     NA      NA   NA   NA   NA     NA     NA     NA
     ## 354          0       4    207      NA   NA   NA   NA     NA     NA     NA
     ## 355          0       4    219      NA   NA   NA   NA     NA     NA     NA
     ## 356          0       4    231      NA   NA   NA   NA     NA     NA     NA
@@ -887,11 +1089,11 @@
     ## 388          0       4    130      NA   NA   NA   NA     NA     NA     NA
     ## 389          0       4    142      NA   NA   NA   NA     NA     NA     NA
     ## 390          0       2     16      NA   NA   NA   NA     NA     NA     NA
-    ## 391          1       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 392         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 393         -7       6     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 394         -3       6     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 395         -3       6     -3      NA   NA   NA   NA     NA     NA     NA
+    ## 391          1       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 392         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 393         -7       6     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 394         -3       6     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 395         -3       6     NA      NA   NA   NA   NA     NA     NA     NA
     ## 396          0       3    213      NA   NA   NA   NA     NA     NA     NA
     ## 397          0       3    225      NA   NA   NA   NA     NA     NA     NA
     ## 398          0       3    237      NA   NA   NA   NA     NA     NA     NA
@@ -908,23 +1110,23 @@
     ## 409         -3       2      1      NA   NA   NA   NA     NA     NA     NA
     ## 410          0       4    126      NA   NA   NA   NA     NA      5      3
     ## 411          0       4    150      NA   -3   -3   NA     NA      5      2
-    ## 412         -7       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 413         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 414         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
+    ## 412         -7       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 413         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 414         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
     ## 415          0       2     15      NA   NA   NA   NA     NA     NA     NA
     ## 416          0       4     26      NA   NA   NA   NA     NA     NA     NA
     ## 417          0       4     38      NA   NA   NA   NA     NA     NA     NA
     ## 418          0       4    182      NA   NA   NA   NA     NA     NA     NA
     ## 419          0       4    194      NA   NA   NA   NA     NA     NA     NA
     ## 420          0       4    206      NA   NA   NA   NA     NA     NA     NA
-    ## 421          1       6     -3      NA   NA   NA   NA     NA     -3     -3
+    ## 421          1       6     NA      NA   NA   NA   NA     NA     -3     -3
     ## 422          0       4    227      NA   NA   NA   NA     NA      4      4
-    ## 423          1       6     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 424         -3       6     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 425          1       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 426         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 427         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 428         -7       1     -3      NA   NA   NA   NA     NA     NA     NA
+    ## 423          1       6     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 424         -3       6     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 425          1       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 426         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 427         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 428         -7       1     NA      NA   NA   NA   NA     NA     NA     NA
     ## 429         -3       2      1      NA   NA   NA   NA     NA     NA     NA
     ## 430          0       4     95      NA   NA   NA   NA     NA     NA     NA
     ## 431          0       4    108      NA   NA   NA   NA     NA     NA     NA
@@ -939,9 +1141,9 @@
     ## 440          0       4    315      NA   NA   NA   NA     NA     NA     NA
     ## 441          0       4    174      NA   NA   NA   NA     NA      5      5
     ## 442          0       3    179      NA   NA   NA   NA     NA     NA     NA
-    ## 443         -3       1     -3      NA   NA   NA   NA     NA     -3     -3
-    ## 444         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 445         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
+    ## 443         -3       1     NA      NA   NA   NA   NA     NA     -3     -3
+    ## 444         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 445         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
     ## 446          0       3    111      NA   NA   NA   NA     NA     NA     NA
     ## 447          0       3    117      NA   NA   NA   NA     NA      4      4
     ## 448          0       3    135      NA   NA   NA   NA     NA     NA     NA
@@ -970,8 +1172,8 @@
     ## 471          0       8     85      NA   NA   NA   NA     NA     NA     NA
     ## 472          0       8     98      NA   NA   NA   NA     NA     NA     NA
     ## 473          0       4    242      NA   NA   NA   NA     NA     NA     NA
-    ## 474          0       4     -7      NA   NA   NA   NA     NA     NA     NA
-    ## 475          0       4     -7      NA   -3   -3   NA     NA      2      2
+    ## 474          0       4     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 475          0       4     NA      NA   -3   -3   NA     NA      2      2
     ## 476          0       4    208      NA   NA   NA   NA     NA     NA     NA
     ## 477          0       4    220      NA   NA   NA   NA     NA     NA     NA
     ## 478          0       4    231      NA   NA   NA   NA     NA     NA     NA
@@ -987,8 +1189,8 @@
     ## 488          0       4    231      NA   NA   NA   NA     NA     NA     NA
     ## 489          0       4    243      NA   NA   NA   NA     NA     NA     NA
     ## 490          0       4    255      NA   NA   NA   NA     NA     NA     NA
-    ## 491         -7       1     -3      NA   NA   NA   NA     NA     NA     NA
-    ## 492         -3       1     -3      NA   NA   NA   NA     NA     NA     NA
+    ## 491         -7       1     NA      NA   NA   NA   NA     NA     NA     NA
+    ## 492         -3       1     NA      NA   NA   NA   NA     NA     NA     NA
     ##     pa17i4 pa17i5 pa17i6 pa17i8 pa21i7 pa21i8 pa21i9 pa21i10 pa21i11 pa21i12
     ## 1       NA     NA     NA     NA     NA     NA     NA      NA      NA      NA
     ## 2       NA     NA     NA     NA     NA     NA     NA      NA      NA      NA
@@ -5687,7 +5889,7 @@
     ## 258       NA      NA      NA      NA      NA      NA     1    NA    NA    NA
     ## 259       NA      NA      NA      NA      NA      NA     1    NA    NA    NA
     ## 260       NA      NA      NA      NA      NA      NA     1    NA    NA    NA
-    ## 261       NA      NA      NA      NA      NA      NA    -7    NA    NA    NA
+    ## 261       NA      NA      NA      NA      NA      NA    NA    NA    NA    NA
     ## 262       NA      NA      NA      NA      NA      NA     0    NA     5     3
     ## 263       NA      NA      NA      NA      NA      NA     0    NA    NA    NA
     ## 264       NA      NA      NA      NA      NA      NA     1    NA    NA    NA
@@ -10358,69 +10560,10 @@
     ## 492    NA    NA    -10
     ##  [ reached 'max' / getOption("max.print") -- omitted 107429 rows ]
 
-    library(tidyverse)
-
-    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ## ✔ dplyr     1.2.1     ✔ readr     2.2.0
-    ## ✔ forcats   1.0.1     ✔ stringr   1.6.0
-    ## ✔ ggplot2   4.0.3     ✔ tibble    3.3.1
-    ## ✔ lubridate 1.9.5     ✔ tidyr     1.3.2
-    ## ✔ purrr     1.2.2     
-    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ## ✖ dplyr::filter() masks stats::filter()
-    ## ✖ dplyr::lag()    masks stats::lag()
-    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-
-    library(dplyr)
-    library(ggplot2)
-    library(kableExtra)
-
-    ## 
-    ## Attaching package: 'kableExtra'
-    ## 
-    ## The following object is masked from 'package:dplyr':
-    ## 
-    ##     group_rows
-
-    library(ppcor)
-
-    ## Loading required package: MASS
-    ## 
-    ## Attaching package: 'MASS'
-    ## 
-    ## The following object is masked from 'package:dplyr':
-    ## 
-    ##     select
-
-    #Where possible, use functions of the loaded packages
-
-## Analysis of Reasons for the low Fertility Rate
-
-    # mutating values with `-2` to `NA` for the variable `fertility_rate
-    data <- data %>%
-      mutate(frt69 = ifelse(frt69 == -2, NA, frt69))
-
-    #1.1
-    cor(data$sat3, data$frt68, use = "complete.obs")
-
-    ## [1] -0.02948568
-
-    cor(data$sat3, data$frt69, use = "complete.obs")
-
-    ## [1] 0.1134073
-
-    #1.2
-    # heat map, sat3 on x axis, frt69 on y axis, I want to see how much percent of people are in each box which displays the relative frequency of people with a specific combination of relationship satisfaction and intention to get children in the next 3 years.
-
-
-    ggplot(data, aes(x = sat3, y = frt69)) +
-     geom_tile() +
-     theme_minimal()
-
-    ## Warning: Removed 100864 rows containing missing values or values outside the scale range
-    ## (`geom_tile()`).
-
-![](Jannis-DW_files/figure-markdown_strict/FertilityRateAnalysis-1.png)
+    #ggplot(data, aes(x = sat3, y = frt69, fill = percentages)) +
+     #geom_tile() + 
+      #scale_fill_gradient(low = "white", high = "blue") +
+     #theme_minimal()
 
     #1.3
     #I think that is due to happy couples not wanting to change any of their current situation since they are allready fulfilled. Maybe the unhappier families simply are unhapy because they want ti have children but do not have any yet and will be happier as soon as they have children. 
@@ -10428,14 +10571,23 @@
     #1.4
     hist(data$sat3)
 
-![](Jannis-DW_files/figure-markdown_strict/FertilityRateAnalysis-2.png)
+![](Jannis-DW_files/figure-markdown_strict/FertilityRateAnalysis-1.png)
 
     #We have the statistical problem that most people see themselves as very happy or do not want to answer the question. This leads to a very skewed distribution of the data and makes it hard to find a correlation between the two variables.
 
     #1.5
     #corellation between sat3 and frt69 with controll of age
-    cor(data$sat3, data$frt69, use = "complete.obs", method = "pearson")
+    vars <- c("sat3", "frt69", "age")
 
-    ## [1] 0.1134073
+    #data %>%
+     # mutate(
+      #  age = 2026 - data$age
+      #) %>%
+      #mutate(
+       # across(c(sat3, frt69, age), ~replace(NA, .x, .x<0,))
+      #)
+      #drop_na(data, any_of(vars))
+
+    # pcor.test(data$sat3, data$frt69, (2026 - data$age), method = "pearson")
 
     #1.6
