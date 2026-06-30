@@ -1,11 +1,16 @@
 ---
-title: "Michaels_solution_for_Sami"
-output: md_document
-date: "2026-06-30"
+title: "IUCN Red List Data Analysis – Species Conservation Status"
+author: "Your Name"
+date: "`r Sys.Date()`"
+output: 
+  md_document:
+    variant: markdown_github
+    toc: true
+    toc_depth: 2
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, fig.align = "center")
 library(dplyr)
 library(tidyr)
 library(ggplot2)
@@ -13,69 +18,157 @@ library(forcats)
 library(readr)
 ```
 
-# Data Import and Preparation
+# Introduction
+
+This analysis examines the **conservation status of species** across different taxonomic classes and kingdoms, based on data from the **IUCN Red List** (`SpeciesByKingdomAndClass.csv`). The IUCN Red List is the world's most comprehensive inventory of the global conservation status of biological species.
+
+**What we will do:**
+
+1. **Import and enrich the data** – add Kingdom information based on taxonomic classification.
+2. **Clean and restructure** – remove non‑official categories, combine similar statuses, and rename columns for readability.
+3. **Create a percentage table** – express each category as a percentage of the total species count per class.
+4. **Visualise differences between Kingdoms** – compare the proportion of extinct, affected, and unaffected species across major kingdoms (Animalia, Plantae, Fungi, Chromista).
+5. **Identify most and least affected Classes** – highlight the classes with the highest and lowest percentages of Critically Endangered species.
+
+---
+
+# 1. Data Import and Wrangling
+
+## 1a) Import CSV into R
+
+The dataset is imported from `~/Downloads/SpeciesByKingdomAndClass.csv`. It contains information about the number of species in various IUCN Red List categories for each taxonomic class.
 
 ```{r import}
+# IMPORTANT: Adjust the file path if your file is located elsewhere!
 redlist <- read_csv("~/Downloads/SpeciesByKingdomAndClass.csv")
-head(redlist)
+head(redlist, 6)
 ```
 
-## Add Kingdom Information
+**Explanation:** The table shows for each class (e.g., `ACTINOPTERYGII` – ray‑finned fishes) the number of species in each IUCN category: `EX` (Extinct), `EW` (Extinct in the Wild), `CR` (Critically Endangered), `EN` (Endangered), `VU` (Vulnerable), `NT` (Near Threatened), `LC` (Least Concern), and `DD` (Data Deficient). The `Total` column gives the total number of assessed species for that class.
+
+**Note:** The columns `CR(PE)` and `CR(PEW)` represent "Possibly Extinct" and "Possibly Extinct in the Wild" – these are *not* official IUCN categories and will be removed later.
+
+---
+
+## 1c) Add Kingdom Data
+
+The original dataset does not contain a `Kingdom` column. We add it using a lookup table that maps each class (`Name`) to its kingdom (Animalia, Plantae, Fungi, or Chromista) based on the taxonomic hierarchy from the IUCN website.
 
 ```{r add_kingdom}
-# Lookup table (all classes from the IUCN page)
+# Lookup table: Class -> Kingdom
+# This maps every taxonomic class to its kingdom based on the IUCN website
 kingdom_lookup <- c(
-  # ANIMALIA
-  "ACTINOPTERYGII" = "ANIMALIA", "AMPHIBIA" = "ANIMALIA",
-  "ANTHOZOA" = "ANIMALIA", "ARACHNIDA" = "ANIMALIA",
-  "ASTEROIDEA" = "ANIMALIA", "AVES" = "ANIMALIA",
-  "BIVALVIA" = "ANIMALIA", "BRANCHIOPODA" = "ANIMALIA",
-  "CALCAREA" = "ANIMALIA", "CEPHALOPODA" = "ANIMALIA",
-  "CHILOPODA" = "ANIMALIA", "CHONDRICHTHYES" = "ANIMALIA",
-  "CLITELLATA" = "ANIMALIA", "COLLEMBOLA" = "ANIMALIA",
-  "DEMOSPONGIAE" = "ANIMALIA", "DIPLOPODA" = "ANIMALIA",
-  "ECHINOIDEA" = "ANIMALIA", "GASTROPODA" = "ANIMALIA",
-  "HEXACTINELLIDA" = "ANIMALIA", "HEXANAUPLIA" = "ANIMALIA",
-  "HOLOTHUROIDEA" = "ANIMALIA", "HYDROZOA" = "ANIMALIA",
-  "INSECTA" = "ANIMALIA", "MALACOSTRACA" = "ANIMALIA",
-  "MAMMALIA" = "ANIMALIA", "MAXILLOPODA" = "ANIMALIA",
-  "MEROSTOMATA" = "ANIMALIA", "MONOPLACOPHORA" = "ANIMALIA",
-  "MYXINI" = "ANIMALIA", "NEMERTEA" = "ANIMALIA",
-  "OSTRACODA" = "ANIMALIA", "PETROMYZONTI" = "ANIMALIA",
-  "POLYCHAETA" = "ANIMALIA", "POLYPLACOPHORA" = "ANIMALIA",
-  "REPTILIA" = "ANIMALIA", "SARCOPTERYGII" = "ANIMALIA",
-  "SOLENOGASTRES" = "ANIMALIA", "TURBELLARIA" = "ANIMALIA",
-  "UDEONYCHOPHORA" = "ANIMALIA",
-  # CHROMISTA
-  "PHAEOPHYCEAE" = "CHROMISTA",
-  # FUNGI
-  "AGARICOMYCETES" = "FUNGI", "ARTHONIOMYCETES" = "FUNGI",
-  "DACRYMYCETES" = "FUNGI", "DOTHIDEOMYCETES" = "FUNGI",
-  "EUROTIOMYCETES" = "FUNGI", "EXOBASIDIOMYCETES" = "FUNGI",
-  "GEOGLOSSOMYCETES" = "FUNGI", "LECANOROMYCETES" = "FUNGI",
-  "LEOTIOMYCETES" = "FUNGI", "NOT ASSIGNED" = "FUNGI",
-  "PEZIZOMYCETES" = "FUNGI", "SORDARIOMYCETES" = "FUNGI",
-  "USTILAGINOMYCETES" = "FUNGI", "WALLEMIOMYCETES" = "FUNGI",
-  # PLANTAE
-  "ANDREAEOPSIDA" = "PLANTAE", "ANTHOCEROTOPSIDA" = "PLANTAE",
-  "BRYOPSIDA" = "PLANTAE", "CHAROPHYCEAE" = "PLANTAE",
-  "CHLOROPHYCEAE" = "PLANTAE", "CYCADOPSIDA" = "PLANTAE",
-  "FLORIDEOPHYCEAE" = "PLANTAE", "GINKGOOPSIDA" = "PLANTAE",
-  "GNETOPSIDA" = "PLANTAE", "JUNGERMANNIOPSIDA" = "PLANTAE",
-  "LILIOPSIDA" = "PLANTAE", "LYCOPODIOPSIDA" = "PLANTAE",
-  "MAGNOLIOPSIDA" = "PLANTAE", "MARCHANTIOPSIDA" = "PLANTAE",
-  "PINOPSIDA" = "PLANTAE", "POLYPODIOPSIDA" = "PLANTAE",
-  "POLYTRICHOPSIDA" = "PLANTAE", "SPHAGNOPSIDA" = "PLANTAE",
-  "TAKAKIOPSIDA" = "PLANTAE", "ULVOPHYCEAE" = "PLANTAE"
+  # ==================== ANIMALIA ====================
+  "ACTINOPTERYGII" = "ANIMALIA",   # Ray-finned fishes
+  "AMPHIBIA" = "ANIMALIA",         # Amphibians
+  "ANTHOZOA" = "ANIMALIA",         # Corals and sea anemones
+  "ARACHNIDA" = "ANIMALIA",        # Spiders, scorpions, mites
+  "ASTEROIDEA" = "ANIMALIA",       # Starfish
+  "AVES" = "ANIMALIA",             # Birds
+  "BIVALVIA" = "ANIMALIA",         # Clams, mussels, oysters
+  "BRANCHIOPODA" = "ANIMALIA",     # Fairy shrimp, water fleas
+  "CALCAREA" = "ANIMALIA",         # Calcareous sponges
+  "CEPHALOPODA" = "ANIMALIA",      # Squid, octopus, cuttlefish
+  "CHILOPODA" = "ANIMALIA",        # Centipedes
+  "CHONDRICHTHYES" = "ANIMALIA",   # Sharks, rays, skates
+  "CLITELLATA" = "ANIMALIA",       # Earthworms, leeches
+  "COLLEMBOLA" = "ANIMALIA",       # Springtails
+  "DEMOSPONGIAE" = "ANIMALIA",     # Common sponges
+  "DIPLOPODA" = "ANIMALIA",        # Millipedes
+  "ECHINOIDEA" = "ANIMALIA",       # Sea urchins, sand dollars
+  "GASTROPODA" = "ANIMALIA",       # Snails, slugs
+  "HEXACTINELLIDA" = "ANIMALIA",   # Glass sponges
+  "HEXANAUPLIA" = "ANIMALIA",      # Copepods
+  "HOLOTHUROIDEA" = "ANIMALIA",    # Sea cucumbers
+  "HYDROZOA" = "ANIMALIA",         # Hydroids, hydra
+  "INSECTA" = "ANIMALIA",          # Insects
+  "MALACOSTRACA" = "ANIMALIA",     # Crustaceans (crabs, lobsters, shrimp)
+  "MAMMALIA" = "ANIMALIA",         # Mammals
+  "MAXILLOPODA" = "ANIMALIA",      # Barnacles, fish lice
+  "MEROSTOMATA" = "ANIMALIA",      # Horseshoe crabs
+  "MONOPLACOPHORA" = "ANIMALIA",   # Monoplacophoran mollusks
+  "MYXINI" = "ANIMALIA",           # Hagfish
+  "NEMERTEA" = "ANIMALIA",         # Ribbon worms
+  "OSTRACODA" = "ANIMALIA",        # Seed shrimp
+  "PETROMYZONTI" = "ANIMALIA",     # Lampreys
+  "POLYCHAETA" = "ANIMALIA",       # Bristle worms
+  "POLYPLACOPHORA" = "ANIMALIA",   # Chitons
+  "REPTILIA" = "ANIMALIA",         # Reptiles
+  "SARCOPTERYGII" = "ANIMALIA",    # Lobe-finned fishes
+  "SOLENOGASTRES" = "ANIMALIA",    # Solenogasters (worm-like mollusks)
+  "TURBELLARIA" = "ANIMALIA",      # Flatworms
+  "UDEONYCHOPHORA" = "ANIMALIA",   # Velvet worms
+
+  # ==================== CHROMISTA ====================
+  "PHAEOPHYCEAE" = "CHROMISTA",    # Brown algae
+
+  # ==================== FUNGI ====================
+  "AGARICOMYCETES" = "FUNGI",      # Mushrooms, bracket fungi
+  "ARTHONIOMYCETES" = "FUNGI",     # Lichen-forming fungi
+  "DACRYMYCETES" = "FUNGI",        # Jelly fungi
+  "DOTHIDEOMYCETES" = "FUNGI",     # Plant pathogenic fungi
+  "EUROTIOMYCETES" = "FUNGI",      # Molds, truffles
+  "EXOBASIDIOMYCETES" = "FUNGI",   # Rust fungi
+  "GEOGLOSSOMYCETES" = "FUNGI",    # Earth tongues
+  "LECANOROMYCETES" = "FUNGI",     # Lichenized fungi
+  "LEOTIOMYCETES" = "FUNGI",       # Cup fungi
+  "NOT ASSIGNED" = "FUNGI",        # Unassigned fungi (listed under Fungi on IUCN site)
+  "PEZIZOMYCETES" = "FUNGI",       # Cup fungi
+  "SORDARIOMYCETES" = "FUNGI",     # Pyrenomycetes fungi
+  "USTILAGINOMYCETES" = "FUNGI",   # Smut fungi
+  "WALLEMIOMYCETES" = "FUNGI",     # Wallemiomycetes fungi
+
+  # ==================== PLANTAE ====================
+  "ANDREAEOPSIDA" = "PLANTAE",     # Granite mosses
+  "ANTHOCEROTOPSIDA" = "PLANTAE",  # Hornworts
+  "BRYOPSIDA" = "PLANTAE",         # True mosses
+  "CHAROPHYCEAE" = "PLANTAE",      # Charophytes (stoneworts)
+  "CHLOROPHYCEAE" = "PLANTAE",     # Green algae
+  "CYCADOPSIDA" = "PLANTAE",       # Cycads
+  "FLORIDEOPHYCEAE" = "PLANTAE",   # Red algae
+  "GINKGOOPSIDA" = "PLANTAE",      # Ginkgo
+  "GNETOPSIDA" = "PLANTAE",        # Gnetophytes
+  "JUNGERMANNIOPSIDA" = "PLANTAE", # Jungermannialean liverworts
+  "LILIOPSIDA" = "PLANTAE",        # Monocots (grasses, lilies, orchids)
+  "LYCOPODIOPSIDA" = "PLANTAE",    # Clubmosses
+  "MAGNOLIOPSIDA" = "PLANTAE",     # Dicots (flowering plants)
+  "MARCHANTIOPSIDA" = "PLANTAE",   # Liverworts
+  "PINOPSIDA" = "PLANTAE",         # Conifers
+  "POLYPODIOPSIDA" = "PLANTAE",    # Ferns
+  "POLYTRICHOPSIDA" = "PLANTAE",   # Polytrichales mosses
+  "SPHAGNOPSIDA" = "PLANTAE",      # Peat mosses
+  "TAKAKIOPSIDA" = "PLANTAE",      # Takakiophytes
+  "ULVOPHYCEAE" = "PLANTAE"        # Ulvophycean green algae
 )
 
+# Add the Kingdom column
 redlist$Kingdom <- kingdom_lookup[redlist$Name]
+
+# Check if any classes were not matched
+missing <- redlist$Name[is.na(redlist$Kingdom)]
+if (length(missing) > 0) {
+  cat("⚠️ Warning: The following classes have no Kingdom assigned:\n", 
+      paste(missing, collapse = ", "), "\n")
+} else {
+  cat("✅ All classes successfully matched to a Kingdom.\n")
+}
+
+# View the result
+head(redlist, 6)
 ```
 
-## Data Cleaning
+**Explanation:** The `Kingdom` column now tells us which kingdom each class belongs to. This allows us to group and compare species across the major kingdoms (Animalia, Plantae, Fungi, Chromista).
 
-```{r clean}
-# Remove unwanted columns
+---
+
+# 2. Data Manipulation
+
+## 2a) Remove Unwanted Columns
+
+The columns `CR(PE)` (Possibly Extinct) and `CR(PEW)` (Possibly Extinct in the Wild) are *not* official IUCN categories and are removed. The subtotal that includes them is also removed. The remaining subtotals are renamed for clarity.
+
+```{r remove_cols}
+# Remove non-official IUCN columns
 redlist_clean <- redlist %>%
   select(-c("CR(PE)", "CR(PEW)", "Subtotal (EX+EW+ CR(PE)+CR(PEW))")) %>%
   rename(
@@ -83,14 +176,38 @@ redlist_clean <- redlist %>%
     Threatened_Subtotal = "Subtotal (threatened spp.)"
   )
 
-# Combine LR/cd and NT into "Near Threatened"
+head(redlist_clean, 6)
+```
+
+**Explanation:** After this step, the table contains only the official IUCN categories plus the subtotals for extinct and threatened species. The columns are now easier to read.
+
+---
+
+## 2c) Simplify Columns
+
+`LR/cd` (Lower Risk – conservation dependent) and `NT or LR/nt` (Near Threatened) are combined into a single column called **Near Threatened**. This aligns the data with the current IUCN classification system.
+
+```{r combine_nt}
+# Combine LR/cd and NT into a single "Near Threatened" column
 redlist_clean <- redlist_clean %>%
   mutate(
     `Near Threatened` = `LR/cd` + `NT or LR/nt`
   ) %>%
   select(-c("LR/cd", "NT or LR/nt"))
 
-# Readable column names
+head(redlist_clean, 6)
+```
+
+**Explanation:** The new `Near Threatened` column contains the combined counts of Lower Risk / conservation dependent species and Near Threatened species. This simplifies the table and aligns with the current IUCN Red List categories.
+
+---
+
+## 2d) Make Column Names Readable
+
+All column names are replaced with their full, human‑readable names.
+
+```{r rename_cols}
+# Rename columns to full IUCN category names
 redlist_clean <- redlist_clean %>%
   rename(
     Extinct = EX,
@@ -101,35 +218,61 @@ redlist_clean <- redlist_clean %>%
     Least_Concern = `LC or LR/lc`,
     Data_Deficient = DD
   )
+
+head(redlist_clean, 6)
 ```
 
-## Percentage Table
+**Resulting columns:** `Name`, `Kingdom`, `Extinct`, `Extinct_Wild`, `Critically_Endangered`, `Endangered`, `Vulnerable`, `Near Threatened`, `Least_Concern`, `Data_Deficient`, `Extinct_Subtotal`, `Threatened_Subtotal`, `Total`.
+
+---
+
+# 3. Data Visualisation
+
+## 3a) Create Relative Amount Table
+
+We create a new table `redlist_pct` where every numeric column (except `Total`) is expressed as a percentage of the row's `Total`. This makes it easy to compare proportions across classes. The `Total` column is set to 100.
 
 ```{r pct_table}
+# Identify numeric columns (excluding Name, Kingdom, Total)
 numeric_cols <- redlist_clean %>%
   select(-c(Name, Kingdom, Total)) %>%
   names()
 
+# Create percentage table
 redlist_pct <- redlist_clean %>%
   mutate(
     across(all_of(numeric_cols), ~ (. / Total) * 100),
     Total = 100
   )
 
+# Rename columns with "[%]" suffix
 colnames(redlist_pct)[colnames(redlist_pct) %in% numeric_cols] <-
   paste0(colnames(redlist_pct)[colnames(redlist_pct) %in% numeric_cols], " [%]")
 
-head(redlist_pct)
+head(redlist_pct, 6)
 ```
 
-## Kingdom Plot
+**Explanation:** In this table, each value shows the percentage of species in that category relative to the total number of species for that class. For example, for `ACTINOPTERYGII`, about 0.325% are Extinct, 0.04% Extinct in the Wild, etc. The `Total` column is always 100. This makes it easy to compare proportions across classes, regardless of the total number of species assessed.
+
+---
+
+## 3b) Visualise Difference Between Kingdoms
+
+To compare the conservation status across major Kingdoms, we create a **stacked bar plot**. Only Kingdoms with at least 1,000 species are included to avoid distorted results for small groups.
+
+**Categories:**
+- **Extinct:** `Extinct + Extinct_Wild` (EX + EW)
+- **Affected:** `Critically_Endangered + Endangered + Vulnerable` (CR + EN + VU)
+- **Unaffected / No data:** `Least_Concern + Near Threatened + Data_Deficient`
 
 ```{r kingdom_plot}
+# Only include Kingdoms with at least 1000 species
 kingdom_total <- redlist_clean %>%
   group_by(Kingdom) %>%
   summarise(Total_species = sum(Total, na.rm = TRUE)) %>%
   filter(Total_species >= 1000)
 
+# Prepare data for plotting
 kingdom_plot_data <- redlist_clean %>%
   filter(Kingdom %in% kingdom_total$Kingdom) %>%
   group_by(Kingdom) %>%
@@ -144,7 +287,8 @@ kingdom_plot_data <- redlist_clean %>%
   group_by(Kingdom) %>%
   mutate(Percentage = Count / sum(Count) * 100)
 
-ggplot(kingdom_plot_data, aes(x = Kingdom, y = Percentage, fill = Category)) +
+# Create stacked bar plot
+p_kingdom <- ggplot(kingdom_plot_data, aes(x = Kingdom, y = Percentage, fill = Category)) +
   geom_bar(stat = "identity", position = "stack") +
   scale_fill_manual(
     values = c("Extinct" = "#D55E00", "Affected" = "#E69F00", "Unaffected" = "#56B4E9"),
@@ -161,25 +305,45 @@ ggplot(kingdom_plot_data, aes(x = Kingdom, y = Percentage, fill = Category)) +
     axis.text.x = element_text(angle = 45, hjust = 1),
     legend.position = "bottom"
   )
+
+print(p_kingdom)
 ```
 
-## Class Plot
+**Interpretation:** The plot shows the proportion of species in each status category for each Kingdom.
+
+- **Animalia** and **Plantae** have relatively high proportions of "Affected" species (CR + EN + VU).
+- **Fungi** and **Chromista** have very few species in the extinct or affected categories – but this is largely because fewer species have been assessed in these kingdoms.
+- The "Unaffected / No data" category dominates for Fungi and Chromista, reflecting incomplete assessments.
+
+---
+
+## 3c) Visualise Most and Least Affected Classes
+
+We define **"affected"** as the percentage of **Critically Endangered** species within a class. This plot shows the **10 most affected** and the **10 least affected** classes, colour‑coded by Kingdom.
 
 ```{r class_plot}
+# Calculate Critically Endangered percentage per class
 class_cr_pct <- redlist_clean %>%
   mutate(CR_percent = (Critically_Endangered / Total) * 100) %>%
   arrange(desc(CR_percent))
 
-most_affected <- class_cr_pct %>% head(10) %>% mutate(Group = "Most Affected")
+# Top 10 most affected
+most_affected <- class_cr_pct %>%
+  head(10) %>%
+  mutate(Group = "Most Affected")
+
+# Bottom 10 least affected (excluding classes with 0% CR)
 least_affected <- class_cr_pct %>%
   filter(CR_percent > 0) %>%
   tail(10) %>%
   mutate(Group = "Least Affected")
 
+# Combine both groups for plotting
 plot_data <- bind_rows(most_affected, least_affected) %>%
-  mutate(Class = fct_inorder(Name))
+  mutate(Class = fct_inorder(Name))  # Preserve the order
 
-ggplot(plot_data, aes(x = Class, y = CR_percent, fill = Kingdom)) +
+# Create faceted bar plot
+p_classes <- ggplot(plot_data, aes(x = Class, y = CR_percent, fill = Kingdom)) +
   geom_bar(stat = "identity") +
   facet_wrap(~ Group, scales = "free_x") +
   labs(
@@ -194,4 +358,35 @@ ggplot(plot_data, aes(x = Class, y = CR_percent, fill = Kingdom)) +
     strip.text = element_text(face = "bold"),
     legend.position = "bottom"
   )
+
+print(p_classes)
+```
+
+**Interpretation:**
+
+- **Most affected classes:** **AMPHIBIA** (Amphibians) and **ACTINOPTERYGII** (Ray‑finned fishes) have the highest percentages of Critically Endangered species. Many of the most affected classes belong to **Animalia**.
+- **Least affected classes:** The least affected classes (with small but non‑zero CR percentages) include **CHAROPHYCEAE** (Charophytes) and **POLYTRICHOPSIDA** (a moss class), both belonging to **Plantae**. However, the low numbers often reflect limited assessments rather than genuinely low threat levels.
+
+---
+
+# Summary
+
+- **Data import** and **Kingdom enrichment** were successful – all classes were assigned a kingdom.
+- **Cleaning** removed non‑official categories and consolidated the Near Threatened classification.
+- The **percentage table** (`redlist_pct`) allows direct comparison of relative conservation statuses across classes.
+- **Plot 1 (Kingdom comparison)** shows that the majority of assessed species are in the "Unaffected / No data" category for all Kingdoms, but **Animalia** and **Plantae** have notable affected proportions.
+- **Plot 2 (Class comparison)** highlights **Amphibia** and **ACTINOPTERYGII** as the most affected classes, while several plant classes have very low CR percentages – likely due to assessment gaps rather than actual low threat levels.
+
+---
+
+## ⚠️ Important Notes
+
+1. **File path:** Make sure the CSV file is at `~/Downloads/SpeciesByKingdomAndClass.csv`. If it is elsewhere, adjust the path in the `read_csv()` call.
+2. **Data limitations:** The IUCN Red List data is incomplete for many groups. Fungi and Chromista have very few assessed species, so the percentages may not reflect true global patterns. This analysis is based on the subset of species that have been assessed.
+3. **Plots:** The plots are rendered as PNG images in the output folder. If you are rendering to HTML, the images will be embedded. If you are rendering to GitHub Markdown, the images will be linked correctly.
+
+---
+
+```{r session_info, echo=FALSE}
+sessionInfo()
 ```
