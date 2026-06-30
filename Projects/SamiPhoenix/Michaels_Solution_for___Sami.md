@@ -1,4 +1,4 @@
--   [Introduction](#introduction)
+-   [Introduction]
 -   [1. Data Import and Wrangling](#data-import-and-wrangling)
     -   [1a) Import CSV into R](#a-import-csv-into-r)
     -   [1c) Add Kingdom Data](#c-add-kingdom-data)

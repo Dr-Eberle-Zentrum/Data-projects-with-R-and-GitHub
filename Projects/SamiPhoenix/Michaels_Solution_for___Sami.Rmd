@@ -1,6 +1,6 @@
 ---
 title: "IUCN Red List Data Analysis – Species Conservation Status"
-author: "Your Name"
+author: "michael"
 date: "`r Sys.Date()`"
 output: 
   md_document:
