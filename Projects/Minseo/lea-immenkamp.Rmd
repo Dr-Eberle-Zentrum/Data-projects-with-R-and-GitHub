@@ -32,28 +32,23 @@ socialmedia_clean <- socialmedia %>%
    mutate(
     Duration = as.numeric(str_extract(Duration, "\\d+"))
   ) %>% 
-  
   mutate(
     Acquisition_Cost = as.numeric(
       str_replace_all(Acquisition_Cost, "[$,]", "")
     )
   ) %>%
-  
   mutate(
     Date = mdy(Date)
   ) %>%
-  
   mutate(
     Target_Audience = str_replace(Target_Audience, "All Ages", "All gender")
   ) %>% 
-  
   separate(
     Target_Audience,
     into = c("Gender", "Age_Group"),
     sep = " (?=\\d)",
     remove = TRUE
   ) %>%
-  
   mutate(
     Gender = str_trim(Gender),
     Age_Group = str_trim(Age_Group)
@@ -67,7 +62,7 @@ socialmedia_clean <- socialmedia %>%
 glimpse(socialmedia_clean)
 ```
 
-# Data mainpulation
+# Data manipulation
 
 ## 1. Which campaign goals bring the highest engagement scores?
 ```{r data engagement score}
@@ -106,28 +101,19 @@ age_data <- socialmedia_clean %>%
     click_through_rate = clicks / impressions,
     gender = tolower(gender)
   ) %>%
-  separate(age_group,
-           into = c("age_min", "age_max"),
-           sep = "\\s*-\\s*",
-           convert = TRUE,
-           fill = "right") %>%
+  separate(
+    age_group,
+    into = c("age_min", "age_max"),
+    sep = "-",
+    convert = TRUE
+  ) %>%
   separate_rows(gender, sep = ",") %>%
-  mutate(
-    age = map2(age_min, age_max, ~ {
-      if (is.finite(.x) & is.finite(.y) & .x <= .y) seq(.x, .y) else NA_real_
-    })
-  ) %>%
-  unnest(age)
-
-age_summary <- age_data %>%
-  group_by(age) %>%
-  summarise(
-    mean_ctr = mean(click_through_rate, na.rm = TRUE),
-    number_of_campaigns = n(),
-    .groups = "drop"
-  ) %>%
-  arrange(age)
+  rowwise() %>%
+  mutate(age = list(seq(age_min, age_max))) %>%
+  unnest(age) %>%
+  ungroup()
 ```
+
 
 Visualization of click-through rate by gender
 ```{r  click-through rate visualization}
