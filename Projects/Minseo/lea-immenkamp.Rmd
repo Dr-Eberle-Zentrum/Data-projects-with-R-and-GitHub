@@ -89,6 +89,10 @@ campaign %>%
   tab_header(
     title = "Engagement Score Summary by Campaign Goal"
   ) %>%
+  fmt_number(
+    columns = c(M, SD),
+    decimals = 2
+  ) %>% 
   tab_footnote(
     footnote = "Note. M = Mean, SD = Standard Derivation, n = number of campaigns."
   )
@@ -97,13 +101,25 @@ campaign %>%
 
 ## 2. Which age group has the highest click-through rate?
 ```{r click-through rate}
-age_summary <- socialmedia_clean %>%
-  mutate(click_through_rate = clicks / impressions) %>%
-  separate(age_group, into = c("age_min", "age_max"), sep = "-", convert = TRUE) %>%
+age_data <- socialmedia_clean %>%
   mutate(
-    age = map2(age_min, age_max, ~ if (is.finite(.x) & is.finite(.y)) seq(.x, .y) else NA_real_)
+    click_through_rate = clicks / impressions,
+    gender = tolower(gender)
   ) %>%
-  unnest(age) %>%
+  separate(age_group,
+           into = c("age_min", "age_max"),
+           sep = "\\s*-\\s*",
+           convert = TRUE,
+           fill = "right") %>%
+  separate_rows(gender, sep = ",") %>%
+  mutate(
+    age = map2(age_min, age_max, ~ {
+      if (is.finite(.x) & is.finite(.y) & .x <= .y) seq(.x, .y) else NA_real_
+    })
+  ) %>%
+  unnest(age)
+
+age_summary <- age_data %>%
   group_by(age) %>%
   summarise(
     mean_ctr = mean(click_through_rate, na.rm = TRUE),
@@ -113,31 +129,22 @@ age_summary <- socialmedia_clean %>%
   arrange(age)
 ```
 
-Visualization of click-through rate
+Visualization of click-through rate by gender
 ```{r  click-through rate visualization}
-socialmedia_clean %>%
-  mutate(
-    click_through_rate = clicks / impressions,
-    gender = tolower(gender),
-    gender = ifelse(gender == "male","female", gender)
-  ) %>%
-  separate(age_group, c("age_min","age_max"), sep = "\\s*-\\s*", convert = TRUE, fill = "right") %>%
-  separate_rows(gender, sep = ",") %>%
-  mutate(
-    age = map2(age_min, age_max, ~ {
-      if (is.finite(.x) & is.finite(.y) & .x <= .y) seq(.x, .y) else NA_real_
-    })
-  ) %>%
-  unnest(age) %>%
+age_data %>%
   group_by(age, gender) %>%
-  summarise(ctr = mean(click_through_rate, na.rm = TRUE), .groups = "drop") %>%
+  summarise(
+    ctr = mean(click_through_rate, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
   ggplot(aes(age, ctr)) +
-  stat_summary(fun = mean, geom = "line") +
+  geom_line() +
   facet_wrap(~gender)
 
 ```
 
-# Data visualization
+
+# 3. Average ROI changes with campaign duration
 ```{r line graph}
 roi_data <- socialmedia_clean %>%
   group_by(duration, channel_used) %>%

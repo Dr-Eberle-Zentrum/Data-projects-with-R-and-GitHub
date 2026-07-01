@@ -12,15 +12,11 @@ financial performance.
 
     library(tidyverse)
 
-    ## Warning: package 'ggplot2' was built under R version 4.5.2
-
-    ## Warning: package 'purrr' was built under R version 4.5.2
-
     ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
-    ## ✔ forcats   1.0.0     ✔ stringr   1.6.0
-    ## ✔ ggplot2   4.0.3     ✔ tibble    3.2.1
-    ## ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+    ## ✔ dplyr     1.2.1     ✔ readr     2.2.0
+    ## ✔ forcats   1.0.1     ✔ stringr   1.6.0
+    ## ✔ ggplot2   4.0.3     ✔ tibble    3.3.1
+    ## ✔ lubridate 1.9.5     ✔ tidyr     1.3.2
     ## ✔ purrr     1.2.2     
     ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
@@ -33,9 +29,6 @@ financial performance.
     library(lubridate)
     library(knitr)
     library(gt)
-
-    ## Warning: package 'gt' was built under R version 4.5.2
-
     library(purrr)
     library(ggplot2)
 
@@ -124,27 +117,31 @@ financial performance.
       tab_header(
         title = "Engagement Score Summary by Campaign Goal"
       ) %>%
+      fmt_number(
+        columns = c(M, SD),
+        decimals = 2
+      ) %>% 
       tab_footnote(
         footnote = "Note. M = Mean, SD = Standard Derivation, n = number of campaigns."
       )
 
-<div id="zauhobiegu" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#zauhobiegu table {
+<div id="shqfyabbxa" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#shqfyabbxa table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#zauhobiegu thead, #zauhobiegu tbody, #zauhobiegu tfoot, #zauhobiegu tr, #zauhobiegu td, #zauhobiegu th {
+#shqfyabbxa thead, #shqfyabbxa tbody, #shqfyabbxa tfoot, #shqfyabbxa tr, #shqfyabbxa td, #shqfyabbxa th {
   border-style: none;
 }
 
-#zauhobiegu p {
+#shqfyabbxa p {
   margin: 0;
   padding: 0;
 }
 
-#zauhobiegu .gt_table {
+#shqfyabbxa .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -170,12 +167,12 @@ financial performance.
   border-left-color: #D3D3D3;
 }
 
-#zauhobiegu .gt_caption {
+#shqfyabbxa .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#zauhobiegu .gt_title {
+#shqfyabbxa .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -187,7 +184,7 @@ financial performance.
   border-bottom-width: 0;
 }
 
-#zauhobiegu .gt_subtitle {
+#shqfyabbxa .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -199,7 +196,7 @@ financial performance.
   border-top-width: 0;
 }
 
-#zauhobiegu .gt_heading {
+#shqfyabbxa .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -211,13 +208,13 @@ financial performance.
   border-right-color: #D3D3D3;
 }
 
-#zauhobiegu .gt_bottom_border {
+#shqfyabbxa .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#zauhobiegu .gt_col_headings {
+#shqfyabbxa .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -232,7 +229,7 @@ financial performance.
   border-right-color: #D3D3D3;
 }
 
-#zauhobiegu .gt_col_heading {
+#shqfyabbxa .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -252,7 +249,7 @@ financial performance.
   overflow-x: hidden;
 }
 
-#zauhobiegu .gt_column_spanner_outer {
+#shqfyabbxa .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -264,15 +261,15 @@ financial performance.
   padding-right: 4px;
 }
 
-#zauhobiegu .gt_column_spanner_outer:first-child {
+#shqfyabbxa .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#zauhobiegu .gt_column_spanner_outer:last-child {
+#shqfyabbxa .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#zauhobiegu .gt_column_spanner {
+#shqfyabbxa .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -284,11 +281,11 @@ financial performance.
   width: 100%;
 }
 
-#zauhobiegu .gt_spanner_row {
+#shqfyabbxa .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#zauhobiegu .gt_group_heading {
+#shqfyabbxa .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -314,7 +311,7 @@ financial performance.
   text-align: left;
 }
 
-#zauhobiegu .gt_empty_group_heading {
+#shqfyabbxa .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -329,15 +326,15 @@ financial performance.
   vertical-align: middle;
 }
 
-#zauhobiegu .gt_from_md > :first-child {
+#shqfyabbxa .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#zauhobiegu .gt_from_md > :last-child {
+#shqfyabbxa .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#zauhobiegu .gt_row {
+#shqfyabbxa .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -356,7 +353,7 @@ financial performance.
   overflow-x: hidden;
 }
 
-#zauhobiegu .gt_stub {
+#shqfyabbxa .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -369,7 +366,7 @@ financial performance.
   padding-right: 5px;
 }
 
-#zauhobiegu .gt_stub_row_group {
+#shqfyabbxa .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -383,15 +380,15 @@ financial performance.
   vertical-align: top;
 }
 
-#zauhobiegu .gt_row_group_first td {
+#shqfyabbxa .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#zauhobiegu .gt_row_group_first th {
+#shqfyabbxa .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#zauhobiegu .gt_summary_row {
+#shqfyabbxa .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -401,16 +398,16 @@ financial performance.
   padding-right: 5px;
 }
 
-#zauhobiegu .gt_first_summary_row {
+#shqfyabbxa .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#zauhobiegu .gt_first_summary_row.thick {
+#shqfyabbxa .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#zauhobiegu .gt_last_summary_row {
+#shqfyabbxa .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -420,7 +417,7 @@ financial performance.
   border-bottom-color: #D3D3D3;
 }
 
-#zauhobiegu .gt_grand_summary_row {
+#shqfyabbxa .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -430,7 +427,7 @@ financial performance.
   padding-right: 5px;
 }
 
-#zauhobiegu .gt_first_grand_summary_row {
+#shqfyabbxa .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -440,7 +437,7 @@ financial performance.
   border-top-color: #D3D3D3;
 }
 
-#zauhobiegu .gt_last_grand_summary_row_top {
+#shqfyabbxa .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -450,11 +447,11 @@ financial performance.
   border-bottom-color: #D3D3D3;
 }
 
-#zauhobiegu .gt_striped {
+#shqfyabbxa .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#zauhobiegu .gt_table_body {
+#shqfyabbxa .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -463,7 +460,7 @@ financial performance.
   border-bottom-color: #D3D3D3;
 }
 
-#zauhobiegu .gt_footnotes {
+#shqfyabbxa .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -477,7 +474,7 @@ financial performance.
   border-right-color: #D3D3D3;
 }
 
-#zauhobiegu .gt_footnote {
+#shqfyabbxa .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -486,7 +483,7 @@ financial performance.
   padding-right: 5px;
 }
 
-#zauhobiegu .gt_sourcenotes {
+#shqfyabbxa .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -500,7 +497,7 @@ financial performance.
   border-right-color: #D3D3D3;
 }
 
-#zauhobiegu .gt_sourcenote {
+#shqfyabbxa .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -508,72 +505,72 @@ financial performance.
   padding-right: 5px;
 }
 
-#zauhobiegu .gt_left {
+#shqfyabbxa .gt_left {
   text-align: left;
 }
 
-#zauhobiegu .gt_center {
+#shqfyabbxa .gt_center {
   text-align: center;
 }
 
-#zauhobiegu .gt_right {
+#shqfyabbxa .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#zauhobiegu .gt_font_normal {
+#shqfyabbxa .gt_font_normal {
   font-weight: normal;
 }
 
-#zauhobiegu .gt_font_bold {
+#shqfyabbxa .gt_font_bold {
   font-weight: bold;
 }
 
-#zauhobiegu .gt_font_italic {
+#shqfyabbxa .gt_font_italic {
   font-style: italic;
 }
 
-#zauhobiegu .gt_super {
+#shqfyabbxa .gt_super {
   font-size: 65%;
 }
 
-#zauhobiegu .gt_footnote_marks {
+#shqfyabbxa .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#zauhobiegu .gt_asterisk {
+#shqfyabbxa .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#zauhobiegu .gt_indent_1 {
+#shqfyabbxa .gt_indent_1 {
   text-indent: 5px;
 }
 
-#zauhobiegu .gt_indent_2 {
+#shqfyabbxa .gt_indent_2 {
   text-indent: 10px;
 }
 
-#zauhobiegu .gt_indent_3 {
+#shqfyabbxa .gt_indent_3 {
   text-indent: 15px;
 }
 
-#zauhobiegu .gt_indent_4 {
+#shqfyabbxa .gt_indent_4 {
   text-indent: 20px;
 }
 
-#zauhobiegu .gt_indent_5 {
+#shqfyabbxa .gt_indent_5 {
   text-indent: 25px;
 }
 
-#zauhobiegu .katex-display {
+#shqfyabbxa .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#zauhobiegu div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#shqfyabbxa div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -592,20 +589,20 @@ financial performance.
   </thead>
   <tbody class="gt_table_body">
     <tr><td headers="Campaign goal" class="gt_row gt_left">Increase Sales</td>
-<td headers="M" class="gt_row gt_right">4.373195</td>
-<td headers="SD" class="gt_row gt_right">3.158475</td>
+<td headers="M" class="gt_row gt_right">4.37</td>
+<td headers="SD" class="gt_row gt_right">3.16</td>
 <td headers="n" class="gt_row gt_right">66547</td></tr>
     <tr><td headers="Campaign goal" class="gt_row gt_left">Product Launch</td>
-<td headers="M" class="gt_row gt_right">4.370281</td>
-<td headers="SD" class="gt_row gt_right">3.155021</td>
+<td headers="M" class="gt_row gt_right">4.37</td>
+<td headers="SD" class="gt_row gt_right">3.16</td>
 <td headers="n" class="gt_row gt_right">66598</td></tr>
     <tr><td headers="Campaign goal" class="gt_row gt_left">Brand Awareness</td>
-<td headers="M" class="gt_row gt_right">4.363321</td>
-<td headers="SD" class="gt_row gt_right">3.152915</td>
+<td headers="M" class="gt_row gt_right">4.36</td>
+<td headers="SD" class="gt_row gt_right">3.15</td>
 <td headers="n" class="gt_row gt_right">66938</td></tr>
     <tr><td headers="Campaign goal" class="gt_row gt_left">Market Expansion</td>
-<td headers="M" class="gt_row gt_right">4.362524</td>
-<td headers="SD" class="gt_row gt_right">3.160453</td>
+<td headers="M" class="gt_row gt_right">4.36</td>
+<td headers="SD" class="gt_row gt_right">3.16</td>
 <td headers="n" class="gt_row gt_right">66470</td></tr>
   </tbody>
   <tfoot>
@@ -618,13 +615,25 @@ financial performance.
 
 ## 2. Which age group has the highest click-through rate?
 
-    age_summary <- socialmedia_clean %>%
-      mutate(click_through_rate = clicks / impressions) %>%
-      separate(age_group, into = c("age_min", "age_max"), sep = "-", convert = TRUE) %>%
+    age_data <- socialmedia_clean %>%
       mutate(
-        age = map2(age_min, age_max, ~ if (is.finite(.x) & is.finite(.y)) seq(.x, .y) else NA_real_)
+        click_through_rate = clicks / impressions,
+        gender = tolower(gender)
       ) %>%
-      unnest(age) %>%
+      separate(age_group,
+               into = c("age_min", "age_max"),
+               sep = "\\s*-\\s*",
+               convert = TRUE,
+               fill = "right") %>%
+      separate_rows(gender, sep = ",") %>%
+      mutate(
+        age = map2(age_min, age_max, ~ {
+          if (is.finite(.x) & is.finite(.y) & .x <= .y) seq(.x, .y) else NA_real_
+        })
+      ) %>%
+      unnest(age)
+
+    age_summary <- age_data %>%
       group_by(age) %>%
       summarise(
         mean_ctr = mean(click_through_rate, na.rm = TRUE),
@@ -633,31 +642,21 @@ financial performance.
       ) %>%
       arrange(age)
 
-Visualization of click-through rate
+Visualization of click-through rate by gender
 
-    socialmedia_clean %>%
-      mutate(
-        click_through_rate = clicks / impressions,
-        gender = tolower(gender),
-        gender = ifelse(gender == "male","female", gender)
-      ) %>%
-      separate(age_group, c("age_min","age_max"), sep = "\\s*-\\s*", convert = TRUE, fill = "right") %>%
-      separate_rows(gender, sep = ",") %>%
-      mutate(
-        age = map2(age_min, age_max, ~ {
-          if (is.finite(.x) & is.finite(.y) & .x <= .y) seq(.x, .y) else NA_real_
-        })
-      ) %>%
-      unnest(age) %>%
+    age_data %>%
       group_by(age, gender) %>%
-      summarise(ctr = mean(click_through_rate, na.rm = TRUE), .groups = "drop") %>%
+      summarise(
+        ctr = mean(click_through_rate, na.rm = TRUE),
+        .groups = "drop"
+      ) %>%
       ggplot(aes(age, ctr)) +
-      stat_summary(fun = mean, geom = "line") +
+      geom_line() +
       facet_wrap(~gender)
 
 ![](lea-immenkamp_files/figure-markdown_strict/click-through%20rate%20visualization-1.png)
 
-# Data visualization
+# 3. Average ROI changes with campaign duration
 
     roi_data <- socialmedia_clean %>%
       group_by(duration, channel_used) %>%
