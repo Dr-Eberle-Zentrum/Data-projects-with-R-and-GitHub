@@ -1,0 +1,111 @@
+## Load the file
+
+    file.exists("data.xlsx")
+
+    ## [1] TRUE
+
+    Intervention_data <- read_excel("data.xlsx",  sheet = "Intervention data") %>% drop_na()
+    Intervention_data
+
+    ## # A tibble: 119 × 14
+    ##    child_id Intervention  i1t0  i2t0  i3t0  i4t0  i5t0    i1    i2    i3    i4
+    ##       <dbl>        <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+    ##  1        1            1     0     0     0     0     0     0     1     1     1
+    ##  2        1            2     0     1     0     0     0     1     1     1     0
+    ##  3        1            1     0     0     0     1     1     1     1     1     1
+    ##  4        1            1     1     1     0     0     0     0     1     0     0
+    ##  5        1            2     0     0     1     1     0     1     1     1     1
+    ##  6        1            2     0     1     0     1     0     1     1     0     1
+    ##  7        2            1     0     1     0     0     1     1     1     0     0
+    ##  8        2            2     1     0     1     0     1     0     0     1     1
+    ##  9        2            1     0     0     1     1     0     1     1     1     1
+    ## 10        2            1     0     0     0     0     0     1     1     0     0
+    ## # ℹ 109 more rows
+    ## # ℹ 3 more variables: i5 <dbl>, Motivation <dbl>, Helpfulness <dbl>
+
+    Q_data <- read_excel("data.xlsx", sheet = "questionaire") %>% drop_na()
+    Q_data                 
+
+    ## # A tibble: 20 × 6
+    ##    `id child` `id age` sweet1 sweet2 sweet3 sweet4
+    ##         <dbl>    <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
+    ##  1          1       11      4      4      3      1
+    ##  2          2        8      5      3      4      1
+    ##  3          3       11      5      5      4      1
+    ##  4          4        9      5      5      1      5
+    ##  5          5       13      5      5      5      2
+    ##  6          6       12      4      4      2      4
+    ##  7          7       11      5      5      5      3
+    ##  8          8       10      3      3      5      5
+    ##  9          9       13      2      2      4      5
+    ## 10         10       11      4      4      5      1
+    ## 11         11       13      4      4      3      5
+    ## 12         12       11      3      4      2      2
+    ## 13         13        9      5      3      4      5
+    ## 14         14       10      4      5      4      4
+    ## 15         15       10      3      5      4      5
+    ## 16         16        9      3      1      3      3
+    ## 17         17       11      2      5      5      2
+    ## 18         18       11      4      2      5      4
+    ## 19         19       10      3      1      1      4
+    ## 20         20        9      3      5      5      3
+
+## Data cleaning
+
+- Calculating the total value before intervention
+- Calculating the total value before intervention
+
+<!-- -->
+
+    Intervention_data$QIpre <- rowSums(Intervention_data[,c("i1t0","i2t0","i3t0","i4t0","i5t0")])
+    Intervention_data$QIpost <- rowSums(Intervention_data[,c("i1","i2","i3","i4","i5")])
+
+- Calculating mean of sweet
+
+<!-- -->
+
+    df <- Q_data %>% mutate(sweet_mean=pmap_dbl(select(.,sweet1,sweet2,sweet3,sweet4),~mean(c(...)))) %>% select("id child","id age",sweet_mean) %>% rename("child_id"="id child") %>% right_join(Intervention_data,by="child_id")
+    df
+
+    ## # A tibble: 119 × 18
+    ##    child_id `id age` sweet_mean Intervention  i1t0  i2t0  i3t0  i4t0  i5t0    i1
+    ##       <dbl>    <dbl>      <dbl>        <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+    ##  1        1       11       3               1     0     0     0     0     0     0
+    ##  2        1       11       3               2     0     1     0     0     0     1
+    ##  3        1       11       3               1     0     0     0     1     1     1
+    ##  4        1       11       3               1     1     1     0     0     0     0
+    ##  5        1       11       3               2     0     0     1     1     0     1
+    ##  6        1       11       3               2     0     1     0     1     0     1
+    ##  7        2        8       3.25            1     0     1     0     0     1     1
+    ##  8        2        8       3.25            2     1     0     1     0     1     0
+    ##  9        2        8       3.25            1     0     0     1     1     0     1
+    ## 10        2        8       3.25            1     0     0     0     0     0     1
+    ## # ℹ 109 more rows
+    ## # ℹ 8 more variables: i2 <dbl>, i3 <dbl>, i4 <dbl>, i5 <dbl>, Motivation <dbl>,
+    ## #   Helpfulness <dbl>, QIpre <dbl>, QIpost <dbl>
+
+    plot_data <- df %>% select(child_id, Intervention, QIpre,QIpost) %>% pivot_longer(cols = c(QIpre,QIpost),names_to = "time",values_to = "score") %>% mutate(
+        time = factor(time, 
+                      levels = c("QIpre","QIpost"),
+                      labels = c("Quality Index Pre", "Quality Index Post"))
+      ) 
+      
+      
+
+    ggplot(plot_data, aes(x = time, y = score, group = child_id)) +
+      geom_line(alpha = 0.2, linewidth = 1.8,aes(colour = factor(child_id))) +
+      geom_point(alpha = 0.4, size = 1.2) +
+      facet_wrap(~ Intervention,
+        ncol = 2,
+        labeller = labeller(Intervention = c(`1` = "Reality Check",
+                                             `2` = "Sugar Shock"))
+      ) +
+      scale_y_continuous(breaks = 0:5, limits = c(0, 5)) +scale_color_viridis_d()+
+      labs(x = "Intervention type", y = "Behavioral Indicator") +
+      theme_minimal(base_size = 13) +
+      theme(
+        strip.text = element_text(hjust = 0.5, face = "bold"),
+        legend.position = "none"
+      )
+
+![](Wenjing_solution_files/figure-markdown_strict/Data_Visualization-1.png)

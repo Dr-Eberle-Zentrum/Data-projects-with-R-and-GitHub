@@ -1,0 +1,76 @@
+---
+title: "Wenjing_solution"
+author: "Wenjing"
+date: "2026-06-30"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+#install.packages("readr")
+library(readxl)
+library(purrr)
+library(tidyverse)
+library(dplyr)
+
+```
+
+## Load the file 
+
+```{r Data_import, echo=TRUE}
+file.exists("data.xlsx")
+
+Intervention_data <- read_excel("data.xlsx",  sheet = "Intervention data") %>% drop_na()
+Intervention_data
+
+Q_data <- read_excel("data.xlsx", sheet = "questionaire") %>% drop_na()
+Q_data                 
+```
+
+## Data cleaning
+- Calculating the total value before intervention
+- Calculating the total value before intervention
+```{r QIpre+QIpost }
+Intervention_data$QIpre <- rowSums(Intervention_data[,c("i1t0","i2t0","i3t0","i4t0","i5t0")])
+Intervention_data$QIpost <- rowSums(Intervention_data[,c("i1","i2","i3","i4","i5")])
+
+```
+
+- Calculating mean of sweet
+```{r mean_sweet}
+
+df <- Q_data %>% mutate(sweet_mean=pmap_dbl(select(.,sweet1,sweet2,sweet3,sweet4),~mean(c(...)))) %>% select("id child","id age",sweet_mean) %>% rename("child_id"="id child") %>% right_join(Intervention_data,by="child_id")
+df
+
+```
+```{r Data_Visualization}
+
+
+plot_data <- df %>% select(child_id, Intervention, QIpre,QIpost) %>% pivot_longer(cols = c(QIpre,QIpost),names_to = "time",values_to = "score") %>% mutate(
+    time = factor(time, 
+                  levels = c("QIpre","QIpost"),
+                  labels = c("Quality Index Pre", "Quality Index Post"))
+  ) 
+  
+  
+
+ggplot(plot_data, aes(x = time, y = score, group = child_id)) +
+  geom_line(alpha = 0.2, linewidth = 1.8,aes(colour = factor(child_id))) +
+  geom_point(alpha = 0.4, size = 1.2) +
+  facet_wrap(~ Intervention,
+    ncol = 2,
+    labeller = labeller(Intervention = c(`1` = "Reality Check",
+                                         `2` = "Sugar Shock"))
+  ) +
+  scale_y_continuous(breaks = 0:5, limits = c(0, 5)) +scale_color_viridis_d()+
+  labs(x = "Intervention type", y = "Behavioral Indicator") +
+  theme_minimal(base_size = 13) +
+  theme(
+    strip.text = element_text(hjust = 0.5, face = "bold"),
+    legend.position = "none"
+  )
+```
+
+
+
+
