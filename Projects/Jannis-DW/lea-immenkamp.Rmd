@@ -7,9 +7,9 @@ always_allow_html: true
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
-  echo = FALSE,    # Versteckt den R-Code
-  warning = FALSE, # Versteckt alle Warnmeldungen (z.B. gelöschte Zeilen im Plot)
-  message = FALSE  # Versteckt Paket-Lademeldungen (z.B. von tidyverse)
+  echo = FALSE,    
+  warning = FALSE, 
+  message = FALSE  
 )
 ```
 
@@ -273,6 +273,36 @@ movies_clean %>%
   geom_point(alpha = 0.5, size = 2) + 
   geom_smooth(method = "lm", formula = y ~ x, color = "black", se = TRUE) +
   scale_x_sqrt(labels = scales::label_dollar(scale = 1e-6, suffix = "M")) +
+  scale_color_brewer(palette = "Dark2") + 
+  labs(
+    title = "Does Financial Success Align with Movie Quality?",
+    subtitle = "Inflation-Adjusted Gross Earnings vs. Combined Score by Primary Genre",
+    x = "Gross Equivalent Earnings (in Millions USD)",
+    y = "Combined Score (User Rating + Metascore)",
+    color = "Primary Genre"
+  ) +
+  theme_minimal()
+```
+
+
+**Use the log function**
+
+```{r graph with log}
+movies_clean %>% 
+  mutate(
+    gross_num = as.numeric(gross_equivalent),
+    total_score = movie_rating + metascore
+  ) %>% 
+  filter(!is.na(gross_num), gross_num > 0) %>% 
+  unnest(genre_list) %>% 
+  group_by(gross_num, total_score) %>% 
+  slice_head(n = 1) %>% 
+  ungroup() %>% 
+
+  ggplot(aes(x = gross_num, y = total_score, color = genre)) +
+  geom_point(alpha = 0.5, size = 2) + 
+  geom_smooth(method = "lm", formula = y ~ x, color = "black", se = TRUE) +
+  scale_x_log10(labels = scales::label_dollar(scale = 1e-6, suffix = "M")) +
   scale_color_brewer(palette = "Dark2") + 
   labs(
     title = "Does Financial Success Align with Movie Quality?",

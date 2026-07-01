@@ -280,3 +280,4 @@ course influences the trend.
 **Remove films with zero revenue**
 
 ![](lea-immenkamp_files/figure-markdown_strict/remove%20films%20without%20revenue-1.png)
+![](lea-immenkamp_files/figure-markdown_strict/graph%20with%20log-1.png)
