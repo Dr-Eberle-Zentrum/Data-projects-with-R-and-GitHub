@@ -375,7 +375,7 @@ the three volumes, using a donut chart
 
     p_donut
 
-![](Solution-for-Emily_files/figure-markdown_strict/donut%20chart-1.png)
+![](Solution-for-Emily-1_files/figure-markdown_strict/donut%20chart-1.png)
 
 ![](donut%20chart-1.png)
 
@@ -426,7 +426,8 @@ the three volumes, using a donut chart
 
     p_top9_books
 
-![](Solution-for-Emily_files/figure-markdown_strict/top%209%20chart%20all%20three%20books-1.png)
+![](Solution-for-Emily-1_files/figure-markdown_strict/top%209%20chart%20all%20three%20books-1.png)
+
 ![](top%209%20chart%20all%20three%20books-1.png)
 
 #### 2.2.2. Total Speaking Time by Character for each individual book
@@ -473,8 +474,9 @@ similar to the one above.
       
     p_top9_by_book
 
-![](Solution-for-Emily_files/figure-markdown_strict/top%209%20by%20book%20chart-1.png)
-![](top%209%by%20book%20chart-1.png)
+![](Solution-for-Emily-1_files/figure-markdown_strict/top%209%20by%20book%20chart-1.png)
+
+![](top%209%20by%20book%20chart-1.png)
 
 ### 2.3. Speakers Time of Frodo
 
@@ -598,5 +600,6 @@ COMPOSITE PLOT**
 
     plot_all
 
-![](Solution-for-Emily_files/figure-markdown_strict/combine%20all%203%20charts-1.png)
-![](combine%20all%203%20chart-1.png)
+![](Solution-for-Emily-1_files/figure-markdown_strict/combine%20all%203%20charts-1.png)
+
+![](combine%20all%203%20charts-1.png)
