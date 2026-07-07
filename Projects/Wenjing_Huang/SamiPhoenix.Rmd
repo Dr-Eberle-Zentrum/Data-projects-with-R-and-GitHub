@@ -144,11 +144,9 @@ data <-
   
 
   
-  
-  
-
-
-  
+# print with kable
+data |> 
+  kableExtra::kable(format = "markdown", caption = "Cleaned Data for Analysis")
 
 
 
