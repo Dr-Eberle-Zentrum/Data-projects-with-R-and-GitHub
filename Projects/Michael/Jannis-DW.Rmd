@@ -6,14 +6,15 @@ output: md_document
 # Solution for Michael's Project "Demographic Shift in Germany"
 
 ```{r LoadingData}
-data <- read.csv("FReDA_panel_4waves_long_labeled.csv")
-head(data)
 
 library(tidyverse)
 library(dplyr)
 library(ggplot2)
 library(kableExtra)
 library(ppcor)
+
+data <- read_csv("FReDA_panel_4waves_long_labeled.csv.zip")
+head(data)
 #Where possible, use functions of the loaded packages
 ```
 
@@ -42,7 +43,7 @@ data%>%
 
 
 #1.3
-I think that is due to happy couples not wanting to change any of their current situation since they are allready fulfilled. Maybe the unhappier families simply are unhappy because they want ti have children but do not have any yet and will be happier as soon as they have children. 
+#I think that is due to happy couples not wanting to change any of their current situation since they are allready fulfilled. Maybe the unhappier families simply are unhappy because they want ti have children but do not have any yet and will be happier as soon as they have children. 
 
 #1.4
 
@@ -55,16 +56,17 @@ hist(data$sat3)
 #corellation between sat3 and frt69 with controll of age
 vars <- c("sat3", "frt69", "age")
 
-data %>%
+data_for_cor <- 
+  data %>%
   mutate(
     age = 2026 - data$age
   ) %>%
   mutate(
-    across(c(sat3, frt69, age), ~replace(NA, .x, .x<0,))
-  )
-  drop_na(data, any_of(vars))
+    across(c(sat3, frt69, age), ~replace(.x, .x<0, NA))
+  ) |> 
+  drop_na( any_of(vars))
 
- pcor.test(data$sat3, data$frt69, (2026 - data$age), method = "pearson")
+pcor.test(data_for_cor$sat3, data_for_cor$frt69, (2026 - data_for_cor$age), method = "pearson")
 
 #1.6
 
