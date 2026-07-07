@@ -4,6 +4,7 @@ author: "Lea Immenkamp"
 date: "2026-06-09"
 output: md_document
 ---
+
 # Social Media Advertising
 Social media advertising is an important part of modern marketing and public relations. This project explores how social media advertising campaigns differ across platforms, customer segments, and campaign goals.
 
@@ -16,7 +17,7 @@ library(tidyr)
 library(stringr)
 library(lubridate)
 library(knitr)
-library(gt)
+# library(gt)
 library(purrr)
 library(ggplot2)
 ```
@@ -78,19 +79,35 @@ campaign <- socialmedia_clean %>%
     `Campaign goal` = campaign_goal
   )
 
+## only for HTML/PDF/DOC output...
+# campaign %>%
+#   gt() %>%
+#   tab_header(
+#     title = "Engagement Score Summary by Campaign Goal"
+#   ) %>%
+#   fmt_number(
+#     columns = c(M, SD),
+#     decimals = 2
+#   ) %>% 
+#   tab_footnote(
+#     footnote = "Note. M = Mean, SD = Standard Derivation, n = number of campaigns."
+#   )
+
 
 campaign %>%
-  gt() %>%
-  tab_header(
-    title = "Engagement Score Summary by Campaign Goal"
-  ) %>%
-  fmt_number(
-    columns = c(M, SD),
-    decimals = 2
-  ) %>% 
-  tab_footnote(
-    footnote = "Note. M = Mean, SD = Standard Derivation, n = number of campaigns."
-  )
+  knitr::kable(
+    caption = "Engagement Score Summary by Campaign Goal",
+    digits = 2
+  ) 
+# %>% # only for HTML/PDF/DOC output...
+#   kableExtra::kable_styling(
+#     full_width = FALSE,
+#     position = "center"
+#   ) %>%
+#   kableExtra::footnote(
+#     general = "Note. M = Mean, SD = Standard Derivation, n = number of campaigns."
+#   )
+
   
 ```
 
