@@ -7,11 +7,16 @@ output: md_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
 #install.packages("readr")
+#install.packages("lme4")
+#install.packages("stdmod")
 library(readxl)
 library(purrr)
 library(tidyverse)
 library(dplyr)
+library(lme4)
+library(stdmod)
 
 ```
 
@@ -20,44 +25,63 @@ library(dplyr)
 ```{r Data_import, echo=TRUE}
 file.exists("data.xlsx")
 
+
 Intervention_data <- read_excel("data.xlsx",  sheet = "Intervention data") %>% drop_na()
-Intervention_data
+#revise: "glimpse()" is better to preview the data.
+glimpse(Intervention_data)
 
 Q_data <- read_excel("data.xlsx", sheet = "questionaire") %>% drop_na()
-Q_data                 
+glimpse(Q_data)               
 ```
 
 ## Data cleaning
 - Calculating the total value before intervention
 - Calculating the total value before intervention
 ```{r QIpre+QIpost }
-Intervention_data$QIpre <- rowSums(Intervention_data[,c("i1t0","i2t0","i3t0","i4t0","i5t0")])
-Intervention_data$QIpost <- rowSums(Intervention_data[,c("i1","i2","i3","i4","i5")])
+
+#Intervention_data$QIpre <- rowSums(Intervention_data[,c("i1t0","i2t0","i3t0","i4t0","i5t0")])
+#Intervention_data$QIpost <- rowSums(Intervention_data[,c("i1","i2","i3","i4","i5")])
+#revise: in a more "tidyverse" style
+
+Intervention_data <- Intervention_data %>% mutate(QIpre=rowSums(across(c(i1t0:i5t0))),QIpost=rowSums(across(c(i1:i5))))
 
 ```
 
 - Calculating mean of sweet
-```{r mean_sweet}
+```{r data_calculation+ plotdata_1}
+# Calculating mean of sweet
+df_withmean <- Q_data %>% 
+  mutate(sweet_mean=pmap_dbl(select(.,sweet1,sweet2,sweet3,sweet4),~mean(c(...)))) %>%
+  select("id child","id age",sweet_mean) %>%
+  rename("child_id"="id child") %>%
+  right_join(Intervention_data,by="child_id")
+df_withmean
 
-df <- Q_data %>% mutate(sweet_mean=pmap_dbl(select(.,sweet1,sweet2,sweet3,sweet4),~mean(c(...)))) %>% select("id child","id age",sweet_mean) %>% rename("child_id"="id child") %>% right_join(Intervention_data,by="child_id")
-df
+# plotdata_1
 
-```
-```{r Data_Visualization}
-
-
-plot_data <- df %>% select(child_id, Intervention, QIpre,QIpost) %>% pivot_longer(cols = c(QIpre,QIpost),names_to = "time",values_to = "score") %>% mutate(
+# "0" presents "pre"; "1" prsents "0" 
+plot_data <-df_withmean  %>% select(child_id, Intervention, QIpre,QIpost) %>%group_by(child_id, Intervention) %>%
+mutate(trial_id = row_number()) %>%
+ungroup() %>%
+mutate(pair_id = paste(child_id, Intervention, trial_id, sep = "_")) %>% pivot_longer(cols = c(QIpre,QIpost),names_to = "time",values_to = "score") %>% mutate(
     time = factor(time, 
                   levels = c("QIpre","QIpost"),
-                  labels = c("Quality Index Pre", "Quality Index Post"))
-  ) 
-  
-  
+                  labels = c(0, 1))
+  )  
 
-ggplot(plot_data, aes(x = time, y = score, group = child_id)) +
-  geom_line(alpha = 0.2, linewidth = 1.8,aes(colour = factor(child_id))) +
-  geom_point(alpha = 0.4, size = 1.2) +
-  facet_wrap(~ Intervention,
+   
+  
+plot_data
+ 
+summary_data <- plot_data %>% group_by(child_id,Intervention,time) %>% summarise(mean=mean(score,na.rm=TRUE), .groups = "drop") 
+summary_data
+```
+  
+  
+```{r Data_Visualization}
+ggplot() +
+  geom_line(data=plot_data,alpha = 0.2, linewidth = 1.8,aes(x=time,y=score,group = pair_id)) +
+  geom_point(alpha = 0.4, size = 1.2) +geom_line(data=summary_data,aes(x=time,y=mean,group=child_id),colour="red",linewidth=1.5)+geom_point(data=summary_data,aes(x=time,y=mean),color="red",size=2)+facet_wrap(~ Intervention,
     ncol = 2,
     labeller = labeller(Intervention = c(`1` = "Reality Check",
                                          `2` = "Sugar Shock"))
@@ -71,6 +95,23 @@ ggplot(plot_data, aes(x = time, y = score, group = child_id)) +
   )
 ```
 
+```{r plot_data_sencond_plot }
+#lm(QIpost ~ Intervention * Motivation + QIpre+（1｜child_id), data = df) because the random intercept variance was near 0 which indicates minimal between participants variablity after controlling baseline quality. so i changed it to `lm()`function
 
+model <- lm(QIpost ~ Intervention * Motivation + QIpre, data = df_withmean) 
+model %>% summary()
+
+
+
+#use a linear plot with the motivation on the x-Axis, QIpost quality on the y-axis and one line (colour) for each Intervention #type. It should look like an interaction plot in the end
+
+
+model %>% plotmod(x=Motivation,w=Intervention)+labs(y="QIpost quality",title="Motivation effect")
+
+
+
+
+
+```
 
 
