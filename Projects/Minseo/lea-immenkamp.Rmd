@@ -1,0 +1,169 @@
+---
+title: "lea-immenkamp"
+author: "Lea Immenkamp"
+date: "2026-06-09"
+output: md_document
+---
+
+# Social Media Advertising
+
+Social media advertising is an important part of modern marketing and public relations. This project explores how social media advertising campaigns differ across platforms, customer segments, and campaign goals.
+
+The focus of this project lies on cleaning, restructuring, and visualizing advertising campaign data. I am especially interested in how different advertising strategies lead to audience interaction and financial performance.
+
+```{r library loading}
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(lubridate)
+library(knitr)
+library(kableExtra)
+library(purrr)
+library(ggplot2)
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Set working directory
+knitr::opts_knit$set(root.dir = "/Users/Lea/Library/CloudStorage/OneDrive-UTCloud/Module/SoSe26/NV")
+```
+
+```{r data loading}
+socialmedia <- read.csv("Social_Media_Advertising.csv")
+```
+
+```{r data cleaning}
+socialmedia_clean <- socialmedia %>% 
+   mutate(
+    Duration = as.numeric(str_extract(Duration, "\\d+"))
+  ) %>% 
+  mutate(
+    Acquisition_Cost = as.numeric(
+      str_replace_all(Acquisition_Cost, "[$,]", "")
+    )
+  ) %>%
+  mutate(
+    Date = mdy(Date)
+  ) %>%
+  mutate(
+    Target_Audience = str_replace(Target_Audience, "All Ages", "All gender")
+  ) %>% 
+  separate(
+    Target_Audience,
+    into = c("Gender", "Age_Group"),
+    sep = " (?=\\d)",
+    remove = TRUE
+  ) %>%
+  mutate(
+    Gender = str_trim(Gender),
+    Age_Group = str_trim(Age_Group)
+  ) %>% 
+   rename_with(tolower) %>% 
+  drop_na(age_group)
+  
+
+# Check variable type
+glimpse(socialmedia_clean)
+```
+
+# Data manipulation
+
+## 1. Which campaign goals bring the highest engagement scores?
+
+```{r data engagement score}
+campaign <- socialmedia_clean %>% 
+  group_by(campaign_goal) %>% 
+  summarise(
+    M = mean(engagement_score, na.rm = TRUE),
+    SD = sd(engagement_score, na.rm = TRUE),
+    n = n()
+  ) %>%
+  arrange(desc(M)) %>% 
+  rename(
+    `Campaign Goal` = campaign_goal
+  )
+
+kable(campaign, 
+      digits = 2, 
+      caption = "Engagement Score Summary by Campaign Goal")
+```
+
+## 2. Which age group has the highest click-through rate?
+
+```{r click-through rate}
+age_data <- socialmedia_clean %>%
+  mutate(
+    click_through_rate = clicks / impressions,
+    gender = tolower(gender)
+  ) %>%
+  separate(
+    age_group,
+    into = c("age_min", "age_max"),
+    sep = "-",
+    convert = TRUE
+  ) %>%
+  separate_rows(gender, sep = ",") %>%
+  mutate(age_span = age_max - age_min + 1) %>% 
+  uncount(age_span) %>% 
+  group_by(across(everything())) %>% 
+  mutate(age = age_min + row_number() - 1) %>% 
+  ungroup()
+```
+
+
+Visualization of click-through rate by gender
+
+```{r  click-through rate visualization}
+age_data %>%
+  group_by(age, gender) %>%
+  summarise(
+    ctr = mean(click_through_rate, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  ggplot(aes(age, ctr)) +
+  geom_point() +
+  facet_wrap(~gender) +
+  labs(
+    title = "Average Click-Through Rate (CTR) by Age and Gender", 
+    x = "Age",
+    y = "CTR"
+  )
+
+```
+**Results CTR**
+- The graph shows the average click-through rate (CTR) by age and gender. 
+- Results indicate that the CTR for men is highest for the age group 18-24, followed by 45-60. The age groups 25-34 and 35-44 demonstrate the lowest CTR.
+- For women, the highest CTR is for the same age group (18–24), but lower than the same age group for men. It is followed by 35–44, 25–34, and then 45–60 (which represents the lowest CTR for women).
+
+
+# 3. Average ROI changes with campaign duration
+
+```{r line graph}
+socialmedia_clean %>%
+  group_by(duration, channel_used) %>%
+  summarise(
+    avg_roi = mean(roi, na.rm = TRUE),
+    .groups = "drop"
+  ) %>% 
+  ggplot(aes(x = duration, y = avg_roi, color = channel_used)) +
+  geom_line() +
+  geom_point() +
+  scale_y_continuous(limits = c(0, NA)) +
+  labs(
+    title = "Average Return on investment (ROI) by Campaign Duration and Platform",
+    x = "Campaign Duration (days)",
+    y = "Average ROI",
+    color = "Platform"
+  ) +
+  theme_minimal()
+
+```
+*Results*
+- This line graph shows the average Return on investment for each campaign duration, separated by the platform used.
+- The average ROI does not change with campaign duration. 
+- However, differences exist regarding the platform used. Whereas facebook, instagram and twitter do not differ much in their average ROI, pinterest seems to be the least effective.
+
+
+
