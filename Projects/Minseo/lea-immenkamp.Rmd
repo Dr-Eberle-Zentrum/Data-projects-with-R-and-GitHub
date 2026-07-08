@@ -24,8 +24,6 @@ library(ggplot2)
 ```
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-
 # Set working directory
 knitr::opts_knit$set(root.dir = "/Users/Lea/Library/CloudStorage/OneDrive-UTCloud/Module/SoSe26/NV")
 ```
@@ -112,7 +110,6 @@ age_data <- socialmedia_clean %>%
   ungroup()
 ```
 
-
 Visualization of click-through rate by gender
 
 ```{r  click-through rate visualization}
@@ -132,11 +129,8 @@ age_data %>%
   )
 
 ```
-**Results CTR**
-- The graph shows the average click-through rate (CTR) by age and gender. 
-- Results indicate that the CTR for men is highest for the age group 18-24, followed by 45-60. The age groups 25-34 and 35-44 demonstrate the lowest CTR.
-- For women, the highest CTR is for the same age group (18–24), but lower than the same age group for men. It is followed by 35–44, 25–34, and then 45–60 (which represents the lowest CTR for women).
 
+**Results CTR** - The graph shows the average click-through rate (CTR) by age and gender. - Results indicate that the CTR for men is highest for the age group 18-24, followed by 45-60. The age groups 25-34 and 35-44 demonstrate the lowest CTR. - For women, the highest CTR is for the same age group (18–24), but lower than the same age group for men. It is followed by 35–44, 25–34, and then 45–60 (which represents the lowest CTR for women).
 
 # 3. Average ROI changes with campaign duration
 
@@ -160,10 +154,5 @@ socialmedia_clean %>%
   theme_minimal()
 
 ```
-*Results*
-- This line graph shows the average Return on investment for each campaign duration, separated by the platform used.
-- The average ROI does not change with campaign duration. 
-- However, differences exist regarding the platform used. Whereas facebook, instagram and twitter do not differ much in their average ROI, pinterest seems to be the least effective.
 
-
-
+*Results* - This line graph shows the average Return on investment for each campaign duration, separated by the platform used. - The average ROI does not change with campaign duration. - However, differences exist regarding the platform used. Whereas facebook, instagram and twitter do not differ much in their average ROI, pinterest seems to be the least effective.
