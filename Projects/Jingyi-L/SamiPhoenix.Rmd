@@ -1,0 +1,104 @@
+---
+title: "SamiPhoenix"
+output: md_document
+---
+
+## Solution of "Wrangling and Analyzing Laptop Market Data"
+
+First loading the necessary libraries:
+```{r setup, echo=FALSE, message=FALSE}
+
+library(tidyverse)
+library(stringr)
+library(scales)
+library(ggridges)
+
+```
+
+Doing all the data transformations:
+```{r tableImportManipulation, echo=TRUE, message=FALSE}
+
+uncleanData <- "data/laptopData.csv" %>% 
+  read_csv(na = c("", "NA", "?"))
+
+  #1
+data <- uncleanData %>% 
+  drop_na() %>% 
+  select(-1) %>% 
+  #2
+  mutate(Ram = as.integer(str_replace_all(Ram, "GB", ""))) %>% 
+  mutate(Weight = as.double(str_replace_all(Weight, "kg", ""))) %>% 
+  mutate(Cpu_clock = as.double(str_extract(Cpu, "\\d+\\.?\\d*(?=GHz)"))) %>% 
+  #3
+  mutate(HasIPS = str_detect(ScreenResolution, "IPS")) %>% 
+  mutate(HasRetina = str_detect(ScreenResolution, "Retina")) %>%
+  mutate(Width = as.integer(str_extract(ScreenResolution, "\\d+(?=x)"))) %>% 
+  mutate(Height = as.integer(str_extract(ScreenResolution, "(?<=x)\\d+"))) %>% 
+    mutate(OpSys = case_when(
+    str_detect(OpSys, regex("windows", ignore_case = TRUE)) ~ "Windows",
+    str_detect(OpSys, regex("mac", ignore_case = TRUE)) ~ "macOS",
+    TRUE ~ OpSys
+    ))
+
+```
+
+```{r dataPeek, echo=FALSE, message=FALSE}
+
+options(knitr.kable.max_rows = 4)
+
+knitr::kable(data, caption = "After the data manipulation the table looks like this")
+
+```
+
+Doing the Visualizations, Nr.3 was not possible as far as I could tell, so instead I drew them after each other.
+```{r Visualisation, echo=TRUE, message=FALSE}
+
+
+#1
+data %>% 
+  ggplot(aes(x = Cpu_clock, y = Price)) +
+  geom_point(alpha = 0.25) +
+  geom_density2d(alpha = 0.75) +
+  scale_y_continuous(labels = label_comma()) +
+  labs(x = "Cpu Clock Speed [Ghz]",
+       y = "Price in Indian Rupee",
+       title = "Breakdown of CPU clock speed and price")
+
+
+#2
+data %>% 
+  ggplot(aes(x = TypeName, y = Price)) +
+  geom_boxplot() +
+  scale_y_continuous(labels = label_comma()) +
+  labs(x = "Laptop Type",
+       y = "Price in Indian Rupee",
+       title = "Different Prices for different types of Laptops")
+
+#3
+# Histogram
+data %>% 
+  ggplot(aes(x = Price)) +
+  geom_histogram(color = "black", fill = "purple") +
+  scale_x_continuous(labels = label_comma()) +
+  labs(x = "Price in Indian Rupee",
+       y = "",
+       title = "Distribution of Laptop prices")
+# Ridgeline
+data %>% 
+  ggplot(aes(x = Price)) +
+  geom_density_ridges(data = data %>%
+                        filter( TypeName %in% c("Notebook", "Ultrabook", "Gaming")), 
+                      aes(y = TypeName, scale = 1.5, fill = TypeName), alpha = 0.5) +
+  labs(x = "Price in Indian Rupee",
+       y = "",
+       title = "Distribution of Price for different types of Laptops") +
+  scale_x_continuous(labels = label_comma())
+
+
+
+```
+
+
+
+
+
