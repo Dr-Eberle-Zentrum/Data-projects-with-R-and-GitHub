@@ -52,6 +52,8 @@ draw a world map using the function `geom_map()` and `map_data("world")`
 contrast (i.e. not light blue to dark blue but e.g. red to blue). The
 exact colors are up to you.
 
+
+
 ### 2. How are these languages distributed?
 
 Find the five languages with the largest number of speakers. For each
