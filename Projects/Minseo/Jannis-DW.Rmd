@@ -1,0 +1,156 @@
+---
+title: "Jannis-DW"
+output: md_document
+always_allow_html: true
+---
+
+# Jannis Solution for Minseo's Project
+
+
+
+## Preperations
+
+
+```{r loading}
+# use the tidyverse package for data manipulation and visualization
+# use piping where possible to make the code more readable and efficient
+
+library(kableExtra)
+library(tidyverse)
+library(ggplot2)
+library(knitr)
+library(stringr)
+library(dplyr)
+library(tidyr)
+
+setwd("/Users/jannisdennochweiler/R2 Course/Projects/Minseo")
+
+data <- read_csv("Social Media Advertising.csv")
+
+head(data)
+```
+
+## Data cleanup
+
+#### Cleanup-Tasks:
+
+* convert Duration values into numeric day values
+* clean currency-formatted variables such as Acquisition_Cost
+* convert Date into a proper date format
+* split Target_Audience into separate demographic variables, such as gender and age group
+* create a cleaned dataset for later manipulation and visualization
+
+```{r cleanup}
+cleandata <- data %>%
+mutate(Duration = as.numeric(str_remove(Duration, " Days"))) %>%
+mutate(Acquisition_Cost = as.numeric(str_sub(Acquisition_Cost, 2))) %>%
+mutate(Date = as.Date(Date, format ="%m/%d/%Y")) %>%
+separate(Target_Audience, into = c("gender", "age_group"), sep = " ")
+
+# create rmd table with output of the cleaned data
+
+kable(head(cleandata), caption = "Cleaned Data", booktabs = TRUE) %>%
+  kable_styling(latex_options = "striped", position = "center")
+
+```
+
+## Manipulaiton
+
+#### Question 1: Which campaign goals bring the highest engagement scores?
+
+* grouping data by campaign goal
+* create table showing average `Engagement_Score` and standard deviation
+
+```{r manipulation}
+
+summary <- cleandata %>%
+group_by(Campaign_Goal) %>%
+summarise(
+avg_engagement = mean(Engagement_Score, na.rm = TRUE),
+  sd_engagement = sd(Engagement_Score, na.rm = TRUE),
+  number_campaigns = n()
+          )
+summary
+```
+
+#### Answer 1:
+All kinds of campaign goals seem to perform similarly in terms of engagement scores, with the exception of "Brand Awareness" campaigns, which have a slightly lower average engagement score. However, the differences are not substantial enough to draw definitive conclusions.
+
+
+#### Question 2: Which group has the highest click-through rate?
+
+* Calculation of Click-Through rate (Clicks/Impressions)
+* decomposition of age ranges into individual ranges
+
+```{r manipulationtwo}
+# this first part here is mainly AI since I had no idea how to tackle this
+
+data_expanded <- cleandata %>%
+  mutate(
+
+    age_group = if_else(age_group == "All Ages", "18-60",age_group)) %>%
+  mutate(age_group = str_replace_all(age_group, "–", "-"),
+         age_group = str_replace_all(age_group, " ", ""),)%>%
+  separate(age_group, into = c("min_age", "max_age"), sep = "-") %>%
+  drop_na(c(min_age, max_age)) %>%
+  rowwise() %>%
+  mutate(age = list(seq(min_age, max_age))) %>%
+  unnest(age)
+
+
+data_expanded2 <- data_expanded%>%
+mutate(click_through_rate = Clicks / Impressions)
+
+
+agedata <- data_expanded2 %>%
+group_by(age) %>%
+summarise(
+avg_click_through_rate = mean(click_through_rate)
+)
+
+
+slice_max(agedata, avg_click_through_rate, n = 1)
+?slice_max
+
+```
+
+#### Answer 2: There are 7 ages that share the highest click through rate of 0,314. This is because all the indivudual ages' use the campaigns targetet at the age group 18-24 as well as those that are targetet towards all ages.
+
+## Visualisation
+
+#### Task: Create a line graph showing how average ROI changes with campaign duration across different social media platforms.
+
+* grouping data by `Duration` and `Channel_Used`
+* campaign duration on x-axis, average ROI on the y-axis
+
+```{r Visualisation}
+# Visualisation
+#Create a line graph showing how average ROI changes with campaign duration across different social media platforms.
+
+#The data should be grouped by Duration and Channel_Used.
+
+#The final graph should show:
+#campaign duration on the x-axis
+#average ROI on the y-axis
+#separate lines for different social media platforms
+
+cleandata %>%
+group_by(Duration, Channel_Used) %>%
+ggplot(aes(x = Duration, y = ROI, color = Channel_Used)) +
+  geom_line(stat = "summary", fun = "mean") +
+  labs(title = "Average ROI by Campaign Duration and Social Media Platform",
+       x = "Campaign Duration (Days)",
+       y = "Average ROI") +
+  theme_minimal() +
+  theme(legend.title = element_blank())
+```
+
+
+
+
+#### Interpretation: 
+
+All kinds of Channels have a nearly identical RIO except for Pinterest which is much lower. All ROIs stay constant over the whole campaign duration. Therefore, Pinterest should not be used in a campaign.
+
+
+
