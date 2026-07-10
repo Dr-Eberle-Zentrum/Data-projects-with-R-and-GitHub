@@ -10,7 +10,7 @@ Social media advertising is an important part of modern marketing and public rel
 
 The focus of this project lies on cleaning, restructuring, and visualizing advertising campaign data. I am especially interested in how different advertising strategies lead to audience interaction and financial performance.
 
-```{r library loading}
+```{r library-loading}
 library(tidyverse)
 library(dplyr)
 library(tidyr)
@@ -29,6 +29,10 @@ socialmedia <- read.csv("Social Media Advertising.csv")
 
 
 ```{r data cleaning}
+socialmedia <- read.csv("Social_Media_Advertising.csv")
+```
+
+```{r data-cleaning}
 socialmedia_clean <- socialmedia %>% 
    mutate(
     Duration = as.numeric(str_extract(Duration, "\\d+"))
@@ -63,9 +67,13 @@ socialmedia_clean <- socialmedia %>%
 glimpse(socialmedia_clean)
 ```
 
+
+In total `r nrow(socialmedia_clean)` particpants took part in the social media advertising campaigns. The dataset contains `r ncol(socialmedia_clean)` variables.
+
 # Data manipulation
 
 ## 1. Which campaign goals bring the highest engagement scores?
+<<<<<<< Updated upstream
 ```{r data engagement score}
 campaign <- socialmedia_clean %>% 
   group_by(campaign_goal) %>% 
@@ -112,6 +120,7 @@ campaign %>%
 ```
 
 ## 2. Which age group has the highest click-through rate?
+<<<<<<< Updated upstream
 ```{r click-through rate}
 age_data <- socialmedia_clean %>%
   mutate(
@@ -132,6 +141,7 @@ age_data <- socialmedia_clean %>%
 ```
 
 
+
 Visualization of click-through rate by gender
 ```{r  click-through rate visualization}
 age_data %>%
@@ -147,21 +157,23 @@ age_data %>%
 ```
 
 
+
 # 3. Average ROI changes with campaign duration
-```{r line graph}
-roi_data <- socialmedia_clean %>%
+
+```{r line-graph}
+socialmedia_clean %>%
   group_by(duration, channel_used) %>%
   summarise(
     avg_roi = mean(roi, na.rm = TRUE),
     .groups = "drop"
-  )
-
-ggplot(roi_data, aes(x = duration, y = avg_roi, color = channel_used)) +
+  ) %>% 
+  ggplot(aes(x = duration, y = avg_roi, color = channel_used)) +
   geom_line() +
   geom_point() +
+  scale_y_continuous(limits = c(0, NA)) +
   labs(
-    title = "Average ROI by Campaign Duration and Platform",
-    x = "Campaign Duration",
+    title = "Average Return on investment (ROI) by Campaign Duration and Platform",
+    x = "Campaign Duration (days)",
     y = "Average ROI",
     color = "Platform"
   ) +
@@ -169,5 +181,8 @@ ggplot(roi_data, aes(x = duration, y = avg_roi, color = channel_used)) +
 
 ```
 
+*Results* 
 
+- This line graph shows the average Return on investment for each campaign duration, separated by the platform used. - The average ROI does not change with campaign duration. 
+- However, differences exist regarding the platform used. Whereas facebook, instagram and twitter do not differ much in their average ROI, pinterest seems to be the least effective.
 

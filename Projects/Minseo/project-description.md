@@ -269,12 +269,12 @@ The data is provided as a CSV file and includes the following variables:
 Before the data can be analyzed, several variables need to be cleaned or
 restructured.
 
--   convert `Duration` values into numeric day values
--   clean currency-formatted variables such as `Acquisition_Cost`
--   convert `Date` into a proper date format
--   split `Target_Audience` into separate demographic variables, such as
-    gender and age group
--   create a cleaned dataset for later manipulation and visualization
+- convert `Duration` values into numeric day values
+- clean currency-formatted variables such as `Acquisition_Cost`
+- convert `Date` into a proper date format
+- split `Target_Audience` into separate demographic variables, such as
+  gender and age group
+- create a cleaned dataset for later manipulation and visualization
 
 These steps are important because several variables are not immediately
 ready for numerical analysis. For example, campaign duration is stored
@@ -293,9 +293,9 @@ generating audience interaction on social media.
 To answer this question, the data will be grouped by `Campaign_Goal`.
 For each campaign goal, create a nicely formatted summary table showing:
 
--   the average of `Engagement_Score`
--   the standard deviation of `Engagement_Score`
--   the number of campaigns
+- the average of `Engagement_Score`
+- the standard deviation of `Engagement_Score`
+- the number of campaigns
 
 The standard deviation should help show whether engagement scores are
 consistent within each campaign goal or vary strongly between campaigns.
@@ -350,9 +350,9 @@ The data should be grouped by `Duration` and `Channel_Used`.
 
 The final graph should show:
 
--   campaign duration on the x-axis
--   average ROI on the y-axis
--   separate lines for different social media platforms
+- campaign duration on the x-axis
+- average ROI on the y-axis
+- separate lines for different social media platforms
 
 This visualization should help explore whether longer advertising
 campaigns are associated with higher ROI, and whether this pattern
