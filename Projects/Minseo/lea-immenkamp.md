@@ -87,6 +87,8 @@ financial performance.
 </tbody>
 </table>
 
+**Results**
+
 There were marginally differences in engagement scores between campaign
 goals. The lowest engagement scores were observed for campaigns with the
 goal of “Brand Awareness” (M = 4.36, SD = 3.15, n = 75248).
@@ -109,27 +111,9 @@ Visualization of click-through rate by gender
 
 # 3. Average ROI changes with campaign duration
 
-    socialmedia_demo %>%
-      group_by(duration, channel_used) %>%
-      summarise(
-        avg_roi = mean(roi, na.rm = TRUE),
-        .groups = "drop"
-      ) %>% 
-      ggplot(aes(x = duration, y = avg_roi, color = channel_used)) +
-      geom_line() +
-      geom_point() +
-      scale_y_continuous(limits = c(0, NA)) +
-      labs(
-        title = "Average Return on investment (ROI) by Campaign Duration and Platform",
-        x = "Campaign Duration (days)",
-        y = "Average ROI",
-        color = "Platform"
-      ) +
-      theme_minimal()
-
 ![](lea-immenkamp_files/figure-markdown_strict/line-graph-1.png)
 
-*Results*
+**Results ROI**
 
 - This line graph shows the average Return on investment for each
   campaign duration, separated by the platform used. - The average ROI

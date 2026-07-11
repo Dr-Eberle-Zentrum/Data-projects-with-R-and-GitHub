@@ -86,6 +86,8 @@ kable(campaign,
       digits = 2, 
       caption = "Engagement Score Summary by Campaign Goal")
 ```
+**Results**
+
 There were marginally differences in engagement scores between campaign goals. The lowest engagement scores were observed for campaigns with the goal of "Brand Awareness" (M = 4.36, SD = 3.15, n = 75248). 
 
 
@@ -138,7 +140,7 @@ age_data %>%
 
 # 3. Average ROI changes with campaign duration
 
-```{r line-graph}
+```{r line-graph, echo=FALSE}
 socialmedia_demo %>%
   group_by(duration, channel_used) %>%
   summarise(
@@ -159,7 +161,7 @@ socialmedia_demo %>%
 
 ```
 
-*Results*
+**Results ROI**
 
 - This line graph shows the average Return on investment for each campaign duration, separated by the platform used. - The average ROI does not change with campaign duration.
 - However, differences exist regarding the platform used. Whereas facebook, instagram and twitter do not differ much in their average ROI, pinterest seems to be the least effective.
