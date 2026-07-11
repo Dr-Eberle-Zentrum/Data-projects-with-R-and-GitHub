@@ -11,7 +11,7 @@ Social media advertising is an important part of modern marketing and public rel
 
 The focus of this project lies on cleaning, restructuring, and visualizing advertising campaign data. I am especially interested in how different advertising strategies lead to audience interaction and financial performance.
 
-```{r library-loading}
+```{r library-loading, include=FALSE}
 library(tidyverse)
 library(dplyr)
 library(tidyr)
@@ -28,51 +28,48 @@ library(ggplot2)
 knitr::opts_knit$set(root.dir = "/Users/Lea/Library/CloudStorage/OneDrive-UTCloud/Module/SoSe26/NV")
 ```
 
-```{r data-loading}
+```{r data-loading, echo=FALSE}
 socialmedia <- read.csv("Social_Media_Advertising.csv")
+head(socialmedia, 7)
 ```
 
-```{r data-cleaning}
-socialmedia_clean <- socialmedia %>% 
-   mutate(
-    Duration = as.numeric(str_extract(Duration, "\\d+"))
-  ) %>% 
+- Problem: The `Target_Audience` variable contained both gender and age group information. For some participants, "All Ages" was used to describe the target audience, which is not a valid gender category (see participant 7). 
+
+```{r data-cleaning, include=FALSE}
+socialmedia_clean <- socialmedia %>%
   mutate(
-    Acquisition_Cost = as.numeric(
-      str_replace_all(Acquisition_Cost, "[$,]", "")
-    )
-  ) %>%
-  mutate(
+    Duration = as.numeric(str_extract(Duration, "\\d+")),
+    Acquisition_Cost = as.numeric(str_replace_all(Acquisition_Cost, "[$,]", "")),
     Date = mdy(Date)
   ) %>%
-  mutate(
-    Target_Audience = str_replace(Target_Audience, "All Ages", "All gender")
-  ) %>% 
+  rename_with(tolower)
+```
+
+
+```{r data-cleaning-demographics, include=FALSE}
+socialmedia_demo <- socialmedia_clean %>%
+  filter(target_audience != "All Ages") %>%
   separate(
-    Target_Audience,
-    into = c("Gender", "Age_Group"),
+    target_audience,
+    into = c("gender", "age_group"),
     sep = " (?=\\d)",
     remove = TRUE
   ) %>%
   mutate(
-    Gender = str_trim(Gender),
-    Age_Group = str_trim(Age_Group)
-  ) %>% 
-   rename_with(tolower) %>% 
+    gender = str_trim(gender),
+    age_group = str_trim(age_group)
+  ) %>%
   drop_na(age_group)
-  
-
-# Check variable type
-glimpse(socialmedia_clean)
 ```
 
-In total `r nrow(socialmedia_clean)` particpants took part in the social media advertising campaigns. The dataset contains `r ncol(socialmedia_clean)` variables.
+
+- In total **`r nrow(socialmedia)`** participants took part in the social media advertising campaigns. The dataset contains `r ncol(socialmedia)` variables. After removing participants with "All gender" for analyses, where age and gender are required, **`r nrow(socialmedia_demo)`** participants remained in the dataset. 
 
 # Data manipulation
 
 ## 1. Which campaign goals bring the highest engagement scores?
 
-```{r data-engagement-score}
+```{r data-engagement-score, echo=FALSE}
 campaign <- socialmedia_clean %>% 
   group_by(campaign_goal) %>% 
   summarise(
@@ -89,11 +86,13 @@ kable(campaign,
       digits = 2, 
       caption = "Engagement Score Summary by Campaign Goal")
 ```
+There were marginally differences in engagement scores between campaign goals. The lowest engagement scores were observed for campaigns with the goal of "Brand Awareness" (M = 4.36, SD = 3.15, n = 75248). 
+
 
 ## 2. Which age group has the highest click-through rate?
 
-```{r click-through-rate}
-age_data <- socialmedia_clean %>%
+```{r click-through-rate, echo=FALSE}
+age_data <- socialmedia_demo %>%
   mutate(
     click_through_rate = clicks / impressions,
     gender = tolower(gender)
@@ -114,7 +113,7 @@ age_data <- socialmedia_clean %>%
 
 Visualization of click-through rate by gender
 
-```{r  click-through-rate-visualization}
+```{r  click-through-rate-visualization, echo=FALSE}
 age_data %>%
   group_by(age, gender) %>%
   summarise(
@@ -140,7 +139,7 @@ age_data %>%
 # 3. Average ROI changes with campaign duration
 
 ```{r line-graph}
-socialmedia_clean %>%
+socialmedia_demo %>%
   group_by(duration, channel_used) %>%
   summarise(
     avg_roi = mean(roi, na.rm = TRUE),

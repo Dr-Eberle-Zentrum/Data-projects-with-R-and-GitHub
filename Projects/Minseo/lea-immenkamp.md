@@ -10,120 +10,44 @@ visualizing advertising campaign data. I am especially interested in how
 different advertising strategies lead to audience interaction and
 financial performance.
 
-    library(tidyverse)
+    ##   Campaign_ID Target_Audience    Campaign_Goal Duration Channel_Used
+    ## 1      529013       Men 35-44   Product Launch  15 Days    Instagram
+    ## 2      275352     Women 45-60 Market Expansion  15 Days     Facebook
+    ## 3      692322       Men 45-60   Product Launch  15 Days    Instagram
+    ## 4      675757       Men 25-34   Increase Sales  15 Days    Pinterest
+    ## 5      535900       Men 45-60 Market Expansion  15 Days    Pinterest
+    ## 6      323031     Women 35-44   Product Launch  15 Days     Facebook
+    ## 7      727501        All Ages   Increase Sales  15 Days    Pinterest
+    ##   Conversion_Rate Acquisition_Cost       ROI    Location Language Clicks
+    ## 1            0.15          $500.00 5.7900000   Las Vegas  Spanish    500
+    ## 2            0.01          $500.00 7.2100000 Los Angeles   French    500
+    ## 3            0.08          $500.00 0.4300000      Austin  Spanish    500
+    ## 4            0.03          $500.00 0.9098236       Miami  Spanish    293
+    ## 5            0.13          $500.00 1.4228282      Austin   French    293
+    ## 6            0.02          $500.00 6.9000000      Austin  Spanish    500
+    ## 7            0.10          $500.00 0.6792396 Los Angeles   French    293
+    ##   Impressions Engagement_Score Customer_Segment       Date        Company
+    ## 1        3000                7           Health 2022-02-25     Aura Align
+    ## 2        3000                5             Home 2022-05-12 Hearth Harmony
+    ## 3        3000                9       Technology 2022-06-19  Cyber Circuit
+    ## 4        1937                1           Health 2022-09-08      Well Wish
+    ## 5        1937                1             Home 2022-08-24 Hearth Harmony
+    ## 6        3001               10       Technology 2022-01-15  Cyber Circuit
+    ## 7        1938                1             Home 2022-10-30   Space Spruce
 
-    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ## ✔ dplyr     1.2.1     ✔ readr     2.2.0
-    ## ✔ forcats   1.0.1     ✔ stringr   1.6.0
-    ## ✔ ggplot2   4.0.3     ✔ tibble    3.3.1
-    ## ✔ lubridate 1.9.5     ✔ tidyr     1.3.2
-    ## ✔ purrr     1.2.2     
-    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ## ✖ dplyr::filter() masks stats::filter()
-    ## ✖ dplyr::lag()    masks stats::lag()
-    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+- Problem: The `Target_Audience` variable contained both gender and age
+  group information. For some participants, “All Ages” was used to
+  describe the target audience, which is not a valid gender category
+  (see participant 7).
 
-    library(dplyr)
-    library(tidyr)
-    library(stringr)
-    library(lubridate)
-    library(knitr)
-    library(kableExtra)
-
-    ## 
-    ## Attaching package: 'kableExtra'
-    ## 
-    ## The following object is masked from 'package:dplyr':
-    ## 
-    ##     group_rows
-
-    library(purrr)
-    library(ggplot2)
-
-    socialmedia <- read.csv("Social_Media_Advertising.csv")
-
-    socialmedia_clean <- socialmedia %>% 
-       mutate(
-        Duration = as.numeric(str_extract(Duration, "\\d+"))
-      ) %>% 
-      mutate(
-        Acquisition_Cost = as.numeric(
-          str_replace_all(Acquisition_Cost, "[$,]", "")
-        )
-      ) %>%
-      mutate(
-        Date = mdy(Date)
-      ) %>%
-      mutate(
-        Target_Audience = str_replace(Target_Audience, "All Ages", "All gender")
-      ) %>% 
-      separate(
-        Target_Audience,
-        into = c("Gender", "Age_Group"),
-        sep = " (?=\\d)",
-        remove = TRUE
-      ) %>%
-      mutate(
-        Gender = str_trim(Gender),
-        Age_Group = str_trim(Age_Group)
-      ) %>% 
-       rename_with(tolower) %>% 
-      drop_na(age_group)
-
-    ## Warning: There was 1 warning in `mutate()`.
-    ## ℹ In argument: `Date = mdy(Date)`.
-    ## Caused by warning:
-    ## ! All formats failed to parse. No formats found.
-
-    ## Warning: Expected 2 pieces. Missing pieces filled with `NA` in 33447 rows [7, 13, 27,
-    ## 29, 55, 58, 64, 75, 89, 90, 132, 138, 140, 151, 153, 168, 178, 183, 188, 189,
-    ## ...].
-
-    # Check variable type
-    glimpse(socialmedia_clean)
-
-    ## Rows: 266,553
-    ## Columns: 17
-    ## $ campaign_id      <int> 529013, 275352, 692322, 675757, 535900, 323031, 28955…
-    ## $ gender           <chr> "Men", "Women", "Men", "Men", "Men", "Women", "Men", …
-    ## $ age_group        <chr> "35-44", "45-60", "45-60", "25-34", "45-60", "35-44",…
-    ## $ campaign_goal    <chr> "Product Launch", "Market Expansion", "Product Launch…
-    ## $ duration         <dbl> 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 1…
-    ## $ channel_used     <chr> "Instagram", "Facebook", "Instagram", "Pinterest", "P…
-    ## $ conversion_rate  <dbl> 0.15, 0.01, 0.08, 0.03, 0.13, 0.02, 0.10, 0.14, 0.04,…
-    ## $ acquisition_cost <dbl> 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500…
-    ## $ roi              <dbl> 5.7900000, 7.2100000, 0.4300000, 0.9098236, 1.4228282…
-    ## $ location         <chr> "Las Vegas", "Los Angeles", "Austin", "Miami", "Austi…
-    ## $ language         <chr> "Spanish", "French", "Spanish", "Spanish", "French", …
-    ## $ clicks           <int> 500, 500, 500, 293, 293, 500, 293, 501, 501, 501, 501…
-    ## $ impressions      <int> 3000, 3000, 3000, 1937, 1937, 3001, 1938, 3003, 3003,…
-    ## $ engagement_score <int> 7, 5, 9, 1, 1, 10, 1, 8, 9, 8, 8, 8, 6, 4, 10, 8, 9, …
-    ## $ customer_segment <chr> "Health", "Home", "Technology", "Health", "Home", "Te…
-    ## $ date             <date> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …
-    ## $ company          <chr> "Aura Align", "Hearth Harmony", "Cyber Circuit", "Wel…
-
-In total 266553 particpants took part in the social media advertising
-campaigns. The dataset contains 17 variables.
+- In total **300000** participants took part in the social media
+  advertising campaigns. The dataset contains 16 variables. After
+  removing participants with “All gender” for analyses, where age and
+  gender are required, **266553** participants remained in the dataset.
 
 # Data manipulation
 
 ## 1. Which campaign goals bring the highest engagement scores?
-
-    campaign <- socialmedia_clean %>% 
-      group_by(campaign_goal) %>% 
-      summarise(
-        M = mean(engagement_score, na.rm = TRUE),
-        SD = sd(engagement_score, na.rm = TRUE),
-        n = n()
-      ) %>%
-      arrange(desc(M)) %>% 
-      rename(
-        `Campaign Goal` = campaign_goal
-      )
-
-    kable(campaign, 
-          digits = 2, 
-          caption = "Engagement Score Summary by Campaign Goal")
 
 <table>
 <caption>Engagement Score Summary by Campaign Goal</caption>
@@ -140,65 +64,36 @@ campaigns. The dataset contains 17 variables.
 <td style="text-align: left;">Increase Sales</td>
 <td style="text-align: right;">4.37</td>
 <td style="text-align: right;">3.16</td>
-<td style="text-align: right;">66547</td>
+<td style="text-align: right;">74963</td>
 </tr>
 <tr>
 <td style="text-align: left;">Product Launch</td>
 <td style="text-align: right;">4.37</td>
 <td style="text-align: right;">3.16</td>
-<td style="text-align: right;">66598</td>
+<td style="text-align: right;">75030</td>
+</tr>
+<tr>
+<td style="text-align: left;">Market Expansion</td>
+<td style="text-align: right;">4.37</td>
+<td style="text-align: right;">3.16</td>
+<td style="text-align: right;">74759</td>
 </tr>
 <tr>
 <td style="text-align: left;">Brand Awareness</td>
 <td style="text-align: right;">4.36</td>
 <td style="text-align: right;">3.15</td>
-<td style="text-align: right;">66938</td>
-</tr>
-<tr>
-<td style="text-align: left;">Market Expansion</td>
-<td style="text-align: right;">4.36</td>
-<td style="text-align: right;">3.16</td>
-<td style="text-align: right;">66470</td>
+<td style="text-align: right;">75248</td>
 </tr>
 </tbody>
 </table>
 
+There were marginally differences in engagement scores between campaign
+goals. The lowest engagement scores were observed for campaigns with the
+goal of “Brand Awareness” (M = 4.36, SD = 3.15, n = 75248).
+
 ## 2. Which age group has the highest click-through rate?
 
-    age_data <- socialmedia_clean %>%
-      mutate(
-        click_through_rate = clicks / impressions,
-        gender = tolower(gender)
-      ) %>%
-      separate(
-        age_group,
-        into = c("age_min", "age_max"),
-        sep = "-",
-        convert = TRUE
-      ) %>%
-      separate_rows(gender, sep = ",") %>%
-      mutate(age_span = age_max - age_min + 1) %>% 
-      uncount(age_span) %>% 
-      group_by(across(everything())) %>% 
-      mutate(age = age_min + row_number() - 1) %>% 
-      ungroup()
-
 Visualization of click-through rate by gender
-
-    age_data %>%
-      group_by(age, gender) %>%
-      summarise(
-        ctr = mean(click_through_rate, na.rm = TRUE),
-        .groups = "drop"
-      ) %>%
-      ggplot(aes(age, ctr)) +
-      geom_point() +
-      facet_wrap(~gender) +
-      labs(
-        title = "Average Click-Through Rate (CTR) by Age and Gender", 
-        x = "Age",
-        y = "CTR"
-      )
 
 ![](lea-immenkamp_files/figure-markdown_strict/click-through-rate-visualization-1.png)
 
@@ -214,7 +109,7 @@ Visualization of click-through rate by gender
 
 # 3. Average ROI changes with campaign duration
 
-    socialmedia_clean %>%
+    socialmedia_demo %>%
       group_by(duration, channel_used) %>%
       summarise(
         avg_roi = mean(roi, na.rm = TRUE),
