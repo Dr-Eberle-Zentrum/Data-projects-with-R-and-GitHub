@@ -1,121 +1,36 @@
 Project-Solution
 ================
 
-``` r
-#figure size
-knitr::opts_chunk$set(
-  fig.width = 10,
-  fig.height = 7,
-  dpi = 150,
-  out.width = "100%"
-)
+## Clean Data
 
-# transfer speaker counts in millions/billions
-format_million_billion <- function(x) {
-  sapply(x, function(v) {
-    if (is.na(v)) return(NA_character_)
-    if (v >= 1e9) {
-      paste0(round(v / 1e9, 2), "B")
-    } else {
-      paste0(round(v / 1e6, 1), "M")
-    }
-  })
-}
+Two things have to be solved before any plot can be drawn:
 
-
-library(tidyverse)
-```
-
-    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ## ✔ dplyr     1.2.0     ✔ readr     2.2.0
-    ## ✔ forcats   1.0.1     ✔ stringr   1.6.0
-    ## ✔ ggplot2   4.0.2     ✔ tibble    3.3.1
-    ## ✔ lubridate 1.9.5     ✔ tidyr     1.3.2
-    ## ✔ purrr     1.2.1     
-    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ## ✖ dplyr::filter() masks stats::filter()
-    ## ✖ dplyr::lag()    masks stats::lag()
-    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+1.  **Flattening.** `extract_language_entry()` pulls exactly four fields
+    out of each entry and returns a one-row tibble; `map_dfr()` stacks
+    them into a rectangular data frame. The `%||%` operator substitutes
+    `NA` whenever a field is absent, so a missing value never silently
+    drops a whole record. A language spoken in several countries
+    produces several rows — this long format is what we want for
+    counting and for joining to the map.
+2.  **Country names.** The country strings in the JSON do not always
+    match the `admin` names used by `rnaturalearth` (e.g. *“USA”* vs
+    *“United States of America”*). I therefore fuzzy-match every country
+    against the map’s names with the Jaro–Winkler distance and keep the
+    closest candidate. The result is stored in a separate column
+    `country_map_sf`, so the original value stays available for
+    inspection.
 
 ``` r
-library(jsonlite)
-```
-
-    ## 
-    ## Attaching package: 'jsonlite'
-    ## 
-    ## The following object is masked from 'package:purrr':
-    ## 
-    ##     flatten
-
-``` r
-library(ggrepel)
-library(scales)
-```
-
-    ## 
-    ## Attaching package: 'scales'
-    ## 
-    ## The following object is masked from 'package:purrr':
-    ## 
-    ##     discard
-    ## 
-    ## The following object is masked from 'package:readr':
-    ## 
-    ##     col_factor
-
-``` r
-library(gridExtra)
-```
-
-    ## 
-    ## Attaching package: 'gridExtra'
-    ## 
-    ## The following object is masked from 'package:dplyr':
-    ## 
-    ##     combine
-
-``` r
-library(rnaturalearth)
-library(rnaturalearthdata)
-```
-
-    ## 
-    ## Attaching package: 'rnaturalearthdata'
-    ## 
-    ## The following object is masked from 'package:rnaturalearth':
-    ## 
-    ##     countries110
-
-``` r
-library(stringdist)
-```
-
-    ## 
-    ## Attaching package: 'stringdist'
-    ## 
-    ## The following object is masked from 'package:tidyr':
-    ## 
-    ##     extract
-
-``` r
-library(purrr)
-library(grid)
-library(ggplot2)
-```
-
-``` r
-raw <- jsonlite::fromJSON("world_languages_integrated.json", simplifyVector = FALSE)
-```
-
-``` r
-# ============================================================
-# Clean Data
-# ============================================================
-
 # Load world map for country matching
 world_basemap <- ne_countries(scale = "medium", returnclass = "sf") 
 map_names <- world_basemap$admin
+
+# Fuzzy‑match country names to map data
+match_country <- function(x) {
+  if (is.na(x)) return(NA)
+  distances <- stringdist(x, map_names, method = "jw")
+  map_names[which.min(distances)][1]
+}
 
 # Extract relevant fields from each language entry
 extract_language_entry <- function(entry) {
@@ -138,68 +53,79 @@ extract_language_entry <- function(entry) {
 # Build cleaned language dataset
 language_data <- raw %>%
   map_dfr(extract_language_entry) %>%
-  filter(!is.na(language))
-
-# Fuzzy‑match country names to map data
-match_country <- function(x) {
-  if (is.na(x)) return(NA)
-  distances <- stringdist(x, map_names, method = "jw")
-  map_names[which.min(distances)]
-}
-
-
-language_data <- language_data %>%
+  filter(!is.na(language)) %>%
   mutate(country_map_sf = sapply(country, match_country))
 
-
-cat(sprintf(
-  "rows: %d | country NA: %d | speakers NA: %d | family NA: %d\n",
-  nrow(language_data),
-  sum(is.na(language_data$country)),
-  sum(is.na(language_data$speakers)),
-  sum(is.na(language_data$family))
-))
+# data summary
+n_rows <- nrow(language_data)
+n_country_na <- sum(is.na(language_data$country))
+n_speakers_na <- sum(is.na(language_data$speakers))
+n_family_na <- sum(is.na(language_data$family))
 ```
 
-    ## rows: 11715 | country NA: 980 | speakers NA: 980 | family NA: 9452
+The cleaned dataset contains 11715 rows in total.
+
+*Missing values summary:*
+
+- Missing country information: 980
+- Missing speaker counts: 980
+- Missing language family information: 9452
+
+## Visualization
+
+### 1. Where is the place with the most diversity (regarding languages)?
+
+We read “diversity” as *the number of distinct languages spoken in a
+country*. Because the long format contains one row per language–country
+pair, a language spoken in ten countries would otherwise be counted ten
+times in the same country if the source lists it repeatedly;
+`distinct()` before `count()` guarantees that every language is counted
+**once per country**.
 
 ``` r
-# ============================================================
-# 1. Where is the place with the most diversity (regarding languages)?
-# ============================================================
- 
 # Find the 20 countries with the most languages
 country_diversity <- language_data %>%
-  filter(!is.na(country_map_sf)) %>%
+  drop_na(country_map_sf) %>%
   distinct(language, country_map_sf) %>%
-  count(country_map_sf, name = "n_languages") 
+  count(country_map_sf, name = "n_languages")
  
-print(slice_head(country_diversity, n = 20), n = 20)
+top20_country_diversity <- country_diversity %>%
+  arrange(desc(n_languages)) %>%
+  slice_head(n = 20)
 ```
 
-    ## # A tibble: 20 × 2
-    ##    country_map_sf      n_languages
-    ##    <chr>                     <int>
-    ##  1 Afghanistan                  45
-    ##  2 Albania                      10
-    ##  3 Algeria                      25
-    ##  4 American Samoa                7
-    ##  5 Andorra                       9
-    ##  6 Angola                       56
-    ##  7 Anguilla                      3
-    ##  8 Antigua and Barbuda           2
-    ##  9 Argentina                    45
-    ## 10 Armenia                      10
-    ## 11 Aruba                         8
-    ## 12 Australia                   175
-    ## 13 Austria                      43
-    ## 14 Azerbaijan                   29
-    ## 15 Bahrain                      17
-    ## 16 Bangladesh                   39
-    ## 17 Barbados                      2
-    ## 18 Belarus                      16
-    ## 19 Belgium                      46
-    ## 20 Belize                       11
+**Top 20 countries by number of languages**
+
+| Country                          | Number of languages |
+|:---------------------------------|:-------------------:|
+| Papua New Guinea                 |         826         |
+| Indonesia                        |         687         |
+| Nigeria                          |         504         |
+| United States of America         |         353         |
+| China                            |         315         |
+| Mexico                           |         289         |
+| Cameroon                         |         281         |
+| Democratic Republic of the Congo |         225         |
+| India                            |         209         |
+| Canada                           |         185         |
+| Philippines                      |         179         |
+| Australia                        |         175         |
+| Brazil                           |         169         |
+| Panama                           |         157         |
+| Malaysia                         |         154         |
+| Myanmar                          |         138         |
+| Chad                             |         128         |
+| Russia                           |         116         |
+| Vanuatu                          |         107         |
+| Vietnam                          |         106         |
+
+The counts are extremely skewed: a handful of countries host several
+hundred languages while most host only a few. On a linear colour scale
+everything except the top few countries would collapse into a single
+shade, so we map the fill to `log10(n_languages)` and re-label the
+colour bar with the original counts (1, 3, 10, … 1000). Countries with
+no data keep a neutral grey, which distinguishes “no information” from
+“few languages”.
 
 ``` r
 # Log‑transform for color scale
@@ -215,7 +141,7 @@ plot_diversity_map <- world_basemap %>%
   ggplot() +
   geom_sf(aes(fill = log_lang), color = "white", size = 0.1) +
   scale_fill_gradientn(
-    colours = c("#5BC0EB", "#9DD9D2", "#F7F7F7", "#F7A8B8", "#FF4D6D"),
+    colours = c("#5BC0EB", "#9DD9D2", "#9e3dff", "#F7A8B8", "#FF4D6D"),
     na.value = "grey90",
     name = "Languages",
     breaks = log10(c(1, 3, 10, 30, 100, 300, 600, 1000)),
@@ -238,13 +164,23 @@ plot_diversity_map <- world_basemap %>%
 plot_diversity_map
 ```
 
-<img src="Project-Solution_files/figure-gfm/unnamed-chunk-4-1.png" alt="" width="100%" />
+<img src="Project-Solution_files/figure-gfm/q1-diversity-map-1.png" alt="" width="100%" />
+
+The map shows that linguistic diversity is not evenly spread: it
+concentrates in a tropical belt — Papua New Guinea, Indonesia, Nigeria,
+India — whereas large, historically centralised states (Russia, most of
+Europe, the Americas) are comparatively homogeneous.
+
+### 2. How are these languages distributed?
+
+Two different notions of “big” are worth separating: a language can have
+many **speakers** (Mandarin) or be present in many **countries**
+(English). I therefore summarise each language once, with both measures.
+`first(speakers)` is used rather than `sum()` because the speaker count
+is a *language-level* attribute that is repeated on every country row —
+summing it would multiply the count by the number of countries.
 
 ``` r
-# ============================================================
-# 2. How are these languages distributed?
-# ============================================================
- 
 # Summarize languages by total speakers and number of countries
 lang_summary <- language_data %>%
   filter(!is.na(country), !is.na(speakers)) %>%
@@ -255,68 +191,63 @@ lang_summary <- language_data %>%
     .groups        = "drop"
   )
 
-# Top 5 
-top5_by_speakers <- lang_summary %>% slice_max(total_speakers, n = 5)
-
-print(top5_by_speakers)
+top5_by_speakers <- lang_summary %>%
+  arrange(desc(total_speakers)) %>%
+  slice_head(n = 5)
 ```
 
-    ## # A tibble: 5 × 3
-    ##   language         total_speakers n_countries
-    ##   <chr>                     <dbl>       <int>
-    ## 1 Mandarin Chinese      964553200          78
-    ## 2 Hindi                 703211800          54
-    ## 3 Spanish               457774910          62
-    ## 4 English               373691840         136
-    ## 5 Bengali               238634300          31
+**Top 5 languages by number of speakers**
+
+| Language         | Total speakers | Countries |
+|:-----------------|:--------------:|:---------:|
+| Mandarin Chinese |   964553200    |    78     |
+| Hindi            |   703211800    |    54     |
+| Spanish          |   457774910    |    62     |
+| English          |   373691840    |    136    |
+| Bengali          |   238634300    |    31     |
+
+To show *where* these five languages live, I join them back onto the
+world map and facet by language. Each panel is a binary map (spoken /
+not spoken), which makes the geographical footprints directly comparable
+across panels.
 
 ``` r
-# Plot world map showing where a given language is spoken
-plot_language_map <- function(lang_name) {
+top5 <- top5_by_speakers$language
 
-  # Retrieve speaker count from top‑5 table
-  total_speakers <- top5_by_speakers %>%
-    filter(language %in% lang_name) %>%
-    pull(total_speakers)
-  
-  total_label <- format_million_billion(total_speakers)
+spoken_pairs <- language_data %>%
+  filter(language %in% top5) %>%
+  distinct(language, country_map_sf) %>%
+  drop_na(country_map_sf) %>%
+  mutate(spoken = TRUE)
 
- # Countries where the language is spoken
-  spoken_regions <- language_data %>%
-    filter(language %in% lang_name) %>%
-    pull(country_map_sf)
+map_facets <- crossing(
+    language = top5,
+    admin    = world_basemap$admin
+  ) %>%
+  left_join(spoken_pairs, by = c("language", "admin" = "country_map_sf")) %>%
+  mutate(spoken = !is.na(spoken))
 
-  world_basemap %>%
-    mutate(spoken = admin %in% spoken_regions) %>%
-    ggplot() +
-    geom_sf(aes(fill = spoken), color = "white", size = 0.1) +
-    scale_fill_manual(
-      values = c("TRUE" = "#F7A8B8", "FALSE" = "#e0f3f8")
-    ) +
-    labs(
-      title = paste0(lang_name, " (", total_label, ")")
-    ) +
-    theme_void() +
-    theme(
-      plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
-      legend.position = "none"
-    )
-}
-
-plots <- purrr::map(top5_by_speakers$language, plot_language_map)
-
-
-big_plot <- grid.arrange(
-  grobs = plots,
-  ncol = 3,
-  top = textGrob(
-    "Top 5 Languages by Number of Speakers",
-    gp = gpar(fontsize = 14, fontface = "bold")
+world_basemap %>%
+  filter(admin != "Antarctica") %>%          
+  left_join(map_facets, by = "admin") %>%   
+  ggplot() +
+  geom_sf(aes(fill = spoken), color = "white", linewidth = 0.05) +
+  scale_fill_manual(
+    values = c("TRUE" = "#F7A8B8", "FALSE" = "grey92"),
+    guide  = "none"
+  ) +
+  coord_sf(ylim = c(-56, 84), expand = FALSE) +   # 裁掉上下空白
+  facet_wrap(~ language, ncol = 3) +
+  labs(title = "Where the five largest languages are spoken") +
+  theme_void(base_size = 10) +
+  theme(
+    plot.title    = element_text(face = "bold", size = 13, hjust = 0.5, margin = margin(t = 5, b = 14) ),
+    strip.text    = element_text(face = "bold", size = 9, margin = margin(t = 4, b = 4)),
+    panel.spacing = unit(0.8, "lines")
   )
-)
 ```
 
-<img src="Project-Solution_files/figure-gfm/unnamed-chunk-6-1.png" alt="" width="100%" />
+<img src="Project-Solution_files/figure-gfm/unnamed-chunk-1-1.png" alt="" width="100%" />
 
 ``` r
 # Remove NA or 0 country counts
@@ -337,12 +268,9 @@ top10_countries <- lang_summary_clean %>%
   arrange(desc(n_countries)) %>%
   slice(1:10)
 
-# combine
-selected_langs <- bind_rows(top10_speakers, top10_countries) %>%
-  distinct(language, .keep_all = TRUE)
-
-
-selected_langs <- selected_langs %>%
+selected_langs <- top10_speakers %>%
+  bind_rows(top10_countries) %>%
+  distinct(language, .keep_all = TRUE) %>%
   mutate(label_id = row_number())
 
 plot_q2_2 <- ggplot(selected_langs, aes(
@@ -385,13 +313,15 @@ plot_q2_2 <- ggplot(selected_langs, aes(
 plot_q2_2
 ```
 
-<img src="Project-Solution_files/figure-gfm/unnamed-chunk-7-1.png" alt="" width="100%" />
+<img src="Project-Solution_files/figure-gfm/unnamed-chunk-2-1.png" alt="" width="100%" />
+\### 3. Languages and language families with the most speakers
+
+A language family aggregates its languages, so its speaker total is the
+sum over its members. The `distinct(language, speakers, family)` step is
+essential: without it, a language listed for 20 countries would
+contribute its speaker count 20 times and inflate its family.
 
 ``` r
-# ============================================================
-# 3. Languages and language families with the most speakers
-# ============================================================
-
 # Keep one row per language to avoid double‑counting speakers
 lang_by_family <- language_data %>%
   filter(!is.na(speakers), !is.na(family)) %>%
@@ -403,28 +333,26 @@ family_summary <- lang_by_family %>%
   summarise(total_speakers = sum(speakers), .groups = "drop") %>%
   arrange(desc(total_speakers))
 
-cat("Top 10 language families by speakers:\n")
+top5_families <- family_summary %>% slice_head(n = 5) %>% pull(family)
 ```
 
-    ## Top 10 language families by speakers:
+**Top 5 language families by number of speakers**
 
-``` r
-print(slice_head(family_summary, n = 10))
-```
+| Language family | Total speakers |
+|:----------------|:--------------:|
+| Indo-Iranian    |   1357864800   |
+| Sinitic         |   1197272500   |
+| Italic          |   823744970    |
+| Germanic        |   487451040    |
+| Balto-Slavic    |   268649810    |
 
-    ## # A tibble: 10 × 2
-    ##    family            total_speakers
-    ##    <chr>                      <dbl>
-    ##  1 Indo-Iranian          1357864800
-    ##  2 Sinitic               1197272500
-    ##  3 Italic                 823744970
-    ##  4 Germanic               487451040
-    ##  5 Balto-Slavic           268649810
-    ##  6 Malayo-Polynesian      246002270
-    ##  7 Atlantic-Congo         176053500
-    ##  8 Japanese               120668000
-    ##  9 Mon-Khmer              108931700
-    ## 10 Korean                  80144200
+For each of these five families we draw a stacked bar of its ten largest
+languages. The stacking shows two things at once: the **height** is the
+family total, the **segments** show how that total is composed — whether
+the family is dominated by one giant language or spread over several
+mid-sized ones. Because the same plot is needed five times, it is
+written once as a function and mapped over the families (`purrr::map`),
+then arranged in a grid.
 
 ``` r
 # Plot top‑10 languages within a family using a unified blue gradient palette
@@ -433,13 +361,11 @@ plot_family_bar <- function(fam_name) {
     filter(family == fam_name) %>%
     slice_max(speakers, n = 10) %>%
     mutate(language = fct_reorder(language, speakers)) %>%
+    
     ggplot(aes(x = fam_name, y = speakers, fill = language)) +
     geom_col(width = 0.5, color = "white", linewidth = 0.3) +
     scale_y_continuous(labels = format_million_billion) +
-    scale_fill_manual(
-      values = colorRampPalette(c("#A8DADC", "#457B9D", "#1D3557"))(10),
-      name = "Language"
-    ) +
+    scale_fill_brewer(palette = "Paired") +
     labs(
       title = fam_name,
       x = NULL,
@@ -455,7 +381,6 @@ plot_family_bar <- function(fam_name) {
     )
 }
 
-top5_families <- family_summary %>% slice_head(n = 5) %>% pull(family)
 
 family_plots <- purrr::map(top5_families, plot_family_bar)
 
@@ -465,9 +390,9 @@ big_family_plot <- grid.arrange(
 )
 ```
 
-<img src="Project-Solution_files/figure-gfm/unnamed-chunk-9-1.png" alt="" width="100%" />
+<img src="Project-Solution_files/figure-gfm/q3-family-plots-1.png" alt="" width="100%" />
 
-## Data Source & License
+# Data Source & License
 
 This project uses the [World Languages
 dataset](https://huggingface.co/datasets/lukeslp/world-languages) by
