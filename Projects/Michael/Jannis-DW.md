@@ -1,45 +1,11 @@
 # Solution for Michael’s Project “Demographic Shift in Germany”
 
-    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ## ✔ dplyr     1.2.1     ✔ readr     2.2.0
-    ## ✔ forcats   1.0.1     ✔ stringr   1.6.0
-    ## ✔ ggplot2   4.0.3     ✔ tibble    3.3.1
-    ## ✔ lubridate 1.9.5     ✔ tidyr     1.3.2
-    ## ✔ purrr     1.2.2     
-    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ## ✖ dplyr::filter() masks stats::filter()
-    ## ✖ dplyr::lag()    masks stats::lag()
-    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-    ## 
-    ## Attaching package: 'kableExtra'
-    ## 
-    ## 
-    ## The following object is masked from 'package:dplyr':
-    ## 
-    ##     group_rows
-    ## 
-    ## 
-    ## Loading required package: MASS
-    ## 
-    ## 
-    ## Attaching package: 'MASS'
-    ## 
-    ## 
-    ## The following object is masked from 'package:dplyr':
-    ## 
-    ##     select
-    ## 
-    ## 
-    ## Multiple files in zip: reading 'FReDA_panel_4waves_long_labeled.csv'
-    ## Rows: 107921 Columns: 203
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ","
-    ## dbl (203): id, welle, pid, sample, sat3, pa27, sd3, sd40, sd43, sd11, sd7e1,...
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Task 1: Analysis of Reasons for the low Fertility Rate
 
-## Analysis of Reasons for the low Fertility Rate
+### 1.1
+
+Task: Calculate Correlation between relationship satisfaction and
+intention to have children in the next 3 years.
 
 Solution: There is a positive correlation between relationship
 satisfaction and intention to have children in the next 3 years.
@@ -48,29 +14,58 @@ satisfaction and intention to have children in the next 3 years.
 
     ## [1] 0.1458812
 
-![](Jannis-DW_files/figure-markdown_strict/FertilityRateAnalysis-1.png)
+### 1.2
 
-\##1.3 I think that is due to happy couples not wanting to change any of
-their current situation since they are allready fulfilled. Maybe the
-unhappier families simply are unhappy because they want ti have children
-but do not have any yet and will be happier as soon as they have
-children.
+Task: Create a Heatmap to visualize the correlation between relationship
+satisfaction and intention to have children in the next 3 years.
 
-\#1.4
+![](Jannis-DW_files/figure-markdown_strict/HeatMap-1.png)
 
-Histogram to get an overview of data: Answer: We have the statistical
+### 1.3
+
+Task: Interpretation: Why do you think that people who are satisfied
+with their relationship the most are seemingly less likely to get
+children in the near future?
+
+Solution: I think the effect is due to happy couples not wanting to
+change any of their current situation since they are allready fulfilled.
+Maybe the unhappier families simply are unhappy because they want t0
+have children but do not have any yet and will be happier as soon as
+they have children.
+
+### 1.4
+
+Task: What statistical problems do we run into?
+
+Solution: Histogram to get an overview of data: We have the statistical
 problem that most people see themselves as very happy or do not want to
 answer the question. This leads to a very skewed distribution of the
 data and makes it hard to find a correlation between the two variables.
 
 ![](Jannis-DW_files/figure-markdown_strict/histogram-1.png)
 
-\#Corellation between sat3 and frt69 with controll of age
+### 1.5
+
+Task: Correllation between relationship satisfaction and fertility
+intentions with control of age.
+
+Answer: The correlation between sat3 and frt69 with control of age is
+0.08, which is a weak positive correlation. This means that there is a
+weak positive relationship between relationship satisfaction and
+intention to have children in the next 3 years, even when controlling
+for age.
 
     ##    estimate      p.value statistic    n gp  Method
     ## 1 0.1104294 1.232921e-16  8.305721 5591  1 pearson
 
-\#1.6
+### 1.6
+
+Task: Correllation between relationship satisfaction and fertility
+intentions with control of age, number of children and relationship
+duration
+
+    ##    estimate      p.value statistic    n gp  Method
+    ## 1 0.1057409 1.774588e-14  7.687956 5232  3 pearson
 
 ## Task 2
 

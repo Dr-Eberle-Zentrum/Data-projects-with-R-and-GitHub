@@ -6,7 +6,7 @@ always_allow_html: true
 
 # Solution for Michael's Project "Demographic Shift in Germany"
 
-```{r LoadingData, echo=FALSE}
+```{r LoadingData, include=FALSE}
 
 library(tidyverse)
 library(dplyr)
@@ -17,9 +17,14 @@ library(ppcor)
 data <- read_csv("FReDA_panel_4waves_long_labeled.csv.zip")
 ```
 
-## Analysis of Reasons for the low Fertility Rate
+## Task 1: Analysis of Reasons for the low Fertility Rate
+
+### 1.1
+
+Task: Calculate Correlation between relationship satisfaction and intention to have children in the next 3 years.
 
 Solution: There is a positive correlation between relationship satisfaction and intention to have children in the next 3 years.
+
 ```{r FertilityRateAnalysis, echo=FALSE}
 # mutating values with `-2` to `NA` for the variable `fertility_rate
 data <- data %>%
@@ -31,7 +36,13 @@ data <- data %>%
 
 cor(data$sat3, data$frt68, use = "complete.obs")
 cor(data$sat3, data$frt69, use = "complete.obs")
+```
 
+### 1.2
+
+Task: Create a Heatmap to visualize the correlation between relationship satisfaction and intention to have children in the next 3 years.
+
+```{r HeatMap, echo=FALSE}
 
 #1.2
 
@@ -48,24 +59,29 @@ dataheatmap <- data %>%
   theme_minimal()
 ```
 
-##1.3
-I think that is due to happy couples not wanting to change any of their current situation since they are allready fulfilled. Maybe the unhappier families simply are unhappy because they want ti have children but do not have any yet and will be happier as soon as they have children. 
+### 1.3
 
-#1.4
+Task: Interpretation: Why do you think that people who are satisfied with their relationship the most are seemingly less likely to get children in the near future?
 
-Histogram to get an overview of data:
-Answer: We have the statistical problem that most people see themselves as very happy or do not want to answer the question. This leads to a very skewed distribution of the data and makes it hard to find a correlation between the two variables.
+Solution: I think the effect is due to happy couples not wanting to change any of their current situation since they are allready fulfilled. Maybe the unhappier families simply are unhappy because they want t0 have children but do not have any yet and will be happier as soon as they have children. 
+
+### 1.4
+
+Task: What statistical problems do we run into?
+
+Solution: Histogram to get an overview of data:
+We have the statistical problem that most people see themselves as very happy or do not want to answer the question. This leads to a very skewed distribution of the data and makes it hard to find a correlation between the two variables.
 
 
 ```{r histogram, echo=FALSE}
 hist(data$sat3)
 ```
 
+### 1.5
 
+Task: Correllation between relationship satisfaction and fertility intentions with control of age.
 
-#Corellation between sat3 and frt69 with controll of age
-
-
+Answer: The correlation between sat3 and frt69 with control of age is 0.08, which is a weak positive correlation. This means that there is a weak positive relationship between relationship satisfaction and intention to have children in the next 3 years, even when controlling for age.
 
 ```{r CorrelationControll, echo=FALSE}
 vars <- c("sat3", "frt69", "age")
@@ -84,8 +100,27 @@ pcor.test(data_for_cor$sat3, data_for_cor$frt69, (2026 - data_for_cor$age), meth
 
 
 ``` 
-#1.6
+### 1.6
 
+Task: Correllation between relationship satisfaction and fertility intentions with control of age, number of children and relationship duration
+
+```{r CorrelationControll2, echo=FALSE}
+vars <- c("sat3", "frt69", "age", "nkids", "reldur")
+
+data_for_cor2 <- 
+  data %>%
+  mutate(
+    age = 2026 - data$age
+  ) %>%
+  mutate(
+    across(c(sat3, frt69, age, nkids, reldur), ~replace(.x, .x<0, NA))
+  ) |> 
+  drop_na( any_of(vars))
+
+pcor.test(data_for_cor2$sat3, data_for_cor2$frt69, data_for_cor2[, c("age", "nkids", "reldur")])
+
+?pcor.test()
+```
 
 ## Task 2
 ```{r Task2, echo=FALSE}
