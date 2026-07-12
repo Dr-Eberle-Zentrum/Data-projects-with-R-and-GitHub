@@ -24,9 +24,9 @@ I will only be interested in:
 -   the language names (`$name`)
 -   the countries the language is spoken in (all the keys starting with
     `$speaker_count$metadata$countries`) - note that there are multiple
-    countries - in the new dataframe there should not be multiple
-    columns, but if necessary a language can be listed multiple times
-    (with different countries)
+    columns with countries - in the new dataframe there should not be
+    multiple columns - but if necessary a language can be listed
+    multiple times (with different countries)
 -   the (number of) speakers of the language (`$speaker_count$count`)
 -   the language family (`$language_history$family_tree$path[[3]]`)
 
@@ -75,7 +75,8 @@ language family by adding the number of speakers of the its child
 languages.
 
 Create a table listing these language families in descending order.
-Include the number of speakers.
+Include the number of speakers. Note that the number is not listed as a
+double and will have to converted.
 
 Plot the five language families with the largest amount of speakers and
 their respective child languages as a stacked bar plot. Present the
