@@ -1,11 +1,12 @@
 ---
 title: "Jannis-DW"
 output: md_document
+always_allow_html: true
 ---
 
 # Solution for Michael's Project "Demographic Shift in Germany"
 
-```{r LoadingData}
+```{r LoadingData, echo=FALSE}
 
 library(tidyverse)
 library(dplyr)
@@ -14,13 +15,12 @@ library(kableExtra)
 library(ppcor)
 
 data <- read_csv("FReDA_panel_4waves_long_labeled.csv.zip")
-head(data)
-#Where possible, use functions of the loaded packages
 ```
 
 ## Analysis of Reasons for the low Fertility Rate
 
-```{r FertilityRateAnalysis}
+Solution: There is a positive correlation between relationship satisfaction and intention to have children in the next 3 years.
+```{r FertilityRateAnalysis, echo=FALSE}
 # mutating values with `-2` to `NA` for the variable `fertility_rate
 data <- data %>%
  mutate(
@@ -28,32 +28,46 @@ data <- data %>%
   
 
 #1.1
+
 cor(data$sat3, data$frt68, use = "complete.obs")
 cor(data$sat3, data$frt69, use = "complete.obs")
-#positive correllation between relationship satisfaction and intention to have children in the next 3 years.
+
+
 #1.2
 
 # heat map, sat3 on x axis, frt69 on y axis
-# I allready got. this runnning somehow but wanted to improve it and now nothing works ... :/ I really do not understand what I fucked up here... My Interpretation relys on the previous results
 
-data%>%
-  ggplot(aes(x = data$sat3, y = data$frt69)) +
+dataheatmap <- data %>%
+  drop_na(sat3, frt69) %>%
+  count(sat3, frt69) %>%
+  mutate(percentage= n/sum(n))
+
+
+  ggplot(dataheatmap, aes(x = sat3, y = frt69, fill= percentage)) +
   geom_tile() + 
   theme_minimal()
+```
 
-
-#1.3
-#I think that is due to happy couples not wanting to change any of their current situation since they are allready fulfilled. Maybe the unhappier families simply are unhappy because they want ti have children but do not have any yet and will be happier as soon as they have children. 
+##1.3
+I think that is due to happy couples not wanting to change any of their current situation since they are allready fulfilled. Maybe the unhappier families simply are unhappy because they want ti have children but do not have any yet and will be happier as soon as they have children. 
 
 #1.4
 
-# Histpgram to get an overview of data
+Histogram to get an overview of data:
+Answer: We have the statistical problem that most people see themselves as very happy or do not want to answer the question. This leads to a very skewed distribution of the data and makes it hard to find a correlation between the two variables.
+
+
+```{r histogram, echo=FALSE}
 hist(data$sat3)
+```
 
-#We have the statistical problem that most people see themselves as very happy or do not want to answer the question. This leads to a very skewed distribution of the data and makes it hard to find a correlation between the two variables.
 
-#1.5
-#corellation between sat3 and frt69 with controll of age
+
+#Corellation between sat3 and frt69 with controll of age
+
+
+
+```{r CorrelationControll, echo=FALSE}
 vars <- c("sat3", "frt69", "age")
 
 data_for_cor <- 
@@ -68,21 +82,39 @@ data_for_cor <-
 
 pcor.test(data_for_cor$sat3, data_for_cor$frt69, (2026 - data_for_cor$age), method = "pearson")
 
+
+``` 
 #1.6
 
 
-```
+## Task 2
+```{r Task2, echo=FALSE}
+ datatask2 <- data %>%
+ mutate(across(c(val1i3, val1i5),~replace(.x, .x<0, NA))) %>%
+   group_by(east)
 
-##Task 2
-```{r Task2}
- data <- data %>%
- mutate(
-   across(c(val1i3, val1i5),~replace(.x, .x<0, NA)))
-
-ggplot(data, aes(x = east, y = sat3)) +
-  geom_boxplot() +
-  theme_minimal()
-
+datatask2 %>%
+  summarise(
+    mean_val1i3 = mean(val1i3, na.rm = TRUE),
+    mean_val1i5 = mean(val1i5, na.rm = TRUE)
+  ) %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = F)
 
 ``` 
+
+## Task 2.2
+
+```{r ViolinPlot, echo=FALSE}
+
+
+plot <- ggplot(datatask2, aes(x = factor(east), y = val1i3)) +
+  geom_violin(trim = FALSE, fill = "lightblue") +
+  labs(x = "East (0=West, 1=East)", y = "val1i3") +
+  theme_minimal()
+
+plot
+
+```
+
 
