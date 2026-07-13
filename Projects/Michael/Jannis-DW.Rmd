@@ -15,6 +15,7 @@ library(kableExtra)
 library(ppcor)
 
 data <- read_csv("FReDA_panel_4waves_long_labeled.csv.zip")
+head(data)
 ```
 
 ## Task 1: Analysis of Reasons for the low Fertility Rate
@@ -122,7 +123,11 @@ pcor.test(data_for_cor2$sat3, data_for_cor2$frt69, data_for_cor2[, c("age", "nki
 ?pcor.test()
 ```
 
-## Task 2
+### Task 2
+
+Task: Check for differences in the perception of what a good relationship looks like.
+
+Answer: People in former West Germany have more conservative viewpoints on thei relationships.
 ```{r Task2, echo=FALSE}
  datatask2 <- data %>%
  mutate(across(c(val1i3, val1i5),~replace(.x, .x<0, NA))) %>%
@@ -140,8 +145,12 @@ datatask2 %>%
 
 ## Task 2.2
 
+Task: Create a violin plot, summarizing the differences of East and West Germany in one plot by using faceting.
+
 ```{r ViolinPlot, echo=FALSE}
 
+datatask2 %>%
+  drop_na(val1i3, east)
 
 plot <- ggplot(datatask2, aes(x = factor(east), y = val1i3)) +
   geom_violin(trim = FALSE, fill = "lightblue") +
@@ -149,7 +158,6 @@ plot <- ggplot(datatask2, aes(x = factor(east), y = val1i3)) +
   theme_minimal()
 
 plot
-
 ```
 
 

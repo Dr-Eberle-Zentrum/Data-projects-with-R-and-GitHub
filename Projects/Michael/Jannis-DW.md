@@ -67,8 +67,13 @@ duration
     ##    estimate      p.value statistic    n gp  Method
     ## 1 0.1057409 1.774588e-14  7.687956 5232  3 pearson
 
-## Task 2
+### Task 2
 
+Task: Check for differences in the perception of what a good
+relationship looks like.
+
+Answer: People in former West Germany have more conservative viewpoints
+on thei relationships.
 <table class="table table-striped table-hover table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -121,6 +126,31 @@ mean\_val1i5
 </table>
 
 ## Task 2.2
+
+Task: Create a violin plot, summarizing the differences of East and West
+Germany in one plot by using faceting.
+
+    ## # A tibble: 36,725 × 203
+    ## # Groups:   east [3]
+    ##          id welle     pid sample  sat3  pa27   sd3  sd40  sd43  sd11 sd7e1 pstat
+    ##       <dbl> <dbl>   <dbl>  <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+    ##  1   1.00e9     1  1.00e9     10    10    NA     1    NA    NA    NA    NA     1
+    ##  2   1.00e9     1 NA          10    NA    NA     2    -3    NA    NA    -3     0
+    ##  3   1.00e9     1  1.00e9     10    10    NA     1     1    NA    NA     2     1
+    ##  4   1.00e9     1 NA          10    NA    NA     2    -3    NA    NA    -3     0
+    ##  5   1.00e9     1 NA          10    NA    NA     2    NA    NA    NA    NA     0
+    ##  6   1.00e9     1  1.00e9     10     7    NA     1    NA    NA    NA    NA     1
+    ##  7   1.00e9     1  1.00e9     10     3    NA     1     1    NA    NA     2     1
+    ##  8   1.00e9     1  1.00e9     10     8    NA     1    NA    NA    NA    NA     1
+    ##  9   1.00e9     1  1.00e9     10     8    NA     1    NA    NA    NA    NA     1
+    ## 10   1.00e9     1  1.00e9     10    10    NA     1     1    NA    NA     1     1
+    ## # ℹ 36,715 more rows
+    ## # ℹ 191 more variables: separation <dbl>, relstat <dbl>, reldur <dbl>,
+    ## #   sd5ezby <dbl>, pa64 <dbl>, pa65 <dbl>, pa66 <dbl>, pa68i1 <dbl>,
+    ## #   pa17i1 <dbl>, pa17i2 <dbl>, pa17i4 <dbl>, pa17i5 <dbl>, pa17i6 <dbl>,
+    ## #   pa17i8 <dbl>, pa21i7 <dbl>, pa21i8 <dbl>, pa21i9 <dbl>, pa21i10 <dbl>,
+    ## #   pa21i11 <dbl>, pa21i12 <dbl>, pa21i13 <dbl>, pa22ri1 <dbl>, pa22ri9 <dbl>,
+    ## #   pa22ri10 <dbl>, pa22ri11 <dbl>, pa22ri12 <dbl>, pa22ri8 <dbl>, …
 
     ## Warning: Removed 71196 rows containing non-finite outside the scale range
     ## (`stat_ydensity()`).
