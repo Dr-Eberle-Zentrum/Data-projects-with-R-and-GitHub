@@ -101,8 +101,7 @@ directors with the most movies).
 
 ![](Chaoicci_files/figure-markdown_strict/plot-with-actor-1.png)
 
-![](Chaoicci_files/figure-markdown_strict/plot-rating-and-money-1.png)
+![](Chaoicci_files/figure-markdown_strict/density-plot-1.png)
 
-This plot is a bit harder to interpret. There seems to be some
-(positive) correlation, however, most movies didn’t make that much money
-compared to the other movies.
+The colors indicate the density: yellow - more movies, purple - fewer
+movies.
