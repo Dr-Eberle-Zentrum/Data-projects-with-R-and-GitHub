@@ -147,17 +147,23 @@ datatask2 %>%
 
 Task: Create a violin plot, summarizing the differences of East and West Germany in one plot by using faceting.
 
-```{r ViolinPlot, echo=FALSE}
+```{r ViolinPlot, echo=FALSE, message=FALSE, warning=FALSE}
 
-datatask2 %>%
+datatask3 <- datatask2 %>%
   drop_na(val1i3, east)
 
-plot <- ggplot(datatask2, aes(x = factor(east), y = val1i3)) +
+vars <- c("val1i3", "val1i5")
+
+plot <- ggplot(datatask3, aes(x = factor(east), y = val1i3)) +
   geom_violin(trim = FALSE, fill = "lightblue") +
   labs(x = "East (0=West, 1=East)", y = "val1i3") +
+  facet_wrap(~vars)
   theme_minimal()
-
-plot
+  
+plot + facet_grid()
 ```
+
+
+
 
 
