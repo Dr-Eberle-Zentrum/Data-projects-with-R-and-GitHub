@@ -17,8 +17,6 @@ The pre-intervention measurement is represented by the columns “i1t0” to
 “i5t0”, while the post-intervention measurement is represented by the
 columns “i1” to “i5”.
 
-    ## [1] TRUE
-
 <table>
 <caption>Dataset</caption>
 <colgroup>
@@ -323,9 +321,10 @@ From plot, we can conclude that there is no obvious difference between
 two interventions, but the “Suger shock” intervention seems to have a
 slightly better effect on reducing children’s consumption of sweets.
 ![](Wenjing_solution_files/figure-markdown_strict/Data_Visualization-1.png)
-2. We need to make a plot to explore whether **motivation** moderates
-the relationship between the **intervention** and the QIpost in quality
-(for each type) and control for the initial QIpre.
+
+1.  We need to make a plot to explore whether **motivation** moderates
+    the relationship between the **intervention** and the QIpost in
+    quality (for each type) and control for the initial QIpre.
 
 We should use
 `model2 <- lmer(QIpost ~ intervention_type * motivaton + QIpre, data = data)`.
