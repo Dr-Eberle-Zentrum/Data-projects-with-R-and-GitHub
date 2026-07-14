@@ -13,8 +13,6 @@
         Kingdoms](#b-visualise-difference-between-kingdoms)
     -   [3c) Visualise Most and Least Affected
         Classes](#c-visualise-most-and-least-affected-classes)
--   [Summary](#summary)
-    -   [⚠️ Important Notes](#important-notes)
 
 # Introduction
 
@@ -62,28 +60,16 @@ First 6 rows of the raw dataset
 **Explanation:** The table shows for each class the number of species in
 each IUCN category: `EX` (Extinct), `EW` (Extinct in the Wild), `CR`
 (Critically Endangered), `EN` (Endangered), `VU` (Vulnerable), `NT`
-(Near Threatened), `LC` (Least Concern), and `DD` (Data Deficient). The
-`Total` column gives the total number of assessed species for that
-class.
-
-**Note:** The columns `CR(PE)` and `CR(PEW)` represent “Possibly
-Extinct” and “Possibly Extinct in the Wild” – these are *not* official
-IUCN categories and will be removed later.
+(Near Threatened), `LC` (Least Concern), and `DD` (Data Deficient).
 
 ------------------------------------------------------------------------
 
 ## 1c) Add Kingdom Data
 
-The original dataset does not contain a `Kingdom` column. Instead of
-using a static lookup table (which breaks when the dataset updates), we
-use a **dynamic, order‑based method**:
+The original dataset does not contain a `Kingdom` column.
 
--   The dataset is sorted alphabetically within each Kingdom.
--   We identify Kingdom boundaries by detecting when a class name is
-    **alphabetically “smaller”** than the previous class name (using
-    `lag()`).
--   We assign a Kingdom ID using `cumsum()`, then map IDs to Kingdom
-    names.
+So we assign a Kingdom ID using `cumsum()`, then map IDs to Kingdom
+names.
 
 **First rows after adding Kingdom:**
 
@@ -99,8 +85,7 @@ use a **dynamic, order‑based method**:
 First 6 rows with Kingdom column added
 
 **Explanation:** The `Kingdom` column now tells us which kingdom each
-class belongs to. This allows us to group and compare species across the
-major kingdoms.
+class belongs to.
 
 ------------------------------------------------------------------------
 
@@ -188,8 +173,7 @@ Relative amounts (percentages of Total)
 
 **Explanation:** In this table, each value shows the percentage of
 species in that category relative to the total number of species for
-that class. The `Total` column is always 100. This makes it easy to
-compare proportions across classes.
+that class.
 
 ------------------------------------------------------------------------
 
@@ -210,14 +194,6 @@ in **orange** - **Unaffected / No data:**
 **Interpretation:** The plot shows the proportion of species in each
 status category for each Kingdom.
 
--   **Animalia** and **Plantae** have relatively high proportions of
-    “Affected” species.
--   **Fungi** and **Chromista** have very few species in the extinct or
-    affected categories – largely because fewer species have been
-    assessed.
--   The total number of assessed species (`n = ...`) is shown above each
-    bar.
-
 ------------------------------------------------------------------------
 
 ## 3c) Visualise Most and Least Affected Classes
@@ -227,49 +203,6 @@ species within a class. This plot shows the **10 most affected** and the
 **10 least affected** classes, colour‑coded by Kingdom.
 
 <img src="Michael_files/figure-markdown_github/class_plot-1.png" style="display: block; margin: auto;" />
-
-**Interpretation:**
-
--   **Most affected classes:** **AMPHIBIA** (Amphibians) and
-    **ACTINOPTERYGII** (Ray‑finned fishes) have the highest percentages
-    of Critically Endangered species. Many of the most affected classes
-    belong to **Animalia**.
--   **Least affected classes:** The least affected classes (with small
-    but non‑zero CR percentages) include **CHAROPHYCEAE** (Charophytes)
-    and **POLYTRICHOPSIDA** (a moss class), both belonging to
-    **Plantae**. However, the low numbers often reflect limited
-    assessments rather than genuinely low threat levels.
-
-------------------------------------------------------------------------
-
-# Summary
-
--   **Data import** and **Kingdom enrichment** were successful using a
-    dynamic, order‑based method that is robust to future updates.
--   **Cleaning** removed non‑official categories and consolidated the
-    Near Threatened classification.
--   The **percentage table** (`redlist_pct`) allows direct comparison of
-    relative conservation statuses across classes.
--   **Plot 1 (Kingdom comparison)** shows that the majority of assessed
-    species are in the “Unaffected / No data” category, but **Animalia**
-    and **Plantae** have notable affected proportions.
--   **Plot 2 (Class comparison)** highlights **Amphibia** and
-    **ACTINOPTERYGII** as the most affected classes.
-
-------------------------------------------------------------------------
-
-## ⚠️ Important Notes
-
-1.  **File path:** The CSV file is loaded from
-    `dependencies/SpeciesByKingdomAndClass.csv` – this is portable
-    across systems.
-2.  **Data limitations:** The IUCN Red List data is incomplete for many
-    groups. Fungi and Chromista have very few assessed species, so the
-    percentages may not reflect true global patterns.
-3.  **Plots:** The plots are rendered as PNG images in the output
-    folder.
-
-<!-- -->
 
     ## R version 4.4.0 (2024-04-24)
     ## Platform: aarch64-apple-darwin20
