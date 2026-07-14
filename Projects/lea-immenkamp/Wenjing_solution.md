@@ -1,8 +1,8 @@
-# Topic: The impact of various deterrents on children’s consumption of sweets-from Lea
+# Topic: The impact of various deterrents on children’s consumption of sweets–From Lea
 
 ## Load the file (btw. remove the missing values)
 
-### quick overview of the data
+### Get Quick Overview of the data
 
 1.The file consists of two sheets: “Intervention data” and
 “questionaire”.
@@ -17,30 +17,28 @@ The pre-intervention measurement is represented by the columns “i1t0” to
 “i5t0”, while the post-intervention measurement is represented by the
 columns “i1” to “i5”.
 
-    file.exists("data.xlsx")
-
     ## [1] TRUE
 
-    Intervention_data <- read_excel("data.xlsx",  sheet = "Intervention data") %>% drop_na()
-    #revise: "glimpse()" is better to preview the data.
-    head(kable(Intervention_data))
+    ## # A tibble: 6 × 14
+    ##   child_id Intervention  i1t0  i2t0  i3t0  i4t0  i5t0    i1    i2    i3    i4
+    ##      <dbl>        <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+    ## 1        1            1     0     0     0     0     0     0     1     1     1
+    ## 2        1            2     0     1     0     0     0     1     1     1     0
+    ## 3        1            1     0     0     0     1     1     1     1     1     1
+    ## 4        1            1     1     1     0     0     0     0     1     0     0
+    ## 5        1            2     0     0     1     1     0     1     1     1     1
+    ## 6        1            2     0     1     0     1     0     1     1     0     1
+    ## # ℹ 3 more variables: i5 <dbl>, Motivation <dbl>, Helpfulness <dbl>
 
-    ## [1] "| child_id| Intervention| i1t0| i2t0| i3t0| i4t0| i5t0| i1| i2| i3| i4| i5| Motivation| Helpfulness|"
-    ## [2] "|--------:|------------:|----:|----:|----:|----:|----:|--:|--:|--:|--:|--:|----------:|-----------:|"
-    ## [3] "|        1|            1|    0|    0|    0|    0|    0|  0|  1|  1|  1|  1|          3|           4|"
-    ## [4] "|        1|            2|    0|    1|    0|    0|    0|  1|  1|  1|  0|  0|          2|           4|"
-    ## [5] "|        1|            1|    0|    0|    0|    1|    1|  1|  1|  1|  1|  1|          3|           4|"
-    ## [6] "|        1|            1|    1|    1|    0|    0|    0|  0|  1|  0|  0|  0|          3|           4|"
-
-    Q_data <- read_excel("data.xlsx", sheet = "questionaire") %>% drop_na()
-    head(kable(Q_data))
-
-    ## [1] "| id child| id age| sweet1| sweet2| sweet3| sweet4|"
-    ## [2] "|--------:|------:|------:|------:|------:|------:|"
-    ## [3] "|        1|     11|      4|      4|      3|      1|"
-    ## [4] "|        2|      8|      5|      3|      4|      1|"
-    ## [5] "|        3|     11|      5|      5|      4|      1|"
-    ## [6] "|        4|      9|      5|      5|      1|      5|"
+    ## # A tibble: 6 × 6
+    ##   `id child` `id age` sweet1 sweet2 sweet3 sweet4
+    ##        <dbl>    <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
+    ## 1          1       11      4      4      3      1
+    ## 2          2        8      5      3      4      1
+    ## 3          3       11      5      5      4      1
+    ## 4          4        9      5      5      1      5
+    ## 5          5       13      5      5      5      2
+    ## 6          6       12      4      4      2      4
 
 ## Data cleaning
 
@@ -51,19 +49,17 @@ columns “i1” to “i5”.
 
 <!-- -->
 
-    #Intervention_data$QIpre <- rowSums(Intervention_data[,c("i1t0","i2t0","i3t0","i4t0","i5t0")])
-    #Intervention_data$QIpost <- rowSums(Intervention_data[,c("i1","i2","i3","i4","i5")])
-    #revise: in a more "tidyverse" style
-
-    Intervention_data <- Intervention_data %>% mutate(QIpre=rowSums(across(c(i1t0:i5t0))),QIpost=rowSums(across(c(i1:i5))))
-    head(kable(Intervention_data))
-
-    ## [1] "| child_id| Intervention| i1t0| i2t0| i3t0| i4t0| i5t0| i1| i2| i3| i4| i5| Motivation| Helpfulness| QIpre| QIpost|"
-    ## [2] "|--------:|------------:|----:|----:|----:|----:|----:|--:|--:|--:|--:|--:|----------:|-----------:|-----:|------:|"
-    ## [3] "|        1|            1|    0|    0|    0|    0|    0|  0|  1|  1|  1|  1|          3|           4|     0|      4|"
-    ## [4] "|        1|            2|    0|    1|    0|    0|    0|  1|  1|  1|  0|  0|          2|           4|     1|      3|"
-    ## [5] "|        1|            1|    0|    0|    0|    1|    1|  1|  1|  1|  1|  1|          3|           4|     2|      5|"
-    ## [6] "|        1|            1|    1|    1|    0|    0|    0|  0|  1|  0|  0|  0|          3|           4|     2|      1|"
+    ## # A tibble: 6 × 16
+    ##   child_id Intervention  i1t0  i2t0  i3t0  i4t0  i5t0    i1    i2    i3    i4
+    ##      <dbl>        <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+    ## 1        1            1     0     0     0     0     0     0     1     1     1
+    ## 2        1            2     0     1     0     0     0     1     1     1     0
+    ## 3        1            1     0     0     0     1     1     1     1     1     1
+    ## 4        1            1     1     1     0     0     0     0     1     0     0
+    ## 5        1            2     0     0     1     1     0     1     1     1     1
+    ## 6        1            2     0     1     0     1     0     1     1     0     1
+    ## # ℹ 5 more variables: i5 <dbl>, Motivation <dbl>, Helpfulness <dbl>,
+    ## #   QIpre <dbl>, QIpost <dbl>
 
 - Calculating mean of sweet to get children’s attitude toward sweet
   consumption, and then merge it with Intervention\_data by “child\_id”
@@ -71,20 +67,17 @@ columns “i1” to “i5”.
 
 <!-- -->
 
-    # Calculating mean of sweet
-    df_withmean <- Q_data %>% 
-      mutate(sweet_mean=pmap_dbl(select(.,sweet1,sweet2,sweet3,sweet4),~mean(c(...)))) %>%
-      select("id child","id age",sweet_mean) %>%
-      rename("child_id"="id child") %>%
-      right_join(Intervention_data,by="child_id")
-    head(kable(df_withmean))
-
-    ## [1] "| child_id| id age| sweet_mean| Intervention| i1t0| i2t0| i3t0| i4t0| i5t0| i1| i2| i3| i4| i5| Motivation| Helpfulness| QIpre| QIpost|"
-    ## [2] "|--------:|------:|----------:|------------:|----:|----:|----:|----:|----:|--:|--:|--:|--:|--:|----------:|-----------:|-----:|------:|"
-    ## [3] "|        1|     11|       3.00|            1|    0|    0|    0|    0|    0|  0|  1|  1|  1|  1|          3|           4|     0|      4|"
-    ## [4] "|        1|     11|       3.00|            2|    0|    1|    0|    0|    0|  1|  1|  1|  0|  0|          2|           4|     1|      3|"
-    ## [5] "|        1|     11|       3.00|            1|    0|    0|    0|    1|    1|  1|  1|  1|  1|  1|          3|           4|     2|      5|"
-    ## [6] "|        1|     11|       3.00|            1|    1|    1|    0|    0|    0|  0|  1|  0|  0|  0|          3|           4|     2|      1|"
+    ## # A tibble: 6 × 18
+    ##   child_id `id age` sweet_mean Intervention  i1t0  i2t0  i3t0  i4t0  i5t0    i1
+    ##      <dbl>    <dbl>      <dbl>        <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+    ## 1        1       11          3            1     0     0     0     0     0     0
+    ## 2        1       11          3            2     0     1     0     0     0     1
+    ## 3        1       11          3            1     0     0     0     1     1     1
+    ## 4        1       11          3            1     1     1     0     0     0     0
+    ## 5        1       11          3            2     0     0     1     1     0     1
+    ## 6        1       11          3            2     0     1     0     1     0     1
+    ## # ℹ 8 more variables: i2 <dbl>, i3 <dbl>, i4 <dbl>, i5 <dbl>, Motivation <dbl>,
+    ## #   Helpfulness <dbl>, QIpre <dbl>, QIpost <dbl>
 
 ## Data visualization
 
@@ -96,58 +89,34 @@ columns “i1” to “i5”.
 
 <!-- -->
 
-    plot_data <-df_withmean  %>% select(child_id, Intervention, QIpre,QIpost) %>%group_by(child_id, Intervention) %>%
-    mutate(trial_id = row_number()) %>%
-    ungroup() %>%
-    mutate(pair_id = paste(child_id, Intervention, trial_id, sep = "_")) %>% pivot_longer(cols = c(QIpre,QIpost),names_to = "time",values_to = "score") %>% mutate(
-        time = factor(time, 
-                      levels = c("QIpre","QIpost"))
-      )  
-    head(kable(plot_data))
-
-    ## [1] "| child_id| Intervention| trial_id|pair_id |time   | score|"
-    ## [2] "|--------:|------------:|--------:|:-------|:------|-----:|"
-    ## [3] "|        1|            1|        1|1_1_1   |QIpre  |     0|"
-    ## [4] "|        1|            1|        1|1_1_1   |QIpost |     4|"
-    ## [5] "|        1|            2|        1|1_2_1   |QIpre  |     1|"
-    ## [6] "|        1|            2|        1|1_2_1   |QIpost |     3|"
-
-    # here I keep plot_data, because i need to used it to create "summary_data". and they will be used separately in the next step.
+    ## # A tibble: 6 × 6
+    ##   child_id Intervention trial_id pair_id time   score
+    ##      <dbl>        <dbl>    <int> <chr>   <fct>  <dbl>
+    ## 1        1            1        1 1_1_1   QIpre      0
+    ## 2        1            1        1 1_1_1   QIpost     4
+    ## 3        1            2        1 1_2_1   QIpre      1
+    ## 4        1            2        1 1_2_1   QIpost     3
+    ## 5        1            1        2 1_1_2   QIpre      2
+    ## 6        1            1        2 1_1_2   QIpost     5
 
 - the mean score of all participants in each intervention group to
   present tendency
 
 <!-- -->
 
-    summary_data <- plot_data %>% group_by(child_id,Intervention,time) %>% summarise(mean=mean(score,na.rm=TRUE), .groups = "drop") 
-    head(kable(summary_data))
-
-    ## [1] "| child_id| Intervention|time   |      mean|"
-    ## [2] "|--------:|------------:|:------|---------:|"
-    ## [3] "|        1|            1|QIpre  | 1.3333333|"
-    ## [4] "|        1|            1|QIpost | 3.3333333|"
-    ## [5] "|        1|            2|QIpre  | 1.6666667|"
-    ## [6] "|        1|            2|QIpost | 3.3333333|"
+    ## # A tibble: 6 × 4
+    ##   child_id Intervention time    mean
+    ##      <dbl>        <dbl> <fct>  <dbl>
+    ## 1        1            1 QIpre   1.33
+    ## 2        1            1 QIpost  3.33
+    ## 3        1            2 QIpre   1.67
+    ## 4        1            2 QIpost  3.33
+    ## 5        2            1 QIpre   1.33
+    ## 6        2            1 QIpost  3.67
 
 From plot, we can conclude that there is no obvious difference between
 two interventions, but the “Suger shock” intervention seems to have a
 slightly better effect on reducing children’s consumption of sweets.
-
-    ggplot() +
-      geom_line(data=plot_data,alpha = 0.2, linewidth = 1.8,aes(x=time,y=score,group = pair_id)) +
-      geom_point(alpha = 0.4, size = 1.2) +geom_line(data=summary_data,aes(x=time,y=mean,group=child_id,colour=factor(child_id)),linewidth=1.5)+geom_point(data=summary_data,aes(x=time,y=mean),color="red",size=2)+facet_wrap(~ Intervention,
-        ncol = 2,
-        labeller = labeller(Intervention = c(`1` = "Reality Check",
-                                             `2` = "Sugar Shock"))
-      ) +
-      scale_y_continuous(breaks = 0:5, limits = c(0, 5)) +scale_color_viridis_d()+
-      labs(x = "Intervention type", y = "Behavioral Indicator",legend="Child Id") +
-      theme_minimal(base_size = 13) +
-      theme(
-        strip.text = element_text(hjust = 0.5, face = "bold"),
-        legend.position = "bottom"
-      )
-
 ![](Wenjing_solution_files/figure-markdown_strict/Data_Visualization-1.png)
 2. We need to make a plot to explore whether **motivation** moderates
 the relationship between the **intervention** and the QIpost in quality
@@ -165,9 +134,6 @@ for the variability between children.
 
 The random intercept variance was near 0 which indicates minimal between
 participants variablity after controlling baseline quality.
-
-    model_lmer <- lmer(QIpost ~ Intervention * Motivation + QIpre + (1 | child_id), data = df_withmean)
-    summary(model_lmer)
 
     ## Linear mixed model fit by REML ['lmerMod']
     ## Formula: QIpost ~ Intervention * Motivation + QIpre + (1 | child_id)
@@ -202,9 +168,6 @@ participants variablity after controlling baseline quality.
     ## optimizer (nloptwrap) convergence code: 0 (OK)
     ## boundary (singular) fit: see help('isSingular')
 
-    model <- lm(QIpost ~ Intervention * Motivation + QIpre, data = df_withmean) 
-    summary(model)
-
     ## 
     ## Call:
     ## lm(formula = QIpost ~ Intervention * Motivation + QIpre, data = df_withmean)
@@ -226,11 +189,6 @@ participants variablity after controlling baseline quality.
     ## Residual standard error: 1.236 on 114 degrees of freedom
     ## Multiple R-squared:  0.08693,    Adjusted R-squared:  0.0549 
     ## F-statistic: 2.713 on 4 and 114 DF,  p-value: 0.03339
-
-    #use a linear plot with the motivation on the x-Axis, QIpost quality on the y-axis and one line (colour) for each Intervention #type. It should look like an interaction plot in the end
-
-
-    model %>% plotmod(x=Motivation,w=Intervention)+labs(y="QIpost quality",title="Motivation effect")
 
 ![](Wenjing_solution_files/figure-markdown_strict/plot_data_sencond_plot-1.png)
 Conclusion: The interaction between intervention type and motivation was

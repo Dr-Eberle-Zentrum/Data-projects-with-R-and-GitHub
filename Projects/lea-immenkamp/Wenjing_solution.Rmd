@@ -4,10 +4,10 @@ author: "Wenjing"
 date: "2026-06-30"
 output: md_document
 ---
-# Topic: The impact of various deterrents on children’s consumption of sweets-from Lea
+# Topic: The impact of various deterrents on children’s consumption of sweets--From Lea
 
 ```{r setup, echo=FALSE, message=FALSE, warning=FALSE}
-knitr::opts_chunk$set(include = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 
 #install.packages("readr")
 #install.packages("lme4")
@@ -23,7 +23,7 @@ library(knitr)
 
 ## Load the file (btw. remove the missing values)
 
-### quick overview of the data
+### Get Quick Overview of the data
 
 1.The file consists of two sheets: "Intervention data" and "questionaire". 
 
@@ -37,11 +37,11 @@ file.exists("data.xlsx")
 
 Intervention_data <- read_excel("data.xlsx",  sheet = "Intervention data") %>% drop_na()
 #revise: "glimpse()" is better to preview the data.
-head(kable(Intervention_data))
+head(Intervention_data)
 
 
 Q_data <- read_excel("data.xlsx", sheet = "questionaire") %>% drop_na()
-head(kable(Q_data))
+head(Q_data)
 
 ```
 
@@ -56,7 +56,7 @@ head(kable(Q_data))
 #revise: in a more "tidyverse" style
 
 Intervention_data <- Intervention_data %>% mutate(QIpre=rowSums(across(c(i1t0:i5t0))),QIpost=rowSums(across(c(i1:i5))))
-head(kable(Intervention_data))
+head(Intervention_data)
 
 ```
 
@@ -68,7 +68,7 @@ df_withmean <- Q_data %>%
   select("id child","id age",sweet_mean) %>%
   rename("child_id"="id child") %>%
   right_join(Intervention_data,by="child_id")
-head(kable(df_withmean))
+head(df_withmean)
 
 ```
 
@@ -86,7 +86,7 @@ mutate(pair_id = paste(child_id, Intervention, trial_id, sep = "_")) %>% pivot_l
     time = factor(time, 
                   levels = c("QIpre","QIpost"))
   )  
-head(kable(plot_data))
+head(plot_data)
 
 # here I keep plot_data, because i need to used it to create "summary_data". and they will be used separately in the next step.
 ```
@@ -95,7 +95,7 @@ head(kable(plot_data))
 ```{r plot1_data_summarise}
  
 summary_data <- plot_data %>% group_by(child_id,Intervention,time) %>% summarise(mean=mean(score,na.rm=TRUE), .groups = "drop") 
-head(kable(summary_data))
+head(summary_data)
 ```
   
 From plot, we can conclude that there is no obvious difference between two interventions, but the "Suger shock" intervention seems to have a slightly better effect on reducing children's consumption of sweets. 
