@@ -37,11 +37,17 @@ file.exists("data.xlsx")
 
 Intervention_data <- read_excel("data.xlsx",  sheet = "Intervention data") %>% drop_na()
 #revise: "glimpse()" is better to preview the data.
-head(Intervention_data)
+knitr::kable(
+  Intervention_data[1:5, ],
+  caption = "Dataset"
+)
 
 
 Q_data <- read_excel("data.xlsx", sheet = "questionaire") %>% drop_na()
-head(Q_data)
+knitr::kable(
+  Q_data[1:5, ],
+  caption = "Dataset"
+)
 
 ```
 
@@ -49,7 +55,7 @@ head(Q_data)
 - Calculating the total value before intervention `QIpre`
 - Calculating the total value before intervention `QIpost`
  - using `across()` and `c()` to select the columns in a more "tidyverse" style
-```{r QIpre_and_QIpost }
+```{r QIpre_and_QIpost , include=FALSE,message=FALSE, warning=FALSE}
 
 #Intervention_data$QIpre <- rowSums(Intervention_data[,c("i1t0","i2t0","i3t0","i4t0","i5t0")])
 #Intervention_data$QIpost <- rowSums(Intervention_data[,c("i1","i2","i3","i4","i5")])
@@ -68,7 +74,7 @@ df_withmean <- Q_data %>%
   select("id child","id age",sweet_mean) %>%
   rename("child_id"="id child") %>%
   right_join(Intervention_data,by="child_id")
-head(df_withmean)
+
 
 ```
 
@@ -86,7 +92,10 @@ mutate(pair_id = paste(child_id, Intervention, trial_id, sep = "_")) %>% pivot_l
     time = factor(time, 
                   levels = c("QIpre","QIpost"))
   )  
-head(plot_data)
+knitr::kable(
+  plot_data[1:5, ],
+  caption = "Dataset"
+)
 
 # here I keep plot_data, because i need to used it to create "summary_data". and they will be used separately in the next step.
 ```
@@ -95,7 +104,10 @@ head(plot_data)
 ```{r plot1_data_summarise}
  
 summary_data <- plot_data %>% group_by(child_id,Intervention,time) %>% summarise(mean=mean(score,na.rm=TRUE), .groups = "drop") 
-head(summary_data)
+knitr::kable(
+  summary_data[1:5, ],
+  caption = "Dataset"
+)
 ```
   
 From plot, we can conclude that there is no obvious difference between two interventions, but the "Suger shock" intervention seems to have a slightly better effect on reducing children's consumption of sweets. 

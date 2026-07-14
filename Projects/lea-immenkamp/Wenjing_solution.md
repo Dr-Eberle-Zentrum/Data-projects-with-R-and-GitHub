@@ -19,65 +19,194 @@ columns “i1” to “i5”.
 
     ## [1] TRUE
 
-    ## # A tibble: 6 × 14
-    ##   child_id Intervention  i1t0  i2t0  i3t0  i4t0  i5t0    i1    i2    i3    i4
-    ##      <dbl>        <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-    ## 1        1            1     0     0     0     0     0     0     1     1     1
-    ## 2        1            2     0     1     0     0     0     1     1     1     0
-    ## 3        1            1     0     0     0     1     1     1     1     1     1
-    ## 4        1            1     1     1     0     0     0     0     1     0     0
-    ## 5        1            2     0     0     1     1     0     1     1     1     1
-    ## 6        1            2     0     1     0     1     0     1     1     0     1
-    ## # ℹ 3 more variables: i5 <dbl>, Motivation <dbl>, Helpfulness <dbl>
+<table>
+<caption>Dataset</caption>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 15%" />
+<col style="width: 5%" />
+<col style="width: 5%" />
+<col style="width: 5%" />
+<col style="width: 5%" />
+<col style="width: 5%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 12%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: right;">child_id</th>
+<th style="text-align: right;">Intervention</th>
+<th style="text-align: right;">i1t0</th>
+<th style="text-align: right;">i2t0</th>
+<th style="text-align: right;">i3t0</th>
+<th style="text-align: right;">i4t0</th>
+<th style="text-align: right;">i5t0</th>
+<th style="text-align: right;">i1</th>
+<th style="text-align: right;">i2</th>
+<th style="text-align: right;">i3</th>
+<th style="text-align: right;">i4</th>
+<th style="text-align: right;">i5</th>
+<th style="text-align: right;">Motivation</th>
+<th style="text-align: right;">Helpfulness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3</td>
+</tr>
+</tbody>
+</table>
 
-    ## # A tibble: 6 × 6
-    ##   `id child` `id age` sweet1 sweet2 sweet3 sweet4
-    ##        <dbl>    <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
-    ## 1          1       11      4      4      3      1
-    ## 2          2        8      5      3      4      1
-    ## 3          3       11      5      5      4      1
-    ## 4          4        9      5      5      1      5
-    ## 5          5       13      5      5      5      2
-    ## 6          6       12      4      4      2      4
+<table>
+<caption>Dataset</caption>
+<thead>
+<tr>
+<th style="text-align: right;">id child</th>
+<th style="text-align: right;">id age</th>
+<th style="text-align: right;">sweet1</th>
+<th style="text-align: right;">sweet2</th>
+<th style="text-align: right;">sweet3</th>
+<th style="text-align: right;">sweet4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">2</td>
+</tr>
+</tbody>
+</table>
 
 ## Data cleaning
 
 - Calculating the total value before intervention `QIpre`
+
 - Calculating the total value before intervention `QIpost`
+
 - using `across()` and `c()` to select the columns in a more “tidyverse”
   style
-
-<!-- -->
-
-    ## # A tibble: 6 × 16
-    ##   child_id Intervention  i1t0  i2t0  i3t0  i4t0  i5t0    i1    i2    i3    i4
-    ##      <dbl>        <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-    ## 1        1            1     0     0     0     0     0     0     1     1     1
-    ## 2        1            2     0     1     0     0     0     1     1     1     0
-    ## 3        1            1     0     0     0     1     1     1     1     1     1
-    ## 4        1            1     1     1     0     0     0     0     1     0     0
-    ## 5        1            2     0     0     1     1     0     1     1     1     1
-    ## 6        1            2     0     1     0     1     0     1     1     0     1
-    ## # ℹ 5 more variables: i5 <dbl>, Motivation <dbl>, Helpfulness <dbl>,
-    ## #   QIpre <dbl>, QIpost <dbl>
 
 - Calculating mean of sweet to get children’s attitude toward sweet
   consumption, and then merge it with Intervention\_data by “child\_id”
   column.
-
-<!-- -->
-
-    ## # A tibble: 6 × 18
-    ##   child_id `id age` sweet_mean Intervention  i1t0  i2t0  i3t0  i4t0  i5t0    i1
-    ##      <dbl>    <dbl>      <dbl>        <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-    ## 1        1       11          3            1     0     0     0     0     0     0
-    ## 2        1       11          3            2     0     1     0     0     0     1
-    ## 3        1       11          3            1     0     0     0     1     1     1
-    ## 4        1       11          3            1     1     1     0     0     0     0
-    ## 5        1       11          3            2     0     0     1     1     0     1
-    ## 6        1       11          3            2     0     1     0     1     0     1
-    ## # ℹ 8 more variables: i2 <dbl>, i3 <dbl>, i4 <dbl>, i5 <dbl>, Motivation <dbl>,
-    ## #   Helpfulness <dbl>, QIpre <dbl>, QIpost <dbl>
 
 ## Data visualization
 
@@ -87,32 +216,108 @@ columns “i1” to “i5”.
 
 - the individual QIpre & QIpost scores
 
-<!-- -->
-
-    ## # A tibble: 6 × 6
-    ##   child_id Intervention trial_id pair_id time   score
-    ##      <dbl>        <dbl>    <int> <chr>   <fct>  <dbl>
-    ## 1        1            1        1 1_1_1   QIpre      0
-    ## 2        1            1        1 1_1_1   QIpost     4
-    ## 3        1            2        1 1_2_1   QIpre      1
-    ## 4        1            2        1 1_2_1   QIpost     3
-    ## 5        1            1        2 1_1_2   QIpre      2
-    ## 6        1            1        2 1_1_2   QIpost     5
+<table>
+<caption>Dataset</caption>
+<thead>
+<tr>
+<th style="text-align: right;">child_id</th>
+<th style="text-align: right;">Intervention</th>
+<th style="text-align: right;">trial_id</th>
+<th style="text-align: left;">pair_id</th>
+<th style="text-align: left;">time</th>
+<th style="text-align: right;">score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">1_1_1</td>
+<td style="text-align: left;">QIpre</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">1_1_1</td>
+<td style="text-align: left;">QIpost</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">1_2_1</td>
+<td style="text-align: left;">QIpre</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">1_2_1</td>
+<td style="text-align: left;">QIpost</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">1_1_2</td>
+<td style="text-align: left;">QIpre</td>
+<td style="text-align: right;">2</td>
+</tr>
+</tbody>
+</table>
 
 - the mean score of all participants in each intervention group to
   present tendency
 
-<!-- -->
-
-    ## # A tibble: 6 × 4
-    ##   child_id Intervention time    mean
-    ##      <dbl>        <dbl> <fct>  <dbl>
-    ## 1        1            1 QIpre   1.33
-    ## 2        1            1 QIpost  3.33
-    ## 3        1            2 QIpre   1.67
-    ## 4        1            2 QIpost  3.33
-    ## 5        2            1 QIpre   1.33
-    ## 6        2            1 QIpost  3.67
+<table>
+<caption>Dataset</caption>
+<thead>
+<tr>
+<th style="text-align: right;">child_id</th>
+<th style="text-align: right;">Intervention</th>
+<th style="text-align: left;">time</th>
+<th style="text-align: right;">mean</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">QIpre</td>
+<td style="text-align: right;">1.333333</td>
+</tr>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">QIpost</td>
+<td style="text-align: right;">3.333333</td>
+</tr>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">QIpre</td>
+<td style="text-align: right;">1.666667</td>
+</tr>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">QIpost</td>
+<td style="text-align: right;">3.333333</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">QIpre</td>
+<td style="text-align: right;">1.333333</td>
+</tr>
+</tbody>
+</table>
 
 From plot, we can conclude that there is no obvious difference between
 two interventions, but the “Suger shock” intervention seems to have a
