@@ -2,7 +2,7 @@
 
 ## \## Task 1: Analysis of Reasons for the low Fertility Rate
 
-### 1.1
+### Task 1.1
 
 Task: Calculate Correlation between relationship satisfaction and
 intention to have children in the next 3 years.
@@ -16,14 +16,15 @@ satisfaction and intention to have children in the next 3 years.
 
 ------------------------------------------------------------------------
 
-### 1.2
+### Task 1.2
 
 Task: Create a Heatmap to visualize the correlation between relationship
-satisfaction and intention to have children in the next 3 years.
+satisfaction (sat3) and intention to have children in the next 3 years
+(frt69).
 
 ## ![](Jannis-DW_files/figure-markdown_strict/HeatMap-1.png)
 
-### 1.3
+### Task 1.3
 
 Task: Interpretation: Why do you think that people who are satisfied
 with their relationship the most are seemingly less likely to get
@@ -37,7 +38,7 @@ they have children.
 
 ------------------------------------------------------------------------
 
-### 1.4
+### Task 1.4
 
 Task: What statistical problems do we run into?
 
@@ -48,7 +49,7 @@ data and makes it hard to find a correlation between the two variables.
 
 ## ![](Jannis-DW_files/figure-markdown_strict/histogram-1.png)
 
-### 1.5
+### Task 1.5
 
 Task: Correllation between relationship satisfaction and fertility
 intentions with control of age.
@@ -64,7 +65,7 @@ for age.
 
 ------------------------------------------------------------------------
 
-### 1.6
+### Task 1.6
 
 Task: Correllation between relationship satisfaction and fertility
 intentions with control of age, number of children and relationship
@@ -135,7 +136,7 @@ mean\_val1i5
 
 ------------------------------------------------------------------------
 
-## Task 2.2
+### Task 2.2
 
 Task: Create a violin plot, summarizing the differences of East and West
 Germany in one plot by using faceting.
