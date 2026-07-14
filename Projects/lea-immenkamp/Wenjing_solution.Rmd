@@ -1,0 +1,159 @@
+---
+title: "Wenjing_solution"
+author: "Wenjing"
+date: "2026-06-30"
+output: md_document
+---
+# Topic: The impact of various deterrents on children’s consumption of sweets--From Lea
+
+```{r setup, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+
+#install.packages("readr")
+#install.packages("lme4")
+#install.packages("stdmod")
+library(readxl)
+library(tidyverse)
+library(dplyr)
+library(lme4)
+library(stdmod)
+library(knitr)
+
+```
+
+## Load the file (btw. remove the missing values)
+
+### Get Quick Overview of the data
+
+1.The file consists of two sheets: "Intervention data" and "questionaire". 
+
+2.Each child was assigned to one of **two interventions**: "Reality Check" or "Sugar Shock".(in dataset we use "1" for "Reality Check" and "2" for "Sugar Shock"). 
+
+3.Each type experiment was conducted in **three rounds**, with a pre- and post-intervention measurement of the child's consumption of sweets. The pre-intervention measurement is represented by the columns "i1t0" to "i5t0", while the post-intervention measurement is represented by the columns "i1" to "i5".
+
+```{r Data_import}
+
+Intervention_data <- read_excel("data.xlsx",  sheet = "Intervention data") %>% drop_na()
+#revise: "glimpse()" is better to preview the data.
+knitr::kable(
+  Intervention_data[1:5, ],
+  caption = "Dataset"
+)
+
+
+Q_data <- read_excel("data.xlsx", sheet = "questionaire") %>% drop_na()
+knitr::kable(
+  Q_data[1:5, ],
+  caption = "Dataset"
+)
+
+```
+
+## Data cleaning
+- Calculating the total value before intervention `QIpre`
+- Calculating the total value before intervention `QIpost`
+ - using `across()` and `c()` to select the columns in a more "tidyverse" style
+```{r QIpre_and_QIpost , include=FALSE,message=FALSE, warning=FALSE}
+
+#Intervention_data$QIpre <- rowSums(Intervention_data[,c("i1t0","i2t0","i3t0","i4t0","i5t0")])
+#Intervention_data$QIpost <- rowSums(Intervention_data[,c("i1","i2","i3","i4","i5")])
+#revise: in a more "tidyverse" style
+
+Intervention_data <- Intervention_data %>% mutate(QIpre=rowSums(across(c(i1t0:i5t0))),QIpost=rowSums(across(c(i1:i5))))
+head(Intervention_data)
+
+```
+
+- Calculating mean of sweet to get children's attitude toward sweet consumption, and then merge it with Intervention_data by "child_id" column.
+```{r data_calculation}
+# Calculating mean of sweet
+df_withmean <- Q_data %>% 
+  mutate(sweet_mean=pmap_dbl(select(.,sweet1,sweet2,sweet3,sweet4),~mean(c(...)))) %>%
+  select("id child","id age",sweet_mean) %>%
+  rename("child_id"="id child") %>%
+  right_join(Intervention_data,by="child_id")
+
+
+```
+
+## Data visualization
+1. To compare the effect of two interventions, we make the plot where each line represents one participant, connecting their pre score to post score. We need two datasets: 
+
+- the individual QIpre & QIpost scores
+
+```{r plot1_data_t}
+
+plot_data <-df_withmean  %>% select(child_id, Intervention, QIpre,QIpost) %>%group_by(child_id, Intervention) %>%
+mutate(trial_id = row_number()) %>%
+ungroup() %>%
+mutate(pair_id = paste(child_id, Intervention, trial_id, sep = "_")) %>% pivot_longer(cols = c(QIpre,QIpost),names_to = "time",values_to = "score") %>% mutate(
+    time = factor(time, 
+                  levels = c("QIpre","QIpost"))
+  )  
+knitr::kable(
+  plot_data[1:5, ],
+  caption = "Dataset"
+)
+
+# here I keep plot_data, because i need to used it to create "summary_data". and they will be used separately in the next step.
+```
+
+- the mean score of all participants in each intervention group to present tendency
+```{r plot1_data_summarise}
+ 
+summary_data <- plot_data %>% group_by(child_id,Intervention,time) %>% summarise(mean=mean(score,na.rm=TRUE), .groups = "drop") 
+knitr::kable(
+  summary_data[1:5, ],
+  caption = "Dataset"
+)
+```
+  
+From plot, we can conclude that there is no obvious difference between two interventions, but the "Suger shock" intervention seems to have a slightly better effect on reducing children's consumption of sweets. 
+```{r Data_Visualization}
+ggplot() +
+  geom_line(data=plot_data,alpha = 0.2, linewidth = 1.8,aes(x=time,y=score,group = pair_id)) +
+  geom_point(alpha = 0.4, size = 1.2) +geom_line(data=summary_data,aes(x=time,y=mean,group=child_id,colour=factor(child_id)),linewidth=1.5)+geom_point(data=summary_data,aes(x=time,y=mean),color="red",size=2)+facet_wrap(~ Intervention,
+    ncol = 2,
+    labeller = labeller(Intervention = c(`1` = "Reality Check",
+                                         `2` = "Sugar Shock"))
+  ) +
+  scale_y_continuous(breaks = 0:5, limits = c(0, 5)) +scale_color_viridis_d()+
+  labs(x = "Intervention type", y = "Behavioral Indicator",legend="Child Id") +
+  theme_minimal(base_size = 13) +
+  theme(
+    strip.text = element_text(hjust = 0.5, face = "bold"),
+    legend.position = "bottom"
+  )
+```
+
+
+2. We need to make a plot to explore whether **motivation** moderates the relationship between the **intervention** and the QIpost in quality (for each type) and control for the initial QIpre.
+
+We should use `model2 <- lmer(QIpost ~ intervention_type * motivaton + QIpre, data = data)`. Because
+
+`lmer() function` is used to fit linear mixed-effects models, which are useful when you have data that is grouped or clustered, such as **repeated measurements on the same subjects**. In this case, we have repeated measurements of QIpost for each child, and we want to account for the variability between children.
+
+The random intercept variance was near 0 which indicates minimal between participants variablity after controlling baseline quality. 
+```{r plot_data_sencond_plot }
+
+model_lmer <- lmer(QIpost ~ Intervention * Motivation + QIpre + (1 | child_id), data = df_withmean)
+summary(model_lmer)
+
+
+model <- lm(QIpost ~ Intervention * Motivation + QIpre, data = df_withmean) 
+summary(model)
+
+
+#use a linear plot with the motivation on the x-Axis, QIpost quality on the y-axis and one line (colour) for each Intervention #type. It should look like an interaction plot in the end
+
+
+model %>% plotmod(x=Motivation,w=Intervention)+labs(y="QIpost quality",title="Motivation effect")
+
+
+
+
+
+```
+Conclusion: The interaction between intervention type and motivation was not significant ( p = 0.341), suggesting that motivation did not significantly moderate the relationship between intervention and QIpost.
+
+
