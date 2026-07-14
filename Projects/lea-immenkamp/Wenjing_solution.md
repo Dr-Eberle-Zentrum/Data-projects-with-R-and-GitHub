@@ -1,25 +1,5 @@
 # Topic: The impact of various deterrents on children’s consumption of sweets-from Lea
 
-    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ## ✔ dplyr     1.2.1     ✔ readr     2.2.0
-    ## ✔ forcats   1.0.1     ✔ stringr   1.6.0
-    ## ✔ ggplot2   4.0.3     ✔ tibble    3.3.1
-    ## ✔ lubridate 1.9.5     ✔ tidyr     1.3.2
-    ## ✔ purrr     1.2.2     
-    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ## ✖ dplyr::filter() masks stats::filter()
-    ## ✖ dplyr::lag()    masks stats::lag()
-    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-    ## Loading required package: Matrix
-    ## 
-    ## 
-    ## Attaching package: 'Matrix'
-    ## 
-    ## 
-    ## The following objects are masked from 'package:tidyr':
-    ## 
-    ##     expand, pack, unpack
-
 ## Load the file (btw. remove the missing values)
 
 ### quick overview of the data
@@ -43,36 +23,24 @@ columns “i1” to “i5”.
 
     Intervention_data <- read_excel("data.xlsx",  sheet = "Intervention data") %>% drop_na()
     #revise: "glimpse()" is better to preview the data.
-    glimpse(Intervention_data)
+    head(kable(Intervention_data))
 
-    ## Rows: 119
-    ## Columns: 14
-    ## $ child_id     <dbl> 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, …
-    ## $ Intervention <dbl> 1, 2, 1, 1, 2, 2, 1, 2, 1, 1, 2, 2, 2, 1, 1, 2, 1, 2, 2, …
-    ## $ i1t0         <dbl> 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, …
-    ## $ i2t0         <dbl> 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, …
-    ## $ i3t0         <dbl> 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, …
-    ## $ i4t0         <dbl> 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, …
-    ## $ i5t0         <dbl> 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, …
-    ## $ i1           <dbl> 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, …
-    ## $ i2           <dbl> 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, …
-    ## $ i3           <dbl> 1, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, …
-    ## $ i4           <dbl> 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, …
-    ## $ i5           <dbl> 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, …
-    ## $ Motivation   <dbl> 3, 2, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 2, 3, 2, 2, 3, 4, 2, …
-    ## $ Helpfulness  <dbl> 4, 4, 4, 4, 3, 3, 3, 4, 3, 2, 2, 3, 4, 4, 3, 3, 4, 2, 4, …
+    ## [1] "| child_id| Intervention| i1t0| i2t0| i3t0| i4t0| i5t0| i1| i2| i3| i4| i5| Motivation| Helpfulness|"
+    ## [2] "|--------:|------------:|----:|----:|----:|----:|----:|--:|--:|--:|--:|--:|----------:|-----------:|"
+    ## [3] "|        1|            1|    0|    0|    0|    0|    0|  0|  1|  1|  1|  1|          3|           4|"
+    ## [4] "|        1|            2|    0|    1|    0|    0|    0|  1|  1|  1|  0|  0|          2|           4|"
+    ## [5] "|        1|            1|    0|    0|    0|    1|    1|  1|  1|  1|  1|  1|          3|           4|"
+    ## [6] "|        1|            1|    1|    1|    0|    0|    0|  0|  1|  0|  0|  0|          3|           4|"
 
     Q_data <- read_excel("data.xlsx", sheet = "questionaire") %>% drop_na()
-    glimpse(Q_data)
+    head(kable(Q_data))
 
-    ## Rows: 20
-    ## Columns: 6
-    ## $ `id child` <dbl> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, …
-    ## $ `id age`   <dbl> 11, 8, 11, 9, 13, 12, 11, 10, 13, 11, 13, 11, 9, 10, 10, 9,…
-    ## $ sweet1     <dbl> 4, 5, 5, 5, 5, 4, 5, 3, 2, 4, 4, 3, 5, 4, 3, 3, 2, 4, 3, 3
-    ## $ sweet2     <dbl> 4, 3, 5, 5, 5, 4, 5, 3, 2, 4, 4, 4, 3, 5, 5, 1, 5, 2, 1, 5
-    ## $ sweet3     <dbl> 3, 4, 4, 1, 5, 2, 5, 5, 4, 5, 3, 2, 4, 4, 4, 3, 5, 5, 1, 5
-    ## $ sweet4     <dbl> 1, 1, 1, 5, 2, 4, 3, 5, 5, 1, 5, 2, 5, 4, 5, 3, 2, 4, 4, 3
+    ## [1] "| id child| id age| sweet1| sweet2| sweet3| sweet4|"
+    ## [2] "|--------:|------:|------:|------:|------:|------:|"
+    ## [3] "|        1|     11|      4|      4|      3|      1|"
+    ## [4] "|        2|      8|      5|      3|      4|      1|"
+    ## [5] "|        3|     11|      5|      5|      4|      1|"
+    ## [6] "|        4|      9|      5|      5|      1|      5|"
 
 ## Data cleaning
 
@@ -88,26 +56,14 @@ columns “i1” to “i5”.
     #revise: in a more "tidyverse" style
 
     Intervention_data <- Intervention_data %>% mutate(QIpre=rowSums(across(c(i1t0:i5t0))),QIpost=rowSums(across(c(i1:i5))))
-    glimpse(Intervention_data)
+    head(kable(Intervention_data))
 
-    ## Rows: 119
-    ## Columns: 16
-    ## $ child_id     <dbl> 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, …
-    ## $ Intervention <dbl> 1, 2, 1, 1, 2, 2, 1, 2, 1, 1, 2, 2, 2, 1, 1, 2, 1, 2, 2, …
-    ## $ i1t0         <dbl> 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, …
-    ## $ i2t0         <dbl> 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, …
-    ## $ i3t0         <dbl> 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, …
-    ## $ i4t0         <dbl> 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, …
-    ## $ i5t0         <dbl> 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, …
-    ## $ i1           <dbl> 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, …
-    ## $ i2           <dbl> 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, …
-    ## $ i3           <dbl> 1, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, …
-    ## $ i4           <dbl> 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, …
-    ## $ i5           <dbl> 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, …
-    ## $ Motivation   <dbl> 3, 2, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 2, 3, 2, 2, 3, 4, 2, …
-    ## $ Helpfulness  <dbl> 4, 4, 4, 4, 3, 3, 3, 4, 3, 2, 2, 3, 4, 4, 3, 3, 4, 2, 4, …
-    ## $ QIpre        <dbl> 0, 1, 2, 2, 2, 2, 2, 3, 2, 0, 1, 2, 2, 0, 2, 1, 1, 1, 2, …
-    ## $ QIpost       <dbl> 4, 3, 5, 1, 4, 3, 3, 3, 5, 3, 2, 4, 5, 0, 4, 4, 3, 3, 5, …
+    ## [1] "| child_id| Intervention| i1t0| i2t0| i3t0| i4t0| i5t0| i1| i2| i3| i4| i5| Motivation| Helpfulness| QIpre| QIpost|"
+    ## [2] "|--------:|------------:|----:|----:|----:|----:|----:|--:|--:|--:|--:|--:|----------:|-----------:|-----:|------:|"
+    ## [3] "|        1|            1|    0|    0|    0|    0|    0|  0|  1|  1|  1|  1|          3|           4|     0|      4|"
+    ## [4] "|        1|            2|    0|    1|    0|    0|    0|  1|  1|  1|  0|  0|          2|           4|     1|      3|"
+    ## [5] "|        1|            1|    0|    0|    0|    1|    1|  1|  1|  1|  1|  1|          3|           4|     2|      5|"
+    ## [6] "|        1|            1|    1|    1|    0|    0|    0|  0|  1|  0|  0|  0|          3|           4|     2|      1|"
 
 - Calculating mean of sweet to get children’s attitude toward sweet
   consumption, and then merge it with Intervention\_data by “child\_id”
@@ -121,24 +77,14 @@ columns “i1” to “i5”.
       select("id child","id age",sweet_mean) %>%
       rename("child_id"="id child") %>%
       right_join(Intervention_data,by="child_id")
-    df_withmean
+    head(kable(df_withmean))
 
-    ## # A tibble: 119 × 18
-    ##    child_id `id age` sweet_mean Intervention  i1t0  i2t0  i3t0  i4t0  i5t0    i1
-    ##       <dbl>    <dbl>      <dbl>        <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-    ##  1        1       11       3               1     0     0     0     0     0     0
-    ##  2        1       11       3               2     0     1     0     0     0     1
-    ##  3        1       11       3               1     0     0     0     1     1     1
-    ##  4        1       11       3               1     1     1     0     0     0     0
-    ##  5        1       11       3               2     0     0     1     1     0     1
-    ##  6        1       11       3               2     0     1     0     1     0     1
-    ##  7        2        8       3.25            1     0     1     0     0     1     1
-    ##  8        2        8       3.25            2     1     0     1     0     1     0
-    ##  9        2        8       3.25            1     0     0     1     1     0     1
-    ## 10        2        8       3.25            1     0     0     0     0     0     1
-    ## # ℹ 109 more rows
-    ## # ℹ 8 more variables: i2 <dbl>, i3 <dbl>, i4 <dbl>, i5 <dbl>, Motivation <dbl>,
-    ## #   Helpfulness <dbl>, QIpre <dbl>, QIpost <dbl>
+    ## [1] "| child_id| id age| sweet_mean| Intervention| i1t0| i2t0| i3t0| i4t0| i5t0| i1| i2| i3| i4| i5| Motivation| Helpfulness| QIpre| QIpost|"
+    ## [2] "|--------:|------:|----------:|------------:|----:|----:|----:|----:|----:|--:|--:|--:|--:|--:|----------:|-----------:|-----:|------:|"
+    ## [3] "|        1|     11|       3.00|            1|    0|    0|    0|    0|    0|  0|  1|  1|  1|  1|          3|           4|     0|      4|"
+    ## [4] "|        1|     11|       3.00|            2|    0|    1|    0|    0|    0|  1|  1|  1|  0|  0|          2|           4|     1|      3|"
+    ## [5] "|        1|     11|       3.00|            1|    0|    0|    0|    1|    1|  1|  1|  1|  1|  1|          3|           4|     2|      5|"
+    ## [6] "|        1|     11|       3.00|            1|    1|    1|    0|    0|    0|  0|  1|  0|  0|  0|          3|           4|     2|      1|"
 
 ## Data visualization
 
@@ -157,16 +103,14 @@ columns “i1” to “i5”.
         time = factor(time, 
                       levels = c("QIpre","QIpost"))
       )  
-    glimpse(plot_data)
+    head(kable(plot_data))
 
-    ## Rows: 238
-    ## Columns: 6
-    ## $ child_id     <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, …
-    ## $ Intervention <dbl> 1, 1, 2, 2, 1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 1, 1, 1, …
-    ## $ trial_id     <int> 1, 1, 1, 1, 2, 2, 3, 3, 2, 2, 3, 3, 1, 1, 1, 1, 2, 2, 3, …
-    ## $ pair_id      <chr> "1_1_1", "1_1_1", "1_2_1", "1_2_1", "1_1_2", "1_1_2", "1_…
-    ## $ time         <fct> QIpre, QIpost, QIpre, QIpost, QIpre, QIpost, QIpre, QIpos…
-    ## $ score        <dbl> 0, 4, 1, 3, 2, 5, 2, 1, 2, 4, 2, 3, 2, 3, 3, 3, 2, 5, 0, …
+    ## [1] "| child_id| Intervention| trial_id|pair_id |time   | score|"
+    ## [2] "|--------:|------------:|--------:|:-------|:------|-----:|"
+    ## [3] "|        1|            1|        1|1_1_1   |QIpre  |     0|"
+    ## [4] "|        1|            1|        1|1_1_1   |QIpost |     4|"
+    ## [5] "|        1|            2|        1|1_2_1   |QIpre  |     1|"
+    ## [6] "|        1|            2|        1|1_2_1   |QIpost |     3|"
 
     # here I keep plot_data, because i need to used it to create "summary_data". and they will be used separately in the next step.
 
@@ -176,14 +120,14 @@ columns “i1” to “i5”.
 <!-- -->
 
     summary_data <- plot_data %>% group_by(child_id,Intervention,time) %>% summarise(mean=mean(score,na.rm=TRUE), .groups = "drop") 
-    glimpse(summary_data)
+    head(kable(summary_data))
 
-    ## Rows: 80
-    ## Columns: 4
-    ## $ child_id     <dbl> 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, …
-    ## $ Intervention <dbl> 1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, …
-    ## $ time         <fct> QIpre, QIpost, QIpre, QIpost, QIpre, QIpost, QIpre, QIpos…
-    ## $ mean         <dbl> 1.333333, 3.333333, 1.666667, 3.333333, 1.333333, 3.66666…
+    ## [1] "| child_id| Intervention|time   |      mean|"
+    ## [2] "|--------:|------------:|:------|---------:|"
+    ## [3] "|        1|            1|QIpre  | 1.3333333|"
+    ## [4] "|        1|            1|QIpost | 3.3333333|"
+    ## [5] "|        1|            2|QIpre  | 1.6666667|"
+    ## [6] "|        1|            2|QIpost | 3.3333333|"
 
 From plot, we can conclude that there is no obvious difference between
 two interventions, but the “Suger shock” intervention seems to have a
