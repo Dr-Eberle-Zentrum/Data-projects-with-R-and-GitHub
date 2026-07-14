@@ -220,7 +220,7 @@ p_kingdom <- ggplot(kingdom_plot_data, aes(x = Kingdom, y = Percentage, fill = C
     size = 3.5
   ) +
   scale_fill_manual(
-    values = c("Extinct" = "orange", "Affected" = "red", "Unaffected" = "blue"),
+    values = c("Extinct" = "red", "Affected" = "orange", "Unaffected" = "blue"),
     labels = c("Extinct (EX + EW)", "Affected (CR + EN + VU)", "Unaffected / No data")
   ) +
   labs(
