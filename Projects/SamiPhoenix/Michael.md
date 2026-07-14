@@ -20,9 +20,8 @@
 
 This analysis examines the **conservation status of species** across
 different taxonomic classes and kingdoms, based on data from the **IUCN
-Red List** (`SpeciesByKingdomAndClass.csv`). The IUCN Red List is the
-world’s most comprehensive inventory of the global conservation status
-of biological species.
+Red List**. The IUCN Red List is the world’s most comprehensive
+inventory of the global conservation status of biological species.
 
 **What we will do:**
 
@@ -33,8 +32,7 @@ of biological species.
 3.  **Create a percentage table** – express each category as a
     percentage of the total species count per class.
 4.  **Visualise differences between Kingdoms** – compare the proportion
-    of extinct, affected, and unaffected species across major kingdoms
-    (Animalia, Plantae, Fungi, Chromista).
+    of extinct, affected, and unaffected species across major kingdoms.
 5.  **Identify most and least affected Classes** – highlight the classes
     with the highest and lowest percentages of Critically Endangered
     species.
@@ -45,30 +43,28 @@ of biological species.
 
 ## 1a) Import CSV into R
 
-The dataset is imported from `~/Downloads/SpeciesByKingdomAndClass.csv`.
-It contains information about the number of species in various IUCN Red
-List categories for each taxonomic class.
+The dataset is loaded from the project’s `dependencies` folder (portable
+path).
 
-    ## # A tibble: 6 × 16
-    ##   Name     EX    EW `Subtotal (EX+EW)` `CR(PE)` `CR(PEW)` Subtotal (EX+EW+ CR(…¹
-    ##   <chr> <dbl> <dbl>              <dbl>    <dbl>     <dbl>                  <dbl>
-    ## 1 ACTI…    90    11                101      143         8                    252
-    ## 2 AMPH…    37     2                 39      187         1                    227
-    ## 3 ANTH…     0     0                  0        2         0                      2
-    ## 4 ARAC…     9     0                  9       27         0                     36
-    ## 5 ASTE…     0     0                  0        0         0                      0
-    ## 6 AVES    164     5                169       18         2                    189
-    ## # ℹ abbreviated name: ¹​`Subtotal (EX+EW+ CR(PE)+CR(PEW))`
-    ## # ℹ 9 more variables: CR <dbl>, EN <dbl>, VU <dbl>,
-    ## #   `Subtotal (threatened spp.)` <dbl>, `LR/cd` <dbl>, `NT or LR/nt` <dbl>,
-    ## #   `LC or LR/lc` <dbl>, DD <dbl>, Total <dbl>
+**First rows of the dataset:**
 
-**Explanation:** The table shows for each class (e.g., `ACTINOPTERYGII`
-– ray‑finned fishes) the number of species in each IUCN category: `EX`
-(Extinct), `EW` (Extinct in the Wild), `CR` (Critically Endangered),
-`EN` (Endangered), `VU` (Vulnerable), `NT` (Near Threatened), `LC`
-(Least Concern), and `DD` (Data Deficient). The `Total` column gives the
-total number of assessed species for that class.
+| Name           |  EX |  EW | Subtotal (EX+EW) | CR(PE) | CR(PEW) | Subtotal (EX+EW+ CR(PE)+CR(PEW)) |  CR |   EN |   VU | Subtotal (threatened spp.) | LR/cd | NT or LR/nt | LC or LR/lc |   DD | Total |
+|:-----|--:|-:|------:|---:|---:|-----------:|--:|--:|--:|---------:|--:|----:|----:|--:|--:|
+| ACTINOPTERYGII |  90 |  11 |              101 |    143 |       8 |                              252 | 777 | 1359 | 1502 |                       3638 |     0 |         890 |       17851 | 5236 | 27716 |
+| AMPHIBIA       |  37 |   2 |               39 |    187 |       1 |                              227 | 825 | 1291 |  814 |                       2930 |     0 |         453 |        3733 |  896 |  8051 |
+| ANTHOZOA       |   0 |   0 |                0 |      2 |       0 |                                2 |  32 |  246 |   58 |                        336 |     0 |          24 |         431 |  147 |   938 |
+| ARACHNIDA      |   9 |   0 |                9 |     27 |       0 |                               36 | 121 |  165 |  104 |                        390 |     0 |          52 |         488 |  114 |  1053 |
+| ASTEROIDEA     |   0 |   0 |                0 |      0 |       0 |                                0 |   2 |    0 |    0 |                          2 |     0 |           0 |           0 |    0 |     2 |
+| AVES           | 164 |   5 |              169 |     18 |       2 |                              189 | 216 |  372 |  668 |                       1256 |     0 |         967 |        8757 |   36 | 11185 |
+
+First 6 rows of the raw dataset
+
+**Explanation:** The table shows for each class the number of species in
+each IUCN category: `EX` (Extinct), `EW` (Extinct in the Wild), `CR`
+(Critically Endangered), `EN` (Endangered), `VU` (Vulnerable), `NT`
+(Near Threatened), `LC` (Least Concern), and `DD` (Data Deficient). The
+`Total` column gives the total number of assessed species for that
+class.
 
 **Note:** The columns `CR(PE)` and `CR(PEW)` represent “Possibly
 Extinct” and “Possibly Extinct in the Wild” – these are *not* official
@@ -78,31 +74,33 @@ IUCN categories and will be removed later.
 
 ## 1c) Add Kingdom Data
 
-The original dataset does not contain a `Kingdom` column. We add it
-using a lookup table that maps each class (`Name`) to its kingdom
-(Animalia, Plantae, Fungi, or Chromista) based on the taxonomic
-hierarchy from the IUCN website.
+The original dataset does not contain a `Kingdom` column. Instead of
+using a static lookup table (which breaks when the dataset updates), we
+use a **dynamic, order‑based method**:
 
-    ## ⚠️ Warning: The following classes have no Kingdom assigned:
-    ##  Total
+-   The dataset is sorted alphabetically within each Kingdom.
+-   We identify Kingdom boundaries by detecting when a class name is
+    **alphabetically “smaller”** than the previous class name (using
+    `lag()`).
+-   We assign a Kingdom ID using `cumsum()`, then map IDs to Kingdom
+    names.
 
-    ## # A tibble: 6 × 17
-    ##   Name     EX    EW `Subtotal (EX+EW)` `CR(PE)` `CR(PEW)` Subtotal (EX+EW+ CR(…¹
-    ##   <chr> <dbl> <dbl>              <dbl>    <dbl>     <dbl>                  <dbl>
-    ## 1 ACTI…    90    11                101      143         8                    252
-    ## 2 AMPH…    37     2                 39      187         1                    227
-    ## 3 ANTH…     0     0                  0        2         0                      2
-    ## 4 ARAC…     9     0                  9       27         0                     36
-    ## 5 ASTE…     0     0                  0        0         0                      0
-    ## 6 AVES    164     5                169       18         2                    189
-    ## # ℹ abbreviated name: ¹​`Subtotal (EX+EW+ CR(PE)+CR(PEW))`
-    ## # ℹ 10 more variables: CR <dbl>, EN <dbl>, VU <dbl>,
-    ## #   `Subtotal (threatened spp.)` <dbl>, `LR/cd` <dbl>, `NT or LR/nt` <dbl>,
-    ## #   `LC or LR/lc` <dbl>, DD <dbl>, Total <dbl>, Kingdom <chr>
+**First rows after adding Kingdom:**
+
+| Name           |  EX |  EW | Subtotal (EX+EW) | CR(PE) | CR(PEW) | Subtotal (EX+EW+ CR(PE)+CR(PEW)) |  CR |   EN |   VU | Subtotal (threatened spp.) | LR/cd | NT or LR/nt | LC or LR/lc |   DD | Total | Kingdom   |
+|:-----|--:|-:|------:|---:|---:|----------:|--:|--:|--:|---------:|--:|----:|----:|--:|--:|:----|
+| ACTINOPTERYGII |  90 |  11 |              101 |    143 |       8 |                              252 | 777 | 1359 | 1502 |                       3638 |     0 |         890 |       17851 | 5236 | 27716 | CHROMISTA |
+| AMPHIBIA       |  37 |   2 |               39 |    187 |       1 |                              227 | 825 | 1291 |  814 |                       2930 |     0 |         453 |        3733 |  896 |  8051 | CHROMISTA |
+| ANTHOZOA       |   0 |   0 |                0 |      2 |       0 |                                2 |  32 |  246 |   58 |                        336 |     0 |          24 |         431 |  147 |   938 | CHROMISTA |
+| ARACHNIDA      |   9 |   0 |                9 |     27 |       0 |                               36 | 121 |  165 |  104 |                        390 |     0 |          52 |         488 |  114 |  1053 | CHROMISTA |
+| ASTEROIDEA     |   0 |   0 |                0 |      0 |       0 |                                0 |   2 |    0 |    0 |                          2 |     0 |           0 |           0 |    0 |     2 | CHROMISTA |
+| AVES           | 164 |   5 |              169 |     18 |       2 |                              189 | 216 |  372 |  668 |                       1256 |     0 |         967 |        8757 |   36 | 11185 | CHROMISTA |
+
+First 6 rows with Kingdom column added
 
 **Explanation:** The `Kingdom` column now tells us which kingdom each
 class belongs to. This allows us to group and compare species across the
-major kingdoms (Animalia, Plantae, Fungi, Chromista).
+major kingdoms.
 
 ------------------------------------------------------------------------
 
@@ -115,21 +113,16 @@ in the Wild) are *not* official IUCN categories and are removed. The
 subtotal that includes them is also removed. The remaining subtotals are
 renamed for clarity.
 
-    ## # A tibble: 6 × 14
-    ##   Name           EX    EW Extinct_Subtotal    CR    EN    VU Threatened_Subtotal
-    ##   <chr>       <dbl> <dbl>            <dbl> <dbl> <dbl> <dbl>               <dbl>
-    ## 1 ACTINOPTER…    90    11              101   777  1359  1502                3638
-    ## 2 AMPHIBIA       37     2               39   825  1291   814                2930
-    ## 3 ANTHOZOA        0     0                0    32   246    58                 336
-    ## 4 ARACHNIDA       9     0                9   121   165   104                 390
-    ## 5 ASTEROIDEA      0     0                0     2     0     0                   2
-    ## 6 AVES          164     5              169   216   372   668                1256
-    ## # ℹ 6 more variables: `LR/cd` <dbl>, `NT or LR/nt` <dbl>, `LC or LR/lc` <dbl>,
-    ## #   DD <dbl>, Total <dbl>, Kingdom <chr>
+| Name           |  EX |  EW | Extinct_Subtotal |  CR |   EN |   VU | Threatened_Subtotal | LR/cd | NT or LR/nt | LC or LR/lc |   DD | Total | Kingdom   |
+|:-------|--:|--:|--------:|--:|---:|---:|----------:|---:|------:|------:|---:|---:|:-----|
+| ACTINOPTERYGII |  90 |  11 |              101 | 777 | 1359 | 1502 |                3638 |     0 |         890 |       17851 | 5236 | 27716 | CHROMISTA |
+| AMPHIBIA       |  37 |   2 |               39 | 825 | 1291 |  814 |                2930 |     0 |         453 |        3733 |  896 |  8051 | CHROMISTA |
+| ANTHOZOA       |   0 |   0 |                0 |  32 |  246 |   58 |                 336 |     0 |          24 |         431 |  147 |   938 | CHROMISTA |
+| ARACHNIDA      |   9 |   0 |                9 | 121 |  165 |  104 |                 390 |     0 |          52 |         488 |  114 |  1053 | CHROMISTA |
+| ASTEROIDEA     |   0 |   0 |                0 |   2 |    0 |    0 |                   2 |     0 |           0 |           0 |    0 |     2 | CHROMISTA |
+| AVES           | 164 |   5 |              169 | 216 |  372 |  668 |                1256 |     0 |         967 |        8757 |   36 | 11185 | CHROMISTA |
 
-**Explanation:** After this step, the table contains only the official
-IUCN categories plus the subtotals for extinct and threatened species.
-The columns are now easier to read.
+After removing non‑official IUCN columns
 
 ------------------------------------------------------------------------
 
@@ -137,25 +130,18 @@ The columns are now easier to read.
 
 `LR/cd` (Lower Risk – conservation dependent) and `NT or LR/nt` (Near
 Threatened) are combined into a single column called **Near
-Threatened**. This aligns the data with the current IUCN classification
-system.
+Threatened**.
 
-    ## # A tibble: 6 × 13
-    ##   Name           EX    EW Extinct_Subtotal    CR    EN    VU Threatened_Subtotal
-    ##   <chr>       <dbl> <dbl>            <dbl> <dbl> <dbl> <dbl>               <dbl>
-    ## 1 ACTINOPTER…    90    11              101   777  1359  1502                3638
-    ## 2 AMPHIBIA       37     2               39   825  1291   814                2930
-    ## 3 ANTHOZOA        0     0                0    32   246    58                 336
-    ## 4 ARACHNIDA       9     0                9   121   165   104                 390
-    ## 5 ASTEROIDEA      0     0                0     2     0     0                   2
-    ## 6 AVES          164     5              169   216   372   668                1256
-    ## # ℹ 5 more variables: `LC or LR/lc` <dbl>, DD <dbl>, Total <dbl>,
-    ## #   Kingdom <chr>, `Near Threatened` <dbl>
+| Name           |  EX |  EW | Extinct_Subtotal |  CR |   EN |   VU | Threatened_Subtotal | LC or LR/lc |   DD | Total | Kingdom   | Near Threatened |
+|:--------|--:|--:|---------:|--:|---:|---:|----------:|------:|---:|---:|:-----|--------:|
+| ACTINOPTERYGII |  90 |  11 |              101 | 777 | 1359 | 1502 |                3638 |       17851 | 5236 | 27716 | CHROMISTA |             890 |
+| AMPHIBIA       |  37 |   2 |               39 | 825 | 1291 |  814 |                2930 |        3733 |  896 |  8051 | CHROMISTA |             453 |
+| ANTHOZOA       |   0 |   0 |                0 |  32 |  246 |   58 |                 336 |         431 |  147 |   938 | CHROMISTA |              24 |
+| ARACHNIDA      |   9 |   0 |                9 | 121 |  165 |  104 |                 390 |         488 |  114 |  1053 | CHROMISTA |              52 |
+| ASTEROIDEA     |   0 |   0 |                0 |   2 |    0 |    0 |                   2 |           0 |    0 |     2 | CHROMISTA |               0 |
+| AVES           | 164 |   5 |              169 | 216 |  372 |  668 |                1256 |        8757 |   36 | 11185 | CHROMISTA |             967 |
 
-**Explanation:** The new `Near Threatened` column contains the combined
-counts of Lower Risk / conservation dependent species and Near
-Threatened species. This simplifies the table and aligns with the
-current IUCN Red List categories.
+After combining Near Threatened categories
 
 ------------------------------------------------------------------------
 
@@ -163,18 +149,16 @@ current IUCN Red List categories.
 
 All column names are replaced with their full, human‑readable names.
 
-    ## # A tibble: 6 × 13
-    ##   Name    Extinct Extinct_Wild Extinct_Subtotal Critically_Endangered Endangered
-    ##   <chr>     <dbl>        <dbl>            <dbl>                 <dbl>      <dbl>
-    ## 1 ACTINO…      90           11              101                   777       1359
-    ## 2 AMPHIB…      37            2               39                   825       1291
-    ## 3 ANTHOZ…       0            0                0                    32        246
-    ## 4 ARACHN…       9            0                9                   121        165
-    ## 5 ASTERO…       0            0                0                     2          0
-    ## 6 AVES        164            5              169                   216        372
-    ## # ℹ 7 more variables: Vulnerable <dbl>, Threatened_Subtotal <dbl>,
-    ## #   Least_Concern <dbl>, Data_Deficient <dbl>, Total <dbl>, Kingdom <chr>,
-    ## #   `Near Threatened` <dbl>
+| Name           | Extinct | Extinct_Wild | Extinct_Subtotal | Critically_Endangered | Endangered | Vulnerable | Threatened_Subtotal | Least_Concern | Data_Deficient | Total | Kingdom   | Near Threatened |
+|:-----|---:|-----:|------:|--------:|----:|----:|-------:|-----:|-----:|--:|:----|------:|
+| ACTINOPTERYGII |      90 |           11 |              101 |                   777 |       1359 |       1502 |                3638 |         17851 |           5236 | 27716 | CHROMISTA |             890 |
+| AMPHIBIA       |      37 |            2 |               39 |                   825 |       1291 |        814 |                2930 |          3733 |            896 |  8051 | CHROMISTA |             453 |
+| ANTHOZOA       |       0 |            0 |                0 |                    32 |        246 |         58 |                 336 |           431 |            147 |   938 | CHROMISTA |              24 |
+| ARACHNIDA      |       9 |            0 |                9 |                   121 |        165 |        104 |                 390 |           488 |            114 |  1053 | CHROMISTA |              52 |
+| ASTEROIDEA     |       0 |            0 |                0 |                     2 |          0 |          0 |                   2 |             0 |              0 |     2 | CHROMISTA |               0 |
+| AVES           |     164 |            5 |              169 |                   216 |        372 |        668 |                1256 |          8757 |             36 | 11185 | CHROMISTA |             967 |
+
+After renaming columns to readable names
 
 **Resulting columns:** `Name`, `Kingdom`, `Extinct`, `Extinct_Wild`,
 `Critically_Endangered`, `Endangered`, `Vulnerable`, `Near Threatened`,
@@ -188,31 +172,24 @@ All column names are replaced with their full, human‑readable names.
 ## 3a) Create Relative Amount Table
 
 We create a new table `redlist_pct` where every numeric column (except
-`Total`) is expressed as a percentage of the row’s `Total`. This makes
-it easy to compare proportions across classes. The `Total` column is set
-to 100.
+`Total`) is expressed as a percentage of the row’s `Total`. The `Total`
+column is set to 100.
 
-    ## # A tibble: 6 × 13
-    ##   Name           `Extinct [%]` `Extinct_Wild [%]` `Extinct_Subtotal [%]`
-    ##   <chr>                  <dbl>              <dbl>                  <dbl>
-    ## 1 ACTINOPTERYGII         0.325             0.0397                  0.364
-    ## 2 AMPHIBIA               0.460             0.0248                  0.484
-    ## 3 ANTHOZOA               0                 0                       0    
-    ## 4 ARACHNIDA              0.855             0                       0.855
-    ## 5 ASTEROIDEA             0                 0                       0    
-    ## 6 AVES                   1.47              0.0447                  1.51 
-    ## # ℹ 9 more variables: `Critically_Endangered [%]` <dbl>,
-    ## #   `Endangered [%]` <dbl>, `Vulnerable [%]` <dbl>,
-    ## #   `Threatened_Subtotal [%]` <dbl>, `Least_Concern [%]` <dbl>,
-    ## #   `Data_Deficient [%]` <dbl>, Total <dbl>, Kingdom <chr>,
-    ## #   `Near Threatened [%]` <dbl>
+| Name           | Extinct \[%\] | Extinct_Wild \[%\] | Extinct_Subtotal \[%\] | Critically_Endangered \[%\] | Endangered \[%\] | Vulnerable \[%\] | Threatened_Subtotal \[%\] | Least_Concern \[%\] | Data_Deficient \[%\] | Total | Kingdom   | Near Threatened \[%\] |
+|:----|----:|-----:|------:|-------:|----:|----:|-------:|-----:|------:|--:|:---|------:|
+| ACTINOPTERYGII |     0.3247222 |          0.0396883 |              0.3644104 |                    2.803435 |         4.903305 |         5.419252 |                  13.12599 |            64.40684 |           18.8916150 |   100 | CHROMISTA |              3.211142 |
+| AMPHIBIA       |     0.4595702 |          0.0248416 |              0.4844119 |                   10.247174 |        16.035275 |        10.110545 |                  36.39299 |            46.36691 |           11.1290523 |   100 | CHROMISTA |              5.626630 |
+| ANTHOZOA       |     0.0000000 |          0.0000000 |              0.0000000 |                    3.411514 |        26.226013 |         6.183369 |                  35.82090 |            45.94883 |           15.6716418 |   100 | CHROMISTA |              2.558635 |
+| ARACHNIDA      |     0.8547009 |          0.0000000 |              0.8547009 |                   11.490978 |        15.669516 |         9.876543 |                  37.03704 |            46.34378 |           10.8262108 |   100 | CHROMISTA |              4.938272 |
+| ASTEROIDEA     |     0.0000000 |          0.0000000 |              0.0000000 |                  100.000000 |         0.000000 |         0.000000 |                 100.00000 |             0.00000 |            0.0000000 |   100 | CHROMISTA |              0.000000 |
+| AVES           |     1.4662494 |          0.0447027 |              1.5109522 |                    1.931158 |         3.325883 |         5.972284 |                  11.22932 |            78.29236 |            0.3218596 |   100 | CHROMISTA |              8.645507 |
+
+Relative amounts (percentages of Total)
 
 **Explanation:** In this table, each value shows the percentage of
 species in that category relative to the total number of species for
-that class. For example, for `ACTINOPTERYGII`, about 0.325% are Extinct,
-0.04% Extinct in the Wild, etc. The `Total` column is always 100. This
-makes it easy to compare proportions across classes, regardless of the
-total number of species assessed.
+that class. The `Total` column is always 100. This makes it easy to
+compare proportions across classes.
 
 ------------------------------------------------------------------------
 
@@ -220,12 +197,13 @@ total number of species assessed.
 
 To compare the conservation status across major Kingdoms, we create a
 **stacked bar plot**. Only Kingdoms with at least 1,000 species are
-included to avoid distorted results for small groups.
+included.
 
-**Categories:** - **Extinct:** `Extinct + Extinct_Wild` (EX + EW) -
-**Affected:** `Critically_Endangered + Endangered + Vulnerable` (CR +
-EN + VU) - **Unaffected / No data:**
-`Least_Concern + Near Threatened + Data_Deficient`
+**Categories:** - **Extinct:** `Extinct + Extinct_Wild` (EX + EW) –
+shown in **red** - **Affected:**
+`Critically_Endangered + Endangered + Vulnerable` (CR + EN + VU) – shown
+in **orange** - **Unaffected / No data:**
+`Least_Concern + Near Threatened + Data_Deficient` – shown in **blue**
 
 <img src="Michael_files/figure-markdown_github/kingdom_plot-1.png" style="display: block; margin: auto;" />
 
@@ -233,12 +211,12 @@ EN + VU) - **Unaffected / No data:**
 status category for each Kingdom.
 
 -   **Animalia** and **Plantae** have relatively high proportions of
-    “Affected” species (CR + EN + VU).
+    “Affected” species.
 -   **Fungi** and **Chromista** have very few species in the extinct or
-    affected categories – but this is largely because fewer species have
-    been assessed in these kingdoms.
--   The “Unaffected / No data” category dominates for Fungi and
-    Chromista, reflecting incomplete assessments.
+    affected categories – largely because fewer species have been
+    assessed.
+-   The total number of assessed species (`n = ...`) is shown above each
+    bar.
 
 ------------------------------------------------------------------------
 
@@ -266,37 +244,32 @@ species within a class. This plot shows the **10 most affected** and the
 
 # Summary
 
--   **Data import** and **Kingdom enrichment** were successful – all
-    classes were assigned a kingdom.
+-   **Data import** and **Kingdom enrichment** were successful using a
+    dynamic, order‑based method that is robust to future updates.
 -   **Cleaning** removed non‑official categories and consolidated the
     Near Threatened classification.
 -   The **percentage table** (`redlist_pct`) allows direct comparison of
     relative conservation statuses across classes.
 -   **Plot 1 (Kingdom comparison)** shows that the majority of assessed
-    species are in the “Unaffected / No data” category for all Kingdoms,
-    but **Animalia** and **Plantae** have notable affected proportions.
+    species are in the “Unaffected / No data” category, but **Animalia**
+    and **Plantae** have notable affected proportions.
 -   **Plot 2 (Class comparison)** highlights **Amphibia** and
-    **ACTINOPTERYGII** as the most affected classes, while several plant
-    classes have very low CR percentages – likely due to assessment gaps
-    rather than actual low threat levels.
+    **ACTINOPTERYGII** as the most affected classes.
 
 ------------------------------------------------------------------------
 
 ## ⚠️ Important Notes
 
-1.  **File path:** Make sure the CSV file is at
-    `~/Downloads/SpeciesByKingdomAndClass.csv`. If it is elsewhere,
-    adjust the path in the `read_csv()` call.
+1.  **File path:** The CSV file is loaded from
+    `dependencies/SpeciesByKingdomAndClass.csv` – this is portable
+    across systems.
 2.  **Data limitations:** The IUCN Red List data is incomplete for many
     groups. Fungi and Chromista have very few assessed species, so the
-    percentages may not reflect true global patterns. This analysis is
-    based on the subset of species that have been assessed.
+    percentages may not reflect true global patterns.
 3.  **Plots:** The plots are rendered as PNG images in the output
-    folder. If you are rendering to HTML, the images will be embedded.
-    If you are rendering to GitHub Markdown, the images will be linked
-    correctly.
+    folder.
 
-------------------------------------------------------------------------
+<!-- -->
 
     ## R version 4.4.0 (2024-04-24)
     ## Platform: aarch64-apple-darwin20
@@ -316,17 +289,18 @@ species within a class. This plot shows the **10 most affected** and the
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ## [1] readr_2.2.0   forcats_1.0.1 ggplot2_4.0.2 tidyr_1.3.2   dplyr_1.2.0  
+    ## [1] readr_2.2.0   knitr_1.47    forcats_1.0.1 ggplot2_4.0.2 tidyr_1.3.2  
+    ## [6] dplyr_1.2.0  
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] bit_4.0.5          gtable_0.3.6       highr_0.11         crayon_1.5.3      
     ##  [5] compiler_4.4.0     tidyselect_1.2.1   parallel_4.4.0     scales_1.4.0      
     ##  [9] yaml_2.3.8         fastmap_1.2.0      R6_2.5.1           labeling_0.4.3    
-    ## [13] generics_0.1.4     knitr_1.47         tibble_3.3.1       pillar_1.9.0      
-    ## [17] RColorBrewer_1.1-3 tzdb_0.4.0         rlang_1.1.7        utf8_1.2.4        
-    ## [21] xfun_0.45          S7_0.2.0           bit64_4.0.5        cli_3.6.3         
-    ## [25] withr_3.0.2        magrittr_2.0.3     digest_0.6.36      grid_4.4.0        
-    ## [29] vroom_1.7.0        rstudioapi_0.18.0  hms_1.1.3          lifecycle_1.0.5   
-    ## [33] vctrs_0.7.2        evaluate_0.24.0    glue_1.8.0         farver_2.1.1      
-    ## [37] fansi_1.0.6        rmarkdown_2.27     purrr_1.2.1        tools_4.4.0       
-    ## [41] pkgconfig_2.0.3    htmltools_0.5.8.1
+    ## [13] generics_0.1.4     tibble_3.3.1       pillar_1.9.0       RColorBrewer_1.1-3
+    ## [17] tzdb_0.4.0         rlang_1.1.7        utf8_1.2.4         xfun_0.45         
+    ## [21] S7_0.2.0           bit64_4.0.5        cli_3.6.3          withr_3.0.2       
+    ## [25] magrittr_2.0.3     digest_0.6.36      grid_4.4.0         vroom_1.7.0       
+    ## [29] rstudioapi_0.18.0  hms_1.1.3          lifecycle_1.0.5    vctrs_0.7.2       
+    ## [33] evaluate_0.24.0    glue_1.8.0         farver_2.1.1       fansi_1.0.6       
+    ## [37] rmarkdown_2.27     purrr_1.2.1        tools_4.4.0        pkgconfig_2.0.3   
+    ## [41] htmltools_0.5.8.1

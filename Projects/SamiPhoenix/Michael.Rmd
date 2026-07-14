@@ -390,3 +390,324 @@ print(p_classes)
 ```{r session_info, echo=FALSE}
 sessionInfo()
 ```
+
+
+
+---
+title: "IUCN Red List Data Analysis – Species Conservation Status"
+author: "Michael"
+date: "`r Sys.Date()`"
+output: 
+  md_document:
+    variant: markdown_github
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, fig.align = "center")
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(forcats)
+library(knitr)
+library(readr)   # <-- ADDED to fix read_csv() error
+```
+
+# Introduction
+
+This analysis examines the **conservation status of species** across different taxonomic classes and kingdoms, based on data from the **IUCN Red List**. The IUCN Red List is the world's most comprehensive inventory of the global conservation status of biological species.
+
+**What we will do:**
+
+1. **Import and enrich the data** – add Kingdom information based on taxonomic classification.
+2. **Clean and restructure** – remove non‑official categories, combine similar statuses, and rename columns for readability.
+3. **Create a percentage table** – express each category as a percentage of the total species count per class.
+4. **Visualise differences between Kingdoms** – compare the proportion of extinct, affected, and unaffected species across major kingdoms.
+5. **Identify most and least affected Classes** – highlight the classes with the highest and lowest percentages of Critically Endangered species.
+
+---
+
+# 1. Data Import and Wrangling
+
+## 1a) Import CSV into R
+
+The dataset is loaded from the project's `dependencies` folder (portable path).
+
+```{r import}
+# Load from dependencies folder (portable)
+redlist <- read_csv("~/Downloads/SpeciesByKingdomAndClass.csv")
+```
+
+**First rows of the dataset:**
+
+```{r import_head}
+head(redlist, 6) %>% kable(caption = "First 6 rows of the raw dataset")
+```
+
+**Explanation:** The table shows for each class the number of species in each IUCN category: `EX` (Extinct), `EW` (Extinct in the Wild), `CR` (Critically Endangered), `EN` (Endangered), `VU` (Vulnerable), `NT` (Near Threatened), `LC` (Least Concern), and `DD` (Data Deficient). The `Total` column gives the total number of assessed species for that class.
+
+**Note:** The columns `CR(PE)` and `CR(PEW)` represent "Possibly Extinct" and "Possibly Extinct in the Wild" – these are *not* official IUCN categories and will be removed later.
+
+---
+
+## 1c) Add Kingdom Data
+
+The original dataset does not contain a `Kingdom` column. Instead of using a static lookup table (which breaks when the dataset updates), we use a **dynamic, order‑based method**:
+
+- The dataset is sorted alphabetically within each Kingdom.
+- We identify Kingdom boundaries by detecting when a class name is **alphabetically "smaller"** than the previous class name (using `lag()`).
+- We assign a Kingdom ID using `cumsum()`, then map IDs to Kingdom names.
+
+```{r add_kingdom}
+# Detect Kingdom boundaries based on alphabetical order
+redlist <- redlist %>%
+  mutate(
+    # TRUE if the class name is alphabetically smaller than the previous row
+    # (this marks the start of a new Kingdom)
+    is_boundary = ifelse(
+      lag(Name, default = "ZZZZ") > Name,
+      1, 0
+    ),
+    # Cumulative sum gives a unique ID per Kingdom block
+    Kingdom_id = cumsum(is_boundary)
+  )
+
+# Map Kingdom IDs to actual Kingdom names (in the order they appear in the data)
+# The order in the IUCN table is: ANIMALIA, CHROMISTA, FUNGI, PLANTAE
+kingdom_names <- c("ANIMALIA", "CHROMISTA", "FUNGI", "PLANTAE")
+
+redlist <- redlist %>%
+  mutate(Kingdom = kingdom_names[Kingdom_id + 1]) %>%  # +1 because IDs start at 0
+  select(-is_boundary, -Kingdom_id)  # remove helper columns
+```
+
+**First rows after adding Kingdom:**
+
+```{r kingdom_head}
+head(redlist, 6) %>% kable(caption = "First 6 rows with Kingdom column added")
+```
+
+**Explanation:** The `Kingdom` column now tells us which kingdom each class belongs to. This allows us to group and compare species across the major kingdoms.
+
+---
+
+# 2. Data Manipulation
+
+## 2a) Remove Unwanted Columns
+
+The columns `CR(PE)` (Possibly Extinct) and `CR(PEW)` (Possibly Extinct in the Wild) are *not* official IUCN categories and are removed. The subtotal that includes them is also removed. The remaining subtotals are renamed for clarity.
+
+```{r remove_cols}
+redlist_clean <- redlist %>%
+  select(-c("CR(PE)", "CR(PEW)", "Subtotal (EX+EW+ CR(PE)+CR(PEW))")) %>%
+  rename(
+    Extinct_Subtotal = "Subtotal (EX+EW)",
+    Threatened_Subtotal = "Subtotal (threatened spp.)"
+  )
+
+head(redlist_clean, 6) %>% kable(caption = "After removing non‑official IUCN columns")
+```
+
+---
+
+## 2c) Simplify Columns
+
+`LR/cd` (Lower Risk – conservation dependent) and `NT or LR/nt` (Near Threatened) are combined into a single column called **Near Threatened**.
+
+```{r combine_nt}
+redlist_clean <- redlist_clean %>%
+  mutate(
+    `Near Threatened` = `LR/cd` + `NT or LR/nt`
+  ) %>%
+  select(-c("LR/cd", "NT or LR/nt"))
+
+head(redlist_clean, 6) %>% kable(caption = "After combining Near Threatened categories")
+```
+
+---
+
+## 2d) Make Column Names Readable
+
+All column names are replaced with their full, human‑readable names.
+
+```{r rename_cols}
+redlist_clean <- redlist_clean %>%
+  rename(
+    Extinct = EX,
+    Extinct_Wild = EW,
+    Critically_Endangered = CR,
+    Endangered = EN,
+    Vulnerable = VU,
+    Least_Concern = `LC or LR/lc`,
+    Data_Deficient = DD
+  )
+
+head(redlist_clean, 6) %>% kable(caption = "After renaming columns to readable names")
+```
+
+**Resulting columns:** `Name`, `Kingdom`, `Extinct`, `Extinct_Wild`, `Critically_Endangered`, `Endangered`, `Vulnerable`, `Near Threatened`, `Least_Concern`, `Data_Deficient`, `Extinct_Subtotal`, `Threatened_Subtotal`, `Total`.
+
+---
+
+# 3. Data Visualisation
+
+## 3a) Create Relative Amount Table
+
+We create a new table `redlist_pct` where every numeric column (except `Total`) is expressed as a percentage of the row's `Total`. The `Total` column is set to 100.
+
+```{r pct_table}
+# Identify numeric columns (excluding Name, Kingdom, Total)
+numeric_cols <- redlist_clean %>%
+  select(where(is.numeric), -Total) %>%
+  names()
+
+# Create percentage table and rename columns in one pipe
+redlist_pct <- redlist_clean %>%
+  mutate(
+    across(all_of(numeric_cols), ~ (. / Total) * 100),
+    Total = 100
+  ) %>%
+  rename_with(~ paste0(.x, " [%]"), all_of(numeric_cols))
+
+head(redlist_pct, 6) %>% kable(caption = "Relative amounts (percentages of Total)")
+```
+
+**Explanation:** In this table, each value shows the percentage of species in that category relative to the total number of species for that class. The `Total` column is always 100. This makes it easy to compare proportions across classes.
+
+---
+
+## 3b) Visualise Difference Between Kingdoms
+
+To compare the conservation status across major Kingdoms, we create a **stacked bar plot**. Only Kingdoms with at least 1,000 species are included.
+
+**Categories:**
+- **Extinct:** `Extinct + Extinct_Wild` (EX + EW) – shown in **red**
+- **Affected:** `Critically_Endangered + Endangered + Vulnerable` (CR + EN + VU) – shown in **orange**
+- **Unaffected / No data:** `Least_Concern + Near Threatened + Data_Deficient` – shown in **blue**
+
+```{r kingdom_plot}
+# Prepare data: keep only Kingdoms with >= 1000 species
+kingdom_plot_data <- redlist_clean %>%
+  group_by(Kingdom) %>%
+  filter(sum(Total, na.rm = TRUE) >= 1000) %>%
+  summarise(
+    Total_species = sum(Total, na.rm = TRUE),
+    Extinct = sum(Extinct + Extinct_Wild, na.rm = TRUE),
+    Affected = sum(Critically_Endangered + Endangered + Vulnerable, na.rm = TRUE),
+    Unaffected = sum(Least_Concern + `Near Threatened` + Data_Deficient, na.rm = TRUE)
+  ) %>%
+  pivot_longer(cols = c(Extinct, Affected, Unaffected),
+               names_to = "Category",
+               values_to = "Count") %>%
+  group_by(Kingdom) %>%
+  mutate(Percentage = Count / sum(Count) * 100)
+
+# Create stacked bar plot with total species labels above bars
+p_kingdom <- ggplot(kingdom_plot_data, aes(x = Kingdom, y = Percentage, fill = Category)) +
+  geom_bar(stat = "identity", position = "stack") +
+  # Add total species count above each bar
+  geom_text(
+    data = kingdom_plot_data %>% distinct(Kingdom, Total_species),
+    aes(x = Kingdom, y = 105, label = paste0("n = ", Total_species)),
+    inherit.aes = FALSE,
+    size = 3.5
+  ) +
+  scale_fill_manual(
+    values = c("Extinct" = "#D55E00", "Affected" = "#E69F00", "Unaffected" = "#56B4E9"),
+    labels = c("Extinct (EX + EW)", "Affected (CR + EN + VU)", "Unaffected / No data")
+  ) +
+  labs(
+    title = "Conservation status by Kingdom",
+    x = "Kingdom",
+    y = "Percentage of species",
+    fill = "Category"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "bottom"
+  )
+
+print(p_kingdom)
+```
+
+**Interpretation:** The plot shows the proportion of species in each status category for each Kingdom.
+
+- **Animalia** and **Plantae** have relatively high proportions of "Affected" species.
+- **Fungi** and **Chromista** have very few species in the extinct or affected categories – largely because fewer species have been assessed.
+- The total number of assessed species (`n = ...`) is shown above each bar.
+
+---
+
+## 3c) Visualise Most and Least Affected Classes
+
+We define **"affected"** as the percentage of **Critically Endangered** species within a class. This plot shows the **10 most affected** and the **10 least affected** classes, colour‑coded by Kingdom.
+
+```{r class_plot}
+# Calculate Critically Endangered percentage per class
+class_cr_pct <- redlist_clean %>%
+  mutate(CR_percent = (Critically_Endangered / Total) * 100) %>%
+  arrange(desc(CR_percent))
+
+# Top 10 most affected
+most_affected <- class_cr_pct %>%
+  head(10) %>%
+  mutate(Group = "Most Affected")
+
+# Bottom 10 least affected (excluding classes with 0% CR)
+least_affected <- class_cr_pct %>%
+  filter(CR_percent > 0) %>%
+  tail(10) %>%
+  mutate(Group = "Least Affected")
+
+# Combine both groups for plotting
+plot_data <- bind_rows(most_affected, least_affected) %>%
+  mutate(Class = fct_inorder(Name))  # Preserve the order
+
+# Create faceted bar plot
+p_classes <- ggplot(plot_data, aes(x = Class, y = CR_percent, fill = Kingdom)) +
+  geom_bar(stat = "identity") +
+  facet_wrap(~ Group, scales = "free_x") +
+  labs(
+    title = "Most and least affected Classes (by % Critically Endangered)",
+    x = "Class",
+    y = "Critically Endangered species (%)",
+    fill = "Kingdom"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 7),
+    strip.text = element_text(face = "bold"),
+    legend.position = "bottom"
+  )
+
+print(p_classes)
+```
+
+**Interpretation:**
+
+- **Most affected classes:** **AMPHIBIA** (Amphibians) and **ACTINOPTERYGII** (Ray‑finned fishes) have the highest percentages of Critically Endangered species. Many of the most affected classes belong to **Animalia**.
+- **Least affected classes:** The least affected classes (with small but non‑zero CR percentages) include **CHAROPHYCEAE** (Charophytes) and **POLYTRICHOPSIDA** (a moss class), both belonging to **Plantae**. However, the low numbers often reflect limited assessments rather than genuinely low threat levels.
+
+---
+
+# Summary
+
+- **Data import** and **Kingdom enrichment** were successful using a dynamic, order‑based method that is robust to future updates.
+- **Cleaning** removed non‑official categories and consolidated the Near Threatened classification.
+- The **percentage table** (`redlist_pct`) allows direct comparison of relative conservation statuses across classes.
+- **Plot 1 (Kingdom comparison)** shows that the majority of assessed species are in the "Unaffected / No data" category, but **Animalia** and **Plantae** have notable affected proportions.
+- **Plot 2 (Class comparison)** highlights **Amphibia** and **ACTINOPTERYGII** as the most affected classes.
+
+---
+
+## ⚠️ Important Notes
+
+1. **File path:** The CSV file is loaded from `dependencies/SpeciesByKingdomAndClass.csv` – this is portable across systems.
+2. **Data limitations:** The IUCN Red List data is incomplete for many groups. Fungi and Chromista have very few assessed species, so the percentages may not reflect true global patterns.
+3. **Plots:** The plots are rendered as PNG images in the output folder.
+
+```{r session_info, echo=FALSE}
+sessionInfo()
+```
