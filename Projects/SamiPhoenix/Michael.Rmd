@@ -38,7 +38,6 @@ This analysis examines the **conservation status of species** across different t
 
 ## 1a) Import CSV into R
 
-The dataset is loaded from the project's `dependencies` folder (portable path).
 
 ```{r import}
 # Load from dependencies folder (portable)
