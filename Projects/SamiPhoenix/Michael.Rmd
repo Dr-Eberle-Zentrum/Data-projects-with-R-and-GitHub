@@ -58,8 +58,7 @@ head(redlist, 6) %>% kable(caption = "First 6 rows of the raw dataset")
 
 The original dataset does not contain a `Kingdom` column. 
 
- So we assign a Kingdom ID using `cumsum()`, then map IDs to Kingdom names.
-
+So we add it. 
 ```{r add_kingdom}
 # Detect Kingdom boundaries based on alphabetical order
 redlist <- redlist %>%
@@ -155,7 +154,6 @@ head(redlist_clean, 6) %>% kable(caption = "After renaming columns to readable n
 
 ## 3a) Create Relative Amount Table
 
-We create a new table `redlist_pct` where every numeric column (except `Total`) is expressed as a percentage of the row's `Total`. The `Total` column is set to 100.
 
 ```{r pct_table}
 # Identify numeric columns (excluding Name, Kingdom, Total)
@@ -179,8 +177,6 @@ head(redlist_pct, 6) %>% kable(caption = "Relative amounts (percentages of Total
 ---
 
 ## 3b) Visualise Difference Between Kingdoms
-
-To compare the conservation status across major Kingdoms, we create a **stacked bar plot**. Only Kingdoms with at least 1,000 species are included.
 
 **Categories:**
 - **Extinct:** `Extinct + Extinct_Wild` (EX + EW) – shown in **red**
@@ -239,7 +235,7 @@ print(p_kingdom)
 
 ## 3c) Visualise Most and Least Affected Classes
 
-We define **"affected"** as the percentage of **Critically Endangered** species within a class. This plot shows the **10 most affected** and the **10 least affected** classes, colour‑coded by Kingdom.
+We define **"affected"** as the percentage of **Critically Endangered** species within a class. This plot shows the **10 most affected** and the **10 least affected** classes.
 
 ```{r class_plot}
 # Calculate Critically Endangered percentage per class
