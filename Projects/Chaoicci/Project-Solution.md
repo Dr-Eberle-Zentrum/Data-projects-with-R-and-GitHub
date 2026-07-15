@@ -9,16 +9,12 @@ Two things have to be solved before any plot can be drawn:
     out of each entry and returns a one-row tibble; `map_dfr()` stacks
     them into a rectangular data frame. The `%||%` operator substitutes
     `NA` whenever a field is absent, so a missing value never silently
-    drops a whole record. A language spoken in several countries
-    produces several rows — this long format is what we want for
-    counting and for joining to the map.
+    drops a whole record.
+
 2.  **Country names.** The country strings in the JSON do not always
     match the `admin` names used by `rnaturalearth` (e.g. *“USA”* vs
     *“United States of America”*). I therefore fuzzy-match every country
-    against the map’s names with the Jaro–Winkler distance and keep the
-    closest candidate. The result is stored in a separate column
-    `country_map_sf`, so the original value stays available for
-    inspection.
+    against the map’s names.
 
 ``` r
 # Load world map for country matching
@@ -75,7 +71,7 @@ The cleaned dataset contains 11715 rows in total.
 
 ### 1. Where is the place with the most diversity (regarding languages)?
 
-We read “diversity” as *the number of distinct languages spoken in a
+I read “diversity” as *the number of distinct languages spoken in a
 country*. Because the long format contains one row per language–country
 pair, a language spoken in ten countries would otherwise be counted ten
 times in the same country if the source lists it repeatedly;
@@ -119,13 +115,11 @@ top20_country_diversity <- country_diversity %>%
 | Vanuatu                          |         107         |
 | Vietnam                          |         106         |
 
-The counts are extremely skewed: a handful of countries host several
-hundred languages while most host only a few. On a linear colour scale
-everything except the top few countries would collapse into a single
-shade, so we map the fill to `log10(n_languages)` and re-label the
-colour bar with the original counts (1, 3, 10, … 1000). Countries with
-no data keep a neutral grey, which distinguishes “no information” from
-“few languages”.
+On a linear colour scale everything except the top few countries would
+collapse into a single shade, so I map the fill to `log10(n_languages)`
+and re-label the colour bar with the original counts (1, 3, 10, … 1000).
+Countries with no data keep a neutral grey, which distinguishes “no
+information” from “few languages”.
 
 ``` r
 # Log‑transform for color scale
@@ -205,11 +199,6 @@ top5_by_speakers <- lang_summary %>%
 | Spanish          |   457774910    |    62     |
 | English          |   373691840    |    136    |
 | Bengali          |   238634300    |    31     |
-
-To show *where* these five languages live, I join them back onto the
-world map and facet by language. Each panel is a binary map (spoken /
-not spoken), which makes the geographical footprints directly comparable
-across panels.
 
 ``` r
 top5 <- top5_by_speakers$language
@@ -317,9 +306,7 @@ plot_q2_2
 \### 3. Languages and language families with the most speakers
 
 A language family aggregates its languages, so its speaker total is the
-sum over its members. The `distinct(language, speakers, family)` step is
-essential: without it, a language listed for 20 countries would
-contribute its speaker count 20 times and inflate its family.
+sum over its members.
 
 ``` r
 # Keep one row per language to avoid double‑counting speakers
@@ -350,9 +337,7 @@ For each of these five families we draw a stacked bar of its ten largest
 languages. The stacking shows two things at once: the **height** is the
 family total, the **segments** show how that total is composed — whether
 the family is dominated by one giant language or spread over several
-mid-sized ones. Because the same plot is needed five times, it is
-written once as a function and mapped over the families (`purrr::map`),
-then arranged in a grid.
+mid-sized ones.
 
 ``` r
 # Plot top‑10 languages within a family using a unified blue gradient palette
