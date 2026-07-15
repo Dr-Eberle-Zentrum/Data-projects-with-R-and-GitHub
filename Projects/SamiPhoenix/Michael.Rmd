@@ -22,7 +22,7 @@ library(readr)   # <-- ADDED to fix read_csv() error
 
 # Introduction
 
-This analysis examines the **conservation status of species** across different taxonomic classes and kingdoms, based on data from the **IUCN Red List**. The IUCN Red List is the world's most comprehensive inventory of the global conservation status of biological species.
+This analysis examines the **conservation status of species** across different taxonomic classes and kingdoms, based on data from the **IUCN Red List**. 
 
 **What we will do:**
 
