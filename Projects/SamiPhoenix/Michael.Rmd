@@ -279,7 +279,4 @@ print(p_classes)
 ```
 
 
-
-```{r session_info, echo=FALSE}
-sessionInfo()
-```
+## finish
