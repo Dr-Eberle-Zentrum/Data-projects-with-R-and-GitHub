@@ -5,7 +5,9 @@ always_allow_html: true
 ---
 
 # Solution for Michael's Project "Demographic Shift in Germany"
+
 ------------------------
+
 ```{r LoadingData, include=FALSE}
 
 library(tidyverse)
@@ -20,7 +22,10 @@ head(data)
 ```
 
 ## Task 1: Analysis of Reasons for the low Fertility Rate
+
 ----------
+
+Using the FREDA-Dataset, I will show some insights and possible explanations for the low fertility rate in Germany by analyzing different factors like relationship satisfaction and fertility intentions. 
 
 ### Task 1.1
 

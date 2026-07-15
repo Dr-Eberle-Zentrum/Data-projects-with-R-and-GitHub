@@ -1,6 +1,15 @@
-## \# Solution for Michael’s Project “Demographic Shift in Germany”
+# Solution for Michael’s Project “Demographic Shift in Germany”
 
-## \## Task 1: Analysis of Reasons for the low Fertility Rate
+------------------------------------------------------------------------
+
+## Task 1: Analysis of Reasons for the low Fertility Rate
+
+------------------------------------------------------------------------
+
+Using the FREDA-Dataset, I will show some insights and possible
+explanations for the low fertility rate in Germany by analyzing
+different factors like relationship satisfaction and fertility
+intentions.
 
 ### Task 1.1
 
