@@ -111,6 +111,7 @@ info_data <- info_data %>%
           Realm  = replace_na(Realm, "Unknown"))
 
 info_data %>%
+  filter(Gender=="Unknown" | Realm=="Unknown")%>%
   select(Gender,Realm)%>%
   kable(col.names = c("Gender", "Realm"))
 ```
@@ -129,9 +130,6 @@ setdiff(unique(words_data$Character), unique(info_data$Character))
 
 info_data$Character[info_data$Character=="Bosun"]<-"Boson"
 
-info_data %>%
-  select(Character)%>%
-  kable(col.names = "Character")
 ```
 
 : In Info_data, there was "Bosun" instead of "Boson", so fixed it to unify the names with words_data
@@ -143,9 +141,9 @@ info_data %>%
 lotr_data<- words_data %>%
   left_join(info_data%>%
       select(-Race),by = "Character")
-
-lotr_data %>% kable
 ```
+
+: Merged dataset by Character
 
 --------
 
@@ -219,8 +217,9 @@ character_total <- lotr_data %>%
             .groups = "drop") %>%
   arrange(desc(total_words))
 
-kable(character_total,
-      col.names = c("Character", "Total Words"))
+character_total%>%
+  slice_head(n=9)%>%
+  kable(col.names = c("Character", "Total Words"))
 ```
 
 **Visualization for "Top 9 Characters with the most speaking time"**
@@ -455,7 +454,7 @@ p_frodo_lines<-frodo_chapters%>%
 
 #### 2.3.4. All three charts related to Frodo as a Speaker
 
-```{r final_plot}
+```{r final_plot, fig.width=18, fig.height=9}
 
 
 plot_all<-p_frodo_lines / (p_frodo_chapters | plot_spacer()| p_frodo_book)+plot_layout(widths=c(1,0.2,1))
