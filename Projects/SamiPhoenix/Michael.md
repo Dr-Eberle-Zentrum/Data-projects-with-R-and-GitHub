@@ -13,13 +13,13 @@
         Kingdoms](#b-visualise-difference-between-kingdoms)
     -   [3c) Visualise Most and Least Affected
         Classes](#c-visualise-most-and-least-affected-classes)
+    -   [finish](#finish)
 
 # Introduction
 
 This analysis examines the **conservation status of species** across
 different taxonomic classes and kingdoms, based on data from the **IUCN
-Red List**. The IUCN Red List is the world’s most comprehensive
-inventory of the global conservation status of biological species.
+Red List**.
 
 **What we will do:**
 
@@ -40,9 +40,6 @@ inventory of the global conservation status of biological species.
 # 1. Data Import and Wrangling
 
 ## 1a) Import CSV into R
-
-The dataset is loaded from the project’s `dependencies` folder (portable
-path).
 
 **First rows of the dataset:**
 
@@ -68,8 +65,7 @@ each IUCN category: `EX` (Extinct), `EW` (Extinct in the Wild), `CR`
 
 The original dataset does not contain a `Kingdom` column.
 
-So we assign a Kingdom ID using `cumsum()`, then map IDs to Kingdom
-names.
+So we add it.
 
 **First rows after adding Kingdom:**
 
@@ -156,10 +152,6 @@ After renaming columns to readable names
 
 ## 3a) Create Relative Amount Table
 
-We create a new table `redlist_pct` where every numeric column (except
-`Total`) is expressed as a percentage of the row’s `Total`. The `Total`
-column is set to 100.
-
 | Name           | Extinct \[%\] | Extinct_Wild \[%\] | Extinct_Subtotal \[%\] | Critically_Endangered \[%\] | Endangered \[%\] | Vulnerable \[%\] | Threatened_Subtotal \[%\] | Least_Concern \[%\] | Data_Deficient \[%\] | Total | Kingdom   | Near Threatened \[%\] |
 |:----|----:|-----:|------:|-------:|----:|----:|-------:|-----:|------:|--:|:---|------:|
 | ACTINOPTERYGII |     0.3247222 |          0.0396883 |              0.3644104 |                    2.803435 |         4.903305 |         5.419252 |                  13.12599 |            64.40684 |           18.8916150 |   100 | CHROMISTA |              3.211142 |
@@ -179,10 +171,6 @@ that class.
 
 ## 3b) Visualise Difference Between Kingdoms
 
-To compare the conservation status across major Kingdoms, we create a
-**stacked bar plot**. Only Kingdoms with at least 1,000 species are
-included.
-
 **Categories:** - **Extinct:** `Extinct + Extinct_Wild` (EX + EW) –
 shown in **red** - **Affected:**
 `Critically_Endangered + Endangered + Vulnerable` (CR + EN + VU) – shown
@@ -200,40 +188,8 @@ status category for each Kingdom.
 
 We define **“affected”** as the percentage of **Critically Endangered**
 species within a class. This plot shows the **10 most affected** and the
-**10 least affected** classes, colour‑coded by Kingdom.
+**10 least affected** classes.
 
 <img src="Michael_files/figure-markdown_github/class_plot-1.png" style="display: block; margin: auto;" />
 
-    ## R version 4.4.0 (2024-04-24)
-    ## Platform: aarch64-apple-darwin20
-    ## Running under: macOS 15.6.1
-    ## 
-    ## Matrix products: default
-    ## BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
-    ## LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
-    ## 
-    ## locale:
-    ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-    ## 
-    ## time zone: Europe/Berlin
-    ## tzcode source: internal
-    ## 
-    ## attached base packages:
-    ## [1] stats     graphics  grDevices utils     datasets  methods   base     
-    ## 
-    ## other attached packages:
-    ## [1] readr_2.2.0   knitr_1.47    forcats_1.0.1 ggplot2_4.0.2 tidyr_1.3.2  
-    ## [6] dplyr_1.2.0  
-    ## 
-    ## loaded via a namespace (and not attached):
-    ##  [1] bit_4.0.5          gtable_0.3.6       highr_0.11         crayon_1.5.3      
-    ##  [5] compiler_4.4.0     tidyselect_1.2.1   parallel_4.4.0     scales_1.4.0      
-    ##  [9] yaml_2.3.8         fastmap_1.2.0      R6_2.5.1           labeling_0.4.3    
-    ## [13] generics_0.1.4     tibble_3.3.1       pillar_1.9.0       RColorBrewer_1.1-3
-    ## [17] tzdb_0.4.0         rlang_1.1.7        utf8_1.2.4         xfun_0.45         
-    ## [21] S7_0.2.0           bit64_4.0.5        cli_3.6.3          withr_3.0.2       
-    ## [25] magrittr_2.0.3     digest_0.6.36      grid_4.4.0         vroom_1.7.0       
-    ## [29] rstudioapi_0.18.0  hms_1.1.3          lifecycle_1.0.5    vctrs_0.7.2       
-    ## [33] evaluate_0.24.0    glue_1.8.0         farver_2.1.1       fansi_1.0.6       
-    ## [37] rmarkdown_2.27     purrr_1.2.1        tools_4.4.0        pkgconfig_2.0.3   
-    ## [41] htmltools_0.5.8.1
+## finish
