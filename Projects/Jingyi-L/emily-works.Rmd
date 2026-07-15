@@ -74,6 +74,12 @@ clean_data_USD <- clean_data %>%
 
 ## 1. Price vs. Numeric Features
 
+Creating three scatter plots with density overlays to explore relationships between:
+
+- RAM vs. Price: how memory capacity correlates with cost
+- CPU Clock Speed vs. Price: processor speed's impact on pricing
+- Weight vs. Price: physical weight's relationship to price
+
 ```{r plots, include=FALSE}
 
 plot_price_relationship <- function(data, x_var, x_label, plot_title) {
@@ -97,12 +103,12 @@ plot_price_relationship <- function(data, x_var, x_label, plot_title) {
 ```
 
 ### RAM & Price
-```{r plot RAM, echo=FALSE}
+```{r plot RAM, echo=FALSE, warning=FALSE}
 plot_price_relationship(clean_data_USD, "Ram", "RAM (GB)", "Price vs. RAM with Market Density")
 ```
 
 ### CPU & Price
-```{r plot CPU, echo=FALSE}
+```{r plot CPU, echo=FALSE, warning=FALSE}
 plot_price_relationship(clean_data_USD, "Cpu_clock", "CPU Clock Speed (GHz)", "Price vs. CPU with Market Density")
 ```
 
@@ -111,10 +117,10 @@ plot_price_relationship(clean_data_USD, "Cpu_clock", "CPU Clock Speed (GHz)", "P
 plot_price_relationship(clean_data_USD, "Weight", "Weight (kg)", "Price vs. Weight with Market Density")
 ```
 
-##Price vs. Categorical Features (Distribution Plot)
+## 2. Price vs. Categorical Features (Distribution Plot)
 
 ### By Company
-```{r plot Company, echo=FALSE, height= 1000}
+```{r plot Company, echo=FALSE, height=1000}
 
 clean_data_USD %>%
   ggplot(aes(x = Company, 
@@ -147,7 +153,7 @@ clean_data_USD %>%
 
 ```
 
-## Price Distribution Overlap
+## 3. Price Distribution Overlap
 
 ```{r ridgeline plot, echo=FALSE}
 

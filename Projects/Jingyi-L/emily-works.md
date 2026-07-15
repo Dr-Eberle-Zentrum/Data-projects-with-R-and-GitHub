@@ -167,17 +167,18 @@ assuming an exchange rate of 1 USD = 83 INR.
 
 ## 1. Price vs. Numeric Features
 
-### RAM & Price
+Creating three scatter plots with density overlays to explore
+relationships between:
 
-    ## Warning in geom_point(alpha = 0.3, width = 0.2, height = 0): Ignoring unknown
-    ## parameters: `width` and `height`
+- RAM vs. Price: how memory capacity correlates with cost
+- CPU Clock Speed vs. Price: processor speed’s impact on pricing
+- Weight vs. Price: physical weight’s relationship to price
+
+### RAM & Price
 
 ![](emily-works_files/figure-markdown_strict/plot%20RAM-1.png)
 
 ### CPU & Price
-
-    ## Warning in geom_point(alpha = 0.3, width = 0.2, height = 0): Ignoring unknown
-    ## parameters: `width` and `height`
 
 ![](emily-works_files/figure-markdown_strict/plot%20CPU-1.png)
 
@@ -185,7 +186,7 @@ assuming an exchange rate of 1 USD = 83 INR.
 
 ![](emily-works_files/figure-markdown_strict/plot%20Weight-1.png)
 
-\##Price vs. Categorical Features (Distribution Plot)
+## 2. Price vs. Categorical Features (Distribution Plot)
 
 ### By Company
 
@@ -195,6 +196,6 @@ assuming an exchange rate of 1 USD = 83 INR.
 
 ![](emily-works_files/figure-markdown_strict/plot%20LaptopType-1.png)
 
-## Price Distribution Overlap
+## 3. Price Distribution Overlap
 
 ![](emily-works_files/figure-markdown_strict/ridgeline%20plot-1.png)
