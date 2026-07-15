@@ -454,7 +454,7 @@ p_frodo_lines<-frodo_chapters%>%
 
 #### 2.3.4. All three charts related to Frodo as a Speaker
 
-```{r final_plot, fig.width=18, fig.height=9}
+```{r final_plot, fig.width=15, fig.height=10}
 
 
 plot_all<-p_frodo_lines / (p_frodo_chapters | plot_spacer()| p_frodo_book)+plot_layout(widths=c(1,0.2,1))
