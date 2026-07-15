@@ -1,6 +1,25 @@
 Project-Solution
 ================
 
+# Fun with languages
+
+There are over 7000 languages spoken in the world. While some regions
+are home to a rich diversity of languages, individual languages may also
+be spoken across multiple countries. The provided dataset collects
+information about over 7000 languages (including sign languages), such
+as geographical information, information about religion and about
+language families. I am particularly interested in the regions with the
+greatest language diversity and in the (geographical) distribution of
+languages. I also want to take a look at the corresponding language
+families.
+
+## Questions and Tasks
+
+1.  Where is the place with the most diversity (regarding languages)?
+2.  How are these languages distributed?
+3.  What are the languages and the language families with the most
+    speakers? What languages have the most speakers in their family?
+
 ## Clean Data
 
 Two things have to be solved before any plot can be drawn:
