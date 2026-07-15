@@ -67,7 +67,7 @@ Two things have to be solved before any plot can be drawn:
    `admin` names used by `rnaturalearth` (e.g. *"USA"* vs *"United States of
    America"*). I therefore fuzzy-match every country against the map's names.
 
-```{r clean data}
+```{r clean data, echo=FALSE}
 # Load world map for country matching
 world_basemap <- ne_countries(scale = "medium", returnclass = "sf") 
 map_names <- world_basemap$admin
@@ -129,7 +129,7 @@ spoken in ten countries would otherwise be counted ten times in the same
 country if the source lists it repeatedly; `distinct()` before `count()`
 guarantees that every language is counted **once per country**.
 
-```{r q1-count-languages}
+```{r q1-count-languages, echo=FALSE}
 # Find the 20 countries with the most languages
 country_diversity <- language_data %>%
   drop_na(country_map_sf) %>%
@@ -156,7 +156,7 @@ fill to `log10(n_languages)` and re-label the colour bar with the original
 counts (1, 3, 10, … 1000). Countries with no data keep a neutral grey, which
 distinguishes "no information" from "few languages".
 
-```{r q1-diversity-map}
+```{r q1-diversity-map, echo=FALSE}
 # Log‑transform for color scale
 country_diversity_log <- country_diversity %>%
   mutate(
@@ -206,7 +206,7 @@ therefore summarise each language once, with both measures. `first(speakers)`
 is used rather than `sum()` because the speaker count is a *language-level*
 attribute that is repeated on every country row — summing it would multiply
 the count by the number of countries.
-```{r q2-summarise}
+```{r q2-summarise, echo=FALSE}
 
 # Summarize languages by total speakers and number of countries
 lang_summary <- language_data %>%
@@ -234,7 +234,7 @@ kable(
 ```
 
 
-```{r}
+```{r, echo=FALSE}
 top5 <- top5_by_speakers$language
 
 spoken_pairs <- language_data %>%
@@ -272,7 +272,7 @@ world_basemap %>%
 ```
 
 
-```{r}
+```{r, echo=FALSE}
 # Remove NA or 0 country counts
 lang_summary_clean <- lang_summary %>%
   filter(
@@ -335,11 +335,12 @@ plot_q2_2 <- ggplot(selected_langs, aes(
 
 plot_q2_2
 ```
+
 ### 3. Languages and language families with the most speakers
 
 A language family aggregates its languages, so its speaker total is the sum
 over its members.
-```{r q3-family-totals}
+```{r q3-family-totals, echo=FALSE}
 
 # Keep one row per language to avoid double‑counting speakers
 lang_by_family <- language_data %>%
@@ -370,7 +371,7 @@ languages. The stacking shows two things at once: the **height** is the family
 total, the **segments** show how that total is composed — whether the family is
 dominated by one giant language or spread over several mid-sized ones.
 
-```{r q3-family-plots, fig.height=8}
+```{r q3-family-plots, fig.height=8, echo=FALSE}
 # Plot top‑10 languages within a family using a unified blue gradient palette
 plot_family_bar <- function(fam_name) {
   lang_by_family %>%
