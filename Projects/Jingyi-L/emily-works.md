@@ -110,7 +110,7 @@
 <td style="text-align: right;">8</td>
 <td style="text-align: left;">256GB SSD</td>
 <td style="text-align: left;">Intel HD Graphics 620</td>
-<td style="text-align: left;">No OS</td>
+<td style="text-align: left;">Other</td>
 <td style="text-align: right;">1.86</td>
 <td style="text-align: left;">30636</td>
 <td style="text-align: right;">2.5</td>
@@ -169,15 +169,21 @@ assuming an exchange rate of 1 USD = 83 INR.
 
 ### RAM & Price
 
-![](emily-works_files/figure-markdown_strict/plot%20RAM%20-1.png)
+    ## Warning in geom_point(alpha = 0.3, width = 0.2, height = 0): Ignoring unknown
+    ## parameters: `width` and `height`
+
+![](emily-works_files/figure-markdown_strict/plot%20RAM-1.png)
 
 ### CPU & Price
 
-![](emily-works_files/figure-markdown_strict/plot%20CPU%20-1.png)
+    ## Warning in geom_point(alpha = 0.3, width = 0.2, height = 0): Ignoring unknown
+    ## parameters: `width` and `height`
+
+![](emily-works_files/figure-markdown_strict/plot%20CPU-1.png)
 
 ### Weight & Price
 
-![](emily-works_files/figure-markdown_strict/plot%20Weight%20-1.png)
+![](emily-works_files/figure-markdown_strict/plot%20Weight-1.png)
 
 \##Price vs. Categorical Features (Distribution Plot)
 

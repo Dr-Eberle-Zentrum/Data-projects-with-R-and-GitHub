@@ -16,8 +16,8 @@ library(ggplot2)
 
 ```{r data-manipulation, include=FALSE}
 
-uncleaned_data <- read_csv("data/laptopData.csv")
-head(uncleaned_data)
+raw_data <- read_csv("data/laptopData.csv")
+head(raw_data)
 
 ```
 
@@ -33,13 +33,14 @@ head(uncleaned_data)
 
 ```{r data-cleaning, include=FALSE}
 
-clean_data <- uncleaned_data %>%
+clean_data <- raw_data %>%
   drop_na() %>%  
   mutate(
-    across(everything(), ~ str_replace_all(., "\\?", "")),
+    across(everything(), ~ str_replace_all(., "\\?", NA_character_)),
     Ram = as.integer(str_replace_all(Ram, "GB", "")),
     Weight = as.double(str_replace_all(Weight, "kg", "")),
-    Cpu_clock = as.double(str_extract(Cpu, "\\d+\\.?\\d*(?=GHz)"))) %>%
+    Cpu_clock = as.double(str_extract(Cpu, "\\d+\\.?\\d*(?=GHz)"))
+    ) %>%
   mutate(
     is_IPS = str_detect(ScreenResolution, "IPS"),
     is_Retina = str_detect(ScreenResolution, "Retina"),
@@ -49,7 +50,8 @@ clean_data <- uncleaned_data %>%
     OpSys = case_when(
       str_detect(OpSys, "Windows") ~ "Windows",
       str_detect(OpSys, "Mac OS X|macOS") ~ "macOS",
-      TRUE ~ OpSys))
+      TRUE ~ "Other")
+      )
   
 ```
 
@@ -72,67 +74,41 @@ clean_data_USD <- clean_data %>%
 
 ## 1. Price vs. Numeric Features
 
+```{r plots, include=FALSE}
+
+plot_price_relationship <- function(data, x_var, x_label, plot_title) {
+  data %>%
+    ggplot(aes(x = .data[[x_var]], 
+               y = Price_USD)) +
+    geom_point(alpha = 0.3, 
+               width = 0.2, 
+               height = 0) +
+    stat_density_2d(aes(fill = after_stat(level)), 
+                    geom = "polygon", 
+                    alpha = 0.2) +
+    scale_fill_viridis_c() +
+    theme_minimal() +
+    labs(title = plot_title, 
+         x = x_label, 
+         y = "Price (USD)",
+         fill = "Density")
+}
+
+```
+
 ### RAM & Price
-```{r plot RAM , echo=FALSE}
-
-clean_data_USD %>%
-  ggplot(aes(x = Ram, 
-             y = Price_USD)) +
-  geom_jitter(alpha = 0.3, 
-              width = 0.2, 
-              height = 0) +
-  stat_density_2d(aes(fill = after_stat(level)), 
-                  geom = "polygon", 
-                  alpha = 0.2) +
-  scale_fill_viridis_c() +
-  theme_minimal() +
-  labs(title = "Price vs. RAM with Market Density", 
-       x = "RAM (GB)", 
-       y = "Price (USD)",
-       fill = "Density")
-
+```{r plot RAM, echo=FALSE}
+plot_price_relationship(clean_data_USD, "Ram", "RAM (GB)", "Price vs. RAM with Market Density")
 ```
 
 ### CPU & Price
-```{r plot CPU , echo=FALSE}
-
-clean_data_USD %>%
-  ggplot(aes(x = Cpu_clock, 
-             y = Price_USD)) +
-  geom_jitter(alpha = 0.3, 
-              width = 0.2, 
-              height = 0) +
-  stat_density_2d(aes(fill = after_stat(level)), 
-                  geom = "polygon", 
-                  alpha = 0.2) +
-  scale_fill_viridis_c() +
-  theme_minimal() +
-  labs(title = "Price vs. CPU with Market Density", 
-       x = "CPU Clock Speed (GHz)", 
-       y = "Price (USD)",
-       fill = "Density")
-
+```{r plot CPU, echo=FALSE}
+plot_price_relationship(clean_data_USD, "Cpu_clock", "CPU Clock Speed (GHz)", "Price vs. CPU with Market Density")
 ```
 
 ### Weight & Price
-```{r plot Weight , echo=FALSE, warning = FALSE}
-
-clean_data_USD %>%
-  ggplot(aes(x = Weight, 
-             y = Price_USD)) +
-  geom_jitter(alpha = 0.3, 
-              width = 0.2, 
-              height = 0) +
-  stat_density_2d(aes(fill = after_stat(level)), 
-                  geom = "polygon", 
-                  alpha = 0.2) +
-  scale_fill_viridis_c() +
-  theme_minimal() +
-  labs(title = "Weight vs. CPU with Market Density", 
-       x = "Weight (kg)", 
-       y = "Price (USD)",
-       fill = "Density")
-
+```{r plot Weight, echo=FALSE, warning=FALSE}
+plot_price_relationship(clean_data_USD, "Weight", "Weight (kg)", "Price vs. Weight with Market Density")
 ```
 
 ##Price vs. Categorical Features (Distribution Plot)
