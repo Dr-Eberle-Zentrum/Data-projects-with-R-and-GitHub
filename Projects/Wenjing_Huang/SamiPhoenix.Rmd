@@ -6,8 +6,12 @@ output: md_document
 ```{r libraries, echo=FALSE, message=FALSE}
 
 library(tidyverse)
+library(kableExtra)
 
 ```
+
+This project investigates young peoples' behavior when it comes to getting information on health topics online.
+The data set is based on a questionnaire that notes how old the participants are, what sex, and how they get their information on health.
 
 ```{r everything, echo=TRUE, message=FALSE, warning=FALSE}
 
@@ -38,14 +42,14 @@ data <-
   select(-`Do you have a mobile phone?`, -`Is this mobile phone yours or do you share it ?`) %>% 
   
   # 3. Simplifying Participant's Answers:
-  mutate_all(funs(str_replace_all(., "Checked", "1"))) %>% 
+  mutate_all(funs(str_replace_all(., "Checked", "1"))) %>%
   mutate_all(funs(str_replace_all(., "Unchecked", "0"))) %>%
-  mutate_all(funs(str_replace_all(., "Yes", "1"))) %>% 
-  mutate_all(funs(str_replace_all(., "No", "0"))) %>% 
+  mutate_all(funs(str_replace_all(., "Yes", "1"))) %>%
+  mutate_all(funs(str_replace_all(., "No", "0"))) %>%
   
   # Handling NA:
-  replace(is.na(.), "0") %>% 
-
+  replace(is.na(.), "0") %>%
+  
   # Simplifying Age
   mutate(`Age range` = case_when(
     str_detect(`Age range`, "Greater than or equal to 18") ~ ">= 18",
@@ -54,13 +58,45 @@ data <-
   )) %>% 
   mutate(Age_Sex = paste(`Age range`, Sex)) %>%
   
+  
+  
+  
+  
+  
   # 2. Merging again
   mutate(Health_Platform = case_when(
     `Favourite platform/site for health: social media`  == 1 ~ "social media",
     `Favourite platform/site for health: search engine` == 1 ~ "search engine",
     `Favourite platform/site for health: unclear`       == 1 ~ "unclear",
     `Favourite platform/site for health: none`          == 1 ~ "none"
-  )) %>% 
+  )) %>%
+  
+  
+# sowas macht man eigentlich mit einem
+# 
+# pivot_longer() %>% # aus spalten label und 01NA werte machen
+# drop_na() oder filter==1 %>% # auf 1er werte reduzieren
+# select(-wertspalte) %>% # weil nur noch 1er brauchen wir die spalte nicht mehr
+# mutate(str_remove(.., prefix)) # prefix der spaltennamen entfernen, sodass die gewünschten tags übrig bleiben
+# und weil der ansatz generisch ist, kannst den
+# 
+# in eine funktion packen (mit table und prefix als argument)
+# mit dem prefix steuerst du das pivot
+# und den reduzierten table gibst zurück
+# meinst das kannst mal versuchen? wär cool! 😎
+  
+  # pivot_longer(
+  #   cols = `Favourite platform/site for health: social media`:`Favourite platform/site for health: none`,
+  #   names_to = "Health_Platform",
+  #   values_to = "Health_Usage"
+  # ) %>% 
+  # filter(Health_Usage == 1) %>%
+  # select(-Health_Usage) #%>%
+  # 
+  # 
+  
+  
+  
   mutate(HISB_Platform = case_when(
     `For searching health information: social media`    == 1 ~ "social media",
     `For searching health information: search engine`   == 1 ~ "search engine",
@@ -139,14 +175,15 @@ data <-
   
   # Prep for Visualization
   # Drop NA in Age
-  filter(!is.na(Age)) %>% 
+  
+  drop_na(Age) %>%
   mutate(Age_Sex = as.factor(Age_Sex))
   
 
   
 # print with kable
 data |> 
-  slice_head(n=20) |> 
+  slice_head(n=10) |> 
   kableExtra::kable(format = "markdown", caption = "Cleaned Data for Analysis") 
   
 
