@@ -190,3 +190,121 @@ data |>
 
 
 ```
+
+```{r Vis, echo=FALSE, message=FALSE}
+
+group_order <- c("<= 15 F", "<= 15 M", "16-17 F", "16-17 M", ">= 18 F", ">= 18 M")
+data$Age_Sex <- factor(data$Age_Sex, levels = group_order)
+
+HISB_Grouped <- data %>%
+  mutate(HISB_indicator = as.integer(HISB_Usage > 0)) %>%
+  group_by(Age_Sex) %>%
+  summarise(HISB_Usage = mean(HISB_indicator, na.rm = TRUE), .groups = "drop")
+
+data <- data %>%
+  mutate(across(Computer_Browsing:`mobile_phone ownership`, as.numeric))
+
+Summary_Computer <- data %>%
+  group_by(Age_Sex) %>%
+  summarise(
+    Searching     = mean(Computer_Browsing),
+    Socializing   = mean(Computer_Socializing),
+    Entertainment = mean(Computer_Entertainment),
+    Studying      = mean(Computer_Studying),
+    Others        = mean(Computer_Other),
+    .groups = "drop"
+  )
+
+Sum_Computer <- Summary_Computer %>%
+  mutate(
+    total = Searching + Socializing + Entertainment + Studying + Others,
+    Searching = Searching / total,
+    Socializing = Socializing / total,
+    Entertainment = Entertainment / total,
+    Studying = Studying / total,
+    Others = Others / total
+  ) %>%
+  select(-total)
+
+
+Summary_Phone <- data %>%
+  group_by(Age_Sex) %>%
+  summarise(
+    Searching     = mean(Phone_Browsing),
+    Socializing   = mean(Phone_Socializing),
+    Entertainment = mean(Phone_Entertainment),
+    Studying      = mean(Phone_Studying),
+    Others        = mean(Phone_Other),
+    .groups = "drop"
+  )
+
+Sum_Phone <- Summary_Phone %>%
+  mutate(
+    total = Searching + Socializing + Entertainment + Studying + Others,
+    Searching = Searching / total,
+    Socializing = Socializing / total,
+    Entertainment = Entertainment / total,
+    Studying = Studying / total,
+    Others = Others / total
+  ) %>%
+  select(-total)
+
+data_plotting <- list(
+  "Computer Usage" = Sum_Computer,
+  "Mobile Phone Usage" = Sum_Phone
+) %>% 
+  bind_rows(.id = "Device") %>%
+  pivot_longer(
+  Searching:Others,
+  names_to = "Usage",
+  values_to = "Proportion"
+  ) %>% 
+  mutate(
+    Usage = factor(Usage, levels = c("Searching", "Socializing", "Entertainment", "Studying", "Others")),
+    Device = factor(Device, levels = c("Computer Usage", "Mobile Phone Usage"))
+    )
+
+
+HISB_data <- bind_rows(
+  HISB_Grouped %>% mutate(Device = "Computer Usage"),
+  HISB_Grouped %>% mutate(Device = "Mobile Phone Usage")
+) %>%
+  mutate(Device = factor(Device, levels = c("Computer Usage", "Mobile Phone Usage")))
+
+usage_colors <- c(
+  Searching = "#1B9E77",
+  Socializing = "#D95F02",
+  Entertainment = "#7570B3",
+  Studying = "#E7298A",
+  Others = "#66A61E"
+)
+# Visualization begins:
+
+ggplot(data_plotting, aes(x = Age_Sex, y = Proportion, fill = Usage)) +
+  geom_col() +
+  geom_line(data = HISB_data, aes(x = Age_Sex, y = HISB_Usage, group = 1),
+            inherit.aes = FALSE, color = "black", linewidth = 1) +
+  geom_point(data = HISB_data, aes(x = Age_Sex, y = HISB_Usage),
+            inherit.aes = FALSE, color = "black", size = 2) +
+  facet_wrap(~Device, nrow = 1) +
+  scale_fill_manual(
+    values = usage_colors
+  ) +
+  scale_y_continuous(
+    name = "Proportion of Participants",
+    labels = function(x) sprintf("%.1f", x),
+    expand = c(0, 0),
+    sec.axis = sec_axis(
+      transform = ~.,
+      name = "HISB Rate", 
+      labels = function(x) sprintf("%.1f", x)
+      )
+    )
+
+
+# The values are not right, but I don't have what it takes to troubleshoot my code :/
+  
+
+```
+
+
