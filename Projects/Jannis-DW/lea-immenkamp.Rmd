@@ -2,7 +2,9 @@
 title: "Movies and Inflation Solution"
 author: "Lea Immenkamp"
 date: "2026-06-07"
-output: md_document
+output: 
+  md_document:
+    variant: gfm
 always_allow_html: true
 ---
 ```{r setup, include=FALSE}
