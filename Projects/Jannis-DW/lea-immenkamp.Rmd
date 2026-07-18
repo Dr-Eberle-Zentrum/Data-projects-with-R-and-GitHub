@@ -140,7 +140,7 @@ ggplot(aes(x = movie_rating, y = metascore)) +
 
 # Save output in a nicer format
 ggsave(
-  filename = "movie_correlation.png", 
+  filename = "lea-immenkamp_files/figure-markdown_strict/movie_correlation.png", 
   width = 8, 
   height = 5, 
   units = "in",   
