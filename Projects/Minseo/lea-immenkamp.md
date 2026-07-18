@@ -102,9 +102,10 @@ Visualization of click-through rate by gender
 **Results CTR**
 
 - The graph shows the average click-through rate (CTR) by age and
-  gender. - Results indicate that the CTR for men is highest for the age
-  group 18-24, followed by 45-60. The age groups 25-34 and 35-44
-  demonstrate the lowest CTR.
+  gender.
+- Results indicate that the CTR for men is highest for the age group
+  18-24, followed by 45-60. The age groups 25-34 and 35-44 demonstrate
+  the lowest CTR.
 - For women, the highest CTR is for the same age group (18–24), but
   lower than the same age group for men. It is followed by 35–44, 25–34,
   and then 45–60 (which represents the lowest CTR for women).
