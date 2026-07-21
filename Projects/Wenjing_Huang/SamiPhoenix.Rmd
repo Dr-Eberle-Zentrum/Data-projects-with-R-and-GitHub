@@ -191,7 +191,7 @@ data |>
 
 ```
 
-```{r Vis, echo=FALSE, message=FALSE}
+```{r Vis, echo=TRUE, message=FALSE}
 
 group_order <- c("<= 15 F", "<= 15 M", "16-17 F", "16-17 M", ">= 18 F", ">= 18 M")
 data$Age_Sex <- factor(data$Age_Sex, levels = group_order)
