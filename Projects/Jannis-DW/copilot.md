@@ -118,7 +118,7 @@ locally.
 ### Step 5 – Disassemble Genre into a list of individual genres
 
     movies_nested <- movies %>%
-      mutate(Genre = strsplit(Genre, ",\\s*")) %>%
+      mutate(Genre = strsplit(Genre, ",\\s*")) %>%   # split into a character vector per row
       group_by(across(-Genre)) %>%
       nest(genres = Genre) %>%
       ungroup()

@@ -107,7 +107,7 @@ if (!is.numeric(movies$Movie_Rating)) {
 # Split the comma-separated genre string into a character vector per row,
 # then store as a list-column via nest().
 movies_nested <- movies %>%
-  mutate(Genre = strsplit(Genre, ",\\s*")) %>%   # list-column of genre vectors
+  mutate(Genre = strsplit(Genre, ",\\s*")) %>%   # split into a character vector per row
   group_by(across(-Genre)) %>%
   nest(genres = Genre) %>%
   ungroup()
@@ -162,6 +162,11 @@ inflation_by_year <- movies %>%
 
 print(inflation_by_year)
 ```
+
+The inflation rates are highest for the oldest years (1970s) because the dollar
+has lost significant purchasing power over the decades. As we approach more recent
+years, the difference between nominal and inflation-adjusted gross collections
+shrinks, and the implied inflation rate decreases accordingly.
 
 ---
 
