@@ -1,0 +1,310 @@
+---
+title: "Data Projects with R and GitHub: Movies and Inflation"
+author: "copilot"
+date: "2026-07-22"
+output: md_document
+---
+
+# Movies and Inflation
+
+Movies are a big and important part of our culture. They are a source of
+entertainment, a way to tell stories, and a reflection of society. But they are
+also a big business, with billions of dollars in revenue generated each year. In
+this project, we explore the relationship between movies and inflation using a
+dataset that contains information about movies released between 1970 and 2020,
+including their ratings, box office performance, and inflation-adjusted gross
+collections.
+
+---
+
+## Setup
+
+```{r setup, message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+---
+
+## Data Loading
+
+The dataset is loaded directly from Zenodo without downloading it locally.
+
+```{r load-data}
+movies_raw <- read.csv(
+  "https://zenodo.org/records/5653247/files/sciFiMovies_dataset.csv",
+  sep       = ";",
+  header    = TRUE,
+  stringsAsFactors = FALSE,
+  check.names = FALSE
+)
+
+# Quick overview
+glimpse(movies_raw)
+```
+
+---
+
+## Data Cleanup
+
+### Step 1 – First column: check uniqueness and remove or assign ID
+
+```{r cleanup-first-col}
+# The first column is an unnamed index column (values 0, 1, 2, …).
+# Check whether rows are unique without it.
+col1_name <- names(movies_raw)[1]   # empty string or "X"
+movies_no_first <- movies_raw[, -1]
+
+if (nrow(distinct(movies_no_first)) == nrow(movies_raw)) {
+  message("Rows are unique without the first column → removing it.")
+  movies <- movies_no_first
+} else {
+  message("Rows are NOT unique without the first column → keeping it as row ID.")
+  movies <- movies_raw %>%
+    rename(ID = all_of(col1_name))
+}
+```
+
+### Step 2 – Remove special characters from variable names
+
+```{r cleanup-varnames}
+# Standardise column names: replace spaces / special characters with underscores
+names(movies) <- gsub("[^A-Za-z0-9_]", "_", names(movies))
+names(movies) <- gsub("__+", "_", names(movies))   # collapse repeated underscores
+names(movies) <- gsub("_$", "", names(movies))      # remove trailing underscores
+glimpse(movies)
+```
+
+### Step 3 – Round numeric values (eliminate decimals)
+
+```{r cleanup-round}
+# The Votes column stores numbers with comma thousands-separators ("888,938")
+# → remove commas and coerce to numeric first.
+movies <- movies %>%
+  mutate(
+    Votes            = as.numeric(gsub(",", "", Votes)),
+    Gross_collection = round(as.numeric(Gross_collection)),
+    Gross_equivalent = round(as.numeric(Gross_equivalent))
+  )
+```
+
+### Step 4 – Ensure Movie_Rating is numeric (not a date)
+
+```{r cleanup-rating-type}
+cat("Current class of Movie_Rating:", class(movies$Movie_Rating), "\n")
+
+if (!is.numeric(movies$Movie_Rating)) {
+  movies <- movies %>%
+    mutate(Movie_Rating = as.numeric(Movie_Rating))
+  cat("Movie_Rating converted to numeric.\n")
+} else {
+  cat("Movie_Rating is already numeric – no change needed.\n")
+}
+```
+
+### Step 5 – Disassemble Genre into a list of individual genres
+
+```{r cleanup-genre-nest}
+# Split the comma-separated genre string into a character vector per row,
+# then store as a list-column via nest().
+movies_nested <- movies %>%
+  mutate(Genre = strsplit(Genre, ",\\s*")) %>%   # split into a character vector per row
+  group_by(across(-Genre)) %>%
+  nest(genres = Genre) %>%
+  ungroup()
+
+# Inspect the first few entries
+head(movies_nested$genres, 3)
+```
+
+---
+
+## Data Manipulation
+
+### Best movie: highest combined rating score
+
+```{r manip-combined-score}
+# Create a new variable as the sum of Movie_Rating and Metascore.
+# Note: the two scales differ (0–10 vs. 0–100), so we interpret the task
+# as a direct sum that can be used for relative ranking.
+movies <- movies %>%
+  mutate(
+    Metascore    = as.numeric(Metascore),
+    Movie_Rating = as.numeric(Movie_Rating),
+    Combined_Score = Movie_Rating + Metascore
+  )
+
+best_movie <- movies %>%
+  slice_max(Combined_Score, n = 1) %>%
+  select(Title, Release_Year, Movie_Rating, Metascore, Combined_Score)
+
+print(best_movie)
+```
+
+### Inflation rate per year
+
+```{r manip-inflation}
+# For each year: rate of inflation based on the difference between the
+# inflation-adjusted gross (Gross_equivalent) and the nominal gross
+# (Gross_collection).
+# Formula: inflation_rate = (sum_equivalent - sum_gross) / sum_gross * 100
+
+inflation_by_year <- movies %>%
+  group_by(Release_Year) %>%
+  summarise(
+    sum_gross      = sum(Gross_collection, na.rm = TRUE),
+    sum_equivalent = sum(Gross_equivalent, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    Inflation_Rate = (sum_equivalent - sum_gross) / sum_gross * 100
+  ) %>%
+  arrange(Release_Year)
+
+print(inflation_by_year)
+```
+
+The inflation rates are highest for the oldest years (1970s) because the dollar
+has lost significant purchasing power over the decades. As we approach more recent
+years, the difference between nominal and inflation-adjusted gross collections
+shrinks, and the implied inflation rate decreases accordingly.
+
+---
+
+## Data Visualization
+
+### 1. Scatter plot: Movie_Rating vs. Metascore
+
+```{r viz-scatter, fig.width=7, fig.height=5}
+ggplot(movies, aes(x = Movie_Rating, y = Metascore)) +
+  geom_point(alpha = 0.4, color = "steelblue") +
+  geom_smooth(method = "lm", se = TRUE, color = "firebrick", linewidth = 0.8) +
+  labs(
+    title   = "Correlation between IMDB Rating and Metascore",
+    x       = "IMDB Movie Rating",
+    y       = "Metascore",
+    caption = "Each point represents one movie; red line shows the linear trend."
+  ) +
+  theme_minimal()
+```
+
+**Interpretation:** The scatter plot shows a moderate positive correlation between
+the IMDB Movie Rating and the Metascore. Movies with higher IMDB ratings tend to
+also receive higher Metascores, indicating that both rating systems largely agree
+on movie quality, although there is considerable spread around the trend line.
+
+### 2. Scatter plot faceted by genre
+
+```{r viz-scatter-facets, fig.width=12, fig.height=10, warning=FALSE}
+# Unnest the genre list-column so every genre–movie combination gets its own row
+movies_unnested <- movies %>%
+  mutate(Genre = strsplit(Genre, ",\\s*")) %>%
+  unnest(Genre) %>%
+  mutate(Genre = str_trim(Genre))
+
+ggplot(movies_unnested, aes(x = Movie_Rating, y = Metascore)) +
+  geom_point(alpha = 0.3, color = "steelblue", size = 0.8) +
+  geom_smooth(method = "lm", se = FALSE, color = "firebrick", linewidth = 0.6) +
+  facet_wrap(~Genre) +
+  labs(
+    title = "IMDB Rating vs. Metascore by Genre",
+    x     = "IMDB Movie Rating",
+    y     = "Metascore"
+  ) +
+  theme_minimal() +
+  theme(strip.text = element_text(size = 7))
+```
+
+### 3. Horizontal bar plot: average combined score by director
+
+```{r viz-director-bars, fig.width=10, fig.height=14}
+# Clean up the Director column (raw format: "Director:Name" or "Directors:Name1, Name2")
+# For simplicity, extract the first director's name.
+director_stats <- movies %>%
+  mutate(
+    Director = str_remove(Director, "^Directors?:\\s*"),  # remove prefix
+    Director = str_trim(str_extract(Director, "^[^,]+"))  # first director only
+  ) %>%
+  group_by(Director) %>%
+  summarise(
+    mean_score = mean(Combined_Score, na.rm = TRUE),
+    sd_score   = sd(Combined_Score,   na.rm = TRUE),
+    n_movies   = n(),
+    .groups    = "drop"
+  ) %>%
+  arrange(mean_score) %>%
+  mutate(Director = factor(Director, levels = Director))  # preserve order in plot
+
+ggplot(director_stats,
+       aes(x = mean_score, y = Director)) +
+  geom_col(fill = "steelblue", width = 0.7) +
+  geom_errorbar(
+    aes(xmin = mean_score - sd_score,
+        xmax = mean_score + sd_score),
+    width = 0.3, color = "gray30"
+  ) +
+  geom_text(
+    aes(label = paste0("n=", n_movies)),
+    hjust = -0.2, size = 2.8, color = "gray20"
+  ) +
+  scale_x_continuous(expand = expansion(mult = c(0, 0.15))) +
+  labs(
+    title = "Average Combined Score by Director",
+    x     = "Average Combined Score (IMDB + Metascore)",
+    y     = NULL
+  ) +
+  theme_minimal() +
+  theme(axis.text.y = element_text(size = 7))
+```
+
+---
+
+## Optional Tasks
+
+### Highlight a favourite actor's movies in the scatter plot
+
+```{r viz-actor-highlight, fig.width=7, fig.height=5}
+# Example: highlight all movies featuring Leonardo DiCaprio
+favourite_actor <- "Leonardo DiCaprio"
+
+movies_actor <- movies %>%
+  mutate(
+    Featured = str_detect(Star, fixed(favourite_actor))
+  )
+
+ggplot(movies_actor, aes(x = Movie_Rating, y = Metascore, color = Featured)) +
+  geom_point(alpha = 0.5) +
+  scale_color_manual(
+    values = c("FALSE" = "gray70", "TRUE" = "tomato"),
+    labels = c("Other movies", paste0(favourite_actor, "'s movies"))
+  ) +
+  geom_smooth(data = filter(movies_actor, !Featured),
+              method = "lm", se = FALSE, color = "gray40", linewidth = 0.6) +
+  labs(
+    title  = paste("Movies featuring", favourite_actor, "highlighted"),
+    x      = "IMDB Movie Rating",
+    y      = "Metascore",
+    color  = NULL
+  ) +
+  theme_minimal()
+```
+
+### Does a good rating correlate with higher earnings?
+
+```{r viz-score-vs-gross, fig.width=7, fig.height=5}
+ggplot(movies, aes(x = Gross_equivalent, y = Combined_Score)) +
+  geom_point(alpha = 0.3, color = "steelblue") +
+  geom_smooth(method = "lm", se = TRUE, color = "firebrick", linewidth = 0.8) +
+  scale_x_continuous(labels = scales::label_number(scale = 1e-6, suffix = "M")) +
+  labs(
+    title   = "Do highly-rated films make more money?",
+    x       = "Inflation-adjusted Gross (millions USD)",
+    y       = "Combined Score (IMDB + Metascore)",
+    caption = "Positive slope would suggest higher-rated films earn more."
+  ) +
+  theme_minimal()
+```
+
+**Interpretation:** This scatter plot reveals whether critically and publicly
+acclaimed movies also tend to be bigger box-office successes. A weak or moderate
+positive correlation is expected, but many blockbusters achieve enormous revenues
+despite moderate ratings.
