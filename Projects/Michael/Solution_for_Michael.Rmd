@@ -4,16 +4,15 @@ author: "Minseo Kim"
 output: md_document
 ---
 
-```{r packages}
+```{r packages, echo=FALSE, message=FALSE}
 
+library(ppcor)
 library(tidyverse)
 library(knitr)
-library(ppcor)
-
 ```
 
 
-```{r data}
+```{r data, echo=FALSE, message=FALSE}
 freda<-read_csv("FReDA_panel_4waves_long_labeled.csv")
 ```
 ```{r mutate_negative_values}
@@ -29,7 +28,7 @@ freda_2 <- freda%>%
 
 --------------------------
 
-```{r data-preview}
+```{r data-preview, echo=FALSE, message=FALSE}
 freda_2 %>%
   dplyr::select(id,welle,pid,sat3,frt68,frt69,age,nkids,reldur,val1i3,val1i5,east) %>%
   slice_head(n = 5) %>%
@@ -44,13 +43,13 @@ freda_2 %>%
 
 -------
 
-```{r correlation_sat3&frt68,sat3&frt69}
+```{r correlation_sat3&frt68,sat3&frt69,echo=FALSE, message=FALSE}
 
-#satisfaction with relationship with the general intention to get children
-cor(freda_2$sat3, freda_2$frt68,use="complete.obs")
-
-#satisfaction with relationship with the more specific intention to get children (in the next 3 years)
-cor(freda_2$sat3, freda_2$frt69,use="complete.obs")
+tibble(variable = c("frt68", "frt69"),
+       correlation = c(
+    cor(freda_2$sat3, freda_2$frt68, use = "complete.obs"),
+    cor(freda_2$sat3, freda_2$frt69, use = "complete.obs")))%>%
+  kable()
 
 ```
 
@@ -60,7 +59,7 @@ Answer: The correlations are both positive but also quite small. People with hig
 
 -----
 
-```{r heatmap}
+```{r heatmap, echo=FALSE, message=FALSE}
 freda_2%>%
   drop_na(sat3,frt69)%>%
   count(sat3,frt69)%>%
@@ -83,35 +82,35 @@ Answer: They are already happy with their relationship and do not feel the need 
 
 ------
 
-```{r statistial_problem}
+```{r statistial_problem,echo=FALSE, message=FALSE}
 #Unsatisfied or very unsatisfied: sat3<=4
 mean(freda_2$sat3<=4, na.rm=TRUE)*100
 #Very satisfied: sat3>=9
 mean(freda_2$sat3>=9, na.rm=TRUE)*100
 ```
 
-Answer: Only `r mean(freda_2$sat3<=4, na.rm=TRUE)*100` of the respondents are unsatisfied or very unsatisfied with their relationship, while `mean(freda_2$sat3>=9, na.rm=TRUE)*100` answered that they are very satisfied with their relationship.
+Answer: Only `r mean(freda_2$sat3<=4, na.rm=TRUE)*100` of the respondents are unsatisfied or very unsatisfied with their relationship, while `r mean(freda_2$sat3>=9, na.rm=TRUE)*100` answered that they are very satisfied with their relationship.
 Therefore, the distribution of sat3 is strongly focused toward high satisfaction of the relationship. This can cause a statistical problem because the correlations for low satisfaction group may be unstable and less reliable. 
 
 ### 1.5. See if age is affecting the correlation between relationship satisfaction and fertility intentions (use it as a control variable)
 
 --------
 
-```{r age_control_variable}
+```{r age_control_variable,echo=FALSE, message=FALSE}
 
 partial_function<-function(data,variable,control){
   data%>%
     drop_na(sat3,{{variable}},{{control}})%>%
     summarise(pcor.test(
-      x=sat3,y={{variable}},z=pick({{control}}))
-    )
-}
+      x=sat3,y={{variable}},z=pick({{control}})))}
 
 
-
-partial_function(freda_2,frt68,age)
-
-partial_function(freda_2,frt69,age)
+bind_rows(
+  frt68 = partial_function(freda_2, frt68, age),
+  frt69 = partial_function(freda_2, frt69, age),
+  .id = "variable") %>% 
+  dplyr::select(variable, correlation=estimate)%>%
+    kable()
 ```
 
 Answer: After controlling for age, the correlation between relationship satisfaction and general fertility intention went down to 0.101 from 0.156. Also for the correlation between relationship satisfaction and fertility intention in the next 3 years went down to 0.110 from 0.146. This means that age variable does effect the correlation between relationship satisfaction and fertility intentions. However, correlation still remain positive after controlling for age as well. 
@@ -120,11 +119,14 @@ Answer: After controlling for age, the correlation between relationship satisfac
 
 ------
 
-```{r nkids&reldur_control_variables}
+```{r nkids&reldur_control_variables,echo=FALSE, message=FALSE}
 
-partial_function(freda_2,frt68,c(nkids,reldur))
-
-partial_function(freda_2,frt69,c(nkids,reldur))
+bind_rows(
+  frt68 = partial_function(freda_2,frt68,c(nkids,reldur)),
+  frt69 = partial_function(freda_2,frt69,c(nkids,reldur)),
+  .id = "variable") %>%
+  dplyr::select(variable, correlation=estimate)%>%
+  kable()
 
 ```
 
@@ -134,7 +136,7 @@ Answer: After controlling for the number of kids and the relationship duration, 
 
 ------
 
-```{r p value_confidence interval}
+```{r p value_confidence interval,echo=FALSE, message=FALSE}
 cor.test(freda_2$sat3, freda_2$frt68,use = "complete.obs")
 cor.test(freda_2$sat3, freda_2$frt69,use="complete.obs")
 
@@ -163,17 +165,17 @@ p-value is <.001, meaning the correlations are statistically significant. Howeve
 
 ------ 
 
-```{r NA_elimination}
+```{r NA_elimination,echo=FALSE, message=FALSE}
 freda_3<-freda%>%
   mutate(across(c(val1i3, val1i5, east),~replace(.x, .x<0, NA)))
 ```
 
-```{r region_names}
+```{r region_names,echo=FALSE, message=FALSE}
 freda_3<-freda_3%>%
   mutate(east= east ==1)
 ```
 
-```{r region_comparison}
+```{r region_comparison,echo=FALSE, message=FALSE}
 freda_3%>%
   drop_na(east)%>%
   group_by(east)%>%
@@ -187,7 +189,7 @@ Answer:The average score for the statement that "Women should take care of the f
 
 --------
 
-```{r regional_histograms}
+```{r regional_histograms,echo=FALSE, message=FALSE}
 freda_3 %>%
   pivot_longer(
     c(val1i3, val1i5),

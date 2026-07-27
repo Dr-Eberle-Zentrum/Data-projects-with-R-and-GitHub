@@ -1,38 +1,4 @@
-    library(tidyverse)
-
-    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
-    ## ✔ forcats   1.0.1     ✔ stringr   1.5.2
-    ## ✔ ggplot2   4.0.0     ✔ tibble    3.3.0
-    ## ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
-    ## ✔ purrr     1.1.0     
-    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ## ✖ dplyr::filter() masks stats::filter()
-    ## ✖ dplyr::lag()    masks stats::lag()
-    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-
-    library(knitr)
-    library(ppcor)
-
     ## Warning: package 'ppcor' was built under R version 4.5.3
-
-    ## Loading required package: MASS
-    ## 
-    ## Attaching package: 'MASS'
-    ## 
-    ## The following object is masked from 'package:dplyr':
-    ## 
-    ##     select
-
-    freda<-read_csv("FReDA_panel_4waves_long_labeled.csv")
-
-    ## Rows: 107921 Columns: 203
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ","
-    ## dbl (203): id, welle, pid, sample, sat3, pa27, sd3, sd40, sd43, sd11, sd7e1,...
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
     freda_2 <- freda%>%
       mutate(across
@@ -44,11 +10,6 @@
 ## Data preview
 
 ------------------------------------------------------------------------
-
-    freda_2 %>%
-      dplyr::select(id,welle,pid,sat3,frt68,frt69,age,nkids,reldur,val1i3,val1i5,east) %>%
-      slice_head(n = 5) %>%
-      kable(align = "c",caption = "First five observations of the variables used in the analysis")
 
 <table>
 <caption>First five observations of the variables used in the
@@ -165,15 +126,24 @@ analysis</caption>
 
 ------------------------------------------------------------------------
 
-    #satisfaction with relationship with the general intention to get children
-    cor(freda_2$sat3, freda_2$frt68,use="complete.obs")
-
-    ## [1] 0.1555075
-
-    #satisfaction with relationship with the more specific intention to get children (in the next 3 years)
-    cor(freda_2$sat3, freda_2$frt69,use="complete.obs")
-
-    ## [1] 0.1458812
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">variable</th>
+<th style="text-align: right;">correlation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">frt68</td>
+<td style="text-align: right;">0.1555075</td>
+</tr>
+<tr>
+<td style="text-align: left;">frt69</td>
+<td style="text-align: right;">0.1458812</td>
+</tr>
+</tbody>
+</table>
 
 Answer: The correlations are both positive but also quite small. People
 with higher satisfaction with relationship has slightly stronger general
@@ -184,16 +154,6 @@ within the next 3 years. However, the correlations are weak.
 ### 1.2. Plot a heat map! On the x-axis: sat3. On the y-axis frt69. I want to see how much percent of people are in each box which displays the relative frequency of people with a specific combination of relationship satisfaction and intention to get children in the next 3 years.
 
 ------------------------------------------------------------------------
-
-    freda_2%>%
-      drop_na(sat3,frt69)%>%
-      count(sat3,frt69)%>%
-      mutate(percentage=n/sum(n))%>%
-      ggplot(aes(x=sat3,y=frt69,fill=percentage))+
-      geom_tile()+
-      scale_fill_gradient(low="white",high="red")+
-      labs(x="Satisfaction with Relationship(sat3)", y="Intention to Get Children in the Next 3 Years (frt69)", fill="Percentage")+
-      theme_minimal()
 
 ![](Solution_for_Michael_files/figure-markdown_strict/heatmap-1.png)
 
@@ -209,51 +169,40 @@ would rather focus on their relationship with each other.
 
 ------------------------------------------------------------------------
 
-    #Unsatisfied or very unsatisfied: sat3<=4
-    mean(freda_2$sat3<=4, na.rm=TRUE)*100
-
     ## [1] 3.966446
-
-    #Very satisfied: sat3>=9
-    mean(freda_2$sat3>=9, na.rm=TRUE)*100
 
     ## [1] 50.6674
 
 Answer: Only 3.9664462 of the respondents are unsatisfied or very
-unsatisfied with their relationship, while
-`mean(freda_2$sat3>=9, na.rm=TRUE)*100` answered that they are very
-satisfied with their relationship. Therefore, the distribution of sat3
-is strongly focused toward high satisfaction of the relationship. This
-can cause a statistical problem because the correlations for low
-satisfaction group may be unstable and less reliable.
+unsatisfied with their relationship, while 50.6674014 answered that they
+are very satisfied with their relationship. Therefore, the distribution
+of sat3 is strongly focused toward high satisfaction of the
+relationship. This can cause a statistical problem because the
+correlations for low satisfaction group may be unstable and less
+reliable.
 
 ### 1.5. See if age is affecting the correlation between relationship satisfaction and fertility intentions (use it as a control variable)
 
 ------------------------------------------------------------------------
 
-    partial_function<-function(data,variable,control){
-      data%>%
-        drop_na(sat3,{{variable}},{{control}})%>%
-        summarise(pcor.test(
-          x=sat3,y={{variable}},z=pick({{control}}))
-        )
-    }
-
-
-
-    partial_function(freda_2,frt68,age)
-
-    ## # A tibble: 1 × 6
-    ##   estimate    p.value statistic     n    gp Method 
-    ##      <dbl>      <dbl>     <dbl> <int> <dbl> <chr>  
-    ## 1    0.101 0.00000222      4.74  2174     1 pearson
-
-    partial_function(freda_2,frt69,age)
-
-    ## # A tibble: 1 × 6
-    ##   estimate  p.value statistic     n    gp Method 
-    ##      <dbl>    <dbl>     <dbl> <int> <dbl> <chr>  
-    ## 1    0.110 1.23e-16      8.31  5591     1 pearson
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">variable</th>
+<th style="text-align: right;">correlation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">frt68</td>
+<td style="text-align: right;">0.1013064</td>
+</tr>
+<tr>
+<td style="text-align: left;">frt69</td>
+<td style="text-align: right;">0.1104294</td>
+</tr>
+</tbody>
+</table>
 
 Answer: After controlling for age, the correlation between relationship
 satisfaction and general fertility intention went down to 0.101 from
@@ -267,19 +216,24 @@ still remain positive after controlling for age as well.
 
 ------------------------------------------------------------------------
 
-    partial_function(freda_2,frt68,c(nkids,reldur))
-
-    ## # A tibble: 1 × 6
-    ##   estimate    p.value statistic     n    gp Method 
-    ##      <dbl>      <dbl>     <dbl> <int> <dbl> <chr>  
-    ## 1    0.105 0.00000182      4.79  2056     2 pearson
-
-    partial_function(freda_2,frt69,c(nkids,reldur))
-
-    ## # A tibble: 1 × 6
-    ##   estimate  p.value statistic     n    gp Method 
-    ##      <dbl>    <dbl>     <dbl> <int> <dbl> <chr>  
-    ## 1    0.112 3.61e-16      8.18  5233     2 pearson
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">variable</th>
+<th style="text-align: right;">correlation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">frt68</td>
+<td style="text-align: right;">0.1050705</td>
+</tr>
+<tr>
+<td style="text-align: left;">frt69</td>
+<td style="text-align: right;">0.1123691</td>
+</tr>
+</tbody>
+</table>
 
 Answer: After controlling for the number of kids and the relationship
 duration, the correlation between relationship satisfaction and general
@@ -294,8 +248,6 @@ still remain positive after the controlling as well.
 
 ------------------------------------------------------------------------
 
-    cor.test(freda_2$sat3, freda_2$frt68,use = "complete.obs")
-
     ## 
     ##  Pearson's product-moment correlation
     ## 
@@ -308,8 +260,6 @@ still remain positive after the controlling as well.
     ##       cor 
     ## 0.1555075
 
-    cor.test(freda_2$sat3, freda_2$frt69,use="complete.obs")
-
     ## 
     ##  Pearson's product-moment correlation
     ## 
@@ -321,17 +271,6 @@ still remain positive after the controlling as well.
     ## sample estimates:
     ##       cor 
     ## 0.1458812
-
-    bind_rows(freda_2%>%
-                drop_na(sat3,frt68)%>%
-                with(broom::tidy(cor.test(sat3,frt68)))%>%
-                mutate(variable="frt68"),
-              freda_2%>%
-                drop_na(sat3,frt69)%>%
-                with(broom::tidy(cor.test(sat3,frt69)))%>%
-                mutate(variable="frt69"))%>%
-      transmute(variable=variable,`p-value`=format(p.value,digits=3),`95% CI`=paste0("[",round(conf.low,3),",",round(conf.high,3),"]"))%>%
-      kable()
 
 <table>
 <thead>
@@ -371,18 +310,6 @@ correlation is valid, but the assosiation is relatively weak.
 
 ------------------------------------------------------------------------
 
-    freda_3<-freda%>%
-      mutate(across(c(val1i3, val1i5, east),~replace(.x, .x<0, NA)))
-
-    freda_3<-freda_3%>%
-      mutate(east= east ==1)
-
-    freda_3%>%
-      drop_na(east)%>%
-      group_by(east)%>%
-      summarise(mean_val1i3=mean(val1i3, na.rm=TRUE),mean_val1i5=mean(val1i5, na.rm=TRUE))%>%
-      kable()
-
 <table>
 <thead>
 <tr>
@@ -418,42 +345,4 @@ be more egalitatrian.
 
 ------------------------------------------------------------------------
 
-    freda_3 %>%
-      pivot_longer(
-        c(val1i3, val1i5),
-        names_to = "statement",
-        values_to = "response"
-      ) %>%
-      drop_na(east, response) %>%
-      ggplot(aes(response, fill = east)) +
-      geom_histogram(
-        binwidth = 1,
-        boundary = 0.5,
-        position = "dodge"
-      ) +
-      facet_wrap(
-        ~ statement,
-        labeller = as_labeller(c(
-          val1i3 = "Women should take care of the family \n more than their career",
-          val1i5 = "A child under the age of 6 is suffering,\n if the mother works"
-        ))
-      ) +
-      scale_fill_discrete(
-        labels = c(
-          "FALSE" = "West Germany",
-          "TRUE" = "East Germany"
-        )
-      ) +
-      labs(
-        title = "Regional differences in attitudes toward the role of mothers",
-        x = "Response\n(higher values indicate stronger agreement)",
-        y = "",
-        fill = "Region"
-      ) +
-      theme_minimal()
-
 ![](Solution_for_Michael_files/figure-markdown_strict/regional_histograms-1.png)
-
-    ggsave("histogram.png")
-
-    ## Saving 7 x 5 in image
