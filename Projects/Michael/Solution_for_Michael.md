@@ -248,52 +248,6 @@ still remain positive after the controlling as well.
 
 ------------------------------------------------------------------------
 
-    ## 
-    ##  Pearson's product-moment correlation
-    ## 
-    ## data:  freda_2$sat3 and freda_2$frt68
-    ## t = 7.3383, df = 2173, p-value = 3.04e-13
-    ## alternative hypothesis: true correlation is not equal to 0
-    ## 95 percent confidence interval:
-    ##  0.1142237 0.1962550
-    ## sample estimates:
-    ##       cor 
-    ## 0.1555075
-
-    ## 
-    ##  Pearson's product-moment correlation
-    ## 
-    ## data:  freda_2$sat3 and freda_2$frt69
-    ## t = 11.025, df = 5590, p-value < 2.2e-16
-    ## alternative hypothesis: true correlation is not equal to 0
-    ## 95 percent confidence interval:
-    ##  0.1201297 0.1714366
-    ## sample estimates:
-    ##       cor 
-    ## 0.1458812
-
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">variable</th>
-<th style="text-align: left;">p-value</th>
-<th style="text-align: left;">95% CI</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;">frt68</td>
-<td style="text-align: left;">3.04e-13</td>
-<td style="text-align: left;">[0.114,0.196]</td>
-</tr>
-<tr>
-<td style="text-align: left;">frt69</td>
-<td style="text-align: left;">5.62e-28</td>
-<td style="text-align: left;">[0.12,0.171]</td>
-</tr>
-</tbody>
-</table>
-
 Answer:
 
 \[frt68\] p-value is &lt;.001, meaning the correlations are
