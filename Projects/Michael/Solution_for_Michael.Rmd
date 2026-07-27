@@ -136,7 +136,7 @@ Answer: After controlling for the number of kids and the relationship duration, 
 
 ------
 
-```{r p value_confidence interval, echo=FALSE, message=FALSE, results='hide'}
+```{r p value_confidence interval, echo=FALSE, message=FALSE}
 cor.test(freda_2$sat3, freda_2$frt68,use = "complete.obs")
 cor.test(freda_2$sat3, freda_2$frt69,use="complete.obs")
 
