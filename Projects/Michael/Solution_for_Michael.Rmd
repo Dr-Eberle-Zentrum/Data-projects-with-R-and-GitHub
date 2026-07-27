@@ -4,7 +4,7 @@ author: "Minseo Kim"
 output: md_document
 ---
 
-```{r packages, Include=FALSE}
+```{r packages, include=FALSE}
 
 library(ppcor)
 library(tidyverse)
