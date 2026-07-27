@@ -1,4 +1,45 @@
+    library(ppcor)
+
     ## Warning: package 'ppcor' was built under R version 4.5.3
+
+    ## Loading required package: MASS
+
+    library(tidyverse)
+
+    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+    ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
+    ## ✔ forcats   1.0.1     ✔ stringr   1.5.2
+    ## ✔ ggplot2   4.0.0     ✔ tibble    3.3.0
+    ## ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+    ## ✔ purrr     1.1.0
+
+    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ✖ dplyr::filter() masks stats::filter()
+    ## ✖ dplyr::lag()    masks stats::lag()
+    ## ✖ dplyr::select() masks MASS::select()
+    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+
+    library(knitr)
+
+# Demographic shift in Germany
+
+## Relationship Quality, Fertility Intentions and more
+
+------------------------------------------------------------------------
+
+## Data manipulation of the FReDA Data-set
+
+------------------------------------------------------------------------
+
+    freda<-read_csv("FReDA_panel_4waves_long_labeled.csv")
+
+    ## Rows: 107921 Columns: 203
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## dbl (203): id, welle, pid, sample, sat3, pa27, sd3, sd40, sd43, sd11, sd7e1,...
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
     freda_2 <- freda%>%
       mutate(across

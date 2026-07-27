@@ -4,15 +4,23 @@ author: "Minseo Kim"
 output: md_document
 ---
 
-```{r packages, echo=FALSE, message=FALSE}
+```{r packages, Include=FALSE}
 
 library(ppcor)
 library(tidyverse)
 library(knitr)
 ```
 
+# Demographic shift in Germany
+## Relationship Quality, Fertility Intentions and more
 
-```{r data, echo=FALSE, message=FALSE}
+---------------
+
+## Data manipulation of the FReDA Data-set
+
+--------------
+
+```{r data}
 freda<-read_csv("FReDA_panel_4waves_long_labeled.csv")
 ```
 ```{r mutate_negative_values}
