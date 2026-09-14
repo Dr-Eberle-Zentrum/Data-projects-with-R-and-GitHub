@@ -135,12 +135,18 @@ Current projects:
 
 - Emily (emily-works) - [Distribution of Speakers Time in Lord of the Rings](Projects/emily-works/LOTR/project-description.md)
 - Samandar (SamiPhoenix) - [Project about the IUCN Red List of Threatened Species](Projects/SamiPhoenix/project-description.md)
+  - solution by [Emily](Projects/SamiPhoenix/emily-works.md)
 - Jingyi Li (Yoli-bo) - [Laptop Price Analysis](Projects/Jingyi-L/project-description.md)
+  - solution by [Samandar](Projects/Jingyi-L/SamiPhoenix.md)
 - Wenjing Huang (Wenjing-H06) - [Project about The Influence of online performation on HIBS](Projects/Wenjing_Huang/project-description.md)
+  - solution by [Jingyi](Projects/Wenjing_Huang/Yoli-bo.md)
 - Nikolas (Chaoicci) - [Fun with languages](Projects/Chaoicci/project-description.md)
 - Lea (lea-immenkamp) - [Deterrents and children’s consumption of sweets](Projects/lea-immenkamp/project-description.md) 
+  - solution by [Nikolas](Projects/lea-immenkamp/Chaoicci.md)
 - Jannis Dennochweiler (Jannis-DW) - [Films and Inflation](Projects/Jannis-DW/project-description.md)
+  - solution by [Lea](Projects/Jannis-DW/lea-immenkamp.md)
 - Minseo (Minseo) - [Social Media Advertising and Campaign Performance](Projects/Minseo/project-description.md)
+  - solution by [Jannis](Projects/Minseo/Jannis-DW.md)
 - Michael (Michael1208S) - [Fertility Intentions, Relationship Quality and more](Projects/Michael/project-description.md) 
 
 
