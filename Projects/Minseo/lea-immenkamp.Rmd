@@ -25,11 +25,11 @@ library(ggplot2)
 
 ```{r setup, include=FALSE}
 # Set working directory
-knitr::opts_knit$set(root.dir = "/Users/Lea/Library/CloudStorage/OneDrive-UTCloud/Module/SoSe26/NV")
+#knitr::opts_knit$set(root.dir = "/Users/Lea/Library/CloudStorage/OneDrive-UTCloud/Module/SoSe26/NV")
 ```
 
 ```{r data-loading, echo=FALSE}
-socialmedia <- read.csv("Social_Media_Advertising.csv")
+socialmedia <- read.csv("Social Media Advertising.csv")
 head(socialmedia, 7)
 ```
 
