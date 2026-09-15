@@ -83,6 +83,8 @@ duration
     ##    estimate      p.value statistic    n gp  Method
     ## 1 0.1057409 1.774588e-14  7.687956 5232  3 pearson
 
+    ## starte den http Server für die Hilfe fertig
+
 ------------------------------------------------------------------------
 
 ### Task 2
