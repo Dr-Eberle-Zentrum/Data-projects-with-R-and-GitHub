@@ -19,21 +19,21 @@ financial performance.
     ## 6      323031     Women 35-44   Product Launch  15 Days     Facebook
     ## 7      727501        All Ages   Increase Sales  15 Days    Pinterest
     ##   Conversion_Rate Acquisition_Cost       ROI    Location Language Clicks
-    ## 1            0.15          $500.00 5.7900000   Las Vegas  Spanish    500
-    ## 2            0.01          $500.00 7.2100000 Los Angeles   French    500
-    ## 3            0.08          $500.00 0.4300000      Austin  Spanish    500
-    ## 4            0.03          $500.00 0.9098236       Miami  Spanish    293
-    ## 5            0.13          $500.00 1.4228282      Austin   French    293
-    ## 6            0.02          $500.00 6.9000000      Austin  Spanish    500
-    ## 7            0.10          $500.00 0.6792396 Los Angeles   French    293
+    ## 1            0.15         $500.00  5.7900000   Las Vegas  Spanish    500
+    ## 2            0.01         $500.00  7.2100000 Los Angeles   French    500
+    ## 3            0.08         $500.00  0.4300000      Austin  Spanish    500
+    ## 4            0.03         $500.00  0.9098236       Miami  Spanish    293
+    ## 5            0.13         $500.00  1.4228282      Austin   French    293
+    ## 6            0.02         $500.00  6.9000000      Austin  Spanish    500
+    ## 7            0.10         $500.00  0.6792396 Los Angeles   French    293
     ##   Impressions Engagement_Score Customer_Segment       Date        Company
-    ## 1        3000                7           Health 2022-02-25     Aura Align
-    ## 2        3000                5             Home 2022-05-12 Hearth Harmony
-    ## 3        3000                9       Technology 2022-06-19  Cyber Circuit
-    ## 4        1937                1           Health 2022-09-08      Well Wish
-    ## 5        1937                1             Home 2022-08-24 Hearth Harmony
-    ## 6        3001               10       Technology 2022-01-15  Cyber Circuit
-    ## 7        1938                1             Home 2022-10-30   Space Spruce
+    ## 1        3000                7           Health  2/25/2022     Aura Align
+    ## 2        3000                5             Home  5/12/2022 Hearth Harmony
+    ## 3        3000                9       Technology  6/19/2022  Cyber Circuit
+    ## 4        1937                1           Health   9/8/2022      Well Wish
+    ## 5        1937                1             Home  8/24/2022 Hearth Harmony
+    ## 6        3001               10       Technology  1/15/2022  Cyber Circuit
+    ## 7        1938                1             Home 10/30/2022   Space Spruce
 
 - Problem: The `Target_Audience` variable contained both gender and age
   group information. For some participants, “All Ages” was used to

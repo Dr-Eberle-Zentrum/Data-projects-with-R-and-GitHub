@@ -1,0 +1,157 @@
+---
+title: "Chaoicci"
+output: md_document
+date: "2026-06-05"
+---
+
+```{r libraries, include = FALSE}
+library(readxl)
+library(tidyverse)
+library(ggplot2)
+library(lme4)
+library(lmerTest)
+library(stdmod)
+```
+
+
+```{r quality-index, include = FALSE}
+# Task 2: Sum score for quality index before and after intervention
+data_qis <- "data.xlsx" |> 
+  read_excel(1) |> 
+  # there is one na value: ! we cannot sum with this!
+  drop_na() |> 
+  rowwise() |> 
+  mutate(qi_pre = matches("^i.t0$") |> 
+           c_across() |> 
+           sum(),
+         qi_post = matches("^i.$") |> 
+           c_across() |> 
+           sum()) |>  
+  ungroup()
+```
+
+```{r sweets-mean, include = FALSE}
+# Task 3: Calculate mean for sweets and merge
+data_mean_sweets <- "data.xlsx" |> 
+  read_excel(2) |> 
+  rowwise() |> 
+  mutate(child_id = `id child`,
+         age = `id age`,
+         sweets_mean = matches("^sweet.$") |> c_across() |> mean()) |> 
+  ungroup() |>  
+  select(child_id, age, sweets_mean)
+
+data_full <- full_join(data_qis, data_mean_sweets, by = "child_id") |> 
+  mutate(intervention = factor(Intervention, 
+                               labels = c("Reality Check", "Sugar Shock")),
+         motivation = Motivation,
+         helpfulness = Helpfulness,
+         child_id = factor(child_id)) |> 
+  select(-c(Intervention, Motivation, Helpfulness))
+```
+# Task 1-3
+After importing, calculating the quality index before and after the intervention,
+calculating the mean of sweet 1-4 and merging the two tables, the dataset looks
+like this:
+```{r table, echo = FALSE}
+knitr::kable(
+  data_full[1:5, ],
+  caption = "Dataset"
+)
+```
+
+
+# Task 4: Comparison of the two interventions
+```{r comparison-of-interventions, echo = FALSE}
+# Task 4: Compare the two interventions in terms of their effect on the increase 
+# in quality visually
+data_full |> 
+  group_by(intervention, qi_pre, qi_post) |> 
+  mutate(freq_linetype = n(),
+         qi_incr_or_decr = (qi_post - qi_pre) |> 
+           map_chr(\(x) if(x > 0) "incr" else if(x == 0) "same" else "decr") |>
+           as.factor()) |> 
+  ungroup() |> 
+  ggplot(aes(linewidth = freq_linetype, col = qi_incr_or_decr))  + 
+  geom_point(aes(x = 1, y = qi_pre)) +
+  geom_point(aes(x = 2, y = qi_post)) +
+  geom_segment(aes(x = 1, xend = 2, y = qi_pre, yend = qi_post)) +
+  facet_wrap(~ intervention) + 
+  theme_minimal() +
+  theme(legend.position = "none", 
+        axis.ticks = element_blank(),
+        panel.spacing.x = unit(2, "lines"),
+        plot.margin = margin(10, 35, 10, 20),
+        plot.caption = element_text(hjust = 0.5)) +
+  labs(x = "Intervention type",
+       y = "Behavioral Indicator",
+       caption = "The individual changes before and after the intervention are plotted.
+       Size of the lines indicates the frequency of the line, color indicates whether
+       the line is increasing (green), stable (red) or decreasing (blue).") +
+  scale_x_continuous(breaks = c(1, 2),
+                     labels = c("QIpre", "QIpost")) 
+  
+```
+
+
+
+
+```{r change-qi_pre-qi_post, echo = FALSE}
+# Martin's idea
+data_full |> 
+  mutate(qi_diff = qi_post - qi_pre) |> 
+  ggplot(aes(x = qi_diff)) + 
+  geom_bar() +
+  facet_wrap(~ intervention) + 
+  labs(title = "Change between QIpre and QIpost", 
+       subtitle = str_c("with \U03BC = ", (data_full$qi_post - data_full$qi_pre) |>
+                          mean() |> 
+                          round(2), 
+                        " and \U03C3 = ", (data_full$qi_post - data_full$qi_pre) |> 
+                          sd() |> 
+                          round(2)),
+       x = "Difference between QIpost and QIpre",
+       y = "Count") +
+  theme_bw()
+```
+
+
+# Task 5: Test whether motivation moderates the relationship between the intervention and the QIpost
+Note: I added `child_id` as a random effect (as: `(1 | ID)`), since a random 
+effect is needed for the `lmer()` function. 
+
+The summary of the model looks like this:
+```{r relationship-intervention-qi_post, warning = FALSE, echo = FALSE, message = FALSE}
+# Task 5: Test whether motivation moderates relationship between intervention
+# and QIpost
+model <- lmer(qi_post ~  intervention * motivation + qi_pre + (1 | child_id), 
+            data_full)
+model |>  summary()
+## Ich hoffe ich habe das richtig angepasst, ich weiß nicht was Moderation ist
+## oder wie man das mit R macht
+
+# test whether relationship between Intervention and QIpost is moderated by 
+# motivation and control for initial Qpre
+# outcome: qipost
+# predictor: intervention
+# moderator: motivation
+# control for: qipre
+
+```
+There seems to be no significant interaction between the intervention and the
+motivation (InterventionSugar Shock:Motivation : Est = 0.33717, SE = 0.35259, 
+t = 0.956, Pr(>|t|) = 0.34096 > .05) and therefore no significant moderation 
+effect of motivation on intervention.
+
+
+# Task 6: Plot the moderation
+```{r moderation-plot, echo = FALSE}
+# Task 6: Plot Task 5
+model |> 
+  plotmod(x = motivation, w = intervention) +
+  labs(y = "QIpost",
+       title = "Moderation effect of motivation") +
+  theme_classic() 
+
+```
+
