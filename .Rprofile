@@ -6,4 +6,5 @@ library(stats)
 # load tidyverse package
 library(tidyverse)
 
-
+# wichtige Zahl
+meineWichtigeZahl <- 42
