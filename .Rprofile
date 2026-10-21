@@ -6,5 +6,3 @@ library(stats)
 # load tidyverse package
 library(tidyverse)
 
-# hier sollte was stehen
-meineWichtigeZahl <- 42
