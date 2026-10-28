@@ -1,10 +1,3 @@
-------------------------------------------------------------------------
-
-title: “Mein Superprojekt” date: “2026-10-28 11:13:44” output:
-md\_document
-
-------------------------------------------------------------------------
-
 - grobe themeneinführung
 
 - datensatz (online direkt via URL, oder hier im ordner)
@@ -25,5 +18,5 @@ md\_document
 
     data <- read_csv(
       "https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/main/Projects/martin-raden/Mammal-comeback-in-Europe-data-OWID-download.csv",
-      show_col_types = FALSE
-    )
+      show_col_types = FALSE) |> 
+      head(10)
