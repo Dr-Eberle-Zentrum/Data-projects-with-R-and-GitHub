@@ -22,7 +22,7 @@ output: md_document
 
 
 
-```{r import_csv, message=FALSE, warning=FALSE, echo=TRUE}
+```{r import_csv, message=FALSE, warning=FALSE, echo=FALSE}
 library(tidyverse)
 
 data <- read_csv(

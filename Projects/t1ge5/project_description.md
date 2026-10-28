@@ -12,17 +12,6 @@
 
   - skizzen
 
-<!-- -->
-
-    library(tidyverse)
-
-    data <- read_csv(
-      "https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/main/Projects/martin-raden/Mammal-comeback-in-Europe-data-OWID-download.csv",
-      show_col_types = FALSE) |> 
-      head(10)
-
-    knitr::kable(data, caption = "Beispielhafte Darstellung der ersten 10 Zeilen des Datensatzes")
-
 <table>
 <caption>Beispielhafte Darstellung der ersten 10 Zeilen des
 Datensatzes</caption>
