@@ -1,0 +1,14 @@
+---
+title: "Aufgabe Mammal Comeback"
+date: "`r Sys.Date()`"
+output: md_document
+---
+
+
+```{r test.it, echo=TRUE, message=FALSE, warning=FALSE}
+library(tidyverse)
+
+data <- read_csv("https://raw.githubusercontent.com/Dr-Eberle-Zentrum/Data-projects-with-R-and-GitHub/main/Projects/martin-raden/Mammal-comeback-in-Europe-data-OWID-download.csv")
+```
+
+
