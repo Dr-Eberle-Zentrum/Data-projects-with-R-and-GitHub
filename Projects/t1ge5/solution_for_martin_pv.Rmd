@@ -116,7 +116,7 @@ pv_more |>
 Eigenverbrauch negativ.** An diesen Tagen sind Netzeinspeisung und Speicherung zusammen größer als der
 PV Ertrag. Das macht nicht so viel Sinn, da der Eigenverbrauch nicht negativ sein kann?
 
-Für die weiteren Berechnungen werden diese Daten erstmal nicht entfernt, da sie in den Daten vorkommen.
+Für die weiteren Berechnungen werden diese Daten erstmal nicht entfernt, da sie im Datensatz vorkommen.
 
 ```{r table_negative, echo=FALSE}
 
@@ -127,3 +127,130 @@ pv_more |>
   knitr::kable(digits = 2)
 
 ```
+
+## 4. Datenanalyse and Visualisierung
+
+### 4.1 Monatsübersicht
+
+Kennzahlen pro Monat, mit den Annahmen Strompreis 0,30 €/kWh und Einspeisevergütung 0,08 €/kWh:
+
+```{r table_monthly, echo=FALSE}
+# ---- Datenanalyse: Kennzahlen pro Monat berechnen ----------------------------------------------
+
+pv_analy <- pv_more |>
+  group_by(Monat = month(Datum, label = TRUE)) |>
+  summarise(across(c(`PV Ertrag [kWh]`, `Eigenverbrauch [kWh]`, `Gesamtverbrauch [kWh]`,
+                     `Netzeinspeisung [kWh]`, `Netzbezug [kWh]`), sum)) |>
+  # Annahmen: Strompreis 0,30 €/kWh, Einspeisevergütung 0,08 €/kWh
+  mutate(`Stromkosten [€]` = `Netzbezug [kWh]` * 0.30,
+         `Einspeisevergütung [€]` = `Netzeinspeisung [kWh]` * 0.08,
+         `Einsparungen durch Eigenverbrauch [€]` = `Eigenverbrauch [kWh]` * 0.30,
+         `Gesamtwirtschaftlichkeit [€]` = `Einsparungen durch Eigenverbrauch [€]` + `Einspeisevergütung [€]` - `Stromkosten [€]`)
+
+pv_analy |>
+  knitr::kable(digits = 2)
+
+```
+
+Wirtschaftlichkeit pro Monat:
+
+```{r plot_monthly, echo=FALSE, fig.width=8, fig.height=5, fig.alt="Gruppiertes Balkendiagramm pro Monat: Stromkosten negativ, Einspeisevergütung und Einsparungen durch Eigenverbrauch gestapelt positiv, dazu eine Linie für die Gesamtwirtschaftlichkeit."}
+# ---- Visualisierung: Kosten, Einnahmen und Gesamtwirtschaftlichkeit pro Monat -----------------
+
+pv_analy |>
+  select(Monat, `Einspeisevergütung [€]`, `Einsparungen durch Eigenverbrauch [€]`, `Stromkosten [€]`) |>
+  mutate(`Stromkosten [€]` = -`Stromkosten [€]`) |>                       # Kosten als negative Werte
+  pivot_longer(-Monat, names_to = "Kategorie", values_to = "Euro") |>    #Pivot_longer, damit jeder Monat drei Zeilen hat
+  mutate(Kategorie = factor(str_remove(Kategorie, " \\[€\\]"), # Faktor, damit die Legende in der gewünschten Reihenfolge angezeigt wird
+                            levels = c("Einspeisevergütung", "Einsparungen durch Eigenverbrauch", "Stromkosten"))) |>
+  ggplot(aes(x = Monat, y = Euro)) +
+  geom_hline(yintercept = 0, color = "#c3c2b7") +
+  geom_col(aes(fill = Kategorie), width = 0.6, color = "#fcfcfb", linewidth = 0.6) +   # positive Werte gestapelt
+  geom_line(data = pv_analy, aes(y = `Gesamtwirtschaftlichkeit [€]`, group = 1, color = "Gesamtwirtschaftlichkeit"),
+            linewidth = 1) +
+  geom_point(data = pv_analy, aes(y = `Gesamtwirtschaftlichkeit [€]`, color = "Gesamtwirtschaftlichkeit"),
+             size = 3) +
+  scale_fill_manual(values = c("Einspeisevergütung" = "#3f9bfd",
+                               "Einsparungen durch Eigenverbrauch" = "#eda100",
+                               "Stromkosten" = "#e34948")) +
+  scale_color_manual(values = c("Gesamtwirtschaftlichkeit" = "#e019ea")) +
+  scale_y_continuous(labels = scales::label_number(suffix = " €")) +
+  labs(title = "Wirtschaftlichkeit der PV-Anlage pro Monat (2025)", x = NULL, y = NULL, fill = NULL, color = NULL) +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        panel.grid.major.x = element_blank(), panel.grid.minor = element_blank(),
+        panel.grid.major.y = element_line(color = "#e1e0d9"),
+        plot.title = element_text(face = "bold"))
+
+```
+
+### 4.2 Jahresübersicht
+
+Kennzahlen für die `r nrow(pv_more)` Tage von `r format(min(pv_more$Datum), "%d.%m.%Y")` bis
+`r format(max(pv_more$Datum), "%d.%m.%Y")`:
+
+```{r table_year, echo=FALSE}
+# ---- Jahresübersicht: Kennzahlen für das gesamte Jahr 2025 -------------------------------------
+
+pv_year <- bind_cols(
+  # Summe über alle Monate aus der Monatstabelle
+  pv_analy |>
+    summarise(`Amortisierung [€]` = sum(`Einsparungen durch Eigenverbrauch [€]` + `Einspeisevergütung [€]`)),
+  # Die restlichen Kennzahlen brauchen die Tageswerte
+  # (Anteil der Tage = Anzahl der Tage, die die Bedingung erfüllen / Gesamtanzahl der Tage * 100)
+  pv_more |>
+    summarise(`Durchschnittlicher Netzbezug [kWh]` = mean(`Netzbezug [kWh]`),
+              `Tage mit vollem Speicher [%]` = mean(`Speicherung [kWh]` < 0.5) * 100,
+              `Tage mit überdurchschnittlichem Netzbezug [%]` = mean(`Netzbezug [kWh]` > mean(`Netzbezug [kWh]`) + sd(`Netzbezug [kWh]`)) * 100))
+
+pv_year |>
+  knitr::kable(digits = 2)
+
+```
+
+**Zusammenfassung:**
+
+- **Hat sich die Investition schon amortisiert?** `r if (pv_year[["Amortisierung [€]"]] >= 12000) "Ja" else "Nein"`.
+  Bisher wurden **`r round(pv_year[["Amortisierung [€]"]], 2)` €** eingespart bzw. durch Einspeisung eingenommen.
+  Bei einer Gesamtinvestition von 12.000 € sind das **`r round(pv_year[["Amortisierung [€]"]] / 12000 * 100, 1)` %**.
+- **Wie oft bin ich noch deutlich auf das Netz angewiesen?** An **`r round(pv_year[["Tage mit überdurchschnittlichem Netzbezug [%]"]], 2)` %**
+  der Tage liegt der Netzbezug deutlich über dem Durchschnitt von `r round(pv_year[["Durchschnittlicher Netzbezug [kWh]"]], 2)` kWh pro Tag.
+- **An wie vielen Tagen brauchte ich keinen Batteriespeicher?** An **`r round(pv_year[["Tage mit vollem Speicher [%]"]], 2)` %**
+  der Tage wurden weniger als 0,5 kWh gespeichert.
+
+
+### 4.3 Amortisierung
+
+Anteile an der Gesamtinvestition von 12.000 €:
+
+```{r plot_amortisation, echo=FALSE, fig.show='hide', fig.width=7, fig.height=5, fig.alt="Ringdiagramm der Gesamtinvestition von 12.000 Euro: kleine Anteile für die Einsparungen durch Eigenverbrauch und die Einspeisevergütung, der große Rest ist noch nicht amortisiert."}
+# ---- Visualisierung: Amortisierung der Gesamtinvestition (12.000 €) ----------------------------
+
+pv_analy |>
+  summarise(`Einsparungen durch Eigenverbrauch` = sum(`Einsparungen durch Eigenverbrauch [€]`),
+            Einspeisevergütung = sum(`Einspeisevergütung [€]`),
+            `Noch nicht amortisiert` = 12000 - `Einsparungen durch Eigenverbrauch` - Einspeisevergütung) |>
+  pivot_longer(everything(), names_to = "Kategorie", values_to = "Euro") |>
+  # Beschriftung für die Legende: Name, Betrag und Anteil an der Investition
+  mutate(Beschriftung = paste0(Kategorie, ": ", format(round(Euro, 2), big.mark = ".", decimal.mark = ",", nsmall = 2, trim = TRUE), " € (",
+                               format(round(Euro / 12000 * 100, 1), decimal.mark = ",", trim = TRUE), " %)"),
+         Beschriftung = factor(Beschriftung, levels = Beschriftung)) |>
+  ggplot(aes(x = 2, y = Euro, fill = Beschriftung)) +
+  geom_col(width = 1, color = "#fcfcfb", linewidth = 0.8, position = position_stack(reverse = TRUE)) +  # reverse: kleine Anteile beginnen oben
+  coord_polar(theta = "y") +                                                                           # Balken wird zum Kreis
+  xlim(c(0.4, 2.5)) +                                                                                  # Platz in der Mitte für das Loch
+  annotate("text", x = 0.4, y = 0, size = 8, fontface = "bold", color = "#0b0b0b", lineheight = 1,
+           label = paste0(format(round(pv_year[["Amortisierung [€]"]] / 12000 * 100, 1), decimal.mark = ","), " %\n")) +
+  annotate("text", x = 0.4, y = 0, size = 4, color = "#52514e", label = "\namortisiert") +
+  scale_fill_manual(values = c("#eda100", "#3f9bfd", "#e1e0d9")) +
+  labs(title = "Amortisierung der PV-Anlage", subtitle = paste0("Gesamtinvestition 12.000 €, Stand ", format(max(pv_more$Datum), "%d.%m.%Y")), fill = NULL) +
+  theme_void() +
+  theme(legend.position = "bottom", legend.direction = "vertical",
+        plot.title = element_text(face = "bold", color = "#0b0b0b", size = 14),
+        plot.subtitle = element_text(color = "#52514e"), legend.text = element_text(color = "#52514e", size = 11),
+        plot.margin = margin(10, 10, 10, 10))
+
+```
+
+<!-- Das Diagramm oben wird nicht angezeigt (fig.show='hide'). Stattdessen wird die nachbearbeitete Version eingebunden: -->
+![Ringdiagramm der Amortisierung: 5,8 % der Gesamtinvestition von 12.000 € sind amortisiert, aufgeteilt in Einsparungen durch Eigenverbrauch und Einspeisevergütung.](solution_for_martin_pv_files/figure-markdown_strict/plot_amortisation-1_modified.png)
