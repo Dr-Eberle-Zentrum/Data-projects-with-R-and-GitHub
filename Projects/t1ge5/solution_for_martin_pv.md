@@ -149,46 +149,56 @@ da sie in den Daten vorkommen.
 
 <table>
 <colgroup>
-<col style="width: 9%" />
+<col style="width: 7%" />
 <col style="width: 14%" />
-<col style="width: 19%" />
-<col style="width: 15%" />
-<col style="width: 18%" />
-<col style="width: 22%" />
+<col style="width: 10%" />
+<col style="width: 11%" />
+<col style="width: 10%" />
+<col style="width: 13%" />
+<col style="width: 14%" />
+<col style="width: 17%" />
 </colgroup>
 <thead>
 <tr>
 <th style="text-align: left;">Datum</th>
-<th style="text-align: right;">PV Ertrag [kWh]</th>
 <th style="text-align: right;">Netzeinspeisung [kWh]</th>
+<th style="text-align: right;">Netzbezug [kWh]</th>
 <th style="text-align: right;">Speicherung [kWh]</th>
+<th style="text-align: right;">PV Ertrag [kWh]</th>
 <th style="text-align: right;">Eigenverbrauch [kWh]</th>
+<th style="text-align: right;">Gesamtverbrauch [kWh]</th>
 <th style="text-align: right;">Eigenverbrauchsanteil [%]</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align: left;">04.03.2025</td>
-<td style="text-align: right;">34.25</td>
 <td style="text-align: right;">33.64</td>
+<td style="text-align: right;">0.52</td>
 <td style="text-align: right;">0.77</td>
+<td style="text-align: right;">34.25</td>
 <td style="text-align: right;">-0.16</td>
+<td style="text-align: right;">0.36</td>
 <td style="text-align: right;">-44.44</td>
 </tr>
 <tr>
 <td style="text-align: left;">14.03.2025</td>
-<td style="text-align: right;">6.84</td>
 <td style="text-align: right;">12.53</td>
+<td style="text-align: right;">1.13</td>
 <td style="text-align: right;">3.28</td>
+<td style="text-align: right;">6.84</td>
 <td style="text-align: right;">-8.97</td>
+<td style="text-align: right;">-7.84</td>
 <td style="text-align: right;">114.41</td>
 </tr>
 <tr>
 <td style="text-align: left;">20.03.2025</td>
-<td style="text-align: right;">33.01</td>
 <td style="text-align: right;">30.12</td>
+<td style="text-align: right;">0.70</td>
 <td style="text-align: right;">3.26</td>
+<td style="text-align: right;">33.01</td>
 <td style="text-align: right;">-0.37</td>
+<td style="text-align: right;">0.33</td>
 <td style="text-align: right;">-112.12</td>
 </tr>
 </tbody>

@@ -102,10 +102,10 @@ Vorschau der ersten Zeilen von `pv_2025`:
 pv_more <- pv_2025 |>
   mutate(`Eigenverbrauch [kWh]` = `PV Ertrag [kWh]` - `Netzeinspeisung [kWh]` - `Speicherung [kWh]`,
          `Gesamtverbrauch [kWh]` = `Eigenverbrauch [kWh]` + `Netzbezug [kWh]`,
-         `Eigenverbrauchsanteil [%]` = `Eigenverbrauch [kWh]` / `Gesamtverbrauch [kWh]` * 100)
+         `Eigenverbrauchsanteil [%]` = `Eigenverbrauch [kWh]` / `Gesamtverbrauch [kWh]` * 100) |>
+  select(-zip, -file)
 
 pv_more |>
-  select(-zip, -file) |>
   mutate(Datum = format(Datum, "%d.%m.%Y")) |>
   head(5) |>
   knitr::kable(digits = 2)
@@ -122,8 +122,6 @@ Für die weiteren Berechnungen werden diese Daten erstmal nicht entfernt, da sie
 
 pv_more |>
   filter(`Eigenverbrauch [kWh]` < 0) |>
-  select(Datum, `PV Ertrag [kWh]`, `Netzeinspeisung [kWh]`, `Speicherung [kWh]`,
-         `Eigenverbrauch [kWh]`, `Eigenverbrauchsanteil [%]`) |>
   mutate(Datum = format(Datum, "%d.%m.%Y")) |>
   head(3) |>
   knitr::kable(digits = 2)
