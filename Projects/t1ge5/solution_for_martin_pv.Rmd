@@ -1,0 +1,131 @@
+---
+title: "Lösung für Martins PV-Projekt"
+date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+pak::pkg_install("here")
+library(tidyverse)
+```
+
+```{r data_pipeline, message=FALSE, warning=FALSE, echo=FALSE}
+
+# ---- Import: alle CSV-Dateien aus allen Zip-Dateien, jeder Wert wird als Text eingelesen -------
+
+pv <- here::here("Projects/martin-raden/PV") |>                        #findet den Pfad zum Ordner mit den Zip-Dateien, das Paket this.path hat mit meiner R-Version nicht funktioniert # nolint: line_length_linter.
+  list.files(pattern = "\\.zip$", full.names = TRUE, recursive = TRUE) |>  #findet alle Zip-Dateien im Ordner und in den Unterordnern
+  map(function(zip) unzip(zip, list = TRUE) |>                             #Funktion, die den Inhalt jeder Zip-Datei auflistet
+  transmute(zip = zip, file = Name)) |>
+  list_rbind() |>                                                          #erstellt einen Data Frame mit dem Pfad der Zip-Datei und den Dateinamen darin
+  # Deutsches CSV-Format (";" als Trennzeichen, "," als Dezimalzeichen). Die Spaltennamen kommen aus der Kopfzeile.
+  mutate(data = map2(zip, file, function(zip_path, file_name)
+    read_csv2(unz(zip_path, file_name), col_types = cols(.default = col_character())))) |>
+  unnest(data) |>
+  # Jede Datenzeile endet mit einem überzähligen ";" (z. B. "8,76;"), das readr an die letzte Spalte hängt.
+  # Nur der Text vor dem ";" wird behalten.
+  mutate(across(last_col(), function(x) str_extract(x, "^[^;]*"))) |>
+  # Datumsangaben stehen als dd.mm.yyyy in den Dateien, Zahlen haben "," als Dezimalzeichen.
+  mutate(Datum = dmy(Datum),
+         across(-c(zip, file, Datum),
+         function(x) parse_double(x, locale = locale(decimal_mark = ","))))
+
+# ---- Doppelte Datumswerte (nur vollständige Zeilen, siehe "Datenintegrität" unten) ------------
+
+duplicate_entries <- pv |>
+  drop_na() |>
+  filter(n() > 1, .by = Datum) |>
+  arrange(Datum, file)
+
+# ---- Bereinigung: 1. unvollständige Zeilen entfernen, 2. bei doppelten Datumswerten den höheren
+# ----              PV-Ertrag behalten, 3. nur das Jahr 2025 behalten -----------------------------
+
+pv_2025 <- pv |>
+  drop_na() |>
+  slice_max(`PV Ertrag [kWh]`, n = 1, by = Datum, with_ties = FALSE) |>
+  filter(year(Datum) == 2025) |>
+  arrange(Datum)
+
+```
+
+## 1. Import
+
+Alle CSV-Dateien aus allen Zip-Dateien in `Projects/martin-raden/PV` wurden eingelesen und zu einer
+Tabelle zusammengefügt: **`r nrow(pv)` Zeilen** aus **`r n_distinct(pv$file)` Dateien**, die den
+Zeitraum `r format(min(pv$Datum), "%d.%m.%Y")` bis `r format(max(pv$Datum), "%d.%m.%Y")` abdecken.
+
+## 2. Datenintegrität
+
+### 2.1 Ist jeder Datensatz vollständig?
+
+Es gibt **`r sum(is.na(pv))` fehlende Werte** in den `r ncol(pv) - 2` Datenspalten, daher sind
+**`r nrow(pv) - nrow(drop_na(pv))` von `r nrow(pv)` Zeilen** unvollständig.
+
+Fehlende Werte werden nicht ergänzt, da jede Zeile einer Tagesmessung entspricht und 
+erfundene Werte die Ergebnisse verfälschen würde.
+
+### 2.2 Gibt es doppelte Einträge?
+
+Die Dateien decken überlappende Zeiträume ab (zum Beispiel endet eine Datei am 31.01. und die
+nächste beginnt am 28.01.), daher kann dasselbe Datum in zwei Dateien vorkommen.
+
+**`r n_distinct(duplicate_entries$Datum)` Datumswerte** kommen mehrfach vor (`r nrow(duplicate_entries)` Zeilen,
+siehe unten). Der Eintrag mit dem höheren PV-Ertrag wird behalten, daher werden
+**`r nrow(duplicate_entries) - n_distinct(duplicate_entries$Datum)` Zeilen entfernt**.
+
+Beispielhafte doppelte Einträge:
+```{r table_duplicates, echo=FALSE}
+
+duplicate_entries |>
+  transmute(Datum = format(Datum, "%d.%m.%Y"), Datei = file, `PV Ertrag [kWh]`) |>
+  head(2) |>
+  knitr::kable()
+
+```
+
+### 2.3 Nur das Jahr 2025
+
+Entfernte Zeilen, weil sie nicht aus 2025 stammen: **`r pv |> drop_na() |> distinct(Datum) |> filter(year(Datum) != 2025) |> nrow()`**.
+
+### 2.4 Ergebnis
+
+Von **`r nrow(pv)` importierten Zeilen** wurden `r nrow(pv) - nrow(pv_2025)` entfernt. Die bereinigten Daten (`pv_2025`) enthalten **`r nrow(pv_2025)` Tagesdatensätze** vom
+`r format(min(pv_2025$Datum), "%d.%m.%Y")` bis zum `r format(max(pv_2025$Datum), "%d.%m.%Y")`.
+
+## 3. Datenaufbereitung
+
+Vorschau der ersten Zeilen von `pv_2025`:
+
+```{r table_preview, echo=FALSE}
+# ---- Datenaufbereitung: Eigenverbrauch, Gesamtverbrauch und Eigenverbrauchsanteil berechnen ----
+
+pv_more <- pv_2025 |>
+  mutate(`Eigenverbrauch [kWh]` = `PV Ertrag [kWh]` - `Netzeinspeisung [kWh]` - `Speicherung [kWh]`,
+         `Gesamtverbrauch [kWh]` = `Eigenverbrauch [kWh]` + `Netzbezug [kWh]`,
+         `Eigenverbrauchsanteil [%]` = `Eigenverbrauch [kWh]` / `Gesamtverbrauch [kWh]` * 100)
+
+pv_more |>
+  select(-zip, -file) |>
+  mutate(Datum = format(Datum, "%d.%m.%Y")) |>
+  head(5) |>
+  knitr::kable(digits = 2)
+
+```
+
+**Hinweis: An `r sum(pv_more[["Eigenverbrauch [kWh]"]] < 0)` von `r nrow(pv_more)` Tagen ist der berechnete
+Eigenverbrauch negativ.** An diesen Tagen sind Netzeinspeisung und Speicherung zusammen größer als der
+PV Ertrag. Das macht nicht so viel Sinn, da der Eigenverbrauch nicht negativ sein kann?
+
+Für die weiteren Berechnungen werden diese Daten erstmal nicht entfernt, da sie in den Daten vorkommen.
+
+```{r table_negative, echo=FALSE}
+
+pv_more |>
+  filter(`Eigenverbrauch [kWh]` < 0) |>
+  select(Datum, `PV Ertrag [kWh]`, `Netzeinspeisung [kWh]`, `Speicherung [kWh]`,
+         `Eigenverbrauch [kWh]`, `Eigenverbrauchsanteil [%]`) |>
+  mutate(Datum = format(Datum, "%d.%m.%Y")) |>
+  head(3) |>
+  knitr::kable(digits = 2)
+
+```
