@@ -9,7 +9,7 @@ library(dplyr)
 
 # Hintergrund und Ziel
 
-Weil ich Tennis spiele, möchte ich etwas mit Tennisdaten machen. Mich interessiert vor allem, ob der Gewinner eines Matches normalerweise mehr Asse schlägt als der Verlierer (vielleicht motiviert mich ja das Ergebnis mehr an meinen Aufschlägen zu üben). Ich würde auch gerne wissen, ob der Belag einen Unterschied macht wie viele Asse geschlagen werden können (ich habe da so meine eigenen Ideen und möchte wissen ob die bestätigt werden).
+Ich spiele in meiner Freizeit Tennis (gebe Training und habe früher auch Turniere gespielt). Dabei kam bei mir die Frage auf, ob der Gewinner eines Matches normalerweise mehr Asse schlägt als der Verlierer (vielleicht motiviert mich ja das Ergebnis auch mehr an meinen Aufschlägen zu üben 😉 ). Ich würde auch gerne wissen, ob der Belag einen Unterschied macht wie viele Asse geschlagen werden können (ich habe da so meine eigenen Ideen und möchte wissen ob die bestätigt werden).
 
 Dafür sollen ATP-Einzelmatches aus den Jahren 2023 und 2024 verwendet werden. In den Daten stehen die Statistiken der Gewinner und Verlierer in unterschiedlichen Spalten,es fehlen aber teilweise Werte, weshalb die Daten zunächst bereinigt und umstrukturiert werden müssen.
 
