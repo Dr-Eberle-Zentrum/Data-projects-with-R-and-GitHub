@@ -20,6 +20,8 @@ Daten zunächst bereinigt und umstrukturiert werden müssen.
 2.  Gibt es auf Hartplatz, Sand und Rasen unterschiedlich viele Asse?
 3.  Wie unterscheiden sich die Assquoten von Gewinnern und Verlierern
     auf den verschiedenen Belägen?
+4.  Wie häufig haben Gewinner mehr Asse als ihre Gegner, und
+    unterscheidet sich dieser Anteil zwischen den Belägen?“
 
 # Datensatz
 
@@ -94,9 +96,11 @@ Die erste Datenzeile aus dem Jahr 2024 mit den relevanten Spalten:
     Angaben oder mit nicht regulärem Ende sollen von der Auswertung
     ausgeschlossen werden.
 
-3.  Die Gewinner- und Verliererstatistiken in eine Tabelle bringen. Es
-    soll für jeden Spieler eine eigene Zeile mit seinen Statistiken und
-    dem Ergebnis (Sieg oder Niederlage) geben.
+3.  Die Gewinner- und Verliererstatistiken in eine Tabelle bringen. Für
+    jeden Spieler soll es pro Match eine eigene Zeile mit seinen
+    Statistiken und dem Ergebnis (Sieg oder Niederlage) geben. Eine
+    eindeutige Matchkennung soll die Zuordnung beider Spielerleistungen
+    ermöglichen.
 
 4.  Für jeden Spieler die Assquote berechnen:
 
@@ -108,16 +112,64 @@ Die erste Datenzeile aus dem Jahr 2024 mit den relevanten Spalten:
 
 # Geplante Visualisierungen
 
-1.  **Balkendiagramm:** Durchschnittliche Anzahl der Asse von Gewinnern
-    und Verlierern auf Hartplatz, Sand und Rasen. Eine zusätzliche Linie
-    soll die durchschnittliche Anzahl der Asse pro Spieler und Match
-    über alle drei Beläge zeigen.
+1.  **Balkendiagramm zur durchschnittlichen Anzahl der Asse:**
 
-2.  **Balkendiagramm:** Durchschnittliche Assquote von Gewinnern und
-    Verlierern auf den drei Belägen.
+    Das Diagramm soll aus drei nebeneinanderliegenden Teilbildern für
+    Hartplatz, Sand und Rasen bestehen. Jedes Teilbild enthält zwei
+    Balken für Gewinner und Verlierer. Die Hintergründe sollen den
+    jeweiligen Belag durch passende Farben darstellen. Hartplatz wird
+    blau, Sand terrakottafarben und Rasen grün dargestellt. Weiße
+    Tennisplatzlinien sollen die Darstellung ergänzen (Daten sollten
+    trotzdem lesbar bleiben).
 
-3.  **Kreisdiagramme:** Für jeden Belag darstellen, welcher Anteil aller
-    Aufschlagspunkte Asse waren (also die Assquote).
+    Die Gewinner und Verlierer sollen in den Teilbildern durch
+    Balkenfarben gekennzeichnet werden. Die Mittelwerte sollen direkt am
+    Balken sein. Außerdem sollen die Anzahl der ausgewerteten Matches je
+    Belag und eine beschriftete horizontale Linie für die
+    durchschnittliche Anzahl der Asse pro Spieler und Match über alle 3
+    Beläge dargestellt werden.
+
+2.  **Boxplots zur Verteilung der Assquoten:**
+
+    Vergleiche mit Boxplots die Assquoten von Gewinnern und Verlierern.
+    Erstelle für jeden der 3 Beläge jeweils ein eigenes Teilbild mit 2
+    Boxplots.
+
+    Die Boxplots sollen den Median, mögliche Ausreißer und die mittleren
+    50% der Werte anzeigen. Außerdem sollen einzelne Punkte (seitlich
+    versetzt) die einzelnen Spielerleistungen darstellen. Der Mittelwert
+    jeder Gruppe soll mit einem eigenen Symbol hervorgehoben werden.
+
+    Wie bei 1.sollen die jeweiligen Beläge die Hintergrundfarbe der
+    Teilbilder sein. Die Farben für Gewinner und Verlierer sollen aus
+    dem Diagramm von 1. übernommen werden. Alle Teilbilder verwenden
+    dieselbe Skalierung der Prozentachse. Die Anzahl der ausgewerteten
+    Matches soll je Belag angegeben werden.
+
+3.  **Streudiagramm zum Vergleich der Asse innerhalb eines Matches:**
+
+    Jeder Punkt stellt eine Kombination aus der Assanzahl des Verlierers
+    auf der x-Achse und der Assanzahl des Gewinners auf der y-Achse dar.
+    Jeder Belag erhält ein eigenes Teilbild
+
+    Eine diagonale Referenzlinie bei y = x markiert gleich viele Asse
+    beider Spieler. Oberhalb der Linie hatte der Gewinner mehr Asse,
+    unterhalb der Linie der Verlierer. Die Punktgröße zeigt, wie viele
+    Matches dieselbe Kombination aufweisen (Legende erklärt Größen). Die
+    Punktfarbe kennzeichnet, ob der Gewinner mehr, gleich viele oder
+    weniger Asse hatte.
+
+    Da es sein kann dass mehrere Matches dieselbe Kombination von Assen
+    haben können, sollen die Punkte durch ihre Größe die Anzahl der
+    Matches darstellen (mit Legende). Punkte werden durch eine Färbung
+    unterschieden ob der Gewinner mehr, gleich viele oder weniger Asse
+    hatte.
+
+    Die Hintergründe spielgenl wieder den jeweiligen Belag wieder.
+    Zusätzlich soll in jedem Teilbild angegeben werden, bei welchem
+    Prozentsatz der Matches der Gewinner mehr Asse hatte. Alle
+    Teilbilder verwenden dieselben Achsengrenzen. Eine Einheit wird auf
+    beiden Achsen gleich lang dargestellt.
 
 **Quellenangabe:** Jeff Sackmann / Tennis Abstract: *ATP Tennis
 Rankings, Results, and Stats*.
