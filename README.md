@@ -133,8 +133,8 @@ Example:
 
 Current projects:
 
-- Nicholas (nivo-g) - [TITLE](Projects/nivo_g/project-description.md)
-- Tim (t1ge5) - [TITLE](Projects/t1ge5/project_description.md)
+- Nicholas (nivo-g) - [Tennis-Ass Analyse](Projects/nivo_g/project-description.md)
+- Tim (t1ge5) - [Zwei-Reaktor-System](Projects/t1ge5/project_description.md)
 
 
 #### Goals
