@@ -133,13 +133,8 @@ Example:
 
 Current projects:
 
-- NAME (GITHUBNAME) - [TITLE](Projects/...../project-description.md)
-- NAME (GITHUBNAME) - [TITLE](Projects/...../project-description.md)
-- NAME (GITHUBNAME) - [TITLE](Projects/...../project-description.md)
-- NAME (GITHUBNAME) - [TITLE](Projects/...../project-description.md)
-- NAME (GITHUBNAME) - [TITLE](Projects/...../project-description.md)
-- ...
-
+- Nicholas (nivo-g) - [TITLE](Projects/nivo_g/project-description.md)
+- Tim (t1ge5) - [TITLE](Projects/t1ge5/project_description.md)
 
 
 #### Goals
