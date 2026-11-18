@@ -1,119 +1,520 @@
-- grobe themeneinführung
+# Analyse eines 2 Reaktorsystems
 
-- datensatz (online direkt via URL, oder hier im ordner)
+In einem Biotechnologie Labor wird ein Reaktorsystem getestet, welches
+es ermöglicht aus Strom und CO2, Proteine herzustellen. Dies ist
+interessant, da es eine Möglichkeit bietet, CO2 in wertvolle Produkte
+wie Proteine also Nahrung umzuwandeln. Dadurch können nicht nur auf sehr
+kleinenm Raum Lebensmittel hergestellt werden, sondern auch CO2 aus der
+Luft entfernt werden. Es ist jedoch wichtig das diese Methode auch mit
+anderen Wegen der Proteinherstellung konkurrieren kann, da es sonst
+nicht wirtschaftlich ist und auch von der Industrie nicht umgesetzt
+wird.
 
-  - quelle dokumentieren!
+In diesem Experiment ging es hauptsächlich darum die
+Essigsäureproduktion zu maximieren. Diese Analyse soll nun den
+Wissenschaftlern im Labor helfen die Daten des Reaktorsystems zu
+analysieren und die Effizienz der Essigsäureproduktion zu bewerten.
+Dabei werden verschiedene Messwerte aus unterschiedlichen Messgeräten
+zusammengeführt und ausgewertet.
 
-  - beschreibung der elemente (ggf. header oder teil zeigen)
+## Das Reaktorsystem
 
-- ausführliche arbeitsanweisung (ziel beschreiben)
+Das Reaktorsystem besteht aus 2 Bioreaktoren die hintereinander
+geschalten sind. Im ersten Reaktor wird CO2 und Wasserstoff unter Druck
+und bei 60°C von einem Bakterium in Essigsäure umgewandelt. Im zweiten
+Reaktor wird die Essigsäure von Hefe gegessen. Das Endprodukt ist die
+Biomasse der Hefe, welche Proteine enthält.
 
-  - schrittweise
+Es gibt eine wichtige Pumpe B1 welche die Essigsäure vom ersten Reaktor
+in den zweiten Reaktor pumpt. Die Essigsäurekonzentration in den
+Reaktoren hängt von unterschiedlichen Parametern ab, wie die Pumprate
+von B1, die Produktionsrate und der Verdünnungsrate.
 
-  - skizzen
+![](./dual-reactor-system.png)
+
+Um zu verfolgen was im Reaktor passiert, werden verschiedenste
+Messgeräte eingesetzt; - Messgeräte am Reaktor selbst - 1x pro Tag HPLC
+(High Performance Liquid Chromatography) zur bestimmung der
+Essigsäurekonzentration - 1x pro Tag OD (Optical Density) Messung zur
+bestimmung der Biomassekonzentration - Automatische Messung der
+Gaszusammensetzung (CO2, H2, O2) im Reaktor durch GC (Gas
+Chromatography)
+
+Ziel is diese Messwerte zusammenzuführen und die Effizienz der
+Essigsäureproduktion zu bestimmen. Das wird realsierte in dem vier Werte
+ausgerechnet werden müssen: - Den Gaseverbrauch vom Bakteriellen
+Reaktor - Die Essigsäureproduktion vom Bakteriellen Reaktor - Wie viel
+vom zugeführten Kohlenstoff in Essigsäure umgewandelt wird - Wie
+effizient die Hefe die Essigsäure in Biomasse umwandelt
+
+Die Stichometrie der Acetogenesis ist wichtig für die später Berechnung:
+
+4 *H*<sub>2</sub> + 2 *C**O*<sub>2</sub> → *C**H*<sub>3</sub>*C**O**O**H* + 2 *H*<sub>2</sub>*O*
+
+## Die Daten
+
+Es gibt 4 verschieden Quellen: - Messgeräte am Reaktor selbst -&gt; als
+einzelne CSV Datei pro Reaktor - GC Messungen -&gt; 15 Sartorius
+2/analysis/datein.csv - HPLC Messungen -&gt; eine .txt Datei mit Proben
+von beiden Reaktoren. Gemessen wird die Formate- und
+Essigsäurekonzentration - OD Messungen -&gt; ein excel sheet mit proben
+von beiden Reaktoren. Manuelle erstellt vom Wissenschaftler. Gemessen
+wird die Biomassekonzentration
+
+Für die GC-Messung befindet sich pro Tag eine oder mehrere CSV Dateinen
+im Ordner. Die HPLC Messung erfasst 2 Komponenten, hier sollte nur die
+Essigsäurekonzentration (Acetate) betrachtet werden.
+
+Fünf Datenquellen müssen auf einer gemeinsamen Zeitachse zusammengeführt
+werden. Alle Daten wurden von mir während eines Praktikum erstellt und
+zum Zweck diese Kurses modifiziert. Alle Daten sind in eine
+[Nextcloud-Ordner](https://uni-bonn.sciebo.de/s/AycWdxgCYws5mZY) zu
+finden unter folgendem Link:
+<https://uni-bonn.sciebo.de/s/AycWdxgCYws5mZY>
 
 <table>
-<caption>Beispielhafte Darstellung der ersten 10 Zeilen des
-Datensatzes</caption>
 <colgroup>
-<col style="width: 16%" />
-<col style="width: 14%" />
-<col style="width: 27%" />
-<col style="width: 7%" />
-<col style="width: 6%" />
-<col style="width: 26%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
 </colgroup>
 <thead>
 <tr>
-<th style="text-align: left;">Common name of species</th>
-<th style="text-align: left;">Species name</th>
-<th style="text-align: right;">Number of mammal populations
-included</th>
-<th style="text-align: right;">Start year</th>
-<th style="text-align: right;">End year</th>
-<th style="text-align: left;">Average relative change in abundance</th>
+<th>Datei / Ordner</th>
+<th>Inhalt</th>
+<th>Format</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;">Eurasian beaver</td>
-<td style="text-align: left;">Castor fiber</td>
-<td style="text-align: right;">98</td>
-<td style="text-align: right;">1960</td>
-<td style="text-align: right;">2016</td>
-<td style="text-align: left;">16705%</td>
+<td><code>15 Sartorius 3/analysis/*.csv</code></td>
+<td>Abgaszusammensetzung von R3 (<em>T. kivui</em>), ein oder mehere
+Datei pro Tag</td>
+<td>CSV, <code>,</code></td>
 </tr>
 <tr>
-<td style="text-align: left;">European bison</td>
-<td style="text-align: left;">Bison bonasus</td>
-<td style="text-align: right;">20</td>
-<td style="text-align: right;">1960</td>
-<td style="text-align: right;">2016</td>
-<td style="text-align: left;">16626%</td>
+<td><code>Run3_t0t19.txt.txt</code></td>
+<td>HPLC-Ergebnisse der Proben t0 bis t</td>
+<td>Tabulatorgetrennter Textexport mit mehreren Substanzblöcken</td>
 </tr>
 <tr>
-<td style="text-align: left;">Grey seal</td>
-<td style="text-align: left;">Halichoerus grypus</td>
-<td style="text-align: right;">18</td>
-<td style="text-align: right;">1978</td>
-<td style="text-align: right;">2016</td>
-<td style="text-align: left;">6273%</td>
+<td><code>reactor_data2.xlsx</code>, Blatt 4</td>
+<td>Probenahmeprotokoll: Zeit, OD, Gaszufuhr, Pumpe B1</td>
+<td>Excel</td>
 </tr>
 <tr>
-<td style="text-align: left;">Geoffroy’s bat</td>
-<td style="text-align: left;">Myotis emarginatus</td>
-<td style="text-align: right;">12</td>
-<td style="text-align: right;">1974</td>
-<td style="text-align: right;">2016</td>
-<td style="text-align: left;">5392%</td>
+<td><code>Reactor_data_export/TK_recirculation_6Aug25_final.csv</code></td>
+<td>Reaktor-Prozessdaten von R3</td>
+<td>CSV, <code>;</code></td>
 </tr>
 <tr>
-<td style="text-align: left;">Iberian wild goat</td>
-<td style="text-align: left;">Capra pyrenaica</td>
-<td style="text-align: right;">9</td>
-<td style="text-align: right;">1966</td>
-<td style="text-align: right;">2012</td>
-<td style="text-align: left;">3502%</td>
-</tr>
-<tr>
-<td style="text-align: left;">Grey wolf</td>
-<td style="text-align: left;">Canis lupus</td>
-<td style="text-align: right;">86</td>
-<td style="text-align: right;">1965</td>
-<td style="text-align: right;">2016</td>
-<td style="text-align: left;">1871%</td>
-</tr>
-<tr>
-<td style="text-align: left;">Southern chamois</td>
-<td style="text-align: left;">Rupicapra pyrenaica</td>
-<td style="text-align: right;">31</td>
-<td style="text-align: right;">1970</td>
-<td style="text-align: right;">2016</td>
-<td style="text-align: left;">1549%</td>
-</tr>
-<tr>
-<td style="text-align: left;">Chamois</td>
-<td style="text-align: left;">Rupicapra rupicapra</td>
-<td style="text-align: right;">31</td>
-<td style="text-align: right;">1960</td>
-<td style="text-align: right;">2016</td>
-<td style="text-align: left;">1045%</td>
-</tr>
-<tr>
-<td style="text-align: left;">Golden jackal</td>
-<td style="text-align: left;">Canis aureus</td>
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">2001</td>
-<td style="text-align: right;">2015</td>
-<td style="text-align: left;">886%</td>
-</tr>
-<tr>
-<td style="text-align: left;">Eurasian lynx</td>
-<td style="text-align: left;">Lynx lynx</td>
-<td style="text-align: right;">75</td>
-<td style="text-align: right;">1963</td>
-<td style="text-align: right;">2016</td>
-<td style="text-align: left;">524%</td>
+<td><code>Reactor_data_export/Y_recirculation_6Aug25_final.csv</code></td>
+<td>Reaktor-Prozessdaten von R1</td>
+<td>CSV, <code>;</code></td>
 </tr>
 </tbody>
 </table>
+
+# Aufgaben
+
+Ein Hauptziel ist es die Datenanalyse für den Wissenschaftler so einfach
+wie möglich zu machen. Die Daten aus der HPLC, GC, und dem Reaktor
+werden automatisch eingfügt. Die Ergebnistabelle soll geupdated werden
+sobald der Wissenschaftler neue Werte in sein Probenprotokoll einträgt
+
+## Datenimport
+
+### 1.1 Abgasdaten
+
+- Alle CSV-Datein des Analyseordners in eine Masterdatei zusammenführen
+- pro Tag kommen neue Daten hinzu, die in der Masterardatei einghügt
+  werden müssen.
+- Die Masterdatei soll nicht jedes Mal neu erstellt werden, sondern nur
+  die neuen Dateien angehängt werden.
+- Dabei muss daruf geachtet werden das an manchen Tagen mehrere Dateien
+  exportiert werden; Es gilt nicht pro Tag eine Datei
+
+Bedeutung wichtiger Daten:
+
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Spalte</th>
+<th>Einheit</th>
+<th>Bedeutung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Time Date</code></td>
+<td>–</td>
+<td>Zeitstempel <code>YYYY-MM-DD HH:MM:SS</code> (wird mit
+<code>read.csv()</code> zu <code>Time.Date</code>)</td>
+</tr>
+<tr>
+<td><code>H2</code></td>
+<td>Vol.-%</td>
+<td>Wasserstoff im Abgas</td>
+</tr>
+<tr>
+<td><code>CO2</code></td>
+<td>Vol.-%</td>
+<td>Kohlendioxid im Abgas</td>
+</tr>
+<tr>
+<td><code>N2</code></td>
+<td>Vol.-%</td>
+<td>Stickstoff, dient als Inerttracer</td>
+</tr>
+</tbody>
+</table>
+
+### 1.2 HPLC-Acetatdaten
+
+- Name: Run3\_t0-t19.txt
+- Wie oben schon beschrieben sollen nur die Werte für Acetat aus der
+  HPLC-Datei extrahiert werden
+- Die einzelnen Substanzen werden in Blöcken untereinander exportiert.
+  Jeder Block beginnt mit einer Zeile `ID# <n>`. Acetat steht in Block
+  `ID# 2`
+- Der Acetatblock soll automatisch gefunden werden
+- In der Datei kriegt jede Probe einen Namen z. B. Y\_t18 und Tk\_t18.
+  Daei gehört Y\_18 zu Reaktor 1 und Tk\_t18 zu Reaktor 3. Diese soll
+  beim zusammenführen berücksichtigt werden.
+
+Bedeutung wichtiger Daten:
+
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Spalte</th>
+<th>Einheit</th>
+<th>Bedeutung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Data Filename</code></td>
+<td>–</td>
+<td>Probenname: Reaktorpräfix (<code>Tk_</code> oder <code>Y_</code>)
+plus Probenahme-ID (<code>t0</code>, <code>t1.5</code>, …)</td>
+</tr>
+<tr>
+<td><code>Conc.</code></td>
+<td>mM</td>
+<td>Acetatkonzentration</td>
+</tr>
+</tbody>
+</table>
+
+### 1.3 Probenahmeprotokoll
+
+- Als nächstes die manuell erstellte Excell-Tabelle des Wissenschaftlers
+- Name: reactor\_data2.xlsx
+- Die relevanten Dateien sind im zweiten Sheet, namens Run3\_timeOD
+- Entweder jetzt oder später die Werte über Sample ID zusammenführen
+- Folgende Spalten sind wichtig für die Downstream Datenanlayse:
+  `time_reactor`, `OD_R1Y`, `OD_R3B`, `Y_AcO`, `Tk_AcO`, `H2CO2_inflow`,
+  `SampleID`, `B1_set` und `B1_flow` unvollständige Zeilen sollten
+  entfernt werden.
+- Aus den OD werten soll außerdem der log10 berechenet werden und mit
+  folgen 2 spalten mit in der Tabelle vorkommen `OD_R1Y_log10` und
+  `OD_R3B_log10`.
+
+Bedeutung wichtiger Daten
+
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Spalte</th>
+<th>Einheit</th>
+<th>Bedeutung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>time_reactor</code></td>
+<td>h</td>
+<td>Prozesszeit von R3 bei der Probenahme</td>
+</tr>
+<tr>
+<td><code>SampleID</code></td>
+<td>–</td>
+<td><code>t0</code>, <code>t1.5</code>, …</td>
+</tr>
+<tr>
+<td><code>OD_R1Y</code></td>
+<td>–</td>
+<td>OD600 in R1</td>
+</tr>
+<tr>
+<td><code>OD_R3B</code></td>
+<td>–</td>
+<td>OD600 in R3</td>
+</tr>
+<tr>
+<td><code>H2CO2_inflow</code></td>
+<td>mL/min</td>
+<td>Gesamter H2/CO2-Zustrom in R3</td>
+</tr>
+<tr>
+<td><code>B1_set</code></td>
+<td>mL/h</td>
+<td>Sollwert von Pumpe B1</td>
+</tr>
+<tr>
+<td><code>B1_flow</code></td>
+<td>mL/h</td>
+<td>Gemessener Fluss von Pumpe B1 zwischen den Reaktoren</td>
+</tr>
+</tbody>
+</table>
+
+### 1.4 Reaktor-Prozessdaten
+
+- beide Reaktorexporte sollten eingelesen werden
+
+Bedeutung wichtiger Daten von R1
+
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Spalte</th>
+<th>Einheit</th>
+<th>Bedeutung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ProcessTime</code></td>
+<td>h</td>
+<td>Prozesszeit von R1</td>
+</tr>
+<tr>
+<td><code>FWEIGHT_B</code></td>
+<td>g</td>
+<td>Gewicht auf Waage B (kumulativ gepumpte Flüssigkeit)</td>
+</tr>
+</tbody>
+</table>
+
+Bedeutung wichtiger Daten von R3
+
+<table>
+<thead>
+<tr>
+<th>Spalte</th>
+<th>Einheit</th>
+<th>Bedeutung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ProcessTime</code></td>
+<td>h</td>
+<td>Prozesszeit seit Inokulation von R3</td>
+</tr>
+<tr>
+<td><code>BASET</code></td>
+<td>mL</td>
+<td>Basen (kumulativ)</td>
+</tr>
+<tr>
+<td><code>FLOW_A</code></td>
+<td>mL/h</td>
+<td>Mediumzufuhrrate</td>
+</tr>
+<tr>
+<td><code>SUBST_D</code></td>
+<td>mL</td>
+<td>Na2S (kumulativ)</td>
+</tr>
+<tr>
+<td><code>AFOAMT</code></td>
+<td>mL</td>
+<td>Antifoam (kumulativ)</td>
+</tr>
+</tbody>
+</table>
+
+## Aufgabe 2 – Datenaufbereitung
+
+### 2.1 Datenzusammen führen
+
+Die Reaktor-Prozessdaten werden alle paar Minuten automatisch vom System
+erfasst, Proben aber nur einmal bis maximal zweiaml pro Tag manuell. Die
+Aufgabe des Datenanalysten ist es hier einen sinnvollen Weg zufinden
+alle Datein zusammenzuführen. Es ist nicht erlaubt einfach über den
+genauen Zeitpunkt alle Dateien zusammen zu führen, da so jegliche Daten
+welche innerhalb einer manuellen Probeentnahme verloren gehen. Erlaubt
+ist es jedoch zu mitteln oder Entnahmeintervalle zu bilden Ziel des
+Datenimports ist es die verschiedenen Quellen in eine Tabelle
+zusammenzufügen.
+
+### 2.2 Verdünnungsraten berechnen
+
+Alle Verdünnungsraten werden in h⁻¹ angegeben und beziehen sich auf das
+Reaktorvolumen von V = 1,5 L (1500 mL).
+
+Für **R1 (Y)** – relativ einfach aus der Gewichtszunahme auf Waage B (1
+g ≈ 1 mL):
+
+$$
+D\_Y = \frac{m\_B(h) - m\_B(h-1)}{\Delta t \cdot V}
+$$
+
+Für **R3 (*T. kivui*)** – aus den fünf Flüssigkeitsströme die in den
+Reaktor kommen:
+
+<table>
+<thead>
+<tr>
+<th>Strom</th>
+<th>Quelle</th>
+<th>Berechnung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Base</td>
+<td>Totalisator <code>BASET</code></td>
+<td>ΔBASET / Δt / V</td>
+</tr>
+<tr>
+<td>Na2S</td>
+<td>Totalisator <code>SUBST_D</code></td>
+<td>ΔSUBST_D / Δt / V</td>
+</tr>
+<tr>
+<td>Antischaum</td>
+<td>Totalisator <code>AFOAMT</code></td>
+<td>ΔAFOAMT / Δt / V</td>
+</tr>
+<tr>
+<td>Medium</td>
+<td>Flussrate <code>FLOW_A</code></td>
+<td>FLOW_A / V</td>
+</tr>
+<tr>
+<td>Rückfluss aus R1</td>
+<td><code>B1_flow</code> (Probenahmeprotokoll)</td>
+<td>B1_flow / V</td>
+</tr>
+</tbody>
+</table>
+
+*D*<sub>*T**k*</sub> = *D*<sub>*B*1</sub> + *D̄*<sub>*O**H*</sub> + *D̄*<sub>*M**e**d**i**u**m*</sub> + *D̄*<sub>*N**a*<sub>2</sub>*S*</sub> + *D̄*<sub>*A**F*</sub>
+
+## Aufgabe 3 - Datenanalyse
+
+### 3.1 Gasaufnahem von Reactor 3
+
+Fragen die sich hier stellen: - wie viel H2 und CO2 nimmt R3 im Verlauf
+des Experiments auf? - Wie viel Acetat kann maximal aus diesem Gas
+gebildet werden?
+
+Wenn nicht schon oben vorher gemacht müssen jetzt hier die Abgasdaten
+mit den restlichen Daten verknüft werden um
+
+- **Gaszustrom \[mL/min\]**: `H2_flow_in = 0.8 × H2CO2_inflow`,
+  `CO2_flow_in = 0.2 × H2CO2_inflow`
+- **Gasabstrom \[mL/min\]**: N2 wird nicht verbraucht und dient daher
+  als interner Standard für den gesamten Abgasstrom. Für *i* = H2, CO2,
+  N2 gilt:
+
+$$
+\dot{V}\_{i,out} = x\_i \cdot \frac{\dot{V}\_{N\_2}}{x\_{N\_2}}
+$$
+
+### 3.2 Acetatproduktion in R3
+
+Die Acetatbilanz sollte zwischen zwei aufeinanderfolgenden Proben, mit
+*c* = `Tk_AcO − Y_AcO` in mM dargestellt werden:
+
+$$
+r\_{AcO} = \frac{c\_i - c\_{i-1}}{t\_i - t\_{i-1}} + \frac{c\_i + c\_{i-1}}{2} \cdot D\_{Tk}
+$$
+
+- `prod_rate_tk_mmol` = *r*<sub>*A**c**O*</sub> in mmol L⁻¹ h⁻¹
+- `prod_rate_tk_g` = *r*<sub>*A**c**O*</sub> × 0,06, in g L⁻¹ h⁻¹
+- `prod_rate_tk_mol` = *r*<sub>*A**c**O*</sub> × V × 2, in mmol C/h
+  (Acetat enthält 2 Kohlenstoffatome)
+
+### 3.3 Berechnung von Carbon-Recovery
+
+Die Carbon-Recovery pro Probe soll berechnet werden; also wieviel
+Kohlenstoff kann pro CO2 verwendet werden: Vorher müssen alle drei Terme
+auf dieselbe Einheit gebracht werden (mol C/h): Der Acetatkohlenstoff
+aus 3.2 liegt in mmol C/h vor.
+
+$$
+CR = \frac{\dot{n}\_{C,AcO} + \dot{n}\_{CO\_2,out}}{\dot{n}\_{CO\_2,in}}
+$$
+
+### 3.4 Biomasse und Acetataufnameh in R1
+
+Fragen die man hiermit beantworten kann: - Wie schnell wächst R1? - Wie
+viel Acetat wird benötigt pro Gramm an Biomasse? - Wird R1 mit mehr
+Acetat versorgt also es im Wachstum umsetzten kann?
+
+Dafür müssen folgende Werte für jede Probe berechnet werden:
+
+- **Biomasseproduktivität \[OD h⁻¹\]** (`p_rate_y_OD`): dieselbe Bilanz
+  wie in 3.2, mit `OD_R1Y`
+- **Biomasseproduktivität / umgewandelt \[g BTM L⁻¹ h⁻¹\]**
+  (`p_rate_y_gDW`): `p_rate_y_OD × 0.515`
+- **Acetataufnahmerate \[mmol L⁻¹ h⁻¹\]** (`conrate_y`):
+  `(Tk_AcO − Y_AcO) × D_Tk`
+- **Acetatzufuhrrate \[mmol L⁻¹ h⁻¹\]** (`feedrate_y`): `Tk_AcO × D_Tk`
+- **Spezifischer Acetatbedarf \[mmol g BTM⁻¹\]** (`specific_prod`):
+  `conrate_y / p_rate_y_gDW`
+
+### 3.5 Ergebnistabelle
+
+Die berechneten Spalten und dazugehörige Spalten für Kontext wie
+Sample\_ID oder die Zeit sollen als Markdown-Tabelle dargestellt werden,
+gerundet auf 3 signifikante Stellen. Verdünnungsraten liegen bei etwa
+0,01 h⁻¹ und würden bei zwei Nachkommastellen verschwinden.
+
+## Aufgabe 4 - Datenvisualisierung
+
+### 4.1 Acetat und Wachstum in beiden Reaktoren
+
+Ein kombiniertes Diagramm mit zwei y-Achsen:
+
+- Acetatkonzentrationen `Tk_AcO` und `Y_AcO` in mM auf der linken Achse,
+  als Linien mit Punkten.
+- log10-OD beider Reaktoren (`OD_R3B_log10`, `OD_R1Y_log10`) auf einer
+  sekundären Achse rechts (`sec_axis()`).
+- Die OD-Werte sollten mit dem Faktor max(Acetat) / max(log10-OD)
+  skaliert werden und sie sollte so verschoben werden, dass der
+  niedrigste OD-Wert bei y = 0 liegt.
+- Die sekundäre Achse verwendet die Umkehrung dieser Transformation.
+- Die sekundäre Achse soll auch mit den echten OD-Werten also (0, 1, 2,
+  3, 4, 5, 10, 40)
+
+![](./graph_example.png)
+
+Fragen die man dann mit dieser Tabelle beantworten kann - Sinkt die
+Acetatkonzentration in R1, wenn Y am schnellsten wächst? - Wie hängt die
+OD von *T. kivui* mit seiner Acetatproduktion zusammen?
